@@ -22,6 +22,7 @@ export const StatsSchema = z.object({
 
 export const AffixSchema = z.object({
   id: z.string(),
+  ref: z.string(), // e.g., "Force", "CritPct"
   type: z.enum(["prefix","suffix"]),
   portée: z.tuple([z.number(), z.number()]),
   échelonnage: z.enum(["lin", "exp", "palier"]),
@@ -36,9 +37,18 @@ export const ItemSchema = z.object({
   ]),
   niveauMin: z.number().int(),
   rarity: RaretéEnum,
-  affixes: z.array(z.object({ ref: z.string(), type: z.enum(["prefix", "suffix"]), val: z.number().optional() })).default([]),
+  affixes: z.array(z.object({ ref: z.string(), val: z.number() })).default([]),
   tagsClasse: z.array(z.string()).default([]),
 });
+
+export const ClasseSchema = z.object({
+  id: z.string(),
+  nom: z.string(),
+  ressource: z.enum(["Mana", "Énergie", "Rage"]),
+  archétype: z.enum(["Mêlée", "Distance", "Magie", "Soutien"]),
+  statsBase: StatsSchema,
+});
+
 
 export const TalentSchema = z.object({
   id: z.string(),
@@ -67,6 +77,7 @@ export const DungeonSchema = z.object({
   palier: z.number().int(),
   name: z.string(),
   biome: z.enum(["frost","fire","nature","occult"]),
+  monsters: z.array(z.string()),
   modifiers: z.array(z.string()).default([]),
   killTarget: z.number().int().default(25),
   bossId: z.string(),

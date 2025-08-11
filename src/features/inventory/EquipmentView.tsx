@@ -1,0 +1,57 @@
+'use client';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useGameStore } from '@/state/gameStore';
+import { Item, Rareté } from '@/lib/types';
+import { Button } from '@/components/ui/button';
+import { BaggageClaim, Dices } from 'lucide-react';
+
+const rarityColorMap: Record<Rareté, string> = {
+    Commun: 'text-gray-400',
+    Rare: 'text-blue-400',
+    Épique: 'text-purple-500',
+    Légendaire: 'text-yellow-500',
+};
+
+function EquipmentSlot({ slotName, item }: { slotName: string; item: Item | null }) {
+    const unequipItem = useGameStore(s => s.unequipItem);
+
+    return (
+        <div className="flex items-center justify-between p-2 rounded-md bg-card-foreground/5">
+            <span className="text-sm capitalize text-muted-foreground w-1/4">{slotName}</span>
+            <div className="flex-grow text-center">
+                {item ? (
+                     <span className={`${rarityColorMap[item.rarity]}`}>{item.name}</span>
+                ) : (
+                    <span className="text-xs text-muted-foreground/50">Vide</span>
+                )}
+            </div>
+             <div className="w-1/4 text-right">
+                {item && (
+                     <Button size="sm" variant="ghost" onClick={() => unequipItem(item.slot as any)}>
+                        <BaggageClaim className="h-4 w-4" />
+                     </Button>
+                )}
+            </div>
+        </div>
+    );
+}
+
+
+export function EquipmentView() {
+    const { equipment } = useGameStore(state => state.inventory);
+
+    return (
+        <Card>
+            <CardHeader>
+                <CardTitle>Équipement</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <div className="space-y-2">
+                   {Object.entries(equipment).map(([slot, item]) => (
+                       <EquipmentSlot key={slot} slotName={slot} item={item}/>
+                   ))}
+                </div>
+            </CardContent>
+        </Card>
+    );
+}

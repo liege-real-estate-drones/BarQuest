@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import type {
   StatsSchema,
-  AffixSchema,
+  AffixeSchema,
   ItemSchema,
   TalentSchema,
   MonsterSchema,
@@ -23,15 +23,11 @@ export type PlayerClassId = 'berserker' | 'mage' | 'druid';
 
 export interface PlayerState {
   name: string;
-  classe: PlayerClassId;
+  classeId: PlayerClassId;
   level: number;
   xp: number;
-  stats: Stats & {
-    Force?: number;
-    Intelligence?: number;
-    Dexterite?: number;
-    Esprit?: number;
-  };
+  baseStats: Stats; // Unmodified stats from class + level
+  stats: Stats; // Current stats with equipment
   talentPoints: number;
   resources: {
     mana: number;
@@ -41,7 +37,20 @@ export interface PlayerState {
 export interface InventoryState {
   gold: number;
   items: Item[];
-  equipment: Record<Item['slot'], Item | null>;
+  equipment: {
+    weapon: Item | null;
+    head: Item | null;
+    chest: Item | null;
+    legs: Item | null;
+    hands: Item | null;
+    feet: Item | null;
+    belt: Item | null;
+    amulet: Item | null;
+    ring: Item | null;
+    ring2: Item | null;
+    trinket: Item | null;
+    offhand: Item | null;
+  };
 }
 
 export interface CombatLogEntry {

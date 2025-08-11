@@ -3,13 +3,25 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { PlayerState, useGameStore } from '@/state/gameStore';
-import { Monstre } from '@/lib/types';
+import { Monstre, Stats } from '@/lib/types';
 import * as formulas from '@/core/formulas';
 import { Separator } from '@/components/ui/separator';
 
 interface EntityDisplayProps {
   entity: PlayerState | Monstre;
   isPlayer?: boolean;
+}
+
+function StatGrid({ stats }: { stats: Stats }) {
+    return (
+        <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm font-mono">
+            <span className="text-muted-foreground">Attaque:</span><span className="text-right">{stats.AttMin ?? 0} - {stats.AttMax ?? 0}</span>
+            <span className="text-muted-foreground">Crit %:</span><span className="text-right">{stats.CritPct ?? 0}%</span>
+            <span className="text-muted-foreground">Crit Dmg:</span><span className="text-right">{stats.CritDmg ?? 0}%</span>
+            <span className="text-muted-foreground">Armure:</span><span className="text-right">{stats.Armure ?? 0}</span>
+            <span className="text-muted-foreground">Vitesse:</span><span className="text-right">{stats.Vitesse ?? 0}s</span>
+        </div>
+    );
 }
 
 export default function EntityDisplay({ entity, isPlayer = false }: EntityDisplayProps) {
@@ -20,10 +32,10 @@ export default function EntityDisplay({ entity, isPlayer = false }: EntityDispla
 
   const currentHp = entity.stats.PV;
   const maxHp = isPlayer 
-    ? formulas.calculateMaxHP(entity as PlayerState) 
+    ? formulas.calculateMaxHP(entity.level, (entity as PlayerState).stats) 
     : (entity as any).initialHp ?? entity.stats.PV;
 
-  const hpPercentage = (currentHp / maxHp) * 100;
+  const hpPercentage = maxHp > 0 ? (currentHp / maxHp) * 100 : 0;
 
   let currentMana: number | undefined;
   let maxMana: number | undefined;
@@ -34,17 +46,17 @@ export default function EntityDisplay({ entity, isPlayer = false }: EntityDispla
   if (isPlayer) {
     const player = entity as PlayerState;
     currentMana = player.resources.mana;
-    maxMana = formulas.calculateMaxMana(player);
+    maxMana = formulas.calculateMaxMana(player.level, player.stats);
     manaPercentage = maxMana > 0 ? (currentMana / maxMana) * 100 : 0;
     
     xpToNextLevel = getXpToNextLevel();
-    xpPercentage = (player.xp / xpToNextLevel) * 100;
+    xpPercentage = xpToNextLevel > 0 ? (player.xp / xpToNextLevel) * 100 : 0;
   }
   
   const stats = entity.stats;
 
   return (
-    <Card className="flex flex-col h-full">
+    <Card className="flex flex-col h-full bg-card/50">
       <CardHeader>
         <CardTitle className="font-headline flex justify-between items-baseline">
           <span>{name}</span>
@@ -80,13 +92,7 @@ export default function EntityDisplay({ entity, isPlayer = false }: EntityDispla
           </div>
         )}
         <Separator className="my-4" />
-        <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm font-mono">
-            <span className="text-muted-foreground">Attaque:</span><span className="text-right">{stats.AttMin ?? 0} - {stats.AttMax ?? 0}</span>
-            <span className="text-muted-foreground">Crit %:</span><span className="text-right">{stats.CritPct ?? 0}%</span>
-            <span className="text-muted-foreground">Crit Dmg:</span><span className="text-right">{stats.CritDmg ?? 0}%</span>
-            <span className="text-muted-foreground">Armure:</span><span className="text-right">{stats.Armure ?? 0}</span>
-            <span className="text-muted-foreground">Vitesse:</span><span className="text-right">{stats.Vitesse ?? 0}</span>
-        </div>
+        <StatGrid stats={stats} />
       </CardContent>
     </Card>
   );

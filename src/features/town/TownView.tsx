@@ -6,6 +6,8 @@ import { InventoryView } from '../inventory/InventoryView';
 import { TalentsView } from '../talents/TalentsView';
 import { VendorsView } from '../vendors/VendorsView';
 import { useGameStore } from '@/state/gameStore';
+import { EquipmentView } from '../inventory/EquipmentView';
+import { PlayerStatsView } from '../player/PlayerStatsView';
 
 export function TownView() {
   const { player } = useGameStore();
@@ -20,26 +22,34 @@ export function TownView() {
         <Button>Export/Import Save</Button>
       </header>
       
-      <Tabs defaultValue="dungeons" className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="dungeons">Dungeons</TabsTrigger>
-          <TabsTrigger value="inventory">Inventory</TabsTrigger>
-          <TabsTrigger value="talents">Talents</TabsTrigger>
-          <TabsTrigger value="vendors">Vendors</TabsTrigger>
-        </TabsList>
-        <TabsContent value="dungeons" className="mt-4">
-          <DungeonsView />
-        </TabsContent>
-        <TabsContent value="inventory" className="mt-4">
-          <InventoryView />
-        </TabsContent>
-        <TabsContent value="talents" className="mt-4">
-          <TalentsView />
-        </TabsContent>
-        <TabsContent value="vendors" className="mt-4">
-          <VendorsView />
-        </TabsContent>
-      </Tabs>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-1 flex flex-col gap-8">
+            <PlayerStatsView />
+            <EquipmentView />
+        </div>
+        <div className="lg:col-span-2">
+            <Tabs defaultValue="dungeons" className="w-full">
+                <TabsList className="grid w-full grid-cols-4">
+                <TabsTrigger value="dungeons">Dungeons</TabsTrigger>
+                <TabsTrigger value="inventory">Inventory</TabsTrigger>
+                <TabsTrigger value="talents">Talents</TabsTrigger>
+                <TabsTrigger value="vendors">Vendors</TabsTrigger>
+                </TabsList>
+                <TabsContent value="dungeons" className="mt-4">
+                <DungeonsView />
+                </TabsContent>
+                <TabsContent value="inventory" className="mt-4">
+                <InventoryView />
+                </TabsContent>
+                <TabsContent value="talents" className="mt-4">
+                <TalentsView />
+                </TabsContent>
+                <TabsContent value="vendors" className="mt-4">
+                <VendorsView />
+                </TabsContent>
+            </Tabs>
+        </div>
+      </div>
     </div>
   );
 }

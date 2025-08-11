@@ -1,14 +1,14 @@
-import type { PlayerState, Stats, Monstre } from '@/lib/types';
+import type { Stats } from '@/lib/types';
 
 // Player formulas
-export const calculateMaxHP = (player: PlayerState): number => {
+export const calculateMaxHP = (level: number, stats: Stats): number => {
   // Base HP + STR bonus. Placeholder formula for now.
-  return 100 + 20 * player.level + 10 * (player.stats.Force || 0) + 5 * (player.stats.Esprit || 0);
+  return 100 + 20 * level + 10 * (stats.Force || 0) + 5 * (stats.Esprit || 0);
 };
 
-export const calculateMaxMana = (player: PlayerState): number => {
+export const calculateMaxMana = (level: number, stats: Stats): number => {
   // Base Mana + INT bonus. Placeholder formula for now.
-  return 50 + 15 * player.level + 10 * (player.stats.Intelligence || 0);
+  return 50 + 15 * level + 10 * (stats.Intelligence || 0);
 };
 
 export const calculateAttackPower = (stats: Stats): number => {
@@ -36,22 +36,26 @@ export const calculateSpellDamage = (baseDamage: number, spellPower: number): nu
 export const calculateArmorDR = (armor: number, enemyLevel: number): number => {
     const denominator = armor + (100 + 20 * enemyLevel);
     if (denominator === 0) return 0;
-    return armor / denominator;
+    const dr = armor / denominator;
+    return Math.min(dr, 0.75); // Cap DR at 75%
 };
 
 export const calculateResistanceDR = (resistance: number, enemyLevel: number): number => {
     const denominator = resistance + (100 + 20 * enemyLevel);
     if (denominator === 0) return 0;
-    return resistance / denominator;
+    const dr = resistance / denominator;
+    return Math.min(dr, 0.75); // Cap DR at 75%
 };
 
-export const calculateCritChance = (dex: number, bonusCritChance: number): number => {
-  const baseCrit = 5; // Assuming a 5% base crit chance
-  return baseCrit + (dex * 0.1) + bonusCritChance;
+export const calculateCritChance = (critPct: number, precision: number, targetDodge: number): number => {
+  const hitChance = Math.min(100, precision - targetDodge) / 100;
+  if(Math.random() > hitChance) return 0; // The attack missed, so it can't crit
+  return critPct;
 };
 
-export const isCriticalHit = (critChance: number): boolean => {
-    return Math.random() * 100 < critChance;
+export const isCriticalHit = (critChance: number, precision: number, targetDodge: number): boolean => {
+    const finalCritChance = calculateCritChance(critChance, precision, targetDodge);
+    return Math.random() * 100 < finalCritChance;
 }
 
 export const CRIT_MULTIPLIER = 1.5;
