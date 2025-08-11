@@ -8,6 +8,8 @@ import { VendorsView } from '../vendors/VendorsView';
 import { useGameStore } from '@/state/gameStore';
 import { EquipmentView } from '../inventory/EquipmentView';
 import { PlayerStatsView } from '../player/PlayerStatsView';
+import { QuestsView } from '../quests/QuestsView';
+import { ReputationView } from '../reputation/ReputationView';
 
 export function TownView() {
   const { player } = useGameStore();
@@ -25,6 +27,8 @@ export function TownView() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-1 flex flex-col gap-8">
             <PlayerStatsView />
+            <QuestsView />
+            <ReputationView />
             <EquipmentView />
         </div>
         <div className="lg:col-span-2">

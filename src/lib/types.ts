@@ -1,16 +1,20 @@
 import { z } from 'zod';
 import type {
   StatsSchema,
-  AffixeSchema,
+  AffixSchema,
   ItemSchema,
   TalentSchema,
   MonsterSchema,
   DungeonSchema,
   RaretéEnum,
   ClasseSchema,
+  QueteSchema,
+  FactionSchema,
 } from '@/data/schemas';
 
 export type Rareté = z.infer<typeof RaretéEnum>;
+export type Quete = z.infer<typeof QueteSchema>;
+export type Faction = z.infer<typeof FactionSchema>;
 export type Stats = z.infer<typeof StatsSchema>;
 export type Affixe = z.infer<typeof AffixSchema>;
 export type Item = z.infer<typeof ItemSchema>;
@@ -32,6 +36,10 @@ export interface PlayerState {
   resources: {
     mana: number;
   };
+  reputation: {
+    [factionId: string]: number;
+  };
+  activeEffects: string[];
 }
 
 export interface InventoryState {
@@ -77,4 +85,6 @@ export interface GameData {
   talents: Talent[];
   affixes: Affixe[];
   classes: Classe[];
+  quests: Quete[];
+  factions: Faction[];
 }

@@ -1,0 +1,34 @@
+[
+  {
+    "id": "q_chasse_01",
+    "type": "chasse",
+    "name": "Purifier la Crypte",
+    "desc": "Éliminez 5 monstres dans le Caveau Indigo.",
+    "requirements": {
+      "dungeonId": "caveau_indigo",
+      "killCount": 5
+    },
+    "rewards": {
+      "gold": 100,
+      "xp": 50,
+      "reputation": {
+        "factionId": "guilde_des_pisteurs",
+        "amount": 25
+      }
+    }
+  },
+  {
+    "id": "q_chasse_02",
+    "type": "chasse",
+    "name": "Nettoyage de printemps",
+    "desc": "Éliminez 10 monstres dans le Caveau Indigo.",
+    "requirements": {
+      "dungeonId": "caveau_indigo",
+      "killCount": 10
+    },
+    "rewards": {
+      "gold": 250,
+      "xp": 120
+    }
+  }
+]

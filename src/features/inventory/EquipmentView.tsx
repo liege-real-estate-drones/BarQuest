@@ -10,6 +10,7 @@ const rarityColorMap: Record<Rareté, string> = {
     Rare: 'text-blue-400',
     Épique: 'text-purple-500',
     Légendaire: 'text-yellow-500',
+    Unique: 'text-orange-500',
 };
 
 function EquipmentSlot({ slotName, item }: { slotName: string; item: Item | null }) {

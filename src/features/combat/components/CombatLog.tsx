@@ -2,7 +2,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
-import type { CombatLogEntry } from '@/state/gameStore';
+import type { CombatLogEntry } from '@/lib/types';
 import { useRef, useEffect } from 'react';
 
 interface CombatLogProps {

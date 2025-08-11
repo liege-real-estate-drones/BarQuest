@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const RaretéEnum = z.enum(["Commun", "Rare", "Épique", "Légendaire"]);
+export const RaretéEnum = z.enum(["Commun", "Rare", "Épique", "Légendaire", "Unique"]);
 
 export const StatsSchema = z.object({
   PV: z.number().int(),
@@ -39,6 +39,7 @@ export const ItemSchema = z.object({
   rarity: RaretéEnum,
   affixes: z.array(z.object({ ref: z.string(), val: z.number() })).default([]),
   tagsClasse: z.array(z.string()).default([]),
+  effect: z.string().optional(),
 });
 
 export const ClasseSchema = z.object({
@@ -81,4 +82,29 @@ export const DungeonSchema = z.object({
   modifiers: z.array(z.string()).default([]),
   killTarget: z.number().int().default(25),
   bossId: z.string(),
+});
+
+export const QueteSchema = z.object({
+  id: z.string(),
+  type: z.enum(["chasse"]),
+  name: z.string(),
+  desc: z.string(),
+  requirements: z.object({
+    dungeonId: z.string(),
+    killCount: z.number().int(),
+  }),
+  rewards: z.object({
+    gold: z.number().int(),
+    xp: z.number().int(),
+    reputation: z.object({
+        factionId: z.string(),
+        amount: z.number().int(),
+    }).optional(),
+  }),
+});
+
+export const FactionSchema = z.object({
+    id: z.string(),
+    name: z.string(),
+    ranks: z.array(z.string()),
 });

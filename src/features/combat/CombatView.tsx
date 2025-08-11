@@ -96,7 +96,7 @@ export function CombatView() {
                 <div className="flex flex-col items-center gap-2">
                     <Bot className="h-10 w-10 text-red-400" />
                     <AttackRing progress={enemyAttackProgress * 100} onFire={() => {}} size={140} strokeColor="hsl(var(--destructive))" />
-                    <p className="font-bold text-lg">{enemy.name}</p>
+                    <p className="font-bold text-lg">{enemy.nom}</p>
                 </div>
               </div>
               
