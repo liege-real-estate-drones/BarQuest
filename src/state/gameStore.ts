@@ -221,7 +221,7 @@ export const useGameStore = create<GameState>()(
 
       playerAttack: () => {
         const { player, combat, gameData, getXpToNextLevel } = get();
-        if (!combat.enemy) return;
+        if (!combat.enemy || !combat.enemy.stats) return;
 
         // Player attacks enemy
         const pa = formulas.calculateAttackPower(player.stats);
@@ -236,12 +236,14 @@ export const useGameStore = create<GameState>()(
         const critMsg = `CRITICAL! You hit ${combat.enemy.name} for ${mitigatedDamage} damage.`;
 
         set(state => {
-            state.combat.enemy!.stats.hp -= mitigatedDamage;
+            if (state.combat.enemy?.stats.hp) {
+                state.combat.enemy.stats.hp -= mitigatedDamage;
+            }
             state.combat.log.push({ message: isCrit ? critMsg : attackMsg, type: isCrit ? 'crit' : 'player_attack', timestamp: Date.now() });
             state.combat.playerAttackProgress = 0;
         });
 
-        if (get().combat.enemy!.stats.hp <= 0) {
+        if (get().combat.enemy!.stats.hp! <= 0) {
             const enemy = get().combat.enemy!;
             const goldDrop = Math.floor(Math.random() * (enemy.drops.gold[1] - enemy.drops.gold[0] + 1)) + enemy.drops.gold[0];
             const itemDrop = resolveLoot(enemy, gameData);
@@ -298,9 +300,9 @@ export const useGameStore = create<GameState>()(
       
       enemyAttack: () => {
         const { player, combat } = get();
-        if (!combat.enemy) return;
+        if (!combat.enemy || !combat.enemy.stats) return;
 
-        const enemyDamage = combat.enemy.stats.pa;
+        const enemyDamage = combat.enemy.stats.pa ?? 0;
         const playerDr = formulas.calculateArmorDR(player.stats.armor, combat.enemy.level);
         const mitigatedEnemyDamage = Math.round(enemyDamage * (1 - playerDr));
 

@@ -16,11 +16,11 @@ export default function EntityDisplay({ entity, isPlayer = false }: EntityDispla
   const { level, name } = entity;
   const getXpToNextLevel = useGameStore(s => s.getXpToNextLevel);
   
-  const currentHp = isPlayer ? (entity as PlayerState).resources.hp : (entity as Monster).stats.hp;
+  const currentHp = isPlayer ? (entity as PlayerState).resources.hp : (entity as Monster).stats.hp ?? 0;
   
   const maxHp = isPlayer 
     ? formulas.calculateMaxHP(level, (entity as PlayerState).stats) 
-    : (entity as any).initialHp ?? (entity as Monster).stats.hp;
+    : (entity as any).initialHp ?? (entity as Monster).stats.hp ?? 1;
 
   const hpPercentage = (currentHp / maxHp) * 100;
 
@@ -40,7 +40,7 @@ export default function EntityDisplay({ entity, isPlayer = false }: EntityDispla
     xpPercentage = (player.xp / xpToNextLevel) * 100;
   }
   
-  const stats = isPlayer ? (entity as PlayerState).stats : (entity as Monster).stats;
+  const stats = entity.stats;
 
   return (
     <Card className="flex flex-col h-full">
@@ -82,18 +82,18 @@ export default function EntityDisplay({ entity, isPlayer = false }: EntityDispla
         <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm font-mono">
           { isPlayer && (
             <>
-              <span className="text-muted-foreground">Strength:</span><span className="text-right">{stats.str ?? 0}</span>
+              <span className="text-muted-foreground">Force:</span><span className="text-right">{stats.str ?? 0}</span>
               <span className="text-muted-foreground">Intellect:</span><span className="text-right">{stats.int ?? 0}</span>
-              <span className="text-muted-foreground">Dexterity:</span><span className="text-right">{stats.dex ?? 0}</span>
-              <span className="text-muted-foreground">Spirit:</span><span className="text-right">{stats.spi ?? 0}</span>
+              <span className="text-muted-foreground">Dextérité:</span><span className="text-right">{stats.dex ?? 0}</span>
+              <span className="text-muted-foreground">Esprit:</span><span className="text-right">{stats.spi ?? 0}</span>
             </>
           )}
           {!isPlayer && (
              <>
-                <span className="text-muted-foreground">Power:</span><span className="text-right">{(stats as any).pa ?? 0}</span>
+                <span className="text-muted-foreground">Puissance:</span><span className="text-right">{stats.pa ?? 0}</span>
              </>
           )}
-          <span className="text-muted-foreground">Armor:</span><span className="text-right">{stats.armor ?? 0}</span>
+          <span className="text-muted-foreground">Armure:</span><span className="text-right">{stats.armor ?? 0}</span>
         </div>
       </CardContent>
     </Card>

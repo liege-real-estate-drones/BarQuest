@@ -1,11 +1,15 @@
 import { z } from "zod";
 
+export const RaretéEnum = z.enum(["Commun", "Rare", "Épique", "Légendaire"]);
+
 export const StatsSchema = z.object({
   str: z.number().int().nonnegative().default(0),
   int: z.number().int().nonnegative().default(0),
   dex: z.number().int().nonnegative().default(0),
   spi: z.number().int().nonnegative().default(0),
   armor: z.number().int().nonnegative().default(0),
+  hp: z.number().int().optional(),
+  pa: z.number().int().optional(),
   res: z.object({
     fire: z.number().int().default(0),
     frost: z.number().int().default(0),
@@ -17,8 +21,8 @@ export const StatsSchema = z.object({
 export const AffixSchema = z.object({
   id: z.string(),
   type: z.enum(["prefix","suffix"]),
-  tags: z.array(z.string()).default([]), // ex: ["berserker","melee"]
-  stat: z.string(),                      // ex: "haste_pct"
+  tags: z.array(z.string()).default([]),
+  stat: z.string(),
   min: z.number(),
   max: z.number(),
   weight: z.number().default(1),
@@ -54,17 +58,7 @@ export const MonsterSchema = z.object({
   family: z.string(),
   isBoss: z.boolean().default(false),
   biome: z.array(z.enum(["frost","fire","nature","occult"])).default([]),
-  stats: z.object({
-    hp: z.number().int(),
-    pa: z.number().int(),
-    armor: z.number().int().default(0),
-    res: z.object({
-      fire: z.number().int().default(0),
-      frost: z.number().int().default(0),
-      nature: z.number().int().default(0),
-      occult: z.number().int().default(0),
-    }),
-  }),
+  stats: StatsSchema,
   affixes: z.array(z.string()).default([]),
   drops: z.object({ gold: z.tuple([z.number().int(), z.number().int()]), tables: z.array(z.string()).default([]) }),
 });

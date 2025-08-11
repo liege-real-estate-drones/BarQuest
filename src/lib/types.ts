@@ -1,15 +1,17 @@
 import { z } from 'zod';
 import type {
-  AffixSchema,
+  StatsSchema,
+  AffixeSchema,
   ItemSchema,
   TalentSchema,
   MonsterSchema,
   DungeonSchema,
-  StatsSchema,
+  RaretéEnum,
 } from '@/data/schemas';
 
+export type Rareté = z.infer<typeof RaretéEnum>;
 export type Stats = z.infer<typeof StatsSchema>;
-export type Affix = z.infer<typeof AffixSchema>;
+export type Affixe = z.infer<typeof AffixeSchema>;
 export type Item = z.infer<typeof ItemSchema>;
 export type Talent = z.infer<typeof TalentSchema>;
 export type Monster = z.infer<typeof MonsterSchema>;
