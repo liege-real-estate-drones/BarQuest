@@ -13,7 +13,7 @@ interface AttackRingProps {
 }
 
 export function AttackRing({
-  progress,
+  progress = 0,
   onFire,
   size = 180,
   strokeWidth = 12,
@@ -21,7 +21,7 @@ export function AttackRing({
 }: AttackRingProps) {
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
-  const offset = circumference - (progress / 100) * circumference;
+  const offset = circumference - ((progress || 0) / 100) * circumference;
 
   const isReady = progress >= 100;
 
