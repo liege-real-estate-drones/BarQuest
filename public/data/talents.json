@@ -1,23 +1,2 @@
-[
-    {
-        "id": "talent_berserker_1",
-        "name": "Flurry",
-        "cls": "berserker",
-        "tier": 1,
-        "effects": [{ "stat": "haste_pct", "value": 5 }]
-    },
-    {
-        "id": "talent_mage_1",
-        "name": "Arcane Intellect",
-        "cls": "mage",
-        "tier": 1,
-        "effects": [{ "stat": "int", "value": 10 }]
-    },
-    {
-        "id": "talent_druid_1",
-        "name": "Thick Hide",
-        "cls": "druid",
-        "tier": 1,
-        "effects": [{ "stat": "armor_pct", "value": 10 }]
-    }
-]
+
+[]

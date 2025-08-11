@@ -1,49 +1,43 @@
+
 [
     {
-        "id": "monster_sk_melee",
-        "name": "Risen Skeleton",
+        "id": "skeleton-1",
+        "nom": "Skeleton",
         "level": 1,
-        "family": "undead",
-        "biome": ["occult"],
-        "stats": { "hp": 50, "pa": 8, "armor": 10, "res": { "occult": 5 } },
-        "drops": { "gold": [1, 5] }
+        "famille": "undead",
+        "isBoss": false,
+        "palier": 1,
+        "stats": {
+            "PV": 40,
+            "AttMin": 3,
+            "AttMax": 5,
+            "CritPct": 2,
+            "CritDmg": 120,
+            "Armure": 5,
+            "Vitesse": 2.5,
+            "Precision": 90,
+            "Esquive": 3
+        },
+        "lootTableId": "lt-tier1-common"
     },
     {
-        "id": "monster_sk_archer",
-        "name": "Skeleton Archer",
+        "id": "skeleton-archer-1",
+        "nom": "Skeleton Archer",
         "level": 2,
-        "family": "undead",
-        "biome": ["occult"],
-        "stats": { "hp": 40, "pa": 12, "armor": 5, "res": { "occult": 5 } },
-        "drops": { "gold": [2, 8] }
-    },
-    {
-        "id": "monster_sk_boss",
-        "name": "Grave Lord",
-        "level": 3,
-        "family": "undead",
-        "isBoss": true,
-        "biome": ["occult"],
-        "stats": { "hp": 200, "pa": 20, "armor": 25, "res": { "occult": 15 } },
-        "drops": { "gold": [25, 50], "tables": ["boss_common"] }
-    },
-    {
-        "id": "monster_ice_elemental",
-        "name": "Ice Elemental",
-        "level": 5,
-        "family": "elemental",
-        "biome": ["frost"],
-        "stats": { "hp": 120, "pa": 25, "armor": 15, "res": { "frost": 50, "fire": -25 } },
-        "drops": { "gold": [10, 20] }
-    },
-    {
-        "id": "monster_frost_golem",
-        "name": "Frost Golem",
-        "level": 7,
-        "family": "construct",
-        "isBoss": true,
-        "biome": ["frost"],
-        "stats": { "hp": 500, "pa": 40, "armor": 50, "res": { "frost": 75, "fire": -50 } },
-        "drops": { "gold": [75, 150], "tables": ["boss_rare"] }
+        "famille": "undead",
+        "isBoss": false,
+        "palier": 1,
+        "stats": {
+            "PV": 30,
+            "AttMin": 4,
+            "AttMax": 6,
+            "CritPct": 3,
+            "CritDmg": 125,
+            "Armure": 3,
+            "Vitesse": 2.2,
+            "Precision": 92,
+            "Esquive": 5
+        },
+        "lootTableId": "lt-tier1-common"
     }
 ]

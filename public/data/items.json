@@ -1,30 +1,12 @@
+
 [
     {
-        "id": "item_sword_1",
-        "name": "Rusty Shortsword",
+        "id": "rusty-sword",
+        "name": "Rusty Sword",
         "slot": "weapon",
-        "ilevel": 1,
-        "rarity": "common",
-        "tags": ["sword", "one_hand"],
-        "base": { "min": 3, "max": 5, "speed": 1.8 }
-    },
-    {
-        "id": "item_wand_1",
-        "name": "Cracked Wand",
-        "slot": "weapon",
-        "ilevel": 1,
-        "rarity": "common",
-        "tags": ["wand", "one_hand"],
-        "base": { "min": 2, "max": 6, "speed": 2.2 }
-    },
-    {
-        "id": "item_epic_sword",
-        "name": "Glimmering Blade of the Victor",
-        "slot": "weapon",
-        "ilevel": 10,
-        "rarity": "epic",
-        "tags": ["sword", "one_hand"],
-        "base": { "min": 15, "max": 25, "speed": 2.0 },
-        "affixes": ["affix_str_3", "affix_haste_2"]
+        "niveauMin": 1,
+        "rarity": "Commun",
+        "affixes": [],
+        "tagsClasse": ["common"]
     }
 ]

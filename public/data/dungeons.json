@@ -1,20 +1,12 @@
+
 [
-  {
-    "id": "dungeon_1",
-    "index": 1,
-    "name": "The Decrepit Cellar",
-    "biome": "occult",
-    "recommendedLevel": 1,
-    "killTarget": 10,
-    "bossId": "monster_sk_boss"
-  },
-  {
-    "id": "dungeon_2",
-    "index": 2,
-    "name": "The Frozen Crypt",
-    "biome": "frost",
-    "recommendedLevel": 5,
-    "killTarget": 15,
-    "bossId": "monster_frost_golem"
-  }
+    {
+        "id": "cellar-1",
+        "palier": 1,
+        "name": "The Decrepit Cellar",
+        "biome": "occult",
+        "modifiers": [],
+        "killTarget": 10,
+        "bossId": "boss-skeleton-king"
+    }
 ]

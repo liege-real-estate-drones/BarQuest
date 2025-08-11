@@ -1,0 +1,20 @@
+
+[
+  {
+    "id": "berserker",
+    "nom": "Berserker",
+    "ressource": "Rage",
+    "archétype": "Mêlée",
+    "statsBase": {
+      "PV": 120,
+      "AttMin": 6,
+      "AttMax": 10,
+      "CritPct": 5,
+      "CritDmg": 150,
+      "Armure": 15,
+      "Vitesse": 2.0,
+      "Precision": 95,
+      "Esquive": 5
+    }
+  }
+]
