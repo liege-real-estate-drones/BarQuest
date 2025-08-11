@@ -7,6 +7,7 @@ import type {
   MonsterSchema,
   DungeonSchema,
   RaretéEnum,
+  ClasseSchema,
 } from '@/data/schemas';
 
 export type Rareté = z.infer<typeof RaretéEnum>;
@@ -16,15 +17,21 @@ export type Item = z.infer<typeof ItemSchema>;
 export type Talent = z.infer<typeof TalentSchema>;
 export type Monstre = z.infer<typeof MonsterSchema>;
 export type Dungeon = z.infer<typeof DungeonSchema>;
+export type Classe = z.infer<typeof ClasseSchema>;
 
-export type PlayerClass = 'berserker' | 'mage' | 'druid';
+export type PlayerClassId = 'berserker' | 'mage' | 'druid';
 
 export interface PlayerState {
   name: string;
-  classe: PlayerClass;
+  classe: PlayerClassId;
   level: number;
   xp: number;
-  stats: Stats;
+  stats: Stats & {
+    Force?: number;
+    Intelligence?: number;
+    Dexterite?: number;
+    Esprit?: number;
+  };
   talentPoints: number;
   resources: {
     mana: number;
@@ -60,4 +67,5 @@ export interface GameData {
   items: Item[];
   talents: Talent[];
   affixes: Affixe[];
+  classes: Classe[];
 }

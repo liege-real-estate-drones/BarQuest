@@ -6,7 +6,7 @@ import { TownView } from '@/features/town/TownView';
 import { CombatView } from '@/features/combat/CombatView';
 import { useHydrated } from '@/hooks/useHydrated';
 import { LoaderCircle } from 'lucide-react';
-import { Dungeon, Monstre, Item, Talent, Affixe } from '@/lib/types';
+import { Dungeon, Monstre, Item, Talent, Affixe, Classe } from '@/lib/types';
 
 export default function Home() {
   const { view, initializeGameData, isInitialized } = useGameStore((state) => ({
@@ -20,14 +20,15 @@ export default function Home() {
   useEffect(() => {
     async function loadGameData() {
       try {
-        const [dungeons, monsters, items, talents, affixes] = await Promise.all([
+        const [dungeons, monsters, items, talents, affixes, classes] = await Promise.all([
           fetch('/data/dungeons.json').then(res => res.json()) as Promise<Dungeon[]>,
           fetch('/data/monsters.json').then(res => res.json()) as Promise<Monstre[]>,
           fetch('/data/items.json').then(res => res.json()) as Promise<Item[]>,
           fetch('/data/talents.json').then(res => res.json()) as Promise<Talent[]>,
           fetch('/data/affixes.json').then(res => res.json()) as Promise<Affixe[]>,
+          fetch('/data/classes.json').then(res => res.json()) as Promise<Classe[]>,
         ]);
-        initializeGameData({ dungeons, monsters, items, talents, affixes });
+        initializeGameData({ dungeons, monsters, items, talents, affixes, classes });
       } catch (error) {
         console.error("Failed to load game data:", error);
       } finally {
