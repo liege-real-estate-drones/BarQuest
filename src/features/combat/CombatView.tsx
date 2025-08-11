@@ -7,7 +7,9 @@ import { AttackRing } from './components/AttackRing';
 import { CombatLog } from './components/CombatLog';
 import EntityDisplay from './components/EntityDisplay';
 import { useEffect } from 'react';
-import { Dices, Heart, Shield } from 'lucide-react';
+import { Dices, Heart, Shield, Bot } from 'lucide-react';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
 
 export function CombatView() {
   const {
@@ -18,6 +20,8 @@ export function CombatView() {
     attackProgress,
     startCombat,
     combatLog,
+    autoAttack,
+    toggleAutoAttack
   } = useGameStore((state) => ({
     player: state.player,
     enemy: state.combat.enemy,
@@ -26,6 +30,8 @@ export function CombatView() {
     attackProgress: state.combat.attackProgress,
     startCombat: state.startCombat,
     combatLog: state.combat.log,
+    autoAttack: state.combat.autoAttack,
+    toggleAutoAttack: state.toggleAutoAttack
   }));
 
   useEffect(() => {
@@ -70,16 +76,25 @@ export function CombatView() {
              </Card>
           </div>
           <AttackRing progress={attackProgress * 100} onFire={handleAttack} />
-          <div className="flex w-full justify-center gap-4">
-            <Button onClick={handleAttack} disabled={attackProgress < 1} className="w-32">
-                <Dices className="mr-2 h-4 w-4" /> Attack
-            </Button>
-            <Button variant="secondary" className="w-32">
-                <Heart className="mr-2 h-4 w-4" /> Potion
-            </Button>
-            <Button variant="outline" onClick={flee} className="w-32">
-                <Shield className="mr-2 h-4 w-4" /> Retreat
-            </Button>
+          <div className="flex flex-col items-center gap-4 w-full">
+            <div className="flex items-center space-x-2">
+                <Switch id="auto-attack-switch" checked={autoAttack} onCheckedChange={toggleAutoAttack} />
+                <Label htmlFor="auto-attack-switch" className="flex items-center gap-2">
+                    <Bot />
+                    Attaque automatique
+                </Label>
+            </div>
+            <div className="flex w-full justify-center gap-4">
+                <Button onClick={handleAttack} disabled={attackProgress < 1 || autoAttack} className="w-32">
+                    <Dices className="mr-2 h-4 w-4" /> Attaquer
+                </Button>
+                <Button variant="secondary" className="w-32">
+                    <Heart className="mr-2 h-4 w-4" /> Potion
+                </Button>
+                <Button variant="outline" onClick={flee} className="w-32">
+                    <Shield className="mr-2 h-4 w-4" /> Retraite
+                </Button>
+            </div>
           </div>
         </div>
 

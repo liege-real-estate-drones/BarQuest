@@ -37,6 +37,7 @@ export interface CombatState {
   attackProgress: number; // 0 to 1
   killCount: number;
   log: CombatLogEntry[];
+  autoAttack: boolean;
 }
 
 interface GameData {
@@ -63,6 +64,7 @@ interface GameState {
   gameTick: (delta: number) => void;
   attack: () => void;
   flee: () => void;
+  toggleAutoAttack: () => void;
 }
 
 const initialPlayerState: PlayerState = {
@@ -87,6 +89,7 @@ const initialCombatState: CombatState = {
   attackProgress: 0,
   killCount: 0,
   log: [],
+  autoAttack: false,
 };
 
 let gameLoop: any = null;
@@ -147,6 +150,11 @@ export const useGameStore = create<GameState>()(
       },
       
       gameTick: (delta) => {
+          const { attack, combat } = get();
+          if(combat.autoAttack && combat.attackProgress >= 1) {
+            attack();
+          }
+
           set(state => {
               if(state.view !== 'COMBAT' || !state.combat.enemy) {
                 if(gameLoop) clearInterval(gameLoop);
@@ -235,6 +243,12 @@ export const useGameStore = create<GameState>()(
         });
         if(gameLoop) clearInterval(gameLoop);
       },
+
+      toggleAutoAttack: () => {
+        set(state => {
+          state.combat.autoAttack = !state.combat.autoAttack;
+        });
+      },
       
     })),
     {
@@ -245,6 +259,10 @@ export const useGameStore = create<GameState>()(
           inventory: state.inventory,
           lastPlayed: state.lastPlayed,
           isInitialized: state.isInitialized,
+          combat: { // only persist autoAttack setting
+            ...initialCombatState,
+            autoAttack: state.combat.autoAttack
+          }
       }),
       onRehydrateStorage: () => (state) => {
         if(state) {
