@@ -17,6 +17,8 @@ const getLogEntryColor = (type: CombatLogEntry['type']) => {
       return 'text-red-400';
     case 'crit':
       return 'text-yellow-400 font-bold';
+    case 'levelup':
+        return 'text-yellow-300 font-bold text-lg animate-pulse';
     case 'loot':
       return 'text-primary';
     case 'info':

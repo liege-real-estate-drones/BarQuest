@@ -27,7 +27,7 @@ export interface InventoryState {
 
 export interface CombatLogEntry {
     message: string;
-    type: 'player_attack' | 'enemy_attack' | 'crit' | 'loot' | 'info' | 'flee';
+    type: 'player_attack' | 'enemy_attack' | 'crit' | 'loot' | 'info' | 'flee' | 'levelup';
     timestamp: number;
 }
 
@@ -68,6 +68,7 @@ interface GameState {
   enemyAttack: () => void;
   flee: () => void;
   toggleAutoAttack: () => void;
+  getXpToNextLevel: () => number;
 }
 
 const initialPlayerState: PlayerState = {
@@ -134,6 +135,11 @@ export const useGameStore = create<GameState>()(
       player: initialPlayerState,
       inventory: initialInventoryState,
       combat: initialCombatState,
+
+      getXpToNextLevel: () => {
+        const player = get().player;
+        return player.level * 100;
+      },
 
       initializeGameData: (data) => {
         set((state) => {
@@ -214,7 +220,7 @@ export const useGameStore = create<GameState>()(
       },
 
       playerAttack: () => {
-        const { player, combat, gameData } = get();
+        const { player, combat, gameData, getXpToNextLevel } = get();
         if (!combat.enemy) return;
 
         // Player attacks enemy
@@ -239,11 +245,35 @@ export const useGameStore = create<GameState>()(
             const enemy = get().combat.enemy!;
             const goldDrop = Math.floor(Math.random() * (enemy.drops.gold[1] - enemy.drops.gold[0] + 1)) + enemy.drops.gold[0];
             const itemDrop = resolveLoot(enemy, gameData);
+            const xpGained = enemy.level * 10;
 
             set(state => {
                 state.combat.log.push({ message: `You defeated ${enemy.name}!`, type: 'info', timestamp: Date.now() });
                 state.combat.log.push({ message: `You find ${goldDrop} gold.`, type: 'loot', timestamp: Date.now() });
                 state.inventory.gold += goldDrop;
+                
+                state.player.xp += xpGained;
+                state.combat.log.push({ message: `You gain ${xpGained} experience.`, type: 'info', timestamp: Date.now() });
+
+                // Level up check
+                const xpToNextLevel = getXpToNextLevel();
+                if (state.player.xp >= xpToNextLevel) {
+                    state.player.level += 1;
+                    state.player.xp -= xpToNextLevel;
+                    state.player.talentPoints += 1;
+                    // Basic stat increase on level up
+                    state.player.stats.str += 2;
+                    state.player.stats.int += 1;
+                    state.player.stats.dex += 1;
+                    state.player.stats.spi += 1;
+
+                    state.combat.log.push({ message: `Congratulations! You have reached level ${state.player.level}!`, type: 'levelup', timestamp: Date.now() });
+                    
+                    // Full heal on level up
+                    state.player.resources.hp = formulas.calculateMaxHP(state.player.level, state.player.stats);
+                    state.player.resources.mana = formulas.calculateMaxMana(state.player.level, state.player.stats);
+                }
+
 
                 if (itemDrop) {
                     state.inventory.items.push(itemDrop);

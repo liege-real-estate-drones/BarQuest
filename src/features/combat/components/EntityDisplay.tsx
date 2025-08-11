@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { PlayerState } from '@/state/gameStore';
+import { PlayerState, useGameStore } from '@/state/gameStore';
 import { Monster } from '@/lib/types';
 import * as formulas from '@/core/formulas';
 import { Separator } from '@/components/ui/separator';
@@ -14,6 +14,7 @@ interface EntityDisplayProps {
 
 export default function EntityDisplay({ entity, isPlayer = false }: EntityDisplayProps) {
   const { level, name } = entity;
+  const getXpToNextLevel = useGameStore(s => s.getXpToNextLevel);
   
   const currentHp = isPlayer ? (entity as PlayerState).resources.hp : (entity as Monster).stats.hp;
   
@@ -26,12 +27,17 @@ export default function EntityDisplay({ entity, isPlayer = false }: EntityDispla
   let currentMana: number | undefined;
   let maxMana: number | undefined;
   let manaPercentage: number | undefined;
+  let xpPercentage: number | undefined;
+  let xpToNextLevel: number | undefined;
 
   if (isPlayer) {
     const player = entity as PlayerState;
     currentMana = player.resources.mana;
     maxMana = formulas.calculateMaxMana(level, player.stats);
     manaPercentage = maxMana > 0 ? (currentMana / maxMana) * 100 : 0;
+    
+    xpToNextLevel = getXpToNextLevel();
+    xpPercentage = (player.xp / xpToNextLevel) * 100;
   }
   
   const stats = isPlayer ? (entity as PlayerState).stats : (entity as Monster).stats;
@@ -61,6 +67,15 @@ export default function EntityDisplay({ entity, isPlayer = false }: EntityDispla
               <span>{Math.round(currentMana!)} / {Math.round(maxMana)}</span>
             </div>
             <Progress value={manaPercentage} className="h-4" indicatorClassName="bg-gradient-to-r from-blue-500 to-blue-700" />
+          </div>
+        )}
+        {isPlayer && xpToNextLevel !== undefined && (
+          <div>
+            <div className="flex justify-between text-xs mb-1 font-mono text-yellow-400">
+                <span>XP</span>
+                <span>{Math.round((entity as PlayerState).xp)} / {Math.round(xpToNextLevel)}</span>
+            </div>
+            <Progress value={xpPercentage} className="h-2" indicatorClassName="bg-gradient-to-r from-yellow-500 to-yellow-700" />
           </div>
         )}
         <Separator className="my-4" />
