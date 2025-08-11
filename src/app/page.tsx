@@ -1,3 +1,60 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useGameStore } from '@/state/gameStore';
+import { TownView } from '@/features/town/TownView';
+import { CombatView } from '@/features/combat/CombatView';
+import { useHydrated } from '@/hooks/useHydrated';
+import { LoaderCircle } from 'lucide-react';
+import { Dungeon, Monster, Item, Talent, Affix } from '@/lib/types';
+
 export default function Home() {
-  return <></>;
+  const { view, initializeGameData, isInitialized } = useGameStore((state) => ({
+    view: state.view,
+    initializeGameData: state.initializeGameData,
+    isInitialized: state.isInitialized,
+  }));
+  const hydrated = useHydrated();
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadGameData() {
+      try {
+        const [dungeons, monsters, items, talents, affixes] = await Promise.all([
+          fetch('/data/dungeons.json').then(res => res.json()) as Promise<Dungeon[]>,
+          fetch('/data/monsters.json').then(res => res.json()) as Promise<Monster[]>,
+          fetch('/data/items.json').then(res => res.json()) as Promise<Item[]>,
+          fetch('/data/talents.json').then(res => res.json()) as Promise<Talent[]>,
+          fetch('/data/affixes.json').then(res => res.json()) as Promise<Affix[]>,
+        ]);
+        initializeGameData({ dungeons, monsters, items, talents, affixes });
+      } catch (error) {
+        console.error("Failed to load game data:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    if (hydrated && !isInitialized) {
+      loadGameData();
+    } else if (isInitialized) {
+      setIsLoading(false);
+    }
+  }, [hydrated, initializeGameData, isInitialized]);
+  
+  if (!hydrated || isLoading) {
+    return (
+      <main className="flex min-h-screen flex-col items-center justify-center p-24 bg-background">
+        <LoaderCircle className="h-16 w-16 animate-spin text-primary" />
+        <p className="mt-4 text-xl text-foreground">Loading BarQuest...</p>
+      </main>
+    );
+  }
+
+  return (
+    <main className="min-h-screen bg-background text-foreground">
+      {view === 'TOWN' && <TownView />}
+      {view === 'COMBAT' && <CombatView />}
+    </main>
+  );
 }

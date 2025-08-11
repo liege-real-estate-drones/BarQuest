@@ -1,0 +1,48 @@
+
+[
+  {
+    "id": "monster_1",
+    "name": "Mindless Zombie",
+    "level": 1,
+    "family": "Undead",
+    "isBoss": false,
+    "biome": ["occult"],
+    "stats": {
+      "hp": 40,
+      "pa": 5,
+      "armor": 10,
+      "res": { "fire": 0, "frost": 0, "nature": 0, "occult": 5 }
+    },
+    "drops": { "gold": [2, 5], "tables": [] }
+  },
+  {
+    "id": "monster_2",
+    "name": "Ghastly Apparition",
+    "level": 2,
+    "family": "Spirit",
+    "isBoss": false,
+    "biome": ["occult"],
+    "stats": {
+      "hp": 30,
+      "pa": 8,
+      "armor": 5,
+      "res": { "fire": 0, "frost": 10, "nature": 0, "occult": 15 }
+    },
+    "drops": { "gold": [4, 8], "tables": [] }
+  },
+  {
+    "id": "monster_boss_1",
+    "name": "The Unspoken One",
+    "level": 5,
+    "family": "Aberration",
+    "isBoss": true,
+    "biome": ["occult"],
+    "stats": {
+      "hp": 250,
+      "pa": 15,
+      "armor": 30,
+      "res": { "fire": 10, "frost": 10, "nature": 10, "occult": 25 }
+    },
+    "drops": { "gold": [50, 100], "tables": ["rare_gear"] }
+  }
+]

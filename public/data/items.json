@@ -1,0 +1,25 @@
+
+[
+    {
+        "id": "item_wep_1",
+        "name": "Rusty Shortsword",
+        "slot": "weapon",
+        "ilevel": 1,
+        "rarity": "common",
+        "tags": ["berserker", "sword"],
+        "base": {
+            "min": 3,
+            "max": 5,
+            "speed": 1.8
+        }
+    },
+    {
+        "id": "item_chest_1",
+        "name": "Tattered Leather Vest",
+        "slot": "chest",
+        "ilevel": 1,
+        "rarity": "common",
+        "tags": [],
+        "affixes": [ "affix_armor_1" ]
+    }
+]

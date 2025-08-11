@@ -1,0 +1,13 @@
+
+[
+  {
+    "id": "dungeon_1",
+    "index": 1,
+    "name": "Crypt of the Unspoken",
+    "biome": "occult",
+    "recommendedLevel": 1,
+    "modifiers": [],
+    "killTarget": 5,
+    "bossId": "monster_boss_1"
+  }
+]
