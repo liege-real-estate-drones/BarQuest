@@ -1,53 +1,52 @@
 import create from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import type { Dungeon, Monstre, Item, Talent, Affixe, Stats } from '@/lib/types';
+import type { Dungeon, Monstre, Item, Talent, Affixe, Stats, PlayerState, InventoryState, CombatLogEntry, CombatState, GameData } from '@/lib/types';
 import * as formulas from '@/core/formulas';
 
-export type PlayerClass = 'berserker' | 'mage' | 'druid';
 
-export interface PlayerState {
-  name: string;
-  class: PlayerClass;
-  level: number;
-  xp: number;
-  stats: Stats;
-  talentPoints: number;
+const initialPlayerState: PlayerState = {
+  name: "Hero",
+  classe: 'berserker',
+  level: 1,
+  xp: 0,
+  stats: { 
+    PV: 120, 
+    Force: 10,
+    Intelligence: 5,
+    Dexterite: 7,
+    Esprit: 8,
+    AttMin: 6, 
+    AttMax: 10, 
+    CritPct: 5, 
+    CritDmg: 150, 
+    Armure: 15, 
+    Vitesse: 2.0, 
+    Precision: 95, 
+    Esquive: 5 
+  },
+  talentPoints: 0,
   resources: {
-    mana: number;
-  };
-}
+    mana: 50,
+  },
+};
 
-export interface InventoryState {
-  gold: number;
-  items: Item[];
-  equipment: Record<Item['slot'], Item | null>;
-}
+const initialInventoryState: InventoryState = {
+  gold: 100,
+  items: [],
+  equipment: { weapon: null, head: null, chest: null, legs: null, hands: null, feet: null, belt: null, amulet: null, ring: null, ring2: null, trinket: null, offhand: null },
+};
 
-export interface CombatLogEntry {
-    message: string;
-    type: 'player_attack' | 'enemy_attack' | 'crit' | 'loot' | 'info' | 'flee' | 'levelup';
-    timestamp: number;
-}
-
-export interface CombatState {
-  enemy: (Monstre & { initialHp?: number }) | null;
-  playerAttackInterval: number; // in ms
-  playerAttackProgress: number; // 0 to 1
-  enemyAttackInterval: number; // in ms
-  enemyAttackProgress: number; // 0 to 1
-  killCount: number;
-  log: CombatLogEntry[];
-  autoAttack: boolean;
-}
-
-interface GameData {
-  dungeons: Dungeon[];
-  monsters: Monstre[];
-  items: Item[];
-  talents: Talent[];
-  affixes: Affixe[];
-}
+const initialCombatState: CombatState = {
+  enemy: null,
+  playerAttackInterval: 2000,
+  playerAttackProgress: 0,
+  enemyAttackInterval: 2500,
+  enemyAttackProgress: 0,
+  killCount: 0,
+  log: [],
+  autoAttack: false,
+};
 
 interface GameState {
   isInitialized: boolean;
@@ -69,33 +68,6 @@ interface GameState {
   toggleAutoAttack: () => void;
   getXpToNextLevel: () => number;
 }
-
-const initialPlayerState: PlayerState = {
-  name: "Hero",
-  class: 'berserker',
-  level: 1,
-  xp: 0,
-  stats: { PV: 120, AttMin: 6, AttMax: 10, CritPct: 5, CritDmg: 150, Armure: 15, Vitesse: 2.0, Precision: 95, Esquive: 5 },
-  talentPoints: 0,
-  resources: { mana: 50 },
-};
-
-const initialInventoryState: InventoryState = {
-  gold: 100,
-  items: [],
-  equipment: { weapon: null, head: null, chest: null, legs: null, hands: null, feet: null, belt: null, amulet: null, ring: null, ring2: null, trinket: null, offhand: null },
-};
-
-const initialCombatState: CombatState = {
-  enemy: null,
-  playerAttackInterval: 2000,
-  playerAttackProgress: 0,
-  enemyAttackInterval: 2500,
-  enemyAttackProgress: 0,
-  killCount: 0,
-  log: [],
-  autoAttack: false,
-};
 
 let gameLoop: any = null;
 
@@ -144,9 +116,11 @@ export const useGameStore = create<GameState>()(
         set((state) => {
           state.gameData = data;
           state.isInitialized = true;
-          const player = state.player;
-          player.stats.PV = formulas.calculateMaxHP(player);
-          player.resources.mana = formulas.calculateMaxMana(player);
+          // Recalculate max HP and Mana based on loaded stats
+          const maxHp = formulas.calculateMaxHP(state.player);
+          const maxMana = formulas.calculateMaxMana(state.player);
+          state.player.stats.PV = maxHp;
+          state.player.resources.mana = maxMana;
         });
       },
 
@@ -181,7 +155,7 @@ export const useGameStore = create<GameState>()(
             state.combat.playerAttackProgress = 0;
             state.combat.enemyAttackProgress = 0;
             state.combat.enemyAttackInterval = monsterInstance.stats.Vitesse * 1000;
-            state.combat.log.push({ message: `A wild ${monsterInstance.name} appears!`, type: 'info', timestamp: Date.now() });
+            state.combat.log.push({ message: `A wild ${monsterInstance.nom} appears!`, type: 'info', timestamp: Date.now() });
           });
         }
       },
@@ -221,16 +195,15 @@ export const useGameStore = create<GameState>()(
         if (!combat.enemy || !combat.enemy.stats) return;
 
         // Player attacks enemy
-        const pa = formulas.calculateAttackPower(player.stats);
-        const damage = formulas.calculateMeleeDamage(pa);
-        const isCrit = formulas.isCriticalHit(player.stats);
+        const damage = formulas.calculateMeleeDamage(player.stats.AttMin, player.stats.AttMax, formulas.calculateAttackPower(player.stats));
+        const isCrit = formulas.isCriticalHit(player.stats.CritPct);
         const finalDamage = isCrit ? damage * (player.stats.CritDmg / 100) : damage;
         
         const dr = formulas.calculateArmorDR(combat.enemy.stats.Armure, player.level);
         const mitigatedDamage = Math.round(finalDamage * (1 - dr));
         
-        const attackMsg = `You hit ${combat.enemy.name} for ${mitigatedDamage} damage.`;
-        const critMsg = `CRITICAL! You hit ${combat.enemy.name} for ${mitigatedDamage} damage.`;
+        const attackMsg = `You hit ${combat.enemy.nom} for ${mitigatedDamage} damage.`;
+        const critMsg = `CRITICAL! You hit ${combat.enemy.nom} for ${mitigatedDamage} damage.`;
 
         set(state => {
             if (state.combat.enemy?.stats.PV) {
@@ -247,7 +220,7 @@ export const useGameStore = create<GameState>()(
             const xpGained = enemy.level * 10;
 
             set(state => {
-                state.combat.log.push({ message: `You defeated ${enemy.name}!`, type: 'info', timestamp: Date.now() });
+                state.combat.log.push({ message: `You defeated ${enemy.nom}!`, type: 'info', timestamp: Date.now() });
                 state.combat.log.push({ message: `You find ${goldDrop} gold.`, type: 'loot', timestamp: Date.now() });
                 state.inventory.gold += goldDrop;
                 
@@ -265,12 +238,16 @@ export const useGameStore = create<GameState>()(
                     state.player.stats.AttMin += 1;
                     state.player.stats.AttMax += 1;
                     state.player.stats.Armure += 5;
+                    state.player.stats.Force! += 1;
+
 
                     state.combat.log.push({ message: `Congratulations! You have reached level ${state.player.level}!`, type: 'levelup', timestamp: Date.now() });
                     
                     // Full heal on level up
-                    state.player.stats.PV = formulas.calculateMaxHP(state.player);
-                    state.resources.mana = formulas.calculateMaxMana(state.player);
+                    const maxHp = formulas.calculateMaxHP(state.player);
+                    const maxMana = formulas.calculateMaxMana(state.player);
+                    state.player.stats.PV = maxHp;
+                    state.player.resources.mana = maxMana;
                 }
 
 
@@ -299,13 +276,13 @@ export const useGameStore = create<GameState>()(
         const { player, combat } = get();
         if (!combat.enemy || !combat.enemy.stats) return;
 
-        const enemyDamage = formulas.calculateMeleeDamage(formulas.calculateAttackPower(combat.enemy.stats));
+        const enemyDamage = formulas.calculateMeleeDamage(combat.enemy.stats.AttMin, combat.enemy.stats.AttMax, formulas.calculateAttackPower(combat.enemy.stats));
         const playerDr = formulas.calculateArmorDR(player.stats.Armure, combat.enemy.level);
         const mitigatedEnemyDamage = Math.round(enemyDamage * (1 - playerDr));
 
         set(state => {
             state.player.stats.PV -= mitigatedEnemyDamage;
-            state.combat.log.push({ message: `${combat.enemy!.name} hits you for ${mitigatedEnemyDamage} damage.`, type: 'enemy_attack', timestamp: Date.now() });
+            state.combat.log.push({ message: `${combat.enemy!.nom} hits you for ${mitigatedEnemyDamage} damage.`, type: 'enemy_attack', timestamp: Date.now() });
             state.combat.enemyAttackProgress = 0;
         });
 

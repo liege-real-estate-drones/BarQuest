@@ -1,20 +1,22 @@
-import type { Stats, Monster } from '@/lib/types';
+import type { PlayerState, Stats, Monstre } from '@/lib/types';
 
 // Player formulas
-export const calculateMaxHP = (level: number, stats: Stats): number => {
-  return 100 + 20 * level + 10 * (stats.str || 0) + 5 * (stats.spi || 0);
+export const calculateMaxHP = (player: PlayerState): number => {
+  // Base HP + STR bonus. Placeholder formula for now.
+  return 100 + 20 * player.level + 10 * (player.stats.Force || 0) + 5 * (player.stats.Esprit || 0);
 };
 
-export const calculateMaxMana = (level: number, stats: Stats): number => {
-  return 50 + 15 * level + 10 * (stats.int || 0);
+export const calculateMaxMana = (player: PlayerState): number => {
+  // Base Mana + INT bonus. Placeholder formula for now.
+  return 50 + 15 * player.level + 10 * (player.stats.Intelligence || 0);
 };
 
 export const calculateAttackPower = (stats: Stats): number => {
-  return 2 * (stats.str || 0);
+  return 2 * (stats.Force || 0);
 };
 
 export const calculateSpellPower = (stats: Stats): number => {
-  return 2 * (stats.int || 0);
+  return 2 * (stats.Intelligence || 0);
 };
 
 // Combat formulas

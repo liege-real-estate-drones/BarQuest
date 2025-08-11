@@ -13,9 +13,11 @@ interface EntityDisplayProps {
 }
 
 export default function EntityDisplay({ entity, isPlayer = false }: EntityDisplayProps) {
-  const { level, name } = entity;
   const getXpToNextLevel = useGameStore(s => s.getXpToNextLevel);
   
+  const { level } = entity;
+  const name = isPlayer ? (entity as PlayerState).name : (entity as Monstre).nom;
+
   const currentHp = entity.stats.PV;
   const maxHp = isPlayer 
     ? formulas.calculateMaxHP(entity as PlayerState) 
