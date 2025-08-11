@@ -1,9 +1,14 @@
 import create from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import type { Dungeon, Monstre, Item, Talent, Affixe, Stats, PlayerState, InventoryState, CombatLogEntry, CombatState, GameData, Classe } from '@/lib/types';
+import type { Dungeon, Monstre, Item, Talent, Affixe, Stats, PlayerState, InventoryState, CombatLogEntry, CombatState, GameData, Classe, Quete } from '@/lib/types';
 import * as formulas from '@/core/formulas';
 import { v4 as uuidv4 } from 'uuid';
+
+export interface ActiveQuete {
+  quete: Quete;
+  progress: number;
+}
 
 
 const getInitialPlayerState = (classes: Classe[]): PlayerState => {
@@ -24,6 +29,8 @@ const getInitialPlayerState = (classes: Classe[]): PlayerState => {
     resources: {
       mana: 50,
     },
+    reputation: {},
+    activeEffects: [],
   };
 };
 
@@ -53,6 +60,7 @@ interface GameState {
   player: PlayerState;
   inventory: InventoryState;
   combat: CombatState;
+  activeQuests: ActiveQuete[];
   
   initializeGameData: (data: GameData) => void;
   recalculateStats: () => void;
@@ -99,10 +107,11 @@ export const useGameStore = create<GameState>()(
       lastPlayed: null,
       view: 'TOWN',
       currentDungeon: null,
-      gameData: { dungeons: [], monsters: [], items: [], talents: [], affixes: [], classes: [] },
+      gameData: { dungeons: [], monsters: [], items: [], talents: [], affixes: [], classes: [], quests: [], factions: [] },
       player: getInitialPlayerState([]),
       inventory: initialInventoryState,
       combat: initialCombatState,
+      activeQuests: [],
 
       getXpToNextLevel: () => {
         const player = get().player;
@@ -116,6 +125,11 @@ export const useGameStore = create<GameState>()(
           state.gameData = data;
           const initialPlayer = getInitialPlayerState(data.classes);
           state.player = initialPlayer;
+
+          // Auto-start the first quest for demo purposes
+          if (data.quests.length > 0 && state.activeQuests.length === 0) {
+            state.activeQuests.push({ quete: data.quests[0], progress: 0 });
+          }
           
           state.isInitialized = true;
         });
@@ -129,20 +143,25 @@ export const useGameStore = create<GameState>()(
           if (!classe) return;
 
           const newStats: Stats = { ...player.baseStats };
+          const newEffects: string[] = [];
 
           // Add stats from equipment
           Object.values(inventory.equipment).forEach(item => {
             if (item) {
               item.affixes.forEach(affix => {
                 const statKey = affix.ref as keyof Stats;
-                if (statKey in newStats) {
+                if (statKey in newStats && typeof newStats[statKey] !== 'object') {
                     (newStats[statKey] as number) = (newStats[statKey] || 0) + (affix.val || 0);
                 }
               });
+              if (item.effect) {
+                newEffects.push(item.effect);
+              }
             }
           });
 
           player.stats = newStats;
+          player.activeEffects = newEffects;
           
           const maxHp = formulas.calculateMaxHP(player.level, player.stats);
           const maxMana = formulas.calculateMaxMana(player.level, player.stats);
@@ -267,8 +286,16 @@ export const useGameStore = create<GameState>()(
 
         const damage = formulas.calculateMeleeDamage(player.stats.AttMin, player.stats.AttMax, formulas.calculateAttackPower(player.stats));
         const isCrit = formulas.isCriticalHit(player.stats.CritPct, player.stats.Precision, combat.enemy.stats.Esquive);
-        const finalDamage = isCrit ? damage * (player.stats.CritDmg / 100) : damage;
+        let finalDamage = isCrit ? damage * (player.stats.CritDmg / 100) : damage;
         
+        // Apply effects
+        if (player.activeEffects.includes('dernier_cri')) {
+            const maxHp = formulas.calculateMaxHP(player.level, player.stats);
+            const hpPercent = (player.stats.PV / maxHp) * 100;
+            const damageMultiplier = 1 + (100 - hpPercent) / 100;
+            finalDamage *= damageMultiplier;
+        }
+
         const dr = formulas.calculateArmorDR(combat.enemy.stats.Armure, player.level);
         const mitigatedDamage = Math.round(finalDamage * (1 - dr));
         
@@ -296,6 +323,36 @@ export const useGameStore = create<GameState>()(
                 
                 state.player.xp += xpGained;
                 state.combat.log.push({ message: `You gain ${xpGained} experience.`, type: 'info', timestamp: Date.now() });
+
+                // Quest Progress
+                state.activeQuests.forEach((activeQuest, index) => {
+                  if (activeQuest.quete.requirements.dungeonId === state.currentDungeon?.id) {
+                    activeQuest.progress++;
+                    if (activeQuest.progress >= activeQuest.quete.requirements.killCount) {
+                      // Quest Complete
+                      const quest = activeQuest.quete;
+                      state.combat.log.push({ message: `Quest Complete: ${quest.name}!`, type: 'levelup', timestamp: Date.now() });
+                      state.inventory.gold += quest.rewards.gold;
+                      state.player.xp += quest.rewards.xp;
+                      state.combat.log.push({ message: `You received ${quest.rewards.gold} gold and ${quest.rewards.xp} XP.`, type: 'loot', timestamp: Date.now() });
+
+                      if (quest.rewards.reputation) {
+                        const rep = quest.rewards.reputation;
+                        state.player.reputation[rep.factionId] = (state.player.reputation[rep.factionId] || 0) + rep.amount;
+                        state.combat.log.push({ message: `Your reputation with ${rep.factionId} increased by ${rep.amount}.`, type: 'info', timestamp: Date.now() });
+                      }
+
+                      // Remove completed quest and add the next one if available
+                      state.activeQuests.splice(index, 1);
+                      const nextQuestIndex = gameData.quests.findIndex(q => q.id === quest.id) + 1;
+                      if (nextQuestIndex < gameData.quests.length) {
+                        const nextQuest = gameData.quests[nextQuestIndex];
+                        state.activeQuests.push({ quete: nextQuest, progress: 0 });
+                        state.combat.log.push({ message: `New Quest: ${nextQuest.name}!`, type: 'info', timestamp: Date.now() });
+                      }
+                    }
+                  }
+                });
 
                 const xpToNextLevel = getXpToNextLevel();
                 if (state.player.xp >= xpToNextLevel) {

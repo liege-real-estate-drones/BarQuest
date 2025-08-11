@@ -8,5 +8,18 @@
         "rarity": "Commun",
         "affixes": [],
         "tagsClasse": ["common"]
+  },
+  {
+    "id": "unique_axe_dernier_cri",
+    "name": "Hache 'Dernier Cri'",
+    "slot": "weapon",
+    "niveauMin": 10,
+    "rarity": "Unique",
+    "affixes": [
+        { "ref": "AttMin", "val": 25 },
+        { "ref": "AttMax", "val": 40 }
+    ],
+    "tagsClasse": ["berserker"],
+    "effect": "dernier_cri"
     }
 ]

@@ -2,8 +2,8 @@
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { PlayerState, useGameStore } from '@/state/gameStore';
-import { Monstre, Stats } from '@/lib/types';
+import { useGameStore } from '@/state/gameStore';
+import { Monstre, Stats, PlayerState } from '@/lib/types';
 import * as formulas from '@/core/formulas';
 import { Separator } from '@/components/ui/separator';
 
@@ -37,17 +37,12 @@ export default function EntityDisplay({ entity, isPlayer = false }: EntityDispla
 
   const hpPercentage = maxHp > 0 ? (currentHp / maxHp) * 100 : 0;
 
-  let currentMana: number | undefined;
-  let maxMana: number | undefined;
-  let manaPercentage: number | undefined;
-  let xpPercentage: number | undefined;
-  let xpToNextLevel: number | undefined;
+  let currentMana, maxMana, xpPercentage, xpToNextLevel;
 
   if (isPlayer) {
     const player = entity as PlayerState;
     currentMana = player.resources.mana;
     maxMana = formulas.calculateMaxMana(player.level, player.stats);
-    manaPercentage = maxMana > 0 ? (currentMana / maxMana) * 100 : 0;
     
     xpToNextLevel = getXpToNextLevel();
     xpPercentage = xpToNextLevel > 0 ? (player.xp / xpToNextLevel) * 100 : 0;
@@ -73,13 +68,13 @@ export default function EntityDisplay({ entity, isPlayer = false }: EntityDispla
           </div>
           <Progress value={hpPercentage} className="h-4" indicatorClassName="bg-gradient-to-r from-red-500 to-red-700" />
         </div>
-        {isPlayer && maxMana !== undefined && maxMana > 0 && (
+        {isPlayer && currentMana !== undefined && maxMana !== undefined && maxMana > 0 && (
           <div>
             <div className="flex justify-between text-xs mb-1 font-mono text-blue-400">
               <span>MANA</span>
-              <span>{Math.round(currentMana!)} / {Math.round(maxMana)}</span>
+              <span>{Math.round(currentMana)} / {Math.round(maxMana)}</span>
             </div>
-            <Progress value={manaPercentage} className="h-4" indicatorClassName="bg-gradient-to-r from-blue-500 to-blue-700" />
+            <Progress value={(currentMana / maxMana) * 100} className="h-4" indicatorClassName="bg-gradient-to-r from-blue-500 to-blue-700" />
           </div>
         )}
         {isPlayer && xpToNextLevel !== undefined && (
