@@ -94,6 +94,30 @@ const initialCombatState: CombatState = {
 
 let gameLoop: any = null;
 
+const resolveLoot = (monster: Monster, gameData: GameData): Item | null => {
+  if (!monster.drops.tables || monster.drops.tables.length === 0) {
+    return null;
+  }
+
+  // For now, let's keep it simple: 25% chance to drop any item from its tables
+  if (Math.random() > 0.25) {
+    return null;
+  }
+  
+  const possibleItems = gameData.items.filter(item => 
+      monster.drops.tables.some(tag => item.tags.includes(tag)) &&
+      item.ilevel <= monster.level + 2 // Item level constraint
+  );
+
+  if (possibleItems.length === 0) {
+    return null;
+  }
+
+  const droppedItem = possibleItems[Math.floor(Math.random() * possibleItems.length)];
+  return JSON.parse(JSON.stringify(droppedItem));
+};
+
+
 export const useGameStore = create<GameState>()(
   persist(
     immer((set, get) => ({
@@ -171,7 +195,7 @@ export const useGameStore = create<GameState>()(
       },
 
       attack: () => {
-        const { player, combat } = get();
+        const { player, combat, gameData } = get();
         if (!combat.enemy) return;
 
         // Player attacks enemy
@@ -195,10 +219,18 @@ export const useGameStore = create<GameState>()(
         if (get().combat.enemy!.stats.hp <= 0) {
             const enemy = get().combat.enemy!;
             const goldDrop = Math.floor(Math.random() * (enemy.drops.gold[1] - enemy.drops.gold[0] + 1)) + enemy.drops.gold[0];
+            const itemDrop = resolveLoot(enemy, gameData);
+
             set(state => {
                 state.combat.log.push({ message: `You defeated ${enemy.name}!`, type: 'info', timestamp: Date.now() });
                 state.combat.log.push({ message: `You find ${goldDrop} gold.`, type: 'loot', timestamp: Date.now() });
                 state.inventory.gold += goldDrop;
+
+                if (itemDrop) {
+                    state.inventory.items.push(itemDrop);
+                    state.combat.log.push({ message: `You loot [${itemDrop.name}].`, type: 'loot', timestamp: Date.now() });
+                }
+
                 state.combat.killCount += 1;
                 state.combat.enemy = null;
             });
