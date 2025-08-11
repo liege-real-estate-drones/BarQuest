@@ -1,13 +1,20 @@
-
 [
   {
     "id": "dungeon_1",
     "index": 1,
-    "name": "Crypt of the Unspoken",
+    "name": "The Decrepit Cellar",
     "biome": "occult",
     "recommendedLevel": 1,
-    "modifiers": [],
-    "killTarget": 5,
-    "bossId": "monster_boss_1"
+    "killTarget": 10,
+    "bossId": "monster_sk_boss"
+  },
+  {
+    "id": "dungeon_2",
+    "index": 2,
+    "name": "The Frozen Crypt",
+    "biome": "frost",
+    "recommendedLevel": 5,
+    "killTarget": 15,
+    "bossId": "monster_frost_golem"
   }
 ]

@@ -1,48 +1,49 @@
-
 [
-  {
-    "id": "monster_1",
-    "name": "Mindless Zombie",
-    "level": 1,
-    "family": "Undead",
-    "isBoss": false,
-    "biome": ["occult"],
-    "stats": {
-      "hp": 40,
-      "pa": 5,
-      "armor": 10,
-      "res": { "fire": 0, "frost": 0, "nature": 0, "occult": 5 }
+    {
+        "id": "monster_sk_melee",
+        "name": "Risen Skeleton",
+        "level": 1,
+        "family": "undead",
+        "biome": ["occult"],
+        "stats": { "hp": 50, "pa": 8, "armor": 10, "res": { "occult": 5 } },
+        "drops": { "gold": [1, 5] }
     },
-    "drops": { "gold": [2, 5], "tables": [] }
-  },
-  {
-    "id": "monster_2",
-    "name": "Ghastly Apparition",
-    "level": 2,
-    "family": "Spirit",
-    "isBoss": false,
-    "biome": ["occult"],
-    "stats": {
-      "hp": 30,
-      "pa": 8,
-      "armor": 5,
-      "res": { "fire": 0, "frost": 10, "nature": 0, "occult": 15 }
+    {
+        "id": "monster_sk_archer",
+        "name": "Skeleton Archer",
+        "level": 2,
+        "family": "undead",
+        "biome": ["occult"],
+        "stats": { "hp": 40, "pa": 12, "armor": 5, "res": { "occult": 5 } },
+        "drops": { "gold": [2, 8] }
     },
-    "drops": { "gold": [4, 8], "tables": [] }
-  },
-  {
-    "id": "monster_boss_1",
-    "name": "The Unspoken One",
-    "level": 5,
-    "family": "Aberration",
-    "isBoss": true,
-    "biome": ["occult"],
-    "stats": {
-      "hp": 250,
-      "pa": 15,
-      "armor": 30,
-      "res": { "fire": 10, "frost": 10, "nature": 10, "occult": 25 }
+    {
+        "id": "monster_sk_boss",
+        "name": "Grave Lord",
+        "level": 3,
+        "family": "undead",
+        "isBoss": true,
+        "biome": ["occult"],
+        "stats": { "hp": 200, "pa": 20, "armor": 25, "res": { "occult": 15 } },
+        "drops": { "gold": [25, 50], "tables": ["boss_common"] }
     },
-    "drops": { "gold": [50, 100], "tables": ["rare_gear"] }
-  }
+    {
+        "id": "monster_ice_elemental",
+        "name": "Ice Elemental",
+        "level": 5,
+        "family": "elemental",
+        "biome": ["frost"],
+        "stats": { "hp": 120, "pa": 25, "armor": 15, "res": { "frost": 50, "fire": -25 } },
+        "drops": { "gold": [10, 20] }
+    },
+    {
+        "id": "monster_frost_golem",
+        "name": "Frost Golem",
+        "level": 7,
+        "family": "construct",
+        "isBoss": true,
+        "biome": ["frost"],
+        "stats": { "hp": 500, "pa": 40, "armor": 50, "res": { "frost": 75, "fire": -50 } },
+        "drops": { "gold": [75, 150], "tables": ["boss_rare"] }
+    }
 ]

@@ -1,21 +1,12 @@
-
 [
-    {
-        "id": "affix_str_1",
-        "type": "suffix",
-        "tags": ["berserker"],
-        "stat": "str",
-        "min": 1,
-        "max": 3,
-        "weight": 1
-    },
-    {
-        "id": "affix_armor_1",
-        "type": "prefix",
-        "tags": [],
-        "stat": "armor",
-        "min": 5,
-        "max": 10,
-        "weight": 1
-    }
+    { "id": "affix_str_1", "type": "prefix", "tags": ["physical"], "stat": "str", "min": 1, "max": 3 },
+    { "id": "affix_str_2", "type": "prefix", "tags": ["physical"], "stat": "str", "min": 4, "max": 7 },
+    { "id": "affix_str_3", "type": "prefix", "tags": ["physical"], "stat": "str", "min": 8, "max": 12 },
+    { "id": "affix_int_1", "type": "prefix", "tags": ["caster"], "stat": "int", "min": 1, "max": 3 },
+    { "id": "affix_int_2", "type": "prefix", "tags": ["caster"], "stat": "int", "min": 4, "max": 7 },
+    { "id": "affix_int_3", "type": "prefix", "tags": ["caster"], "stat": "int", "min": 8, "max": 12 },
+    { "id": "affix_haste_1", "type": "suffix", "tags": [], "stat": "haste_pct", "min": 1, "max": 2, "weight": 50 },
+    { "id": "affix_haste_2", "type": "suffix", "tags": [], "stat": "haste_pct", "min": 3, "max": 5, "weight": 25 },
+    { "id": "affix_crit_1", "type": "suffix", "tags": [], "stat": "crit_chance", "min": 1, "max": 2, "weight": 50 },
+    { "id": "affix_crit_2", "type": "suffix", "tags": [], "stat": "crit_chance", "min": 3, "max": 5, "weight": 25 }
 ]
