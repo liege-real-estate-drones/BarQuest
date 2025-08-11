@@ -32,7 +32,7 @@ export interface CombatLogEntry {
 }
 
 export interface CombatState {
-  enemy: Monster | null;
+  enemy: (Monster & { initialHp?: number }) | null;
   attackInterval: number; // in ms
   attackProgress: number; // 0 to 1
   killCount: number;
@@ -164,7 +164,9 @@ export const useGameStore = create<GameState>()(
         const randomMonster = possibleMonsters[Math.floor(Math.random() * possibleMonsters.length)];
         
         if (randomMonster) {
-          const monsterInstance = JSON.parse(JSON.stringify(randomMonster));
+          const monsterInstance: Monster & { initialHp?: number } = JSON.parse(JSON.stringify(randomMonster));
+          monsterInstance.initialHp = monsterInstance.stats.hp; // Store initial HP
+
           set(state => {
             state.combat.enemy = monsterInstance;
             state.combat.attackProgress = 0;

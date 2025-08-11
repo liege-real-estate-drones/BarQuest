@@ -44,15 +44,16 @@ export function CombatLog({ log }: CombatLogProps) {
 
   return (
     <Card className="flex flex-col h-full">
-      <CardHeader>
-        <CardTitle className="font-headline">Combat Log</CardTitle>
+      <CardHeader className="py-3">
+        <CardTitle className="font-headline text-lg">Combat Log</CardTitle>
       </CardHeader>
       <CardContent className="flex-grow p-0">
-        <ScrollArea className="h-[60vh] md:h-full p-6" ref={scrollAreaRef}>
-          <div className="flex flex-col gap-1 font-code text-sm">
+        <ScrollArea className="h-full p-4" ref={scrollAreaRef}>
+          <div className="flex flex-col gap-1 font-code text-xs">
             {log.map((entry, index) => (
               <p key={index} className={cn('whitespace-pre-wrap', getLogEntryColor(entry.type))}>
-                [{new Date(entry.timestamp).toLocaleTimeString()}] {entry.message}
+                <span className="text-muted-foreground/50 mr-2">[{new Date(entry.timestamp).toLocaleTimeString()}]</span>
+                {entry.message}
               </p>
             ))}
           </div>

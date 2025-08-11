@@ -1,7 +1,7 @@
 'use client';
 
 import { useGameStore } from '@/state/gameStore';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { AttackRing } from './components/AttackRing';
 import { CombatLog } from './components/CombatLog';
@@ -98,8 +98,13 @@ export function CombatView() {
           </div>
         </div>
 
-        {/* Combat Log */}
-        <CombatLog log={combatLog} />
+        {/* Enemy Panel */}
+        <EntityDisplay entity={enemy} />
+      </div>
+
+       {/* Combat Log */}
+      <div className="h-48">
+         <CombatLog log={combatLog} />
       </div>
     </div>
   );
