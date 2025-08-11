@@ -19,7 +19,7 @@ export function InventoryView() {
                 <CardTitle>Inventory</CardTitle>
             </CardHeader>
             <CardContent>
-                <p><Badge variant="secondary">{gold} Gold</Badge></p>
+                <div><Badge variant="secondary">{gold} Gold</Badge></div>
                 <h3 className="mt-4 font-bold mb-2">Items:</h3>
                 {items.length > 0 ? (
                     <ul className="space-y-1">
