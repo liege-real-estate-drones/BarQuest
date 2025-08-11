@@ -6,7 +6,7 @@ import { TownView } from '@/features/town/TownView';
 import { CombatView } from '@/features/combat/CombatView';
 import { useHydrated } from '@/hooks/useHydrated';
 import { LoaderCircle } from 'lucide-react';
-import { Dungeon, Monster, Item, Talent, Affix } from '@/lib/types';
+import { Dungeon, Monstre, Item, Talent, Affixe } from '@/lib/types';
 
 export default function Home() {
   const { view, initializeGameData, isInitialized } = useGameStore((state) => ({
@@ -22,10 +22,10 @@ export default function Home() {
       try {
         const [dungeons, monsters, items, talents, affixes] = await Promise.all([
           fetch('/data/dungeons.json').then(res => res.json()) as Promise<Dungeon[]>,
-          fetch('/data/monsters.json').then(res => res.json()) as Promise<Monster[]>,
+          fetch('/data/monsters.json').then(res => res.json()) as Promise<Monstre[]>,
           fetch('/data/items.json').then(res => res.json()) as Promise<Item[]>,
           fetch('/data/talents.json').then(res => res.json()) as Promise<Talent[]>,
-          fetch('/data/affixes.json').then(res => res.json()) as Promise<Affix[]>,
+          fetch('/data/affixes.json').then(res => res.json()) as Promise<Affixe[]>,
         ]);
         initializeGameData({ dungeons, monsters, items, talents, affixes });
       } catch (error) {

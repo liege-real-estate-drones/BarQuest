@@ -17,14 +17,14 @@ export function DungeonsView() {
           <Card key={dungeon.id}>
             <CardHeader>
               <CardTitle>{dungeon.name}</CardTitle>
-              <CardDescription>Recommended Level: {dungeon.recommendedLevel}</CardDescription>
+              <CardDescription>Palier: {dungeon.palier}</CardDescription>
             </CardHeader>
             <CardContent>
               <p>Biome: <span className="capitalize text-primary">{dungeon.biome}</span></p>
-              <p>Objective: Kill {dungeon.killTarget} monsters.</p>
+              <p>Objectif: Tuer {dungeon.killTarget} monstres.</p>
             </CardContent>
             <CardFooter>
-              <Button onClick={() => enterDungeon(dungeon.id)}>Enter Dungeon</Button>
+              <Button onClick={() => enterDungeon(dungeon.id)}>Entrer</Button>
             </CardFooter>
           </Card>
         ))}

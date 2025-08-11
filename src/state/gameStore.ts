@@ -1,7 +1,7 @@
 import create from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import type { Dungeon, Monster, Item, Talent, Affix, Stats } from '@/lib/types';
+import type { Dungeon, Monstre, Item, Talent, Affixe, Stats } from '@/lib/types';
 import * as formulas from '@/core/formulas';
 
 export type PlayerClass = 'berserker' | 'mage' | 'druid';
@@ -14,7 +14,6 @@ export interface PlayerState {
   stats: Stats;
   talentPoints: number;
   resources: {
-    hp: number;
     mana: number;
   };
 }
@@ -32,7 +31,7 @@ export interface CombatLogEntry {
 }
 
 export interface CombatState {
-  enemy: (Monster & { initialHp?: number }) | null;
+  enemy: (Monstre & { initialHp?: number }) | null;
   playerAttackInterval: number; // in ms
   playerAttackProgress: number; // 0 to 1
   enemyAttackInterval: number; // in ms
@@ -44,10 +43,10 @@ export interface CombatState {
 
 interface GameData {
   dungeons: Dungeon[];
-  monsters: Monster[];
+  monsters: Monstre[];
   items: Item[];
   talents: Talent[];
-  affixes: Affix[];
+  affixes: Affixe[];
 }
 
 interface GameState {
@@ -76,9 +75,9 @@ const initialPlayerState: PlayerState = {
   class: 'berserker',
   level: 1,
   xp: 0,
-  stats: { str: 10, int: 5, dex: 7, spi: 6, armor: 10, res: { fire: 0, frost: 0, nature: 0, occult: 0 } },
+  stats: { PV: 120, AttMin: 6, AttMax: 10, CritPct: 5, CritDmg: 150, Armure: 15, Vitesse: 2.0, Precision: 95, Esquive: 5 },
   talentPoints: 0,
-  resources: { hp: 100, mana: 50 },
+  resources: { mana: 50 },
 };
 
 const initialInventoryState: InventoryState = {
@@ -100,8 +99,8 @@ const initialCombatState: CombatState = {
 
 let gameLoop: any = null;
 
-const resolveLoot = (monster: Monster, gameData: GameData): Item | null => {
-  if (!monster.drops.tables || monster.drops.tables.length === 0) {
+const resolveLoot = (monster: Monstre, gameData: GameData): Item | null => {
+  if (!monster.lootTableId) {
     return null;
   }
 
@@ -111,8 +110,8 @@ const resolveLoot = (monster: Monster, gameData: GameData): Item | null => {
   }
   
   const possibleItems = gameData.items.filter(item => 
-      monster.drops.tables.some(tag => item.tags.includes(tag)) &&
-      item.ilevel <= monster.level + 2 // Item level constraint
+      item.tagsClasse?.includes('common') && // A simplified stand-in for table resolution
+      item.niveauMin <= monster.level + 2 // Item level constraint
   );
 
   if (possibleItems.length === 0) {
@@ -145,10 +144,9 @@ export const useGameStore = create<GameState>()(
         set((state) => {
           state.gameData = data;
           state.isInitialized = true;
-          // Set initial HP/Mana
           const player = state.player;
-          player.resources.hp = formulas.calculateMaxHP(player.level, player.stats);
-          player.resources.mana = formulas.calculateMaxMana(player.level, player.stats);
+          player.stats.PV = formulas.calculateMaxHP(player);
+          player.resources.mana = formulas.calculateMaxMana(player);
         });
       },
 
@@ -171,19 +169,18 @@ export const useGameStore = create<GameState>()(
         const { currentDungeon, gameData } = get();
         if (!currentDungeon) return;
         
-        const possibleMonsters = gameData.monsters.filter(m => m.biome.includes(currentDungeon.biome) && !m.isBoss);
+        const possibleMonsters = gameData.monsters.filter(m => m.palier === currentDungeon.palier && !m.isBoss);
         const randomMonster = possibleMonsters[Math.floor(Math.random() * possibleMonsters.length)];
         
         if (randomMonster) {
-          const monsterInstance: Monster & { initialHp?: number } = JSON.parse(JSON.stringify(randomMonster));
-          monsterInstance.initialHp = monsterInstance.stats.hp; // Store initial HP
+          const monsterInstance: Monstre & { initialHp?: number } = JSON.parse(JSON.stringify(randomMonster));
+          monsterInstance.initialHp = monsterInstance.stats.PV; // Store initial HP
 
           set(state => {
             state.combat.enemy = monsterInstance;
             state.combat.playerAttackProgress = 0;
             state.combat.enemyAttackProgress = 0;
-            // Example: Enemy speed could be a stat later on
-            state.combat.enemyAttackInterval = 2500;
+            state.combat.enemyAttackInterval = monsterInstance.stats.Vitesse * 1000;
             state.combat.log.push({ message: `A wild ${monsterInstance.name} appears!`, type: 'info', timestamp: Date.now() });
           });
         }
@@ -225,27 +222,27 @@ export const useGameStore = create<GameState>()(
 
         // Player attacks enemy
         const pa = formulas.calculateAttackPower(player.stats);
-        const damage = formulas.calculateMeleeDamage(5, 10, pa); // placeholder weapon damage
-        const isCrit = formulas.isCriticalHit(formulas.calculateCritChance(player.stats.dex || 0, 0));
-        const finalDamage = isCrit ? damage * formulas.CRIT_MULTIPLIER : damage;
+        const damage = formulas.calculateMeleeDamage(pa);
+        const isCrit = formulas.isCriticalHit(player.stats);
+        const finalDamage = isCrit ? damage * (player.stats.CritDmg / 100) : damage;
         
-        const dr = formulas.calculateArmorDR(combat.enemy.stats.armor, player.level);
+        const dr = formulas.calculateArmorDR(combat.enemy.stats.Armure, player.level);
         const mitigatedDamage = Math.round(finalDamage * (1 - dr));
         
         const attackMsg = `You hit ${combat.enemy.name} for ${mitigatedDamage} damage.`;
         const critMsg = `CRITICAL! You hit ${combat.enemy.name} for ${mitigatedDamage} damage.`;
 
         set(state => {
-            if (state.combat.enemy?.stats.hp) {
-                state.combat.enemy.stats.hp -= mitigatedDamage;
+            if (state.combat.enemy?.stats.PV) {
+                state.combat.enemy.stats.PV -= mitigatedDamage;
             }
             state.combat.log.push({ message: isCrit ? critMsg : attackMsg, type: isCrit ? 'crit' : 'player_attack', timestamp: Date.now() });
             state.combat.playerAttackProgress = 0;
         });
 
-        if (get().combat.enemy!.stats.hp! <= 0) {
+        if (get().combat.enemy!.stats.PV! <= 0) {
             const enemy = get().combat.enemy!;
-            const goldDrop = Math.floor(Math.random() * (enemy.drops.gold[1] - enemy.drops.gold[0] + 1)) + enemy.drops.gold[0];
+            const goldDrop = 5; // Placeholder
             const itemDrop = resolveLoot(enemy, gameData);
             const xpGained = enemy.level * 10;
 
@@ -263,17 +260,17 @@ export const useGameStore = create<GameState>()(
                     state.player.level += 1;
                     state.player.xp -= xpToNextLevel;
                     state.player.talentPoints += 1;
-                    // Basic stat increase on level up
-                    state.player.stats.str += 2;
-                    state.player.stats.int += 1;
-                    state.player.stats.dex += 1;
-                    state.player.stats.spi += 1;
+                    
+                    // Basic stat increase on level up - this should be driven by data later
+                    state.player.stats.AttMin += 1;
+                    state.player.stats.AttMax += 1;
+                    state.player.stats.Armure += 5;
 
                     state.combat.log.push({ message: `Congratulations! You have reached level ${state.player.level}!`, type: 'levelup', timestamp: Date.now() });
                     
                     // Full heal on level up
-                    state.player.resources.hp = formulas.calculateMaxHP(state.player.level, state.player.stats);
-                    state.player.resources.mana = formulas.calculateMaxMana(state.player.level, state.player.stats);
+                    state.player.stats.PV = formulas.calculateMaxHP(state.player);
+                    state.resources.mana = formulas.calculateMaxMana(state.player);
                 }
 
 
@@ -302,20 +299,20 @@ export const useGameStore = create<GameState>()(
         const { player, combat } = get();
         if (!combat.enemy || !combat.enemy.stats) return;
 
-        const enemyDamage = combat.enemy.stats.pa ?? 0;
-        const playerDr = formulas.calculateArmorDR(player.stats.armor, combat.enemy.level);
+        const enemyDamage = formulas.calculateMeleeDamage(formulas.calculateAttackPower(combat.enemy.stats));
+        const playerDr = formulas.calculateArmorDR(player.stats.Armure, combat.enemy.level);
         const mitigatedEnemyDamage = Math.round(enemyDamage * (1 - playerDr));
 
         set(state => {
-            state.player.resources.hp -= mitigatedEnemyDamage;
+            state.player.stats.PV -= mitigatedEnemyDamage;
             state.combat.log.push({ message: `${combat.enemy!.name} hits you for ${mitigatedEnemyDamage} damage.`, type: 'enemy_attack', timestamp: Date.now() });
             state.combat.enemyAttackProgress = 0;
         });
 
-        if (get().player.resources.hp <= 0) {
+        if (get().player.stats.PV <= 0) {
             set(state => {
                 state.combat.log.push({ message: `You have been defeated! Returning to town.`, type: 'info', timestamp: Date.now() });
-                state.player.resources.hp = formulas.calculateMaxHP(player.level, player.stats); // Heal on death
+                state.player.stats.PV = formulas.calculateMaxHP(player); // Heal on death
                 state.view = 'TOWN';
             });
             if(gameLoop) clearInterval(gameLoop);

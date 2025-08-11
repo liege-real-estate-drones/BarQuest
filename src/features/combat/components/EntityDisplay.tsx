@@ -3,12 +3,12 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { PlayerState, useGameStore } from '@/state/gameStore';
-import { Monster } from '@/lib/types';
+import { Monstre } from '@/lib/types';
 import * as formulas from '@/core/formulas';
 import { Separator } from '@/components/ui/separator';
 
 interface EntityDisplayProps {
-  entity: PlayerState | Monster;
+  entity: PlayerState | Monstre;
   isPlayer?: boolean;
 }
 
@@ -16,11 +16,10 @@ export default function EntityDisplay({ entity, isPlayer = false }: EntityDispla
   const { level, name } = entity;
   const getXpToNextLevel = useGameStore(s => s.getXpToNextLevel);
   
-  const currentHp = isPlayer ? (entity as PlayerState).resources.hp : (entity as Monster).stats.hp ?? 0;
-  
+  const currentHp = entity.stats.PV;
   const maxHp = isPlayer 
-    ? formulas.calculateMaxHP(level, (entity as PlayerState).stats) 
-    : (entity as any).initialHp ?? (entity as Monster).stats.hp ?? 1;
+    ? formulas.calculateMaxHP(entity as PlayerState) 
+    : (entity as any).initialHp ?? entity.stats.PV;
 
   const hpPercentage = (currentHp / maxHp) * 100;
 
@@ -33,7 +32,7 @@ export default function EntityDisplay({ entity, isPlayer = false }: EntityDispla
   if (isPlayer) {
     const player = entity as PlayerState;
     currentMana = player.resources.mana;
-    maxMana = formulas.calculateMaxMana(level, player.stats);
+    maxMana = formulas.calculateMaxMana(player);
     manaPercentage = maxMana > 0 ? (currentMana / maxMana) * 100 : 0;
     
     xpToNextLevel = getXpToNextLevel();
@@ -50,12 +49,12 @@ export default function EntityDisplay({ entity, isPlayer = false }: EntityDispla
           <span className="text-sm text-muted-foreground">Lvl {level}</span>
         </CardTitle>
         {isPlayer && <CardDescription>The Hero</CardDescription>}
-        {!isPlayer && <CardDescription className="capitalize">{(entity as Monster).family}</CardDescription>}
+        {!isPlayer && <CardDescription className="capitalize">{(entity as Monstre).famille}</CardDescription>}
       </CardHeader>
       <CardContent className="space-y-4 flex-grow">
         <div>
           <div className="flex justify-between text-xs mb-1 font-mono text-red-400">
-            <span>HP</span>
+            <span>PV</span>
             <span>{Math.round(currentHp)} / {Math.round(maxHp)}</span>
           </div>
           <Progress value={hpPercentage} className="h-4" indicatorClassName="bg-gradient-to-r from-red-500 to-red-700" />
@@ -80,20 +79,11 @@ export default function EntityDisplay({ entity, isPlayer = false }: EntityDispla
         )}
         <Separator className="my-4" />
         <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm font-mono">
-          { isPlayer && (
-            <>
-              <span className="text-muted-foreground">Force:</span><span className="text-right">{stats.str ?? 0}</span>
-              <span className="text-muted-foreground">Intellect:</span><span className="text-right">{stats.int ?? 0}</span>
-              <span className="text-muted-foreground">Dextérité:</span><span className="text-right">{stats.dex ?? 0}</span>
-              <span className="text-muted-foreground">Esprit:</span><span className="text-right">{stats.spi ?? 0}</span>
-            </>
-          )}
-          {!isPlayer && (
-             <>
-                <span className="text-muted-foreground">Puissance:</span><span className="text-right">{stats.pa ?? 0}</span>
-             </>
-          )}
-          <span className="text-muted-foreground">Armure:</span><span className="text-right">{stats.armor ?? 0}</span>
+            <span className="text-muted-foreground">Attaque:</span><span className="text-right">{stats.AttMin ?? 0} - {stats.AttMax ?? 0}</span>
+            <span className="text-muted-foreground">Crit %:</span><span className="text-right">{stats.CritPct ?? 0}%</span>
+            <span className="text-muted-foreground">Crit Dmg:</span><span className="text-right">{stats.CritDmg ?? 0}%</span>
+            <span className="text-muted-foreground">Armure:</span><span className="text-right">{stats.Armure ?? 0}</span>
+            <span className="text-muted-foreground">Vitesse:</span><span className="text-right">{stats.Vitesse ?? 0}</span>
         </div>
       </CardContent>
     </Card>
