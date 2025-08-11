@@ -9,6 +9,7 @@ interface AttackRingProps {
   onFire: () => void;
   size?: number;
   strokeWidth?: number;
+  strokeColor?: string;
 }
 
 export function AttackRing({
@@ -16,6 +17,7 @@ export function AttackRing({
   onFire,
   size = 180,
   strokeWidth = 12,
+  strokeColor = "hsl(var(--primary))",
 }: AttackRingProps) {
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
@@ -24,7 +26,8 @@ export function AttackRing({
   const isReady = progress >= 100;
 
   useEffect(() => {
-    if (isReady) {
+    // Only bind space/1 for player attacks
+    if (onFire.name === "handleAttack" && isReady) {
       const handleKeyPress = (event: KeyboardEvent) => {
         if (event.key === '1' || event.key === ' ') {
           onFire();
@@ -37,16 +40,18 @@ export function AttackRing({
     }
   }, [isReady, onFire]);
 
+  const canClick = isReady && onFire.name === "handleAttack";
+
   return (
     <div
       className={cn(
         "relative flex items-center justify-center transition-all",
-        isReady ? "cursor-pointer transform scale-105" : "cursor-default"
+        canClick ? "cursor-pointer transform scale-105" : "cursor-default"
       )}
       style={{ width: size, height: size }}
-      onClick={isReady ? onFire : undefined}
+      onClick={canClick ? onFire : undefined}
       role="button"
-      aria-disabled={!isReady}
+      aria-disabled={!canClick}
       aria-label="Attack"
     >
       <svg width={size} height={size} className="transform -rotate-90">
@@ -62,7 +67,7 @@ export function AttackRing({
           cx={size / 2}
           cy={size / 2}
           r={radius}
-          stroke="hsl(var(--primary))"
+          stroke={strokeColor}
           strokeWidth={strokeWidth}
           fill="transparent"
           strokeDasharray={circumference}
@@ -72,10 +77,19 @@ export function AttackRing({
         />
       </svg>
       <div className="absolute flex flex-col items-center justify-center text-center">
-        <Dices className={cn("h-12 w-12", isReady ? "text-primary animate-pulse" : "text-muted-foreground")} />
-        <span className={cn("mt-2 text-xs font-bold", isReady ? "text-primary" : "text-muted-foreground")}>
-          {isReady ? "READY (1)" : `${Math.floor(progress)}%`}
-        </span>
+         {canClick && (
+          <>
+            <Dices className={cn("h-8 w-8", isReady ? "text-primary animate-pulse" : "text-muted-foreground")} />
+            <span className={cn("mt-2 text-xs font-bold", isReady ? "text-primary" : "text-muted-foreground")}>
+              {isReady ? "READY (1)" : `${Math.floor(progress)}%`}
+            </span>
+          </>
+        )}
+        {!canClick && (
+             <span className={cn("text-xs font-bold", isReady ? "text-red-400" : "text-muted-foreground")}>
+                {`${Math.floor(progress)}%`}
+             </span>
+        )}
       </div>
     </div>
   );

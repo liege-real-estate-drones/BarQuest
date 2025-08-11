@@ -7,7 +7,7 @@ import { AttackRing } from './components/AttackRing';
 import { CombatLog } from './components/CombatLog';
 import EntityDisplay from './components/EntityDisplay';
 import { useEffect } from 'react';
-import { Dices, Heart, Shield, Bot } from 'lucide-react';
+import { Dices, Heart, Shield, Bot, User, Swords } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 
@@ -15,9 +15,10 @@ export function CombatView() {
   const {
     player,
     enemy,
-    attack,
+    playerAttack,
     flee,
-    attackProgress,
+    playerAttackProgress,
+    enemyAttackProgress,
     startCombat,
     combatLog,
     autoAttack,
@@ -25,9 +26,10 @@ export function CombatView() {
   } = useGameStore((state) => ({
     player: state.player,
     enemy: state.combat.enemy,
-    attack: state.attack,
+    playerAttack: state.playerAttack,
     flee: state.flee,
-    attackProgress: state.combat.attackProgress,
+    playerAttackProgress: state.combat.playerAttackProgress,
+    enemyAttackProgress: state.combat.enemyAttackProgress,
     startCombat: state.startCombat,
     combatLog: state.combat.log,
     autoAttack: state.combat.autoAttack,
@@ -46,8 +48,8 @@ export function CombatView() {
   }
 
   const handleAttack = () => {
-    if (attackProgress >= 1) {
-      attack();
+    if (playerAttackProgress >= 1) {
+      playerAttack();
     }
   };
 
@@ -63,19 +65,21 @@ export function CombatView() {
         <EntityDisplay entity={player} isPlayer />
 
         {/* Arena / Actions */}
-        <div className="flex flex-col items-center justify-between gap-4">
-          <div className="w-full text-center">
-             <Card>
-                <CardHeader>
-                    <CardTitle className="text-primary">VS</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <p className="text-lg">{enemy.name}</p>
-                    <p className="text-sm text-muted-foreground">Level {enemy.level} {enemy.family}</p>
-                </CardContent>
-             </Card>
+        <div className="flex flex-col items-center justify-center gap-4">
+          <div className="flex justify-around w-full items-center">
+            <div className="flex flex-col items-center gap-2">
+                <User className="h-10 w-10 text-primary" />
+                <AttackRing progress={playerAttackProgress * 100} onFire={handleAttack} size={140} />
+                <p className="font-bold text-lg">{player.name}</p>
+            </div>
+            <Swords className="h-12 w-12 text-muted-foreground" />
+            <div className="flex flex-col items-center gap-2">
+                <Bot className="h-10 w-10 text-red-400" />
+                <AttackRing progress={enemyAttackProgress * 100} onFire={() => {}} size={140} strokeColor="hsl(var(--destructive))" />
+                <p className="font-bold text-lg">{enemy.name}</p>
+            </div>
           </div>
-          <AttackRing progress={attackProgress * 100} onFire={handleAttack} />
+          
           <div className="flex flex-col items-center gap-4 w-full">
             <div className="flex items-center space-x-2">
                 <Switch id="auto-attack-switch" checked={autoAttack} onCheckedChange={toggleAutoAttack} />
@@ -85,7 +89,7 @@ export function CombatView() {
                 </Label>
             </div>
             <div className="flex w-full justify-center gap-4">
-                <Button onClick={handleAttack} disabled={attackProgress < 1 || autoAttack} className="w-32">
+                <Button onClick={handleAttack} disabled={playerAttackProgress < 1 || autoAttack} className="w-32">
                     <Dices className="mr-2 h-4 w-4" /> Attaquer
                 </Button>
                 <Button variant="secondary" className="w-32">

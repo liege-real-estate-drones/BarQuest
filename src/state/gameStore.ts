@@ -33,8 +33,10 @@ export interface CombatLogEntry {
 
 export interface CombatState {
   enemy: (Monster & { initialHp?: number }) | null;
-  attackInterval: number; // in ms
-  attackProgress: number; // 0 to 1
+  playerAttackInterval: number; // in ms
+  playerAttackProgress: number; // 0 to 1
+  enemyAttackInterval: number; // in ms
+  enemyAttackProgress: number; // 0 to 1
   killCount: number;
   log: CombatLogEntry[];
   autoAttack: boolean;
@@ -62,7 +64,8 @@ interface GameState {
   enterDungeon: (dungeonId: string) => void;
   startCombat: () => void;
   gameTick: (delta: number) => void;
-  attack: () => void;
+  playerAttack: () => void;
+  enemyAttack: () => void;
   flee: () => void;
   toggleAutoAttack: () => void;
 }
@@ -85,8 +88,10 @@ const initialInventoryState: InventoryState = {
 
 const initialCombatState: CombatState = {
   enemy: null,
-  attackInterval: 2000,
-  attackProgress: 0,
+  playerAttackInterval: 2000,
+  playerAttackProgress: 0,
+  enemyAttackInterval: 2500,
+  enemyAttackProgress: 0,
   killCount: 0,
   log: [],
   autoAttack: false,
@@ -169,16 +174,22 @@ export const useGameStore = create<GameState>()(
 
           set(state => {
             state.combat.enemy = monsterInstance;
-            state.combat.attackProgress = 0;
+            state.combat.playerAttackProgress = 0;
+            state.combat.enemyAttackProgress = 0;
+            // Example: Enemy speed could be a stat later on
+            state.combat.enemyAttackInterval = 2500;
             state.combat.log.push({ message: `A wild ${monsterInstance.name} appears!`, type: 'info', timestamp: Date.now() });
           });
         }
       },
       
       gameTick: (delta) => {
-          const { attack, combat } = get();
-          if(combat.autoAttack && combat.attackProgress >= 1) {
-            attack();
+          const { playerAttack, enemyAttack, combat } = get();
+          if(combat.autoAttack && combat.playerAttackProgress >= 1) {
+            playerAttack();
+          }
+          if(combat.enemy && combat.enemyAttackProgress >= 1) {
+            enemyAttack();
           }
 
           set(state => {
@@ -187,16 +198,22 @@ export const useGameStore = create<GameState>()(
                 return;
               }
 
-              if(state.combat.attackProgress < 1) {
-                  state.combat.attackProgress += delta / state.combat.attackInterval;
-                  if (state.combat.attackProgress > 1) {
-                      state.combat.attackProgress = 1;
+              if(state.combat.playerAttackProgress < 1) {
+                  state.combat.playerAttackProgress += delta / state.combat.playerAttackInterval;
+                  if (state.combat.playerAttackProgress > 1) {
+                      state.combat.playerAttackProgress = 1;
+                  }
+              }
+              if(state.combat.enemyAttackProgress < 1) {
+                  state.combat.enemyAttackProgress += delta / state.combat.enemyAttackInterval;
+                  if (state.combat.enemyAttackProgress > 1) {
+                      state.combat.enemyAttackProgress = 1;
                   }
               }
           })
       },
 
-      attack: () => {
+      playerAttack: () => {
         const { player, combat, gameData } = get();
         if (!combat.enemy) return;
 
@@ -215,7 +232,7 @@ export const useGameStore = create<GameState>()(
         set(state => {
             state.combat.enemy!.stats.hp -= mitigatedDamage;
             state.combat.log.push({ message: isCrit ? critMsg : attackMsg, type: isCrit ? 'crit' : 'player_attack', timestamp: Date.now() });
-            state.combat.attackProgress = 0;
+            state.combat.playerAttackProgress = 0;
         });
 
         if (get().combat.enemy!.stats.hp <= 0) {
@@ -246,10 +263,13 @@ export const useGameStore = create<GameState>()(
             } else {
                  get().startCombat();
             }
-            return;
         }
+      },
+      
+      enemyAttack: () => {
+        const { player, combat } = get();
+        if (!combat.enemy) return;
 
-        // Enemy attacks player
         const enemyDamage = combat.enemy.stats.pa;
         const playerDr = formulas.calculateArmorDR(player.stats.armor, combat.enemy.level);
         const mitigatedEnemyDamage = Math.round(enemyDamage * (1 - playerDr));
@@ -257,6 +277,7 @@ export const useGameStore = create<GameState>()(
         set(state => {
             state.player.resources.hp -= mitigatedEnemyDamage;
             state.combat.log.push({ message: `${combat.enemy!.name} hits you for ${mitigatedEnemyDamage} damage.`, type: 'enemy_attack', timestamp: Date.now() });
+            state.combat.enemyAttackProgress = 0;
         });
 
         if (get().player.resources.hp <= 0) {
