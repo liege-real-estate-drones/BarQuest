@@ -1,7 +1,7 @@
 import create from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import type { Dungeon, Monstre, Item, Talent, Affixe, Stats, PlayerState, InventoryState, CombatLogEntry, CombatState, GameData, Classe, Quete } from '@/lib/types';
+import type { Dungeon, Monstre, Item, Talent, Affixe, Stats, PlayerState, InventoryState, CombatLogEntry, CombatState, GameData, Classe, Quete, PlayerClassId } from '@/lib/types';
 import * as formulas from '@/core/formulas';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -11,25 +11,18 @@ export interface ActiveQuete {
 }
 
 
-const getInitialPlayerState = (classes: Classe[]): PlayerState => {
-  const warriorClass = classes.find(c => c.id === 'warrior');
-  const baseStats = warriorClass ? warriorClass.statsBase : {
-    PV: 150, AttMin: 8, AttMax: 12, CritPct: 0.05, CritDmg: 1.5,
-    Armure: 25, Vitesse: 1.8, Precision: 0.9, Esquive: 0.05,
-    Force: 12, Intelligence: 4, Dexterite: 8, Esprit: 6, RessourceMax: 100,
-  };
-  
+const getInitialPlayerState = (): PlayerState => {
   return {
     name: "Hero",
-    classeId: 'warrior',
+    classeId: null, // This will be set on first load
     level: 1,
     xp: 0,
-    baseStats: baseStats,
-    stats: baseStats,
+    baseStats: {} as Stats, // Empty until class is chosen
+    stats: {} as Stats,
     talentPoints: 0,
     talents: {},
     resources: {
-      mana: 100,
+      mana: 0,
     },
     reputation: {},
     activeEffects: [],
@@ -65,6 +58,7 @@ interface GameState {
   activeQuests: ActiveQuete[];
   
   initializeGameData: (data: GameData) => void;
+  setPlayerClass: (classId: PlayerClassId) => void;
   recalculateStats: () => void;
   equipItem: (itemId: string) => void;
   unequipItem: (slot: keyof InventoryState['equipment']) => void;
@@ -108,7 +102,7 @@ const getTalentEffectValue = (effect: string, rank: number): number => {
     const matches = effect.match(/([\d/]+)/);
     if (!matches) return 0;
     const values = matches[1].split('/').map(Number);
-    return values[rank - 1] || 0;
+    return values[Math.min(rank - 1, values.length - 1)] || 0;
 };
 
 export const useGameStore = create<GameState>()(
@@ -119,42 +113,53 @@ export const useGameStore = create<GameState>()(
       view: 'TOWN',
       currentDungeon: null,
       gameData: { dungeons: [], monsters: [], items: [], talents: [], affixes: [], classes: [], quests: [], factions: [] },
-      player: getInitialPlayerState([]),
+      player: getInitialPlayerState(),
       inventory: initialInventoryState,
       combat: initialCombatState,
       activeQuests: [],
 
       getXpToNextLevel: () => {
         const player = get().player;
+        if (!player.level) return 100;
         return Math.floor(100 * Math.pow(player.level, 1.5));
       },
 
       initializeGameData: (data) => {
         set((state) => {
           if (state.isInitialized) return;
-
           state.gameData = data;
-          const initialPlayer = getInitialPlayerState(data.classes);
           
-          if (!state.player.classeId) {
-             state.player = initialPlayer;
-          } else {
+          if (state.player.classeId) {
              const savedPlayer = JSON.parse(JSON.stringify(state.player));
              const currentClass = data.classes.find(c => c.id === savedPlayer.classeId);
              state.player = {
-                ...initialPlayer,
+                ...getInitialPlayerState(),
                 ...savedPlayer,
-                baseStats: currentClass ? currentClass.statsBase : initialPlayer.baseStats,
+                baseStats: currentClass ? currentClass.statsBase : getInitialPlayerState().baseStats,
              };
           }
 
-
-          // Auto-start the first quest for demo purposes
           if (data.quests.length > 0 && state.activeQuests.length === 0) {
             state.activeQuests.push({ quete: data.quests[0], progress: 0 });
           }
           
           state.isInitialized = true;
+        });
+        if(get().player.classeId) {
+            get().recalculateStats();
+        }
+      },
+      
+      setPlayerClass: (classId: PlayerClassId) => {
+        set(state => {
+            const chosenClass = state.gameData.classes.find(c => c.id === classId);
+            if (!chosenClass) return;
+
+            state.player.classeId = chosenClass.id as PlayerClassId;
+            state.player.baseStats = chosenClass.statsBase;
+            state.player.stats = chosenClass.statsBase;
+            state.player.resources.mana = chosenClass.statsBase.RessourceMax || 0;
+            state.player.stats.PV = formulas.calculateMaxHP(1, chosenClass.statsBase);
         });
         get().recalculateStats();
       },
@@ -162,10 +167,12 @@ export const useGameStore = create<GameState>()(
       recalculateStats: () => {
         set(state => {
           const { player, inventory, gameData } = state;
+          if (!player.classeId) return;
+
           const classe = gameData.classes.find(c => c.id === player.classeId);
           if (!classe) return;
 
-          // Start with a fresh copy of base stats
+          // Start with a fresh copy of base stats for the current level
           const newStats: Stats = JSON.parse(JSON.stringify(player.baseStats));
           const newEffects: string[] = [];
 
@@ -191,14 +198,17 @@ export const useGameStore = create<GameState>()(
               
               talentData.effets.forEach(effectString => {
                   const value = getTalentEffectValue(effectString, rank);
-                  if (effectString.includes('armure')) {
-                      newStats.Armure += (newStats.Armure * value) / 100;
-                  } else if (effectString.includes('PV max')) {
-                      newStats.PV += (newStats.PV * value) / 100;
-                  }
                   // This is a simplified implementation. A more robust solution would
                   // parse the effect string more carefully to identify the stat and whether
                   // the bonus is flat or a percentage.
+                   if (effectString.includes('armure')) {
+                      newStats.Armure += (newStats.Armure * value) / 100;
+                  } else if (effectString.includes('PV max')) {
+                      newStats.PV += (newStats.PV * value) / 100;
+                  } else if (effectString.includes('dégâts de mêlée')) {
+                      newStats.AttMin += (newStats.AttMin * value) / 100;
+                      newStats.AttMax += (newStats.AttMax * value) / 100;
+                  }
               });
           });
 
