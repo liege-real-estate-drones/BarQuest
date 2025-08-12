@@ -1,22 +1,7 @@
 [
-  {
-    "id": "forgerons_dardrem",
-    "name": "Forgerons d'Ardrem",
-    "ranks": ["Neutre", "Ami", "Honoré", "Révéré", "Exalté"]
-  },
-  {
-    "id": "cercle_de_givre",
-    "name": "Cercle de Givre",
-    "ranks": ["Neutre", "Ami", "Honoré", "Révéré", "Exalté"]
-  },
-  {
-    "id": "guilde_des_pisteurs",
-    "name": "Guilde des Pisteurs",
-    "ranks": ["Neutre", "Ami", "Honoré", "Révéré", "Exalté"]
-  },
-  {
-    "id": "archivistes_occultes",
-    "name": "Archivistes Occultes",
-    "ranks": ["Neutre", "Ami", "Honoré", "Révéré", "Exalté"]
-  }
+    {
+        "id": "village_ départ",
+        "name": "Milice du Village",
+        "ranks": ["Neutre", "Ami", "Allié", "Respecté", "Exalté"]
+    }
 ]

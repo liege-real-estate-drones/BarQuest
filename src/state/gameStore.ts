@@ -15,7 +15,8 @@ const getInitialPlayerState = (classes: Classe[]): PlayerState => {
   const berserkerClass = classes.find(c => c.id === 'berserker');
   const baseStats = berserkerClass ? berserkerClass.statsBase : {
     PV: 120, AttMin: 6, AttMax: 10, CritPct: 5, CritDmg: 150,
-    Armure: 15, Vitesse: 2.0, Precision: 95, Esquive: 5
+    Armure: 15, Vitesse: 2.0, Precision: 95, Esquive: 5,
+    Force: 10, Intelligence: 5, Dexterite: 7, Esprit: 8
   };
   
   return {
@@ -124,7 +125,12 @@ export const useGameStore = create<GameState>()(
 
           state.gameData = data;
           const initialPlayer = getInitialPlayerState(data.classes);
-          state.player = initialPlayer;
+          state.player = {
+             ...state.player, // Keep saved player data
+             ...initialPlayer, // But use latest base stats
+             baseStats: initialPlayer.baseStats
+          };
+
 
           // Auto-start the first quest for demo purposes
           if (data.quests.length > 0 && state.activeQuests.length === 0) {
@@ -142,7 +148,8 @@ export const useGameStore = create<GameState>()(
           const classe = gameData.classes.find(c => c.id === player.classeId);
           if (!classe) return;
 
-          const newStats: Stats = { ...player.baseStats };
+          // Start with a fresh copy of base stats
+          const newStats: Stats = JSON.parse(JSON.stringify(player.baseStats));
           const newEffects: string[] = [];
 
           // Add stats from equipment
@@ -166,7 +173,7 @@ export const useGameStore = create<GameState>()(
           const maxHp = formulas.calculateMaxHP(player.level, player.stats);
           const maxMana = formulas.calculateMaxMana(player.level, player.stats);
 
-          // Heal to full if current HP/Mana is 0 or uninitialized
+          // Heal to full if current HP/Mana is 0 or uninitialized or over max
           if (!player.stats.PV || player.stats.PV > maxHp) {
             player.stats.PV = maxHp;
           }
@@ -339,7 +346,7 @@ export const useGameStore = create<GameState>()(
                       if (quest.rewards.reputation) {
                         const rep = quest.rewards.reputation;
                         state.player.reputation[rep.factionId] = (state.player.reputation[rep.factionId] || 0) + rep.amount;
-                        state.combat.log.push({ message: `Your reputation with ${rep.factionId} increased by ${rep.amount}.`, type: 'info', timestamp: Date.now() });
+                        state.combat.log.push({ message: `Your reputation with ${gameData.factions.find(f => f.id === rep.factionId)?.name || 'a faction'} increased by ${rep.amount}.`, type: 'info', timestamp: Date.now() });
                       }
 
                       // Remove completed quest and add the next one if available
@@ -362,12 +369,8 @@ export const useGameStore = create<GameState>()(
                     
                     state.combat.log.push({ message: `Congratulations! You have reached level ${state.player.level}!`, type: 'levelup', timestamp: Date.now() });
                     
-                    recalculateStats();
-
-                    const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
-                    const maxMana = formulas.calculateMaxMana(state.player.level, state.player.stats);
-                    state.player.stats.PV = maxHp;
-                    state.player.resources.mana = maxMana;
+                    // Recalculate stats and heal
+                    recalculateStats(); // This will be called via the set state below
                 }
 
                 if (itemDrop) {
@@ -378,6 +381,20 @@ export const useGameStore = create<GameState>()(
                 state.combat.killCount += 1;
                 state.combat.enemy = null;
             });
+            
+            // Recalculate stats after level up and heal player
+            const xpToNextLevel = getXpToNextLevel();
+            const playerState = get().player;
+             if (playerState.xp >= xpToNextLevel) {
+                 get().recalculateStats();
+                 set(state => {
+                    const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
+                    const maxMana = formulas.calculateMaxMana(state.player.level, state.player.stats);
+                    state.player.stats.PV = maxHp;
+                    state.player.resources.mana = maxMana;
+                 });
+             }
+
 
             if (get().combat.killCount >= get().currentDungeon!.killTarget) {
                  set(state => {
@@ -410,8 +427,8 @@ export const useGameStore = create<GameState>()(
                 state.combat.log.push({ message: `You have been defeated! Returning to town.`, type: 'info', timestamp: Date.now() });
                 state.view = 'TOWN';
                 
-                // On respawn, restore HP/MANA
-                recalculateStats();
+                // On respawn, restore HP/MANA by recalculating and setting to max
+                recalculateStats(); // Ensure stats are up to date first
                 const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
                 const maxMana = formulas.calculateMaxMana(state.player.level, state.player.stats);
                 state.player.stats.PV = maxHp;
@@ -442,7 +459,8 @@ export const useGameStore = create<GameState>()(
       storage: createJSONStorage(() => localStorage),
       onRehydrateStorage: () => (state) => {
         if(state) {
-            state.isInitialized = false; // Will force re-init with latest data files
+            // Don't set to false, allow saved state to persist but still load new data
+            // state.isInitialized = false; 
         }
       }
     }

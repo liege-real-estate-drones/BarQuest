@@ -1,25 +1,39 @@
-
 [
-    {
-        "id": "rusty-sword",
-        "name": "Rusty Sword",
-        "slot": "weapon",
-        "niveauMin": 1,
-        "rarity": "Commun",
-        "affixes": [],
-        "tagsClasse": ["common"]
+  {
+    "id": "starter_sword",
+    "name": "Épée rouillée",
+    "slot": "weapon",
+    "niveauMin": 1,
+    "rarity": "Commun",
+    "affixes": [
+      { "ref": "AttMin", "val": 2 },
+      { "ref": "AttMax", "val": 4 }
+    ],
+    "tagsClasse": ["common"]
   },
   {
-    "id": "unique_axe_dernier_cri",
+    "id": "starter_helm",
+    "name": "Casque en cuir",
+    "slot": "head",
+    "niveauMin": 1,
+    "rarity": "Commun",
+    "affixes": [
+      { "ref": "Armure", "val": 5 }
+    ],
+    "tagsClasse": ["common"]
+  },
+  {
+    "id": "axe_dernier_cri",
     "name": "Hache 'Dernier Cri'",
     "slot": "weapon",
-    "niveauMin": 10,
+    "niveauMin": 5,
     "rarity": "Unique",
     "affixes": [
-        { "ref": "AttMin", "val": 25 },
-        { "ref": "AttMax", "val": 40 }
+      { "ref": "AttMin", "val": 15 },
+      { "ref": "AttMax", "val": 25 },
+      { "ref": "CritPct", "val": 5 }
     ],
     "tagsClasse": ["berserker"],
     "effect": "dernier_cri"
-    }
+  }
 ]
