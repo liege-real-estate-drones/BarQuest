@@ -23,7 +23,7 @@ export type Monstre = z.infer<typeof MonsterSchema>;
 export type Dungeon = z.infer<typeof DungeonSchema>;
 export type Classe = z.infer<typeof ClasseSchema>;
 
-export type PlayerClassId = 'warrior' | 'mage' | 'rogue' | 'cleric';
+export type PlayerClassId = 'berserker' | 'mage' | 'rogue' | 'cleric';
 
 export interface PlayerState {
   name: string;
