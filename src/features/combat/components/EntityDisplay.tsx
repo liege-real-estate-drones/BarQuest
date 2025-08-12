@@ -43,17 +43,17 @@ export default function EntityDisplay({ entity, isPlayer = false }: EntityDispla
 
   const hpPercentage = maxHp > 0 ? (currentHp / maxHp) * 100 : 0;
 
-  let playerResources, xpPercentage, xpToNextLevel, currentResourceConfig;
+  let xpPercentage, xpToNextLevel;
 
   if (isPlayer) {
     const player = entity as PlayerState;
-    playerResources = player.resources;
     xpToNextLevel = getXpToNextLevel();
     xpPercentage = xpToNextLevel > 0 ? (player.xp / xpToNextLevel) * 100 : 0;
-    currentResourceConfig = resourceConfig[playerResources.type] || { color: 'text-gray-400', indicator: 'bg-gray-500' };
   }
   
   const stats = entity.stats;
+  const playerResources = isPlayer ? (entity as PlayerState).resources : undefined;
+  const currentResourceConfig = (playerResources?.type && resourceConfig[playerResources.type]) || { color: 'text-gray-400', indicator: 'bg-gray-500' };
 
   return (
     <Card className="flex flex-col h-full bg-card/50">
@@ -73,7 +73,7 @@ export default function EntityDisplay({ entity, isPlayer = false }: EntityDispla
           </div>
           <Progress value={hpPercentage} className="h-4" indicatorClassName="bg-gradient-to-r from-red-500 to-red-700" />
         </div>
-        {isPlayer && playerResources && playerResources.max > 0 && currentResourceConfig && (
+        {isPlayer && playerResources && playerResources.type && playerResources.max > 0 && (
           <div>
             <div className={`flex justify-between text-xs mb-1 font-mono ${currentResourceConfig.color}`}>
               <span>{playerResources.type.toUpperCase()}</span>

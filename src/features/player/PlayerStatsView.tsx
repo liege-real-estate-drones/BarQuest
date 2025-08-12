@@ -27,7 +27,7 @@ export function PlayerStatsView() {
     const xpToNextLevel = getXpToNextLevel();
     const xpPercentage = xpToNextLevel > 0 ? (player.xp / xpToNextLevel) * 100 : 0;
 
-    const currentResourceConfig = resourceConfig[type] || { color: 'text-gray-400', indicator: 'bg-gray-500' };
+    const currentResourceConfig = (type && resourceConfig[type]) || { color: 'text-gray-400', indicator: 'bg-gray-500' };
 
     return (
         <Card>
@@ -46,6 +46,7 @@ export function PlayerStatsView() {
                     </div>
                     <Progress value={hpPercentage} className="h-4" indicatorClassName="bg-gradient-to-r from-red-500 to-red-700" />
                 </div>
+                {type && max > 0 && (
                  <div>
                     <div className={`flex justify-between text-xs mb-1 font-mono ${currentResourceConfig.color}`}>
                         <span>{type.toUpperCase()}</span>
@@ -53,6 +54,7 @@ export function PlayerStatsView() {
                     </div>
                     <Progress value={resourcePercentage} className="h-4" indicatorClassName={currentResourceConfig.indicator} />
                 </div>
+                )}
                 <div>
                     <div className="flex justify-between text-xs mb-1 font-mono text-yellow-400">
                         <span>XP</span>
