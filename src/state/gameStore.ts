@@ -63,6 +63,7 @@ interface GameState {
   equipItem: (itemId: string) => void;
   unequipItem: (slot: keyof InventoryState['equipment']) => void;
   learnTalent: (talentId: string) => void;
+  resetGame: () => void;
 
   enterDungeon: (dungeonId: string) => void;
   startCombat: () => void;
@@ -104,6 +105,8 @@ const getTalentEffectValue = (effect: string, rank: number): number => {
     const values = matches[1].split('/').map(Number);
     return values[Math.min(rank - 1, values.length - 1)] || 0;
 };
+
+const storage = createJSONStorage(() => localStorage);
 
 export const useGameStore = create<GameState>()(
   persist(
@@ -196,7 +199,7 @@ export const useGameStore = create<GameState>()(
           });
           
           // Add stats from talents
-          Object.entries(player.talents).forEach(([talentId, rank]) => {
+          Object.entries(player.talents || {}).forEach(([talentId, rank]) => {
               const talentData = gameData.talents.find(t => t.id === talentId);
               if (!talentData) return;
               
@@ -292,6 +295,11 @@ export const useGameStore = create<GameState>()(
           }
         });
         get().recalculateStats();
+      },
+
+      resetGame: () => {
+        storage.removeItem('barquest-save');
+        window.location.reload();
       },
 
       enterDungeon: (dungeonId) => {
@@ -458,7 +466,7 @@ export const useGameStore = create<GameState>()(
             });
             
             // Post-defeat processing
-            const didLevelUp = get().combat.log[get().combat.log.length - 1].type === 'levelup';
+            const didLevelUp = get().combat.log.length > 0 && get().combat.log[get().combat.log.length - 1].type === 'levelup';
              if (didLevelUp) {
                  get().recalculateStats();
                  set(state => {
@@ -524,7 +532,7 @@ export const useGameStore = create<GameState>()(
     })),
     {
       name: 'barquest-save',
-      storage: createJSONStorage(() => localStorage),
+      storage: storage,
       onRehydrateStorage: () => (state) => {
         if(state) {
           // state.isInitialized = false; 
