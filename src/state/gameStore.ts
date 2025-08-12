@@ -142,6 +142,9 @@ export const useGameStore = create<GameState>()(
                 ...savedPlayer,
                 baseStats: currentClass ? currentClass.statsBase : getInitialPlayerState().baseStats,
              };
+          } else {
+            state.isInitialized = true;
+            return;
           }
 
           if (data.quests.length > 0 && state.activeQuests.length === 0) {
@@ -166,9 +169,16 @@ export const useGameStore = create<GameState>()(
             state.player.baseStats = chosenClass.statsBase;
             state.player.stats = chosenClass.statsBase;
 
-            const maxResource = formulas.calculateMaxMana(1, chosenClass.statsBase);
+            let maxResource = formulas.calculateMaxMana(1, chosenClass.statsBase);
+            let currentResource = maxResource;
+
+            if (chosenClass.ressource === 'Rage') {
+              maxResource = 100; // Rage is usually capped at 100
+              currentResource = 0; // Start with 0 rage
+            }
+
             state.player.resources = {
-                current: maxResource,
+                current: currentResource,
                 max: maxResource,
                 type: chosenClass.ressource as ResourceType,
             };
@@ -235,18 +245,21 @@ export const useGameStore = create<GameState>()(
           player.activeEffects = newEffects;
           
           const maxHp = formulas.calculateMaxHP(player.level, player.stats);
-          const maxMana = formulas.calculateMaxMana(player.level, player.stats);
+          if (classe.ressource !== 'Rage') {
+            const maxMana = formulas.calculateMaxMana(player.level, player.stats);
+            player.resources.max = maxMana;
+             if (player.resources.current > player.resources.max) {
+                player.resources.current = player.resources.max;
+            }
+          } else {
+             player.resources.max = 100; // Rage is capped
+          }
 
-          player.resources.max = maxMana;
 
           if (player.stats.PV <= 0) { // If dead, respawn with full health
             player.stats.PV = maxHp;
           } else if (player.stats.PV > maxHp) { // Don't overflow health
             player.stats.PV = maxHp;
-          }
-
-          if (player.resources.current > player.resources.max) {
-            player.resources.current = player.resources.max;
           }
         });
       },
@@ -323,6 +336,9 @@ export const useGameStore = create<GameState>()(
             state.currentDungeon = dungeon;
             state.combat.killCount = 0;
             state.combat.log = [{ message: `Entered ${dungeon.name}.`, type: 'info', timestamp: Date.now() }];
+            if (state.player.resources.type === 'Rage') {
+              state.player.resources.current = 0; // Reset rage on entering dungeon
+            }
           });
           get().startCombat();
           if(gameLoop) clearInterval(gameLoop);
@@ -408,6 +424,20 @@ export const useGameStore = create<GameState>()(
             if (state.combat.enemy?.stats.PV) {
                 state.combat.enemy.stats.PV -= mitigatedDamage;
             }
+
+            // Rage Generation
+            if(state.player.resources.type === 'Rage') {
+              let rageGained = 5;
+              const criDeGuerreRank = state.player.talents['wr3'] || 0;
+              if (criDeGuerreRank > 0) {
+                 const talent = state.gameData.talents.find(t => t.id === 'wr3');
+                 if(talent) {
+                   rageGained += getTalentEffectValue(talent.effets[0], criDeGuerreRank);
+                 }
+              }
+              state.player.resources.current = Math.min(state.player.resources.max, state.player.resources.current + rageGained);
+            }
+
             state.combat.log.push({ message: isCrit ? critMsg : attackMsg, type: isCrit ? 'crit' : 'player_attack', timestamp: Date.now() });
             state.combat.playerAttackProgress = 0;
         });
@@ -486,7 +516,9 @@ export const useGameStore = create<GameState>()(
                     const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
                     const maxMana = formulas.calculateMaxMana(state.player.level, state.player.stats);
                     state.player.stats.PV = maxHp;
-                    state.player.resources.current = maxMana;
+                    if(state.player.resources.type !== 'Rage') {
+                        state.player.resources.current = maxMana;
+                    }
                  });
              }
 
