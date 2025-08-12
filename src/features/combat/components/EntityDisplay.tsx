@@ -43,13 +43,14 @@ export default function EntityDisplay({ entity, isPlayer = false }: EntityDispla
 
   const hpPercentage = maxHp > 0 ? (currentHp / maxHp) * 100 : 0;
 
-  let playerResources, xpPercentage, xpToNextLevel;
+  let playerResources, xpPercentage, xpToNextLevel, currentResourceConfig;
 
   if (isPlayer) {
     const player = entity as PlayerState;
     playerResources = player.resources;
     xpToNextLevel = getXpToNextLevel();
     xpPercentage = xpToNextLevel > 0 ? (player.xp / xpToNextLevel) * 100 : 0;
+    currentResourceConfig = resourceConfig[playerResources.type] || { color: 'text-gray-400', indicator: 'bg-gray-500' };
   }
   
   const stats = entity.stats;
@@ -72,13 +73,13 @@ export default function EntityDisplay({ entity, isPlayer = false }: EntityDispla
           </div>
           <Progress value={hpPercentage} className="h-4" indicatorClassName="bg-gradient-to-r from-red-500 to-red-700" />
         </div>
-        {isPlayer && playerResources && playerResources.max > 0 && (
+        {isPlayer && playerResources && playerResources.max > 0 && currentResourceConfig && (
           <div>
-            <div className={`flex justify-between text-xs mb-1 font-mono ${resourceConfig[playerResources.type].color}`}>
+            <div className={`flex justify-between text-xs mb-1 font-mono ${currentResourceConfig.color}`}>
               <span>{playerResources.type.toUpperCase()}</span>
               <span>{Math.round(playerResources.current)} / {Math.round(playerResources.max)}</span>
             </div>
-            <Progress value={(playerResources.current / playerResources.max) * 100} className="h-4" indicatorClassName={resourceConfig[playerResources.type].indicator} />
+            <Progress value={(playerResources.current / playerResources.max) * 100} className="h-4" indicatorClassName={currentResourceConfig.indicator} />
           </div>
         )}
         {isPlayer && xpToNextLevel !== undefined && (
