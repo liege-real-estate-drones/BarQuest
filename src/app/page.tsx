@@ -6,7 +6,6 @@ import { TownView } from '@/features/town/TownView';
 import { CombatView } from '@/features/combat/CombatView';
 import { useHydrated } from '@/hooks/useHydrated';
 import { LoaderCircle } from 'lucide-react';
-import { Dungeon, Monstre, Item, Talent, Affixe, Classe, Quete, Faction } from '@/lib/types';
 import { ChooseClassView } from '@/features/player/ChooseClassView';
 
 export default function Home() {

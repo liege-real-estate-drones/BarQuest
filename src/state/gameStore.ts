@@ -14,10 +14,10 @@ export interface ActiveQuete {
 const getInitialPlayerState = (): PlayerState => {
   return {
     name: "Hero",
-    classeId: null, // This will be set on first load
+    classeId: null,
     level: 1,
     xp: 0,
-    baseStats: {} as Stats, // Empty until class is chosen
+    baseStats: {} as Stats,
     stats: {} as Stats,
     talentPoints: 0,
     talents: {},
