@@ -158,7 +158,7 @@ export const useGameStore = create<GameState>()(
             state.player.classeId = chosenClass.id as PlayerClassId;
             state.player.baseStats = chosenClass.statsBase;
             state.player.stats = chosenClass.statsBase;
-            state.player.resources.mana = chosenClass.statsBase.RessourceMax || 0;
+            state.player.resources.mana = formulas.calculateMaxMana(1, chosenClass.statsBase);
             state.player.stats.PV = formulas.calculateMaxHP(1, chosenClass.statsBase);
         });
         get().recalculateStats();
@@ -168,6 +168,10 @@ export const useGameStore = create<GameState>()(
         set(state => {
           const { player, inventory, gameData } = state;
           if (!player.classeId) return;
+
+          // Ensure talents and reputation are objects
+          if (!player.talents) player.talents = {};
+          if (!player.reputation) player.reputation = {};
 
           const classe = gameData.classes.find(c => c.id === player.classeId);
           if (!classe) return;
