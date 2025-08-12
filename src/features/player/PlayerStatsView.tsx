@@ -39,7 +39,7 @@ export function PlayerStatsView() {
                 </div>
                  <div>
                     <div className="flex justify-between text-xs mb-1 font-mono text-blue-400">
-                        <span>MANA</span>
+                        <span>RESSOURCE</span>
                         <span>{Math.round(player.resources.mana)} / {Math.round(maxMana)}</span>
                     </div>
                     <Progress value={manaPercentage} className="h-4" indicatorClassName="bg-gradient-to-r from-blue-500 to-blue-700" />
@@ -53,6 +53,8 @@ export function PlayerStatsView() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm font-mono pt-4">
+                    <span className="text-muted-foreground">Points de talent:</span><span className="text-right font-bold text-primary">{player.talentPoints}</span>
+                    <hr className="col-span-2 my-1 border-border" />
                     <span className="text-muted-foreground">Force:</span><span className="text-right">{stats.Force ?? 0}</span>
                     <span className="text-muted-foreground">Intelligence:</span><span className="text-right">{stats.Intelligence ?? 0}</span>
                     <span className="text-muted-foreground">Dextérité:</span><span className="text-right">{stats.Dexterite ?? 0}</span>

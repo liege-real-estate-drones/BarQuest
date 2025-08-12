@@ -23,7 +23,7 @@ export type Monstre = z.infer<typeof MonsterSchema>;
 export type Dungeon = z.infer<typeof DungeonSchema>;
 export type Classe = z.infer<typeof ClasseSchema>;
 
-export type PlayerClassId = 'berserker' | 'mage' | 'druid';
+export type PlayerClassId = 'warrior' | 'mage' | 'rogue' | 'cleric' | 'berserker';
 
 export interface PlayerState {
   name: string;
@@ -33,6 +33,7 @@ export interface PlayerState {
   baseStats: Stats; // Unmodified stats from class + level
   stats: Stats; // Current stats with equipment
   talentPoints: number;
+  talents: { [talentId: string]: number }; // e.g. { 'wr1': 2, 'wr5': 1 }
   resources: {
     mana: number;
   };

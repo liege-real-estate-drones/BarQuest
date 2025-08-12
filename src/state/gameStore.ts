@@ -12,23 +12,24 @@ export interface ActiveQuete {
 
 
 const getInitialPlayerState = (classes: Classe[]): PlayerState => {
-  const berserkerClass = classes.find(c => c.id === 'berserker');
-  const baseStats = berserkerClass ? berserkerClass.statsBase : {
-    PV: 120, AttMin: 6, AttMax: 10, CritPct: 5, CritDmg: 150,
-    Armure: 15, Vitesse: 2.0, Precision: 95, Esquive: 5,
-    Force: 10, Intelligence: 5, Dexterite: 7, Esprit: 8
+  const warriorClass = classes.find(c => c.id === 'warrior');
+  const baseStats = warriorClass ? warriorClass.statsBase : {
+    PV: 150, AttMin: 8, AttMax: 12, CritPct: 0.05, CritDmg: 1.5,
+    Armure: 25, Vitesse: 1.8, Precision: 0.9, Esquive: 0.05,
+    Force: 12, Intelligence: 4, Dexterite: 8, Esprit: 6, RessourceMax: 100,
   };
   
   return {
     name: "Hero",
-    classeId: 'berserker',
+    classeId: 'warrior',
     level: 1,
     xp: 0,
     baseStats: baseStats,
     stats: baseStats,
     talentPoints: 0,
+    talents: {},
     resources: {
-      mana: 50,
+      mana: 100,
     },
     reputation: {},
     activeEffects: [],
@@ -67,6 +68,7 @@ interface GameState {
   recalculateStats: () => void;
   equipItem: (itemId: string) => void;
   unequipItem: (slot: keyof InventoryState['equipment']) => void;
+  learnTalent: (talentId: string) => void;
 
   enterDungeon: (dungeonId: string) => void;
   startCombat: () => void;
@@ -101,6 +103,14 @@ const resolveLoot = (monster: Monstre, gameData: GameData): Item | null => {
   return newItem;
 };
 
+// Helper to parse talent effects. E.g. "+5/10/15% armure" for rank 2 -> 10
+const getTalentEffectValue = (effect: string, rank: number): number => {
+    const matches = effect.match(/([\d/]+)/);
+    if (!matches) return 0;
+    const values = matches[1].split('/').map(Number);
+    return values[rank - 1] || 0;
+};
+
 export const useGameStore = create<GameState>()(
   persist(
     immer((set, get) => ({
@@ -125,11 +135,18 @@ export const useGameStore = create<GameState>()(
 
           state.gameData = data;
           const initialPlayer = getInitialPlayerState(data.classes);
-          state.player = {
-             ...state.player, // Keep saved player data
-             ...initialPlayer, // But use latest base stats
-             baseStats: initialPlayer.baseStats
-          };
+          
+          if (!state.player.classeId) {
+             state.player = initialPlayer;
+          } else {
+             const savedPlayer = JSON.parse(JSON.stringify(state.player));
+             const currentClass = data.classes.find(c => c.id === savedPlayer.classeId);
+             state.player = {
+                ...initialPlayer,
+                ...savedPlayer,
+                baseStats: currentClass ? currentClass.statsBase : initialPlayer.baseStats,
+             };
+          }
 
 
           // Auto-start the first quest for demo purposes
@@ -166,6 +183,25 @@ export const useGameStore = create<GameState>()(
               }
             }
           });
+          
+          // Add stats from talents
+          Object.entries(player.talents).forEach(([talentId, rank]) => {
+              const talentData = gameData.talents.find(t => t.id === talentId);
+              if (!talentData) return;
+              
+              talentData.effets.forEach(effectString => {
+                  const value = getTalentEffectValue(effectString, rank);
+                  if (effectString.includes('armure')) {
+                      newStats.Armure += (newStats.Armure * value) / 100;
+                  } else if (effectString.includes('PV max')) {
+                      newStats.PV += (newStats.PV * value) / 100;
+                  }
+                  // This is a simplified implementation. A more robust solution would
+                  // parse the effect string more carefully to identify the stat and whether
+                  // the bonus is flat or a percentage.
+              });
+          });
+
 
           player.stats = newStats;
           player.activeEffects = newEffects;
@@ -173,11 +209,13 @@ export const useGameStore = create<GameState>()(
           const maxHp = formulas.calculateMaxHP(player.level, player.stats);
           const maxMana = formulas.calculateMaxMana(player.level, player.stats);
 
-          // Heal to full if current HP/Mana is 0 or uninitialized or over max
-          if (!player.stats.PV || player.stats.PV > maxHp) {
+          if (player.stats.PV <= 0) { // If dead, respawn with full health
+            player.stats.PV = maxHp;
+          } else if (player.stats.PV > maxHp) { // Don't overflow health
             player.stats.PV = maxHp;
           }
-           if (!player.resources.mana || player.resources.mana > maxMana) {
+
+          if (!player.resources.mana || player.resources.mana > maxMana) {
             player.resources.mana = maxMana;
           }
         });
@@ -191,18 +229,12 @@ export const useGameStore = create<GameState>()(
         const itemToEquip = inventory.items[itemIndex];
         
         set(state => {
-            // Remove from inventory
             state.inventory.items.splice(itemIndex, 1);
-            
             const slot = itemToEquip.slot as keyof InventoryState['equipment'];
-            
-            // If an item is already in the slot, move it back to inventory
             const currentItem = state.inventory.equipment[slot];
             if (currentItem) {
                 state.inventory.items.push(currentItem);
             }
-            
-            // Equip the new item
             state.inventory.equipment[slot] = itemToEquip;
         });
 
@@ -216,6 +248,34 @@ export const useGameStore = create<GameState>()(
                 state.inventory.items.push(item);
                 state.inventory.equipment[slot] = null;
             }
+        });
+        get().recalculateStats();
+      },
+
+      learnTalent: (talentId: string) => {
+        set(state => {
+          const { player, gameData } = state;
+          const talent = gameData.talents.find(t => t.id === talentId);
+          if (!talent || player.talentPoints <= 0) return;
+
+          const currentRank = player.talents[talentId] || 0;
+          if (currentRank >= talent.rangMax) return;
+          
+          // Check requirements
+          let canLearn = true;
+          if (talent.exigences && talent.exigences.length > 0) {
+            talent.exigences.forEach(req => {
+              const [reqId, reqRank] = req.split(':');
+              if ((player.talents[reqId] || 0) < Number(reqRank)) {
+                canLearn = false;
+              }
+            });
+          }
+
+          if (canLearn) {
+            player.talents[talentId] = currentRank + 1;
+            player.talentPoints -= 1;
+          }
         });
         get().recalculateStats();
       },
@@ -319,7 +379,7 @@ export const useGameStore = create<GameState>()(
 
         if (get().combat.enemy!.stats.PV! <= 0) {
             const enemy = get().combat.enemy!;
-            const goldDrop = 5; // Placeholder
+            const goldDrop = 5;
             const itemDrop = resolveLoot(enemy, gameData);
             const xpGained = enemy.level * 10;
 
@@ -336,7 +396,6 @@ export const useGameStore = create<GameState>()(
                   if (activeQuest.quete.requirements.dungeonId === state.currentDungeon?.id) {
                     activeQuest.progress++;
                     if (activeQuest.progress >= activeQuest.quete.requirements.killCount) {
-                      // Quest Complete
                       const quest = activeQuest.quete;
                       state.combat.log.push({ message: `Quest Complete: ${quest.name}!`, type: 'levelup', timestamp: Date.now() });
                       state.inventory.gold += quest.rewards.gold;
@@ -349,7 +408,6 @@ export const useGameStore = create<GameState>()(
                         state.combat.log.push({ message: `Your reputation with ${gameData.factions.find(f => f.id === rep.factionId)?.name || 'a faction'} increased by ${rep.amount}.`, type: 'info', timestamp: Date.now() });
                       }
 
-                      // Remove completed quest and add the next one if available
                       state.activeQuests.splice(index, 1);
                       const nextQuestIndex = gameData.quests.findIndex(q => q.id === quest.id) + 1;
                       if (nextQuestIndex < gameData.quests.length) {
@@ -361,16 +419,19 @@ export const useGameStore = create<GameState>()(
                   }
                 });
 
-                const xpToNextLevel = getXpToNextLevel();
-                if (state.player.xp >= xpToNextLevel) {
+                let leveledUp = false;
+                let xpToNext = getXpToNextLevel();
+                while(state.player.xp >= xpToNext) {
                     state.player.level += 1;
-                    state.player.xp -= xpToNextLevel;
+                    state.player.xp -= xpToNext;
                     state.player.talentPoints += 1;
-                    
+                    leveledUp = true;
                     state.combat.log.push({ message: `Congratulations! You have reached level ${state.player.level}!`, type: 'levelup', timestamp: Date.now() });
-                    
-                    // Recalculate stats and heal
-                    recalculateStats(); // This will be called via the set state below
+                    xpToNext = getXpToNextLevel(); // Recalculate for next level
+                }
+
+                if (leveledUp) {
+                    // Recalculate stats and heal in a separate step
                 }
 
                 if (itemDrop) {
@@ -382,10 +443,9 @@ export const useGameStore = create<GameState>()(
                 state.combat.enemy = null;
             });
             
-            // Recalculate stats after level up and heal player
-            const xpToNextLevel = getXpToNextLevel();
-            const playerState = get().player;
-             if (playerState.xp >= xpToNextLevel) {
+            // Post-defeat processing
+            const didLevelUp = get().combat.log[get().combat.log.length - 1].type === 'levelup';
+             if (didLevelUp) {
                  get().recalculateStats();
                  set(state => {
                     const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
@@ -394,7 +454,6 @@ export const useGameStore = create<GameState>()(
                     state.player.resources.mana = maxMana;
                  });
              }
-
 
             if (get().combat.killCount >= get().currentDungeon!.killTarget) {
                  set(state => {
@@ -426,14 +485,9 @@ export const useGameStore = create<GameState>()(
             set(state => {
                 state.combat.log.push({ message: `You have been defeated! Returning to town.`, type: 'info', timestamp: Date.now() });
                 state.view = 'TOWN';
-                
-                // On respawn, restore HP/MANA by recalculating and setting to max
-                recalculateStats(); // Ensure stats are up to date first
-                const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
-                const maxMana = formulas.calculateMaxMana(state.player.level, state.player.stats);
-                state.player.stats.PV = maxHp;
-                state.player.resources.mana = maxMana;
+                // HP/MANA are restored in recalculateStats now
             });
+            get().recalculateStats(); // Recalculate stats on death to heal
             if(gameLoop) clearInterval(gameLoop);
         }
       },
@@ -459,8 +513,7 @@ export const useGameStore = create<GameState>()(
       storage: createJSONStorage(() => localStorage),
       onRehydrateStorage: () => (state) => {
         if(state) {
-            // Don't set to false, allow saved state to persist but still load new data
-            // state.isInitialized = false; 
+          // state.isInitialized = false; 
         }
       }
     }

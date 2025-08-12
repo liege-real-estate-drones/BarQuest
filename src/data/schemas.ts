@@ -46,7 +46,7 @@ export const ClasseSchema = z.object({
   id: z.string(),
   nom: z.string(),
   ressource: z.enum(["Mana", "Énergie", "Rage"]),
-  archétype: z.enum(["Mêlée", "Distance", "Magie", "Soutien"]),
+  archétype: z.string(),
   statsBase: StatsSchema,
 });
 
@@ -54,12 +54,10 @@ export const ClasseSchema = z.object({
 export const TalentSchema = z.object({
   id: z.string(),
   nom: z.string(),
+  classeId: z.string(),
   rangMax: z.number().int(),
-  effets: z.array(z.object({ stat: z.string(), parRang: z.number() })),
-  exigences: z.object({
-    classeId: z.string().optional(),
-    prerequis: z.array(z.string()),
-  }),
+  effets: z.array(z.string()),
+  exigences: z.array(z.string()),
 });
 
 export const MonsterSchema = z.object({
