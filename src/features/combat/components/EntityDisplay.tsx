@@ -3,7 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { useGameStore } from '@/state/gameStore';
-import { Monstre, Stats, PlayerState } from '@/lib/types';
+import { Monstre, Stats, PlayerState, ResourceType } from '@/lib/types';
 import * as formulas from '@/core/formulas';
 import { Separator } from '@/components/ui/separator';
 
@@ -24,6 +24,12 @@ function StatGrid({ stats }: { stats: Stats }) {
     );
 }
 
+const resourceConfig: Record<ResourceType, { color: string; indicator: string }> = {
+    Mana: { color: 'text-blue-400', indicator: 'bg-gradient-to-r from-blue-500 to-blue-700' },
+    Rage: { color: 'text-orange-400', indicator: 'bg-gradient-to-r from-orange-500 to-orange-700' },
+    'Énergie': { color: 'text-yellow-400', indicator: 'bg-gradient-to-r from-yellow-500 to-yellow-700' },
+};
+
 export default function EntityDisplay({ entity, isPlayer = false }: EntityDisplayProps) {
   const getXpToNextLevel = useGameStore(s => s.getXpToNextLevel);
   
@@ -37,13 +43,11 @@ export default function EntityDisplay({ entity, isPlayer = false }: EntityDispla
 
   const hpPercentage = maxHp > 0 ? (currentHp / maxHp) * 100 : 0;
 
-  let currentMana, maxMana, xpPercentage, xpToNextLevel;
+  let playerResources, xpPercentage, xpToNextLevel;
 
   if (isPlayer) {
     const player = entity as PlayerState;
-    currentMana = player.resources.mana;
-    maxMana = formulas.calculateMaxMana(player.level, player.stats);
-    
+    playerResources = player.resources;
     xpToNextLevel = getXpToNextLevel();
     xpPercentage = xpToNextLevel > 0 ? (player.xp / xpToNextLevel) * 100 : 0;
   }
@@ -68,13 +72,13 @@ export default function EntityDisplay({ entity, isPlayer = false }: EntityDispla
           </div>
           <Progress value={hpPercentage} className="h-4" indicatorClassName="bg-gradient-to-r from-red-500 to-red-700" />
         </div>
-        {isPlayer && currentMana !== undefined && maxMana !== undefined && maxMana > 0 && (
+        {isPlayer && playerResources && playerResources.max > 0 && (
           <div>
-            <div className="flex justify-between text-xs mb-1 font-mono text-blue-400">
-              <span>MANA</span>
-              <span>{Math.round(currentMana)} / {Math.round(maxMana)}</span>
+            <div className={`flex justify-between text-xs mb-1 font-mono ${resourceConfig[playerResources.type].color}`}>
+              <span>{playerResources.type.toUpperCase()}</span>
+              <span>{Math.round(playerResources.current)} / {Math.round(playerResources.max)}</span>
             </div>
-            <Progress value={(currentMana / maxMana) * 100} className="h-4" indicatorClassName="bg-gradient-to-r from-blue-500 to-blue-700" />
+            <Progress value={(playerResources.current / playerResources.max) * 100} className="h-4" indicatorClassName={resourceConfig[playerResources.type].indicator} />
           </div>
         )}
         {isPlayer && xpToNextLevel !== undefined && (
@@ -83,7 +87,7 @@ export default function EntityDisplay({ entity, isPlayer = false }: EntityDispla
                 <span>XP</span>
                 <span>{Math.round((entity as PlayerState).xp)} / {Math.round(xpToNextLevel)}</span>
             </div>
-            <Progress value={xpPercentage} className="h-2" indicatorClassName="bg-gradient-to-r from-yellow-500 to-yellow-700" />
+            <Progress value={xpPercentage} className="h-2" indicatorClassName="bg-gradient-to-r from-yellow-400 to-yellow-600" />
           </div>
         )}
         <Separator className="my-4" />

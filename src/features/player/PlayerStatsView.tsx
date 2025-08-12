@@ -3,6 +3,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { useGameStore } from '@/state/gameStore';
 import * as formulas from '@/core/formulas';
 import { Progress } from '@/components/ui/progress';
+import type { ResourceType } from '@/lib/types';
+
+const resourceConfig: Record<ResourceType, { color: string; indicator: string }> = {
+    Mana: { color: 'text-blue-400', indicator: 'bg-gradient-to-r from-blue-500 to-blue-700' },
+    Rage: { color: 'text-orange-400', indicator: 'bg-gradient-to-r from-orange-500 to-orange-700' },
+    'Énergie': { color: 'text-yellow-400', indicator: 'bg-gradient-to-r from-yellow-500 to-yellow-700' },
+};
 
 export function PlayerStatsView() {
     const { player, getXpToNextLevel } = useGameStore(state => ({
@@ -14,8 +21,8 @@ export function PlayerStatsView() {
     const maxHp = formulas.calculateMaxHP(player.level, stats);
     const hpPercentage = maxHp > 0 ? (stats.PV / maxHp) * 100 : 0;
     
-    const maxMana = formulas.calculateMaxMana(player.level, stats);
-    const manaPercentage = maxMana > 0 ? (player.resources.mana / maxMana) * 100 : 0;
+    const { current, max, type } = player.resources;
+    const resourcePercentage = max > 0 ? (current / max) * 100 : 0;
     
     const xpToNextLevel = getXpToNextLevel();
     const xpPercentage = xpToNextLevel > 0 ? (player.xp / xpToNextLevel) * 100 : 0;
@@ -38,18 +45,18 @@ export function PlayerStatsView() {
                     <Progress value={hpPercentage} className="h-4" indicatorClassName="bg-gradient-to-r from-red-500 to-red-700" />
                 </div>
                  <div>
-                    <div className="flex justify-between text-xs mb-1 font-mono text-blue-400">
-                        <span>RESSOURCE</span>
-                        <span>{Math.round(player.resources.mana)} / {Math.round(maxMana)}</span>
+                    <div className={`flex justify-between text-xs mb-1 font-mono ${resourceConfig[type].color}`}>
+                        <span>{type.toUpperCase()}</span>
+                        <span>{Math.round(current)} / {Math.round(max)}</span>
                     </div>
-                    <Progress value={manaPercentage} className="h-4" indicatorClassName="bg-gradient-to-r from-blue-500 to-blue-700" />
+                    <Progress value={resourcePercentage} className="h-4" indicatorClassName={resourceConfig[type].indicator} />
                 </div>
                 <div>
                     <div className="flex justify-between text-xs mb-1 font-mono text-yellow-400">
                         <span>XP</span>
                         <span>{Math.round(player.xp)} / {Math.round(xpToNextLevel)}</span>
                     </div>
-                    <Progress value={xpPercentage} className="h-2" indicatorClassName="bg-gradient-to-r from-yellow-500 to-yellow-700" />
+                    <Progress value={xpPercentage} className="h-2" indicatorClassName="bg-gradient-to-r from-yellow-400 to-yellow-600" />
                 </div>
 
                 <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm font-mono pt-4">

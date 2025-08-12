@@ -25,6 +25,8 @@ export type Classe = z.infer<typeof ClasseSchema>;
 
 export type PlayerClassId = 'berserker' | 'mage' | 'rogue' | 'cleric';
 
+export type ResourceType = 'Mana' | 'Rage' | 'Énergie';
+
 export interface PlayerState {
   name: string;
   classeId: PlayerClassId | null;
@@ -35,7 +37,9 @@ export interface PlayerState {
   talentPoints: number;
   talents: { [talentId: string]: number }; // e.g. { 'wr1': 2, 'wr5': 1 }
   resources: {
-    mana: number;
+    current: number;
+    max: number;
+    type: ResourceType;
   };
   reputation: {
     [factionId: string]: number;

@@ -1,7 +1,7 @@
 import create from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import type { Dungeon, Monstre, Item, Talent, Affixe, Stats, PlayerState, InventoryState, CombatLogEntry, CombatState, GameData, Classe, Quete, PlayerClassId } from '@/lib/types';
+import type { Dungeon, Monstre, Item, Talent, Affixe, Stats, PlayerState, InventoryState, CombatLogEntry, CombatState, GameData, Classe, Quete, PlayerClassId, ResourceType } from '@/lib/types';
 import * as formulas from '@/core/formulas';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -22,7 +22,9 @@ const getInitialPlayerState = (): PlayerState => {
     talentPoints: 0,
     talents: {},
     resources: {
-      mana: 0,
+      current: 0,
+      max: 0,
+      type: 'Mana',
     },
     reputation: {},
     activeEffects: [],
@@ -158,10 +160,19 @@ export const useGameStore = create<GameState>()(
             const chosenClass = state.gameData.classes.find(c => c.id === classId);
             if (!chosenClass) return;
 
+            state.player = getInitialPlayerState();
+
             state.player.classeId = chosenClass.id as PlayerClassId;
             state.player.baseStats = chosenClass.statsBase;
             state.player.stats = chosenClass.statsBase;
-            state.player.resources.mana = formulas.calculateMaxMana(1, chosenClass.statsBase);
+
+            const maxResource = formulas.calculateMaxMana(1, chosenClass.statsBase);
+            state.player.resources = {
+                current: maxResource,
+                max: maxResource,
+                type: chosenClass.ressource as ResourceType,
+            };
+            
             state.player.stats.PV = formulas.calculateMaxHP(1, chosenClass.statsBase);
         });
         get().recalculateStats();
@@ -199,7 +210,7 @@ export const useGameStore = create<GameState>()(
           });
           
           // Add stats from talents
-          Object.entries(player.talents || {}).forEach(([talentId, rank]) => {
+          Object.entries(player.talents).forEach(([talentId, rank]) => {
               const talentData = gameData.talents.find(t => t.id === talentId);
               if (!talentData) return;
               
@@ -226,14 +237,16 @@ export const useGameStore = create<GameState>()(
           const maxHp = formulas.calculateMaxHP(player.level, player.stats);
           const maxMana = formulas.calculateMaxMana(player.level, player.stats);
 
+          player.resources.max = maxMana;
+
           if (player.stats.PV <= 0) { // If dead, respawn with full health
             player.stats.PV = maxHp;
           } else if (player.stats.PV > maxHp) { // Don't overflow health
             player.stats.PV = maxHp;
           }
 
-          if (!player.resources.mana || player.resources.mana > maxMana) {
-            player.resources.mana = maxMana;
+          if (player.resources.current > player.resources.max) {
+            player.resources.current = player.resources.max;
           }
         });
       },
@@ -473,7 +486,7 @@ export const useGameStore = create<GameState>()(
                     const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
                     const maxMana = formulas.calculateMaxMana(state.player.level, state.player.stats);
                     state.player.stats.PV = maxHp;
-                    state.player.resources.mana = maxMana;
+                    state.player.resources.current = maxMana;
                  });
              }
 
