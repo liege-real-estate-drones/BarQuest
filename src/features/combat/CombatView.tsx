@@ -5,12 +5,13 @@ import { Button } from '@/components/ui/button';
 import { AttackRing } from './components/AttackRing';
 import { CombatLog } from './components/CombatLog';
 import EntityDisplay from './components/EntityDisplay';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Bot, User, Swords, ArrowLeft } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
 import { ActionStrip } from './components/ActionStrip';
+import type { Talent } from '@/lib/types';
 
 export function CombatView() {
   const {
@@ -25,7 +26,8 @@ export function CombatView() {
     autoAttack,
     toggleAutoAttack,
     currentDungeon,
-    killCount
+    killCount,
+    gameData,
   } = useGameStore((state) => ({
     player: state.player,
     enemy: state.combat.enemy,
@@ -38,8 +40,23 @@ export function CombatView() {
     autoAttack: state.combat.autoAttack,
     toggleAutoAttack: state.toggleAutoAttack,
     currentDungeon: state.currentDungeon,
-    killCount: state.combat.killCount
+    killCount: state.combat.killCount,
+    gameData: state.gameData,
   }));
+
+  const activeSkills = useMemo(() => {
+    return Object.entries(player.talents)
+      .map(([talentId, rank]) => {
+        if (rank > 0) {
+          const talentData = gameData.talents.find(t => t.id === talentId);
+          if (talentData && talentData.type === 'actif') {
+            return talentData;
+          }
+        }
+        return null;
+      })
+      .filter((t): t is Talent => t !== null);
+  }, [player.talents, gameData.talents]);
 
   useEffect(() => {
     // Auto-start combat when view loads if no enemy
@@ -123,6 +140,7 @@ export function CombatView() {
           onRetreat={flee}
           isSkill1Ready={playerAttackProgress >= 1}
           isSkill1Auto={autoAttack}
+          skills={activeSkills}
        />
     </div>
   );

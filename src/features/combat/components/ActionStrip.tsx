@@ -1,7 +1,8 @@
 'use client';
 
 import { Button } from "@/components/ui/button";
-import { Dices, Heart, Shield } from "lucide-react";
+import type { Talent } from "@/lib/types";
+import { Dices, Heart, Shield, Zap } from "lucide-react";
 import { useEffect } from "react";
 
 interface ActionStripProps {
@@ -10,9 +11,10 @@ interface ActionStripProps {
     onRetreat: () => void;
     isSkill1Ready: boolean;
     isSkill1Auto: boolean;
+    skills: Talent[];
 }
 
-export function ActionStrip({ onSkill1, onPotion, onRetreat, isSkill1Ready, isSkill1Auto }: ActionStripProps) {
+export function ActionStrip({ onSkill1, onPotion, onRetreat, isSkill1Ready, isSkill1Auto, skills }: ActionStripProps) {
 
     useEffect(() => {
         const handleKeyPress = (event: KeyboardEvent) => {
@@ -29,6 +31,7 @@ export function ActionStrip({ onSkill1, onPotion, onRetreat, isSkill1Ready, isSk
                 case 'R':
                     onRetreat();
                     break;
+                // Add keybinds for skills 3, 4, 5 etc. later
             }
         };
         window.addEventListener('keydown', handleKeyPress);
@@ -38,22 +41,33 @@ export function ActionStrip({ onSkill1, onPotion, onRetreat, isSkill1Ready, isSk
     }, [onSkill1, onPotion, onRetreat, isSkill1Ready]);
 
     return (
-        <div className="flex justify-center items-center gap-4 p-2 border-t bg-background/80 backdrop-blur-sm">
-            <Button onClick={onSkill1} disabled={!isSkill1Ready || isSkill1Auto} className="w-32 h-16 flex-col gap-1">
+        <div className="flex justify-center items-center gap-2 p-2 border-t bg-background/80 backdrop-blur-sm">
+            <Button onClick={onSkill1} disabled={!isSkill1Ready || isSkill1Auto} className="w-28 h-16 flex-col gap-1">
                 <div className="flex items-center gap-2">
                     <Dices />
                     <span>Attaque</span>
                 </div>
                 <span className="text-xs text-primary-foreground/70">[1]</span>
             </Button>
-            <Button variant="secondary" onClick={onPotion} className="w-32 h-16 flex-col gap-1">
+
+            {skills.map((skill, index) => (
+                 <Button key={skill.id} variant="secondary" className="w-28 h-16 flex-col gap-1">
+                    <div className="flex items-center gap-2">
+                        <Zap />
+                        <span>{skill.nom}</span>
+                    </div>
+                    <span className="text-xs text-secondary-foreground/70">[{index + 2}]</span>
+                </Button>
+            ))}
+
+            <Button variant="secondary" onClick={onPotion} className="w-28 h-16 flex-col gap-1">
                  <div className="flex items-center gap-2">
                     <Heart />
                     <span>Potion</span>
                 </div>
-                <span className="text-xs text-secondary-foreground/70">[2]</span>
+                <span className="text-xs text-secondary-foreground/70">[P]</span>
             </Button>
-            <Button variant="outline" onClick={onRetreat} className="w-32 h-16 flex-col gap-1">
+            <Button variant="outline" onClick={onRetreat} className="w-28 h-16 flex-col gap-1">
                  <div className="flex items-center gap-2">
                     <Shield />
                     <span>Retraite</span>

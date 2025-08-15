@@ -55,6 +55,7 @@ export const TalentSchema = z.object({
   id: z.string(),
   nom: z.string(),
   classeId: z.string(),
+  type: z.enum(["actif", "passif"]).default("passif"),
   rangMax: z.number().int(),
   effets: z.array(z.string()),
   exigences: z.array(z.string()),

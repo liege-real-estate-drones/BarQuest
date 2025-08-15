@@ -1,13 +1,13 @@
 
 [
-  { "id": "wr1", "classeId": "berserker", "nom": "Frappe Puissante", "rangMax": 3, "effets": ["+10/20/30% dégâts de mêlée"], "exigences": [] },
-  { "id": "wr2", "classeId": "berserker", "nom": "Peau d'Acier", "rangMax": 3, "effets": ["+5/10/15% armure"], "exigences": [] },
-  { "id": "wr3", "classeId": "berserker", "nom": "Cri de Guerre", "rangMax": 3, "effets": ["Augmente Rage générée par coup +1/+2/+3"], "exigences": [] },
-  { "id": "wr4", "classeId": "berserker", "nom": "Fendoir", "rangMax": 3, "effets": ["Attaques frappent +1 ennemi adjacent"], "exigences": ["wr1:2"] },
-  { "id": "wr5", "classeId": "berserker", "nom": "Mur Vivant", "rangMax": 3, "effets": ["+5/10/15% PV max"], "exigences": ["wr2:1"] },
-  { "id": "wr6", "classeId": "berserker", "nom": "Résistance Inflexible", "rangMax": 3, "effets": ["-5/10/15% dégâts subis sous 30% PV"], "exigences": ["wr5:2"] },
-  { "id": "wr7", "classeId": "berserker", "nom": "Tourbillon", "rangMax": 3, "effets": ["Attaque de zone 360°"], "exigences": ["wr4:3"] },
-  { "id": "wr8", "classeId": "berserker", "nom": "Parade Parfaite", "rangMax": 3, "effets": ["+5/10/15% chance de bloquer totalement un coup"], "exigences": ["wr2:3"] },
-  { "id": "wr9", "classeId": "berserker", "nom": "Colère Inarrêtable", "rangMax": 3, "effets": ["+2/4/6% vitesse d’attaque cumulable 3x à chaque critique"], "exigences": ["wr3:3"] },
-  { "id": "wr10", "classeId": "berserker", "nom": "Exécution", "rangMax": 3, "effets": ["+15/30/50% dégâts sur cibles <20% PV"], "exigences": ["wr7:1","wr9:1"] }
+  { "id": "wr1", "classeId": "berserker", "nom": "Frappe Puissante", "type": "passif", "rangMax": 3, "effets": ["+10/20/30% dégâts de mêlée"], "exigences": [] },
+  { "id": "wr2", "classeId": "berserker", "nom": "Peau d'Acier", "type": "passif", "rangMax": 3, "effets": ["+5/10/15% armure"], "exigences": [] },
+  { "id": "wr3", "classeId": "berserker", "nom": "Cri de Guerre", "type": "passif", "rangMax": 3, "effets": ["Augmente Rage générée par coup +1/+2/+3"], "exigences": [] },
+  { "id": "wr4", "classeId": "berserker", "nom": "Fendoir", "type": "passif", "rangMax": 3, "effets": ["Attaques frappent +1 ennemi adjacent"], "exigences": ["wr1:2"] },
+  { "id": "wr5", "classeId": "berserker", "nom": "Mur Vivant", "type": "passif", "rangMax": 3, "effets": ["+5/10/15% PV max"], "exigences": ["wr2:1"] },
+  { "id": "wr6", "classeId": "berserker", "nom": "Résistance Inflexible", "type": "passif", "rangMax": 3, "effets": ["-5/10/15% dégâts subis sous 30% PV"], "exigences": ["wr5:2"] },
+  { "id": "wr7", "classeId": "berserker", "nom": "Tourbillon", "type": "actif", "rangMax": 3, "effets": ["Attaque de zone 360°"], "exigences": ["wr4:3"] },
+  { "id": "wr8", "classeId": "berserker", "nom": "Parade Parfaite", "type": "passif", "rangMax": 3, "effets": ["+5/10/15% chance de bloquer totalement un coup"], "exigences": ["wr2:3"] },
+  { "id": "wr9", "classeId": "berserker", "nom": "Colère Inarrêtable", "type": "passif", "rangMax": 3, "effets": ["+2/4/6% vitesse d’attaque cumulable 3x à chaque critique"], "exigences": ["wr3:3"] },
+  { "id": "wr10", "classeId": "berserker", "nom": "Exécution", "type": "actif", "rangMax": 3, "effets": ["+15/30/50% dégâts sur cibles <20% PV"], "exigences": ["wr7:1","wr9:1"] }
 ]
