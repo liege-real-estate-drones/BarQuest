@@ -66,6 +66,7 @@ interface GameState {
   equipItem: (itemId: string) => void;
   unequipItem: (slot: keyof InventoryState['equipment']) => void;
   buyItem: (item: Item) => boolean;
+  sellItem: (itemId: string) => void;
   learnTalent: (talentId: string) => void;
   resetGame: () => void;
 
@@ -136,6 +137,21 @@ const getTalentEffectValue = (effect: string, rank: number): number => {
     return values[Math.min(rank - 1, values.length - 1)] || 0;
 };
 
+export const getItemSellPrice = (item: Item): number => {
+    if (item.vendorPrice) {
+        return Math.floor(item.vendorPrice / 4); // Sell for 25% of buy price
+    }
+    // Fallback for non-vendor items
+    const rarityMultiplier: Record<Rareté, number> = {
+        Commun: 1,
+        Rare: 2.5,
+        Épique: 5,
+        Légendaire: 10,
+        Unique: 20,
+    };
+    return Math.ceil(item.niveauMin * rarityMultiplier[item.rarity]);
+};
+
 const storage = createJSONStorage(() => localStorage);
 
 export const useGameStore = create<GameState>()(
@@ -196,6 +212,9 @@ export const useGameStore = create<GameState>()(
             state.player.classeId = chosenClass.id as PlayerClassId;
             state.player.baseStats = chosenClass.statsBase;
             state.player.stats = chosenClass.statsBase;
+            state.player.activeEffects = [];
+            state.player.reputation = {};
+            state.player.talents = {};
 
             let maxResource = formulas.calculateMaxMana(1, chosenClass.statsBase);
             let currentResource = maxResource;
@@ -340,6 +359,19 @@ export const useGameStore = create<GameState>()(
               state.inventory.items.push(newItem);
           });
           return true;
+      },
+      
+      sellItem: (itemId: string) => {
+        set(state => {
+            const itemIndex = state.inventory.items.findIndex(i => i.id === itemId);
+            if (itemIndex === -1) return;
+
+            const itemToSell = state.inventory.items[itemIndex];
+            const sellPrice = getItemSellPrice(itemToSell);
+            
+            state.inventory.gold += sellPrice;
+            state.inventory.items.splice(itemIndex, 1);
+        });
       },
 
       learnTalent: (talentId: string) => {
