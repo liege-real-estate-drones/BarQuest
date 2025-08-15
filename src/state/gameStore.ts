@@ -1,3 +1,4 @@
+
 import create from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
@@ -28,6 +29,7 @@ const getInitialPlayerState = (): PlayerState => {
     },
     reputation: {},
     activeEffects: [],
+    completedDungeons: [],
   };
 };
 
@@ -241,6 +243,7 @@ export const useGameStore = create<GameState>()(
           player.talents = player.talents || {};
           player.reputation = player.reputation || {};
           player.activeEffects = player.activeEffects || [];
+          player.completedDungeons = player.completedDungeons || [];
 
           const classe = gameData.classes.find(c => c.id === player.classeId);
           if (!classe) return;
@@ -475,7 +478,7 @@ export const useGameStore = create<GameState>()(
       },
 
       playerAttack: () => {
-        const { player, combat, gameData, getXpToNextLevel } = get();
+        const { player, combat, gameData, getXpToNextLevel, currentDungeon } = get();
         if (!combat.enemy || !combat.enemy.stats || !player) return;
 
         const damage = formulas.calculateMeleeDamage(player.stats.AttMin, player.stats.AttMax, formulas.calculateAttackPower(player.stats));
@@ -602,8 +605,11 @@ export const useGameStore = create<GameState>()(
                  });
              }
 
-            if (get().combat.killCount >= get().currentDungeon!.killTarget) {
+            if (currentDungeon && get().combat.killCount >= currentDungeon.killTarget) {
                  set(state => {
+                    if (!state.player.completedDungeons.includes(currentDungeon.id)) {
+                      state.player.completedDungeons.push(currentDungeon.id);
+                    }
                     state.combat.log.push({ message: `Dungeon complete! Returning to town.`, type: 'info', timestamp: Date.now() });
                     state.view = 'TOWN';
                  });

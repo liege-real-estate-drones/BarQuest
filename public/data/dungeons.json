@@ -1,12 +1,48 @@
 
 [
-    {
-        "id": "cellar-1",
-        "palier": 1,
-        "name": "The Decrepit Cellar",
-        "biome": "occult",
-        "modifiers": [],
-        "killTarget": 10,
-        "bossId": "boss-skeleton-king"
-    }
+  {
+    "id": "dg001",
+    "palier": 1,
+    "name": "Forêt des murmures",
+    "biome": "nature",
+    "monsters": ["mon_n_01", "mon_n_02", "mon_n_03", "mon_n_04", "mon_n_05"],
+    "killTarget": 15,
+    "bossId": "boss_n_01"
+  },
+  {
+    "id": "dg002",
+    "palier": 2,
+    "name": "Caverne de feu",
+    "biome": "fire",
+    "monsters": ["mon_f_01", "mon_f_02", "mon_f_03", "mon_f_04", "mon_f_05"],
+    "killTarget": 15,
+    "bossId": "boss_f_01"
+  },
+  {
+    "id": "dg003",
+    "palier": 3,
+    "name": "Pic des glaces",
+    "biome": "frost",
+    "monsters": ["mon_c_01", "mon_c_02", "mon_c_03", "mon_c_04", "mon_c_05"],
+    "killTarget": 15,
+    "bossId": "boss_c_01"
+  },
+  {
+    "id": "dg004",
+    "palier": 4,
+    "name": "Crypte oubliée",
+    "biome": "occult",
+    "monsters": ["mon_o_01", "mon_o_02", "mon_o_03", "mon_o_04", "mon_o_05"],
+    "killTarget": 15,
+    "bossId": "boss_o_01"
+  },
+  {
+    "id": "dg005",
+    "palier": 5,
+    "name": "Sanctuaire du chaos",
+    "biome": "occult",
+    "monsters": ["mon_o_06", "mon_o_07", "mon_o_08", "mon_f_06", "mon_c_06"],
+    "killTarget": 15,
+    "bossId": "boss_final"
+  }
 ]

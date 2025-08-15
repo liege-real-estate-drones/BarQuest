@@ -1,4 +1,5 @@
 
+
 import { z } from 'zod';
 import type {
   StatsSchema,
@@ -46,6 +47,7 @@ export interface PlayerState {
     [factionId: string]: number;
   };
   activeEffects: string[];
+  completedDungeons: string[];
 }
 
 export interface InventoryState {
