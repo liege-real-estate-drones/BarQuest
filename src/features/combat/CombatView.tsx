@@ -101,6 +101,7 @@ export function CombatView() {
           </div>
       </main>
       
+      <footer className="flex-shrink-0">
        <ActionStrip 
           onSkill1={handleAttack}
           onPotion={() => console.log('potion used')}
@@ -110,6 +111,7 @@ export function CombatView() {
           skills={activeSkills}
           toggleAutoAttack={toggleAutoAttack}
        />
+      </footer>
     </div>
   );
 }
