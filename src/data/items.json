@@ -444,7 +444,17 @@
   { "id": "item_97", "name": "Pendentif en étain", "slot": "amulet", "niveauMin": 9, "rarity": "Commun", "affixes": [{ "ref": "Esprit", "val": 3 }], "tagsClasse": ["common"] },
   { "id": "item_98", "name": "Bouclier cerclé de fer", "slot": "offhand", "niveauMin": 7, "rarity": "Commun", "affixes": [{ "ref": "Armure", "val": 12 }], "tagsClasse": ["berserker", "cleric"] },
   { "id": "item_99", "name": "Couteau de lancer", "slot": "offhand", "niveauMin": 7, "rarity": "Commun", "affixes": [{ "ref": "Dexterite", "val": 3 }], "tagsClasse": ["rogue"] },
-  { "id": "item_100", "name": "Orbe en verre", "slot": "offhand", "niveauMin": 7, "rarity": "Commun", "affixes": [{ "ref": "Intelligence", "val": 3 }], "tagsClasse": ["mage"] }
+  { "id": "item_100", "name": "Orbe en verre", "slot": "offhand", "niveauMin": 7, "rarity": "Commun", "affixes": [{ "ref": "Intelligence", "val": 3 }], "tagsClasse": ["mage"] },
+  { "id": "vendor_item_1", "name": "Hache de fer robuste", "slot": "weapon", "niveauMin": 5, "rarity": "Commun", "affixes": [{ "ref": "AttMin", "val": 8 }, { "ref": "AttMax", "val": 12 }], "tagsClasse": ["berserker"], "vendorPrice": 150 },
+  { "id": "vendor_item_2", "name": "Bâton de novice discipliné", "slot": "weapon", "niveauMin": 5, "rarity": "Commun", "affixes": [{ "ref": "Intelligence", "val": 4 }, { "ref": "Esprit", "val": 2 }], "tagsClasse": ["mage", "cleric"], "vendorPrice": 150 },
+  { "id": "vendor_item_3", "name": "Poignards d'entraînement", "slot": "weapon", "niveauMin": 5, "rarity": "Commun", "affixes": [{ "ref": "Dexterite", "val": 4 }], "tagsClasse": ["rogue"], "vendorPrice": 150 },
+  { "id": "vendor_item_4", "name": "Armure de mercenaire en plaques", "slot": "chest", "niveauMin": 8, "rarity": "Rare", "affixes": [{ "ref": "Armure", "val": 35 }, { "ref": "PV", "val": 25 }], "tagsClasse": ["berserker", "cleric"], "vendorPrice": 400 },
+  { "id": "vendor_item_5", "name": "Jambières de voyageur aguerri", "slot": "legs", "niveauMin": 7, "rarity": "Rare", "affixes": [{ "ref": "Armure", "val": 18 }, { "ref": "PV", "val": 15 }], "tagsClasse": ["common"], "vendorPrice": 320 },
+  { "id": "vendor_item_6", "name": "Gants de l'adepte", "slot": "hands", "niveauMin": 6, "rarity": "Rare", "affixes": [{ "ref": "Intelligence", "val": 3 }, { "ref": "CritPct", "val": 1 }], "tagsClasse": ["mage"], "vendorPrice": 280 },
+  { "id": "vendor_item_7", "name": "Ceinture de garde de la ville", "slot": "belt", "niveauMin": 4, "rarity": "Commun", "affixes": [{ "ref": "Armure", "val": 5 }, { "ref": "PV", "val": 10 }], "tagsClasse": ["common"], "vendorPrice": 100 },
+  { "id": "vendor_item_8", "name": "Bottes du patrouilleur", "slot": "feet", "niveauMin": 6, "rarity": "Commun", "affixes": [{ "ref": "Dexterite", "val": 2 }, { "ref": "Armure", "val": 6 }], "tagsClasse": ["rogue"], "vendorPrice": 120 },
+  { "id": "vendor_item_9", "name": "Anneau de vitalité mineure", "slot": "ring", "niveauMin": 10, "rarity": "Rare", "affixes": [{ "ref": "PV", "val": 40 }], "tagsClasse": ["common"], "vendorPrice": 500 },
+  { "id": "vendor_item_10", "name": "Amulette de la recrue", "slot": "amulet", "niveauMin": 8, "rarity": "Rare", "affixes": [{ "ref": "Force", "val": 2 }, { "ref": "Dexterite", "val": 2 }], "tagsClasse": ["common"], "vendorPrice": 450 }
 ]
 
     

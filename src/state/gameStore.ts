@@ -1,3 +1,4 @@
+
 import create from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
@@ -64,6 +65,7 @@ interface GameState {
   recalculateStats: () => void;
   equipItem: (itemId: string) => void;
   unequipItem: (slot: keyof InventoryState['equipment']) => void;
+  buyItem: (item: Item) => boolean;
   learnTalent: (talentId: string) => void;
   resetGame: () => void;
 
@@ -322,6 +324,24 @@ export const useGameStore = create<GameState>()(
         get().recalculateStats();
       },
 
+      buyItem: (item: Item): boolean => {
+          const { inventory } = get();
+          const price = item.vendorPrice || 0;
+          if (price <= 0 || inventory.gold < price) {
+              return false;
+          }
+
+          const newItem: Item = JSON.parse(JSON.stringify(item));
+          newItem.id = uuidv4();
+          delete newItem.vendorPrice;
+
+          set(state => {
+              state.inventory.gold -= price;
+              state.inventory.items.push(newItem);
+          });
+          return true;
+      },
+
       learnTalent: (talentId: string) => {
         set(state => {
           const { player, gameData } = state;
@@ -426,8 +446,8 @@ export const useGameStore = create<GameState>()(
       },
 
       playerAttack: () => {
-        const { player, combat, gameData, getXpToNextLevel, recalculateStats } = get();
-        if (!combat.enemy || !combat.enemy.stats) return;
+        const { player, combat, gameData, getXpToNextLevel } = get();
+        if (!combat.enemy || !combat.enemy.stats || !player) return;
 
         const damage = formulas.calculateMeleeDamage(player.stats.AttMin, player.stats.AttMax, formulas.calculateAttackPower(player.stats));
         const isCrit = formulas.isCriticalHit(player.stats.CritPct, player.stats.Precision, combat.enemy.stats.Esquive);
@@ -448,9 +468,8 @@ export const useGameStore = create<GameState>()(
         const critMsg = `CRITICAL! You hit ${combat.enemy.nom} for ${mitigatedDamage} damage.`;
 
         set(state => {
-            if (state.combat.enemy?.stats.PV) {
-                state.combat.enemy.stats.PV -= mitigatedDamage;
-            }
+            if(!state.combat.enemy) return;
+            state.combat.enemy.stats.PV -= mitigatedDamage;
 
             // Rage Generation
             if(state.player.resources.type === 'Rage') {
@@ -562,8 +581,8 @@ export const useGameStore = create<GameState>()(
       },
       
       enemyAttack: () => {
-        const { player, combat, recalculateStats } = get();
-        if (!combat.enemy || !combat.enemy.stats) return;
+        const { player, combat } = get();
+        if (!combat.enemy || !combat.enemy.stats || !player) return;
 
         const enemyDamage = formulas.calculateMeleeDamage(combat.enemy.stats.AttMin, combat.enemy.stats.AttMax, formulas.calculateAttackPower(combat.enemy.stats));
         const playerDr = formulas.calculateArmorDR(player.stats.Armure, combat.enemy.level);
@@ -613,3 +632,5 @@ export const useGameStore = create<GameState>()(
     }
   )
 );
+
+    

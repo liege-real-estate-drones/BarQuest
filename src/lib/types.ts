@@ -1,3 +1,4 @@
+
 import { z } from 'zod';
 import type {
   StatsSchema,
@@ -17,7 +18,7 @@ export type Quete = z.infer<typeof QueteSchema>;
 export type Faction = z.infer<typeof FactionSchema>;
 export type Stats = z.infer<typeof StatsSchema>;
 export type Affixe = z.infer<typeof AffixSchema>;
-export type Item = z.infer<typeof ItemSchema>;
+export type Item = z.infer<typeof ItemSchema> & { vendorPrice?: number };
 export type Talent = z.infer<typeof TalentSchema>;
 export type Monstre = z.infer<typeof MonsterSchema>;
 export type Dungeon = z.infer<typeof DungeonSchema>;
@@ -93,3 +94,5 @@ export interface GameData {
   quests: Quete[];
   factions: Faction[];
 }
+
+    
