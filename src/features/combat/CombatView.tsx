@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { CombatLog } from './components/CombatLog';
 import EntityDisplay from './components/EntityDisplay';
 import { useEffect, useMemo } from 'react';
-import { Bot, User, Swords, ArrowLeft } from 'lucide-react';
+import { User, Swords, ArrowLeft } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { ActionStrip } from './components/ActionStrip';
 import type { Talent } from '@/lib/types';
