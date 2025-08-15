@@ -1,4 +1,5 @@
 
+
 import create from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
@@ -607,6 +608,9 @@ export const useGameStore = create<GameState>()(
 
             if (currentDungeon && get().combat.killCount >= currentDungeon.killTarget) {
                  set(state => {
+                    if (!state.player.completedDungeons) {
+                      state.player.completedDungeons = [];
+                    }
                     if (!state.player.completedDungeons.includes(currentDungeon.id)) {
                       state.player.completedDungeons.push(currentDungeon.id);
                     }
@@ -672,3 +676,4 @@ export const useGameStore = create<GameState>()(
     }
   )
 );
+
