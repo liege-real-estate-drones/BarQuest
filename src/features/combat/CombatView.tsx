@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { CombatLog } from './components/CombatLog';
 import EntityDisplay from './components/EntityDisplay';
 import { useEffect, useMemo } from 'react';
-import { User, Swords, ArrowLeft } from 'lucide-react';
+import { User, ArrowLeft } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { ActionStrip } from './components/ActionStrip';
 import type { Talent } from '@/lib/types';
@@ -23,6 +23,7 @@ export function CombatView() {
     currentDungeon,
     killCount,
     gameData,
+    toggleAutoAttack,
   } = useGameStore((state) => ({
     player: state.player,
     enemy: state.combat.enemy,
@@ -35,6 +36,7 @@ export function CombatView() {
     currentDungeon: state.currentDungeon,
     killCount: state.combat.killCount,
     gameData: state.gameData,
+    toggleAutoAttack: state.toggleAutoAttack,
   }));
 
   const activeSkills = useMemo(() => {
@@ -71,7 +73,7 @@ export function CombatView() {
 
   return (
     <div className="flex h-screen w-full flex-col p-4 gap-4 font-code bg-background text-foreground">
-      <header className="flex justify-between items-center border-b pb-2 gap-4">
+      <header className="flex justify-between items-center border-b pb-2 gap-4 flex-shrink-0">
         <Button variant="ghost" size="icon" onClick={flee}>
             <ArrowLeft />
         </Button>
@@ -106,7 +108,7 @@ export function CombatView() {
           isSkill1Ready={playerAttackProgress >= 1}
           isSkill1Auto={autoAttack}
           skills={activeSkills}
-          toggleAutoAttack={() => useGameStore.getState().toggleAutoAttack()}
+          toggleAutoAttack={toggleAutoAttack}
        />
     </div>
   );

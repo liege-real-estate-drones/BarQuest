@@ -25,10 +25,10 @@ export function ActionStrip({ onSkill1, onPotion, onRetreat, isSkill1Ready, isSk
 
             switch (event.key.toUpperCase()) {
                 case '1':
-                case ' ':
-                    if (isSkill1Ready) onSkill1();
+                case ' ': // Spacebar for main attack
+                    if (isSkill1Ready && !isSkill1Auto) onSkill1();
                     break;
-                case 'P':
+                case '2': // Potion
                     onPotion();
                     break;
                 case 'R':
@@ -41,13 +41,13 @@ export function ActionStrip({ onSkill1, onPotion, onRetreat, isSkill1Ready, isSk
         return () => {
             window.removeEventListener('keydown', handleKeyPress);
         };
-    }, [onSkill1, onPotion, onRetreat, isSkill1Ready]);
+    }, [onSkill1, onPotion, onRetreat, isSkill1Ready, isSkill1Auto]);
 
     return (
-        <div className="flex justify-center items-center gap-2 p-2 border-t bg-background/80 backdrop-blur-sm">
+        <footer className="flex-shrink-0 flex justify-center items-center gap-2 p-2 border-t bg-background/80 backdrop-blur-sm relative">
             <div className="absolute left-4 flex items-center space-x-2">
                 <Switch id="auto-attack-switch" checked={isSkill1Auto} onCheckedChange={toggleAutoAttack} />
-                <Label htmlFor="auto-attack-switch" className="flex items-center gap-2">
+                <Label htmlFor="auto-attack-switch" className="flex items-center gap-2 cursor-pointer">
                     <Bot />
                     Auto
                 </Label>
@@ -67,7 +67,7 @@ export function ActionStrip({ onSkill1, onPotion, onRetreat, isSkill1Ready, isSk
                         <Zap />
                         <span>{skill.nom}</span>
                     </div>
-                    <span className="text-xs text-secondary-foreground/70">[{index + 2}]</span>
+                    <span className="text-xs text-secondary-foreground/70">[{index + 3}]</span>
                 </Button>
             ))}
 
@@ -76,7 +76,7 @@ export function ActionStrip({ onSkill1, onPotion, onRetreat, isSkill1Ready, isSk
                     <Heart />
                     <span>Potion</span>
                 </div>
-                <span className="text-xs text-secondary-foreground/70">[P]</span>
+                <span className="text-xs text-secondary-foreground/70">[2]</span>
             </Button>
             <Button variant="outline" onClick={onRetreat} className="w-28 h-16 flex-col gap-1">
                  <div className="flex items-center gap-2">
@@ -85,6 +85,6 @@ export function ActionStrip({ onSkill1, onPotion, onRetreat, isSkill1Ready, isSk
                 </div>
                 <span className="text-xs text-muted-foreground/70">[R]</span>
             </Button>
-        </div>
+        </footer>
     );
 }
