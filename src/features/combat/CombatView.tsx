@@ -2,17 +2,13 @@
 
 import { useGameStore } from '@/state/gameStore';
 import { Button } from '@/components/ui/button';
-import { AttackRing } from './components/AttackRing';
 import { CombatLog } from './components/CombatLog';
 import EntityDisplay from './components/EntityDisplay';
 import { useEffect, useMemo } from 'react';
 import { Bot, User, Swords, ArrowLeft } from 'lucide-react';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
 import { ActionStrip } from './components/ActionStrip';
 import type { Talent } from '@/lib/types';
-import { Card } from '@/components/ui/card';
 
 export function CombatView() {
   const {
@@ -21,11 +17,9 @@ export function CombatView() {
     playerAttack,
     flee,
     playerAttackProgress,
-    enemyAttackProgress,
     startCombat,
     combatLog,
     autoAttack,
-    toggleAutoAttack,
     currentDungeon,
     killCount,
     gameData,
@@ -35,11 +29,9 @@ export function CombatView() {
     playerAttack: state.playerAttack,
     flee: state.flee,
     playerAttackProgress: state.combat.playerAttackProgress,
-    enemyAttackProgress: state.combat.enemyAttackProgress,
     startCombat: state.startCombat,
     combatLog: state.combat.log,
     autoAttack: state.combat.autoAttack,
-    toggleAutoAttack: state.toggleAutoAttack,
     currentDungeon: state.currentDungeon,
     killCount: state.combat.killCount,
     gameData: state.gameData,
@@ -90,45 +82,21 @@ export function CombatView() {
             </div>
             <Progress value={dungeonProgress} className="h-2" />
         </div>
+        <div className="flex items-center space-x-2">
+            <User />
+            <Progress value={playerAttackProgress * 100} className="w-32 h-2" />
+        </div>
       </header>
 
-      <main className="flex-grow grid grid-cols-3 gap-4 min-h-0">
-          {/* Player Panel */}
-          <EntityDisplay entity={player} isPlayer />
-
-          {/* Arena & Log */}
-          <div className="flex flex-col gap-4 min-h-0">
-              <Card className="flex flex-col items-center justify-around gap-4 p-4 flex-grow">
-                  <div className="flex justify-around w-full items-center">
-                    <div className="flex flex-col items-center gap-2">
-                        <User className="h-16 w-16 text-primary" />
-                        <p className="font-bold text-lg">{player.name}</p>
-                        <AttackRing progress={playerAttackProgress * 100} size={140} />
-                    </div>
-                    <Swords className="h-12 w-12 text-muted-foreground" />
-                    <div className="flex flex-col items-center gap-2">
-                        <Bot className="h-16 w-16 text-red-400" />
-                        <p className="font-bold text-lg">{enemy.nom}</p>
-                        <AttackRing progress={enemyAttackProgress * 100} size={140} strokeColor="hsl(var(--destructive))" />
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center space-x-2">
-                      <Switch id="auto-attack-switch" checked={autoAttack} onCheckedChange={toggleAutoAttack} />
-                      <Label htmlFor="auto-attack-switch" className="flex items-center gap-2">
-                          <Bot />
-                          Attaque automatique
-                      </Label>
-                  </div>
-              </Card>
-
-              <div className="h-1/2 min-h-0">
-                  <CombatLog log={combatLog} />
-              </div>
+      <main className="flex-grow grid md:grid-cols-2 gap-4 min-h-0">
+          <div className="flex flex-col gap-4">
+            <EntityDisplay entity={player} isPlayer />
+            <EntityDisplay entity={enemy} />
           </div>
 
-          {/* Enemy Panel */}
-          <EntityDisplay entity={enemy} />
+          <div className="flex flex-col gap-4 min-h-0">
+            <CombatLog log={combatLog} />
+          </div>
       </main>
       
        <ActionStrip 
@@ -138,6 +106,7 @@ export function CombatView() {
           isSkill1Ready={playerAttackProgress >= 1}
           isSkill1Auto={autoAttack}
           skills={activeSkills}
+          toggleAutoAttack={() => useGameStore.getState().toggleAutoAttack()}
        />
     </div>
   );

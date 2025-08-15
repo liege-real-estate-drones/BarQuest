@@ -1,8 +1,10 @@
 'use client';
 
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import type { Talent } from "@/lib/types";
-import { Dices, Heart, Shield, Zap } from "lucide-react";
+import { Bot, Dices, Heart, Shield, Zap } from "lucide-react";
 import { useEffect } from "react";
 
 interface ActionStripProps {
@@ -12,9 +14,10 @@ interface ActionStripProps {
     isSkill1Ready: boolean;
     isSkill1Auto: boolean;
     skills: Talent[];
+    toggleAutoAttack: () => void;
 }
 
-export function ActionStrip({ onSkill1, onPotion, onRetreat, isSkill1Ready, isSkill1Auto, skills }: ActionStripProps) {
+export function ActionStrip({ onSkill1, onPotion, onRetreat, isSkill1Ready, isSkill1Auto, skills, toggleAutoAttack }: ActionStripProps) {
 
     useEffect(() => {
         const handleKeyPress = (event: KeyboardEvent) => {
@@ -25,7 +28,7 @@ export function ActionStrip({ onSkill1, onPotion, onRetreat, isSkill1Ready, isSk
                 case ' ':
                     if (isSkill1Ready) onSkill1();
                     break;
-                case '2':
+                case 'P':
                     onPotion();
                     break;
                 case 'R':
@@ -42,6 +45,14 @@ export function ActionStrip({ onSkill1, onPotion, onRetreat, isSkill1Ready, isSk
 
     return (
         <div className="flex justify-center items-center gap-2 p-2 border-t bg-background/80 backdrop-blur-sm">
+            <div className="absolute left-4 flex items-center space-x-2">
+                <Switch id="auto-attack-switch" checked={isSkill1Auto} onCheckedChange={toggleAutoAttack} />
+                <Label htmlFor="auto-attack-switch" className="flex items-center gap-2">
+                    <Bot />
+                    Auto
+                </Label>
+            </div>
+
             <Button onClick={onSkill1} disabled={!isSkill1Ready || isSkill1Auto} className="w-28 h-16 flex-col gap-1">
                 <div className="flex items-center gap-2">
                     <Dices />
