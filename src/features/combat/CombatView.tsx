@@ -90,8 +90,8 @@ export function CombatView() {
         </div>
       </header>
 
-      <main className="flex-grow grid md:grid-cols-2 gap-4 min-h-0">
-          <div className="flex flex-col gap-4">
+      <main className="flex-grow grid grid-cols-1 md:grid-cols-2 gap-4 min-h-0">
+          <div className="grid grid-rows-2 gap-4">
             <EntityDisplay entity={player} isPlayer />
             <EntityDisplay entity={enemy} />
           </div>

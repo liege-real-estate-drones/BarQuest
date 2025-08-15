@@ -57,7 +57,7 @@ export default function EntityDisplay({ entity, isPlayer = false }: EntityDispla
 
   return (
     <Card className="flex flex-col h-full bg-card/50">
-      <CardHeader>
+      <CardHeader className="flex-shrink-0">
         <CardTitle className="font-headline flex justify-between items-baseline">
           <span>{name}</span>
           <span className="text-sm text-muted-foreground">Lvl {level}</span>
