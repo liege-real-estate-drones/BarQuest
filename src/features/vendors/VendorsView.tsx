@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useToast } from '@/hooks/use-toast';
 import type { Rareté, Item } from '@/lib/types';
 import { useGameStore, getItemSellPrice } from '@/state/gameStore';
@@ -21,9 +21,9 @@ const rarityColorMap: Record<Rareté, string> = {
     Unique: 'text-orange-500',
 };
 
-function ItemTooltipContent({ item }: { item: Item }) {
+function ItemPopoverContent({ item }: { item: Item }) {
     return (
-        <div className="p-2 border rounded bg-background shadow-lg text-xs w-64 z-50">
+        <div className="p-2 text-xs w-64">
             <h4 className={`font-bold ${rarityColorMap[item.rarity]}`}>{item.name}</h4>
             <div className="flex justify-between text-muted-foreground">
                 <span className="capitalize">{item.slot}</span>
@@ -83,17 +83,17 @@ function BuyTab() {
                 {vendorItems.map(item => (
                     <TableRow key={item.id}>
                         <TableCell>
-                            <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <div className="cursor-default">
+                            <Popover>
+                                <PopoverTrigger asChild>
+                                    <div className="cursor-pointer">
                                         <span className={`${rarityColorMap[item.rarity]} underline decoration-dashed`}>{item.name}</span>
                                         <span className="text-xs text-muted-foreground ml-2">(iLvl {item.niveauMin})</span>
                                     </div>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                    <ItemTooltipContent item={item} />
-                                </TooltipContent>
-                            </Tooltip>
+                                </PopoverTrigger>
+                                <PopoverContent>
+                                    <ItemPopoverContent item={item} />
+                                </PopoverContent>
+                            </Popover>
                         </TableCell>
                         <TableCell className="text-right font-mono text-primary">{item.vendorPrice}</TableCell>
                         <TableCell className="text-right">
@@ -140,17 +140,17 @@ function SellTab() {
                 {inventoryItems.map(item => (
                     <TableRow key={item.id}>
                         <TableCell>
-                            <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <div className="cursor-default">
+                            <Popover>
+                                <PopoverTrigger asChild>
+                                    <div className="cursor-pointer">
                                         <span className={`${rarityColorMap[item.rarity]} underline decoration-dashed`}>{item.name}</span>
                                         <span className="text-xs text-muted-foreground ml-2">(iLvl {item.niveauMin})</span>
                                     </div>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                    <ItemTooltipContent item={item} />
-                                </TooltipContent>
-                            </Tooltip>
+                                </PopoverTrigger>
+                                <PopoverContent>
+                                    <ItemPopoverContent item={item} />
+                                </PopoverContent>
+                            </Popover>
                         </TableCell>
                         <TableCell className="text-right font-mono text-primary">{getItemSellPrice(item)}</TableCell>
                         <TableCell className="text-right">

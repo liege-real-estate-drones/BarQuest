@@ -2,7 +2,7 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useGameStore } from '@/state/gameStore';
 import { PlusCircle } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
@@ -23,7 +23,7 @@ export function TalentsView() {
         const talent = playerTalents.find(t => t.id === talentId);
         if (!talent) return false;
 
-        const currentRank = player.talents[talentId] || 0;
+        const currentRank = player.talents[talent.id] || 0;
         if (currentRank >= talent.rangMax) return false;
 
         if (talent.exigences.length === 0) return true;
@@ -53,26 +53,26 @@ export function TalentsView() {
                                 const canLearn = canLearnTalent(talent.id);
 
                                 return (
-                                    <Tooltip key={talent.id} >
-                                        <TooltipTrigger asChild>
-                                            <div className={`border rounded-lg p-3 flex flex-col justify-between transition-all h-full ${!canLearn && !isMaxRank ? 'opacity-50 cursor-not-allowed' : 'cursor-default'}`}>
-                                                <div className="flex-grow">
+                                    <Popover key={talent.id}>
+                                        <div className={`border rounded-lg p-3 flex flex-col justify-between transition-all h-full ${!canLearn && !isMaxRank ? 'opacity-50' : ''}`}>
+                                            <PopoverTrigger asChild>
+                                                <div className="flex-grow cursor-pointer">
                                                   <p className="font-semibold">{talent.nom}</p>
                                                   <p className="text-xs text-muted-foreground">Rang {currentRank}/{talent.rangMax}</p>
                                                 </div>
-                                                <Button 
-                                                    size="sm" 
-                                                    variant="ghost" 
-                                                    disabled={!canLearn || isMaxRank}
-                                                    onClick={() => learnTalent(talent.id)}
-                                                    className={`w-full mt-2 ${canLearn ? 'text-primary hover:text-primary' : ''}`}
-                                                >
-                                                    <PlusCircle className="h-4 w-4 mr-2" />
-                                                    Apprendre
-                                                </Button>
-                                            </div>
-                                        </TooltipTrigger>
-                                        <TooltipContent side="bottom" align="start">
+                                            </PopoverTrigger>
+                                            <Button 
+                                                size="sm" 
+                                                variant="ghost" 
+                                                disabled={!canLearn || isMaxRank}
+                                                onClick={() => learnTalent(talent.id)}
+                                                className={`w-full mt-2 ${canLearn ? 'text-primary hover:text-primary' : ''}`}
+                                            >
+                                                <PlusCircle className="h-4 w-4 mr-2" />
+                                                Apprendre
+                                            </Button>
+                                        </div>
+                                        <PopoverContent side="bottom" align="start">
                                             <div className="max-w-xs p-2">
                                                 <p className="font-bold text-base text-primary mb-1">{talent.nom}</p>
                                                 <Separator className="my-2" />
@@ -95,8 +95,8 @@ export function TalentsView() {
                                                     </>
                                                 )}
                                             </div>
-                                        </TooltipContent>
-                                    </Tooltip>
+                                        </PopoverContent>
+                                    </Popover>
                                 );
                             })}
                         </div>

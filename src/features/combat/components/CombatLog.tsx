@@ -4,7 +4,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 import type { CombatLogEntry, Item, Rareté } from '@/lib/types';
 import { useRef, useEffect } from 'react';
-import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Separator } from '@/components/ui/separator';
 
 const rarityColorMap: Record<Rareté, string> = {
@@ -15,10 +15,10 @@ const rarityColorMap: Record<Rareté, string> = {
     Unique: 'text-orange-500',
 };
 
-function ItemTooltipContent({ item }: { item: Item }) {
+function ItemPopoverContent({ item }: { item: Item }) {
     if (!item) return null;
     return (
-        <div className="p-2 border rounded bg-background shadow-lg text-xs w-64 z-50">
+        <div className="p-2 text-xs w-64">
             <h4 className={`font-bold ${rarityColorMap[item.rarity]}`}>{item.name}</h4>
             <div className="flex justify-between text-muted-foreground">
                 <span className="capitalize">{item.slot}</span>
@@ -63,14 +63,14 @@ const LogMessage = ({ entry }: { entry: CombatLogEntry }) => {
             <p className={cn('whitespace-pre-wrap', color)}>
                 <span className="text-muted-foreground/50 mr-2">[{new Date(entry.timestamp).toLocaleTimeString()}]</span>
                  Vous avez trouvé :{' '}
-                <Tooltip>
-                    <TooltipTrigger asChild>
-                        <span className={`cursor-default underline decoration-dashed ${rarityColorMap[entry.item.rarity]}`}>[{entry.item.name}]</span>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                        <ItemTooltipContent item={entry.item} />
-                    </TooltipContent>
-                </Tooltip>
+                <Popover>
+                    <PopoverTrigger asChild>
+                        <span className={`cursor-pointer underline decoration-dashed ${rarityColorMap[entry.item.rarity]}`}>[{entry.item.name}]</span>
+                    </PopoverTrigger>
+                    <PopoverContent>
+                        <ItemPopoverContent item={entry.item} />
+                    </PopoverContent>
+                </Popover>
                 .
             </p>
         );
@@ -104,15 +104,13 @@ export function CombatLog({ log }: { log: CombatLogEntry[] }) {
         <CardTitle className="font-headline text-lg">Combat Log</CardTitle>
       </CardHeader>
       <CardContent className="flex-grow p-0">
-        <TooltipProvider delayDuration={100}>
-            <ScrollArea className="h-full p-4" ref={scrollAreaRef}>
-            <div className="flex flex-col gap-1 font-code text-xs">
-                {log.map((entry, index) => (
-                    <LogMessage key={index} entry={entry} />
-                ))}
-            </div>
-            </ScrollArea>
-        </TooltipProvider>
+        <ScrollArea className="h-full p-4" ref={scrollAreaRef}>
+        <div className="flex flex-col gap-1 font-code text-xs">
+            {log.map((entry, index) => (
+                <LogMessage key={index} entry={entry} />
+            ))}
+        </div>
+        </ScrollArea>
       </CardContent>
     </Card>
   );

@@ -30,7 +30,6 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { LogOut, Settings, Trash2 } from 'lucide-react';
-import { TooltipProvider } from "@/components/ui/tooltip";
 
 export function TownView() {
   const { player, resetGame } = useGameStore(state => ({
@@ -39,7 +38,6 @@ export function TownView() {
   }));
 
   return (
-    <TooltipProvider delayDuration={100}>
       <div className="container mx-auto p-4 md:p-8">
         <header className="flex justify-between items-center mb-8">
           <div>
@@ -121,6 +119,5 @@ export function TownView() {
           </div>
         </div>
       </div>
-    </TooltipProvider>
   );
 }
