@@ -1,4 +1,5 @@
 
+
 import create from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
@@ -579,7 +580,12 @@ export const useGameStore = create<GameState>()(
 
                 if (itemDrop) {
                     state.inventory.items.push(itemDrop);
-                    state.combat.log.push({ message: `You loot [${itemDrop.name}].`, type: 'loot', timestamp: Date.now() });
+                    state.combat.log.push({ 
+                        message: `You loot [${itemDrop.name}].`, 
+                        type: 'loot', 
+                        timestamp: Date.now(),
+                        item: itemDrop 
+                    });
                 }
 
                 state.combat.killCount += 1;

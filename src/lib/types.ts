@@ -71,6 +71,7 @@ export interface CombatLogEntry {
     message: string;
     type: 'player_attack' | 'enemy_attack' | 'crit' | 'loot' | 'info' | 'flee' | 'levelup';
     timestamp: number;
+    item?: Item;
 }
 
 export interface CombatState {

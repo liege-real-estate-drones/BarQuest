@@ -2,11 +2,36 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
-import type { CombatLogEntry } from '@/lib/types';
+import type { CombatLogEntry, Item, Rareté } from '@/lib/types';
 import { useRef, useEffect } from 'react';
+import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
+import { Separator } from '@/components/ui/separator';
 
-interface CombatLogProps {
-  log: CombatLogEntry[];
+const rarityColorMap: Record<Rareté, string> = {
+    Commun: 'text-gray-400',
+    Rare: 'text-blue-400',
+    Épique: 'text-purple-500',
+    Légendaire: 'text-yellow-500',
+    Unique: 'text-orange-500',
+};
+
+function ItemTooltipContent({ item }: { item: Item }) {
+    if (!item) return null;
+    return (
+        <div className="p-2 border rounded bg-background shadow-lg text-xs w-64 z-50">
+            <h4 className={`font-bold ${rarityColorMap[item.rarity]}`}>{item.name}</h4>
+            <div className="flex justify-between text-muted-foreground">
+                <span className="capitalize">{item.slot}</span>
+                <span>Niveau {item.niveauMin}</span>
+            </div>
+            <Separator className="my-2" />
+            <div className="space-y-1">
+                {item.affixes.map((affix, i) => (
+                    <p key={i} className="text-green-400">+{affix.val} {affix.ref}</p>
+                ))}
+            </div>
+        </div>
+    );
 }
 
 const getLogEntryColor = (type: CombatLogEntry['type']) => {
@@ -30,12 +55,39 @@ const getLogEntryColor = (type: CombatLogEntry['type']) => {
   }
 };
 
+const LogMessage = ({ entry }: { entry: CombatLogEntry }) => {
+    const color = getLogEntryColor(entry.type);
+
+    if (entry.type === 'loot' && entry.item) {
+        return (
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <p className={cn('whitespace-pre-wrap', color, 'cursor-default')}>
+                        <span className="text-muted-foreground/50 mr-2">[{new Date(entry.timestamp).toLocaleTimeString()}]</span>
+                        {entry.message}
+                    </p>
+                </TooltipTrigger>
+                <TooltipContent>
+                    <ItemTooltipContent item={entry.item} />
+                </TooltipContent>
+            </Tooltip>
+        );
+    }
+    
+    return (
+        <p className={cn('whitespace-pre-wrap', color)}>
+            <span className="text-muted-foreground/50 mr-2">[{new Date(entry.timestamp).toLocaleTimeString()}]</span>
+            {entry.message}
+        </p>
+    );
+};
+
+
 export function CombatLog({ log }: CombatLogProps) {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (scrollAreaRef.current) {
-        // Access the viewport element. Based on shadcn/ui structure.
         const viewport = scrollAreaRef.current.querySelector('div[data-radix-scroll-area-viewport]');
         if(viewport) {
              viewport.scrollTop = viewport.scrollHeight;
@@ -50,16 +102,15 @@ export function CombatLog({ log }: CombatLogProps) {
         <CardTitle className="font-headline text-lg">Combat Log</CardTitle>
       </CardHeader>
       <CardContent className="flex-grow p-0">
-        <ScrollArea className="h-full p-4" ref={scrollAreaRef}>
-          <div className="flex flex-col gap-1 font-code text-xs">
-            {log.map((entry, index) => (
-              <p key={index} className={cn('whitespace-pre-wrap', getLogEntryColor(entry.type))}>
-                <span className="text-muted-foreground/50 mr-2">[{new Date(entry.timestamp).toLocaleTimeString()}]</span>
-                {entry.message}
-              </p>
-            ))}
-          </div>
-        </ScrollArea>
+        <TooltipProvider delayDuration={100}>
+            <ScrollArea className="h-full p-4" ref={scrollAreaRef}>
+            <div className="flex flex-col gap-1 font-code text-xs">
+                {log.map((entry, index) => (
+                    <LogMessage key={index} entry={entry} />
+                ))}
+            </div>
+            </ScrollArea>
+        </TooltipProvider>
       </CardContent>
     </Card>
   );
