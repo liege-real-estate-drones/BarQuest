@@ -79,13 +79,13 @@ interface GameState {
 
 let gameLoop: any = null;
 
-const resolveLoot = (monster: Monstre, gameData: GameData): Item | null => {
+const resolveLoot = (monster: Monstre, gameData: GameData, playerClassId: PlayerClassId | null): Item | null => {
   if (Math.random() > 0.5) { // 50% chance to drop anything
     return null;
   }
   
   const possibleItems = gameData.items.filter(item => 
-      (item.tagsClasse?.includes('common') || item.tagsClasse?.includes('berserker')) && 
+      (item.tagsClasse?.includes('common') || (playerClassId && item.tagsClasse?.includes(playerClassId))) && 
       item.niveauMin <= monster.level + 2 &&
       item.niveauMin >= monster.level - 2
   );
@@ -446,7 +446,7 @@ export const useGameStore = create<GameState>()(
         if (get().combat.enemy!.stats.PV! <= 0) {
             const enemy = get().combat.enemy!;
             const goldDrop = 5;
-            const itemDrop = resolveLoot(enemy, gameData);
+            const itemDrop = resolveLoot(enemy, gameData, get().player.classeId);
             const xpGained = enemy.level * 10;
 
             set(state => {

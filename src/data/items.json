@@ -1,0 +1,111 @@
+
+[
+  {
+    "id": "starter_sword_1",
+    "name": "Rusty Sword",
+    "slot": "weapon",
+    "niveauMin": 1,
+    "rarity": "Commun",
+    "affixes": [],
+    "tagsClasse": ["common"]
+  },
+  {
+    "id": "starter_helm_1",
+    "name": "Leather Cap",
+    "slot": "head",
+    "niveauMin": 1,
+    "rarity": "Commun",
+    "affixes": [{ "ref": "Armure", "val": 2 }],
+    "tagsClasse": ["common"]
+  },
+  {
+    "id": "berserker_axe_1",
+    "name": "Gore-drinker Axe",
+    "slot": "weapon",
+    "niveauMin": 3,
+    "rarity": "Rare",
+    "affixes": [{ "ref": "Force", "val": 3 }, { "ref": "CritDmg", "val": 10 }],
+    "tagsClasse": ["berserker"]
+  },
+  {
+    "id": "berserker_chest_1",
+    "name": "Plate of the Unbroken",
+    "slot": "chest",
+    "niveauMin": 5,
+    "rarity": "Rare",
+    "affixes": [{ "ref": "Armure", "val": 25 }, { "ref": "PV", "val": 20 }],
+    "tagsClasse": ["berserker"]
+  },
+  {
+    "id": "mage_staff_1",
+    "name": "Apprentice's Staff",
+    "slot": "weapon",
+    "niveauMin": 3,
+    "rarity": "Rare",
+    "affixes": [{ "ref": "Intelligence", "val": 3 }, { "ref": "RessourceMax", "val": 20 }],
+    "tagsClasse": ["mage", "cleric"]
+  },
+  {
+    "id": "mage_robes_1",
+    "name": "Robes of the Arcanist",
+    "slot": "chest",
+    "niveauMin": 5,
+    "rarity": "Rare",
+    "affixes": [{ "ref": "Intelligence", "val": 5 }, { "ref": "Esprit", "val": 3 }],
+    "tagsClasse": ["mage"]
+  },
+  {
+    "id": "rogue_dagger_1",
+    "name": "Shadow-piercer",
+    "slot": "weapon",
+    "niveauMin": 3,
+    "rarity": "Rare",
+    "affixes": [{ "ref": "Dexterite", "val": 3 }, { "ref": "CritPct", "val": 2 }],
+    "tagsClasse": ["rogue"]
+  },
+  {
+    "id": "rogue_chest_1",
+    "name": "Tunic of Quick Blades",
+    "slot": "chest",
+    "niveauMin": 5,
+    "rarity": "Rare",
+    "affixes": [{ "ref": "Dexterite", "val": 5 }, { "ref": "Esquive", "val": 5 }],
+    "tagsClasse": ["rogue"]
+  },
+  {
+    "id": "cleric_mace_1",
+    "name": "Holy Warhammer",
+    "slot": "weapon",
+    "niveauMin": 3,
+    "rarity": "Rare",
+    "affixes": [{ "ref": "Esprit", "val": 3 }, { "ref": "Force", "val": 2 }],
+    "tagsClasse": ["cleric"]
+  },
+  {
+    "id": "cleric_chest_1",
+    "name": "Vestments of the Faithful",
+    "slot": "chest",
+    "niveauMin": 5,
+    "rarity": "Rare",
+    "affixes": [{ "ref": "Armure", "val": 20 }, { "ref": "Esprit", "val": 5 }],
+    "tagsClasse": ["cleric"]
+  },
+  {
+    "id": "common_ring_1",
+    "name": "Simple Iron Ring",
+    "slot": "ring",
+    "niveauMin": 2,
+    "rarity": "Commun",
+    "affixes": [{ "ref": "PV", "val": 10 }],
+    "tagsClasse": ["common"]
+  },
+  {
+    "id": "common_boots_1",
+    "name": "Sturdy Leather Boots",
+    "slot": "feet",
+    "niveauMin": 1,
+    "rarity": "Commun",
+    "affixes": [{ "ref": "Armure", "val": 5 }],
+    "tagsClasse": ["common"]
+  }
+]
