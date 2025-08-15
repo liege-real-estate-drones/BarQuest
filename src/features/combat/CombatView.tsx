@@ -12,6 +12,7 @@ import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
 import { ActionStrip } from './components/ActionStrip';
 import type { Talent } from '@/lib/types';
+import { Card } from '@/components/ui/card';
 
 export function CombatView() {
   const {
@@ -59,7 +60,6 @@ export function CombatView() {
   }, [player.talents, gameData.talents]);
 
   useEffect(() => {
-    // Auto-start combat when view loads if no enemy
     if (!enemy) {
       startCombat();
     }
@@ -92,47 +92,44 @@ export function CombatView() {
         </div>
       </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 flex-grow min-h-0">
-        {/* Player & Enemy Panel */}
-        <div className="flex flex-col gap-4">
-            <EntityDisplay entity={player} isPlayer />
-            <EntityDisplay entity={enemy} />
-        </div>
+      <main className="flex-grow grid grid-cols-3 gap-4 min-h-0">
+          {/* Player Panel */}
+          <EntityDisplay entity={player} isPlayer />
 
+          {/* Arena & Log */}
+          <div className="flex flex-col gap-4 min-h-0">
+              <Card className="flex flex-col items-center justify-around gap-4 p-4 flex-grow">
+                  <div className="flex justify-around w-full items-center">
+                    <div className="flex flex-col items-center gap-2">
+                        <User className="h-16 w-16 text-primary" />
+                        <p className="font-bold text-lg">{player.name}</p>
+                        <AttackRing progress={playerAttackProgress * 100} size={140} />
+                    </div>
+                    <Swords className="h-12 w-12 text-muted-foreground" />
+                    <div className="flex flex-col items-center gap-2">
+                        <Bot className="h-16 w-16 text-red-400" />
+                        <p className="font-bold text-lg">{enemy.nom}</p>
+                        <AttackRing progress={enemyAttackProgress * 100} size={140} strokeColor="hsl(var(--destructive))" />
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center space-x-2">
+                      <Switch id="auto-attack-switch" checked={autoAttack} onCheckedChange={toggleAutoAttack} />
+                      <Label htmlFor="auto-attack-switch" className="flex items-center gap-2">
+                          <Bot />
+                          Attaque automatique
+                      </Label>
+                  </div>
+              </Card>
 
-        {/* Arena & Log */}
-        <div className="flex flex-col gap-4 min-h-0">
-            {/* Arena / Visuals */}
-            <div className="flex flex-col items-center justify-center gap-4 border rounded-lg p-4 flex-grow">
-              <div className="flex justify-around w-full items-center">
-                <div className="flex flex-col items-center gap-2">
-                    <User className="h-10 w-10 text-primary" />
-                    <AttackRing progress={playerAttackProgress * 100} size={140} />
-                    <p className="font-bold text-lg">{player.name}</p>
-                </div>
-                <Swords className="h-12 w-12 text-muted-foreground" />
-                <div className="flex flex-col items-center gap-2">
-                    <Bot className="h-10 w-10 text-red-400" />
-                    <AttackRing progress={enemyAttackProgress * 100} size={140} strokeColor="hsl(var(--destructive))" />
-                    <p className="font-bold text-lg">{enemy.nom}</p>
-                </div>
+              <div className="h-1/2 min-h-0">
+                  <CombatLog log={combatLog} />
               </div>
-              
-              <div className="flex items-center space-x-2">
-                  <Switch id="auto-attack-switch" checked={autoAttack} onCheckedChange={toggleAutoAttack} />
-                  <Label htmlFor="auto-attack-switch" className="flex items-center gap-2">
-                      <Bot />
-                      Attaque automatique
-                  </Label>
-              </div>
-            </div>
+          </div>
 
-            {/* Combat Log */}
-            <div className="flex-grow min-h-0">
-                <CombatLog log={combatLog} />
-            </div>
-        </div>
-      </div>
+          {/* Enemy Panel */}
+          <EntityDisplay entity={enemy} />
+      </main>
       
        <ActionStrip 
           onSkill1={handleAttack}
