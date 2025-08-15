@@ -4,6 +4,8 @@ import { useGameStore } from '@/state/gameStore';
 import { Item, Rareté } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { BaggageClaim, Dices } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Separator } from '@/components/ui/separator';
 
 const rarityColorMap: Record<Rareté, string> = {
     Commun: 'text-gray-400',
@@ -13,6 +15,24 @@ const rarityColorMap: Record<Rareté, string> = {
     Unique: 'text-orange-500',
 };
 
+function ItemTooltipContent({ item }: { item: Item }) {
+    return (
+        <div className="p-2 border rounded bg-background shadow-lg text-xs w-64 z-50">
+            <h4 className={`font-bold ${rarityColorMap[item.rarity]}`}>{item.name}</h4>
+            <div className="flex justify-between text-muted-foreground">
+                <span className="capitalize">{item.slot}</span>
+                <span>Niveau {item.niveauMin}</span>
+            </div>
+            <Separator className="my-2" />
+            <div className="space-y-1">
+                {item.affixes.map((affix, i) => (
+                    <p key={i} className="text-green-400">+{affix.val} {affix.ref}</p>
+                ))}
+            </div>
+        </div>
+    );
+}
+
 function EquipmentSlot({ slotName, item }: { slotName: string; item: Item | null }) {
     const unequipItem = useGameStore(s => s.unequipItem);
 
@@ -21,7 +41,14 @@ function EquipmentSlot({ slotName, item }: { slotName: string; item: Item | null
             <span className="text-sm capitalize text-muted-foreground w-1/4">{slotName}</span>
             <div className="flex-grow text-center">
                 {item ? (
-                     <span className={`${rarityColorMap[item.rarity]}`}>{item.name}</span>
+                     <Tooltip>
+                        <TooltipTrigger asChild>
+                             <span className={`${rarityColorMap[item.rarity]} cursor-default`}>{item.name}</span>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            <ItemTooltipContent item={item} />
+                        </TooltipContent>
+                     </Tooltip>
                 ) : (
                     <span className="text-xs text-muted-foreground/50">Vide</span>
                 )}
@@ -47,11 +74,13 @@ export function EquipmentView() {
                 <CardTitle>Équipement</CardTitle>
             </CardHeader>
             <CardContent>
-                <div className="space-y-2">
-                   {Object.entries(equipment).map(([slot, item]) => (
-                       <EquipmentSlot key={slot} slotName={slot} item={item}/>
-                   ))}
-                </div>
+                <TooltipProvider delayDuration={200}>
+                    <div className="space-y-2">
+                    {Object.entries(equipment).map(([slot, item]) => (
+                        <EquipmentSlot key={slot} slotName={slot} item={item}/>
+                    ))}
+                    </div>
+                </TooltipProvider>
             </CardContent>
         </Card>
     );

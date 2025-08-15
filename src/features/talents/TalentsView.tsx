@@ -5,6 +5,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useGameStore } from '@/state/gameStore';
 import { PlusCircle } from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
 
 export function TalentsView() {
     const { player, gameData, learnTalent, talentPoints } = useGameStore(state => ({
@@ -45,7 +46,7 @@ export function TalentsView() {
             </CardHeader>
             <CardContent className="flex-grow">
                 <ScrollArea className="h-full pr-4">
-                    <TooltipProvider>
+                    <TooltipProvider delayDuration={100}>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             {playerTalents.map(talent => {
                                 const currentRank = player.talents[talent.id] || 0;
@@ -53,9 +54,9 @@ export function TalentsView() {
                                 const canLearn = canLearnTalent(talent.id);
 
                                 return (
-                                    <Tooltip key={talent.id}>
+                                    <Tooltip key={talent.id} >
                                         <TooltipTrigger asChild>
-                                            <div className={`border rounded-lg p-3 flex justify-between items-center transition-all ${!canLearn && !isMaxRank ? 'opacity-50' : ''}`}>
+                                            <div className={`border rounded-lg p-3 flex justify-between items-center transition-all ${!canLearn && !isMaxRank ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}>
                                                 <div>
                                                     <p className="font-semibold">{talent.nom}</p>
                                                     <p className="text-xs text-muted-foreground">Rang {currentRank}/{talent.rangMax}</p>
@@ -71,18 +72,28 @@ export function TalentsView() {
                                                 </Button>
                                             </div>
                                         </TooltipTrigger>
-                                        <TooltipContent>
-                                            <div className="max-w-xs">
-                                                <p className="font-bold">{talent.nom}</p>
-                                                <ul className="list-disc list-inside mt-1">
-                                                    {talent.effets.map((effet, i) => <li key={i} className="text-xs">{effet}</li>)}
+                                        <TooltipContent side="bottom" align="start">
+                                            <div className="max-w-xs p-2">
+                                                <p className="font-bold text-base text-primary mb-1">{talent.nom}</p>
+                                                <Separator className="my-2" />
+                                                <p className="text-sm mb-2">Effets actuels (Rang {currentRank}):</p>
+                                                <ul className="list-disc list-inside space-y-1">
+                                                    {talent.effets.map((effet, i) => <li key={i} className="text-xs text-green-400">{effet}</li>)}
                                                 </ul>
-                                                {talent.exigences.length > 0 && <hr className="my-2" />}
-                                                {talent.exigences.map(req => {
-                                                     const [reqId, reqRankStr] = req.split(':');
-                                                     const reqTalent = playerTalents.find(t => t.id === reqId);
-                                                     return <p key={req} className="text-xs text-amber-400">Requiert: {reqTalent?.nom} (Rang {reqRankStr})</p>
-                                                })}
+                                                {talent.exigences.length > 0 && (
+                                                    <>
+                                                        <Separator className="my-2" />
+                                                        <div className="space-y-1">
+                                                            <p className="text-sm">Prérequis:</p>
+                                                            {talent.exigences.map(req => {
+                                                                const [reqId, reqRankStr] = req.split(':');
+                                                                const reqTalent = playerTalents.find(t => t.id === reqId);
+                                                                const hasReq = (player.talents[reqId] || 0) >= parseInt(reqRankStr, 10);
+                                                                return <p key={req} className={`text-xs ${hasReq ? 'text-muted-foreground' : 'text-amber-400'}`}>- {reqTalent?.nom} (Rang {reqRankStr})</p>
+                                                            })}
+                                                        </div>
+                                                    </>
+                                                )}
                                             </div>
                                         </TooltipContent>
                                     </Tooltip>
