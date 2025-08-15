@@ -196,6 +196,7 @@ export const useGameStore = create<GameState>()(
           // Ensure talents and reputation are objects
           if (!player.talents) player.talents = {};
           if (!player.reputation) player.reputation = {};
+          if (!player.activeEffects) player.activeEffects = [];
 
           const classe = gameData.classes.find(c => c.id === player.classeId);
           if (!classe) return;
@@ -407,7 +408,7 @@ export const useGameStore = create<GameState>()(
         let finalDamage = isCrit ? damage * (player.stats.CritDmg / 100) : damage;
         
         // Apply effects
-        if (player.activeEffects.includes('dernier_cri')) {
+        if (player.activeEffects && player.activeEffects.includes('dernier_cri')) {
             const maxHp = formulas.calculateMaxHP(player.level, player.stats);
             const hpPercent = (player.stats.PV / maxHp) * 100;
             const damageMultiplier = 1 + (100 - hpPercent) / 100;
