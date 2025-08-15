@@ -1,7 +1,7 @@
 import create from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import type { Dungeon, Monstre, Item, Talent, Affixe, Stats, PlayerState, InventoryState, CombatLogEntry, CombatState, GameData, Classe, Quete, PlayerClassId, ResourceType } from '@/lib/types';
+import type { Dungeon, Monstre, Item, Talent, Affixe, Stats, PlayerState, InventoryState, CombatLogEntry, CombatState, GameData, Classe, Quete, PlayerClassId, ResourceType, Rareté } from '@/lib/types';
 import * as formulas from '@/core/formulas';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -79,15 +79,41 @@ interface GameState {
 
 let gameLoop: any = null;
 
+const rarityDropChances: Record<Rareté, number> = {
+  Commun: 0.7,
+  Rare: 0.25,
+  Épique: 0.04,
+  Légendaire: 0.01,
+  Unique: 0.0, // Uniques are special drops
+};
+
 const resolveLoot = (monster: Monstre, gameData: GameData, playerClassId: PlayerClassId | null): Item | null => {
   if (Math.random() > 0.5) { // 50% chance to drop anything
     return null;
   }
   
+  // Determine rarity
+  const dropRoll = Math.random();
+  let cumulativeChance = 0;
+  let chosenRarity: Rareté | null = null;
+
+  for (const [rarity, chance] of Object.entries(rarityDropChances)) {
+    cumulativeChance += chance;
+    if (dropRoll < cumulativeChance) {
+      chosenRarity = rarity as Rareté;
+      break;
+    }
+  }
+
+  if (!chosenRarity) {
+    return null;
+  }
+
   const possibleItems = gameData.items.filter(item => 
+      item.rarity === chosenRarity &&
       (item.tagsClasse?.includes('common') || (playerClassId && item.tagsClasse?.includes(playerClassId))) && 
       item.niveauMin <= monster.level + 2 &&
-      item.niveauMin >= monster.level - 2
+      item.niveauMin >= monster.level - 5
   );
 
   if (possibleItems.length === 0) {
