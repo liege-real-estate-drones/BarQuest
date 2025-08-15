@@ -8,7 +8,7 @@ export function DungeonsView() {
   const { dungeons, enterDungeon, completedDungeons } = useGameStore(state => ({
     dungeons: state.gameData.dungeons,
     enterDungeon: state.enterDungeon,
-    completedDungeons: state.player.completedDungeons,
+    completedDungeons: state.player.completedDungeons || [],
   }));
 
   const unlockedDungeons = dungeons.filter((dungeon, index) => {
