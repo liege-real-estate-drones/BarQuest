@@ -6,7 +6,6 @@ import React, { useEffect } from "react";
 
 interface AttackRingProps {
   progress: number;
-  onFire: () => void;
   size?: number;
   strokeWidth?: number;
   strokeColor?: string;
@@ -14,7 +13,6 @@ interface AttackRingProps {
 
 export function AttackRing({
   progress = 0,
-  onFire,
   size = 180,
   strokeWidth = 12,
   strokeColor = "hsl(var(--primary))",
@@ -25,34 +23,13 @@ export function AttackRing({
 
   const isReady = progress >= 100;
 
-  useEffect(() => {
-    // Only bind space/1 for player attacks
-    if (onFire.name === "handleAttack" && isReady) {
-      const handleKeyPress = (event: KeyboardEvent) => {
-        if (event.key === '1' || event.key === ' ') {
-          onFire();
-        }
-      };
-      window.addEventListener('keydown', handleKeyPress);
-      return () => {
-        window.removeEventListener('keydown', handleKeyPress);
-      };
-    }
-  }, [isReady, onFire]);
-
-  const canClick = isReady && onFire.name === "handleAttack";
-
   return (
     <div
       className={cn(
         "relative flex items-center justify-center transition-all",
-        canClick ? "cursor-pointer transform scale-105" : "cursor-default"
+        "cursor-default"
       )}
       style={{ width: size, height: size }}
-      onClick={canClick ? onFire : undefined}
-      role="button"
-      aria-disabled={!canClick}
-      aria-label="Attack"
     >
       <svg width={size} height={size} className="transform -rotate-90">
         <circle
@@ -77,18 +54,17 @@ export function AttackRing({
         />
       </svg>
       <div className="absolute flex flex-col items-center justify-center text-center">
-         {canClick && (
+        {isReady ? (
           <>
-            <Dices className={cn("h-8 w-8", isReady ? "text-primary animate-pulse" : "text-muted-foreground")} />
-            <span className={cn("mt-2 text-xs font-bold", isReady ? "text-primary" : "text-muted-foreground")}>
-              {isReady ? "READY (1)" : `${Math.floor(progress)}%`}
+            <Dices className={cn("h-8 w-8 text-primary animate-pulse")} />
+            <span className={cn("mt-2 text-xs font-bold text-primary")}>
+              READY
             </span>
           </>
-        )}
-        {!canClick && (
-             <span className={cn("text-xs font-bold", isReady ? "text-red-400" : "text-muted-foreground")}>
+        ) : (
+            <span className={cn("text-xs font-bold text-muted-foreground")}>
                 {`${Math.floor(progress)}%`}
-             </span>
+            </span>
         )}
       </div>
     </div>
