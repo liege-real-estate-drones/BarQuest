@@ -95,10 +95,7 @@ export function CombatView() {
             <EntityDisplay entity={player} isPlayer />
             <EntityDisplay entity={enemy} />
           </div>
-
-          <div className="flex flex-col gap-4 min-h-0">
-            <CombatLog log={combatLog} />
-          </div>
+          <CombatLog log={combatLog} />
       </main>
       
       <footer className="flex-shrink-0">
