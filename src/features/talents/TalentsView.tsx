@@ -2,7 +2,7 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useGameStore } from '@/state/gameStore';
 import { PlusCircle } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
@@ -46,7 +46,6 @@ export function TalentsView() {
             </CardHeader>
             <CardContent className="flex-grow">
                 <ScrollArea className="h-full pr-4">
-                    <TooltipProvider delayDuration={100}>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             {playerTalents.map(talent => {
                                 const currentRank = player.talents[talent.id] || 0;
@@ -56,19 +55,20 @@ export function TalentsView() {
                                 return (
                                     <Tooltip key={talent.id} >
                                         <TooltipTrigger asChild>
-                                            <div className={`border rounded-lg p-3 flex justify-between items-center transition-all ${!canLearn && !isMaxRank ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}>
-                                                <div>
-                                                    <p className="font-semibold">{talent.nom}</p>
-                                                    <p className="text-xs text-muted-foreground">Rang {currentRank}/{talent.rangMax}</p>
+                                            <div className={`border rounded-lg p-3 flex flex-col justify-between transition-all h-full ${!canLearn && !isMaxRank ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                                                <div className="flex-grow">
+                                                  <p className="font-semibold">{talent.nom}</p>
+                                                  <p className="text-xs text-muted-foreground">Rang {currentRank}/{talent.rangMax}</p>
                                                 </div>
                                                 <Button 
-                                                    size="icon" 
+                                                    size="sm" 
                                                     variant="ghost" 
                                                     disabled={!canLearn || isMaxRank}
                                                     onClick={() => learnTalent(talent.id)}
-                                                    className={canLearn ? 'text-primary hover:text-primary' : ''}
+                                                    className={`w-full mt-2 ${canLearn ? 'text-primary hover:text-primary' : ''}`}
                                                 >
-                                                    <PlusCircle className="h-6 w-6" />
+                                                    <PlusCircle className="h-4 w-4 mr-2" />
+                                                    Apprendre
                                                 </Button>
                                             </div>
                                         </TooltipTrigger>
@@ -76,7 +76,7 @@ export function TalentsView() {
                                             <div className="max-w-xs p-2">
                                                 <p className="font-bold text-base text-primary mb-1">{talent.nom}</p>
                                                 <Separator className="my-2" />
-                                                <p className="text-sm mb-2">Effets actuels (Rang {currentRank}):</p>
+                                                <p className="text-sm mb-2">Effets (Rang {currentRank+1 > talent.rangMax ? talent.rangMax : currentRank+1}):</p>
                                                 <ul className="list-disc list-inside space-y-1">
                                                     {talent.effets.map((effet, i) => <li key={i} className="text-xs text-green-400">{effet}</li>)}
                                                 </ul>
@@ -100,7 +100,6 @@ export function TalentsView() {
                                 );
                             })}
                         </div>
-                    </TooltipProvider>
                 </ScrollArea>
             </CardContent>
         </Card>

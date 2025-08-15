@@ -30,6 +30,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { LogOut, Settings, Trash2 } from 'lucide-react';
+import { TooltipProvider } from '@/components/ui/tooltip';
 
 export function TownView() {
   const { player, resetGame } = useGameStore(state => ({
@@ -90,12 +91,15 @@ export function TownView() {
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-1 flex flex-col gap-8">
+          <TooltipProvider delayDuration={100}>
             <PlayerStatsView />
             <QuestsView />
             <ReputationView />
             <EquipmentView />
+          </TooltipProvider>
         </div>
         <div className="lg:col-span-2">
+          <TooltipProvider delayDuration={100}>
             <Tabs defaultValue="dungeons" className="w-full">
                 <TabsList className="grid w-full grid-cols-4">
                 <TabsTrigger value="dungeons">Dungeons</TabsTrigger>
@@ -116,6 +120,7 @@ export function TownView() {
                 <VendorsView />
                 </TabsContent>
             </Tabs>
+          </TooltipProvider>
         </div>
       </div>
     </div>
