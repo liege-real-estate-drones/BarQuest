@@ -60,17 +60,19 @@ const LogMessage = ({ entry }: { entry: CombatLogEntry }) => {
 
     if (entry.type === 'loot' && entry.item) {
         return (
-            <Tooltip>
-                <TooltipTrigger asChild>
-                    <p className={cn('whitespace-pre-wrap', color, 'cursor-default')}>
-                        <span className="text-muted-foreground/50 mr-2">[{new Date(entry.timestamp).toLocaleTimeString()}]</span>
-                        {entry.message}
-                    </p>
-                </TooltipTrigger>
-                <TooltipContent>
-                    <ItemTooltipContent item={entry.item} />
-                </TooltipContent>
-            </Tooltip>
+            <p className={cn('whitespace-pre-wrap', color)}>
+                <span className="text-muted-foreground/50 mr-2">[{new Date(entry.timestamp).toLocaleTimeString()}]</span>
+                 Vous avez trouvé :{' '}
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <span className={`cursor-default underline decoration-dashed ${rarityColorMap[entry.item.rarity]}`}>[{entry.item.name}]</span>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                        <ItemTooltipContent item={entry.item} />
+                    </TooltipContent>
+                </Tooltip>
+                .
+            </p>
         );
     }
     
@@ -83,7 +85,7 @@ const LogMessage = ({ entry }: { entry: CombatLogEntry }) => {
 };
 
 
-export function CombatLog({ log }: CombatLogProps) {
+export function CombatLog({ log }: { log: CombatLogEntry[] }) {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

@@ -55,7 +55,7 @@ export function TalentsView() {
                                 return (
                                     <Tooltip key={talent.id} >
                                         <TooltipTrigger asChild>
-                                            <div className={`border rounded-lg p-3 flex flex-col justify-between transition-all h-full ${!canLearn && !isMaxRank ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                                            <div className={`border rounded-lg p-3 flex flex-col justify-between transition-all h-full ${!canLearn && !isMaxRank ? 'opacity-50 cursor-not-allowed' : 'cursor-default'}`}>
                                                 <div className="flex-grow">
                                                   <p className="font-semibold">{talent.nom}</p>
                                                   <p className="text-xs text-muted-foreground">Rang {currentRank}/{talent.rangMax}</p>

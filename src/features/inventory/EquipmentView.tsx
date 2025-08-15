@@ -3,8 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useGameStore } from '@/state/gameStore';
 import { Item, Rareté } from '@/lib/types';
 import { Button } from '@/components/ui/button';
-import { BaggageClaim, Dices } from 'lucide-react';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { BaggageClaim } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { Separator } from '@/components/ui/separator';
 
 const rarityColorMap: Record<Rareté, string> = {
@@ -43,7 +43,7 @@ function EquipmentSlot({ slotName, item }: { slotName: string; item: Item | null
                 {item ? (
                      <Tooltip>
                         <TooltipTrigger asChild>
-                             <span className={`${rarityColorMap[item.rarity]} cursor-default`}>{item.name}</span>
+                             <span className={`${rarityColorMap[item.rarity]} cursor-default underline decoration-dashed`}>{item.name}</span>
                         </TooltipTrigger>
                         <TooltipContent>
                             <ItemTooltipContent item={item} />
@@ -74,13 +74,11 @@ export function EquipmentView() {
                 <CardTitle>Équipement</CardTitle>
             </CardHeader>
             <CardContent>
-                <TooltipProvider delayDuration={200}>
-                    <div className="space-y-2">
-                    {Object.entries(equipment).map(([slot, item]) => (
-                        <EquipmentSlot key={slot} slotName={slot} item={item}/>
-                    ))}
-                    </div>
-                </TooltipProvider>
+                <div className="space-y-2">
+                {Object.entries(equipment).map(([slot, item]) => (
+                    <EquipmentSlot key={slot} slotName={slot} item={item}/>
+                ))}
+                </div>
             </CardContent>
         </Card>
     );

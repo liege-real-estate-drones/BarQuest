@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { Rareté, Item } from '@/lib/types';
 import { useGameStore } from '@/state/gameStore';
 import { Swords } from 'lucide-react';
@@ -52,7 +52,6 @@ export function InventoryView() {
                 
                 <div className="flex-grow relative">
                   <ScrollArea className="absolute inset-0">
-                    <TooltipProvider delayDuration={200}>
                         {items.length > 0 ? (
                             <ul className="space-y-2 pr-4">
                                 {items.map((item) => (
@@ -60,7 +59,7 @@ export function InventoryView() {
                                        <Tooltip>
                                             <TooltipTrigger asChild>
                                                 <div className="cursor-default">
-                                                    <span className={rarityColorMap[item.rarity]}>
+                                                    <span className={`${rarityColorMap[item.rarity]} underline decoration-dashed`}>
                                                         {item.name}
                                                     </span>
                                                     <span className="text-xs text-muted-foreground ml-2">(iLvl {item.niveauMin})</span>
@@ -80,7 +79,6 @@ export function InventoryView() {
                         ) : (
                             <p className="text-muted-foreground text-center mt-8">Vos sacs sont vides.</p>
                         )}
-                    </TooltipProvider>
                    </ScrollArea>
                 </div>
             </CardContent>

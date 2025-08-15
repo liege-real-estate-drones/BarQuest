@@ -1,5 +1,3 @@
-
-
 import create from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
@@ -209,14 +207,12 @@ export const useGameStore = create<GameState>()(
             if (!chosenClass) return;
 
             state.player = getInitialPlayerState();
+            state.inventory = initialInventoryState;
 
             state.player.classeId = chosenClass.id as PlayerClassId;
             state.player.baseStats = chosenClass.statsBase;
             state.player.stats = chosenClass.statsBase;
-            state.player.activeEffects = [];
-            state.player.reputation = {};
-            state.player.talents = {};
-
+            
             let maxResource = formulas.calculateMaxMana(1, chosenClass.statsBase);
             let currentResource = maxResource;
 
@@ -241,10 +237,10 @@ export const useGameStore = create<GameState>()(
           const { player, inventory, gameData } = state;
           if (!player.classeId) return;
 
-          // Ensure talents and reputation are objects
-          if (!player.talents) player.talents = {};
-          if (!player.reputation) player.reputation = {};
-          if (!player.activeEffects) player.activeEffects = [];
+          // Ensure objects exist before proceeding
+          player.talents = player.talents || {};
+          player.reputation = player.reputation || {};
+          player.activeEffects = player.activeEffects || [];
 
           const classe = gameData.classes.find(c => c.id === player.classeId);
           if (!classe) return;
@@ -581,7 +577,7 @@ export const useGameStore = create<GameState>()(
                 if (itemDrop) {
                     state.inventory.items.push(itemDrop);
                     state.combat.log.push({ 
-                        message: `You loot [${itemDrop.name}].`, 
+                        message: ``, // Message is now handled in the component
                         type: 'loot', 
                         timestamp: Date.now(),
                         item: itemDrop 
@@ -593,7 +589,7 @@ export const useGameStore = create<GameState>()(
             });
             
             // Post-defeat processing
-            const didLevelUp = get().combat.log.length > 0 && get().combat.log[get().combat.log.length - 1].type === 'levelup';
+            const didLevelUp = get().combat.log.some(l => l.message.includes('You have reached level'));
              if (didLevelUp) {
                  get().recalculateStats();
                  set(state => {
@@ -670,5 +666,3 @@ export const useGameStore = create<GameState>()(
     }
   )
 );
-
-    

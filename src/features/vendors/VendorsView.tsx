@@ -1,11 +1,10 @@
-
 'use client';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useToast } from '@/hooks/use-toast';
 import type { Rareté, Item } from '@/lib/types';
 import { useGameStore, getItemSellPrice } from '@/state/gameStore';
@@ -61,7 +60,6 @@ function BuyTab() {
             toast({
                 title: "Achat réussi !",
                 description: `Vous avez acheté [${item.name}].`,
-                className: 'bg-green-700 border-green-600 text-white'
             });
         } else {
             toast({
@@ -88,7 +86,7 @@ function BuyTab() {
                             <Tooltip>
                                 <TooltipTrigger asChild>
                                     <div className="cursor-default">
-                                        <span className={`${rarityColorMap[item.rarity]}`}>{item.name}</span>
+                                        <span className={`${rarityColorMap[item.rarity]} underline decoration-dashed`}>{item.name}</span>
                                         <span className="text-xs text-muted-foreground ml-2">(iLvl {item.niveauMin})</span>
                                     </div>
                                 </TooltipTrigger>
@@ -122,7 +120,6 @@ function SellTab() {
         toast({
             title: "Objet Vendu",
             description: `Vous avez vendu [${item.name}] pour ${getItemSellPrice(item)} or.`,
-            className: 'bg-green-700 border-green-600 text-white'
         });
     };
     
@@ -146,7 +143,7 @@ function SellTab() {
                             <Tooltip>
                                 <TooltipTrigger asChild>
                                     <div className="cursor-default">
-                                        <span className={`${rarityColorMap[item.rarity]}`}>{item.name}</span>
+                                        <span className={`${rarityColorMap[item.rarity]} underline decoration-dashed`}>{item.name}</span>
                                         <span className="text-xs text-muted-foreground ml-2">(iLvl {item.niveauMin})</span>
                                     </div>
                                 </TooltipTrigger>
@@ -185,24 +182,22 @@ export function VendorsView() {
                 </CardTitle>
             </CardHeader>
             <CardContent className="flex-grow flex flex-col p-0">
-                 <TooltipProvider delayDuration={100}>
-                    <Tabs defaultValue="buy" className="w-full flex-grow flex flex-col">
-                        <TabsList className="grid w-full grid-cols-2">
-                            <TabsTrigger value="buy">Acheter</TabsTrigger>
-                            <TabsTrigger value="sell">Vendre</TabsTrigger>
-                        </TabsList>
-                        <div className="relative flex-grow mt-4">
-                            <ScrollArea className="absolute inset-0">
-                                <TabsContent value="buy" className="m-0 px-6">
-                                    <BuyTab />
-                                </TabsContent>
-                                <TabsContent value="sell" className="m-0 px-6">
-                                    <SellTab />
-                                </TabsContent>
-                            </ScrollArea>
-                        </div>
-                    </Tabs>
-                </TooltipProvider>
+                <Tabs defaultValue="buy" className="w-full flex-grow flex flex-col">
+                    <TabsList className="grid w-full grid-cols-2">
+                        <TabsTrigger value="buy">Acheter</TabsTrigger>
+                        <TabsTrigger value="sell">Vendre</TabsTrigger>
+                    </TabsList>
+                    <div className="relative flex-grow mt-4">
+                        <ScrollArea className="absolute inset-0">
+                            <TabsContent value="buy" className="m-0 px-6">
+                                <BuyTab />
+                            </TabsContent>
+                            <TabsContent value="sell" className="m-0 px-6">
+                                <SellTab />
+                            </TabsContent>
+                        </ScrollArea>
+                    </div>
+                </Tabs>
             </CardContent>
         </Card>
     );
