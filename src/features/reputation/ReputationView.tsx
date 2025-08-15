@@ -13,16 +13,19 @@ export function ReputationView() {
     return factions.find(f => f.id === factionId)?.name || factionId;
   }
 
+  // Ensure reputation is an object before trying to get its keys
+  const reputationEntries = reputation ? Object.entries(reputation) : [];
+
   return (
     <Card>
       <CardHeader>
         <CardTitle>Reputation</CardTitle>
       </CardHeader>
       <CardContent className="space-y-2">
-        {Object.keys(reputation).length === 0 ? (
+        {reputationEntries.length === 0 ? (
           <p className="text-sm text-muted-foreground">No reputation yet.</p>
         ) : (
-          Object.entries(reputation).map(([factionId, value]) => (
+          reputationEntries.map(([factionId, value]) => (
             <div key={factionId} className="flex justify-between items-center">
                 <span className="font-medium">{getFactionName(factionId)}</span>
                 <span className="text-muted-foreground">{value}</span>
