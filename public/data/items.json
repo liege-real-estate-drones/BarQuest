@@ -1,37 +1,11 @@
 
 [
-  {
-    "id": "basic_sword",
-    "name": "Épée Courte de Recrue",
-    "slot": "weapon",
-    "niveauMin": 1,
-    "rarity": "Commun",
-    "affixes": [
-      { "ref": "AttMin", "val": 2 },
-      { "ref": "AttMax", "val": 4 }
-    ],
-    "vendorPrice": 10
-  },
-  {
-    "id": "basic_wand",
-    "name": "Baguette d'Apprenti",
-    "slot": "weapon",
-    "niveauMin": 1,
-    "rarity": "Commun",
-    "affixes": [
-      { "ref": "Intelligence", "val": 1 }
-    ],
-    "tagsClasse": ["mage", "cleric"],
-    "vendorPrice": 10
-  },
-  {
-    "id": "minor_potion",
-    "name": "Potion de Soins Mineure",
-    "slot": "potion",
-    "niveauMin": 1,
-    "rarity": "Commun",
-    "affixes": [],
-    "effect": "heal_15_percent",
-    "vendorPrice": 50
-  }
+    { "id": "shortsword_c", "name": "Épée Courte", "slot": "weapon", "niveauMin": 1, "rarity": "Commun", "affixes": [{ "ref": "Force", "val": 1 }], "tagsClasse": ["common"], "vendorPrice": 10 },
+    { "id": "rusty_axe_c", "name": "Hache Rouillée", "slot": "weapon", "niveauMin": 1, "rarity": "Commun", "affixes": [{ "ref": "AttMin", "val": 1 }, { "ref": "AttMax", "val": 2 }], "tagsClasse": ["common"], "vendorPrice": 12 },
+    { "id": "apprentice_staff_c", "name": "Bâton d'Apprenti", "slot": "weapon", "niveauMin": 1, "rarity": "Commun", "affixes": [{ "ref": "Intelligence", "val": 1 }], "tagsClasse": ["common"], "vendorPrice": 10 },
+    { "id": "warriors_edge_r", "name": "Tranchant du Guerrier", "slot": "weapon", "niveauMin": 5, "rarity": "Rare", "affixes": [{ "ref": "Force", "val": 5 }, { "ref": "CritPct", "val": 2 }], "tagsClasse": ["berserker"], "vendorPrice": 50 },
+    { "id": "mages_scepter_r", "name": "Sceptre du Mage", "slot": "weapon", "niveauMin": 5, "rarity": "Rare", "affixes": [{ "ref": "Intelligence", "val": 5 }, { "ref": "RessourceMax", "val": 20 }], "tagsClasse": ["mage"], "vendorPrice": 50 },
+    { "id": "leather_cap_c", "name": "Calotte de Cuir", "slot": "head", "niveauMin": 1, "rarity": "Commun", "affixes": [{ "ref": "Armure", "val": 5 }], "tagsClasse": ["common"], "vendorPrice": 8 },
+    { "id": "iron_helm_r", "name": "Heaume de Fer", "slot": "head", "niveauMin": 6, "rarity": "Rare", "affixes": [{ "ref": "Armure", "val": 20 }, { "ref": "PV", "val": 15 }], "tagsClasse": ["berserker", "cleric"], "vendorPrice": 45 },
+    { "id": "minor_healing_potion", "name": "Potion de Soins Mineure", "slot": "potion", "niveauMin": 1, "rarity": "Commun", "effect": "heal_15_percent", "vendorPrice": 50 }
 ]

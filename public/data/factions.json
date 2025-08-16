@@ -1,14 +1,13 @@
 
 [
-  {
-    "id": "town_guard",
-    "name": "Garde de la ville",
-    "ranks": [
-      "Neutre",
-      "Amical",
-      "Honoré",
-      "Révéré",
-      "Exalté"
-    ]
-  }
+    {
+        "id": "town_guard",
+        "name": "Garde de la Ville",
+        "ranks": ["Étranger", "Ami", "Allié", "Champion"]
+    },
+    {
+        "id": "mages_guild",
+        "name": "Guilde des Mages",
+        "ranks": ["Initié", "Apprenti", "Adepte", "Maître"]
+    }
 ]

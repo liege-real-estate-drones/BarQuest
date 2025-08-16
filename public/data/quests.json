@@ -1,39 +1,39 @@
 
 [
-  {
-    "id": "quest_1",
-    "type": "chasse",
-    "name": "Nettoyer les cavernes",
-    "desc": "Les grottes voisines sont infestées de créatures. Éliminez 10 monstres pour rendre la zone plus sûre.",
-    "requirements": {
-      "dungeonId": "dungeon_1",
-      "killCount": 10
+    {
+        "id": "quest_1",
+        "type": "chasse",
+        "name": "Nettoyage de Crypte",
+        "desc": "La crypte locale est infestée de morts-vivants. Éliminez-les.",
+        "requirements": {
+            "dungeonId": "crypt_of_the_restless",
+            "killCount": 15
+        },
+        "rewards": {
+            "gold": 50,
+            "xp": 100,
+            "reputation": {
+                "factionId": "town_guard",
+                "amount": 25
+            }
+        }
     },
-    "rewards": {
-      "gold": 50,
-      "xp": 100,
-      "reputation": {
-        "factionId": "town_guard",
-        "amount": 25
-      }
+    {
+        "id": "quest_2",
+        "type": "chasse",
+        "name": "Vague de Froid",
+        "desc": "Les créatures des tunnels gelés deviennent une menace. Réduisez leur nombre.",
+        "requirements": {
+            "dungeonId": "frozen_tunnels",
+            "killCount": 20
+        },
+        "rewards": {
+            "gold": 100,
+            "xp": 250,
+            "reputation": {
+                "factionId": "town_guard",
+                "amount": 50
+            }
+        }
     }
-  },
-  {
-    "id": "quest_2",
-    "type": "chasse",
-    "name": "Purifier l'armurerie",
-    "desc": "L'ancienne armurerie est hantée. Vainquez 15 morts-vivants.",
-    "requirements": {
-      "dungeonId": "dungeon_2",
-      "killCount": 15
-    },
-    "rewards": {
-      "gold": 100,
-      "xp": 250,
-      "reputation": {
-        "factionId": "town_guard",
-        "amount": 50
-      }
-    }
-  }
 ]

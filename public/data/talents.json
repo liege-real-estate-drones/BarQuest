@@ -1,75 +1,9 @@
 
 [
-    {
-        "id": "berserker_toughness",
-        "nom": "Robustesse",
-        "classeId": "berserker",
-        "type": "passif",
-        "niveauRequis": 1,
-        "rangMax": 5,
-        "effets": [
-            "Augmente les PV maximum de 2/4/6/8/10%."
-        ],
-        "exigences": []
-    },
-    {
-        "id": "berserker_armor_mastery",
-        "nom": "Maîtrise de l'Armure",
-        "classeId": "berserker",
-        "type": "passif",
-        "niveauRequis": 1,
-        "rangMax": 3,
-        "effets": [
-            "Augmente l'Armure de 5/10/15%."
-        ],
-        "exigences": ["berserker_toughness:1"]
-    },
-    {
-        "id": "berserker_cleave",
-        "nom": "Enchaînement",
-        "classeId": "berserker",
-        "type": "passif",
-        "niveauRequis": 5,
-        "rangMax": 3,
-        "effets": [
-            "Vos attaques de mêlée infligent 10/15/20% de leurs dégâts à un ennemi proche."
-        ],
-        "exigences": []
-    },
-    {
-        "id": "mage_intellect",
-        "nom": "Intellect",
-        "classeId": "mage",
-        "type": "passif",
-        "niveauRequis": 1,
-        "rangMax": 5,
-        "effets": [
-            "Augmente l'Intelligence de 2/4/6/8/10%."
-        ],
-        "exigences": []
-    },
-    {
-        "id": "mage_fire_mastery",
-        "nom": "Maîtrise du Feu",
-        "classeId": "mage",
-        "type": "passif",
-        "niveauRequis": 1,
-        "rangMax": 3,
-        "effets": [
-            "Augmente les dégâts de Feu de 5/10/15%."
-        ],
-        "exigences": ["mage_intellect:1"]
-    },
-    {
-        "id": "mage_mana_shield",
-        "nom": "Bouclier de Mana",
-        "classeId": "mage",
-        "type": "passif",
-        "niveauRequis": 5,
-        "rangMax": 1,
-        "effets": [
-            "Quand vous tombez sous 30% de PV, un bouclier absorbant 50% de votre Mana max est créé."
-        ],
-        "exigences": []
-    }
+    { "id": "berserker_toughness", "nom": "Robustesse", "classeId": "berserker", "type": "passif", "rangMax": 5, "effets": ["Augmente les PV de 2/4/6/8/10%"], "exigences": [] },
+    { "id": "berserker_cleave", "nom": "Enchaînement", "classeId": "berserker", "type": "passif", "rangMax": 3, "effets": ["Vos attaques de mêlée ont une chance de frapper un ennemi proche pour 50% des dégâts."], "exigences": ["berserker_toughness:1"] },
+    { "id": "berserker_battle_cry", "nom": "Cri de Guerre", "classeId": "berserker", "type": "passif", "rangMax": 3, "effets": ["Génère 1/2/3 Rage supplémentaire par attaque."], "exigences": [] },
+    { "id": "mage_arcane_intellect", "nom": "Intelligence des Arcanes", "classeId": "mage", "type": "passif", "rangMax": 5, "effets": ["Augmente l'Intelligence de 2/4/6/8/10%."], "exigences": [] },
+    { "id": "rogue_fleet_footed", "nom": "Pieds Agiles", "classeId": "rogue", "type": "passif", "rangMax": 5, "effets": ["Augmente l'Esquive de 1/2/3/4/5%."], "exigences": [] },
+    { "id": "cleric_divine_spirit", "nom": "Esprit Divin", "classeId": "cleric", "type": "passif", "rangMax": 5, "effets": ["Augmente l'Esprit de 2/4/6/8/10%."], "exigences": [] }
 ]

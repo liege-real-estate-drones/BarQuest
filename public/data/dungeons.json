@@ -1,39 +1,53 @@
 
 [
-    {
-      "id": "dungeon_1",
-      "palier": 1,
-      "name": "The Whispering Caves",
-      "biome": "nature",
-      "monsters": ["goblin", "bat"],
-      "killTarget": 10,
-      "bossId": "goblin_brute"
-    },
-    {
-      "id": "dungeon_2",
-      "palier": 1,
-      "name": "The Sunken Armory",
-      "biome": "occult",
-      "monsters": ["skeleton", "zombie"],
-      "killTarget": 15,
-      "bossId": "skeleton_captain"
-    },
-    {
-      "id": "dungeon_3",
-      "palier": 2,
-      "name": "The Frostbite Warrens",
-      "biome": "frost",
-      "monsters": ["ice_elemental", "yeti_cub"],
-      "killTarget": 20,
-      "bossId": "yeti_matriarch"
-    },
-    {
-      "id": "dungeon_4",
-      "palier": 2,
-      "name": "The Charred Foundry",
-      "biome": "fire",
-      "monsters": ["fire_elemental", "imp"],
-      "killTarget": 25,
-      "bossId": "lava_golem"
-    }
+  {
+    "id": "crypt_of_the_restless",
+    "palier": 1,
+    "name": "Crypte des Agités",
+    "biome": "occult",
+    "monsters": ["skeleton_warrior", "zombie_shambler", "crypt_bat"],
+    "modifiers": [],
+    "killTarget": 15,
+    "bossId": "skeleton_lord"
+  },
+  {
+    "id": "frozen_tunnels",
+    "palier": 2,
+    "name": "Tunnels Gelés",
+    "biome": "frost",
+    "monsters": ["ice_elemental", "frost_spider", "polar_bear"],
+    "modifiers": ["chilling_winds"],
+    "killTarget": 20,
+    "bossId": "ice_giant"
+  },
+  {
+    "id": "molten_core",
+    "palier": 3,
+    "name": "Noyau en Fusion",
+    "biome": "fire",
+    "monsters": ["fire_elemental", "lava_golem", "hell_hound"],
+    "modifiers": ["scorching_heat"],
+    "killTarget": 25,
+    "bossId": "magma_wyrm"
+  },
+  {
+    "id": "verdant_ruins",
+    "palier": 4,
+    "name": "Ruines Verdoyantes",
+    "biome": "nature",
+    "monsters": ["treant", "dire_wolf", "thorn_spitter"],
+    "modifiers": ["overgrowth"],
+    "killTarget": 30,
+    "bossId": "ancient_treant"
+  },
+  {
+    "id": "shadow_catacombs",
+    "palier": 5,
+    "name": "Catacombes de l'Ombre",
+    "biome": "occult",
+    "monsters": ["shade", "specter", "bone_golem"],
+    "modifiers": ["lingering_darkness"],
+    "killTarget": 35,
+    "bossId": "lich_king"
+  }
 ]

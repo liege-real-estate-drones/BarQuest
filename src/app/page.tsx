@@ -25,7 +25,17 @@ export default function Home() {
     async function loadGameData() {
         if (isInitialized) return;
         try {
-            const [dungeons, monsters, items, talents, skills, affixes, classes, quests, factions] = await Promise.all([
+            const [
+                dungeonsData,
+                monstersData,
+                itemsData,
+                talentsData,
+                skillsData,
+                affixesData,
+                classesData,
+                questsData,
+                factionsData
+            ] = await Promise.all([
                 fetch('/data/dungeons.json').then(res => res.json()),
                 fetch('/data/monsters.json').then(res => res.json()),
                 fetch('/data/items.json').then(res => res.json()),
@@ -36,8 +46,18 @@ export default function Home() {
                 fetch('/data/quests.json').then(res => res.json()),
                 fetch('/data/factions.json').then(res => res.json()),
             ]);
-
-            initializeGameData({ dungeons, monsters, items, talents, skills, affixes, classes, quests, factions });
+            
+            initializeGameData({
+                dungeons: dungeonsData,
+                monsters: monstersData,
+                items: itemsData,
+                talents: talentsData,
+                skills: skillsData,
+                affixes: affixesData,
+                classes: classesData,
+                quests: questsData,
+                factions: factionsData
+            });
         } catch (error) {
             console.error("Failed to load game data:", error);
         }

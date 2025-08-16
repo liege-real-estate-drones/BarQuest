@@ -1,60 +1,9 @@
 
 [
-  {
-    "id": "goblin",
-    "nom": "Gobelin",
-    "level": 1,
-    "famille": "Humanoïde",
-    "isBoss": false,
-    "palier": 1,
-    "stats": {
-      "PV": 50,
-      "AttMin": 5,
-      "AttMax": 8,
-      "CritPct": 5,
-      "CritDmg": 120,
-      "Armure": 5,
-      "Vitesse": 2.8,
-      "Precision": 85,
-      "Esquive": 5
-    }
-  },
-  {
-    "id": "bat",
-    "nom": "Chauve-souris Géante",
-    "level": 1,
-    "famille": "Bête",
-    "isBoss": false,
-    "palier": 1,
-    "stats": {
-      "PV": 40,
-      "AttMin": 4,
-      "AttMax": 6,
-      "CritPct": 5,
-      "CritDmg": 120,
-      "Armure": 2,
-      "Vitesse": 2.0,
-      "Precision": 90,
-      "Esquive": 10
-    }
-  },
-  {
-    "id": "goblin_brute",
-    "nom": "Brute Gobeline",
-    "level": 3,
-    "famille": "Humanoïde",
-    "isBoss": true,
-    "palier": 1,
-    "stats": {
-      "PV": 150,
-      "AttMin": 10,
-      "AttMax": 15,
-      "CritPct": 8,
-      "CritDmg": 130,
-      "Armure": 15,
-      "Vitesse": 3.2,
-      "Precision": 88,
-      "Esquive": 5
-    }
-  }
+    { "id": "skeleton_warrior", "nom": "Guerrier Squelette", "level": 1, "famille": "Mort-vivant", "palier": 1, "stats": { "PV": 50, "AttMin": 5, "AttMax": 8, "CritPct": 5, "CritDmg": 150, "Armure": 20, "Vitesse": 2.5, "Precision": 100, "Esquive": 5 } },
+    { "id": "zombie_shambler", "nom": "Zombie Hébété", "level": 2, "famille": "Mort-vivant", "palier": 1, "stats": { "PV": 65, "AttMin": 4, "AttMax": 7, "CritPct": 2, "CritDmg": 150, "Armure": 15, "Vitesse": 3.0, "Precision": 95, "Esquive": 2 } },
+    { "id": "crypt_bat", "nom": "Chauve-souris de Crypte", "level": 1, "famille": "Bête", "palier": 1, "stats": { "PV": 30, "AttMin": 6, "AttMax": 9, "CritPct": 8, "CritDmg": 150, "Armure": 5, "Vitesse": 1.8, "Precision": 110, "Esquive": 15 } },
+    { "id": "skeleton_lord", "nom": "Seigneur Squelette", "level": 5, "famille": "Mort-vivant", "isBoss": true, "palier": 1, "stats": { "PV": 250, "AttMin": 15, "AttMax": 22, "CritPct": 10, "CritDmg": 150, "Armure": 50, "Vitesse": 2.2, "Precision": 120, "Esquive": 10 } },
+    { "id": "ice_elemental", "nom": "Élémentaire de Glace", "level": 6, "famille": "Élémentaire", "palier": 2, "stats": { "PV": 120, "AttMin": 12, "AttMax": 18, "CritPct": 5, "CritDmg": 150, "Armure": 40, "Vitesse": 2.8, "Precision": 110, "Esquive": 5 } },
+    { "id": "fire_elemental", "nom": "Élémentaire de Feu", "level": 11, "famille": "Élémentaire", "palier": 3, "stats": { "PV": 200, "AttMin": 25, "AttMax": 35, "CritPct": 15, "CritDmg": 160, "Armure": 60, "Vitesse": 2.0, "Precision": 130, "Esquive": 10 } }
 ]
