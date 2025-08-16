@@ -1,3 +1,4 @@
+
 'use client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -22,6 +23,8 @@ export function TalentsView() {
         
         const talent = playerTalents.find(t => t.id === talentId);
         if (!talent) return false;
+
+        if (talent.niveauRequis && player.level < talent.niveauRequis) return false;
 
         const currentRank = player.talents[talent.id] || 0;
         if (currentRank >= talent.rangMax) return false;
@@ -50,15 +53,22 @@ export function TalentsView() {
                             {playerTalents.map(talent => {
                                 const currentRank = player.talents[talent.id] || 0;
                                 const isMaxRank = currentRank >= talent.rangMax;
+                                const isLockedByLevel = talent.niveauRequis && player.level < talent.niveauRequis;
                                 const canLearn = canLearnTalent(talent.id);
+                                const isRequirementMet = talent.exigences.every(req => {
+                                    const [reqId, reqRankStr] = req.split(':');
+                                    const reqRank = parseInt(reqRankStr, 10);
+                                    return (player.talents[reqId] || 0) >= reqRank;
+                                });
 
                                 return (
                                     <Popover key={talent.id}>
-                                        <div className={`border rounded-lg p-3 flex flex-col justify-between transition-all h-full ${!canLearn && !isMaxRank ? 'opacity-50' : ''}`}>
+                                        <div className={`border rounded-lg p-3 flex flex-col justify-between transition-all h-full ${(!canLearn && !isMaxRank) || isLockedByLevel ? 'opacity-50' : ''}`}>
                                             <PopoverTrigger asChild>
                                                 <div className="flex-grow cursor-pointer">
                                                   <p className="font-semibold">{talent.nom}</p>
                                                   <p className="text-xs text-muted-foreground">Rang {currentRank}/{talent.rangMax}</p>
+                                                  {isLockedByLevel && <p className="text-xs text-amber-400">Requis: Niveau {talent.niveauRequis}</p>}
                                                 </div>
                                             </PopoverTrigger>
                                             <Button 
@@ -75,16 +85,18 @@ export function TalentsView() {
                                         <PopoverContent side="bottom" align="start">
                                             <div className="max-w-xs p-2">
                                                 <p className="font-bold text-base text-primary mb-1">{talent.nom}</p>
+                                                <p className="text-sm text-muted-foreground">{talent.type === 'actif' ? 'Actif' : 'Passif'}</p>
                                                 <Separator className="my-2" />
-                                                <p className="text-sm mb-2">Effets (Rang {currentRank+1 > talent.rangMax ? talent.rangMax : currentRank+1}):</p>
+                                                <p className="text-sm mb-2">Effets (Prochain rang):</p>
                                                 <ul className="list-disc list-inside space-y-1">
                                                     {talent.effets.map((effet, i) => <li key={i} className="text-xs text-green-400">{effet}</li>)}
                                                 </ul>
-                                                {talent.exigences.length > 0 && (
+                                                {(talent.exigences.length > 0 || talent.niveauRequis) && (
                                                     <>
                                                         <Separator className="my-2" />
                                                         <div className="space-y-1">
                                                             <p className="text-sm">Prérequis:</p>
+                                                            {talent.niveauRequis && <p className={`text-xs ${player.level >= talent.niveauRequis ? 'text-muted-foreground' : 'text-amber-400'}`}>- Niveau {talent.niveauRequis}</p>}
                                                             {talent.exigences.map(req => {
                                                                 const [reqId, reqRankStr] = req.split(':');
                                                                 const reqTalent = playerTalents.find(t => t.id === reqId);

@@ -1,3 +1,4 @@
+
 import { z } from "zod";
 
 export const RaretéEnum = z.enum(["Commun", "Rare", "Épique", "Légendaire", "Unique"]);
@@ -56,6 +57,7 @@ export const TalentSchema = z.object({
   nom: z.string(),
   classeId: z.string(),
   type: z.enum(["actif", "passif"]).default("passif"),
+  niveauRequis: z.number().int().optional(),
   rangMax: z.number().int(),
   effets: z.array(z.string()),
   exigences: z.array(z.string()),
