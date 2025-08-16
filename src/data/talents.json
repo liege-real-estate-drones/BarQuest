@@ -60,3 +60,5 @@
   { "id": "cleric_angelic_form", "classeId": "cleric", "nom": "Forme Angélique", "type": "passif", "niveauRequis": 45, "rangMax": 1, "effets": ["Augmente tous les soins que vous prodiguez et recevez de 15%."], "exigences": ["cleric_divine_hymn:1"] },
   { "id": "cleric_divine_judgment", "classeId": "cleric", "nom": "Jugement Divin", "type": "actif", "niveauRequis": 50, "rangMax": 1, "effets": ["Invoque un pilier de lumière Sacrée sur une zone, infligeant 200 dégâts aux ennemis et les étourdissant pendant 3s.", "Coûte 70 Mana."], "exigences": ["cleric_penance:1"] }
 ]
+
+    

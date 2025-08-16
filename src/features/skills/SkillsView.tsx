@@ -30,20 +30,18 @@ export function SkillsView() {
         const firstEmptySlot = player.equippedSkills.indexOf(null);
         if (firstEmptySlot !== -1) {
             equipSkill(skillId, firstEmptySlot);
-        } else {
-            // Optional: Show a toast or message that the bar is full
         }
     };
 
     return (
         <Card className="h-full flex flex-col">
             <CardHeader>
-                <CardTitle>Compétences</CardTitle>
-                <CardDescription>Équipez jusqu'à 4 compétences actives à utiliser en combat.</CardDescription>
+                <CardTitle>Compétences Actives</CardTitle>
+                <CardDescription>Équipez jusqu'à 4 compétences à utiliser en combat.</CardDescription>
             </CardHeader>
             <CardContent className="flex-grow flex flex-col gap-8">
                 <div>
-                    <h3 className="font-semibold mb-2 text-center">Compétences Disponibles</h3>
+                    <h3 className="font-semibold mb-2 text-center">Compétences Apprises</h3>
                     <Separator className="mb-4"/>
                     <div className="space-y-2 p-4 rounded-lg bg-background/50 min-h-[150px]">
                         {availableSkills.length > 0 ? availableSkills.map(skill => (
@@ -52,12 +50,12 @@ export function SkillsView() {
                                     <Zap className="h-4 w-4 text-yellow-400" />
                                     <span>{skill.nom}</span>
                                 </div>
-                                <Button size="sm" variant="outline" onClick={() => handleEquip(skill.id)}>
+                                <Button size="sm" variant="outline" onClick={() => handleEquip(skill.id)} disabled={player.equippedSkills.filter(s => s !== null).length >= 4}>
                                     <PlusCircle className="h-4 w-4 mr-2"/>
                                     Équiper
                                 </Button>
                             </div>
-                        )) : <p className="text-center text-sm text-muted-foreground pt-8">Aucune autre compétence disponible à équiper.</p>}
+                        )) : <p className="text-center text-sm text-muted-foreground pt-8">Aucune autre compétence à équiper.</p>}
                     </div>
                 </div>
                 <div>
@@ -87,3 +85,5 @@ export function SkillsView() {
         </Card>
     );
 }
+
+    
