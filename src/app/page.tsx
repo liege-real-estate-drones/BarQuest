@@ -11,11 +11,12 @@ import { ChooseClassView } from '@/features/player/ChooseClassView';
 
 export default function Home() {
   const hydrated = useHydrated();
-  const { view, initializeGameData, isInitialized, player } = useGameStore((state) => ({
+  const { view, initializeGameData, isInitialized, player, checkAndAssignStarterSkill } = useGameStore((state) => ({
     view: state.view,
     initializeGameData: state.initializeGameData,
     isInitialized: state.isInitialized,
     player: state.player,
+    checkAndAssignStarterSkill: state.checkAndAssignStarterSkill,
   }));
   const [isLoading, setIsLoading] = useState(true);
 
@@ -33,6 +34,10 @@ export default function Home() {
           fetch('/data/factions.json').then(res => res.json()),
         ]);
         initializeGameData({ dungeons, monsters, items, talents, affixes, classes, quests, factions });
+        // This is the key fix: ensure data is loaded, THEN check for skills.
+        if (player.classeId) {
+          checkAndAssignStarterSkill();
+        }
       } catch (error) {
         console.error("Failed to load game data:", error);
       } finally {
@@ -43,9 +48,13 @@ export default function Home() {
     if (hydrated && !isInitialized) {
       loadGameData();
     } else if (hydrated && isInitialized) {
-      setIsLoading(false);
+        // Also check on subsequent loads if the player exists but somehow lost skills
+        if (player.classeId) {
+            checkAndAssignStarterSkill();
+        }
+        setIsLoading(false);
     }
-  }, [hydrated, isInitialized, initializeGameData]);
+  }, [hydrated, isInitialized, initializeGameData, player.classeId, checkAndAssignStarterSkill]);
   
   if (!hydrated || isLoading) {
     return (

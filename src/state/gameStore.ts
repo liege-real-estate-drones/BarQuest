@@ -69,6 +69,7 @@ interface GameState {
   
   initializeGameData: (data: GameData) => void;
   setPlayerClass: (classId: PlayerClassId) => void;
+  checkAndAssignStarterSkill: () => void;
   recalculateStats: () => void;
   equipItem: (itemId: string) => void;
   unequipItem: (slot: keyof InventoryState['equipment']) => void;
@@ -191,35 +192,7 @@ export const useGameStore = create<GameState>()(
         set((state) => {
             state.gameData = { ...state.gameData, ...data };
             state.isInitialized = true;
-            
-            // Check if player exists and needs stat recalculation after data is loaded
-            if (state.player.classeId) {
-                const currentClass = data.classes.find(c => c.id === state.player.classeId);
-                if (currentClass) {
-                    state.player.baseStats = currentClass.statsBase;
-
-                    // Retroactive check for starting skill
-                    const startingSkillId = state.gameData.talents.find(t => t.classeId === state.player.classeId && t.type === 'actif' && t.exigences.length === 0)?.id;
-                    if (startingSkillId && !state.player.talents[startingSkillId]) {
-                        state.player.talents[startingSkillId] = 1;
-                        if (!state.player.equippedSkills.includes(startingSkillId)) {
-                            const emptySlot = state.player.equippedSkills.indexOf(null);
-                            if (emptySlot !== -1) {
-                                state.player.equippedSkills[emptySlot] = startingSkillId;
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (data.quests.length > 0 && state.activeQuests.length === 0 && state.player.classeId) {
-                state.activeQuests.push({ quete: data.quests[0], progress: 0 });
-            }
         });
-
-        if (get().player.classeId) {
-            get().recalculateStats();
-        }
       },
       
       setPlayerClass: (classId: PlayerClassId) => {
@@ -240,13 +213,7 @@ export const useGameStore = create<GameState>()(
 
             state.player.classeId = chosenClass.id as PlayerClassId;
             state.player.baseStats = chosenClass.statsBase;
-            state.player.talentPoints = 0; // Start with 0 points
-            
-            const startingSkillId = state.gameData.talents.find(t => t.classeId === classId && t.type === 'actif' && t.exigences.length === 0)?.id;
-            if (startingSkillId) {
-                state.player.talents[startingSkillId] = 1;
-                state.player.equippedSkills[0] = startingSkillId;
-            }
+            state.player.talentPoints = 0;
 
             let maxResource = formulas.calculateMaxMana(1, chosenClass.statsBase);
             let currentResource = maxResource;
@@ -265,7 +232,36 @@ export const useGameStore = create<GameState>()(
                 type: chosenClass.ressource as ResourceType,
             };
         });
+        get().checkAndAssignStarterSkill();
         get().recalculateStats();
+      },
+
+      checkAndAssignStarterSkill: () => {
+        set(state => {
+            const { player, gameData } = state;
+            if (!player.classeId || !gameData.talents.length) return;
+
+            const hasAnyActiveSkill = Object.keys(player.talents).some(talentId => {
+                const talent = gameData.talents.find(t => t.id === talentId);
+                return talent && talent.type === 'actif';
+            });
+            
+            if (hasAnyActiveSkill) return;
+
+            const startingSkill = gameData.talents.find(t => 
+                t.classeId === player.classeId && 
+                t.type === 'actif' && 
+                t.exigences.length === 0
+            );
+
+            if (startingSkill) {
+                player.talents[startingSkill.id] = 1;
+                // Equip it if the first slot is empty
+                if (player.equippedSkills[0] === null) {
+                    player.equippedSkills[0] = startingSkill.id;
+                }
+            }
+        });
       },
 
       recalculateStats: () => {
