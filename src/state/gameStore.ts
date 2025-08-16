@@ -12,7 +12,6 @@ export interface ActiveQuete {
   progress: number;
 }
 
-
 const getInitialPlayerState = (): PlayerState => {
   return {
     name: "Hero",
@@ -37,6 +36,7 @@ const getInitialPlayerState = (): PlayerState => {
 const initialInventoryState: InventoryState = {
   gold: 100,
   items: [],
+  potions: 3,
   equipment: { weapon: null, head: null, chest: null, legs: null, hands: null, feet: null, belt: null, amulet: null, ring: null, ring2: null, trinket: null, offhand: null },
 };
 
@@ -49,6 +49,7 @@ const initialCombatState: CombatState = {
   killCount: 0,
   log: [],
   autoAttack: false,
+  dungeonRunItems: [],
 };
 
 interface GameState {
@@ -71,6 +72,11 @@ interface GameState {
   sellItem: (itemId: string) => void;
   learnTalent: (talentId: string) => void;
   resetGame: () => void;
+
+  // Inn actions
+  buyPotion: () => boolean;
+  rest: () => boolean;
+  usePotion: () => void;
 
   enterDungeon: (dungeonId: string) => void;
   startCombat: () => void;
@@ -116,6 +122,7 @@ const resolveLoot = (monster: Monstre, gameData: GameData, playerClassId: Player
 
   const possibleItems = gameData.items.filter(item => 
       item.rarity === chosenRarity &&
+      item.slot !== 'potion' &&
       (item.tagsClasse?.includes('common') || (playerClassId && item.tagsClasse?.includes(playerClassId))) && 
       item.niveauMin <= monster.level + 2 &&
       item.niveauMin >= monster.level - 5
@@ -240,20 +247,18 @@ export const useGameStore = create<GameState>()(
           const { player, inventory, gameData } = state;
           if (!player.classeId) return;
 
-          // Ensure objects exist before proceeding
           player.talents = player.talents || {};
           player.reputation = player.reputation || {};
           player.activeEffects = player.activeEffects || [];
           player.completedDungeons = player.completedDungeons || [];
+          inventory.potions = inventory.potions || 0;
 
           const classe = gameData.classes.find(c => c.id === player.classeId);
           if (!classe) return;
 
-          // Start with a fresh copy of base stats for the current level
           const newStats: Stats = JSON.parse(JSON.stringify(player.baseStats));
           const newEffects: string[] = [];
 
-          // Add stats from equipment
           Object.values(inventory.equipment).forEach(item => {
             if (item) {
               item.affixes.forEach(affix => {
@@ -268,16 +273,12 @@ export const useGameStore = create<GameState>()(
             }
           });
           
-          // Add stats from talents
           Object.entries(player.talents).forEach(([talentId, rank]) => {
               const talentData = gameData.talents.find(t => t.id === talentId);
               if (!talentData) return;
               
               talentData.effets.forEach(effectString => {
                   const value = getTalentEffectValue(effectString, rank);
-                  // This is a simplified implementation. A more robust solution would
-                  // parse the effect string more carefully to identify the stat and whether
-                  // the bonus is flat or a percentage.
                    if (effectString.includes('armure')) {
                       newStats.Armure += (newStats.Armure * value) / 100;
                   } else if (effectString.includes('PV max')) {
@@ -303,11 +304,10 @@ export const useGameStore = create<GameState>()(
           } else {
              player.resources.max = 100; // Rage is capped
           }
-
-
-          if (player.stats.PV <= 0) { // If dead, respawn with full health
-            player.stats.PV = maxHp;
-          } else if (player.stats.PV > maxHp) { // Don't overflow health
+          
+          // Don't auto-heal on recalculate unless HP is 0 or overflow
+          const currentHp = player.stats.PV;
+          if (currentHp > maxHp) {
             player.stats.PV = maxHp;
           }
         });
@@ -350,14 +350,18 @@ export const useGameStore = create<GameState>()(
           if (price <= 0 || inventory.gold < price) {
               return false;
           }
-
+          
           const newItem: Item = JSON.parse(JSON.stringify(item));
           newItem.id = uuidv4();
           delete newItem.vendorPrice;
 
           set(state => {
               state.inventory.gold -= price;
-              state.inventory.items.push(newItem);
+              if (newItem.slot === 'potion') {
+                  state.inventory.potions = (state.inventory.potions || 0) + 1;
+              } else {
+                  state.inventory.items.push(newItem);
+              }
           });
           return true;
       },
@@ -384,7 +388,6 @@ export const useGameStore = create<GameState>()(
           const currentRank = player.talents[talentId] || 0;
           if (currentRank >= talent.rangMax) return;
           
-          // Check requirements
           let canLearn = true;
           if (talent.exigences && talent.exigences.length > 0) {
             talent.exigences.forEach(req => {
@@ -408,6 +411,50 @@ export const useGameStore = create<GameState>()(
         window.location.reload();
       },
 
+      buyPotion: () => {
+          const POTION_COST = 50;
+          const { inventory } = get();
+          if (inventory.gold < POTION_COST) {
+              return false;
+          }
+          set(state => {
+              state.inventory.gold -= POTION_COST;
+              state.inventory.potions = (state.inventory.potions || 0) + 1;
+          });
+          return true;
+      },
+
+      rest: () => {
+          const REST_COST = 25;
+          const { inventory } = get();
+          if (inventory.gold < REST_COST) {
+              return false;
+          }
+          set(state => {
+              state.inventory.gold -= REST_COST;
+              const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
+              state.player.stats.PV = maxHp;
+              if (state.player.resources.type !== 'Rage') {
+                  state.player.resources.current = state.player.resources.max;
+              } else {
+                  state.player.resources.current = 0;
+              }
+          });
+          return true;
+      },
+
+      usePotion: () => {
+          set(state => {
+              if (state.inventory.potions > 0) {
+                  const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
+                  const healAmount = Math.round(maxHp * 0.15);
+                  state.player.stats.PV = Math.min(maxHp, state.player.stats.PV + healAmount);
+                  state.inventory.potions -= 1;
+                  state.combat.log.push({ message: `You use a potion and heal for ${healAmount} HP.`, type: 'heal', timestamp: Date.now() });
+              }
+          });
+      },
+
       enterDungeon: (dungeonId) => {
         const dungeon = get().gameData.dungeons.find(d => d.id === dungeonId);
         if (dungeon) {
@@ -415,6 +462,7 @@ export const useGameStore = create<GameState>()(
             state.view = 'COMBAT';
             state.currentDungeon = dungeon;
             state.combat.killCount = 0;
+            state.combat.dungeonRunItems = [];
             state.combat.log = [{ message: `Entered ${dungeon.name}.`, type: 'info', timestamp: Date.now() }];
             if (state.player.resources.type === 'Rage') {
               state.player.resources.current = 0; // Reset rage on entering dungeon
@@ -459,20 +507,16 @@ export const useGameStore = create<GameState>()(
           set(state => {
               if (state.combat.playerAttackProgress < 1) {
                   state.combat.playerAttackProgress += delta / state.combat.playerAttackInterval;
-                  if (state.combat.playerAttackProgress >= 1) {
-                      state.combat.playerAttackProgress = 1;
-                      if (state.combat.autoAttack) {
-                          // The attack will be triggered in the next block
-                      }
-                  }
+              }
+              if(state.combat.playerAttackProgress >= 1) {
+                  state.combat.playerAttackProgress = 1;
               }
 
               if (state.combat.enemyAttackProgress < 1) {
                   state.combat.enemyAttackProgress += delta / state.combat.enemyAttackInterval;
-                  if (state.combat.enemyAttackProgress >= 1) {
-                      state.combat.enemyAttackProgress = 1;
-                      // The enemy attack will be triggered in the next block
-                  }
+              }
+              if(state.combat.enemyAttackProgress >= 1) {
+                state.combat.enemyAttackProgress = 1;
               }
           });
 
@@ -495,7 +539,6 @@ export const useGameStore = create<GameState>()(
         const isCrit = formulas.isCriticalHit(player.stats.CritPct, player.stats.Precision, combat.enemy.stats.Esquive);
         let finalDamage = isCrit ? damage * (player.stats.CritDmg / 100) : damage;
         
-        // Apply effects
         if (player.activeEffects && player.activeEffects.includes('dernier_cri')) {
             const maxHp = formulas.calculateMaxHP(player.level, player.stats);
             const hpPercent = (player.stats.PV / maxHp) * 100;
@@ -513,7 +556,6 @@ export const useGameStore = create<GameState>()(
             if(!state.combat.enemy) return;
             state.combat.enemy.stats.PV -= mitigatedDamage;
 
-            // Rage Generation
             if(state.player.resources.type === 'Rage') {
               let rageGained = 5;
               const criDeGuerreRank = state.player.talents['wr3'] || 0;
@@ -544,7 +586,6 @@ export const useGameStore = create<GameState>()(
                 state.player.xp += xpGained;
                 state.combat.log.push({ message: `You gain ${xpGained} experience.`, type: 'info', timestamp: Date.now() });
 
-                // Quest Progress
                 state.activeQuests.forEach((activeQuest, index) => {
                   if (activeQuest.quete.requirements.dungeonId === state.currentDungeon?.id) {
                     activeQuest.progress++;
@@ -580,17 +621,23 @@ export const useGameStore = create<GameState>()(
                     state.player.talentPoints += 1;
                     leveledUp = true;
                     state.combat.log.push({ message: `Congratulations! You have reached level ${state.player.level}!`, type: 'levelup', timestamp: Date.now() });
-                    xpToNext = getXpToNextLevel(); // Recalculate for next level
+                    xpToNext = getXpToNextLevel();
                 }
 
                 if (leveledUp) {
-                    // Recalculate stats and heal in a separate step
+                    const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
+                    const maxMana = formulas.calculateMaxMana(state.player.level, state.player.stats);
+                    state.player.stats.PV = maxHp;
+                    if(state.player.resources.type !== 'Rage') {
+                        state.player.resources.current = maxMana;
+                    }
+                    get().recalculateStats();
                 }
 
                 if (itemDrop) {
-                    state.inventory.items.push(itemDrop);
+                    state.combat.dungeonRunItems.push(itemDrop);
                     state.combat.log.push({ 
-                        message: ``, // Message is now handled in the component
+                        message: ``,
                         type: 'loot', 
                         timestamp: Date.now(),
                         item: itemDrop 
@@ -601,28 +648,13 @@ export const useGameStore = create<GameState>()(
                 state.combat.enemy = null;
             });
             
-            // Post-defeat processing
-            const didLevelUp = get().combat.log.some(l => l.message.includes('You have reached level'));
-             if (didLevelUp) {
-                 get().recalculateStats();
-                 set(state => {
-                    const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
-                    const maxMana = formulas.calculateMaxMana(state.player.level, state.player.stats);
-                    state.player.stats.PV = maxHp;
-                    if(state.player.resources.type !== 'Rage') {
-                        state.player.resources.current = maxMana;
-                    }
-                 });
-             }
-
             if (currentDungeon && get().combat.killCount >= currentDungeon.killTarget) {
                  set(state => {
-                    if (!state.player.completedDungeons) {
-                      state.player.completedDungeons = [];
-                    }
                     if (!state.player.completedDungeons.includes(currentDungeon.id)) {
                       state.player.completedDungeons.push(currentDungeon.id);
                     }
+                    state.inventory.items.push(...state.combat.dungeonRunItems);
+                    state.combat.dungeonRunItems = [];
                     state.combat.log.push({ message: `Dungeon complete! Returning to town.`, type: 'info', timestamp: Date.now() });
                     state.view = 'TOWN';
                  });
@@ -649,11 +681,21 @@ export const useGameStore = create<GameState>()(
 
         if (get().player.stats.PV <= 0) {
             set(state => {
-                state.combat.log.push({ message: `You have been defeated! Returning to town.`, type: 'info', timestamp: Date.now() });
+                const goldPenalty = Math.floor(state.inventory.gold * 0.10);
+                state.inventory.gold -= goldPenalty;
+                state.combat.log.push({ message: `You have been defeated! You lose ${goldPenalty} gold and all items found in the dungeon. Returning to town.`, type: 'info', timestamp: Date.now() });
+                
+                const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
+                state.player.stats.PV = maxHp;
+                if (state.player.resources.type !== 'Rage') {
+                  state.player.resources.current = state.player.resources.max;
+                } else {
+                  state.player.resources.current = 0;
+                }
+                
                 state.view = 'TOWN';
                 if(gameLoop) clearInterval(gameLoop);
             });
-            get().recalculateStats(); // Recalculate stats on death to heal
         }
       },
 
@@ -661,7 +703,9 @@ export const useGameStore = create<GameState>()(
         set(state => {
             state.view = 'TOWN';
             state.combat.enemy = null;
-            state.combat.log.push({ message: 'You fled from combat.', type: 'flee', timestamp: Date.now() });
+            state.inventory.items.push(...state.combat.dungeonRunItems);
+            state.combat.dungeonRunItems = [];
+            state.combat.log.push({ message: 'You fled from combat. Items found have been kept.', type: 'flee', timestamp: Date.now() });
         });
         if(gameLoop) clearInterval(gameLoop);
       },
@@ -678,11 +722,9 @@ export const useGameStore = create<GameState>()(
       storage: storage,
       onRehydrateStorage: () => (state) => {
         if(state) {
-          // state.isInitialized = false; 
+            state.isInitialized = false;
         }
       }
     }
   )
 );
-
-    

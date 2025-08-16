@@ -33,7 +33,7 @@ export const ItemSchema = z.object({
   name: z.string(),
   slot: z.enum([
     "weapon","head","chest","legs","hands","feet",
-    "belt","amulet","ring","ring2","trinket","offhand"
+    "belt","amulet","ring","ring2","trinket","offhand", "potion"
   ]),
   niveauMin: z.number().int(),
   rarity: RaretéEnum,

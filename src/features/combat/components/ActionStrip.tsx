@@ -7,10 +7,10 @@ import { Switch } from "@/components/ui/switch";
 import type { Talent } from "@/lib/types";
 import { Bot, Dices, Heart, Shield, Zap } from "lucide-react";
 import { useEffect } from "react";
+import { useGameStore } from "@/state/gameStore";
 
 interface ActionStripProps {
     onSkill1: () => void;
-    onPotion: () => void;
     onRetreat: () => void;
     isSkill1Ready: boolean;
     isSkill1Auto: boolean;
@@ -18,7 +18,11 @@ interface ActionStripProps {
     toggleAutoAttack: () => void;
 }
 
-export function ActionStrip({ onSkill1, onPotion, onRetreat, isSkill1Ready, isSkill1Auto, skills, toggleAutoAttack }: ActionStripProps) {
+export function ActionStrip({ onSkill1, onRetreat, isSkill1Ready, isSkill1Auto, skills, toggleAutoAttack }: ActionStripProps) {
+    const { usePotion, inventory } = useGameStore(state => ({
+        usePotion: state.usePotion,
+        inventory: state.inventory,
+    }));
 
     useEffect(() => {
         const handleKeyPress = (event: KeyboardEvent) => {
@@ -30,7 +34,7 @@ export function ActionStrip({ onSkill1, onPotion, onRetreat, isSkill1Ready, isSk
                     if (isSkill1Ready && !isSkill1Auto) onSkill1();
                     break;
                 case '2': // Potion
-                    onPotion();
+                    usePotion();
                     break;
                 case 'R':
                     onRetreat();
@@ -42,10 +46,10 @@ export function ActionStrip({ onSkill1, onPotion, onRetreat, isSkill1Ready, isSk
         return () => {
             window.removeEventListener('keydown', handleKeyPress);
         };
-    }, [onSkill1, onPotion, onRetreat, isSkill1Ready, isSkill1Auto]);
+    }, [onSkill1, usePotion, onRetreat, isSkill1Ready, isSkill1Auto]);
 
     return (
-        <div className="flex justify-center items-center gap-2 p-2">
+        <div className="flex justify-center items-center gap-2 p-2 bg-background/50">
             <Button onClick={onSkill1} disabled={!isSkill1Ready || isSkill1Auto} className="w-24 h-16 flex-col gap-1 text-xs">
                 <div className="flex items-center gap-2">
                     <Dices />
@@ -64,12 +68,17 @@ export function ActionStrip({ onSkill1, onPotion, onRetreat, isSkill1Ready, isSk
                 </Button>
             ))}
 
-            <Button variant="secondary" onClick={onPotion} className="w-24 h-16 flex-col gap-1 text-xs">
+            <Button variant="secondary" onClick={usePotion} className="w-24 h-16 flex-col gap-1 text-xs relative" disabled={inventory.potions <= 0}>
                  <div className="flex items-center gap-2">
                     <Heart />
                     <span>Potion</span>
                 </div>
                 <span className="text-secondary-foreground/70">[2]</span>
+                 {inventory.potions > 0 && (
+                    <div className="absolute -top-1 -right-1 bg-primary text-primary-foreground rounded-full h-5 w-5 flex items-center justify-center text-xs">
+                        {inventory.potions}
+                    </div>
+                 )}
             </Button>
             <Button variant="outline" onClick={onRetreat} className="w-24 h-16 flex-col gap-1 text-xs">
                  <div className="flex items-center gap-2">

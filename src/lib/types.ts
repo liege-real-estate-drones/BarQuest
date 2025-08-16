@@ -53,6 +53,7 @@ export interface PlayerState {
 export interface InventoryState {
   gold: number;
   items: Item[];
+  potions: number;
   equipment: {
     weapon: Item | null;
     head: Item | null;
@@ -71,7 +72,7 @@ export interface InventoryState {
 
 export interface CombatLogEntry {
     message: string;
-    type: 'player_attack' | 'enemy_attack' | 'crit' | 'loot' | 'info' | 'flee' | 'levelup';
+    type: 'player_attack' | 'enemy_attack' | 'crit' | 'loot' | 'info' | 'flee' | 'levelup' | 'heal';
     timestamp: number;
     item?: Item;
 }
@@ -85,6 +86,7 @@ export interface CombatState {
   killCount: number;
   log: CombatLogEntry[];
   autoAttack: boolean;
+  dungeonRunItems: Item[];
 }
 
 export interface GameData {

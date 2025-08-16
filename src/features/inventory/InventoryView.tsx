@@ -7,7 +7,7 @@ import { Separator } from '@/components/ui/separator';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Rareté, Item } from '@/lib/types';
 import { useGameStore } from '@/state/gameStore';
-import { Swords } from 'lucide-react';
+import { Coins, Swords, FlaskConical } from 'lucide-react';
 
 const rarityColorMap: Record<Rareté, string> = {
     Commun: 'text-gray-400',
@@ -37,9 +37,8 @@ function ItemPopoverContent({ item }: { item: Item }) {
 
 
 export function InventoryView() {
-    const { gold, items, equipItem } = useGameStore(state => ({
-        gold: state.inventory.gold,
-        items: state.inventory.items,
+    const { inventory, equipItem } = useGameStore(state => ({
+        inventory: state.inventory,
         equipItem: state.equipItem,
     }));
     return (
@@ -48,13 +47,16 @@ export function InventoryView() {
                 <CardTitle>Inventaire</CardTitle>
             </CardHeader>
             <CardContent className="flex-grow flex flex-col gap-4">
-                <div><Badge variant="secondary">{gold} Or</Badge></div>
+                <div className="flex gap-4">
+                    <Badge variant="secondary" className="text-base"><Coins className="mr-2 h-4 w-4" /> {inventory.gold} Or</Badge>
+                    <Badge variant="secondary" className="text-base"><FlaskConical className="mr-2 h-4 w-4" /> {inventory.potions} Potions</Badge>
+                </div>
                 
                 <div className="flex-grow relative">
                   <ScrollArea className="absolute inset-0">
-                        {items.length > 0 ? (
+                        {inventory.items.length > 0 ? (
                             <ul className="space-y-2 pr-4">
-                                {items.map((item) => (
+                                {inventory.items.map((item) => (
                                     <li key={item.id} className="border p-2 rounded flex justify-between items-center bg-card-foreground/5 hover:bg-card-foreground/10">
                                        <Popover>
                                             <PopoverTrigger asChild>

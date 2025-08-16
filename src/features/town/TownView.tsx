@@ -30,6 +30,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { LogOut, Settings, Trash2 } from 'lucide-react';
+import { InnView } from './InnView';
 
 export function TownView() {
   const { player, resetGame } = useGameStore(state => ({
@@ -97,11 +98,12 @@ export function TownView() {
           </div>
           <div className="lg:col-span-2">
               <Tabs defaultValue="dungeons" className="w-full">
-                  <TabsList className="grid w-full grid-cols-4">
+                  <TabsList className="grid w-full grid-cols-5">
                   <TabsTrigger value="dungeons">Dungeons</TabsTrigger>
                   <TabsTrigger value="inventory">Inventory</TabsTrigger>
                   <TabsTrigger value="talents">Talents</TabsTrigger>
                   <TabsTrigger value="vendors">Vendors</TabsTrigger>
+                  <TabsTrigger value="inn">Inn</TabsTrigger>
                   </TabsList>
                     <TabsContent value="dungeons" className="mt-4">
                       <DungeonsView />
@@ -114,6 +116,9 @@ export function TownView() {
                     </TabsContent>
                     <TabsContent value="vendors" className="mt-4">
                       <VendorsView />
+                    </TabsContent>
+                    <TabsContent value="inn" className="mt-4">
+                      <InnView />
                     </TabsContent>
               </Tabs>
           </div>

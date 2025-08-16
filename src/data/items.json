@@ -1,6 +1,17 @@
 
 [
   {
+    "id": "potion_health_1",
+    "name": "Potion de soins mineure",
+    "slot": "potion",
+    "niveauMin": 1,
+    "rarity": "Commun",
+    "affixes": [],
+    "effect": "heal_15_percent",
+    "tagsClasse": ["common"],
+    "vendorPrice": 50
+  },
+  {
     "id": "starter_sword_1",
     "name": "Épée rouillée",
     "slot": "weapon",
