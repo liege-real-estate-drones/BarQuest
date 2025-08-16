@@ -45,6 +45,7 @@ export function SkillsView() {
     }));
 
     const learnedActiveSkills = gameData.talents.filter(talent =>
+        talent.classeId === player.classeId &&
         talent.type === 'actif' &&
         (player.talents[talent.id] || 0) > 0
     );

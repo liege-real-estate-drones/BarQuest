@@ -189,42 +189,35 @@ export const useGameStore = create<GameState>()(
 
       initializeGameData: (data) => {
         set((state) => {
-          if (state.isInitialized) return;
-          state.gameData = { ...state.gameData, ...data };
-          
-          if (state.player.classeId) {
-             const savedPlayer = JSON.parse(JSON.stringify(state.player));
-             const currentClass = data.classes.find(c => c.id === savedPlayer.classeId);
-             state.player = {
-                ...getInitialPlayerState(),
-                ...savedPlayer,
-                baseStats: currentClass ? currentClass.statsBase : getInitialPlayerState().baseStats,
-             };
-             
-            // Retroactively grant the starting skill if it's missing for some reason
-            const startingSkillId = state.gameData.talents.find(t => t.classeId === state.player.classeId && t.type === 'actif' && t.exigences.length === 0)?.id;
-            if(startingSkillId && !state.player.talents[startingSkillId]){
-                state.player.talents[startingSkillId] = 1;
-                if(!state.player.equippedSkills.includes(startingSkillId)){
-                   const emptySlot = state.player.equippedSkills.indexOf(null);
-                   if(emptySlot !== -1){
-                      state.player.equippedSkills[emptySlot] = startingSkillId;
-                   }
+            state.gameData = { ...state.gameData, ...data };
+            state.isInitialized = true;
+            
+            // Check if player exists and needs stat recalculation after data is loaded
+            if (state.player.classeId) {
+                const currentClass = data.classes.find(c => c.id === state.player.classeId);
+                if (currentClass) {
+                    state.player.baseStats = currentClass.statsBase;
+
+                    // Retroactive check for starting skill
+                    const startingSkillId = state.gameData.talents.find(t => t.classeId === state.player.classeId && t.type === 'actif' && t.exigences.length === 0)?.id;
+                    if (startingSkillId && !state.player.talents[startingSkillId]) {
+                        state.player.talents[startingSkillId] = 1;
+                        if (!state.player.equippedSkills.includes(startingSkillId)) {
+                            const emptySlot = state.player.equippedSkills.indexOf(null);
+                            if (emptySlot !== -1) {
+                                state.player.equippedSkills[emptySlot] = startingSkillId;
+                            }
+                        }
+                    }
                 }
             }
 
-          } else {
-            state.isInitialized = true;
-            return;
-          }
-
-          if (data.quests.length > 0 && state.activeQuests.length === 0) {
-            state.activeQuests.push({ quete: data.quests[0], progress: 0 });
-          }
-          
-          state.isInitialized = true;
+            if (data.quests.length > 0 && state.activeQuests.length === 0 && state.player.classeId) {
+                state.activeQuests.push({ quete: data.quests[0], progress: 0 });
+            }
         });
-        if(get().player.classeId) {
+
+        if (get().player.classeId) {
             get().recalculateStats();
         }
       },
@@ -577,9 +570,9 @@ export const useGameStore = create<GameState>()(
           }
 
           set(state => {
-              if (state.combat.playerAttackProgress < 1) {
+              if (state.combat.autoAttack && state.combat.playerAttackProgress < 1) {
                   state.combat.playerAttackProgress += delta / state.combat.playerAttackInterval;
-              } else {
+              } else if (state.combat.autoAttack) {
                   state.combat.playerAttackProgress = 1;
               }
 

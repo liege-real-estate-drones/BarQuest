@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -9,13 +10,13 @@ import { LoaderCircle } from 'lucide-react';
 import { ChooseClassView } from '@/features/player/ChooseClassView';
 
 export default function Home() {
+  const hydrated = useHydrated();
   const { view, initializeGameData, isInitialized, player } = useGameStore((state) => ({
     view: state.view,
     initializeGameData: state.initializeGameData,
     isInitialized: state.isInitialized,
     player: state.player,
   }));
-  const hydrated = useHydrated();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -41,10 +42,10 @@ export default function Home() {
 
     if (hydrated && !isInitialized) {
       loadGameData();
-    } else if (isInitialized) {
+    } else if (hydrated && isInitialized) {
       setIsLoading(false);
     }
-  }, [hydrated, initializeGameData, isInitialized]);
+  }, [hydrated, isInitialized, initializeGameData]);
   
   if (!hydrated || isLoading) {
     return (
