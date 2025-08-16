@@ -99,7 +99,7 @@ export function CombatView() {
           <CombatLog log={combatLog} />
       </main>
       
-      <footer className="flex-shrink-0">
+      <footer className="flex-shrink-0 border-t pt-2">
        <ActionStrip 
           onSkill1={handleAttack}
           onPotion={() => console.log('potion used')}

@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Button } from "@/components/ui/button";
@@ -44,15 +45,7 @@ export function ActionStrip({ onSkill1, onPotion, onRetreat, isSkill1Ready, isSk
     }, [onSkill1, onPotion, onRetreat, isSkill1Ready, isSkill1Auto]);
 
     return (
-        <div className="flex justify-center items-center gap-2 p-2 border-t bg-background/80 backdrop-blur-sm relative">
-            <div className="absolute left-4 flex items-center space-x-2">
-                <Switch id="auto-attack-switch" checked={isSkill1Auto} onCheckedChange={toggleAutoAttack} />
-                <Label htmlFor="auto-attack-switch" className="flex items-center gap-2 cursor-pointer">
-                    <Bot />
-                    Auto
-                </Label>
-            </div>
-
+        <div className="flex justify-center items-center gap-2">
             <Button onClick={onSkill1} disabled={!isSkill1Ready || isSkill1Auto} className="w-28 h-16 flex-col gap-1">
                 <div className="flex items-center gap-2">
                     <Dices />
@@ -85,6 +78,13 @@ export function ActionStrip({ onSkill1, onPotion, onRetreat, isSkill1Ready, isSk
                 </div>
                 <span className="text-xs text-muted-foreground/70">[R]</span>
             </Button>
+             <div className="flex items-center space-x-2 ml-4">
+                <Switch id="auto-attack-switch" checked={isSkill1Auto} onCheckedChange={toggleAutoAttack} />
+                <Label htmlFor="auto-attack-switch" className="flex items-center gap-2 cursor-pointer">
+                    <Bot />
+                    Auto
+                </Label>
+            </div>
         </div>
     );
 }
