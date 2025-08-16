@@ -187,8 +187,11 @@ export const useGameStore = create<GameState>()(
 
       initializeGameData: (data) => {
         set((state) => {
-            state.gameData = { ...state.gameData, ...data };
-            state.isInitialized = true;
+            // This forces the static game data to be updated, even if a save is loaded
+            state.gameData = data;
+            if (!state.isInitialized) {
+                state.isInitialized = true;
+            }
         });
       },
       
@@ -892,13 +895,17 @@ export const useGameStore = create<GameState>()(
     {
       name: 'barquest-save',
       storage: storage,
-      onRehydrateStorage: () => (state) => {
-        if(state) {
-            state.isInitialized = false;
+      onRehydrateStorage: () => (state, error) => {
+        if (error) {
+          console.log('an error happened during hydration', error)
+        } else if (state) {
+            // This will ensure that even if the save is from an old version, 
+            // the game won't start in a broken state.
+            state.isInitialized = false; 
+            state.view = 'TOWN';
+            state.combat = initialCombatState;
         }
       }
     }
   )
 );
-
-    

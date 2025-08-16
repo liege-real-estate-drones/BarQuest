@@ -38,20 +38,21 @@ export default function Home() {
       } catch (error) {
         console.error("Failed to load game data:", error);
       } finally {
-        setIsLoading(false);
+        // We set loading to false only when the game is fully initialized from the store
       }
     }
-
-    if (hydrated && !isInitialized) {
-      loadGameData();
-    } else if (hydrated && isInitialized) {
-        setIsLoading(false);
+    
+    if (hydrated) {
+        loadGameData();
     }
-  }, [hydrated, isInitialized, initializeGameData]);
+  }, [hydrated, initializeGameData]);
 
   useEffect(() => {
-    if(isInitialized && player.classeId) {
-        checkAndAssignStarterSkill();
+    if (isInitialized) {
+        setIsLoading(false);
+        if(player.classeId) {
+            checkAndAssignStarterSkill();
+        }
     }
   }, [isInitialized, player.classeId, checkAndAssignStarterSkill]);
   
