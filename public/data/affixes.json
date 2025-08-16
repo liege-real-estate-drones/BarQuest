@@ -1,12 +1,8 @@
 
 {
     "affixes": [
-        { "id": "str_1", "ref": "Force", "type": "suffix", "portée": [1, 5], "échelonnage": "lin" },
-        { "id": "int_1", "ref": "Intelligence", "type": "suffix", "portée": [1, 5], "échelonnage": "lin" },
-        { "id": "dex_1", "ref": "Dexterite", "type": "suffix", "portée": [1, 5], "échelonnage": "lin" },
-        { "id": "vit_1", "ref": "PV", "type": "suffix", "portée": [5, 25], "échelonnage": "lin" },
-        { "id": "crit_pct_1", "ref": "CritPct", "type": "prefix", "portée": [1, 3], "échelonnage": "palier" },
-        { "id": "crit_dmg_1", "ref": "CritDmg", "type": "prefix", "portée": [5, 15], "échelonnage": "lin" },
-        { "id": "armor_1", "ref": "Armure", "type": "prefix", "portée": [10, 50], "échelonnage": "lin" }
+        { "id": "affix_str", "ref": "Force", "type": "prefix", "portée": [1, 50], "échelonnage": "lin" },
+        { "id": "affix_int", "ref": "Intelligence", "type": "prefix", "portée": [1, 50], "échelonnage": "lin" },
+        { "id": "affix_crit_pct", "ref": "CritPct", "type": "suffix", "portée": [1, 10], "échelonnage": "palier" }
     ]
 }

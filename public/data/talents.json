@@ -1,14 +1,9 @@
 
 {
     "talents": [
-        { "id": "berserker_toughness", "nom": "Robustesse", "classeId": "berserker", "type": "passif", "rangMax": 5, "effets": ["Augmente les PV maximum de 2/4/6/8/10%."], "exigences": [] },
-        { "id": "berserker_weapon_mastery", "nom": "Maîtrise des armes", "classeId": "berserker", "type": "passif", "niveauRequis": 5, "rangMax": 3, "effets": ["Augmente les dégâts de mêlée de 2/4/6%."], "exigences": ["berserker_toughness:1"] },
-        { "id": "berserker_cleave", "nom": "Enchaînement", "classeId": "berserker", "type": "passif", "niveauRequis": 10, "rangMax": 1, "effets": ["Vos attaques de mêlée touchent un ennemi supplémentaire pour 50% des dégâts."], "exigences": ["berserker_weapon_mastery:2"] },
-        { "id": "berserker_last_stand", "nom": "Baroud d'honneur", "classeId": "berserker", "type": "passif", "niveauRequis": 15, "rangMax": 1, "effets": ["Lorsque vos PV tombent sous 20%, vous gagnez 50% de Réduction de Dégâts pendant 5s. Ne peut se produire qu'une fois par minute."], "exigences": ["berserker_cleave:1"] },
-        { "id": "mage_arcane_intellect", "nom": "Intelligence des arcanes", "classeId": "mage", "type": "passif", "rangMax": 5, "effets": ["Augmente l'Intelligence de 2/4/6/8/10%."], "exigences": [] },
-        { "id": "mage_fire_attunement", "nom": "Harmonisation du feu", "classeId": "mage", "type": "passif", "niveauRequis": 5, "rangMax": 3, "effets": ["Augmente les chances de coup critique des sorts de Feu de 3/6/9%."], "exigences": ["mage_arcane_intellect:1"] },
-        { "id": "mage_ice_barrier", "nom": "Barrière de glace", "classeId": "mage", "type": "passif", "niveauRequis": 10, "rangMax": 1, "effets": ["Vous entoure d'une barrière qui absorbe 20% de vos PV max en dégâts."], "exigences": ["mage_fire_attunement:2"] },
-        { "id": "cleric_divine_fortitude", "nom": "Vigueur divine", "classeId": "cleric", "type": "passif", "rangMax": 5, "effets": ["Augmente l'Esprit de 2/4/6/8/10%."], "exigences": [] },
-        { "id": "rogue_precision", "nom": "Précision", "classeId": "rogue", "type": "passif", "rangMax": 5, "effets": ["Augmente les chances de coup critique de 1/2/3/4/5%."], "exigences": [] }
+        { "id": "berserker_toughness", "nom": "Robustesse", "classeId": "berserker", "type": "passif", "rangMax": 5, "effets": ["Augmente les PV de 2/4/6/8/10%."], "exigences": [] },
+        { "id": "berserker_cleave", "nom": "Enchaînement", "classeId": "berserker", "type": "passif", "rangMax": 1, "effets": ["Vos attaques de mêlée infligent 50% de leurs dégâts à une deuxième cible."], "exigences": ["berserker_heroic_strike:1"] },
+        { "id": "mage_intellect", "nom": "Intellect Arcanique", "classeId": "mage", "type": "passif", "rangMax": 5, "effets": ["Augmente l'Intelligence de 2/4/6/8/10%."], "exigences": [] },
+        { "id": "mage_crit_chance", "nom": "Focalisation du destin", "classeId": "mage", "type": "passif", "rangMax": 3, "effets": ["Augmente les chances de coup critique de 1/2/3%."], "exigences": ["mage_intellect:2"] }
     ]
 }

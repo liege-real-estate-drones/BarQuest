@@ -25,7 +25,17 @@ export default function Home() {
     async function loadGameData() {
         if (isInitialized) return;
         try {
-            const responses = await Promise.all([
+            const [
+                dungeonsResponse,
+                monstersResponse,
+                itemsResponse,
+                talentsResponse,
+                skillsResponse,
+                affixesResponse,
+                classesResponse,
+                questsResponse,
+                factionsResponse
+            ] = await Promise.all([
                 fetch('/data/dungeons.json'),
                 fetch('/data/monsters.json'),
                 fetch('/data/items.json'),
@@ -37,17 +47,15 @@ export default function Home() {
                 fetch('/data/factions.json'),
             ]);
 
-            const [
-                dungeonsData,
-                monstersData,
-                itemsData,
-                talentsData,
-                skillsData,
-                affixesData,
-                classesData,
-                questsData,
-                factionsData
-            ] = await Promise.all(responses.map(r => r.json()));
+            const dungeonsData = await dungeonsResponse.json();
+            const monstersData = await monstersResponse.json();
+            const itemsData = await itemsResponse.json();
+            const talentsData = await talentsResponse.json();
+            const skillsData = await skillsResponse.json();
+            const affixesData = await affixesResponse.json();
+            const classesData = await classesResponse.json();
+            const questsData = await questsResponse.json();
+            const factionsData = await factionsResponse.json();
             
             initializeGameData({
                 dungeons: dungeonsData.dungeons,

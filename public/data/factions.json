@@ -3,12 +3,12 @@
     "factions": [
         {
             "id": "town_guard",
-            "name": "Garde de la Ville",
+            "name": "Garde de la ville",
             "ranks": ["Neutre", "Amical", "Honoré", "Révéré", "Exalté"]
         },
         {
-            "id": "arcane_syndicate",
-            "name": "Syndicat des Arcanes",
+            "id": "mages_guild",
+            "name": "Guilde des Mages",
             "ranks": ["Neutre", "Amical", "Honoré", "Révéré", "Exalté"]
         }
     ]

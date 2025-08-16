@@ -1,114 +1,17 @@
 
 {
-  "monsters": [
-    {
-      "id": "skeleton_warrior",
-      "nom": "Squelette Guerrier",
-      "level": 1,
-      "famille": "Mort-vivant",
-      "palier": 1,
-      "stats": {
-        "PV": 50,
-        "AttMin": 5,
-        "AttMax": 8,
-        "CritPct": 5,
-        "CritDmg": 150,
-        "Armure": 10,
-        "Vitesse": 2.5,
-        "Precision": 100,
-        "Esquive": 5
-      }
-    },
-    {
-      "id": "zombie_shambler",
-      "nom": "Zombie Pataud",
-      "level": 2,
-      "famille": "Mort-vivant",
-      "palier": 1,
-      "stats": {
-        "PV": 75,
-        "AttMin": 6,
-        "AttMax": 10,
-        "CritPct": 2,
-        "CritDmg": 150,
-        "Armure": 15,
-        "Vitesse": 3.0,
-        "Precision": 95,
-        "Esquive": 2
-      }
-    },
-    {
-      "id": "ice_golem",
-      "nom": "Golem de Glace",
-      "level": 3,
-      "famille": "Élémentaire",
-      "palier": 1,
-      "stats": {
-        "PV": 100,
-        "AttMin": 8,
-        "AttMax": 12,
-        "CritPct": 5,
-        "CritDmg": 150,
-        "Armure": 25,
-        "Vitesse": 2.8,
-        "Precision": 100,
-        "Esquive": 5
-      }
-    },
-    {
-      "id": "fire_elemental",
-      "nom": "Élémentaire de Feu",
-      "level": 5,
-      "famille": "Élémentaire",
-      "palier": 2,
-      "stats": {
-        "PV": 150,
-        "AttMin": 15,
-        "AttMax": 22,
-        "CritPct": 10,
-        "CritDmg": 150,
-        "Armure": 20,
-        "Vitesse": 2.2,
-        "Precision": 110,
-        "Esquive": 10
-      }
-    },
-    {
-      "id": "dire_wolf",
-      "nom": "Loup Sinistre",
-      "level": 6,
-      "famille": "Bête",
-      "palier": 2,
-      "stats": {
-        "PV": 120,
-        "AttMin": 18,
-        "AttMax": 25,
-        "CritPct": 15,
-        "CritDmg": 160,
-        "Armure": 15,
-        "Vitesse": 1.8,
-        "Precision": 120,
-        "Esquive": 15
-      }
-    },
-    {
-        "id": "skeleton_king",
-        "nom": "Roi Squelette",
-        "level": 5,
-        "famille": "Mort-vivant",
-        "isBoss": true,
-        "palier": 1,
-        "stats": {
-            "PV": 500,
-            "AttMin": 20,
-            "AttMax": 30,
-            "CritPct": 10,
-            "CritDmg": 150,
-            "Armure": 50,
-            "Vitesse": 2.0,
-            "Precision": 120,
-            "Esquive": 10
-        }
-    }
-  ]
+    "monsters": [
+        { "id": "skelly_1", "nom": "Squelette", "level": 1, "famille": "Mort-vivant", "palier": 1, "stats": { "PV": 30, "Force": 5, "AttMin": 2, "AttMax": 4, "CritPct": 5, "CritDmg": 150, "Armure": 10, "Vitesse": 2.5, "Precision": 10, "Esquive": 5 } },
+        { "id": "zombie_1", "nom": "Zombie", "level": 2, "famille": "Mort-vivant", "palier": 1, "stats": { "PV": 50, "Force": 7, "AttMin": 3, "AttMax": 5, "CritPct": 0, "CritDmg": 150, "Armure": 15, "Vitesse": 3.0, "Precision": 8, "Esquive": 2 } },
+        { "id": "goblin_1", "nom": "Gobelin", "level": 3, "famille": "Peau-verte", "palier": 1, "stats": { "PV": 25, "Dexterite": 8, "AttMin": 4, "AttMax": 6, "CritPct": 10, "CritDmg": 150, "Armure": 5, "Vitesse": 2.0, "Precision": 15, "Esquive": 10 } },
+        { "id": "wolf_1", "nom": "Loup", "level": 4, "famille": "Bête", "palier": 1, "stats": { "PV": 40, "Dexterite": 10, "AttMin": 5, "AttMax": 7, "CritPct": 15, "CritDmg": 160, "Armure": 8, "Vitesse": 1.8, "Precision": 20, "Esquive": 15 } },
+        { "id": "imp_1", "nom": "Diablotin", "level": 5, "famille": "Démon", "palier": 2, "stats": { "PV": 60, "Intelligence": 12, "AttMin": 6, "AttMax": 9, "CritPct": 5, "CritDmg": 150, "Armure": 20, "Vitesse": 2.2, "Precision": 18, "Esquive": 8 } },
+        { "id": "fire_elemental_1", "nom": "Élémentaire de Feu", "level": 6, "famille": "Élémentaire", "palier": 2, "stats": { "PV": 80, "Intelligence": 15, "AttMin": 8, "AttMax": 12, "CritPct": 5, "CritDmg": 150, "Armure": 25, "Vitesse": 2.8, "Precision": 22, "Esquive": 5 } },
+        { "id": "cultist_1", "nom": "Cultiste", "level": 7, "famille": "Humanoïde", "palier": 3, "stats": { "PV": 100, "Intelligence": 20, "AttMin": 10, "AttMax": 15, "CritPct": 10, "CritDmg": 175, "Armure": 30, "Vitesse": 2.4, "Precision": 25, "Esquive": 12 } },
+        { "id": "shade_1", "nom": "Ombre", "level": 8, "famille": "Mort-vivant", "palier": 3, "stats": { "PV": 75, "Dexterite": 25, "AttMin": 12, "AttMax": 18, "CritPct": 20, "CritDmg": 200, "Armure": 50, "Vitesse": 1.6, "Precision": 30, "Esquive": 25 } },
+        { "id": "skelly_boss_1", "nom": "Roi Squelette", "level": 5, "famille": "Mort-vivant", "isBoss": true, "palier": 1, "stats": { "PV": 250, "Force": 15, "AttMin": 10, "AttMax": 15, "CritPct": 10, "CritDmg": 150, "Armure": 50, "Vitesse": 2.0, "Precision": 25, "Esquive": 10 } },
+        { "id": "goblin_boss_1", "nom": "Chef Gobelin", "level": 7, "famille": "Peau-verte", "isBoss": true, "palier": 1, "stats": { "PV": 200, "Dexterite": 20, "AttMin": 12, "AttMax": 18, "CritPct": 15, "CritDmg": 160, "Armure": 30, "Vitesse": 1.8, "Precision": 30, "Esquive": 20 } },
+        { "id": "demon_boss_1", "nom": "Démon Majeur", "level": 9, "famille": "Démon", "isBoss": true, "palier": 2, "stats": { "PV": 500, "Intelligence": 30, "AttMin": 20, "AttMax": 30, "CritPct": 10, "CritDmg": 175, "Armure": 75, "Vitesse": 2.5, "Precision": 35, "Esquive": 15 } },
+        { "id": "cultist_boss_1", "nom": "Grand Prêtre", "level": 11, "famille": "Humanoïde", "isBoss": true, "palier": 3, "stats": { "PV": 400, "Intelligence": 40, "AttMin": 25, "AttMax": 35, "CritPct": 15, "CritDmg": 200, "Armure": 60, "Vitesse": 2.2, "Precision": 40, "Esquive": 20 } }
+    ]
 }
