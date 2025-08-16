@@ -344,7 +344,7 @@ export const useGameStore = create<GameState>()(
         get().recalculateStats();
       },
 
-      buyItem: (item: Item): boolean => {
+      buyItem: (item: Item) => boolean => {
           const { inventory } = get();
           const price = item.vendorPrice || 0;
           if (price <= 0 || inventory.gold < price) {
@@ -686,11 +686,12 @@ export const useGameStore = create<GameState>()(
                 state.combat.log.push({ message: `You have been defeated! You lose ${goldPenalty} gold and all items found in the dungeon. Returning to town.`, type: 'info', timestamp: Date.now() });
                 
                 const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
-                state.player.stats.PV = maxHp;
+                state.player.stats.PV = maxHp * 0.2; // Resurrect with 20% health
+                
                 if (state.player.resources.type !== 'Rage') {
-                  state.player.resources.current = state.player.resources.max;
+                  state.player.resources.current = state.player.resources.max * 0.2; // Resurrect with 20% resource
                 } else {
-                  state.player.resources.current = 0;
+                  state.player.resources.current = 0; // Reset rage
                 }
                 
                 state.view = 'TOWN';
