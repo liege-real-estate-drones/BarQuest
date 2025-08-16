@@ -1,31 +1,31 @@
 
 [
-  {
-    "id": "berserker",
-    "nom": "Berserker",
-    "ressource": "Rage",
-    "archétype": "Mêlée lourde",
-    "statsBase": { "Force": 10, "Intelligence": 2, "Dexterite": 5, "Esprit": 4, "PV": 120, "AttMin": 6, "AttMax": 10, "CritPct": 5, "CritDmg": 150, "Armure": 15, "Vitesse": 2, "Precision": 90, "Esquive": 5 }
-  },
-  {
-    "id": "mage",
-    "nom": "Mage",
-    "ressource": "Mana",
-    "archétype": "Caster",
-    "statsBase": { "Force": 2, "Intelligence": 10, "Dexterite": 4, "Esprit": 8, "PV": 80, "AttMin": 2, "AttMax": 4, "CritPct": 5, "CritDmg": 150, "Armure": 3, "Vitesse": 2.5, "Precision": 90, "Esquive": 5 }
-  },
-  {
-    "id": "rogue",
-    "nom": "Voleur",
-    "ressource": "Énergie",
-    "archétype": "DPS rapide",
-    "statsBase": { "Force": 5, "Intelligence": 4, "Dexterite": 10, "Esprit": 3, "PV": 100, "AttMin": 5, "AttMax": 8, "CritPct": 10, "CritDmg": 160, "Armure": 8, "Vitesse": 1.5, "Precision": 95, "Esquive": 10 }
-  },
-  {
-    "id": "cleric",
-    "nom": "Clerc",
-    "ressource": "Mana",
-    "archétype": "Soutien",
-    "statsBase": { "Force": 6, "Intelligence": 6, "Dexterite": 3, "Esprit": 10, "PV": 110, "AttMin": 4, "AttMax": 6, "CritPct": 5, "CritDmg": 150, "Armure": 12, "Vitesse": 2.2, "Precision": 90, "Esquive": 5 }
-  }
+    {
+        "id": "berserker",
+        "nom": "Berserker",
+        "ressource": "Rage",
+        "archétype": "Guerrier enragé qui se renforce dans la mêlée.",
+        "statsBase": { "PV": 120, "Force": 10, "Intelligence": 2, "Dexterite": 5, "Esprit": 3, "AttMin": 4, "AttMax": 6, "CritPct": 5, "CritDmg": 150, "Armure": 20, "Vitesse": 2.8, "Precision": 80, "Esquive": 5 }
+    },
+    {
+        "id": "mage",
+        "nom": "Mage",
+        "ressource": "Mana",
+        "archétype": "Maître des arcanes, déchaînant des sorts dévastateurs à distance.",
+        "statsBase": { "PV": 80, "Force": 2, "Intelligence": 10, "Dexterite": 3, "Esprit": 5, "AttMin": 2, "AttMax": 3, "CritPct": 5, "CritDmg": 150, "Armure": 5, "Vitesse": 2.0, "Precision": 85, "Esquive": 3 }
+    },
+    {
+        "id": "rogue",
+        "nom": "Rogue",
+        "ressource": "Énergie",
+        "archétype": "Assassin agile qui frappe depuis l'ombre avec une précision mortelle.",
+        "statsBase": { "PV": 90, "Force": 4, "Intelligence": 4, "Dexterite": 10, "Esprit": 2, "AttMin": 3, "AttMax": 5, "CritPct": 10, "CritDmg": 160, "Armure": 10, "Vitesse": 1.8, "Precision": 90, "Esquive": 10 }
+    },
+    {
+        "id": "cleric",
+        "nom": "Clerc",
+        "ressource": "Mana",
+        "archétype": "Guerrier saint qui manie la lumière pour châtier ses ennemis et se protéger.",
+        "statsBase": { "PV": 100, "Force": 5, "Intelligence": 5, "Dexterite": 2, "Esprit": 8, "AttMin": 3, "AttMax": 4, "CritPct": 3, "CritDmg": 150, "Armure": 15, "Vitesse": 2.5, "Precision": 80, "Esquive": 5 }
+    }
 ]

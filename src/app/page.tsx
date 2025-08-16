@@ -37,15 +37,15 @@ export default function Home() {
                 fetch('/data/factions.json'),
             ]);
 
-            const dungeons = (await dungeonsRes.json()).dungeons;
-            const monsters = (await monstersRes.json()).monsters;
-            const items = (await itemsRes.json()).items;
-            const talents = (await talentsRes.json()).talents;
-            const skills = (await skillsRes.json()).skills;
-            const affixes = (await affixesRes.json()).affixes;
-            const classes = (await classesRes.json()).classes;
-            const quests = (await questsRes.json()).quests;
-            const factions = (await factionsRes.json()).factions;
+            const dungeons = await dungeonsRes.json();
+            const monsters = await monstersRes.json();
+            const items = await itemsRes.json();
+            const talents = await talentsRes.json();
+            const skills = await skillsRes.json();
+            const affixes = await affixesRes.json();
+            const classes = await classesRes.json();
+            const quests = await questsRes.json();
+            const factions = await factionsRes.json();
 
             initializeGameData({ dungeons, monsters, items, talents, skills, affixes, classes, quests, factions });
         } catch (error) {

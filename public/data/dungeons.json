@@ -1,40 +1,39 @@
-{
-  "dungeons": [
+
+[
     {
-      "id": "dungeon_1",
-      "palier": 1,
-      "name": "Les Cryptes Infestées",
-      "biome": "occult",
-      "monsters": ["goblin_warrior", "goblin_shaman"],
-      "killTarget": 10,
-      "bossId": "undead_behemoth"
+        "id": "dungeon_1",
+        "palier": 1,
+        "name": "Cryptes Glaciales",
+        "biome": "frost",
+        "monsters": ["skelly_1", "zombie_1"],
+        "killTarget": 10,
+        "bossId": "skelly_boss_1"
     },
     {
-      "id": "dungeon_2",
-      "palier": 1,
-      "name": "La Forêt des Ombres",
-      "biome": "nature",
-      "monsters": ["dire_wolf", "forest_troll"],
-      "killTarget": 15,
-      "bossId": "alpha_wolf"
+        "id": "dungeon_2",
+        "palier": 1,
+        "name": "Le Terrier Brûlant",
+        "biome": "fire",
+        "monsters": ["imp_1", "hound_1"],
+        "killTarget": 15,
+        "bossId": "demon_boss_1"
     },
     {
-      "id": "dungeon_3",
-      "palier": 2,
-      "name": "Les Cavernes de Givre",
-      "biome": "frost",
-      "monsters": ["ice_elemental", "frost_spider"],
-      "killTarget": 20,
-      "bossId": "ice_giant"
+        "id": "dungeon_3",
+        "palier": 2,
+        "name": "Forêt Susurrante",
+        "biome": "nature",
+        "monsters": ["goblin_2", "spider_2"],
+        "killTarget": 20,
+        "bossId": "goblin_king_2"
     },
     {
-      "id": "dungeon_4",
-      "palier": 2,
-      "name": "Le Coeur du Volcan",
-      "biome": "fire",
-      "monsters": ["fire_elemental", "magma_golem"],
-      "killTarget": 25,
-      "bossId": "ancient_fire_drake"
+        "id": "dungeon_4",
+        "palier": 2,
+        "name": "Caveau Oublié",
+        "biome": "occult",
+        "monsters": ["cultist_2", "shade_2"],
+        "killTarget": 25,
+        "bossId": "lich_2"
     }
-  ]
-}
+]

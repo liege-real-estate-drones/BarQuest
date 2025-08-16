@@ -1,33 +1,27 @@
 
 [
-  { "id": "berserker_toughness", "classeId": "berserker", "nom": "Peau d'Acier", "type": "passif", "niveauRequis": 1, "rangMax": 5, "effets": ["Augmente l'Armure de 3/6/9/12/15%."], "exigences": [] },
-  { "id": "berserker_battle_rage", "classeId": "berserker", "nom": "Rage de Bataille", "type": "passif", "niveauRequis": 1, "rangMax": 3, "effets": ["Augmente la Rage générée par les attaques de base de 1/2/3."], "exigences": [] },
-  { "id": "berserker_bloodlust", "classeId": "berserker", "nom": "Soif de Sang", "type": "passif", "niveauRequis": 1, "rangMax": 5, "effets": ["Augmente les dégâts infligés de 4/8/12/16/20% lorsque vous êtes en dessous de 50% de vos PV."], "exigences": [] },
-  { "id": "berserker_cleave", "classeId": "berserker", "nom": "Enchaînement", "type": "passif", "niveauRequis": 10, "rangMax": 1, "effets": ["Vos attaques de base touchent une cible supplémentaire pour 50% de leurs dégâts."], "exigences": ["berserker_heroic_strike:3"] },
-  { "id": "berserker_enrage", "classeId": "berserker", "nom": "Enrager", "type": "passif", "niveauRequis": 25, "rangMax": 3, "effets": ["Augmente vos chances de coup critique de 1/2/3% pour chaque 10% de vie manquante."], "exigences": ["berserker_bloodlust:3"] },
-  { "id": "berserker_second_wind", "classeId": "berserker", "nom": "Second Souffle", "type": "passif", "niveauRequis": 30, "rangMax": 1, "effets": ["Vous soigne de 10% de vos PV maximum sur 5s après avoir tué un ennemi."], "exigences": ["berserker_intimidating_shout:1"] },
-  { "id": "berserker_unstoppable", "classeId": "berserker", "nom": "Inarrêtable", "type": "passif", "niveauRequis": 40, "rangMax": 1, "effets": ["Devenir étourdi vous rend insensible aux étourdissements pendant 5s. Ne peut se produire qu'une fois toutes les 30s."], "exigences": ["berserker_charge:1"] },
-  { "id": "berserker_titan_grip", "classeId": "berserker", "nom": "Poigne de Titan", "type": "passif", "niveauRequis": 45, "rangMax": 1, "effets": ["Augmente les dégâts de base de 15% mais réduit la vitesse d'attaque de 10%."], "exigences": ["berserker_whirlwind:3"] },
-
-  { "id": "mage_arcane_intellect", "classeId": "mage", "nom": "Intelligence des Arcanes", "type": "passif", "niveauRequis": 1, "rangMax": 5, "effets": ["Augmente l'Intelligence de 3/6/9/12/15%."], "exigences": [] },
-  { "id": "mage_mana_shield", "classeId": "mage", "nom": "Bouclier de Mana", "type": "passif", "niveauRequis": 1, "rangMax": 3, "effets": ["Absorbe un montant de dégâts égal à 10/20/30% de votre Mana maximum. Se recharge hors combat."], "exigences": [] },
-  { "id": "mage_combustion", "classeId": "mage", "nom": "Combustion", "type": "passif", "niveauRequis": 20, "rangMax": 3, "effets": ["Vos sorts de Feu ont 5/10/15% de chances d'appliquer un DoT qui inflige 50% des dégâts du sort sur 5s."], "exigences": ["mage_fireball:2"] },
-  { "id": "mage_elemental_focus", "classeId": "mage", "nom": "Focalisation Élémentaire", "type": "passif", "niveauRequis": 30, "rangMax": 3, "effets": ["Augmente les dégâts de Feu et de Givre de 5/10/15%."], "exigences": ["mage_combustion:1"] },
-  { "id": "mage_spell_power", "classeId": "mage", "nom": "Puissance des Sorts", "type": "passif", "niveauRequis": 40, "rangMax": 3, "effets": ["Augmente votre Esprit de 5/10/15%."], "exigences": ["mage_elemental_focus:1"] },
-  { "id": "mage_critical_mass", "classeId": "mage", "nom": "Masse Critique", "type": "passif", "niveauRequis": 45, "rangMax": 3, "effets": ["Augmente les chances de coup critique de vos sorts de feu de 2/4/6%."], "exigences": ["mage_pyroblast:1"] },
-
-  { "id": "rogue_fleet_footed", "classeId": "rogue", "nom": "Pieds Agiles", "type": "passif", "niveauRequis": 1, "rangMax": 5, "effets": ["Augmente l'Esquive de 2/4/6/8/10%."], "exigences": [] },
-  { "id": "rogue_precision", "classeId": "rogue", "nom": "Précision", "type": "passif", "niveauRequis": 1, "rangMax": 5, "effets": ["Augmente les chances de coup critique de 1/2/3/4/5%."], "exigences": [] },
-  { "id": "rogue_poisons", "classeId": "rogue", "nom": "Poisons", "type": "passif", "niveauRequis": 1, "rangMax": 1, "effets": ["Vos attaques ont une chance d'appliquer un poison qui inflige des dégâts sur la durée."], "exigences": [] },
-  { "id": "rogue_lethality", "classeId": "rogue", "nom": "Létalité", "type": "passif", "niveauRequis": 20, "rangMax": 3, "effets": ["Augmente les dégâts des coups critiques de 10/20/30%."], "exigences": ["rogue_precision:3"] },
-  { "id": "rogue_relentless_strikes", "classeId": "rogue", "nom": "Frappes Implacables", "type": "passif", "niveauRequis": 30, "rangMax": 5, "effets": ["Vos attaques de finition ont 4/8/12/16/20% de chances de vous rendre 25 Énergie."], "exigences": ["rogue_eviscerate:1"] },
-  { "id": "rogue_improved_poisons", "classeId": "rogue", "nom": "Poisons Améliorés", "type": "passif", "niveauRequis": 40, "rangMax": 3, "effets": ["Augmente les dégâts de vos poisons de 10/20/30%."], "exigences": ["rogue_lethality:1"] },
-
-  { "id": "cleric_divine_spirit", "classeId": "cleric", "nom": "Esprit Divin", "type": "passif", "niveauRequis": 1, "rangMax": 5, "effets": ["Augmente l'Esprit de 3/6/9/12/15%."], "exigences": [] },
-  { "id": "cleric_resilience", "classeId": "cleric", "nom": "Résilience", "type": "passif", "niveauRequis": 1, "rangMax": 5, "effets": ["Augmente l'Armure et les PV de 2/4/6/8/10%."], "exigences": [] },
-  { "id": "cleric_blessed_hammer", "classeId": "cleric", "nom": "Marteau Béni", "type": "passif", "niveauRequis": 1, "rangMax": 1, "effets": ["Vos attaques de base ont une chance de soigner un allié proche (vous-même) pour un faible montant."], "exigences": [] },
-  { "id": "cleric_inner_fire", "classeId": "cleric", "nom": "Feu Intérieur", "type": "passif", "niveauRequis": 20, "rangMax": 3, "effets": ["Augmente votre Force et votre Intelligence de 5/10/15% de votre Esprit."], "exigences": ["cleric_blessed_hammer:1"] },
-  { "id": "cleric_divine_fury", "classeId": "cleric", "nom": "Fureur Divine", "type": "passif", "niveauRequis": 30, "rangMax": 3, "effets": ["Vos sorts de dégâts ont 5/10/15% de chances de rendre vos 3 prochaines attaques de mêlée instantanées."], "exigences": ["cleric_smite:3"] },
-  { "id": "cleric_divine_protection", "classeId": "cleric", "nom": "Protection Divine", "type": "passif", "niveauRequis": 40, "rangMax": 1, "effets": ["Réduit la durée des effets de contrôle sur vous de 20%."], "exigences": ["cleric_guardian_spirit:1"] },
-  { "id": "cleric_angelic_form", "classeId": "cleric", "nom": "Forme Angélique", "type": "passif", "niveauRequis": 45, "rangMax": 1, "effets": ["Augmente tous les soins que vous prodiguez et recevez de 15%."], "exigences": ["cleric_divine_hymn:1"] }
+    {
+        "id": "berserker_toughness", "nom": "Robustesse", "classeId": "berserker", "type": "passif", "niveauRequis": 2, "rangMax": 5,
+        "effets": ["Augmente l'Armure de 2/4/6/8/10%."], "exigences": []
+    },
+    {
+        "id": "berserker_cleave", "nom": "Enchaînement", "classeId": "berserker", "type": "passif", "niveauRequis": 5, "rangMax": 1,
+        "effets": ["Vos attaques de base infligent 50% de leurs dégâts à une cible proche."], "exigences": ["berserker_heroic_strike:1"]
+    },
+    {
+        "id": "berserker_last_stand", "nom": "Dernier Rempart", "classeId": "berserker", "type": "passif", "niveauRequis": 10, "rangMax": 1,
+        "effets": ["Augmente vos dégâts jusqu'à 100% en fonction de vos PV manquants."], "exigences": []
+    },
+    {
+        "id": "mage_arcane_intellect", "nom": "Intelligence des Arcanes", "classeId": "mage", "type": "passif", "niveauRequis": 2, "rangMax": 5,
+        "effets": ["Augmente l'Intelligence de 2/4/6/8/10%."], "exigences": []
+    },
+    {
+        "id": "rogue_precision", "nom": "Précision", "classeId": "rogue", "type": "passif", "niveauRequis": 2, "rangMax": 5,
+        "effets": ["Augmente les chances de coup critique de 1/2/3/4/5%."], "exigences": []
+    },
+    {
+        "id": "cleric_divine_spirit", "nom": "Esprit Divin", "classeId": "cleric", "type": "passif", "niveauRequis": 2, "rangMax": 5,
+        "effets": ["Augmente l'Esprit de 2/4/6/8/10%."], "exigences": []
+    }
 ]

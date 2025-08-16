@@ -1,1 +1,39 @@
-[]
+
+[
+    {
+        "id": "quest_1",
+        "type": "chasse",
+        "name": "Nettoyage des Cryptes",
+        "desc": "Les morts-vivants infestent les cryptes. Éliminez-les.",
+        "requirements": {
+            "dungeonId": "dungeon_1",
+            "killCount": 10
+        },
+        "rewards": {
+            "gold": 50,
+            "xp": 100,
+            "reputation": {
+                "factionId": "town_guard",
+                "amount": 50
+            }
+        }
+    },
+    {
+        "id": "quest_2",
+        "type": "chasse",
+        "name": "Infestation Infernale",
+        "desc": "Des créatures démoniaques ont été aperçues dans le terrier. Purgez la zone.",
+        "requirements": {
+            "dungeonId": "dungeon_2",
+            "killCount": 15
+        },
+        "rewards": {
+            "gold": 75,
+            "xp": 150,
+            "reputation": {
+                "factionId": "town_guard",
+                "amount": 75
+            }
+        }
+    }
+]
