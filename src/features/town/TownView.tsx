@@ -42,7 +42,7 @@ export function TownView() {
   }));
 
   return (
-      <div className="flex flex-col h-screen">
+      <div className="flex flex-col h-screen max-h-screen">
         <header className="flex-shrink-0 container mx-auto px-4 md:px-8 py-4 flex justify-between items-center border-b">
           <div>
               <h1 className="text-4xl font-headline text-primary">BarQuest</h1>
@@ -92,8 +92,8 @@ export function TownView() {
 
         </header>
         
-        <div className="flex-grow container mx-auto px-4 md:px-8 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8 overflow-hidden">
-          <ScrollArea className="lg:col-span-1 h-full">
+        <main className="flex-grow container mx-auto px-4 md:px-8 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8 min-h-0">
+          <ScrollArea className="lg:col-span-1">
             <div className="flex flex-col gap-8 pr-6">
               <PlayerStatsView />
               <QuestsView />
@@ -101,8 +101,8 @@ export function TownView() {
               <EquipmentView />
             </div>
           </ScrollArea>
-          <div className="lg:col-span-2 flex flex-col h-full">
-              <Tabs defaultValue="dungeons" className="w-full flex flex-col h-full">
+          <div className="lg:col-span-2 flex flex-col min-h-0">
+              <Tabs defaultValue="dungeons" className="w-full flex flex-col flex-grow min-h-0">
                   <TabsList className="grid w-full grid-cols-6 flex-shrink-0">
                     <TabsTrigger value="dungeons">Dungeons</TabsTrigger>
                     <TabsTrigger value="inventory">Inventory</TabsTrigger>
@@ -111,29 +111,31 @@ export function TownView() {
                     <TabsTrigger value="vendors">Vendors</TabsTrigger>
                     <TabsTrigger value="inn">Inn</TabsTrigger>
                   </TabsList>
-                  <div className="flex-grow mt-4">
-                    <TabsContent value="dungeons" className="h-full m-0">
-                      <DungeonsView />
+                  <div className="flex-grow mt-4 relative">
+                    <TabsContent value="dungeons" className="absolute inset-0">
+                      <ScrollArea className="h-full w-full">
+                        <DungeonsView />
+                      </ScrollArea>
                     </TabsContent>
-                    <TabsContent value="inventory">
+                    <TabsContent value="inventory" className="absolute inset-0">
                       <InventoryView />
                     </TabsContent>
-                    <TabsContent value="talents">
-                      <TalentsView />
+                    <TabsContent value="talents" className="absolute inset-0">
+                       <TalentsView />
                     </TabsContent>
-                    <TabsContent value="skills">
+                    <TabsContent value="skills" className="absolute inset-0">
                       <SkillsView />
                     </TabsContent>
-                    <TabsContent value="vendors">
+                    <TabsContent value="vendors" className="absolute inset-0">
                       <VendorsView />
                     </TabsContent>
-                    <TabsContent value="inn">
+                    <TabsContent value="inn" className="absolute inset-0">
                       <InnView />
                     </TabsContent>
                   </div>
               </Tabs>
           </div>
-        </div>
+        </main>
       </div>
   );
 }

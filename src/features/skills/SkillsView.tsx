@@ -83,7 +83,7 @@ export function SkillsView() {
                 </CardTitle>
                 <CardDescription>Apprenez et équipez jusqu'à 4 compétences à utiliser en combat.</CardDescription>
             </CardHeader>
-            <CardContent className="flex-grow flex flex-col gap-4">
+            <CardContent className="flex-grow flex flex-col gap-4 overflow-hidden">
                  <div>
                     <h3 className="font-semibold mb-2 text-center">Compétences à Apprendre</h3>
                     <Separator className="mb-4"/>
@@ -112,10 +112,10 @@ export function SkillsView() {
                     </ScrollArea>
                 </div>
 
-                <div>
+                <div className="flex-grow flex flex-col overflow-hidden">
                     <h3 className="font-semibold mb-2 text-center">Compétences Disponibles</h3>
                     <Separator className="mb-4"/>
-                     <ScrollArea className="h-[200px] p-1">
+                     <ScrollArea className="flex-grow p-1">
                         <div className="space-y-2 p-3 rounded-lg bg-background/50 min-h-[150px]">
                             {availableToDisplay.length > 0 ? availableToDisplay.map(skill => (
                                <Popover key={skill.id}>
@@ -140,7 +140,7 @@ export function SkillsView() {
                     </ScrollArea>
                 </div>
 
-                <div>
+                <div className="flex-shrink-0">
                     <h3 className="font-semibold mb-2 text-center">Barre d'Action</h3>
                      <Separator className="mb-4"/>
                     <div className="grid grid-cols-4 gap-2">
@@ -174,5 +174,3 @@ export function SkillsView() {
         </Card>
     );
 }
-
-    

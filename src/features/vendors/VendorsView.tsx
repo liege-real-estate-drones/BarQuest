@@ -1,3 +1,4 @@
+
 'use client';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -171,7 +172,7 @@ export function VendorsView() {
     }));
     
     return (
-        <Card className="h-[60vh] flex flex-col">
+        <Card className="h-full flex flex-col">
             <CardHeader>
                 <CardTitle className="flex justify-between items-center">
                     <span>Blacksmith</span>
@@ -183,7 +184,7 @@ export function VendorsView() {
             </CardHeader>
             <CardContent className="flex-grow flex flex-col p-0">
                 <Tabs defaultValue="buy" className="w-full flex-grow flex flex-col">
-                    <TabsList className="grid w-full grid-cols-2">
+                    <TabsList className="grid w-full grid-cols-2 mx-6">
                         <TabsTrigger value="buy">Acheter</TabsTrigger>
                         <TabsTrigger value="sell">Vendre</TabsTrigger>
                     </TabsList>
