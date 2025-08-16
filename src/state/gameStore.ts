@@ -233,14 +233,14 @@ export const useGameStore = create<GameState>()(
                 type: chosenClass.ressource as ResourceType,
             };
         });
-        get().recalculateStats();
         get().checkAndAssignStarterSkill();
+        get().recalculateStats();
       },
 
       checkAndAssignStarterSkill: () => {
         set(state => {
             const { player, gameData } = state;
-            if (!player.classeId || !gameData.talents.length) return;
+            if (!player.classeId || !gameData.talents || gameData.talents.length === 0) return;
 
             const hasAnyActiveSkillLearned = Object.keys(player.talents).some(talentId => {
                 const talent = gameData.talents.find(t => t.id === talentId);
@@ -252,7 +252,7 @@ export const useGameStore = create<GameState>()(
             const startingSkill = gameData.talents.find(t => 
                 t.classeId === player.classeId && 
                 t.type === 'actif' && 
-                t.exigences.length === 0
+                (!t.exigences || t.exigences.length === 0)
             );
 
             if (startingSkill) {
