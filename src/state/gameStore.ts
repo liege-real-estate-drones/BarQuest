@@ -244,7 +244,7 @@ export const useGameStore = create<GameState>()(
 
             const hasAnyActiveSkillLearned = Object.keys(player.talents).some(talentId => {
                 const talent = gameData.talents.find(t => t.id === talentId);
-                return talent && talent.type === 'actif' && player.talents[talentId] > 0;
+                return talent && talent.type === 'actif' && (player.talents[talentId] || 0) > 0;
             });
             
             if (hasAnyActiveSkillLearned) return;
@@ -257,8 +257,7 @@ export const useGameStore = create<GameState>()(
 
             if (startingSkill) {
                 player.talents[startingSkill.id] = 1;
-                // Equip it if the first slot is empty and not already equipped
-                if (player.equippedSkills[0] === null && !player.equippedSkills.includes(startingSkill.id)) {
+                if (player.equippedSkills.every(s => s === null)) {
                     player.equippedSkills[0] = startingSkill.id;
                 }
             }
