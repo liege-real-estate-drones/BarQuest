@@ -1,39 +1,83 @@
 
 [
   {
-    "id": "berserker_heroic_strike", "nom": "Frappe Héroïque", "classeId": "berserker", "type": "actif", "niveauRequis": 1, "rangMax": 5, "effets": ["Inflige 120% des dégâts de l'arme.", "Coûte 10 Rage"], "exigences": []
+    "id": "berserker_heroic_strike",
+    "nom": "Frappe Héroïque",
+    "classeId": "berserker",
+    "type": "actif",
+    "niveauRequis": 1,
+    "rangMax": 5,
+    "effets": ["Inflige 120/130/140/150/160% des dégâts de l'arme.", "Coûte 15 Rage"],
+    "exigences": []
   },
   {
-    "id": "berserker_whirlwind", "nom": "Tourbillon", "classeId": "berserker", "type": "actif", "niveauRequis": 5, "rangMax": 5, "effets": ["Frappe tous les ennemis proches pour 70% des dégâts de l'arme.", "Coûte 25 Rage"], "exigences": []
+    "id": "berserker_whirlwind",
+    "nom": "Tourbillon",
+    "classeId": "berserker",
+    "type": "actif",
+    "niveauRequis": 1,
+    "rangMax": 5,
+    "effets": ["Inflige 70/80/90/100/110% des dégâts de l'arme à tous les ennemis proches.", "Coûte 25 Rage"],
+    "exigences": []
   },
   {
-    "id": "berserker_charge", "nom": "Charge", "classeId": "berserker", "type": "actif", "niveauRequis": 10, "rangMax": 1, "effets": ["Charge un ennemi, l'étourdissant pendant 1s et infligeant 50% des dégâts de l'arme."], "exigences": []
+    "id": "berserker_charge",
+    "nom": "Charge",
+    "classeId": "berserker",
+    "type": "actif",
+    "niveauRequis": 1,
+    "rangMax": 1,
+    "effets": ["Charge un ennemi, l'étourdissant pendant 1/1.5/2/2.5/3 seconde(s).", "Coûte 10 Rage"],
+    "exigences": []
   },
   {
-    "id": "mage_fireball", "nom": "Boule de Feu", "classeId": "mage", "type": "actif", "niveauRequis": 1, "rangMax": 5, "effets": ["Inflige 30/45/60/75/90 dégâts de Feu.", "Coûte 15 Mana"], "exigences": []
+    "id": "berserker_battle_shout",
+    "nom": "Cri de Bataille",
+    "classeId": "berserker",
+    "type": "actif",
+    "niveauRequis": 1,
+    "rangMax": 5,
+    "effets": ["Augmente la Force de 10/12/14/16/18% pendant 10 secondes.", "Coûte 20 Rage"],
+    "exigences": []
   },
   {
-    "id": "mage_ice_bolt", "nom": "Éclair de Givre", "classeId": "mage", "type": "actif", "niveauRequis": 5, "rangMax": 5, "effets": ["Inflige 25 dégâts de Givre et ralentit la cible.", "Coûte 20 Mana"], "exigences": []
+    "id": "mage_fireball",
+    "nom": "Boule de Feu",
+    "classeId": "mage",
+    "type": "actif",
+    "niveauRequis": 1,
+    "rangMax": 5,
+    "effets": ["Inflige 30/40/50/60/70 dégâts de Feu.", "Coûte 20 Mana"],
+    "exigences": []
   },
   {
-    "id": "mage_lightning", "nom": "Chaîne d'Éclairs", "classeId": "mage", "type": "actif", "niveauRequis": 10, "rangMax": 5, "effets": ["Frappe jusqu'à 3 ennemis pour 40 dégâts de Nature.", "Coûte 30 Mana"], "exigences": []
+    "id": "mage_ice_nova",
+    "nom": "Nova de Givre",
+    "classeId": "mage",
+    "type": "actif",
+    "niveauRequis": 1,
+    "rangMax": 5,
+    "effets": ["Inflige 15/20/25/30/35 dégâts de Givre à tous les ennemis et les gèle pendant 2 secondes.", "Coûte 30 Mana"],
+    "exigences": []
   },
   {
-    "id": "rogue_sinister_strike", "nom": "Attaque Pernicieuse", "classeId": "rogue", "type": "actif", "niveauRequis": 1, "rangMax": 5, "effets": ["Inflige 110% des dégâts de l'arme.", "Coûte 40 Énergie"], "exigences": []
+    "id": "mage_arcane_missile",
+    "nom": "Projectile des Arcanes",
+    "classeId": "mage",
+    "type": "actif",
+    "niveauRequis": 1,
+    "rangMax": 5,
+    "effets": ["Tire 3 projectiles qui infligent chacun 10/12/14/16/18 dégâts des Arcanes.", "Coûte 25 Mana"],
+    "exigences": []
   },
   {
-    "id": "rogue_eviscerate", "nom": "Éviscération", "classeId": "rogue", "type": "actif", "niveauRequis": 5, "rangMax": 5, "effets": ["Coup de grâce qui consomme tous les points de combo pour infliger des dégâts massifs.", "Coûte 25 Énergie"], "exigences": []
-  },
-  {
-    "id": "rogue_fan_of_knives", "nom": "Éventail de Couteaux", "classeId": "rogue", "type": "actif", "niveauRequis": 10, "rangMax": 5, "effets": ["Lance des couteaux sur tous les ennemis proches pour 50% des dégâts de l'arme.", "Coûte 35 Énergie"], "exigences": []
-  },
-  {
-    "id": "cleric_smite", "nom": "Châtiment", "classeId": "cleric", "type": "actif", "niveauRequis": 1, "rangMax": 5, "effets": ["Inflige 20 dégâts Sacrés à un ennemi.", "Coûte 10 Mana"], "exigences": []
-  },
-  {
-    "id": "cleric_holy_light", "nom": "Lumière Sacrée", "classeId": "cleric", "type": "actif", "niveauRequis": 5, "rangMax": 5, "effets": ["Soigne un allié pour 50 points de vie.", "Coûte 25 Mana"], "exigences": []
-  },
-  {
-    "id": "cleric_consecration", "nom": "Consécration", "classeId": "cleric", "type": "actif", "niveauRequis": 10, "rangMax": 5, "effets": ["Consacre le sol, infligeant des dégâts Sacrés aux ennemis qui s'y trouvent.", "Coûte 40 Mana"], "exigences": []
+    "id": "mage_mana_shield",
+    "nom": "Bouclier de Mana",
+    "classeId": "mage",
+    "type": "actif",
+    "niveauRequis": 1,
+    "rangMax": 5,
+    "effets": ["Absorbe 50/75/100/125/150 dégâts. Dure 10 secondes.", "Coûte 15 Mana"],
+    "exigences": []
   }
 ]
