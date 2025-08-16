@@ -10,6 +10,7 @@ import { User, ArrowLeft } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { ActionStrip } from './components/ActionStrip';
 import type { Talent } from '@/lib/types';
+import { Card } from '@/components/ui/card';
 
 export function CombatView() {
   const {
@@ -91,25 +92,26 @@ export function CombatView() {
         </div>
       </header>
 
-      <main className="flex-grow grid grid-cols-1 md:grid-cols-2 gap-4 min-h-0">
-          <div className="flex flex-col gap-4">
+      <main className="flex-grow grid grid-cols-1 lg:grid-cols-3 gap-4 min-h-0">
+          <div className="lg:col-span-1 flex flex-col gap-4">
             <EntityDisplay entity={player} isPlayer />
             <EntityDisplay entity={enemy} />
           </div>
-          <CombatLog log={combatLog} />
+          <div className="lg:col-span-2 flex flex-col gap-4">
+            <CombatLog log={combatLog} />
+            <Card className="flex-shrink-0">
+                <ActionStrip 
+                    onSkill1={handleAttack}
+                    onPotion={() => console.log('potion used')}
+                    onRetreat={flee}
+                    isSkill1Ready={playerAttackProgress >= 1}
+                    isSkill1Auto={autoAttack}
+                    skills={activeSkills}
+                    toggleAutoAttack={toggleAutoAttack}
+                />
+            </Card>
+          </div>
       </main>
-      
-      <footer className="flex-shrink-0 border-t pt-2">
-       <ActionStrip 
-          onSkill1={handleAttack}
-          onPotion={() => console.log('potion used')}
-          onRetreat={flee}
-          isSkill1Ready={playerAttackProgress >= 1}
-          isSkill1Auto={autoAttack}
-          skills={activeSkills}
-          toggleAutoAttack={toggleAutoAttack}
-       />
-      </footer>
     </div>
   );
 }
