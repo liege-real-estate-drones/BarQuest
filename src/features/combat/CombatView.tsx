@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useGameStore } from '@/state/gameStore';
@@ -72,8 +73,8 @@ export function CombatView() {
   const dungeonProgress = (killCount / currentDungeon.killTarget) * 100;
 
   return (
-    <div className="flex h-screen w-full flex-col p-4 gap-4 font-code bg-background text-foreground">
-      <header className="flex justify-between items-center border-b pb-2 gap-4 flex-shrink-0">
+    <div className="flex flex-col h-screen w-full p-4 gap-4 font-code bg-background text-foreground">
+      <header className="flex-shrink-0 flex justify-between items-center border-b pb-2 gap-4">
         <Button variant="ghost" size="icon" onClick={flee}>
             <ArrowLeft />
         </Button>
