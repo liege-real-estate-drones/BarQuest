@@ -48,7 +48,7 @@ const initialCombatState: CombatState = {
   enemyAttackProgress: 0,
   killCount: 0,
   log: [],
-  autoAttack: false,
+  autoAttack: true,
   dungeonRunItems: [],
 };
 

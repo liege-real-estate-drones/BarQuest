@@ -16,20 +16,16 @@ export function CombatView() {
   const {
     player,
     enemy,
-    playerAttack,
     flee,
     playerAttackProgress,
     startCombat,
     combatLog,
-    autoAttack,
     currentDungeon,
     killCount,
     gameData,
-    toggleAutoAttack,
   } = useGameStore((state) => ({
     player: state.player,
     enemy: state.combat.enemy,
-    playerAttack: state.playerAttack,
     flee: state.flee,
     playerAttackProgress: state.combat.playerAttackProgress,
     startCombat: state.startCombat,
@@ -65,12 +61,6 @@ export function CombatView() {
     return <div className="flex items-center justify-center h-screen">Finding a target...</div>;
   }
 
-  const handleAttack = () => {
-    if (playerAttackProgress >= 1) {
-      playerAttack();
-    }
-  };
-
   const dungeonProgress = (killCount / currentDungeon.killTarget) * 100;
 
   return (
@@ -101,13 +91,8 @@ export function CombatView() {
             <CombatLog log={combatLog} />
             <Card className="flex-shrink-0">
                 <ActionStrip 
-                    onSkill1={handleAttack}
-                    onPotion={() => console.log('potion used')}
                     onRetreat={flee}
-                    isSkill1Ready={playerAttackProgress >= 1}
-                    isSkill1Auto={autoAttack}
                     skills={activeSkills}
-                    toggleAutoAttack={toggleAutoAttack}
                 />
             </Card>
           </div>
