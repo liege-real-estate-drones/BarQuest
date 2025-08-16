@@ -3,7 +3,7 @@
 
 import { Button } from "@/components/ui/button";
 import type { Talent } from "@/lib/types";
-import { Heart, Shield, Zap, Shuffle } from "lucide-react";
+import { Heart, Shield, Zap, Shuffle, ArrowRightLeft } from "lucide-react";
 import { useEffect } from "react";
 import { useGameStore } from "@/state/gameStore";
 
@@ -77,7 +77,7 @@ export function ActionStrip({ onRetreat, onCycleTarget, skills }: ActionStripPro
                 </Button>
             ))}
 
-            {[...Array(4 - skills.length)].map((_, index) => (
+            {[...Array(4 - (skills?.length || 0))].map((_, index) => (
                 <div key={`empty-${index}`} className="w-24 h-16 rounded-md bg-secondary/30 flex items-center justify-center text-xs text-muted-foreground">
                     Vide
                 </div>
@@ -85,7 +85,7 @@ export function ActionStrip({ onRetreat, onCycleTarget, skills }: ActionStripPro
 
             <Button variant="outline" onClick={onCycleTarget} className="w-24 h-16 flex-col gap-1 text-xs">
                  <div className="flex items-center gap-2">
-                    <Shuffle />
+                    <ArrowRightLeft />
                     <span>Changer Cible</span>
                 </div>
                 <span className="text-muted-foreground/70">[T]</span>

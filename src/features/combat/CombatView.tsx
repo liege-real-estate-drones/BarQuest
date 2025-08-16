@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { CombatLog } from './components/CombatLog';
 import EntityDisplay from './components/EntityDisplay';
 import { useEffect, useMemo, useState } from 'react';
-import { User, ArrowLeft, Target, Shuffle } from 'lucide-react';
+import { User, ArrowLeft } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { ActionStrip } from './components/ActionStrip';
 import type { Talent } from '@/lib/types';
@@ -69,7 +69,6 @@ export function CombatView() {
   }
 
   const dungeonProgress = (killCount / currentDungeon.killTarget) * 100;
-  const currentTarget = enemies[targetIndex];
 
   return (
     <div className="flex flex-col h-screen w-full p-4 gap-4 font-code bg-background text-foreground">
