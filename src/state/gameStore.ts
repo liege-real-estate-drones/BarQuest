@@ -232,8 +232,8 @@ export const useGameStore = create<GameState>()(
                 type: chosenClass.ressource as ResourceType,
             };
         });
-        get().checkAndAssignStarterSkill();
         get().recalculateStats();
+        get().checkAndAssignStarterSkill();
       },
 
       checkAndAssignStarterSkill: () => {
@@ -241,12 +241,12 @@ export const useGameStore = create<GameState>()(
             const { player, gameData } = state;
             if (!player.classeId || !gameData.talents.length) return;
 
-            const hasAnyActiveSkill = Object.keys(player.talents).some(talentId => {
+            const learnedActiveSkills = Object.keys(player.talents).filter(talentId => {
                 const talent = gameData.talents.find(t => t.id === talentId);
-                return talent && talent.type === 'actif';
+                return talent && talent.type === 'actif' && player.talents[talentId] > 0;
             });
-            
-            if (hasAnyActiveSkill) return;
+
+            if (learnedActiveSkills.length > 0) return;
 
             const startingSkill = gameData.talents.find(t => 
                 t.classeId === player.classeId && 
@@ -256,8 +256,8 @@ export const useGameStore = create<GameState>()(
 
             if (startingSkill) {
                 player.talents[startingSkill.id] = 1;
-                // Equip it if the first slot is empty
-                if (player.equippedSkills[0] === null) {
+                // Equip it if the first slot is empty and not already equipped
+                if (player.equippedSkills[0] === null && !player.equippedSkills.includes(startingSkill.id)) {
                     player.equippedSkills[0] = startingSkill.id;
                 }
             }

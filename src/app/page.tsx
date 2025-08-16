@@ -34,10 +34,6 @@ export default function Home() {
           fetch('/data/factions.json').then(res => res.json()),
         ]);
         initializeGameData({ dungeons, monsters, items, talents, affixes, classes, quests, factions });
-        // This is the key fix: ensure data is loaded, THEN check for skills.
-        if (player.classeId) {
-          checkAndAssignStarterSkill();
-        }
       } catch (error) {
         console.error("Failed to load game data:", error);
       } finally {
@@ -48,13 +44,15 @@ export default function Home() {
     if (hydrated && !isInitialized) {
       loadGameData();
     } else if (hydrated && isInitialized) {
-        // Also check on subsequent loads if the player exists but somehow lost skills
-        if (player.classeId) {
-            checkAndAssignStarterSkill();
-        }
         setIsLoading(false);
     }
-  }, [hydrated, isInitialized, initializeGameData, player.classeId, checkAndAssignStarterSkill]);
+  }, [hydrated, isInitialized, initializeGameData]);
+
+  useEffect(() => {
+    if(isInitialized && player.classeId) {
+        checkAndAssignStarterSkill();
+    }
+  }, [isInitialized, player.classeId, checkAndAssignStarterSkill]);
   
   if (!hydrated || isLoading) {
     return (
