@@ -111,28 +111,26 @@ export function TownView() {
                     <TabsTrigger value="vendors">Vendors</TabsTrigger>
                     <TabsTrigger value="inn">Inn</TabsTrigger>
                   </TabsList>
-                  <ScrollArea className="flex-grow mt-4">
-                    <div className="pr-2">
-                      <TabsContent value="dungeons">
-                        <DungeonsView />
-                      </TabsContent>
-                      <TabsContent value="inventory">
-                        <InventoryView />
-                      </TabsContent>
-                      <TabsContent value="talents">
-                        <TalentsView />
-                      </TabsContent>
-                      <TabsContent value="skills">
-                        <SkillsView />
-                      </TabsContent>
-                      <TabsContent value="vendors">
-                        <VendorsView />
-                      </TabsContent>
-                      <TabsContent value="inn">
-                        <InnView />
-                      </TabsContent>
-                    </div>
-                  </ScrollArea>
+                  <div className="flex-grow mt-4">
+                    <TabsContent value="dungeons" className="h-full m-0">
+                      <DungeonsView />
+                    </TabsContent>
+                    <TabsContent value="inventory">
+                      <InventoryView />
+                    </TabsContent>
+                    <TabsContent value="talents">
+                      <TalentsView />
+                    </TabsContent>
+                    <TabsContent value="skills">
+                      <SkillsView />
+                    </TabsContent>
+                    <TabsContent value="vendors">
+                      <VendorsView />
+                    </TabsContent>
+                    <TabsContent value="inn">
+                      <InnView />
+                    </TabsContent>
+                  </div>
               </Tabs>
           </div>
         </div>
