@@ -11,41 +11,52 @@ import { ChooseClassView } from '@/features/player/ChooseClassView';
 
 export default function Home() {
   const hydrated = useHydrated();
-  const { view, initializeGameData, isInitialized, player, checkAndAssignStarterSkill } = useGameStore((state) => ({
+  const { view, initializeGameData, isInitialized, player, checkAndAssignStarterSkill, rehydrateComplete } = useGameStore((state) => ({
     view: state.view,
     initializeGameData: state.initializeGameData,
     isInitialized: state.isInitialized,
     player: state.player,
     checkAndAssignStarterSkill: state.checkAndAssignStarterSkill,
+    rehydrateComplete: state.rehydrateComplete
   }));
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function loadGameData() {
-      try {
-        const [dungeons, monsters, items, talents, skills, affixes, classes, quests, factions] = await Promise.all([
-          fetch('/data/dungeons.json').then(res => res.json()),
-          fetch('/data/monsters.json').then(res => res.json()),
-          fetch('/data/items.json').then(res => res.json()),
-          fetch('/data/talents.json').then(res => res.json()),
-          fetch('/data/skills.json').then(res => res.json()),
-          fetch('/data/affixes.json').then(res => res.json()),
-          fetch('/data/classes.json').then(res => res.json()),
-          fetch('/data/quests.json').then(res => res.json()),
-          fetch('/data/factions.json').then(res => res.json()),
-        ]);
-        initializeGameData({ dungeons, monsters, items, talents, skills, affixes, classes, quests, factions });
-      } catch (error) {
-        console.error("Failed to load game data:", error);
-      } finally {
-        // We set loading to false only when the game is fully initialized from the store
-      }
+        if (isInitialized) return;
+        try {
+            const [dungeonsRes, monstersRes, itemsRes, talentsRes, skillsRes, affixesRes, classesRes, questsRes, factionsRes] = await Promise.all([
+                fetch('/data/dungeons.json'),
+                fetch('/data/monsters.json'),
+                fetch('/data/items.json'),
+                fetch('/data/talents.json'),
+                fetch('/data/skills.json'),
+                fetch('/data/affixes.json'),
+                fetch('/data/classes.json'),
+                fetch('/data/quests.json'),
+                fetch('/data/factions.json'),
+            ]);
+
+            const dungeons = (await dungeonsRes.json()).dungeons;
+            const monsters = (await monstersRes.json()).monsters;
+            const items = (await itemsRes.json()).items;
+            const talents = (await talentsRes.json()).talents;
+            const skills = (await skillsRes.json()).skills;
+            const affixes = (await affixesRes.json()).affixes;
+            const classes = (await classesRes.json()).classes;
+            const quests = (await questsRes.json()).quests;
+            const factions = (await factionsRes.json()).factions;
+
+            initializeGameData({ dungeons, monsters, items, talents, skills, affixes, classes, quests, factions });
+        } catch (error) {
+            console.error("Failed to load game data:", error);
+        }
     }
     
-    if (hydrated) {
+    if (hydrated && rehydrateComplete) {
         loadGameData();
     }
-  }, [hydrated, initializeGameData]);
+  }, [hydrated, rehydrateComplete, initializeGameData, isInitialized]);
 
   useEffect(() => {
     if (isInitialized) {
@@ -56,7 +67,7 @@ export default function Home() {
     }
   }, [isInitialized, player.classeId, checkAndAssignStarterSkill]);
   
-  if (!hydrated || isLoading) {
+  if (!hydrated || isLoading || !rehydrateComplete) {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center p-24 bg-background">
         <LoaderCircle className="h-16 w-16 animate-spin text-primary" />

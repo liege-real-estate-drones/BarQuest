@@ -1,39 +1,40 @@
-
-[
-  {
-    "id": "dungeon_1",
-    "palier": 1,
-    "name": "Forêt des Ombres",
-    "biome": "nature",
-    "monsters": ["goblin_1", "wolf_1"],
-    "killTarget": 10,
-    "bossId": "goblin_chieftain_1"
-  },
-  {
-    "id": "dungeon_2",
-    "palier": 1,
-    "name": "Cavernes de Givre",
-    "biome": "frost",
-    "monsters": ["ice_elemental_1", "yeti_1"],
-    "killTarget": 15,
-    "bossId": "ice_golem_1"
-  },
-  {
-    "id": "dungeon_3",
-    "palier": 2,
-    "name": "Volcan Endormi",
-    "biome": "fire",
-    "monsters": ["fire_elemental_2", "lava_golem_2"],
-    "killTarget": 20,
-    "bossId": "fire_drake_2"
-  },
-  {
-    "id": "dungeon_4",
-    "palier": 2,
-    "name": "Crypte Occulte",
-    "biome": "occult",
-    "monsters": ["skeleton_2", "ghost_2"],
-    "killTarget": 25,
-    "bossId": "lich_2"
-  }
-]
+{
+  "dungeons": [
+    {
+      "id": "dungeon_1",
+      "palier": 1,
+      "name": "Les Cryptes Infestées",
+      "biome": "occult",
+      "monsters": ["goblin_warrior", "goblin_shaman"],
+      "killTarget": 10,
+      "bossId": "undead_behemoth"
+    },
+    {
+      "id": "dungeon_2",
+      "palier": 1,
+      "name": "La Forêt des Ombres",
+      "biome": "nature",
+      "monsters": ["dire_wolf", "forest_troll"],
+      "killTarget": 15,
+      "bossId": "alpha_wolf"
+    },
+    {
+      "id": "dungeon_3",
+      "palier": 2,
+      "name": "Les Cavernes de Givre",
+      "biome": "frost",
+      "monsters": ["ice_elemental", "frost_spider"],
+      "killTarget": 20,
+      "bossId": "ice_giant"
+    },
+    {
+      "id": "dungeon_4",
+      "palier": 2,
+      "name": "Le Coeur du Volcan",
+      "biome": "fire",
+      "monsters": ["fire_elemental", "magma_golem"],
+      "killTarget": 25,
+      "bossId": "ancient_fire_drake"
+    }
+  ]
+}

@@ -53,6 +53,7 @@ const initialCombatState: CombatState = {
 
 interface GameState {
   isInitialized: boolean;
+  rehydrateComplete: boolean;
   lastPlayed: number | null;
   view: 'TOWN' | 'COMBAT';
   currentDungeon: Dungeon | null;
@@ -170,6 +171,7 @@ export const useGameStore = create<GameState>()(
   persist(
     immer((set, get) => ({
       isInitialized: false,
+      rehydrateComplete: false,
       lastPlayed: null,
       view: 'TOWN',
       currentDungeon: null,
@@ -189,9 +191,7 @@ export const useGameStore = create<GameState>()(
         set((state) => {
             // This forces the static game data to be updated, even if a save is loaded
             state.gameData = data;
-            if (!state.isInitialized) {
-                state.isInitialized = true;
-            }
+            state.isInitialized = true;
         });
       },
       
@@ -896,12 +896,8 @@ export const useGameStore = create<GameState>()(
       name: 'barquest-save',
       storage: storage,
       onRehydrateStorage: () => (state, error) => {
-        if (error) {
-          console.log('an error happened during hydration', error)
-        } else if (state) {
-            // This will ensure that even if the save is from an old version, 
-            // the game won't start in a broken state.
-            state.isInitialized = false; 
+        if (state) {
+            state.rehydrateComplete = true;
             state.view = 'TOWN';
             state.combat = initialCombatState;
         }
