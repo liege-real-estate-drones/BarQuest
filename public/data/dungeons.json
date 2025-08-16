@@ -2,40 +2,58 @@
 {
     "dungeons": [
         {
-            "id": "dungeon_1",
+            "id": "crypts",
             "palier": 1,
-            "name": "Frozen Crypt",
-            "biome": "frost",
-            "monsters": ["skel_warrior", "skel_archer", "zombie"],
-            "killTarget": 15,
-            "bossId": "skel_king"
-        },
-        {
-            "id": "dungeon_2",
-            "palier": 1,
-            "name": "Volcanic Lair",
-            "biome": "fire",
-            "monsters": ["imp", "fire_elemental"],
-            "killTarget": 20,
-            "bossId": "demon_lord"
-        },
-        {
-            "id": "dungeon_3",
-            "palier": 2,
-            "name": "Sunken Grotto",
-            "biome": "nature",
-            "monsters": ["murloc_fighter", "murloc_shaman"],
-            "killTarget": 25,
-            "bossId": "murloc_chieftain"
-        },
-        {
-            "id": "dungeon_4",
-            "palier": 2,
-            "name": "Shadowy Weald",
+            "name": "Les cryptes profanes",
             "biome": "occult",
-            "monsters": ["shadow_beast", "cultist"],
+            "monsters": ["squelette", "zombie"],
+            "killTarget": 15,
+            "bossId": "lich_mage"
+        },
+        {
+            "id": "ice_caves",
+            "palier": 1,
+            "name": "Grottes de givre",
+            "biome": "frost",
+            "monsters": ["ice_elemental", "frost_spider"],
+            "killTarget": 20,
+            "bossId": "yeti_chieftain"
+        },
+        {
+            "id": "volcano_lair",
+            "palier": 2,
+            "name": "Repaire du volcan",
+            "biome": "fire",
+            "monsters": ["fire_elemental", "obsidian_golem"],
+            "killTarget": 25,
+            "bossId": "magma_wyrm"
+        },
+        {
+            "id": "sunken_ruins",
+            "palier": 2,
+            "name": "Ruines englouties",
+            "biome": "nature",
+            "monsters": ["naga_warrior", "sea_serpent"],
             "killTarget": 30,
-            "bossId": "cultist_leader"
+            "bossId": "kraken"
+        },
+        {
+            "id": "celestial_citadel",
+            "palier": 3,
+            "name": "Citadelle céleste",
+            "biome": "occult",
+            "monsters": ["angelic_guardian", "celestial_construct"],
+            "killTarget": 35,
+            "bossId": "archangel"
+        },
+        {
+            "id": "cursed_forest",
+            "palier": 3,
+            "name": "Forêt maudite",
+            "biome": "nature",
+            "monsters": ["dire_wolf", "treant"],
+            "killTarget": 40,
+            "bossId": "ancient_leshen"
         }
     ]
 }

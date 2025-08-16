@@ -1,61 +1,53 @@
 
 {
-    "talents": [
-        {
-            "id": "berserker_toughness",
-            "nom": "Robustesse",
-            "classeId": "berserker",
-            "type": "passif",
-            "rangMax": 5,
-            "effets": ["Augmente l'Armure de 2/4/6/8/10%."],
-            "exigences": []
-        },
-        {
-            "id": "berserker_cleave",
-            "nom": "Enchaînement",
-            "classeId": "berserker",
-            "type": "passif",
-            "rangMax": 1,
-            "niveauRequis": 5,
-            "effets": ["Vos attaques de mêlée infligent 50% de leurs dégâts à une cible proche."],
-            "exigences": []
-        },
-        {
-            "id": "berserker_battle_cry",
-            "nom": "Cri de Guerre",
-            "classeId": "berserker",
-            "type": "passif",
-            "rangMax": 3,
-            "niveauRequis": 10,
-            "effets": ["Vos attaques génèrent 1/2/3 Rage supplémentaire."],
-            "exigences": []
-        },
-        {
-            "id": "mage_arcane_intellect",
-            "nom": "Intelligence des Arcanes",
-            "classeId": "mage",
-            "type": "passif",
-            "rangMax": 5,
-            "effets": ["Augmente l'Intelligence de 2/4/6/8/10%."],
-            "exigences": []
-        },
-        {
-            "id": "cleric_divine_fortitude",
-            "nom": "Robustesse Divine",
-            "classeId": "cleric",
-            "type": "passif",
-            "rangMax": 5,
-            "effets": ["Augmente les PV de 2/4/6/8/10%."],
-            "exigences": []
-        },
-        {
-            "id": "rogue_lethality",
-            "nom": "Létalité",
-            "classeId": "rogue",
-            "type": "passif",
-            "rangMax": 5,
-            "effets": ["Augmente les chances de coup critique de 1/2/3/4/5%."],
-            "exigences": []
-        }
-    ]
+  "talents": [
+    {
+      "id": "berserker_toughness",
+      "nom": "Robustesse",
+      "classeId": "berserker",
+      "type": "passif",
+      "niveauRequis": 1,
+      "rangMax": 5,
+      "effets": [
+        "Augmente l'Armure de 2/4/6/8/10%."
+      ],
+      "exigences": []
+    },
+    {
+      "id": "berserker_cleave",
+      "nom": "Enchaînement",
+      "classeId": "berserker",
+      "type": "passif",
+      "niveauRequis": 5,
+      "rangMax": 1,
+      "effets": [
+        "Vos attaques de base infligent 50% de leurs dégâts à une cible secondaire proche."
+      ],
+      "exigences": ["berserker_toughness:2"]
+    },
+    {
+      "id": "mage_intellect",
+      "nom": "Intellect Arcanique",
+      "classeId": "mage",
+      "type": "passif",
+      "niveauRequis": 1,
+      "rangMax": 5,
+      "effets": [
+        "Augmente l'Intelligence de 2/4/6/8/10%."
+      ],
+      "exigences": []
+    },
+    {
+      "id": "mage_critical_mass",
+      "nom": "Masse critique",
+      "classeId": "mage",
+      "type": "passif",
+      "niveauRequis": 5,
+      "rangMax": 3,
+      "effets": [
+        "Augmente vos chances de coup critique avec les sorts de 1/2/3%."
+      ],
+      "exigences": ["mage_intellect:2"]
+    }
+  ]
 }

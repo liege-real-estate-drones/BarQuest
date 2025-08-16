@@ -1,89 +1,93 @@
 
 {
-    "classes": [
-        {
-            "id": "berserker",
-            "nom": "Berserker",
-            "ressource": "Rage",
-            "archétype": "Guerrier enragé spécialisé dans le combat au corps à corps brutal.",
-            "statsBase": {
-                "PV": 120,
-                "Force": 10,
-                "Intelligence": 3,
-                "Dexterite": 5,
-                "Esprit": 4,
-                "AttMin": 5,
-                "AttMax": 8,
-                "CritPct": 5,
-                "CritDmg": 150,
-                "Armure": 10,
-                "Vitesse": 2.8,
-                "Precision": 90,
-                "Esquive": 5
-            }
-        },
-        {
-            "id": "mage",
-            "nom": "Mage",
-            "ressource": "Mana",
-            "archétype": "Maître des arcanes, capable de déchaîner des sorts dévastateurs à distance.",
-            "statsBase": {
-                "PV": 80,
-                "Force": 3,
-                "Intelligence": 10,
-                "Dexterite": 4,
-                "Esprit": 8,
-                "AttMin": 2,
-                "AttMax": 4,
-                "CritPct": 5,
-                "CritDmg": 150,
-                "Armure": 3,
-                "Vitesse": 2.0,
-                "Precision": 90,
-                "Esquive": 5
-            }
-        },
-        {
-            "id": "rogue",
-            "nom": "Rogue",
-            "ressource": "Énergie",
-            "archétype": "Assassin agile qui frappe depuis l'ombre avec une vitesse fulgurante.",
-            "statsBase": {
-                "PV": 100,
-                "Force": 5,
-                "Intelligence": 4,
-                "Dexterite": 10,
-                "Esprit": 3,
-                "AttMin": 4,
-                "AttMax": 6,
-                "CritPct": 8,
-                "CritDmg": 160,
-                "Armure": 6,
-                "Vitesse": 1.8,
-                "Precision": 95,
-                "Esquive": 10
-            }
-        },
-        {
-            "id": "cleric",
-            "nom": "Clerc",
-            "ressource": "Mana",
-            "archétype": "Guerrier saint qui manie la lumière pour châtier les impies et se protéger.",
-            "statsBase": {
-                "PV": 110,
-                "Force": 6,
-                "Intelligence": 6,
-                "Dexterite": 4,
-                "Esprit": 8,
-                "AttMin": 3,
-                "AttMax": 5,
-                "CritPct": 4,
-                "CritDmg": 150,
-                "Armure": 8,
-                "Vitesse": 2.5,
-                "Precision": 90,
-                "Esquive": 5
-            }
-        }
-    ]
+  "classes": [
+    {
+      "id": "berserker",
+      "nom": "Berserker",
+      "ressource": "Rage",
+      "archétype": "Combattant enragé en mêlée",
+      "statsBase": {
+        "PV": 120,
+        "RessourceMax": 100,
+        "Force": 12,
+        "Intelligence": 5,
+        "Dexterite": 8,
+        "Esprit": 7,
+        "AttMin": 5,
+        "AttMax": 8,
+        "CritPct": 5,
+        "CritDmg": 150,
+        "Armure": 10,
+        "Vitesse": 2.8,
+        "Precision": 100,
+        "Esquive": 5
+      }
+    },
+    {
+      "id": "mage",
+      "nom": "Mage",
+      "ressource": "Mana",
+      "archétype": "Lanceur de sorts à distance",
+      "statsBase": {
+        "PV": 80,
+        "RessourceMax": 150,
+        "Force": 5,
+        "Intelligence": 12,
+        "Dexterite": 7,
+        "Esprit": 10,
+        "AttMin": 2,
+        "AttMax": 4,
+        "CritPct": 5,
+        "CritDmg": 150,
+        "Armure": 3,
+        "Vitesse": 2.0,
+        "Precision": 100,
+        "Esquive": 5
+      }
+    },
+    {
+      "id": "rogue",
+      "nom": "Voleur",
+      "ressource": "Énergie",
+      "archétype": "Assassin agile et rapide",
+      "statsBase": {
+        "PV": 100,
+        "RessourceMax": 100,
+        "Force": 7,
+        "Intelligence": 6,
+        "Dexterite": 12,
+        "Esprit": 6,
+        "AttMin": 4,
+        "AttMax": 6,
+        "CritPct": 8,
+        "CritDmg": 160,
+        "Armure": 5,
+        "Vitesse": 1.8,
+        "Precision": 110,
+        "Esquive": 10
+      }
+    },
+    {
+      "id": "cleric",
+      "nom": "Clerc",
+      "ressource": "Mana",
+      "archétype": "Guerrier sacré et soigneur",
+      "statsBase": {
+        "PV": 110,
+        "RessourceMax": 120,
+        "Force": 8,
+        "Intelligence": 8,
+        "Dexterite": 6,
+        "Esprit": 12,
+        "AttMin": 4,
+        "AttMax": 7,
+        "CritPct": 4,
+        "CritDmg": 150,
+        "Armure": 8,
+        "Vitesse": 2.5,
+        "Precision": 105,
+        "Esquive": 7
+      }
+    }
+  ]
 }

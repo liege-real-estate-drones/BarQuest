@@ -4,10 +4,10 @@
         {
             "id": "quest_1",
             "type": "chasse",
-            "name": "Nettoyer la Crypte",
-            "desc": "Les morts se relèvent dans la crypte voisine. Montrez-leur le repos éternel.",
+            "name": "Nettoyage des cryptes",
+            "desc": "Les cryptes sont infestées de morts-vivants. Éliminez 15 monstres pour sécuriser la zone.",
             "requirements": {
-                "dungeonId": "dungeon_1",
+                "dungeonId": "crypts",
                 "killCount": 15
             },
             "rewards": {
@@ -22,18 +22,18 @@
         {
             "id": "quest_2",
             "type": "chasse",
-            "name": "Éteindre les Flammes",
-            "desc": "Des créatures de feu menacent la région depuis une caverne volcanique. Calmez leurs ardeurs.",
+            "name": "Coeur de glace",
+            "desc": "Les grottes de givre sont dangereusement froides. Prouvez votre valeur en y éliminant 20 créatures.",
             "requirements": {
-                "dungeonId": "dungeon_2",
+                "dungeonId": "ice_caves",
                 "killCount": 20
             },
             "rewards": {
                 "gold": 75,
                 "xp": 150,
                 "reputation": {
-                    "factionId": "town_guard",
-                    "amount": 35
+                    "factionId": "explorers_league",
+                    "amount": 50
                 }
             }
         }

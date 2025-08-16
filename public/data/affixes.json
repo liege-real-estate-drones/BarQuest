@@ -2,32 +2,25 @@
 {
     "affixes": [
         {
-            "id": "force_1",
+            "id": "strength",
             "ref": "Force",
-            "type": "prefix",
-            "portée": [1, 5],
-            "échelonnage": "lin"
-        },
-        {
-            "id": "intel_1",
-            "ref": "Intelligence",
-            "type": "prefix",
-            "portée": [1, 5],
-            "échelonnage": "lin"
-        },
-        {
-            "id": "crit_1",
-            "ref": "CritPct",
             "type": "suffix",
-            "portée": [1, 3],
+            "portée": [1, 50],
             "échelonnage": "lin"
         },
         {
-            "id": "armor_1",
-            "ref": "Armure",
-            "type": "prefix",
-            "portée": [5, 20],
+            "id": "intelligence",
+            "ref": "Intelligence",
+            "type": "suffix",
+            "portée": [1, 50],
             "échelonnage": "lin"
+        },
+        {
+            "id": "crit_chance",
+            "ref": "CritPct",
+            "type": "prefix",
+            "portée": [1, 10],
+            "échelonnage": "palier"
         }
     ]
 }

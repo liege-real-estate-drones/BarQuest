@@ -1,65 +1,53 @@
 
 {
-    "items": [
-        {
-            "id": "starter_sword",
-            "name": "Épée Rouillée",
-            "slot": "weapon",
-            "niveauMin": 1,
-            "rarity": "Commun",
-            "affixes": [
-                { "ref": "AttMin", "val": 3 },
-                { "ref": "AttMax", "val": 5 }
-            ],
-            "tagsClasse": ["common"],
-            "vendorPrice": 10
-        },
-        {
-            "id": "starter_staff",
-            "name": "Bâton Tordu",
-            "slot": "weapon",
-            "niveauMin": 1,
-            "rarity": "Commun",
-            "affixes": [
-                { "ref": "Intelligence", "val": 2 }
-            ],
-            "tagsClasse": ["mage", "cleric"],
-            "vendorPrice": 10
-        },
-        {
-            "id": "iron_helm",
-            "name": "Casque en Fer",
-            "slot": "head",
-            "niveauMin": 3,
-            "rarity": "Commun",
-            "affixes": [
-                { "ref": "Armure", "val": 10 }
-            ],
-            "tagsClasse": ["common"],
-            "vendorPrice": 15
-        },
-        {
-            "id": "minor_potion",
-            "name": "Potion Mineure",
-            "slot": "potion",
-            "niveauMin": 1,
-            "rarity": "Commun",
-            "affixes": [],
-            "effect": "Heals for 15% of max HP.",
-            "vendorPrice": 50
-        },
-        {
-            "id": "gloves_of_haste",
-            "name": "Gants de Hâte",
-            "slot": "hands",
-            "niveauMin": 5,
-            "rarity": "Rare",
-            "affixes": [
-                { "ref": "Vitesse", "val": -0.1 },
-                { "ref": "Armure", "val": 5 }
-            ],
-            "tagsClasse": ["common"],
-            "vendorPrice": 50
-        }
-    ]
+  "items": [
+    {
+      "id": "shortsword_common",
+      "name": "Épée courte rouillée",
+      "slot": "weapon",
+      "niveauMin": 1,
+      "rarity": "Commun",
+      "affixes": [
+        { "ref": "AttMin", "val": 3 },
+        { "ref": "AttMax", "val": 5 }
+      ],
+      "tagsClasse": ["berserker", "rogue", "common"],
+      "vendorPrice": 10
+    },
+    {
+      "id": "wand_common",
+      "name": "Baguette d'apprenti",
+      "slot": "weapon",
+      "niveauMin": 1,
+      "rarity": "Commun",
+      "affixes": [
+        { "ref": "Intelligence", "val": 2 }
+      ],
+      "tagsClasse": ["mage", "cleric", "common"],
+      "vendorPrice": 12
+    },
+    {
+      "id": "longsword_rare",
+      "name": "Longue épée de soldat",
+      "slot": "weapon",
+      "niveauMin": 5,
+      "rarity": "Rare",
+      "affixes": [
+        { "ref": "AttMin", "val": 8 },
+        { "ref": "AttMax", "val": 12 },
+        { "ref": "Force", "val": 5 }
+      ],
+      "tagsClasse": ["berserker"],
+      "vendorPrice": 50
+    },
+    {
+        "id": "health_potion_minor",
+        "name": "Potion de soins mineure",
+        "slot": "potion",
+        "niveauMin": 1,
+        "rarity": "Commun",
+        "effect": "heal_15_percent",
+        "vendorPrice": 50
+    }
+  ]
 }

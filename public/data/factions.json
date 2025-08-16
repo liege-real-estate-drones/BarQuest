@@ -3,14 +3,13 @@
     "factions": [
         {
             "id": "town_guard",
-            "name": "Garde de la Ville",
-            "ranks": [
-                "Neutre",
-                "Amical",
-                "Honoré",
-                "Révéré",
-                "Exalté"
-            ]
+            "name": "Garde de la ville",
+            "ranks": ["Neutre", "Amical", "Honoré", "Révéré", "Exalté"]
+        },
+        {
+            "id": "explorers_league",
+            "name": "Ligue des explorateurs",
+            "ranks": ["Neutre", "Amical", "Honoré", "Révéré", "Exalté"]
         }
     ]
 }
