@@ -1,9 +1,114 @@
 
-[
-    { "id": "skeleton_warrior", "nom": "Guerrier Squelette", "level": 1, "famille": "Mort-vivant", "palier": 1, "stats": { "PV": 50, "AttMin": 5, "AttMax": 8, "CritPct": 5, "CritDmg": 150, "Armure": 20, "Vitesse": 2.5, "Precision": 100, "Esquive": 5 } },
-    { "id": "zombie_shambler", "nom": "Zombie Hébété", "level": 2, "famille": "Mort-vivant", "palier": 1, "stats": { "PV": 65, "AttMin": 4, "AttMax": 7, "CritPct": 2, "CritDmg": 150, "Armure": 15, "Vitesse": 3.0, "Precision": 95, "Esquive": 2 } },
-    { "id": "crypt_bat", "nom": "Chauve-souris de Crypte", "level": 1, "famille": "Bête", "palier": 1, "stats": { "PV": 30, "AttMin": 6, "AttMax": 9, "CritPct": 8, "CritDmg": 150, "Armure": 5, "Vitesse": 1.8, "Precision": 110, "Esquive": 15 } },
-    { "id": "skeleton_lord", "nom": "Seigneur Squelette", "level": 5, "famille": "Mort-vivant", "isBoss": true, "palier": 1, "stats": { "PV": 250, "AttMin": 15, "AttMax": 22, "CritPct": 10, "CritDmg": 150, "Armure": 50, "Vitesse": 2.2, "Precision": 120, "Esquive": 10 } },
-    { "id": "ice_elemental", "nom": "Élémentaire de Glace", "level": 6, "famille": "Élémentaire", "palier": 2, "stats": { "PV": 120, "AttMin": 12, "AttMax": 18, "CritPct": 5, "CritDmg": 150, "Armure": 40, "Vitesse": 2.8, "Precision": 110, "Esquive": 5 } },
-    { "id": "fire_elemental", "nom": "Élémentaire de Feu", "level": 11, "famille": "Élémentaire", "palier": 3, "stats": { "PV": 200, "AttMin": 25, "AttMax": 35, "CritPct": 15, "CritDmg": 160, "Armure": 60, "Vitesse": 2.0, "Precision": 130, "Esquive": 10 } }
-]
+{
+  "monsters": [
+    {
+      "id": "skeleton_warrior",
+      "nom": "Squelette Guerrier",
+      "level": 1,
+      "famille": "Mort-vivant",
+      "palier": 1,
+      "stats": {
+        "PV": 50,
+        "AttMin": 5,
+        "AttMax": 8,
+        "CritPct": 5,
+        "CritDmg": 150,
+        "Armure": 10,
+        "Vitesse": 2.5,
+        "Precision": 100,
+        "Esquive": 5
+      }
+    },
+    {
+      "id": "zombie_shambler",
+      "nom": "Zombie Pataud",
+      "level": 2,
+      "famille": "Mort-vivant",
+      "palier": 1,
+      "stats": {
+        "PV": 75,
+        "AttMin": 6,
+        "AttMax": 10,
+        "CritPct": 2,
+        "CritDmg": 150,
+        "Armure": 15,
+        "Vitesse": 3.0,
+        "Precision": 95,
+        "Esquive": 2
+      }
+    },
+    {
+      "id": "ice_golem",
+      "nom": "Golem de Glace",
+      "level": 3,
+      "famille": "Élémentaire",
+      "palier": 1,
+      "stats": {
+        "PV": 100,
+        "AttMin": 8,
+        "AttMax": 12,
+        "CritPct": 5,
+        "CritDmg": 150,
+        "Armure": 25,
+        "Vitesse": 2.8,
+        "Precision": 100,
+        "Esquive": 5
+      }
+    },
+    {
+      "id": "fire_elemental",
+      "nom": "Élémentaire de Feu",
+      "level": 5,
+      "famille": "Élémentaire",
+      "palier": 2,
+      "stats": {
+        "PV": 150,
+        "AttMin": 15,
+        "AttMax": 22,
+        "CritPct": 10,
+        "CritDmg": 150,
+        "Armure": 20,
+        "Vitesse": 2.2,
+        "Precision": 110,
+        "Esquive": 10
+      }
+    },
+    {
+      "id": "dire_wolf",
+      "nom": "Loup Sinistre",
+      "level": 6,
+      "famille": "Bête",
+      "palier": 2,
+      "stats": {
+        "PV": 120,
+        "AttMin": 18,
+        "AttMax": 25,
+        "CritPct": 15,
+        "CritDmg": 160,
+        "Armure": 15,
+        "Vitesse": 1.8,
+        "Precision": 120,
+        "Esquive": 15
+      }
+    },
+    {
+        "id": "skeleton_king",
+        "nom": "Roi Squelette",
+        "level": 5,
+        "famille": "Mort-vivant",
+        "isBoss": true,
+        "palier": 1,
+        "stats": {
+            "PV": 500,
+            "AttMin": 20,
+            "AttMax": 30,
+            "CritPct": 10,
+            "CritDmg": 150,
+            "Armure": 50,
+            "Vitesse": 2.0,
+            "Precision": 120,
+            "Esquive": 10
+        }
+    }
+  ]
+}

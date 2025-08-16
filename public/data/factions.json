@@ -1,13 +1,15 @@
 
-[
-    {
-        "id": "town_guard",
-        "name": "Garde de la Ville",
-        "ranks": ["Étranger", "Ami", "Allié", "Champion"]
-    },
-    {
-        "id": "mages_guild",
-        "name": "Guilde des Mages",
-        "ranks": ["Initié", "Apprenti", "Adepte", "Maître"]
-    }
-]
+{
+    "factions": [
+        {
+            "id": "town_guard",
+            "name": "Garde de la Ville",
+            "ranks": ["Neutre", "Amical", "Honoré", "Révéré", "Exalté"]
+        },
+        {
+            "id": "arcane_syndicate",
+            "name": "Syndicat des Arcanes",
+            "ranks": ["Neutre", "Amical", "Honoré", "Révéré", "Exalté"]
+        }
+    ]
+}

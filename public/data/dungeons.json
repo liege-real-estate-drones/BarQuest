@@ -1,93 +1,77 @@
 
-[
-    {
-        "id": "crypts_of_the_damned_1",
-        "palier": 1,
-        "name": "Cryptes des Damnés",
-        "biome": "occult",
-        "monsters": ["skeletal_warrior", "skeletal_mage", "zombie"],
-        "killTarget": 15,
-        "bossId": "lich_lord_malakor"
-    },
-    {
-        "id": "frozen_tunnels_2",
-        "palier": 2,
-        "name": "Tunnels Gelés",
-        "biome": "frost",
-        "monsters": ["ice_elemental", "frost_spider", "yeti_youngling"],
-        "killTarget": 20,
-        "bossId": "yeti_matriarch"
-    },
-    {
-        "id": "volcanic_caverns_3",
-        "palier": 3,
-        "name": "Cavernes Volcaniques",
-        "biome": "fire",
-        "monsters": ["fire_elemental", "magma_slime", "obsidian_golem"],
-        "killTarget": 25,
-        "bossId": "magma_wyrm"
-    },
-    {
-        "id": "whispering_woods_4",
-        "palier": 4,
-        "name": "Bois Murmurants",
-        "biome": "nature",
-        "monsters": ["treant_sapling", "dire_wolf", "pixie_swarm"],
-        "killTarget": 30,
-        "bossId": "ancient_treant"
-    },
-    {
-        "id": "shadowed_citadel_5",
-        "palier": 5,
-        "name": "Citadelle Ténébreuse",
-        "biome": "occult",
-        "monsters": ["shadow_beast", "cultist_acolyte", "gargoyle"],
-        "killTarget": 35,
-        "bossId": "shadow_lord_vex"
-    },
-    {
-        "id": "glacial_peak_6",
-        "palier": 6,
-        "name": "Pic Glacial",
-        "biome": "frost",
-        "monsters": ["ice_wraith", "frost_giant_initiate", "armored_yeti"],
-        "killTarget": 40,
-        "bossId": "ice_titan"
-    },
-    {
-        "id": "inferno_core_7",
-        "palier": 7,
-        "name": "Noyau de l'Enfer",
-        "biome": "fire",
-        "monsters": ["hellhound", "flame_demon", "lava_titan"],
-        "killTarget": 45,
-        "bossId": "balrog_king"
-    },
-    {
-        "id": "primeval_grove_8",
-        "palier": 8,
-        "name": "Bosquet Primitif",
-        "biome": "nature",
-        "monsters": ["spirit_bear", "satyr_chanter", "colossal_treant"],
-        "killTarget": 50,
-        "bossId": "gaeas_avatar"
-    },
-    {
-        "id": "void_chasm_9",
-        "palier": 9,
-        "name": "Gouffre du Vide",
-        "biome": "occult",
-        "monsters": ["void_tentacle", "void_walker", "mind_flayer"],
-        "killTarget": 55,
-        "bossId": "eater_of_worlds"
-    },
-    {
-        "id": "celestial_spire_10",
-        "palier": 10,
-        "name": "Flèche Céleste",
-        "biome": "occult",
-        "monsters": ["angelic_guardian", "celestial_construct", "seraphim"],
-        "killTarget": 60,
-        "bossId": "archangel_tyrael"
-    }
-]
+{
+    "dungeons": [
+        {
+            "id": "crypt_of_the_restless",
+            "palier": 1,
+            "name": "Crypte des Agités",
+            "biome": "occult",
+            "monsters": ["skeleton_warrior", "zombie_shambler", "crypt_bat"],
+            "killTarget": 15,
+            "bossId": "skeleton_king"
+        },
+        {
+            "id": "frozen_tunnels",
+            "palier": 1,
+            "name": "Tunnels gelés",
+            "biome": "frost",
+            "monsters": ["ice_golem", "frost_spider", "polar_bear"],
+            "killTarget": 20,
+            "bossId": "yeti_chieftain"
+        },
+        {
+            "id": "ember_caves",
+            "palier": 2,
+            "name": "Cavernes de braises",
+            "biome": "fire",
+            "monsters": ["fire_elemental", "lava_golem", "hell_hound"],
+            "killTarget": 25,
+            "bossId": "magma_titan"
+        },
+        {
+            "id": "whispering_woods",
+            "palier": 2,
+            "name": "Bois des Murmures",
+            "biome": "nature",
+            "monsters": ["treant", "dire_wolf", "forest_spirit"],
+            "killTarget": 30,
+            "bossId": "ancient_leshen"
+        },
+        {
+            "id": "shadowed_citadel",
+            "palier": 3,
+            "name": "Citadelle Ténébreuse",
+            "biome": "occult",
+            "monsters": ["gargoyle", "shadow_stalker", "death_knight"],
+            "killTarget": 40,
+            "bossId": "lich_lord"
+        },
+        {
+            "id": "glacial_peak",
+            "palier": 3,
+            "name": "Pic Glacial",
+            "biome": "frost",
+            "monsters": ["ice_wyvern", "frost_giant", "tundra_yeti"],
+            "killTarget": 45,
+            "bossId": "frost_dragon"
+        },
+        {
+            "id": "volcanic_core",
+            "palier": 4,
+            "name": "Noyau Volcanique",
+            "biome": "fire",
+            "monsters": ["obsidian_destroyer", "magma_worm", "phoenix"],
+            "killTarget": 50,
+            "bossId": "balrog"
+        },
+        {
+            "id": "emerald_sanctuary",
+            "palier": 4,
+            "name": "Sanctuaire d'Émeraude",
+            "biome": "nature",
+            "monsters": ["ancient_treant_guardian", "spirit_dragon", "dryad_queen"],
+            "killTarget": 55,
+            "bossId": "archdruid"
+        }
+    ]
+}

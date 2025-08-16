@@ -1,11 +1,54 @@
 
-[
-    { "id": "shortsword_c", "name": "Épée Courte", "slot": "weapon", "niveauMin": 1, "rarity": "Commun", "affixes": [{ "ref": "Force", "val": 1 }], "tagsClasse": ["common"], "vendorPrice": 10 },
-    { "id": "rusty_axe_c", "name": "Hache Rouillée", "slot": "weapon", "niveauMin": 1, "rarity": "Commun", "affixes": [{ "ref": "AttMin", "val": 1 }, { "ref": "AttMax", "val": 2 }], "tagsClasse": ["common"], "vendorPrice": 12 },
-    { "id": "apprentice_staff_c", "name": "Bâton d'Apprenti", "slot": "weapon", "niveauMin": 1, "rarity": "Commun", "affixes": [{ "ref": "Intelligence", "val": 1 }], "tagsClasse": ["common"], "vendorPrice": 10 },
-    { "id": "warriors_edge_r", "name": "Tranchant du Guerrier", "slot": "weapon", "niveauMin": 5, "rarity": "Rare", "affixes": [{ "ref": "Force", "val": 5 }, { "ref": "CritPct", "val": 2 }], "tagsClasse": ["berserker"], "vendorPrice": 50 },
-    { "id": "mages_scepter_r", "name": "Sceptre du Mage", "slot": "weapon", "niveauMin": 5, "rarity": "Rare", "affixes": [{ "ref": "Intelligence", "val": 5 }, { "ref": "RessourceMax", "val": 20 }], "tagsClasse": ["mage"], "vendorPrice": 50 },
-    { "id": "leather_cap_c", "name": "Calotte de Cuir", "slot": "head", "niveauMin": 1, "rarity": "Commun", "affixes": [{ "ref": "Armure", "val": 5 }], "tagsClasse": ["common"], "vendorPrice": 8 },
-    { "id": "iron_helm_r", "name": "Heaume de Fer", "slot": "head", "niveauMin": 6, "rarity": "Rare", "affixes": [{ "ref": "Armure", "val": 20 }, { "ref": "PV", "val": 15 }], "tagsClasse": ["berserker", "cleric"], "vendorPrice": 45 },
-    { "id": "minor_healing_potion", "name": "Potion de Soins Mineure", "slot": "potion", "niveauMin": 1, "rarity": "Commun", "effect": "heal_15_percent", "vendorPrice": 50 }
-]
+{
+    "items": [
+        {
+            "id": "rusty_sword", "name": "Épée rouillée", "slot": "weapon", "niveauMin": 1, "rarity": "Commun",
+            "affixes": [{ "ref": "AttMin", "val": 3 }, { "ref": "AttMax", "val": 5 }], "tagsClasse": ["berserker", "common"]
+        },
+        {
+            "id": "worn_leather_cap", "name": "Coiffe en cuir usée", "slot": "head", "niveauMin": 1, "rarity": "Commun",
+            "affixes": [{ "ref": "Armure", "val": 5 }], "tagsClasse": ["common"]
+        },
+        {
+            "id": "apprentice_wand", "name": "Baguette d'apprenti", "slot": "weapon", "niveauMin": 1, "rarity": "Commun",
+            "affixes": [{ "ref": "Intelligence", "val": 2 }], "tagsClasse": ["mage", "cleric"]
+        },
+        {
+            "id": "chipped_dagger", "name": "Dague ébréchée", "slot": "weapon", "niveauMin": 1, "rarity": "Commun",
+            "affixes": [{ "ref": "CritPct", "val": 1 }], "tagsClasse": ["rogue"]
+        },
+        {
+            "id": "orcish_cleaver", "name": "Couperet orque", "slot": "weapon", "niveauMin": 5, "rarity": "Rare",
+            "affixes": [{ "ref": "AttMin", "val": 10 }, { "ref": "AttMax", "val": 15 }, { "ref": "Force", "val": 5 }],
+            "tagsClasse": ["berserker"]
+        },
+        {
+            "id": "glowing_staff", "name": "Bâton luisant", "slot": "weapon", "niveauMin": 5, "rarity": "Rare",
+            "affixes": [{ "ref": "Intelligence", "val": 8 }, { "ref": "Esprit", "val": 3 }], "tagsClasse": ["mage", "cleric"]
+        },
+        {
+            "id": "plated_armor", "name": "Armure de plaques", "slot": "chest", "niveauMin": 8, "rarity": "Rare",
+            "affixes": [{ "ref": "Armure", "val": 40 }, { "ref": "PV", "val": 20 }], "tagsClasse": ["berserker", "cleric"]
+        },
+        {
+            "id": "shadow_cloak", "name": "Cape d'ombre", "slot": "chest", "niveauMin": 8, "rarity": "Épique",
+            "affixes": [{ "ref": "Esquive", "val": 5 }, { "ref": "CritDmg", "val": 10 }, { "ref": "Dexterite", "val": 10 }],
+            "tagsClasse": ["rogue"]
+        },
+        {
+            "id": "firestone_ring", "name": "Bague de pierre de feu", "slot": "ring", "niveauMin": 12, "rarity": "Épique",
+            "affixes": [{ "ref": "CritPct", "val": 3 }, { "ref": "Intelligence", "val": 7 }], "tagsClasse": ["mage"]
+        },
+        {
+            "id": "helm_of_command", "name": "Heaume de commandement", "slot": "head", "niveauMin": 15, "rarity": "Légendaire",
+            "affixes": [{ "ref": "Force", "val": 15 }, { "ref": "Armure", "val": 30 }, { "ref": "PV", "val": 50 }],
+            "tagsClasse": ["berserker"]
+        },
+        {
+            "id": "minor_healing_potion", "name": "Potion de soins mineure", "slot": "potion", "niveauMin": 1, "rarity": "Commun",
+            "affixes": [],
+            "effect": "Heals for 15% of max HP.",
+            "vendorPrice": 50
+        }
+    ]
+}
