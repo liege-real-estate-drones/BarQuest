@@ -449,33 +449,42 @@ export const useGameStore = create<GameState>()(
       },
       
       gameTick: (delta) => {
-          const { playerAttack, enemyAttack, combat } = get();
-          if(combat.autoAttack && combat.playerAttackProgress >= 1) {
-            playerAttack();
-          }
-          if(combat.enemy && combat.enemyAttackProgress >= 1) {
-            enemyAttack();
+          const { playerAttack, enemyAttack, combat, view } = get();
+          
+          if(view !== 'COMBAT' || !combat.enemy) {
+            if(gameLoop) clearInterval(gameLoop);
+            return;
           }
 
           set(state => {
-              if(state.view !== 'COMBAT' || !state.combat.enemy) {
-                if(gameLoop) clearInterval(gameLoop);
-                return;
+              if (state.combat.playerAttackProgress < 1) {
+                  state.combat.playerAttackProgress += delta / state.combat.playerAttackInterval;
+                  if (state.combat.playerAttackProgress >= 1) {
+                      state.combat.playerAttackProgress = 1;
+                      if (state.combat.autoAttack) {
+                          // The attack will be triggered in the next block
+                      }
+                  }
               }
 
-              if(state.combat.playerAttackProgress < 1) {
-                  state.combat.playerAttackProgress += delta / state.combat.playerAttackInterval;
-                  if (state.combat.playerAttackProgress > 1) {
-                      state.combat.playerAttackProgress = 1;
-                  }
-              }
-              if(state.combat.enemyAttackProgress < 1) {
+              if (state.combat.enemyAttackProgress < 1) {
                   state.combat.enemyAttackProgress += delta / state.combat.enemyAttackInterval;
-                  if (state.combat.enemyAttackProgress > 1) {
+                  if (state.combat.enemyAttackProgress >= 1) {
                       state.combat.enemyAttackProgress = 1;
+                      // The enemy attack will be triggered in the next block
                   }
               }
-          })
+          });
+
+          // Re-get the state after updates
+          const updatedState = get();
+          if (updatedState.combat.autoAttack && updatedState.combat.playerAttackProgress >= 1) {
+              updatedState.playerAttack();
+          }
+
+          if (updatedState.combat.enemy && updatedState.combat.enemyAttackProgress >= 1) {
+              updatedState.enemyAttack();
+          }
       },
 
       playerAttack: () => {
@@ -642,10 +651,9 @@ export const useGameStore = create<GameState>()(
             set(state => {
                 state.combat.log.push({ message: `You have been defeated! Returning to town.`, type: 'info', timestamp: Date.now() });
                 state.view = 'TOWN';
-                // HP/MANA are restored in recalculateStats now
+                if(gameLoop) clearInterval(gameLoop);
             });
             get().recalculateStats(); // Recalculate stats on death to heal
-            if(gameLoop) clearInterval(gameLoop);
         }
       },
 
@@ -677,3 +685,4 @@ export const useGameStore = create<GameState>()(
   )
 );
 
+    
