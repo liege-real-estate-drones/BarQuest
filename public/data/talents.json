@@ -1,22 +1,7 @@
 
-[
-    {
-        "id": "berserker_toughness",
-        "nom": "Toughness",
-        "classeId": "berserker",
-        "type": "passif",
-        "rangMax": 5,
-        "effets": ["Augmente les PV de 2/4/6/8/10%."],
-        "exigences": []
-    },
-    {
-        "id": "berserker_cleave",
-        "nom": "Cleave",
-        "classeId": "berserker",
-        "type": "passif",
-        "rangMax": 1,
-        "effets": ["Vos attaques de base infligent 50% de leurs dégâts à une cible secondaire proche."],
-        "exigences": ["berserker_toughness:2"],
-        "niveauRequis": 5
-    }
-]
+{
+    "talents": [
+        { "id": "berserker_toughness", "nom": "Toughness", "classeId": "berserker", "type": "passif", "rangMax": 5, "effets": ["Augmente les points de vie de 2/4/6/8/10%."], "exigences": [] },
+        { "id": "mage_arcane_intellect", "nom": "Arcane Intellect", "classeId": "mage", "type": "passif", "rangMax": 3, "effets": ["Augmente l'Intelligence de 5/10/15%."], "exigences": [] }
+    ]
+}

@@ -1,21 +1,6 @@
 
-[
-    {
-        "id": "quest_1",
-        "type": "chasse",
-        "name": "Cleansing the Crypt",
-        "desc": "Slay 15 undead creatures in the Crypt of the Damned.",
-        "requirements": {
-            "dungeonId": "crypt_of_the_damned",
-            "killCount": 15
-        },
-        "rewards": {
-            "gold": 50,
-            "xp": 100,
-            "reputation": {
-                "factionId": "argent_crusade",
-                "amount": 25
-            }
-        }
-    }
-]
+{
+    "quests": [
+        { "id": "quest_1", "type": "chasse", "name": "Clearing the Cellar", "desc": "Slay 10 monsters in the Decrepit Cellar.", "requirements": { "dungeonId": "dungeon_1", "killCount": 10 }, "rewards": { "gold": 50, "xp": 100, "reputation": { "factionId": "town_guard", "amount": 25 } } }
+    ]
+}

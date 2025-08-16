@@ -1,43 +1,32 @@
 
-[
-    {
-        "id": "crypt_of_the_damned",
-        "palier": 1,
-        "name": "Crypt of the Damned",
-        "biome": "occult",
-        "monsters": ["skeleton_warrior", "zombie", "crypt_fiend"],
-        "modifiers": [],
-        "killTarget": 15,
-        "bossId": "lich_king"
-    },
-    {
-        "id": "frozen_tunnels",
-        "palier": 1,
-        "name": "Frozen Tunnels",
-        "biome": "frost",
-        "monsters": ["ice_elemental", "frost_spider", "yeti"],
-        "modifiers": ["chilling_winds"],
-        "killTarget": 20,
-        "bossId": "ice_giant"
-    },
-    {
-        "id": "volcanic_caverns",
-        "palier": 2,
-        "name": "Volcanic Caverns",
-        "biome": "fire",
-        "monsters": ["fire_elemental", "lava_golem", "flame_imp"],
-        "modifiers": ["intense_heat"],
-        "killTarget": 25,
-        "bossId": "magma_drake"
-    },
-    {
-        "id": "sunken_city",
-        "palier": 3,
-        "name": "Sunken City of R'lyeh",
-        "biome": "occult",
-        "monsters": ["deep_one", "faceless_horror", "star_spawn"],
-        "modifiers": ["maddening_whispers"],
-        "killTarget": 30,
-        "bossId": "cthulhu_avatar"
-    }
-]
+{
+    "dungeons": [
+        {
+            "id": "dungeon_1",
+            "palier": 1,
+            "name": "The Decrepit Cellar",
+            "biome": "occult",
+            "monsters": ["skel_warrior", "skel_archer"],
+            "killTarget": 10,
+            "bossId": "skel_champion"
+        },
+        {
+            "id": "dungeon_2",
+            "palier": 1,
+            "name": "The Howling Den",
+            "biome": "nature",
+            "monsters": ["wolf", "bear"],
+            "killTarget": 15,
+            "bossId": "alpha_wolf"
+        },
+        {
+            "id": "dungeon_3",
+            "palier": 2,
+            "name": "Ice-Veined Caverns",
+            "biome": "frost",
+            "monsters": ["ice_elemental", "frost_spider"],
+            "killTarget": 20,
+            "bossId": "frost_golem"
+        }
+    ]
+}

@@ -1,24 +1,7 @@
 
-[
-    {
-        "id": "aff_str_1",
-        "ref": "Force",
-        "type": "prefix",
-        "portée": [1, 5],
-        "échelonnage": "lin"
-    },
-    {
-        "id": "aff_int_1",
-        "ref": "Intelligence",
-        "type": "prefix",
-        "portée": [1, 5],
-        "échelonnage": "lin"
-    },
-    {
-        "id": "aff_crit_1",
-        "ref": "CritPct",
-        "type": "suffix",
-        "portée": [1, 3],
-        "échelonnage": "lin"
-    }
-]
+{
+    "affixes": [
+        { "id": "affix_force", "ref": "Force", "type": "prefix", "portée": [1, 20], "échelonnage": "lin" },
+        { "id": "affix_intel", "ref": "Intelligence", "type": "prefix", "portée": [1, 20], "échelonnage": "lin" }
+    ]
+}

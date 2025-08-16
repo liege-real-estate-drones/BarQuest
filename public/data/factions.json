@@ -1,8 +1,6 @@
 
-[
-    {
-        "id": "argent_crusade",
-        "name": "Argent Crusade",
-        "ranks": ["Neutral", "Friendly", "Honored", "Revered", "Exalted"]
-    }
-]
+{
+    "factions": [
+        { "id": "town_guard", "name": "Town Guard", "ranks": ["Neutral", "Friendly", "Honored", "Revered", "Exalted"] }
+    ]
+}

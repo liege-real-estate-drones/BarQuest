@@ -1,23 +1,25 @@
 
-[
-    {
-        "id": "berserker_heroic_strike",
-        "nom": "Heroic Strike",
-        "classeId": "berserker",
-        "type": "actif",
-        "niveauRequis": 1,
-        "rangMax": 5,
-        "effets": ["Inflige 120/130/140/150/160% des dégâts de l'arme. Coûte 15 Rage."],
-        "exigences": []
-    },
-    {
-        "id": "mage_fireball",
-        "nom": "Fireball",
-        "classeId": "mage",
-        "type": "actif",
-        "niveauRequis": 1,
-        "rangMax": 5,
-        "effets": ["Inflige 15/25/35/45/55 dégâts de Feu. Coûte 20 Mana."],
-        "exigences": []
-    }
-]
+{
+    "skills": [
+        {
+            "id": "berserker_heroic_strike",
+            "nom": "Heroic Strike",
+            "classeId": "berserker",
+            "type": "actif",
+            "niveauRequis": 1,
+            "rangMax": 5,
+            "effets": ["Une frappe puissante infligeant 120/140/160/180/200% des dégâts de l'arme.", "Coûte 20 Rage"],
+            "exigences": []
+        },
+        {
+            "id": "mage_fireball",
+            "nom": "Fireball",
+            "classeId": "mage",
+            "type": "actif",
+            "niveauRequis": 1,
+            "rangMax": 5,
+            "effets": ["Lance une boule de feu infligeant 30/45/60/75/90 dégâts de feu.", "Coûte 25 Mana"],
+            "exigences": []
+        }
+    ]
+}

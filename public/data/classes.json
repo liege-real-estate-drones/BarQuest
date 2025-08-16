@@ -1,31 +1,7 @@
 
-[
-    {
-        "id": "berserker",
-        "nom": "Berserker",
-        "ressource": "Rage",
-        "archétype": "Melee DPS",
-        "statsBase": { "PV": 120, "Force": 12, "Intelligence": 5, "Dexterite": 8, "Esprit": 7, "AttMin": 5, "AttMax": 8, "CritPct": 5, "CritDmg": 150, "Armure": 10, "Vitesse": 2.0, "Precision": 100, "Esquive": 5 }
-    },
-    {
-        "id": "mage",
-        "nom": "Mage",
-        "ressource": "Mana",
-        "archétype": "Ranged Caster",
-        "statsBase": { "PV": 80, "Force": 5, "Intelligence": 12, "Dexterite": 7, "Esprit": 10, "AttMin": 2, "AttMax": 4, "CritPct": 5, "CritDmg": 150, "Armure": 5, "Vitesse": 2.2, "Precision": 100, "Esquive": 5 }
-    },
-    {
-        "id": "rogue",
-        "nom": "Rogue",
-        "ressource": "Énergie",
-        "archétype": "Melee Stealth",
-        "statsBase": { "PV": 100, "Force": 8, "Intelligence": 6, "Dexterite": 12, "Esprit": 6, "AttMin": 4, "AttMax": 6, "CritPct": 10, "CritDmg": 160, "Armure": 8, "Vitesse": 1.8, "Precision": 110, "Esquive": 10 }
-    },
-    {
-        "id": "cleric",
-        "nom": "Cleric",
-        "ressource": "Mana",
-        "archétype": "Healer/Support",
-        "statsBase": { "PV": 90, "Force": 7, "Intelligence": 10, "Dexterite": 6, "Esprit": 12, "AttMin": 3, "AttMax": 5, "CritPct": 5, "CritDmg": 150, "Armure": 12, "Vitesse": 2.4, "Precision": 100, "Esquive": 5 }
-    }
-]
+{
+    "classes": [
+        { "id": "berserker", "nom": "Berserker", "ressource": "Rage", "archétype": "Melee DPS", "statsBase": { "PV": 120, "Force": 12, "Intelligence": 5, "Dexterite": 8, "Esprit": 7, "AttMin": 8, "AttMax": 12, "CritPct": 5, "CritDmg": 150, "Armure": 10, "Vitesse": 2.0, "Precision": 80, "Esquive": 5 } },
+        { "id": "mage", "nom": "Mage", "ressource": "Mana", "archétype": "Ranged DPS", "statsBase": { "PV": 80, "Force": 5, "Intelligence": 12, "Dexterite": 7, "Esprit": 10, "AttMin": 2, "AttMax": 4, "CritPct": 5, "CritDmg": 150, "Armure": 3, "Vitesse": 2.0, "Precision": 80, "Esquive": 5 } }
+    ]
+}

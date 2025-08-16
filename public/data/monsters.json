@@ -1,31 +1,8 @@
 
-[
-    {
-        "id": "skeleton_warrior",
-        "nom": "Skeleton Warrior",
-        "level": 1,
-        "famille": "Undead",
-        "palier": 1,
-        "stats": { "PV": 50, "Force": 5, "AttMin": 3, "AttMax": 5, "CritPct": 5, "CritDmg": 150, "Armure": 10, "Vitesse": 2.5, "Precision": 100, "Esquive": 5 },
-        "lootTableId": "undead_common"
-    },
-    {
-        "id": "zombie",
-        "nom": "Zombie",
-        "level": 1,
-        "famille": "Undead",
-        "palier": 1,
-        "stats": { "PV": 65, "Force": 4, "AttMin": 2, "AttMax": 4, "CritPct": 2, "CritDmg": 150, "Armure": 5, "Vitesse": 3.0, "Precision": 90, "Esquive": 2 },
-        "lootTableId": "undead_common"
-    },
-    {
-        "id": "lich_king",
-        "nom": "Lich King",
-        "level": 5,
-        "famille": "Undead",
-        "isBoss": true,
-        "palier": 1,
-        "stats": { "PV": 500, "Intelligence": 15, "AttMin": 15, "AttMax": 25, "CritPct": 10, "CritDmg": 150, "Armure": 50, "Vitesse": 2.0, "Precision": 120, "Esquive": 10 },
-        "lootTableId": "undead_boss"
-    }
-]
+{
+    "monsters": [
+        { "id": "skel_warrior", "nom": "Skeletal Warrior", "level": 1, "palier": 1, "famille": "undead", "stats": { "PV": 40, "AttMin": 5, "AttMax": 8, "CritPct": 5, "CritDmg": 150, "Armure": 10, "Vitesse": 2.5, "Precision": 10, "Esquive": 5 } },
+        { "id": "skel_archer", "nom": "Skeletal Archer", "level": 1, "palier": 1, "famille": "undead", "stats": { "PV": 30, "AttMin": 6, "AttMax": 9, "CritPct": 5, "CritDmg": 150, "Armure": 5, "Vitesse": 2.2, "Precision": 15, "Esquive": 5 } },
+        { "id": "skel_champion", "nom": "Skeletal Champion", "level": 3, "palier": 1, "famille": "undead", "isBoss": true, "stats": { "PV": 150, "AttMin": 10, "AttMax": 15, "CritPct": 10, "CritDmg": 150, "Armure": 25, "Vitesse": 2.0, "Precision": 20, "Esquive": 10 } }
+    ]
+}
