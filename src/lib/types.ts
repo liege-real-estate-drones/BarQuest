@@ -38,6 +38,7 @@ export interface PlayerState {
   stats: Stats; // Current stats with equipment
   talentPoints: number;
   talents: { [talentId: string]: number }; // e.g. { 'wr1': 2, 'wr5': 1 }
+  equippedSkills: (string | null)[]; // Array of 4 slots for equipped skills
   resources: {
     current: number;
     max: number;

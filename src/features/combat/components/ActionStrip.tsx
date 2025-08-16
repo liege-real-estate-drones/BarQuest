@@ -30,7 +30,7 @@ export function ActionStrip({ onRetreat, skills }: ActionStripProps) {
                 case 'R':
                     onRetreat();
                     break;
-                // Keybinds for skills 2, 3, 4 etc.
+                // Keybinds for skills 2, 3, 4, 5
                 case '2':
                 case '3':
                 case '4':

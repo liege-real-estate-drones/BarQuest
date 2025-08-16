@@ -2,6 +2,7 @@
 
 
 
+
 import create from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
@@ -24,6 +25,7 @@ const getInitialPlayerState = (): PlayerState => {
     stats: {} as Stats,
     talentPoints: 0,
     talents: {},
+    equippedSkills: [null, null, null, null],
     resources: {
       current: 0,
       max: 0,
@@ -71,6 +73,8 @@ interface GameState {
   buyItem: (item: Item) => boolean;
   sellItem: (itemId: string) => void;
   learnTalent: (talentId: string) => void;
+  equipSkill: (skillId: string, slot: number) => void;
+  unequipSkill: (slot: number) => void;
   resetGame: () => void;
 
   // Inn actions
@@ -225,6 +229,7 @@ export const useGameStore = create<GameState>()(
             const startingSkillId = state.gameData.talents.find(t => t.classeId === classId && t.type === 'actif' && t.exigences.length === 0)?.id;
             if (startingSkillId) {
                 state.player.talents[startingSkillId] = 1;
+                state.player.equippedSkills[0] = startingSkillId; // Equip it by default
             }
 
             let maxResource = formulas.calculateMaxMana(1, chosenClass.statsBase);
@@ -255,6 +260,7 @@ export const useGameStore = create<GameState>()(
           if (!player.classeId) return;
 
           player.talents = player.talents || {};
+          player.equippedSkills = player.equippedSkills || [null, null, null, null];
           player.reputation = player.reputation || {};
           player.activeEffects = player.activeEffects || [];
           player.completedDungeons = player.completedDungeons || [];
@@ -418,6 +424,27 @@ export const useGameStore = create<GameState>()(
           }
         });
         get().recalculateStats();
+      },
+
+      equipSkill: (skillId: string, slot: number) => {
+        set(state => {
+            if (slot < 0 || slot >= state.player.equippedSkills.length) return;
+            
+            // Unequip if it's already equipped in another slot
+            const existingSlot = state.player.equippedSkills.indexOf(skillId);
+            if (existingSlot !== -1) {
+                state.player.equippedSkills[existingSlot] = null;
+            }
+            
+            state.player.equippedSkills[slot] = skillId;
+        });
+      },
+
+      unequipSkill: (slot: number) => {
+        set(state => {
+            if (slot < 0 || slot >= state.player.equippedSkills.length) return;
+            state.player.equippedSkills[slot] = null;
+        });
       },
 
       resetGame: () => {
@@ -763,7 +790,6 @@ export const useGameStore = create<GameState>()(
             let xpToNext = get().getXpToNextLevel();
             while(state.player.xp >= xpToNext) {
                 state.player.level += 1;
-                state.player.xp -= xpToNext;
                 state.player.talentPoints += 1;
                 leveledUp = true;
                 state.combat.log.push({ message: `Congratulations! You have reached level ${state.player.level}!`, type: 'levelup', timestamp: Date.now() });

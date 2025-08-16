@@ -1,3 +1,4 @@
+
 'use client';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -31,6 +32,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { LogOut, Settings, Trash2 } from 'lucide-react';
 import { InnView } from './InnView';
+import { SkillsView } from '../skills/SkillsView';
 
 export function TownView() {
   const { player, resetGame } = useGameStore(state => ({
@@ -98,10 +100,11 @@ export function TownView() {
           </div>
           <div className="lg:col-span-2">
               <Tabs defaultValue="dungeons" className="w-full">
-                  <TabsList className="grid w-full grid-cols-5">
+                  <TabsList className="grid w-full grid-cols-6">
                   <TabsTrigger value="dungeons">Dungeons</TabsTrigger>
                   <TabsTrigger value="inventory">Inventory</TabsTrigger>
                   <TabsTrigger value="talents">Talents</TabsTrigger>
+                  <TabsTrigger value="skills">Skills</TabsTrigger>
                   <TabsTrigger value="vendors">Vendors</TabsTrigger>
                   <TabsTrigger value="inn">Inn</TabsTrigger>
                   </TabsList>
@@ -113,6 +116,9 @@ export function TownView() {
                     </TabsContent>
                     <TabsContent value="talents" className="mt-4">
                       <TalentsView />
+                    </TabsContent>
+                    <TabsContent value="skills" className="mt-4">
+                      <SkillsView />
                     </TabsContent>
                     <TabsContent value="vendors" className="mt-4">
                       <VendorsView />

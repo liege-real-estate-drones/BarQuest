@@ -36,19 +36,14 @@ export function CombatView() {
     gameData: state.gameData,
   }));
 
-  const activeSkills = useMemo(() => {
-    return Object.entries(player.talents)
-      .map(([talentId, rank]) => {
-        if (rank > 0) {
-          const talentData = gameData.talents.find(t => t.id === talentId);
-          if (talentData && talentData.type === 'actif') {
-            return talentData;
-          }
-        }
-        return null;
+  const equippedSkills = useMemo(() => {
+    return player.equippedSkills
+      .map(skillId => {
+        if (!skillId) return null;
+        return gameData.talents.find(t => t.id === skillId) || null;
       })
       .filter((t): t is Talent => t !== null);
-  }, [player.talents, gameData.talents]);
+  }, [player.equippedSkills, gameData.talents]);
 
   useEffect(() => {
     if (enemies.length === 0) {
@@ -61,7 +56,6 @@ export function CombatView() {
   }
 
   const dungeonProgress = (killCount / currentDungeon.killTarget) * 100;
-  const mainTarget = enemies[0];
 
   return (
     <div className="flex flex-col h-screen w-full p-4 gap-4 font-code bg-background text-foreground">
@@ -98,7 +92,7 @@ export function CombatView() {
             <Card className="flex-shrink-0">
                 <ActionStrip 
                     onRetreat={flee}
-                    skills={activeSkills}
+                    skills={equippedSkills}
                 />
             </Card>
           </div>
