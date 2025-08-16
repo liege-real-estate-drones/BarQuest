@@ -6,50 +6,43 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { useGameStore } from '@/state/gameStore';
 
 export function DungeonsView() {
-  const { dungeons, enterDungeon, completedDungeons } = useGameStore(state => ({
+  const { dungeons, enterDungeon, player } = useGameStore(state => ({
     dungeons: state.gameData.dungeons,
     enterDungeon: state.enterDungeon,
-    completedDungeons: state.player.completedDungeons || [],
+    player: state.player,
   }));
-
-  const unlockedDungeons = dungeons.filter((dungeon, index) => {
-    if (index === 0) return true; // First dungeon is always unlocked
-    // Ensure completedDungeons is an array before checking
-    const safeCompletedDungeons = Array.isArray(completedDungeons) ? completedDungeons : [];
-    const previousDungeon = dungeons[index - 1];
-    return safeCompletedDungeons.includes(previousDungeon.id);
-  });
-
+  
+  const completedDungeons = player.completedDungeons || [];
 
   return (
-    <div className="p-1 h-full">
+    <ScrollArea className="h-full w-full">
+      <div className="p-1">
         <h2 className="text-2xl font-headline mb-4">Select a Dungeon</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {dungeons.map(dungeon => {
-            const isUnlocked = unlockedDungeons.some(unlocked => unlocked.id === dungeon.id);
-            // Ensure completedDungeons is an array before checking
-            const safeCompletedDungeons = Array.isArray(completedDungeons) ? completedDungeons : [];
-            const isCompleted = safeCompletedDungeons.includes(dungeon.id);
+        {dungeons.map((dungeon, index) => {
+            const isCompleted = completedDungeons.includes(dungeon.id);
+            const isUnlocked = index === 0 || completedDungeons.includes(dungeons[index - 1]?.id);
 
             return (
                 <Card key={dungeon.id} className={`transition-all ${!isUnlocked ? 'bg-background/40 filter grayscale' : ''}`}>
-                <CardHeader>
-                    <CardTitle>{dungeon.name}</CardTitle>
-                    <CardDescription>Palier: {dungeon.palier} {isCompleted && <span className="text-primary font-bold ml-2"> (Terminé)</span>}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <p>Biome: <span className="capitalize text-primary">{dungeon.biome}</span></p>
-                    <p>Objectif: Tuer {dungeon.killTarget} monstres.</p>
-                </CardContent>
-                <CardFooter>
-                    <Button onClick={() => enterDungeon(dungeon.id)} disabled={!isUnlocked}>
-                    {isCompleted ? "Rejouer" : "Entrer"}
-                    </Button>
-                </CardFooter>
+                  <CardHeader>
+                      <CardTitle>{dungeon.name}</CardTitle>
+                      <CardDescription>Palier: {dungeon.palier} {isCompleted && <span className="text-primary font-bold ml-2"> (Terminé)</span>}</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                      <p>Biome: <span className="capitalize text-primary">{dungeon.biome}</span></p>
+                      <p>Objectif: Tuer {dungeon.killTarget} monstres.</p>
+                  </CardContent>
+                  <CardFooter>
+                      <Button onClick={() => enterDungeon(dungeon.id)} disabled={!isUnlocked}>
+                      {isCompleted ? "Rejouer" : "Entrer"}
+                      </Button>
+                  </CardFooter>
                 </Card>
             )
         })}
         </div>
-    </div>
+      </div>
+    </ScrollArea>
   );
 }

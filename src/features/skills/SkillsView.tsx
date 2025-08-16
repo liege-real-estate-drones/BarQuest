@@ -10,24 +10,30 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import type { Skill } from '@/lib/types';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
-const SkillPopoverContent = ({ skill }: { skill: Skill }) => (
-    <div className="max-w-xs p-2">
-        <p className="font-bold text-base text-primary mb-1">{skill.nom}</p>
-        <p className="text-sm text-muted-foreground capitalize">Compétence Active</p>
-        <Separator className="my-2" />
-        <p className="text-sm mb-2">Effets (Rang {skill.rangMax > 1 ? '1' : ''}):</p>
-        <ul className="list-disc list-inside space-y-1">
-            {skill.effets.map((effet, i) => <li key={i} className="text-xs text-green-400">{effet}</li>)}
-        </ul>
-        {skill.niveauRequis && (
-            <>
-                <Separator className="my-2" />
-                <p className="text-xs text-amber-400">- Requis: Niveau {skill.niveauRequis}</p>
-            </>
-        )}
-    </div>
-);
-
+const SkillPopoverContent = ({ skill }: { skill: Skill }) => {
+    const effects = skill.effets || [];
+    const resourceCostMatch = effects.join(' ').match(/Coûte (\d+) (Mana|Rage|Énergie)/);
+    const resourceCost = resourceCostMatch ? `${resourceCostMatch[1]} ${resourceCostMatch[2]}` : null;
+    
+    return (
+        <div className="max-w-xs p-2">
+            <p className="font-bold text-base text-primary mb-1">{skill.nom}</p>
+            <p className="text-sm text-muted-foreground capitalize">Compétence Active</p>
+            {resourceCost && <p className="text-xs text-blue-400">Coût: {resourceCost}</p>}
+            <Separator className="my-2" />
+            <p className="text-sm mb-2">Effets :</p>
+            <ul className="list-disc list-inside space-y-1">
+                {effects.map((effet, i) => <li key={i} className="text-xs text-green-400">{effet}</li>)}
+            </ul>
+            {skill.niveauRequis && (
+                <>
+                    <Separator className="my-2" />
+                    <p className="text-xs text-amber-400">- Requis: Niveau {skill.niveauRequis}</p>
+                </>
+            )}
+        </div>
+    );
+}
 
 export function SkillsView() {
     const { player, gameData, equipSkill, unequipSkill, learnSkill } = useGameStore(state => ({
@@ -45,7 +51,7 @@ export function SkillsView() {
         (player.learnedSkills[skill.id] || 0) > 0
     );
 
-    const availableToDisplay = learnedSkills.filter(skill => !player.equippedSkills.includes(skill.id));
+    const availableToEquip = learnedSkills.filter(skill => !player.equippedSkills.includes(skill.id));
     const equippedSkillsDetails = player.equippedSkills.map(skillId => skillId ? gameData.skills.find(s => s.id === skillId) : null);
     
     const unlockedButNotLearnedSkills = gameData.skills.filter(skill => 
@@ -117,7 +123,7 @@ export function SkillsView() {
                     <Separator className="mb-4"/>
                      <ScrollArea className="flex-grow p-1">
                         <div className="space-y-2 p-3 rounded-lg bg-background/50 min-h-[150px]">
-                            {availableToDisplay.length > 0 ? availableToDisplay.map(skill => (
+                            {availableToEquip.length > 0 ? availableToEquip.map(skill => (
                                <Popover key={skill.id}>
                                     <div className="p-2 border rounded-md bg-card/80 flex items-center justify-between gap-2">
                                          <PopoverTrigger asChild>
