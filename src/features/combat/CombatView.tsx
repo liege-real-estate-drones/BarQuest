@@ -41,6 +41,7 @@ export function CombatView() {
   const [targetIndex, setTargetIndex] = useState(0);
 
   const equippedSkills = useMemo(() => {
+    if (!player.equippedSkills) return [];
     return player.equippedSkills
       .map(skillId => {
         if (!skillId) return null;
