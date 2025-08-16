@@ -1,13 +1,14 @@
 
 [
-    {
-        "id": "town_guard",
-        "name": "Garde de la Ville",
-        "ranks": ["Étranger", "Ami", "Allié", "Champion"]
-    },
-    {
-        "id": "arcanum_consortium",
-        "name": "Consortium de l'Arcanum",
-        "ranks": ["Initié", "Apprenti", "Adepte", "Maître"]
-    }
+  {
+    "id": "town_guard",
+    "name": "Garde de la ville",
+    "ranks": [
+      "Neutre",
+      "Amical",
+      "Honoré",
+      "Révéré",
+      "Exalté"
+    ]
+  }
 ]

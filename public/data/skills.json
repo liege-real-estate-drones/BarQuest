@@ -1,31 +1,107 @@
 
 [
     {
-        "id": "berserker_heroic_strike", "nom": "Frappe Héroïque", "classeId": "berserker", "type": "actif", "niveauRequis": 1, "rangMax": 5, 
-        "effets": ["Inflige 120/140/160/180/200% des dégâts de l'arme.", "Coûte 20 Rage"], "exigences": []
+        "id": "berserker_heroic_strike",
+        "nom": "Frappe Héroïque",
+        "classeId": "berserker",
+        "type": "actif",
+        "niveauRequis": 1,
+        "rangMax": 5,
+        "effets": [
+            "Inflige 120/140/160/180/200% des dégâts de l'arme.",
+            "Génère 5 Rage."
+        ],
+        "exigences": []
     },
     {
-        "id": "berserker_whirlwind", "nom": "Tourbillon", "classeId": "berserker", "type": "actif", "niveauRequis": 5, "rangMax": 5, 
-        "effets": ["Inflige 80/90/100/110/120% des dégâts de l'arme à tous les ennemis proches.", "Coûte 40 Rage"], "exigences": []
+        "id": "berserker_whirlwind",
+        "nom": "Tourbillon",
+        "classeId": "berserker",
+        "type": "actif",
+        "niveauRequis": 1,
+        "rangMax": 5,
+        "effets": [
+            "Inflige 80/90/100/110/120% des dégâts de l'arme à tous les ennemis.",
+            "Coûte 25 Rage."
+        ],
+        "exigences": []
     },
     {
-        "id": "mage_fireball", "nom": "Boule de Feu", "classeId": "mage", "type": "actif", "niveauRequis": 1, "rangMax": 5, 
-        "effets": ["Inflige 30/45/60/75/90 dégâts de Feu.", "Coûte 25 Mana"], "exigences": []
+        "id": "berserker_charge",
+        "nom": "Charge",
+        "classeId": "berserker",
+        "type": "actif",
+        "niveauRequis": 1,
+        "rangMax": 3,
+        "effets": [
+            "Inflige 50% des dégâts de l'arme et étourdit la cible pendant 1/1.5/2s.",
+            "Génère 10 Rage."
+        ],
+        "exigences": []
     },
     {
-        "id": "mage_frostbolt", "nom": "Éclair de Givre", "classeId": "mage", "type": "actif", "niveauRequis": 1, "rangMax": 5, 
-        "effets": ["Inflige 20/30/40/50/60 dégâts de Givre et ralentit la cible.", "Coûte 20 Mana"], "exigences": []
+        "id": "berserker_shout",
+        "nom": "Cri de Guerre",
+        "classeId": "berserker",
+        "type": "actif",
+        "niveauRequis": 1,
+        "rangMax": 3,
+        "effets": [
+            "Augmente l'Armure de 10/15/20% pendant 10s.",
+            "Coûte 10 Rage."
+        ],
+        "exigences": []
     },
     {
-        "id": "mage_blizzard", "nom": "Blizzard", "classeId": "mage", "type": "actif", "niveauRequis": 5, "rangMax": 5, 
-        "effets": ["Inflige 50/65/80/95/110 dégâts de Givre à tous les ennemis.", "Coûte 60 Mana"], "exigences": ["mage_frostbolt:1"]
+        "id": "mage_fireball",
+        "nom": "Boule de Feu",
+        "classeId": "mage",
+        "type": "actif",
+        "niveauRequis": 1,
+        "rangMax": 5,
+        "effets": [
+            "Inflige 150/175/200/225/250% de la Puissance des Sorts en dégâts de Feu.",
+            "Coûte 20 Mana."
+        ],
+        "exigences": []
     },
     {
-        "id": "rogue_sinister_strike", "nom": "Attaque Pernicieuse", "classeId": "rogue", "type": "actif", "niveauRequis": 1, "rangMax": 5, 
-        "effets": ["Inflige 110/125/140/155/170% des dégâts de l'arme.", "Coûte 40 Énergie"], "exigences": []
+        "id": "mage_frostbolt",
+        "nom": "Éclair de Givre",
+        "classeId": "mage",
+        "type": "actif",
+        "niveauRequis": 1,
+        "rangMax": 5,
+        "effets": [
+            "Inflige 120/130/140/150/160% de la Puissance des Sorts et ralentit la cible.",
+            "Coûte 15 Mana."
+        ],
+        "exigences": []
     },
     {
-        "id": "cleric_smite", "nom": "Châtiment", "classeId": "cleric", "type": "actif", "niveauRequis": 1, "rangMax": 5, 
-        "effets": ["Inflige 25/35/45/55/65 dégâts Sacrés.", "Coûte 30 Mana"], "exigences": []
+        "id": "mage_ice_nova",
+        "nom": "Nova de Glace",
+        "classeId": "mage",
+        "type": "actif",
+        "niveauRequis": 1,
+        "rangMax": 3,
+        "effets": [
+            "Gèle tous les ennemis proches pendant 2/2.5/3s.",
+            "Coûte 30 Mana."
+        ],
+        "exigences": []
+    },
+    {
+        "id": "mage_arcane_intellect",
+        "nom": "Intelligence des Arcanes",
+        "classeId": "mage",
+        "type": "actif",
+        "niveauRequis": 1,
+        "rangMax": 1,
+        "effets": [
+            "Augmente l'Intelligence de 10% pendant 30 minutes.",
+            "Coûte 10 Mana."
+        ],
+        "exigences": []
     }
 ]

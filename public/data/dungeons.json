@@ -1,39 +1,39 @@
 
 [
     {
-        "id": "dungeon_1",
-        "palier": 1,
-        "name": "Cryptes Glaciales",
-        "biome": "frost",
-        "monsters": ["skelly_1", "zombie_1"],
-        "killTarget": 10,
-        "bossId": "skelly_boss_1"
+      "id": "dungeon_1",
+      "palier": 1,
+      "name": "The Whispering Caves",
+      "biome": "nature",
+      "monsters": ["goblin", "bat"],
+      "killTarget": 10,
+      "bossId": "goblin_brute"
     },
     {
-        "id": "dungeon_2",
-        "palier": 1,
-        "name": "Le Terrier Brûlant",
-        "biome": "fire",
-        "monsters": ["imp_1", "hound_1"],
-        "killTarget": 15,
-        "bossId": "demon_boss_1"
+      "id": "dungeon_2",
+      "palier": 1,
+      "name": "The Sunken Armory",
+      "biome": "occult",
+      "monsters": ["skeleton", "zombie"],
+      "killTarget": 15,
+      "bossId": "skeleton_captain"
     },
     {
-        "id": "dungeon_3",
-        "palier": 2,
-        "name": "Forêt Susurrante",
-        "biome": "nature",
-        "monsters": ["goblin_2", "spider_2"],
-        "killTarget": 20,
-        "bossId": "goblin_king_2"
+      "id": "dungeon_3",
+      "palier": 2,
+      "name": "The Frostbite Warrens",
+      "biome": "frost",
+      "monsters": ["ice_elemental", "yeti_cub"],
+      "killTarget": 20,
+      "bossId": "yeti_matriarch"
     },
     {
-        "id": "dungeon_4",
-        "palier": 2,
-        "name": "Caveau Oublié",
-        "biome": "occult",
-        "monsters": ["cultist_2", "shade_2"],
-        "killTarget": 25,
-        "bossId": "lich_2"
+      "id": "dungeon_4",
+      "palier": 2,
+      "name": "The Charred Foundry",
+      "biome": "fire",
+      "monsters": ["fire_elemental", "imp"],
+      "killTarget": 25,
+      "bossId": "lava_golem"
     }
 ]

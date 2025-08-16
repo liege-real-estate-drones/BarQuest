@@ -1,9 +1,17 @@
 
 [
-    {"id": "force_1", "ref": "Force", "type": "prefix", "portée": [1, 5], "échelonnage": "lin"},
-    {"id": "intel_1", "ref": "Intelligence", "type": "prefix", "portée": [1, 5], "échelonnage": "lin"},
-    {"id": "crit_chance_1", "ref": "CritPct", "type": "suffix", "portée": [1, 3], "échelonnage": "lin"},
-    {"id": "crit_dmg_1", "ref": "CritDmg", "type": "suffix", "portée": [5, 15], "échelonnage": "lin"},
-    {"id": "armor_1", "ref": "Armure", "type": "prefix", "portée": [10, 50], "échelonnage": "lin"},
-    {"id": "hp_1", "ref": "PV", "type": "prefix", "portée": [10, 100], "échelonnage": "lin"}
+  {
+    "id": "prefix_force_1",
+    "ref": "Force",
+    "type": "prefix",
+    "portée": [1, 5],
+    "échelonnage": "lin"
+  },
+  {
+    "id": "suffix_crit_1",
+    "ref": "CritPct",
+    "type": "suffix",
+    "portée": [1, 3],
+    "échelonnage": "lin"
+  }
 ]

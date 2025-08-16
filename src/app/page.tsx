@@ -25,27 +25,17 @@ export default function Home() {
     async function loadGameData() {
         if (isInitialized) return;
         try {
-            const [dungeonsRes, monstersRes, itemsRes, talentsRes, skillsRes, affixesRes, classesRes, questsRes, factionsRes] = await Promise.all([
-                fetch('/data/dungeons.json'),
-                fetch('/data/monsters.json'),
-                fetch('/data/items.json'),
-                fetch('/data/talents.json'),
-                fetch('/data/skills.json'),
-                fetch('/data/affixes.json'),
-                fetch('/data/classes.json'),
-                fetch('/data/quests.json'),
-                fetch('/data/factions.json'),
+            const [dungeons, monsters, items, talents, skills, affixes, classes, quests, factions] = await Promise.all([
+                fetch('/data/dungeons.json').then(res => res.json()),
+                fetch('/data/monsters.json').then(res => res.json()),
+                fetch('/data/items.json').then(res => res.json()),
+                fetch('/data/talents.json').then(res => res.json()),
+                fetch('/data/skills.json').then(res => res.json()),
+                fetch('/data/affixes.json').then(res => res.json()),
+                fetch('/data/classes.json').then(res => res.json()),
+                fetch('/data/quests.json').then(res => res.json()),
+                fetch('/data/factions.json').then(res => res.json()),
             ]);
-
-            const dungeons = await dungeonsRes.json();
-            const monsters = await monstersRes.json();
-            const items = await itemsRes.json();
-            const talents = await talentsRes.json();
-            const skills = await skillsRes.json();
-            const affixes = await affixesRes.json();
-            const classes = await classesRes.json();
-            const quests = await questsRes.json();
-            const factions = await factionsRes.json();
 
             initializeGameData({ dungeons, monsters, items, talents, skills, affixes, classes, quests, factions });
         } catch (error) {

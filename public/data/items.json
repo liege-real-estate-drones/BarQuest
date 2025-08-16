@@ -1,31 +1,37 @@
 
 [
-    {
-        "id": "starter_sword_1", "name": "Épée de Recrue", "slot": "weapon", "niveauMin": 1, "rarity": "Commun",
-        "affixes": [{ "ref": "AttMin", "val": 2 }, { "ref": "AttMax", "val": 4 }], "vendorPrice": 10
-    },
-    {
-        "id": "starter_staff_1", "name": "Bâton d'Apprenti", "slot": "weapon", "niveauMin": 1, "rarity": "Commun",
-        "affixes": [{ "ref": "Intelligence", "val": 2 }], "vendorPrice": 10
-    },
-    {
-        "id": "iron_helm_5", "name": "Casque en Fer", "slot": "head", "niveauMin": 5, "rarity": "Commun",
-        "affixes": [{ "ref": "Armure", "val": 15 }], "vendorPrice": 25
-    },
-    {
-        "id": "rare_amulet_10", "name": "Amulette du Lynx", "slot": "amulet", "niveauMin": 10, "rarity": "Rare",
-        "affixes": [{ "ref": "CritPct", "val": 3 }, { "ref": "Dexterite", "val": 5 }], "vendorPrice": 150
-    },
-    {
-        "id": "epic_chest_15", "name": "Cuirasse du Titan", "slot": "chest", "niveauMin": 15, "rarity": "Épique",
-        "affixes": [{ "ref": "Force", "val": 10 }, { "ref": "Armure", "val": 50 }, { "ref": "PV", "val": 20 }], "vendorPrice": 500
-    },
-    {
-        "id": "legendary_ring_20", "name": "Anneau du Roi Déchu", "slot": "ring", "niveauMin": 20, "rarity": "Légendaire",
-        "affixes": [{ "ref": "Force", "val": 15 }, { "ref": "CritDmg", "val": 20 }, { "ref": "PV", "val": 50 }], "vendorPrice": 2000
-    },
-    {
-      "id": "minor_potion", "name": "Potion de soins mineure", "slot": "potion", "niveauMin": 1, "rarity": "Commun",
-      "affixes": [], "effect": "Heals for 15% of max HP", "vendorPrice": 50
-    }
+  {
+    "id": "basic_sword",
+    "name": "Épée Courte de Recrue",
+    "slot": "weapon",
+    "niveauMin": 1,
+    "rarity": "Commun",
+    "affixes": [
+      { "ref": "AttMin", "val": 2 },
+      { "ref": "AttMax", "val": 4 }
+    ],
+    "vendorPrice": 10
+  },
+  {
+    "id": "basic_wand",
+    "name": "Baguette d'Apprenti",
+    "slot": "weapon",
+    "niveauMin": 1,
+    "rarity": "Commun",
+    "affixes": [
+      { "ref": "Intelligence", "val": 1 }
+    ],
+    "tagsClasse": ["mage", "cleric"],
+    "vendorPrice": 10
+  },
+  {
+    "id": "minor_potion",
+    "name": "Potion de Soins Mineure",
+    "slot": "potion",
+    "niveauMin": 1,
+    "rarity": "Commun",
+    "affixes": [],
+    "effect": "heal_15_percent",
+    "vendorPrice": 50
+  }
 ]
