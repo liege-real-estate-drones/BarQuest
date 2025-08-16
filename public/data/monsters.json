@@ -1,15 +1,133 @@
 
-[
-    { "id": "mon_squelette_1", "nom": "Squelette fragile", "level": 1, "famille": "Mort-vivant", "palier": 1, "stats": { "PV": 40, "AttMin": 5, "AttMax": 8, "CritPct": 2, "CritDmg": 120, "Armure": 10, "Vitesse": 3.0, "Precision": 70, "Esquive": 2 } },
-    { "id": "mon_gobelin_1", "nom": "Guerrier gobelin", "level": 2, "famille": "Peau-verte", "palier": 1, "stats": { "PV": 55, "AttMin": 6, "AttMax": 9, "CritPct": 5, "CritDmg": 130, "Armure": 15, "Vitesse": 2.5, "Precision": 75, "Esquive": 5 } },
-    { "id": "mon_loup_1", "nom": "Loup des forêts", "level": 3, "famille": "Bête", "palier": 1, "stats": { "PV": 60, "AttMin": 8, "AttMax": 12, "CritPct": 8, "CritDmg": 150, "Armure": 10, "Vitesse": 2.0, "Precision": 80, "Esquive": 10 } },
-    { "id": "mon_boss_yeti", "nom": "Yeti Ancien", "level": 5, "isBoss": true, "famille": "Bête", "palier": 1, "stats": { "PV": 300, "AttMin": 15, "AttMax": 25, "CritPct": 10, "CritDmg": 150, "Armure": 50, "Vitesse": 3.5, "Precision": 80, "Esquive": 5 } },
-    { "id": "mon_boss_gobelin", "nom": "Roi Gobelin", "level": 5, "isBoss": true, "famille": "Peau-verte", "palier": 1, "stats": { "PV": 250, "AttMin": 12, "AttMax": 20, "CritPct": 15, "CritDmg": 160, "Armure": 40, "Vitesse": 2.8, "Precision": 85, "Esquive": 15 } },
-
-    { "id": "mon_elementaire_feu_2", "nom": "Élémentaire de Feu", "level": 6, "famille": "Élémentaire", "palier": 2, "stats": { "PV": 120, "AttMin": 20, "AttMax": 30, "CritPct": 5, "CritDmg": 150, "Armure": 30, "Vitesse": 2.8, "Precision": 80, "Esquive": 5 } },
-    { "id": "mon_diablotin_2", "nom": "Diablotin vicieux", "level": 7, "famille": "Démon", "palier": 2, "stats": { "PV": 90, "AttMin": 18, "AttMax": 25, "CritPct": 10, "CritDmg": 150, "Armure": 25, "Vitesse": 2.2, "Precision": 85, "Esquive": 10 } },
-    { "id": "mon_acolyte_2", "nom": "Acolyte du culte", "level": 8, "famille": "Humanoïde", "palier": 2, "stats": { "PV": 150, "AttMin": 22, "AttMax": 28, "CritPct": 8, "CritDmg": 150, "Armure": 40, "Vitesse": 3.0, "Precision": 82, "Esquive": 8 } },
-    { "id": "mon_fantome_2", "nom": "Fantôme en colère", "level": 9, "famille": "Mort-vivant", "palier": 2, "stats": { "PV": 100, "AttMin": 25, "AttMax": 35, "CritPct": 5, "CritDmg": 150, "Armure": 10, "Vitesse": 2.5, "Precision": 88, "Esquive": 20 } },
-    { "id": "mon_boss_demon", "nom": "Démon Majeur", "level": 10, "isBoss": true, "famille": "Démon", "palier": 2, "stats": { "PV": 800, "AttMin": 40, "AttMax": 60, "CritPct": 15, "CritDmg": 170, "Armure": 80, "Vitesse": 3.2, "Precision": 90, "Esquive": 10 } },
-    { "id": "mon_boss_liche", "nom": "Maître Liche", "level": 10, "isBoss": true, "famille": "Mort-vivant", "palier": 2, "stats": { "PV": 650, "AttMin": 35, "AttMax": 55, "CritPct": 20, "CritDmg": 180, "Armure": 60, "Vitesse": 2.9, "Precision": 95, "Esquive": 15 } }
-]
+{
+  "monsters": [
+    {
+      "id": "skel_warrior",
+      "nom": "Skeleton Warrior",
+      "level": 1,
+      "famille": "Undead",
+      "palier": 1,
+      "stats": {
+        "PV": 50,
+        "AttMin": 5,
+        "AttMax": 8,
+        "CritPct": 5,
+        "CritDmg": 150,
+        "Armure": 10,
+        "Vitesse": 2.5,
+        "Precision": 10,
+        "Esquive": 5
+      }
+    },
+    {
+      "id": "skel_archer",
+      "nom": "Skeleton Archer",
+      "level": 1,
+      "famille": "Undead",
+      "palier": 1,
+      "stats": {
+        "PV": 40,
+        "AttMin": 6,
+        "AttMax": 9,
+        "CritPct": 8,
+        "CritDmg": 150,
+        "Armure": 5,
+        "Vitesse": 2.2,
+        "Precision": 15,
+        "Esquive": 8
+      }
+    },
+    {
+      "id": "zombie",
+      "nom": "Rotting Zombie",
+      "level": 2,
+      "famille": "Undead",
+      "palier": 1,
+      "stats": {
+        "PV": 65,
+        "AttMin": 7,
+        "AttMax": 10,
+        "CritPct": 3,
+        "CritDmg": 150,
+        "Armure": 15,
+        "Vitesse": 3,
+        "Precision": 8,
+        "Esquive": 3
+      }
+    },
+    {
+      "id": "skel_champion",
+      "nom": "Skeleton Champion",
+      "level": 3,
+      "famille": "Undead",
+      "isBoss": true,
+      "palier": 1,
+      "stats": {
+        "PV": 150,
+        "AttMin": 12,
+        "AttMax": 18,
+        "CritPct": 10,
+        "CritDmg": 160,
+        "Armure": 30,
+        "Vitesse": 2,
+        "Precision": 20,
+        "Esquive": 10
+      }
+    },
+    {
+      "id": "ice_elemental",
+      "nom": "Ice Elemental",
+      "level": 2,
+      "famille": "Elemental",
+      "palier": 1,
+      "stats": {
+        "PV": 60,
+        "AttMin": 8,
+        "AttMax": 11,
+        "CritPct": 5,
+        "CritDmg": 150,
+        "Armure": 10,
+        "Vitesse": 2.8,
+        "Precision": 12,
+        "Esquive": 8
+      }
+    },
+    {
+      "id": "frost_wolf",
+      "nom": "Frost Wolf",
+      "level": 3,
+      "famille": "Beast",
+      "palier": 1,
+      "stats": {
+        "PV": 75,
+        "AttMin": 10,
+        "AttMax": 14,
+        "CritPct": 12,
+        "CritDmg": 150,
+        "Armure": 20,
+        "Vitesse": 1.8,
+        "Precision": 25,
+        "Esquive": 15
+      }
+    },
+    {
+      "id": "ice_golem",
+      "nom": "Ice Golem",
+      "level": 4,
+      "famille": "Construct",
+      "isBoss": true,
+      "palier": 1,
+      "stats": {
+        "PV": 200,
+        "AttMin": 15,
+        "AttMax": 22,
+        "CritPct": 8,
+        "CritDmg": 150,
+        "Armure": 50,
+        "Vitesse": 3.5,
+        "Precision": 18,
+        "Esquive": 5
+      }
+    }
+  ]
+}

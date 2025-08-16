@@ -1,31 +1,89 @@
 
-[
+{
+  "classes": [
     {
-        "id": "berserker",
-        "nom": "Berserker",
-        "ressource": "Rage",
-        "archétype": "Combattant en mêlée sauvage",
-        "statsBase": { "PV": 150, "Force": 15, "Intelligence": 5, "Dexterite": 10, "Esprit": 8, "AttMin": 10, "AttMax": 15, "CritPct": 5, "CritDmg": 150, "Armure": 50, "Vitesse": 2.5, "Precision": 80, "Esquive": 5 }
+      "id": "berserker",
+      "nom": "Berserker",
+      "ressource": "Rage",
+      "archétype": "Melee Warrior",
+      "statsBase": {
+        "PV": 120,
+        "Force": 12,
+        "Intelligence": 5,
+        "Dexterite": 8,
+        "Esprit": 7,
+        "AttMin": 4,
+        "AttMax": 6,
+        "CritPct": 5,
+        "CritDmg": 150,
+        "Armure": 10,
+        "Vitesse": 2.0,
+        "Precision": 10,
+        "Esquive": 5
+      }
     },
     {
-        "id": "mage",
-        "nom": "Mage",
-        "ressource": "Mana",
-        "archétype": "Lanceur de sorts arcaniques",
-        "statsBase": { "PV": 80, "Force": 5, "Intelligence": 18, "Dexterite": 8, "Esprit": 12, "AttMin": 2, "AttMax": 4, "CritPct": 5, "CritDmg": 150, "Armure": 20, "Vitesse": 2.0, "Precision": 85, "Esquive": 5 }
+      "id": "mage",
+      "nom": "Mage",
+      "ressource": "Mana",
+      "archétype": "Ranged Spellcaster",
+      "statsBase": {
+        "PV": 80,
+        "Force": 5,
+        "Intelligence": 12,
+        "Dexterite": 7,
+        "Esprit": 10,
+        "AttMin": 1,
+        "AttMax": 2,
+        "CritPct": 5,
+        "CritDmg": 150,
+        "Armure": 3,
+        "Vitesse": 1.8,
+        "Precision": 10,
+        "Esquive": 5
+      }
     },
     {
-        "id": "rogue",
-        "nom": "Rogue",
-        "ressource": "Énergie",
-        "archétype": "Maître des ombres et des poisons",
-        "statsBase": { "PV": 100, "Force": 8, "Intelligence": 8, "Dexterite": 18, "Esprit": 6, "AttMin": 8, "AttMax": 12, "CritPct": 10, "CritDmg": 160, "Armure": 35, "Vitesse": 1.8, "Precision": 90, "Esquive": 10 }
+      "id": "rogue",
+      "nom": "Rogue",
+      "ressource": "Énergie",
+      "archétype": "Melee Assassin",
+      "statsBase": {
+        "PV": 100,
+        "Force": 8,
+        "Intelligence": 6,
+        "Dexterite": 12,
+        "Esprit": 6,
+        "AttMin": 3,
+        "AttMax": 5,
+        "CritPct": 10,
+        "CritDmg": 160,
+        "Armure": 6,
+        "Vitesse": 1.5,
+        "Precision": 15,
+        "Esquive": 10
+      }
     },
     {
-        "id": "cleric",
-        "nom": "Cleric",
-        "ressource": "Mana",
-        "archétype": "Guerrier sacré et soigneur",
-        "statsBase": { "PV": 120, "Force": 12, "Intelligence": 12, "Dexterite": 6, "Esprit": 15, "AttMin": 7, "AttMax": 10, "CritPct": 5, "CritDmg": 150, "Armure": 60, "Vitesse": 2.8, "Precision": 80, "Esquive": 5 }
+      "id": "cleric",
+      "nom": "Cleric",
+      "ressource": "Mana",
+      "archétype": "Healer / Support",
+      "statsBase": {
+        "PV": 90,
+        "Force": 7,
+        "Intelligence": 9,
+        "Dexterite": 6,
+        "Esprit": 12,
+        "AttMin": 2,
+        "AttMax": 3,
+        "CritPct": 3,
+        "CritDmg": 150,
+        "Armure": 8,
+        "Vitesse": 2.2,
+        "Precision": 10,
+        "Esquive": 5
+      }
     }
-]
+  ]
+}

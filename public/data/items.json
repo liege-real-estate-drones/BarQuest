@@ -1,8 +1,65 @@
 
-[
-    { "id": "item_epee_rouillee", "name": "Épée rouillée", "slot": "weapon", "niveauMin": 1, "rarity": "Commun", "affixes": [{ "ref": "Force", "val": 1 }], "tagsClasse": ["common"], "vendorPrice": 10 },
-    { "id": "item_baton_tortueux", "name": "Bâton tortueux", "slot": "weapon", "niveauMin": 1, "rarity": "Commun", "affixes": [{ "ref": "Intelligence", "val": 1 }], "tagsClasse": ["common"], "vendorPrice": 10 },
-    { "id": "item_dague_usee", "name": "Dague usée", "slot": "weapon", "niveauMin": 1, "rarity": "Commun", "affixes": [{ "ref": "Dexterite", "val": 1 }], "tagsClasse": ["common"], "vendorPrice": 10 },
-    { "id": "item_masse_en_bois", "name": "Masse en bois", "slot": "weapon", "niveauMin": 1, "rarity": "Commun", "affixes": [{ "ref": "Esprit", "val": 1 }], "tagsClasse": ["common"], "vendorPrice": 10 },
-    { "id": "item_potion_soins", "name": "Potion de Soins Mineure", "slot": "potion", "niveauMin": 1, "rarity": "Commun", "effect": "heal_15_percent", "vendorPrice": 50 }
-]
+{
+  "items": [
+    {
+      "id": "rusty_sword",
+      "name": "Rusty Sword",
+      "slot": "weapon",
+      "niveauMin": 1,
+      "rarity": "Commun",
+      "affixes": [
+        { "ref": "AttMin", "val": 2 },
+        { "ref": "AttMax", "val": 4 }
+      ],
+      "tagsClasse": ["berserker", "common"]
+    },
+    {
+      "id": "cracked_wand",
+      "name": "Cracked Wand",
+      "slot": "weapon",
+      "niveauMin": 1,
+      "rarity": "Commun",
+      "affixes": [
+        { "ref": "Intelligence", "val": 2 }
+      ],
+      "tagsClasse": ["mage", "cleric"]
+    },
+    {
+      "id": "leather_cap",
+      "name": "Leather Cap",
+      "slot": "head",
+      "niveauMin": 1,
+      "rarity": "Commun",
+      "affixes": [
+        { "ref": "Armure", "val": 5 }
+      ],
+      "tagsClasse": ["common"]
+    },
+    {
+      "id": "apprentice_robes",
+      "name": "Apprentice Robes",
+      "slot": "chest",
+      "niveauMin": 2,
+      "rarity": "Rare",
+      "affixes": [
+        { "ref": "Armure", "val": 8 },
+        { "ref": "Intelligence", "val": 3 }
+      ],
+      "tagsClasse": ["mage", "cleric"]
+    },
+    {
+      "id": "iron_greatsword",
+      "name": "Iron Greatsword",
+      "slot": "weapon",
+      "niveauMin": 3,
+      "rarity": "Rare",
+      "affixes": [
+        { "ref": "AttMin", "val": 8 },
+        { "ref": "AttMax", "val": 12 },
+        { "ref": "Force", "val": 2 }
+      ],
+      "tagsClasse": ["berserker"],
+      "vendorPrice": 120
+    }
+  ]
+}

@@ -1,5 +1,41 @@
 
-[
-    { "id": "quest_1", "type": "chasse", "name": "Nettoyage des cryptes", "desc": "Éliminez les créatures qui hantent les cryptes gelées.", "requirements": { "dungeonId": "dungeon_1", "killCount": 10 }, "rewards": { "gold": 50, "xp": 100, "reputation": { "factionId": "faction_gardes", "amount": 25 } } },
-    { "id": "quest_2", "type": "chasse", "name": "Infestation de gobelins", "desc": "Le repaire des gobelins est devenu trop dangereux. Réduisez leur nombre.", "requirements": { "dungeonId": "dungeon_2", "killCount": 15 }, "rewards": { "gold": 75, "xp": 150, "reputation": { "factionId": "faction_gardes", "amount": 35 } } }
-]
+{
+  "quests": [
+    {
+      "id": "quest_1_undead",
+      "type": "chasse",
+      "name": "Cleansing the Crypt",
+      "desc": "Slay 15 undead creatures in The Whispering Crypt.",
+      "requirements": {
+        "dungeonId": "dungeon_1",
+        "killCount": 15
+      },
+      "rewards": {
+        "gold": 50,
+        "xp": 100,
+        "reputation": {
+          "factionId": "town_guard",
+          "amount": 25
+        }
+      }
+    },
+    {
+        "id": "quest_2_frost",
+        "type": "chasse",
+        "name": "Glacial Eradication",
+        "desc": "Defeat 20 creatures in The Howling Glacier.",
+        "requirements": {
+          "dungeonId": "dungeon_2",
+          "killCount": 20
+        },
+        "rewards": {
+          "gold": 75,
+          "xp": 150,
+          "reputation": {
+            "factionId": "mages_guild",
+            "amount": 25
+          }
+        }
+      }
+  ]
+}

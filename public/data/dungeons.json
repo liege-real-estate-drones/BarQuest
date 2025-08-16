@@ -1,15 +1,34 @@
 
-[
+{
+  "dungeons": [
     {
-        "id": "dungeon_1", "palier": 1, "name": "Les cryptes gelées", "biome": "frost", "monsters": ["mon_squelette_1", "mon_gobelin_1"], "killTarget": 10, "bossId": "mon_boss_yeti"
+      "id": "dungeon_1",
+      "palier": 1,
+      "name": "The Whispering Crypt",
+      "biome": "occult",
+      "monsters": ["skel_warrior", "skel_archer", "zombie"],
+      "modifiers": [],
+      "killTarget": 15,
+      "bossId": "skel_champion"
     },
     {
-        "id": "dungeon_2", "palier": 1, "name": "Le repaire des gobelins", "biome": "nature", "monsters": ["mon_gobelin_1", "mon_loup_1"], "killTarget": 15, "bossId": "mon_boss_gobelin"
+      "id": "dungeon_2",
+      "palier": 1,
+      "name": "The Howling Glacier",
+      "biome": "frost",
+      "monsters": ["ice_elemental", "frost_wolf"],
+      "modifiers": [],
+      "killTarget": 20,
+      "bossId": "ice_golem"
     },
     {
-        "id": "dungeon_3", "palier": 2, "name": "La fournaise ignée", "biome": "fire", "monsters": ["mon_elementaire_feu_2", "mon_diablotin_2"], "killTarget": 20, "bossId": "mon_boss_demon"
-    },
-    {
-        "id": "dungeon_4", "palier": 2, "name": "Le sanctuaire impie", "biome": "occult", "monsters": ["mon_acolyte_2", "mon_fantome_2"], "killTarget": 25, "bossId": "mon_boss_liche"
+        "id": "dungeon_3",
+        "palier": 2,
+        "name": "The Verdant Labyrinth",
+        "biome": "nature",
+        "monsters": ["dire_wolf", "treant", "giant_spider"],
+        "killTarget": 25,
+        "bossId": "forest_guardian"
     }
-]
+  ]
+}
