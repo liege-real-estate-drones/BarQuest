@@ -3,6 +3,7 @@
 
 
 
+
 import create from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
@@ -229,7 +230,7 @@ export const useGameStore = create<GameState>()(
             const startingSkillId = state.gameData.talents.find(t => t.classeId === classId && t.type === 'actif' && t.exigences.length === 0)?.id;
             if (startingSkillId) {
                 state.player.talents[startingSkillId] = 1;
-                state.player.equippedSkills[0] = startingSkillId; // Equip it by default
+                state.player.equippedSkills[0] = startingSkillId;
             }
 
             let maxResource = formulas.calculateMaxMana(1, chosenClass.statsBase);
