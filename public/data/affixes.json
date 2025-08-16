@@ -1,26 +1,40 @@
 
 {
-    "affixes": [
-        {
-            "id": "strength",
-            "ref": "Force",
-            "type": "suffix",
-            "portée": [1, 50],
-            "échelonnage": "lin"
-        },
-        {
-            "id": "intelligence",
-            "ref": "Intelligence",
-            "type": "suffix",
-            "portée": [1, 50],
-            "échelonnage": "lin"
-        },
-        {
-            "id": "crit_chance",
-            "ref": "CritPct",
-            "type": "prefix",
-            "portée": [1, 10],
-            "échelonnage": "palier"
-        }
-    ]
+  "affixes": [
+    {
+      "id": "affix_force",
+      "ref": "Force",
+      "type": "prefix",
+      "portée": [1, 50],
+      "échelonnage": "lin"
+    },
+    {
+      "id": "affix_intel",
+      "ref": "Intelligence",
+      "type": "prefix",
+      "portée": [1, 50],
+      "échelonnage": "lin"
+    },
+    {
+      "id": "affix_crit_chance",
+      "ref": "CritPct",
+      "type": "suffix",
+      "portée": [1, 10],
+      "échelonnage": "palier"
+    },
+    {
+      "id": "affix_crit_dmg",
+      "ref": "CritDmg",
+      "type": "suffix",
+      "portée": [5, 50],
+      "échelonnage": "lin"
+    },
+    {
+      "id": "affix_hp",
+      "ref": "PV",
+      "type": "prefix",
+      "portée": [10, 1000],
+      "échelonnage": "exp"
+    }
+  ]
 }

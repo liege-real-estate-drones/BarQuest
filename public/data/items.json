@@ -2,52 +2,72 @@
 {
   "items": [
     {
-      "id": "shortsword_common",
-      "name": "Épée courte rouillée",
+      "id": "starter_sword",
+      "name": "Épée Rouillée",
       "slot": "weapon",
       "niveauMin": 1,
       "rarity": "Commun",
       "affixes": [
-        { "ref": "AttMin", "val": 3 },
-        { "ref": "AttMax", "val": 5 }
+        { "ref": "AttMin", "val": 2 },
+        { "ref": "AttMax", "val": 4 }
       ],
-      "tagsClasse": ["berserker", "rogue", "common"],
+      "tagsClasse": ["common"],
       "vendorPrice": 10
     },
     {
-      "id": "wand_common",
-      "name": "Baguette d'apprenti",
+      "id": "starter_staff",
+      "name": "Bâton Tordu",
       "slot": "weapon",
       "niveauMin": 1,
       "rarity": "Commun",
       "affixes": [
-        { "ref": "Intelligence", "val": 2 }
+        { "ref": "Intelligence", "val": 3 }
       ],
-      "tagsClasse": ["mage", "cleric", "common"],
+      "tagsClasse": ["mage", "cleric"],
       "vendorPrice": 12
     },
     {
-      "id": "longsword_rare",
-      "name": "Longue épée de soldat",
-      "slot": "weapon",
-      "niveauMin": 5,
-      "rarity": "Rare",
-      "affixes": [
-        { "ref": "AttMin", "val": 8 },
-        { "ref": "AttMax", "val": 12 },
-        { "ref": "Force", "val": 5 }
-      ],
-      "tagsClasse": ["berserker"],
-      "vendorPrice": 50
+        "id": "rare_sword_1",
+        "name": "Lame du Soldat",
+        "slot": "weapon",
+        "niveauMin": 5,
+        "rarity": "Rare",
+        "affixes": [
+            { "ref": "AttMin", "val": 8 },
+            { "ref": "AttMax", "val": 12 },
+            { "ref": "Force", "val": 5 }
+        ],
+        "tagsClasse": ["berserker"],
+        "vendorPrice": 50
     },
     {
-        "id": "health_potion_minor",
-        "name": "Potion de soins mineure",
-        "slot": "potion",
-        "niveauMin": 1,
-        "rarity": "Commun",
-        "effect": "heal_15_percent",
-        "vendorPrice": 50
+        "id": "epic_helm_1",
+        "name": "Heaume de la Sentinelle",
+        "slot": "head",
+        "niveauMin": 10,
+        "rarity": "Épique",
+        "affixes": [
+            { "ref": "Armure", "val": 30 },
+            { "ref": "PV", "val": 50 },
+            { "ref": "Force", "val": 8 }
+        ],
+        "tagsClasse": ["berserker"],
+        "vendorPrice": 250
+    },
+    {
+        "id": "legendary_staff_1",
+        "name": "Bâton du Grand Archimage",
+        "slot": "weapon",
+        "niveauMin": 20,
+        "rarity": "Légendaire",
+        "affixes": [
+            { "ref": "Intelligence", "val": 25 },
+            { "ref": "CritPct", "val": 5 },
+            { "ref": "CritDmg", "val": 20 }
+        ],
+        "tagsClasse": ["mage"],
+        "effect": "spell_echo",
+        "vendorPrice": 2000
     }
   ]
 }

@@ -63,7 +63,7 @@ interface GameState {
   combat: CombatState;
   activeQuests: ActiveQuete[];
   
-  initializeGameData: (data: GameData) => void;
+  initializeGameData: (data: Partial<GameData>) => void;
   setPlayerClass: (classId: PlayerClassId) => void;
   checkAndAssignStarterSkill: () => void;
   recalculateStats: () => void;
@@ -190,15 +190,15 @@ export const useGameStore = create<GameState>()(
       initializeGameData: (data) => {
         set((state) => {
             state.gameData = {
-              dungeons: data.dungeons || [],
-              monsters: data.monsters || [],
-              items: data.items || [],
-              talents: data.talents || [],
-              skills: data.skills || [],
-              affixes: data.affixes || [],
-              classes: data.classes || [],
-              quests: data.quests || [],
-              factions: data.factions || [],
+              dungeons: Array.isArray(data.dungeons) ? data.dungeons : [],
+              monsters: Array.isArray(data.monsters) ? data.monsters : [],
+              items: Array.isArray(data.items) ? data.items : [],
+              talents: Array.isArray(data.talents) ? data.talents : [],
+              skills: Array.isArray(data.skills) ? data.skills : [],
+              affixes: Array.isArray(data.affixes) ? data.affixes : [],
+              classes: Array.isArray(data.classes) ? data.classes : [],
+              quests: Array.isArray(data.quests) ? data.quests : [],
+              factions: Array.isArray(data.factions) ? data.factions : [],
             };
             state.isInitialized = true;
         });

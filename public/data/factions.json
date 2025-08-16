@@ -1,15 +1,20 @@
 
 {
-    "factions": [
-        {
-            "id": "town_guard",
-            "name": "Garde de la ville",
-            "ranks": ["Neutre", "Amical", "Honoré", "Révéré", "Exalté"]
-        },
-        {
-            "id": "explorers_league",
-            "name": "Ligue des explorateurs",
-            "ranks": ["Neutre", "Amical", "Honoré", "Révéré", "Exalté"]
-        }
-    ]
+  "factions": [
+    {
+      "id": "town_guard",
+      "name": "Garde de la Ville",
+      "ranks": ["Neutre", "Amical", "Honoré", "Révéré", "Exalté"]
+    },
+    {
+      "id": "hunters_lodge",
+      "name": "Loge des Chasseurs",
+      "ranks": ["Neutre", "Amical", "Honoré", "Révéré", "Exalté"]
+    },
+    {
+      "id": "mages_guild",
+      "name": "Guilde des Mages",
+      "ranks": ["Neutre", "Amical", "Honoré", "Révéré", "Exalté"]
+    }
+  ]
 }

@@ -81,7 +81,7 @@ export default function Home() {
 
             // Data validation
             for (const key in gameDataPayload) {
-                if (!Array.isArray(gameDataPayload[key as keyof typeof gameDataPayload])) {
+                if (!Array.isArray((gameDataPayload as any)[key])) {
                     throw new Error(`Data validation failed: ${key} is not an array.`);
                 }
             }

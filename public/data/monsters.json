@@ -2,96 +2,64 @@
 {
   "monsters": [
     {
-      "id": "squelette",
-      "nom": "Squelette",
+      "id": "skel_warrior",
+      "nom": "Squelette Guerrier",
       "level": 1,
-      "palier": 1,
       "famille": "Mort-vivant",
-      "stats": {
-        "PV": 100,
-        "AttMin": 5,
-        "AttMax": 10,
-        "CritPct": 5,
-        "CritDmg": 150,
-        "Armure": 50,
-        "Vitesse": 2.5,
-        "Precision": 100,
-        "Esquive": 5
-      }
+      "isBoss": false,
+      "palier": 1,
+      "stats": { "PV": 30, "AttMin": 3, "AttMax": 5, "CritPct": 5, "CritDmg": 150, "Armure": 10, "Vitesse": 2.2, "Precision": 100, "Esquive": 5 },
+      "lootTableId": "lt_tier1_common"
     },
     {
       "id": "zombie",
       "nom": "Zombie",
       "level": 2,
-      "palier": 1,
       "famille": "Mort-vivant",
-      "stats": {
-        "PV": 150,
-        "AttMin": 8,
-        "AttMax": 12,
-        "CritPct": 2,
-        "CritDmg": 150,
-        "Armure": 30,
-        "Vitesse": 3.0,
-        "Precision": 100,
-        "Esquive": 1
-      }
+      "isBoss": false,
+      "palier": 1,
+      "stats": { "PV": 50, "AttMin": 2, "AttMax": 4, "CritPct": 0, "CritDmg": 150, "Armure": 5, "Vitesse": 3, "Precision": 90, "Esquive": 0 },
+      "lootTableId": "lt_tier1_common"
     },
     {
-      "id": "lich_mage",
-      "nom": "Liche Mage",
-      "level": 5,
+      "id": "giant_spider",
+      "nom": "Araignée Géante",
+      "level": 3,
+      "famille": "Bête",
+      "isBoss": false,
       "palier": 1,
-      "famille": "Mort-vivant",
-      "isBoss": true,
-      "stats": {
-        "PV": 500,
-        "AttMin": 20,
-        "AttMax": 30,
-        "CritPct": 10,
-        "CritDmg": 150,
-        "Armure": 100,
-        "Vitesse": 2.0,
-        "Precision": 120,
-        "Esquive": 10
-      }
+      "stats": { "PV": 40, "AttMin": 4, "AttMax": 6, "CritPct": 10, "CritDmg": 150, "Armure": 8, "Vitesse": 1.8, "Precision": 110, "Esquive": 10 },
+      "lootTableId": "lt_tier1_common"
     },
     {
       "id": "ice_elemental",
-      "nom": "Élémentaire de glace",
-      "level": 3,
-      "palier": 1,
+      "nom": "Élémentaire de Glace",
+      "level": 5,
       "famille": "Élémentaire",
-      "stats": {
-        "PV": 120,
-        "AttMin": 10,
-        "AttMax": 15,
-        "CritPct": 5,
-        "CritDmg": 150,
-        "Armure": 80,
-        "Vitesse": 2.2,
-        "Precision": 110,
-        "Esquive": 8
-      }
+      "isBoss": false,
+      "palier": 2,
+      "stats": { "PV": 120, "AttMin": 10, "AttMax": 15, "CritPct": 5, "CritDmg": 150, "Armure": 25, "Vitesse": 2.5, "Precision": 120, "Esquive": 5 },
+      "lootTableId": "lt_tier2_common"
     },
     {
-        "id": "yeti_chieftain",
-        "nom": "Chef Yéti",
-        "level": 7,
-        "palier": 1,
-        "famille": "Bête",
-        "isBoss": true,
-        "stats": {
-          "PV": 800,
-          "AttMin": 30,
-          "AttMax": 45,
-          "CritPct": 8,
-          "CritDmg": 160,
-          "Armure": 150,
-          "Vitesse": 2.8,
-          "Precision": 130,
-          "Esquive": 12
-        }
+      "id": "fire_elemental",
+      "nom": "Élémentaire de Feu",
+      "level": 6,
+      "famille": "Élémentaire",
+      "isBoss": false,
+      "palier": 2,
+      "stats": { "PV": 100, "AttMin": 12, "AttMax": 18, "CritPct": 10, "CritDmg": 160, "Armure": 20, "Vitesse": 2.0, "Precision": 120, "Esquive": 10 },
+      "lootTableId": "lt_tier2_common"
+    },
+     {
+      "id": "boss_skel_king",
+      "nom": "Roi Squelette",
+      "level": 5,
+      "famille": "Mort-vivant",
+      "isBoss": true,
+      "palier": 1,
+      "stats": { "PV": 250, "AttMin": 10, "AttMax": 15, "CritPct": 10, "CritDmg": 150, "Armure": 50, "Vitesse": 2.0, "Precision": 120, "Esquive": 10 },
+      "lootTableId": "lt_tier1_boss"
     }
   ]
 }

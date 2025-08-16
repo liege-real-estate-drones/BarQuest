@@ -3,55 +3,53 @@
   "skills": [
     {
       "id": "berserker_heroic_strike",
-      "nom": "Frappe héroïque",
+      "nom": "Frappe Héroïque",
       "classeId": "berserker",
       "type": "actif",
-      "niveauRequis": 1,
       "rangMax": 5,
-      "effets": [
-        "Inflige 120/140/160/180/200% des dégâts de l'arme.",
-        "Coûte 20 Rage."
-      ],
-      "exigences": []
+      "effets": ["Inflige 120/130/140/150/160% des dégâts de l'arme.", "Coûte 20 Rage"],
+      "exigences": [],
+      "niveauRequis": 1
     },
     {
       "id": "berserker_whirlwind",
       "nom": "Tourbillon",
       "classeId": "berserker",
       "type": "actif",
-      "niveauRequis": 5,
       "rangMax": 3,
-      "effets": [
-        "Frappe tous les ennemis proches pour 80/100/120% des dégâts de l'arme.",
-        "Coûte 35 Rage."
-      ],
-      "exigences": ["berserker_heroic_strike:1"]
+      "effets": ["Inflige 80/90/100% des dégâts de l'arme à tous les ennemis proches.", "Coûte 40 Rage"],
+      "exigences": ["berserker_heroic_strike:2"],
+      "niveauRequis": 5
     },
     {
       "id": "mage_fireball",
-      "nom": "Boule de feu",
+      "nom": "Boule de Feu",
       "classeId": "mage",
       "type": "actif",
-      "niveauRequis": 1,
       "rangMax": 5,
-      "effets": [
-        "Inflige 30/45/60/75/90 dégâts de Feu.",
-        "Coûte 25 Mana."
-      ],
-      "exigences": []
+      "effets": ["Inflige 25/35/45/55/65 dégâts de Feu.", "Coûte 15 Mana"],
+      "exigences": [],
+      "niveauRequis": 1
     },
     {
-      "id": "mage_frost_nova",
-      "nom": "Nova de givre",
+      "id": "mage_frostbolt",
+      "nom": "Éclair de Givre",
       "classeId": "mage",
       "type": "actif",
-      "niveauRequis": 5,
+      "rangMax": 5,
+      "effets": ["Inflige 20/28/36/44/52 dégâts de Givre et ralentit la vitesse d'attaque de l'ennemi.", "Coûte 15 Mana"],
+      "exigences": [],
+      "niveauRequis": 2
+    },
+     {
+      "id": "mage_blizzard",
+      "nom": "Blizzard",
+      "classeId": "mage",
+      "type": "actif",
       "rangMax": 3,
-      "effets": [
-        "Inflige 20/30/40 dégâts de Givre à tous les ennemis.",
-        "Coûte 40 Mana."
-      ],
-      "exigences": ["mage_fireball:1"]
+      "effets": ["Invoque une tempête de glace qui inflige 50/75/100 dégâts de Givre à tous les ennemis sur 5 secondes.", "Coûte 50 Mana"],
+      "exigences": ["mage_frostbolt:2"],
+      "niveauRequis": 8
     }
   ]
 }
