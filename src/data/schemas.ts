@@ -117,3 +117,4 @@ export const FactionSchema = z.object({
     name: z.string(),
     ranks: z.array(z.string()),
 });
+
