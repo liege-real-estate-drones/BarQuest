@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import type { Skill } from '@/lib/types';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 const SkillPopoverContent = ({ skill }: { skill: Skill }) => (
     <div className="max-w-xs p-2">
@@ -76,60 +77,67 @@ export function SkillsView() {
     return (
         <Card className="h-full flex flex-col">
             <CardHeader>
-                <CardTitle>Compétences Actives</CardTitle>
+                <CardTitle className="flex justify-between items-center">
+                    <span>Compétences Actives</span>
+                    <span className="text-sm font-medium text-primary">{player.talentPoints} points restants</span>
+                </CardTitle>
                 <CardDescription>Apprenez et équipez jusqu'à 4 compétences à utiliser en combat.</CardDescription>
             </CardHeader>
             <CardContent className="flex-grow flex flex-col gap-4">
                  <div>
-                    <h3 className="font-semibold mb-2 text-center">Compétences à Apprendre ({player.talentPoints} points)</h3>
+                    <h3 className="font-semibold mb-2 text-center">Compétences à Apprendre</h3>
                     <Separator className="mb-4"/>
-                    <div className="space-y-2 p-4 rounded-lg bg-background/50 min-h-[100px]">
-                        {unlockedButNotLearnedSkills.length > 0 ? unlockedButNotLearnedSkills.map(skill => (
-                            <Popover key={skill.id}>
-                                <div className="p-2 border rounded-md bg-card/80 flex items-center justify-between gap-2">
-                                    <PopoverTrigger asChild>
-                                        <div className="flex items-center gap-2 cursor-pointer">
-                                            <Zap className="h-4 w-4 text-muted-foreground" />
-                                            <span>{skill.nom} <span className="text-xs text-muted-foreground">(Niv. {skill.niveauRequis})</span></span>
-                                        </div>
-                                    </PopoverTrigger>
-                                    <Button size="sm" variant="outline" onClick={() => learnSkill(skill.id)} disabled={!canLearnSkill(skill.id)}>
-                                        <PlusCircle className="h-4 w-4 mr-2"/>
-                                        Apprendre
-                                    </Button>
-                                </div>
-                                <PopoverContent>
-                                    <SkillPopoverContent skill={skill} />
-                                </PopoverContent>
-                            </Popover>
-                        )) : <p className="text-center text-sm text-muted-foreground pt-8">Aucune nouvelle compétence à ce niveau.</p>}
-                    </div>
+                    <ScrollArea className="h-[200px] p-1">
+                        <div className="space-y-2 p-3 rounded-lg bg-background/50 min-h-[100px]">
+                            {unlockedButNotLearnedSkills.length > 0 ? unlockedButNotLearnedSkills.map(skill => (
+                                <Popover key={skill.id}>
+                                    <div className="p-2 border rounded-md bg-card/80 flex items-center justify-between gap-2">
+                                        <PopoverTrigger asChild>
+                                            <div className="flex items-center gap-2 cursor-pointer">
+                                                <Zap className="h-4 w-4 text-muted-foreground" />
+                                                <span>{skill.nom} <span className="text-xs text-muted-foreground">(Niv. {skill.niveauRequis})</span></span>
+                                            </div>
+                                        </PopoverTrigger>
+                                        <Button size="sm" variant="outline" onClick={() => learnSkill(skill.id)} disabled={!canLearnSkill(skill.id)}>
+                                            <PlusCircle className="h-4 w-4 mr-2"/>
+                                            Apprendre
+                                        </Button>
+                                    </div>
+                                    <PopoverContent>
+                                        <SkillPopoverContent skill={skill} />
+                                    </PopoverContent>
+                                </Popover>
+                            )) : <p className="text-center text-sm text-muted-foreground pt-8">Aucune nouvelle compétence à ce niveau.</p>}
+                        </div>
+                    </ScrollArea>
                 </div>
 
                 <div>
                     <h3 className="font-semibold mb-2 text-center">Compétences Disponibles</h3>
                     <Separator className="mb-4"/>
-                    <div className="space-y-2 p-4 rounded-lg bg-background/50 min-h-[150px]">
-                        {availableToDisplay.length > 0 ? availableToDisplay.map(skill => (
-                           <Popover key={skill.id}>
-                                <div className="p-2 border rounded-md bg-card/80 flex items-center justify-between gap-2">
-                                     <PopoverTrigger asChild>
-                                        <div className="flex items-center gap-2 cursor-pointer">
-                                            <Zap className="h-4 w-4 text-yellow-400" />
-                                            <span>{skill.nom}</span>
-                                        </div>
-                                     </PopoverTrigger>
-                                    <Button size="sm" variant="outline" onClick={() => handleEquip(skill.id)} disabled={player.equippedSkills.filter(s => s !== null).length >= 4}>
-                                        <PlusCircle className="h-4 w-4 mr-2"/>
-                                        Équiper
-                                    </Button>
-                                </div>
-                                <PopoverContent>
-                                     <SkillPopoverContent skill={skill} />
-                                </PopoverContent>
-                            </Popover>
-                        )) : <p className="text-center text-sm text-muted-foreground pt-8">Aucune autre compétence à équiper.</p>}
-                    </div>
+                     <ScrollArea className="h-[200px] p-1">
+                        <div className="space-y-2 p-3 rounded-lg bg-background/50 min-h-[150px]">
+                            {availableToDisplay.length > 0 ? availableToDisplay.map(skill => (
+                               <Popover key={skill.id}>
+                                    <div className="p-2 border rounded-md bg-card/80 flex items-center justify-between gap-2">
+                                         <PopoverTrigger asChild>
+                                            <div className="flex items-center gap-2 cursor-pointer">
+                                                <Zap className="h-4 w-4 text-yellow-400" />
+                                                <span>{skill.nom}</span>
+                                            </div>
+                                         </PopoverTrigger>
+                                        <Button size="sm" variant="outline" onClick={() => handleEquip(skill.id)} disabled={player.equippedSkills.filter(s => s !== null).length >= 4}>
+                                            <PlusCircle className="h-4 w-4 mr-2"/>
+                                            Équiper
+                                        </Button>
+                                    </div>
+                                    <PopoverContent>
+                                         <SkillPopoverContent skill={skill} />
+                                    </PopoverContent>
+                                </Popover>
+                            )) : <p className="text-center text-sm text-muted-foreground pt-8">Aucune autre compétence à équiper.</p>}
+                        </div>
+                    </ScrollArea>
                 </div>
 
                 <div>
@@ -166,3 +174,5 @@ export function SkillsView() {
         </Card>
     );
 }
+
+    
