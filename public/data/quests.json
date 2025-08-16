@@ -1,41 +1,21 @@
 
-{
-  "quests": [
+[
     {
-      "id": "quest_1",
-      "type": "chasse",
-      "name": "Nettoyage des Cryptes",
-      "desc": "Les morts se relèvent dans les cryptes. Allez y faire le ménage.",
-      "requirements": {
-        "dungeonId": "dungeon_1",
-        "killCount": 10
-      },
-      "rewards": {
-        "gold": 50,
-        "xp": 100,
-        "reputation": {
-          "factionId": "town_guard",
-          "amount": 25
+        "id": "quest_1",
+        "type": "chasse",
+        "name": "Cleansing the Crypt",
+        "desc": "Slay 15 undead creatures in the Crypt of the Damned.",
+        "requirements": {
+            "dungeonId": "crypt_of_the_damned",
+            "killCount": 15
+        },
+        "rewards": {
+            "gold": 50,
+            "xp": 100,
+            "reputation": {
+                "factionId": "argent_crusade",
+                "amount": 25
+            }
         }
-      }
-    },
-    {
-      "id": "quest_2",
-      "type": "chasse",
-      "name": "Infestation d'Araignées",
-      "desc": "La forêt est envahie par des araignées géantes. Éradiquez-les.",
-      "requirements": {
-        "dungeonId": "dungeon_2",
-        "killCount": 15
-      },
-      "rewards": {
-        "gold": 75,
-        "xp": 150,
-        "reputation": {
-          "factionId": "hunters_lodge",
-          "amount": 25
-        }
-      }
     }
-  ]
-}
+]

@@ -1,33 +1,31 @@
 
-{
-  "classes": [
+[
     {
-      "id": "berserker",
-      "nom": "Berserker",
-      "ressource": "Rage",
-      "archétype": "Guerrier enragé spécialisé dans le combat au corps à corps brutal.",
-      "statsBase": { "PV": 120, "RessourceMax": 100, "Force": 10, "Intelligence": 2, "Dexterite": 5, "Esprit": 4, "AttMin": 5, "AttMax": 8, "CritPct": 5, "CritDmg": 150, "Armure": 10, "Vitesse": 2.0, "Precision": 100, "Esquive": 5 }
+        "id": "berserker",
+        "nom": "Berserker",
+        "ressource": "Rage",
+        "archétype": "Melee DPS",
+        "statsBase": { "PV": 120, "Force": 12, "Intelligence": 5, "Dexterite": 8, "Esprit": 7, "AttMin": 5, "AttMax": 8, "CritPct": 5, "CritDmg": 150, "Armure": 10, "Vitesse": 2.0, "Precision": 100, "Esquive": 5 }
     },
     {
-      "id": "mage",
-      "nom": "Mage",
-      "ressource": "Mana",
-      "archétype": "Maître des arcanes, détruisant ses ennemis à distance avec des sorts puissants.",
-      "statsBase": { "PV": 80, "RessourceMax": 100, "Force": 2, "Intelligence": 10, "Dexterite": 4, "Esprit": 8, "AttMin": 2, "AttMax": 3, "CritPct": 5, "CritDmg": 150, "Armure": 2, "Vitesse": 2.5, "Precision": 100, "Esquive": 5 }
+        "id": "mage",
+        "nom": "Mage",
+        "ressource": "Mana",
+        "archétype": "Ranged Caster",
+        "statsBase": { "PV": 80, "Force": 5, "Intelligence": 12, "Dexterite": 7, "Esprit": 10, "AttMin": 2, "AttMax": 4, "CritPct": 5, "CritDmg": 150, "Armure": 5, "Vitesse": 2.2, "Precision": 100, "Esquive": 5 }
     },
     {
-      "id": "rogue",
-      "nom": "Voleur",
-      "ressource": "Énergie",
-      "archétype": "Assassin agile utilisant la vitesse et la ruse pour frapper depuis l'ombre.",
-      "statsBase": { "PV": 90, "RessourceMax": 100, "Force": 5, "Intelligence": 4, "Dexterite": 10, "Esprit": 4, "AttMin": 4, "AttMax": 6, "CritPct": 10, "CritDmg": 160, "Armure": 5, "Vitesse": 1.5, "Precision": 110, "Esquive": 10 }
+        "id": "rogue",
+        "nom": "Rogue",
+        "ressource": "Énergie",
+        "archétype": "Melee Stealth",
+        "statsBase": { "PV": 100, "Force": 8, "Intelligence": 6, "Dexterite": 12, "Esprit": 6, "AttMin": 4, "AttMax": 6, "CritPct": 10, "CritDmg": 160, "Armure": 8, "Vitesse": 1.8, "Precision": 110, "Esquive": 10 }
     },
     {
-      "id": "cleric",
-      "nom": "Clerc",
-      "ressource": "Mana",
-      "archétype": "Guerrier saint qui soutient ses alliés et châtie les morts-vivants.",
-      "statsBase": { "PV": 100, "RessourceMax": 80, "Force": 8, "Intelligence": 5, "Dexterite": 3, "Esprit": 10, "AttMin": 4, "AttMax": 7, "CritPct": 2, "CritDmg": 150, "Armure": 8, "Vitesse": 2.2, "Precision": 100, "Esquive": 5 }
+        "id": "cleric",
+        "nom": "Cleric",
+        "ressource": "Mana",
+        "archétype": "Healer/Support",
+        "statsBase": { "PV": 90, "Force": 7, "Intelligence": 10, "Dexterite": 6, "Esprit": 12, "AttMin": 3, "AttMax": 5, "CritPct": 5, "CritDmg": 150, "Armure": 12, "Vitesse": 2.4, "Precision": 100, "Esquive": 5 }
     }
-  ]
-}
+]

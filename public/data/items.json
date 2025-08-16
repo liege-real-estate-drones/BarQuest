@@ -1,73 +1,50 @@
 
-{
-  "items": [
+[
     {
-      "id": "starter_sword",
-      "name": "Épée Rouillée",
-      "slot": "weapon",
-      "niveauMin": 1,
-      "rarity": "Commun",
-      "affixes": [
-        { "ref": "AttMin", "val": 2 },
-        { "ref": "AttMax", "val": 4 }
-      ],
-      "tagsClasse": ["common"],
-      "vendorPrice": 10
-    },
-    {
-      "id": "starter_staff",
-      "name": "Bâton Tordu",
-      "slot": "weapon",
-      "niveauMin": 1,
-      "rarity": "Commun",
-      "affixes": [
-        { "ref": "Intelligence", "val": 3 }
-      ],
-      "tagsClasse": ["mage", "cleric"],
-      "vendorPrice": 12
-    },
-    {
-        "id": "rare_sword_1",
-        "name": "Lame du Soldat",
+        "id": "rusty_sword",
+        "name": "Rusty Sword",
         "slot": "weapon",
-        "niveauMin": 5,
-        "rarity": "Rare",
+        "niveauMin": 1,
+        "rarity": "Commun",
         "affixes": [
-            { "ref": "AttMin", "val": 8 },
-            { "ref": "AttMax", "val": 12 },
-            { "ref": "Force", "val": 5 }
+            { "ref": "AttMin", "val": 2 },
+            { "ref": "AttMax", "val": 4 }
         ],
-        "tagsClasse": ["berserker"],
-        "vendorPrice": 50
+        "tagsClasse": ["common"],
+        "vendorPrice": 10
     },
     {
-        "id": "epic_helm_1",
-        "name": "Heaume de la Sentinelle",
+        "id": "wizard_hat",
+        "name": "Wizard Hat",
         "slot": "head",
-        "niveauMin": 10,
-        "rarity": "Épique",
+        "niveauMin": 1,
+        "rarity": "Commun",
         "affixes": [
-            { "ref": "Armure", "val": 30 },
-            { "ref": "PV", "val": 50 },
-            { "ref": "Force", "val": 8 }
+            { "ref": "Intelligence", "val": 1 }
         ],
-        "tagsClasse": ["berserker"],
-        "vendorPrice": 250
+        "tagsClasse": ["mage", "cleric"],
+        "vendorPrice": 12
     },
     {
-        "id": "legendary_staff_1",
-        "name": "Bâton du Grand Archimage",
-        "slot": "weapon",
-        "niveauMin": 20,
+        "id": "lich_kings_crown",
+        "name": "Lich King's Crown",
+        "slot": "head",
+        "niveauMin": 5,
         "rarity": "Légendaire",
         "affixes": [
-            { "ref": "Intelligence", "val": 25 },
-            { "ref": "CritPct", "val": 5 },
-            { "ref": "CritDmg", "val": 20 }
+            { "ref": "Intelligence", "val": 10 },
+            { "ref": "CritPct", "val": 5 }
         ],
-        "tagsClasse": ["mage"],
-        "effect": "spell_echo",
-        "vendorPrice": 2000
+        "tagsClasse": ["mage", "cleric"],
+        "effect": "frost_aura"
+    },
+    {
+      "id": "health_potion",
+      "name": "Minor Health Potion",
+      "slot": "potion",
+      "niveauMin": 1,
+      "rarity": "Commun",
+      "effect": "Heals for 15% of max health.",
+      "vendorPrice": 50
     }
-  ]
-}
+]

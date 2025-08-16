@@ -1,55 +1,23 @@
 
-{
-  "skills": [
+[
     {
-      "id": "berserker_heroic_strike",
-      "nom": "Frappe Héroïque",
-      "classeId": "berserker",
-      "type": "actif",
-      "rangMax": 5,
-      "effets": ["Inflige 120/130/140/150/160% des dégâts de l'arme.", "Coûte 20 Rage"],
-      "exigences": [],
-      "niveauRequis": 1
+        "id": "berserker_heroic_strike",
+        "nom": "Heroic Strike",
+        "classeId": "berserker",
+        "type": "actif",
+        "niveauRequis": 1,
+        "rangMax": 5,
+        "effets": ["Inflige 120/130/140/150/160% des dégâts de l'arme. Coûte 15 Rage."],
+        "exigences": []
     },
     {
-      "id": "berserker_whirlwind",
-      "nom": "Tourbillon",
-      "classeId": "berserker",
-      "type": "actif",
-      "rangMax": 3,
-      "effets": ["Inflige 80/90/100% des dégâts de l'arme à tous les ennemis proches.", "Coûte 40 Rage"],
-      "exigences": ["berserker_heroic_strike:2"],
-      "niveauRequis": 5
-    },
-    {
-      "id": "mage_fireball",
-      "nom": "Boule de Feu",
-      "classeId": "mage",
-      "type": "actif",
-      "rangMax": 5,
-      "effets": ["Inflige 25/35/45/55/65 dégâts de Feu.", "Coûte 15 Mana"],
-      "exigences": [],
-      "niveauRequis": 1
-    },
-    {
-      "id": "mage_frostbolt",
-      "nom": "Éclair de Givre",
-      "classeId": "mage",
-      "type": "actif",
-      "rangMax": 5,
-      "effets": ["Inflige 20/28/36/44/52 dégâts de Givre et ralentit la vitesse d'attaque de l'ennemi.", "Coûte 15 Mana"],
-      "exigences": [],
-      "niveauRequis": 2
-    },
-     {
-      "id": "mage_blizzard",
-      "nom": "Blizzard",
-      "classeId": "mage",
-      "type": "actif",
-      "rangMax": 3,
-      "effets": ["Invoque une tempête de glace qui inflige 50/75/100 dégâts de Givre à tous les ennemis sur 5 secondes.", "Coûte 50 Mana"],
-      "exigences": ["mage_frostbolt:2"],
-      "niveauRequis": 8
+        "id": "mage_fireball",
+        "nom": "Fireball",
+        "classeId": "mage",
+        "type": "actif",
+        "niveauRequis": 1,
+        "rangMax": 5,
+        "effets": ["Inflige 15/25/35/45/55 dégâts de Feu. Coûte 20 Mana."],
+        "exigences": []
     }
-  ]
-}
+]

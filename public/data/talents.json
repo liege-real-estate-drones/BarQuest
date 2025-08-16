@@ -1,55 +1,22 @@
 
-{
-  "talents": [
+[
     {
-      "id": "berserker_toughness",
-      "nom": "Robustesse",
-      "classeId": "berserker",
-      "type": "passif",
-      "rangMax": 5,
-      "effets": ["Augmente les PV maximum de 2/4/6/8/10%."],
-      "exigences": [],
-      "niveauRequis": 1
+        "id": "berserker_toughness",
+        "nom": "Toughness",
+        "classeId": "berserker",
+        "type": "passif",
+        "rangMax": 5,
+        "effets": ["Augmente les PV de 2/4/6/8/10%."],
+        "exigences": []
     },
     {
-      "id": "berserker_cleave",
-      "nom": "Enchaînement",
-      "classeId": "berserker",
-      "type": "passif",
-      "rangMax": 1,
-      "effets": ["Vos attaques de mêlée infligent 50% de leurs dégâts à un ennemi proche."],
-      "exigences": ["berserker_toughness:2"],
-       "niveauRequis": 5
-    },
-    {
-      "id": "berserker_battle_cry",
-      "nom": "Cri de Guerre",
-      "classeId": "berserker",
-      "type": "passif",
-      "rangMax": 3,
-      "effets": ["Génère 1/2/3 points de rage supplémentaires par attaque."],
-      "exigences": [],
-       "niveauRequis": 2
-    },
-    {
-      "id": "mage_intellect",
-      "nom": "Intellect Arcanique",
-      "classeId": "mage",
-      "type": "passif",
-      "rangMax": 5,
-      "effets": ["Augmente l'Intelligence de 2/4/6/8/10%."],
-      "exigences": [],
-      "niveauRequis": 1
-    },
-    {
-      "id": "mage_crit_focus",
-      "nom": "Focalisation Critique",
-      "classeId": "mage",
-      "type": "passif",
-      "rangMax": 3,
-      "effets": ["Augmente vos chances de coup critique avec les sorts de 1/2/3%."],
-      "exigences": ["mage_intellect:2"],
-      "niveauRequis": 5
+        "id": "berserker_cleave",
+        "nom": "Cleave",
+        "classeId": "berserker",
+        "type": "passif",
+        "rangMax": 1,
+        "effets": ["Vos attaques de base infligent 50% de leurs dégâts à une cible secondaire proche."],
+        "exigences": ["berserker_toughness:2"],
+        "niveauRequis": 5
     }
-  ]
-}
+]

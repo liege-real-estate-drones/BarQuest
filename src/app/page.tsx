@@ -56,27 +56,27 @@ export default function Home() {
             }
 
             const [
-                dungeonsData,
-                monstersData,
-                itemsData,
-                talentsData,
-                skillsData,
-                affixesData,
-                classesData,
-                questsData,
-                factionsData
+                dungeons,
+                monsters,
+                items,
+                talents,
+                skills,
+                affixes,
+                classes,
+                quests,
+                factions
             ] = await Promise.all(responses.map(r => r.json()));
 
             const gameDataPayload = {
-                dungeons: dungeonsData?.dungeons || [],
-                monsters: monstersData?.monsters || [],
-                items: itemsData?.items || [],
-                talents: talentsData?.talents || [],
-                skills: skillsData?.skills || [],
-                affixes: affixesData?.affixes || [],
-                classes: classesData?.classes || [],
-                quests: questsData?.quests || [],
-                factions: factionsData?.factions || []
+                dungeons: dungeons || [],
+                monsters: monsters || [],
+                items: items || [],
+                talents: talents || [],
+                skills: skills || [],
+                affixes: affixes || [],
+                classes: classes || [],
+                quests: quests || [],
+                factions: factions || []
             };
 
             // Data validation

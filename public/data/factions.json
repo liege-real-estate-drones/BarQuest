@@ -1,20 +1,8 @@
 
-{
-  "factions": [
+[
     {
-      "id": "town_guard",
-      "name": "Garde de la Ville",
-      "ranks": ["Neutre", "Amical", "Honoré", "Révéré", "Exalté"]
-    },
-    {
-      "id": "hunters_lodge",
-      "name": "Loge des Chasseurs",
-      "ranks": ["Neutre", "Amical", "Honoré", "Révéré", "Exalté"]
-    },
-    {
-      "id": "mages_guild",
-      "name": "Guilde des Mages",
-      "ranks": ["Neutre", "Amical", "Honoré", "Révéré", "Exalté"]
+        "id": "argent_crusade",
+        "name": "Argent Crusade",
+        "ranks": ["Neutral", "Friendly", "Honored", "Revered", "Exalted"]
     }
-  ]
-}
+]

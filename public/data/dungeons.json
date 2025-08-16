@@ -1,45 +1,43 @@
 
-{
-  "dungeons": [
+[
     {
-      "id": "dungeon_1",
-      "palier": 1,
-      "name": "Cryptes des Déchus",
-      "biome": "occult",
-      "monsters": ["skel_warrior", "skel_archer", "zombie"],
-      "modifiers": [],
-      "killTarget": 10,
-      "bossId": "boss_skel_king"
+        "id": "crypt_of_the_damned",
+        "palier": 1,
+        "name": "Crypt of the Damned",
+        "biome": "occult",
+        "monsters": ["skeleton_warrior", "zombie", "crypt_fiend"],
+        "modifiers": [],
+        "killTarget": 15,
+        "bossId": "lich_king"
     },
     {
-      "id": "dungeon_2",
-      "palier": 1,
-      "name": "Forêt des Araignées",
-      "biome": "nature",
-      "monsters": ["giant_spider", "spiderling", "venom_spitter"],
-      "modifiers": ["poisonous_air"],
-      "killTarget": 15,
-      "bossId": "boss_spider_queen"
+        "id": "frozen_tunnels",
+        "palier": 1,
+        "name": "Frozen Tunnels",
+        "biome": "frost",
+        "monsters": ["ice_elemental", "frost_spider", "yeti"],
+        "modifiers": ["chilling_winds"],
+        "killTarget": 20,
+        "bossId": "ice_giant"
     },
     {
-      "id": "dungeon_3",
-      "palier": 2,
-      "name": "Cavernes de Glace",
-      "biome": "frost",
-      "monsters": ["ice_elemental", "frost_wolf", "yeti"],
-      "modifiers": ["chilling_winds"],
-      "killTarget": 20,
-      "bossId": "boss_ice_golem"
+        "id": "volcanic_caverns",
+        "palier": 2,
+        "name": "Volcanic Caverns",
+        "biome": "fire",
+        "monsters": ["fire_elemental", "lava_golem", "flame_imp"],
+        "modifiers": ["intense_heat"],
+        "killTarget": 25,
+        "bossId": "magma_drake"
     },
     {
-      "id": "dungeon_4",
-      "palier": 2,
-      "name": "Le Cœur du Volcan",
-      "biome": "fire",
-      "monsters": ["fire_elemental", "magma_beast", "imp"],
-      "modifiers": ["intense_heat"],
-      "killTarget": 25,
-      "bossId": "boss_fire_lord"
+        "id": "sunken_city",
+        "palier": 3,
+        "name": "Sunken City of R'lyeh",
+        "biome": "occult",
+        "monsters": ["deep_one", "faceless_horror", "star_spawn"],
+        "modifiers": ["maddening_whispers"],
+        "killTarget": 30,
+        "bossId": "cthulhu_avatar"
     }
-  ]
-}
+]
