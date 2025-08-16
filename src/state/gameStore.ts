@@ -247,11 +247,13 @@ export const useGameStore = create<GameState>()(
 
             state.player.classeId = chosenClass.id as PlayerClassId;
             state.player.baseStats = chosenClass.statsBase;
+            state.player.talentPoints = 1; // Start with 1 point
             
             const startingSkillId = state.gameData.talents.find(t => t.classeId === classId && t.type === 'actif' && t.exigences.length === 0)?.id;
             if (startingSkillId) {
                 state.player.talents[startingSkillId] = 1;
                 state.player.equippedSkills[0] = startingSkillId;
+                 state.player.talentPoints -= 1; // The first skill is free
             }
 
             let maxResource = formulas.calculateMaxMana(1, chosenClass.statsBase);
