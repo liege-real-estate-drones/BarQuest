@@ -15,6 +15,8 @@ export function SkillsView() {
         unequipSkill: state.unequipSkill,
     }));
 
+    if (!player.classeId) return null;
+
     const learnedActiveSkills = gameData.talents.filter(talent =>
         talent.classeId === player.classeId &&
         talent.type === 'actif' &&
@@ -28,6 +30,8 @@ export function SkillsView() {
         const firstEmptySlot = player.equippedSkills.indexOf(null);
         if (firstEmptySlot !== -1) {
             equipSkill(skillId, firstEmptySlot);
+        } else {
+            // Optional: Show a toast or message that the bar is full
         }
     };
 
@@ -53,7 +57,7 @@ export function SkillsView() {
                                     Équiper
                                 </Button>
                             </div>
-                        )) : <p className="text-center text-sm text-muted-foreground pt-8">Aucune compétence disponible à équiper.</p>}
+                        )) : <p className="text-center text-sm text-muted-foreground pt-8">Aucune autre compétence disponible à équiper.</p>}
                     </div>
                 </div>
                 <div>
@@ -61,7 +65,7 @@ export function SkillsView() {
                      <Separator className="mb-4"/>
                     <div className="grid grid-cols-4 gap-2">
                         {equippedSkills.map((skill, index) => (
-                             <div key={index} className={cn("h-24 border-2 border-dashed rounded-lg flex items-center justify-center transition-colors text-center", skill && "border-solid border-primary/50")}>
+                             <div key={index} className={cn("h-24 border-2 border-dashed rounded-lg flex items-center justify-center transition-colors text-center", skill && "border-solid border-primary/50 bg-card/50")}>
                                 {skill ? (
                                     <div className="relative w-full h-full p-2 flex items-center justify-center">
                                         <Button size="icon" variant="ghost" className="absolute top-0 right-0 h-6 w-6" onClick={() => unequipSkill(index)}>

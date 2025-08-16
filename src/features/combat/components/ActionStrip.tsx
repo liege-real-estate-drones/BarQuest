@@ -3,16 +3,17 @@
 
 import { Button } from "@/components/ui/button";
 import type { Talent } from "@/lib/types";
-import { Bot, Dices, Heart, Shield, Zap } from "lucide-react";
+import { Heart, Shield, Zap, Shuffle } from "lucide-react";
 import { useEffect } from "react";
 import { useGameStore } from "@/state/gameStore";
 
 interface ActionStripProps {
     onRetreat: () => void;
+    onCycleTarget: () => void;
     skills: Talent[];
 }
 
-export function ActionStrip({ onRetreat, skills }: ActionStripProps) {
+export function ActionStrip({ onRetreat, onCycleTarget, skills }: ActionStripProps) {
     const { usePotion, inventory, useSkill } = useGameStore(state => ({
         usePotion: state.usePotion,
         inventory: state.inventory,
@@ -24,13 +25,15 @@ export function ActionStrip({ onRetreat, skills }: ActionStripProps) {
             if (document.activeElement?.tagName === 'INPUT') return;
 
             switch (event.key.toUpperCase()) {
-                case '1': // Potion
+                case '1':
                     usePotion();
                     break;
                 case 'R':
                     onRetreat();
                     break;
-                // Keybinds for skills 2, 3, 4, 5
+                case 'T':
+                    onCycleTarget();
+                    break;
                 case '2':
                 case '3':
                 case '4':
@@ -46,7 +49,7 @@ export function ActionStrip({ onRetreat, skills }: ActionStripProps) {
         return () => {
             window.removeEventListener('keydown', handleKeyPress);
         };
-    }, [usePotion, onRetreat, skills, useSkill]);
+    }, [usePotion, onRetreat, onCycleTarget, skills, useSkill]);
 
     return (
         <div className="flex justify-center items-center gap-2 p-2 bg-background/50">
@@ -74,6 +77,20 @@ export function ActionStrip({ onRetreat, skills }: ActionStripProps) {
                 </Button>
             ))}
 
+            {[...Array(4 - skills.length)].map((_, index) => (
+                <div key={`empty-${index}`} className="w-24 h-16 rounded-md bg-secondary/30 flex items-center justify-center text-xs text-muted-foreground">
+                    Vide
+                </div>
+            ))}
+
+            <Button variant="outline" onClick={onCycleTarget} className="w-24 h-16 flex-col gap-1 text-xs">
+                 <div className="flex items-center gap-2">
+                    <Shuffle />
+                    <span>Changer Cible</span>
+                </div>
+                <span className="text-muted-foreground/70">[T]</span>
+            </Button>
+            
             <Button variant="outline" onClick={onRetreat} className="w-24 h-16 flex-col gap-1 text-xs">
                  <div className="flex items-center gap-2">
                     <Shield />

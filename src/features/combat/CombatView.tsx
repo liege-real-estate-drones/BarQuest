@@ -5,8 +5,8 @@ import { useGameStore } from '@/state/gameStore';
 import { Button } from '@/components/ui/button';
 import { CombatLog } from './components/CombatLog';
 import EntityDisplay from './components/EntityDisplay';
-import { useEffect, useMemo } from 'react';
-import { User, ArrowLeft } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
+import { User, ArrowLeft, Target, Shuffle } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { ActionStrip } from './components/ActionStrip';
 import type { Talent } from '@/lib/types';
@@ -24,6 +24,7 @@ export function CombatView() {
     currentDungeon,
     killCount,
     gameData,
+    cycleTarget,
   } = useGameStore((state) => ({
     player: state.player,
     enemies: state.combat.enemies,
@@ -34,7 +35,10 @@ export function CombatView() {
     currentDungeon: state.currentDungeon,
     killCount: state.combat.killCount,
     gameData: state.gameData,
+    cycleTarget: state.cycleTarget,
   }));
+  
+  const [targetIndex, setTargetIndex] = useState(0);
 
   const equippedSkills = useMemo(() => {
     return player.equippedSkills
@@ -51,11 +55,20 @@ export function CombatView() {
     }
   }, [enemies, startCombat]);
   
+  useEffect(() => {
+    setTargetIndex(0);
+  }, [enemies.length]);
+
+  const handleCycleTarget = () => {
+    cycleTarget();
+  };
+  
   if (enemies.length === 0 || !currentDungeon) {
     return <div className="flex items-center justify-center h-screen">Finding a target...</div>;
   }
 
   const dungeonProgress = (killCount / currentDungeon.killTarget) * 100;
+  const currentTarget = enemies[targetIndex];
 
   return (
     <div className="flex flex-col h-screen w-full p-4 gap-4 font-code bg-background text-foreground">
@@ -82,7 +95,7 @@ export function CombatView() {
              <ScrollArea className="h-full">
                 <div className="flex flex-col gap-4 pr-4">
                     {enemies.map((enemy, index) => (
-                        <EntityDisplay key={enemy.id} entity={enemy} isTarget={index === 0} />
+                        <EntityDisplay key={enemy.id} entity={enemy} isTarget={index === targetIndex} />
                     ))}
                 </div>
             </ScrollArea>
@@ -93,6 +106,7 @@ export function CombatView() {
                 <ActionStrip 
                     onRetreat={flee}
                     skills={equippedSkills}
+                    onCycleTarget={handleCycleTarget}
                 />
             </Card>
           </div>

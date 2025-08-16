@@ -92,6 +92,7 @@ interface GameState {
   useSkill: (skillId: string) => void;
   enemyAttacks: () => void;
   handleEnemyDeath: (enemyId: string) => void;
+  cycleTarget: () => void;
   flee: () => void;
   toggleAutoAttack: () => void;
   getXpToNextLevel: () => number;
@@ -241,12 +242,12 @@ export const useGameStore = create<GameState>()(
             const { player, gameData } = state;
             if (!player.classeId || !gameData.talents.length) return;
 
-            const learnedActiveSkills = Object.keys(player.talents).filter(talentId => {
+            const hasAnyActiveSkillLearned = Object.keys(player.talents).some(talentId => {
                 const talent = gameData.talents.find(t => t.id === talentId);
                 return talent && talent.type === 'actif' && player.talents[talentId] > 0;
             });
-
-            if (learnedActiveSkills.length > 0) return;
+            
+            if (hasAnyActiveSkillLearned) return;
 
             const startingSkill = gameData.talents.find(t => 
                 t.classeId === player.classeId && 
@@ -836,6 +837,19 @@ export const useGameStore = create<GameState>()(
                  get().startCombat();
             }
         }
+      },
+
+      cycleTarget: () => {
+        set(state => {
+            if (state.combat.enemies.length > 1) {
+                // Move the first enemy to the end of the array
+                const newTarget = state.combat.enemies.shift();
+                if (newTarget) {
+                    state.combat.enemies.push(newTarget);
+                    state.combat.log.push({ message: `You are now targeting ${state.combat.enemies[0].nom}.`, type: 'info', timestamp: Date.now() });
+                }
+            }
+        });
       },
 
       flee: () => {

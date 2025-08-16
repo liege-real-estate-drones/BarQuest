@@ -4,13 +4,13 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { useGameStore } from '@/state/gameStore';
-import { Monstre, Stats, PlayerState, ResourceType } from '@/lib/types';
+import { Monstre, Stats, PlayerState, ResourceType, CombatEnemy } from '@/lib/types';
 import * as formulas from '@/core/formulas';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 
 interface EntityDisplayProps {
-  entity: PlayerState | Monstre;
+  entity: PlayerState | CombatEnemy;
   isPlayer?: boolean;
   isTarget?: boolean;
 }
@@ -42,7 +42,7 @@ export default function EntityDisplay({ entity, isPlayer = false, isTarget = fal
   const currentHp = entity.stats.PV;
   const maxHp = isPlayer 
     ? formulas.calculateMaxHP(entity.level, (entity as PlayerState).stats) 
-    : (entity as any).initialHp ?? entity.stats.PV;
+    : (entity as CombatEnemy).initialHp ?? entity.stats.PV;
 
   const hpPercentage = maxHp > 0 ? (currentHp / maxHp) * 100 : 0;
 
@@ -60,15 +60,19 @@ export default function EntityDisplay({ entity, isPlayer = false, isTarget = fal
 
   return (
     <Card className={cn("flex flex-col h-full bg-card/50 transition-all", isTarget && "border-primary shadow-lg shadow-primary/20")}>
-      <CardHeader className="flex-shrink-0">
+      <CardHeader className="flex-shrink-0 pb-2">
         <CardTitle className="font-headline flex justify-between items-baseline">
           <span>{name} {isTarget && <span className="text-xs text-primary">(Cible)</span>}</span>
           <span className="text-sm text-muted-foreground">Lvl {level}</span>
         </CardTitle>
-        {isPlayer && <CardDescription>The Hero</CardDescription>}
-        {!isPlayer && <CardDescription className="capitalize">{(entity as Monstre).famille}</CardDescription>}
+        <CardDescription className="capitalize">
+          {isPlayer ? (entity as PlayerState).classeId : (entity as Monstre).famille}
+        </CardDescription>
+        {!isPlayer && (
+            <Progress value={((entity as CombatEnemy).attackProgress || 0) * 100} className="h-1 mt-1 bg-background/50" indicatorClassName="bg-yellow-500" />
+        )}
       </CardHeader>
-      <CardContent className="space-y-4 flex-grow">
+      <CardContent className="space-y-4 flex-grow pt-4">
         <div>
           <div className="flex justify-between text-xs mb-1 font-mono text-red-400">
             <span>PV</span>
