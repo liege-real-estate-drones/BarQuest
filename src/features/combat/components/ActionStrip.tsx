@@ -13,9 +13,10 @@ interface ActionStripProps {
 }
 
 export function ActionStrip({ onRetreat, skills }: ActionStripProps) {
-    const { usePotion, inventory } = useGameStore(state => ({
+    const { usePotion, inventory, useSkill } = useGameStore(state => ({
         usePotion: state.usePotion,
         inventory: state.inventory,
+        useSkill: state.useSkill
     }));
 
     useEffect(() => {
@@ -36,7 +37,7 @@ export function ActionStrip({ onRetreat, skills }: ActionStripProps) {
                 case '5':
                     const skillIndex = parseInt(event.key) - 2;
                     if (skills[skillIndex]) {
-                        console.log(`Used skill: ${skills[skillIndex].nom}`);
+                        useSkill(skills[skillIndex].id);
                     }
                     break;
             }
@@ -45,7 +46,7 @@ export function ActionStrip({ onRetreat, skills }: ActionStripProps) {
         return () => {
             window.removeEventListener('keydown', handleKeyPress);
         };
-    }, [usePotion, onRetreat, skills]);
+    }, [usePotion, onRetreat, skills, useSkill]);
 
     return (
         <div className="flex justify-center items-center gap-2 p-2 bg-background/50">
@@ -64,7 +65,7 @@ export function ActionStrip({ onRetreat, skills }: ActionStripProps) {
             </Button>
 
             {skills.map((skill, index) => (
-                 <Button key={skill.id} variant="secondary" className="w-24 h-16 flex-col gap-1 text-xs">
+                 <Button key={skill.id} variant="secondary" className="w-24 h-16 flex-col gap-1 text-xs" onClick={() => useSkill(skill.id)}>
                     <div className="flex items-center gap-2">
                         <Zap />
                         <span>{skill.nom}</span>

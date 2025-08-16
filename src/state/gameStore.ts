@@ -1,5 +1,6 @@
 
 
+
 import create from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
@@ -82,6 +83,7 @@ interface GameState {
   startCombat: () => void;
   gameTick: (delta: number) => void;
   playerAttack: () => void;
+  useSkill: (skillId: string) => void;
   enemyAttack: () => void;
   flee: () => void;
   toggleAutoAttack: () => void;
@@ -140,7 +142,7 @@ const resolveLoot = (monster: Monstre, gameData: GameData, playerClassId: Player
 
 // Helper to parse talent effects. E.g. "+5/10/15% armure" for rank 2 -> 10
 const getTalentEffectValue = (effect: string, rank: number): number => {
-    const matches = effect.match(/([\d/]+)/);
+    const matches = effect.match(/([\d\.\/]+)/);
     if (!matches) return 0;
     const values = matches[1].split('/').map(Number);
     return values[Math.min(rank - 1, values.length - 1)] || 0;
@@ -223,12 +225,22 @@ export const useGameStore = create<GameState>()(
             state.player.baseStats = chosenClass.statsBase;
             state.player.stats = chosenClass.statsBase;
             
+            // Grant starting skill
+            const startingSkillId = `${classId}_${chosenClass.id === 'berserker' ? 'heroic_strike' : (chosenClass.id === 'mage' ? 'firebolt' : (chosenClass.id === 'rogue' ? 'sinister_strike' : 'smite'))}`;
+            const startingSkill = state.gameData.talents.find(t => t.id === startingSkillId);
+            if (startingSkill) {
+                state.player.talents[startingSkill.id] = 1; // Grant rank 1
+            }
+
             let maxResource = formulas.calculateMaxMana(1, chosenClass.statsBase);
             let currentResource = maxResource;
 
             if (chosenClass.ressource === 'Rage') {
               maxResource = 100; // Rage is usually capped at 100
               currentResource = 0; // Start with 0 rage
+            } else if (chosenClass.ressource === 'Énergie') {
+                maxResource = 100;
+                currentResource = 100;
             }
 
             state.player.resources = {
@@ -275,17 +287,25 @@ export const useGameStore = create<GameState>()(
           
           Object.entries(player.talents).forEach(([talentId, rank]) => {
               const talentData = gameData.talents.find(t => t.id === talentId);
-              if (!talentData) return;
+              if (!talentData || talentData.type !== 'passif') return;
               
               talentData.effets.forEach(effectString => {
                   const value = getTalentEffectValue(effectString, rank);
                    if (effectString.includes('armure')) {
                       newStats.Armure += (newStats.Armure * value) / 100;
-                  } else if (effectString.includes('PV max')) {
+                  } else if (effectString.includes('PV')) {
                       newStats.PV += (newStats.PV * value) / 100;
                   } else if (effectString.includes('dégâts de mêlée')) {
                       newStats.AttMin += (newStats.AttMin * value) / 100;
                       newStats.AttMax += (newStats.AttMax * value) / 100;
+                  } else if (effectString.includes('Intelligence')) {
+                      newStats.Intelligence = (newStats.Intelligence || 0) + ((newStats.Intelligence || 0) * value) / 100;
+                  } else if (effectString.includes('Esquive')) {
+                      newStats.Esquive += value;
+                  } else if (effectString.includes('critique')) {
+                      newStats.CritPct += value;
+                  } else if (effectString.includes('Esprit')) {
+                        newStats.Esprit = (newStats.Esprit || 0) + ((newStats.Esprit || 0) * value) / 100;
                   }
               });
           });
@@ -497,7 +517,7 @@ export const useGameStore = create<GameState>()(
       },
       
       gameTick: (delta) => {
-          const { playerAttack, enemyAttack, combat, view } = get();
+          const { view, combat } = get();
           
           if(view !== 'COMBAT' || !combat.enemy) {
             if(gameLoop) clearInterval(gameLoop);
@@ -532,7 +552,7 @@ export const useGameStore = create<GameState>()(
       },
 
       playerAttack: () => {
-        const { player, combat, gameData, getXpToNextLevel, currentDungeon } = get();
+        const { player, combat } = get();
         if (!combat.enemy || !combat.enemy.stats || !player) return;
 
         const damage = formulas.calculateMeleeDamage(player.stats.AttMin, player.stats.AttMax, formulas.calculateAttackPower(player.stats));
@@ -573,6 +593,94 @@ export const useGameStore = create<GameState>()(
         });
 
         if (get().combat.enemy!.stats.PV! <= 0) {
+            get().enemyAttack(true); // Finalize combat
+        }
+      },
+      
+      useSkill: (skillId: string) => {
+        set(state => {
+            const { player, combat, gameData } = state;
+            if (!combat.enemy) return;
+
+            const rank = player.talents[skillId];
+            const skill = gameData.talents.find(t => t.id === skillId);
+            if (!skill || !rank) return;
+
+            // Placeholder for resource cost
+            const resourceCost = 20;
+            if (player.resources.current < resourceCost) {
+                state.combat.log.push({ message: "Not enough resource!", type: 'info', timestamp: Date.now() });
+                return;
+            }
+            player.resources.current -= resourceCost;
+
+            // Placeholder for damage calculation
+            let damage = 0;
+            if (skill.classeId === 'berserker' || skill.classeId === 'rogue') {
+                const dmgMultiplier = getTalentEffectValue(skill.effets[0], rank) / 100;
+                const baseDmg = formulas.calculateMeleeDamage(player.stats.AttMin, player.stats.AttMax, formulas.calculateAttackPower(player.stats));
+                damage = baseDmg * dmgMultiplier;
+            } else if (skill.classeId === 'mage' || skill.classeId === 'cleric') {
+                const baseDmg = getTalentEffectValue(skill.effets[0], rank);
+                damage = formulas.calculateSpellDamage(baseDmg, formulas.calculateSpellPower(player.stats));
+            }
+            
+            const isCrit = formulas.isCriticalHit(player.stats.CritPct, player.stats.Precision, combat.enemy.stats.Esquive);
+            let finalDamage = isCrit ? damage * (player.stats.CritDmg / 100) : damage;
+            const dr = formulas.calculateArmorDR(combat.enemy.stats.Armure, player.level);
+            const mitigatedDamage = Math.round(finalDamage * (1 - dr));
+
+            const msg = `You use ${skill.nom} on ${combat.enemy.nom} for ${mitigatedDamage} damage.`;
+            const critMsg = `CRITICAL! Your ${skill.nom} hits ${combat.enemy.nom} for ${mitigatedDamage} damage.`;
+
+            combat.enemy.stats.PV -= mitigatedDamage;
+            combat.log.push({ message: isCrit ? critMsg : msg, type: isCrit ? 'crit' : 'player_attack', timestamp: Date.now() });
+
+            if (combat.enemy.stats.PV <= 0) {
+                get().enemyAttack(true);
+            }
+        });
+      },
+
+      enemyAttack: (isDeathBlow = false) => {
+        const { player, combat, gameData, getXpToNextLevel, currentDungeon } = get();
+        if (!isDeathBlow) {
+            if (!combat.enemy || !combat.enemy.stats || !player) return;
+
+            const enemyDamage = formulas.calculateMeleeDamage(combat.enemy.stats.AttMin, combat.enemy.stats.AttMax, formulas.calculateAttackPower(combat.enemy.stats));
+            const playerDr = formulas.calculateArmorDR(player.stats.Armure, combat.enemy.level);
+            const mitigatedEnemyDamage = Math.round(enemyDamage * (1 - playerDr));
+
+            set(state => {
+                state.player.stats.PV -= mitigatedEnemyDamage;
+                state.combat.log.push({ message: `${combat.enemy!.nom} hits you for ${mitigatedEnemyDamage} damage.`, type: 'enemy_attack', timestamp: Date.now() });
+                state.combat.enemyAttackProgress = 0;
+            });
+        }
+
+
+        if (get().player.stats.PV <= 0) {
+            set(state => {
+                const goldPenalty = Math.floor(state.inventory.gold * 0.10);
+                state.inventory.gold -= goldPenalty;
+                state.combat.log.push({ message: `You have been defeated! You lose ${goldPenalty} gold and all items found in the dungeon. Returning to town.`, type: 'info', timestamp: Date.now() });
+                
+                const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
+                state.player.stats.PV = maxHp * 0.2; // Resurrect with 20% health
+                
+                if (state.player.resources.type !== 'Rage') {
+                  state.player.resources.current = state.player.resources.max * 0.2; // Resurrect with 20% resource
+                } else {
+                  state.player.resources.current = 0; // Reset rage
+                }
+                
+                state.view = 'TOWN';
+                if(gameLoop) clearInterval(gameLoop);
+            });
+            return;
+        }
+
+        if (isDeathBlow) { // Monster died
             const enemy = get().combat.enemy!;
             const goldDrop = 5;
             const itemDrop = resolveLoot(enemy, gameData, get().player.classeId);
@@ -662,41 +770,6 @@ export const useGameStore = create<GameState>()(
             } else {
                  get().startCombat();
             }
-        }
-      },
-      
-      enemyAttack: () => {
-        const { player, combat } = get();
-        if (!combat.enemy || !combat.enemy.stats || !player) return;
-
-        const enemyDamage = formulas.calculateMeleeDamage(combat.enemy.stats.AttMin, combat.enemy.stats.AttMax, formulas.calculateAttackPower(combat.enemy.stats));
-        const playerDr = formulas.calculateArmorDR(player.stats.Armure, combat.enemy.level);
-        const mitigatedEnemyDamage = Math.round(enemyDamage * (1 - playerDr));
-
-        set(state => {
-            state.player.stats.PV -= mitigatedEnemyDamage;
-            state.combat.log.push({ message: `${combat.enemy!.nom} hits you for ${mitigatedEnemyDamage} damage.`, type: 'enemy_attack', timestamp: Date.now() });
-            state.combat.enemyAttackProgress = 0;
-        });
-
-        if (get().player.stats.PV <= 0) {
-            set(state => {
-                const goldPenalty = Math.floor(state.inventory.gold * 0.10);
-                state.inventory.gold -= goldPenalty;
-                state.combat.log.push({ message: `You have been defeated! You lose ${goldPenalty} gold and all items found in the dungeon. Returning to town.`, type: 'info', timestamp: Date.now() });
-                
-                const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
-                state.player.stats.PV = maxHp * 0.2; // Resurrect with 20% health
-                
-                if (state.player.resources.type !== 'Rage') {
-                  state.player.resources.current = state.player.resources.max * 0.2; // Resurrect with 20% resource
-                } else {
-                  state.player.resources.current = 0; // Reset rage
-                }
-                
-                state.view = 'TOWN';
-                if(gameLoop) clearInterval(gameLoop);
-            });
         }
       },
 

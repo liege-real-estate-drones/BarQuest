@@ -1,13 +1,26 @@
 
 [
-  { "id": "wr1", "classeId": "berserker", "nom": "Frappe Puissante", "type": "passif", "rangMax": 3, "effets": ["+10/20/30% dégâts de mêlée"], "exigences": [] },
-  { "id": "wr2", "classeId": "berserker", "nom": "Peau d'Acier", "type": "passif", "rangMax": 3, "effets": ["+5/10/15% armure"], "exigences": [] },
-  { "id": "wr3", "classeId": "berserker", "nom": "Cri de Guerre", "type": "passif", "rangMax": 3, "effets": ["Augmente Rage générée par coup +1/+2/+3"], "exigences": [] },
-  { "id": "wr4", "classeId": "berserker", "nom": "Fendoir", "type": "passif", "rangMax": 3, "effets": ["Attaques frappent +1 ennemi adjacent"], "exigences": ["wr1:2"] },
-  { "id": "wr5", "classeId": "berserker", "nom": "Mur Vivant", "type": "passif", "rangMax": 3, "effets": ["+5/10/15% PV max"], "exigences": ["wr2:1"] },
-  { "id": "wr6", "classeId": "berserker", "nom": "Résistance Inflexible", "type": "passif", "rangMax": 3, "effets": ["-5/10/15% dégâts subis sous 30% PV"], "exigences": ["wr5:2"] },
-  { "id": "wr7", "classeId": "berserker", "nom": "Tourbillon", "type": "actif", "rangMax": 3, "effets": ["Attaque de zone 360°"], "exigences": ["wr4:3"] },
-  { "id": "wr8", "classeId": "berserker", "nom": "Parade Parfaite", "type": "passif", "rangMax": 3, "effets": ["+5/10/15% chance de bloquer totalement un coup"], "exigences": ["wr2:3"] },
-  { "id": "wr9", "classeId": "berserker", "nom": "Colère Inarrêtable", "type": "passif", "rangMax": 3, "effets": ["+2/4/6% vitesse d’attaque cumulable 3x à chaque critique"], "exigences": ["wr3:3"] },
-  { "id": "wr10", "classeId": "berserker", "nom": "Exécution", "type": "actif", "rangMax": 3, "effets": ["+15/30/50% dégâts sur cibles <20% PV"], "exigences": ["wr7:1","wr9:1"] }
+  { "id": "berserker_heroic_strike", "classeId": "berserker", "nom": "Frappe héroïque", "type": "actif", "rangMax": 5, "effets": ["Une attaque puissante infligeant 120/140/160/180/200% des dégâts de l'arme.", "Coûte 15 Rage."], "exigences": [] },
+  { "id": "berserker_toughness", "classeId": "berserker", "nom": "Peau d'Acier", "type": "passif", "rangMax": 3, "effets": ["Augmente l'armure de 5/10/15%."], "exigences": [] },
+  { "id": "berserker_battle_cry", "classeId": "berserker", "nom": "Cri de Guerre", "type": "passif", "rangMax": 3, "effets": ["Augmente la Rage générée par coup de +1/+2/+3."], "exigences": [] },
+  { "id": "berserker_cleave", "classeId": "berserker", "nom": "Fendoir", "type": "passif", "rangMax": 1, "effets": ["Vos attaques de base touchent une cible supplémentaire pour 30% de dégâts."], "exigences": ["berserker_heroic_strike:2"] },
+  { "id": "berserker_whirlwind", "classeId": "berserker", "nom": "Tourbillon", "type": "actif", "rangMax": 3, "effets": ["Frappe tous les ennemis proches pour 80/100/120% des dégâts de l'arme.", "Coûte 40 Rage."], "exigences": ["berserker_cleave:1"] },
+
+  { "id": "mage_firebolt", "classeId": "mage", "nom": "Trait de feu", "type": "actif", "rangMax": 5, "effets": ["Lance un projectile de feu infligeant 10/20/30/40/50 dégâts de base.", "Coûte 10 Mana."], "exigences": [] },
+  { "id": "mage_arcane_intellect", "classeId": "mage", "nom": "Intelligence des arcanes", "type": "passif", "rangMax": 3, "effets": ["Augmente l'Intelligence de 5/10/15%."], "exigences": [] },
+  { "id": "mage_mana_shield", "classeId": "mage", "nom": "Bouclier de mana", "type": "passif", "rangMax": 1, "effets": ["30% des dégâts subis sont absorbés par le Mana au lieu de la vie."], "exigences": [] },
+  { "id": "mage_fireball", "classeId": "mage", "nom": "Boule de feu", "type": "actif", "rangMax": 3, "effets": ["Inflige 30/50/70 dégâts de feu à la cible et aux ennemis proches.", "Coûte 25 Mana."], "exigences": ["mage_firebolt:2"] },
+  { "id": "mage_ice_nova", "classeId": "mage", "nom": "Nova de glace", "type": "actif", "rangMax": 3, "effets": ["Gèle les ennemis sur place pendant 2/3/4 secondes.", "Coûte 20 Mana."], "exigences": ["mage_mana_shield:1"] },
+
+  { "id": "rogue_sinister_strike", "classeId": "rogue", "nom": "Attaque sournoise", "type": "actif", "rangMax": 5, "effets": ["Une frappe rapide infligeant 110/120/130/140/150% des dégâts de l'arme.", "Coûte 20 Énergie."], "exigences": [] },
+  { "id": "rogue_fleet_footed", "classeId": "rogue", "nom": "Pieds légers", "type": "passif", "rangMax": 3, "effets": ["Augmente l'Esquive de 3/6/9%."], "exigences": [] },
+  { "id": "rogue_precision", "classeId": "rogue", "nom": "Précision", "type": "passif", "rangMax": 3, "effets": ["Augmente les chances de coup critique de 1/2/3%."], "exigences": [] },
+  { "id": "rogue_eviscerate", "classeId": "rogue", "nom": "Éviscération", "type": "actif", "rangMax": 3, "effets": ["Une attaque de finition qui inflige de lourds dégâts. Dégâts augmentés par la Dextérité.", "Coûte 40 Énergie."], "exigences": ["rogue_sinister_strike:2"] },
+  { "id": "rogue_vanish", "classeId": "rogue", "nom": "Disparition", "type": "actif", "rangMax": 1, "effets": ["Vous disparaissez, réduisant la menace et esquivant la prochaine attaque.", "Coûte 50 Énergie."], "exigences": ["rogue_fleet_footed:2"] },
+  
+  { "id": "cleric_smite", "classeId": "cleric", "nom": "Châtiment", "type": "actif", "rangMax": 5, "effets": ["Inflige 8/12/16/20/24 dégâts sacrés à la cible.", "Coûte 10 Mana."], "exigences": [] },
+  { "id": "cleric_divine_spirit", "classeId": "cleric", "nom": "Esprit divin", "type": "passif", "rangMax": 3, "effets": ["Augmente l'Esprit de 5/10/15%."], "exigences": [] },
+  { "id": "cleric_healing_touch", "classeId": "cleric", "nom": "Toucher guérisseur", "type": "actif", "rangMax": 3, "effets": ["Vous soigne pour un montant basé sur votre Esprit.", "Coûte 25 Mana."], "exigences": ["cleric_divine_spirit:1"] },
+  { "id": "cleric_holy_nova", "classeId": "cleric", "nom": "Nova sacrée", "type": "actif", "rangMax": 3, "effets": ["Une explosion de lumière qui inflige 15/25/35 dégâts aux ennemis et soigne le lanceur pour le même montant.", "Coûte 40 Mana."], "exigences": ["cleric_healing_touch:2"] },
+  { "id": "cleric_resilience", "classeId": "cleric", "nom": "Résilience", "type": "passif", "rangMax": 3, "effets": ["Augmente l'armure et les PV de 3/6/9%."], "exigences": [] }
 ]
