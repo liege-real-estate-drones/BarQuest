@@ -1,1 +1,39 @@
-[]
+
+[
+  {
+    "id": "dungeon_forest_1",
+    "palier": 1,
+    "name": "Forêt des Murmures",
+    "biome": "nature",
+    "monsters": ["goblin_grunt", "dire_wolf"],
+    "killTarget": 10,
+    "bossId": "goblin_shaman"
+  },
+  {
+    "id": "dungeon_caves_1",
+    "palier": 1,
+    "name": "Grottes Fongiques",
+    "biome": "occult",
+    "monsters": ["giant_bat", "cave_spider"],
+    "killTarget": 15,
+    "bossId": "broodmother_spider"
+  },
+  {
+    "id": "dungeon_frost_2",
+    "palier": 2,
+    "name": "Cavernes de Givre",
+    "biome": "frost",
+    "monsters": ["ice_elemental", "frost_wolf"],
+    "killTarget": 20,
+    "bossId": "ice_golem"
+  },
+  {
+    "id": "dungeon_fire_3",
+    "palier": 3,
+    "name": "Le Bastion Brûlé",
+    "biome": "fire",
+    "monsters": ["fire_elemental", "flame_imp"],
+    "killTarget": 25,
+    "bossId": "fire_giant"
+  }
+]
