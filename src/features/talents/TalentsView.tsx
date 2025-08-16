@@ -9,9 +9,9 @@ import { PlusCircle, Zap, Star } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { Talent } from '@/lib/types';
 
-const TalentCard = ({ talent, player, canLearn, currentRank, isMaxRank, onLearn }: { talent: Talent, player: any, canLearn: boolean, currentRank: number, isMaxRank: boolean, onLearn: (id: string) => void }) => {
+const TalentCard = ({ talent, player, gameData, canLearn, currentRank, isMaxRank, onLearn }: { talent: Talent, player: any, gameData: any, canLearn: boolean, currentRank: number, isMaxRank: boolean, onLearn: (id: string) => void }) => {
     const isLockedByLevel = talent.niveauRequis && player.level < talent.niveauRequis;
-    const playerTalents = gameData.talents.filter(t => t.classeId === player.classeId);
+    const playerTalents = gameData.talents.filter((t: Talent) => t.classeId === player.classeId);
     
     return (
         <Popover>
@@ -119,6 +119,7 @@ export function TalentsView() {
                                         key={talent.id}
                                         talent={talent}
                                         player={player}
+                                        gameData={gameData}
                                         canLearn={canLearn}
                                         currentRank={currentRank}
                                         isMaxRank={isMaxRank}
@@ -132,5 +133,3 @@ export function TalentsView() {
         </Card>
     );
 }
-
-    
