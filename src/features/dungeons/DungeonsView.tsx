@@ -13,8 +13,10 @@ export function DungeonsView() {
 
   const unlockedDungeons = dungeons.filter((dungeon, index) => {
     if (index === 0) return true; // First dungeon is always unlocked
+    // Ensure completedDungeons is an array before checking
+    const safeCompletedDungeons = Array.isArray(completedDungeons) ? completedDungeons : [];
     const previousDungeon = dungeons[index - 1];
-    return completedDungeons.includes(previousDungeon.id);
+    return safeCompletedDungeons.includes(previousDungeon.id);
   });
 
 
@@ -24,7 +26,9 @@ export function DungeonsView() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {dungeons.map(dungeon => {
           const isUnlocked = unlockedDungeons.some(unlocked => unlocked.id === dungeon.id);
-          const isCompleted = completedDungeons.includes(dungeon.id);
+           // Ensure completedDungeons is an array before checking
+          const safeCompletedDungeons = Array.isArray(completedDungeons) ? completedDungeons : [];
+          const isCompleted = safeCompletedDungeons.includes(dungeon.id);
 
           return (
              <Card key={dungeon.id} className={`transition-all ${!isUnlocked ? 'bg-background/40 filter grayscale' : ''}`}>
