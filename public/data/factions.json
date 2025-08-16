@@ -4,12 +4,13 @@
         {
             "id": "town_guard",
             "name": "Garde de la Ville",
-            "ranks": ["Neutre", "Ami", "Honoré", "Révéré", "Exalté"]
-        },
-        {
-            "id": "druid_circle",
-            "name": "Cercle des Druides",
-            "ranks": ["Neutre", "Ami", "Honoré", "Révéré", "Exalté"]
+            "ranks": [
+                "Neutre",
+                "Amical",
+                "Honoré",
+                "Révéré",
+                "Exalté"
+            ]
         }
     ]
 }

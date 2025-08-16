@@ -11,7 +11,14 @@ import { ChooseClassView } from '@/features/player/ChooseClassView';
 
 export default function Home() {
   const hydrated = useHydrated();
-  const { view, initializeGameData, isInitialized, player, checkAndAssignStarterSkill, rehydrateComplete } = useGameStore((state) => ({
+  const { 
+    view, 
+    initializeGameData, 
+    isInitialized, 
+    player, 
+    checkAndAssignStarterSkill, 
+    rehydrateComplete 
+  } = useGameStore((state) => ({
     view: state.view,
     initializeGameData: state.initializeGameData,
     isInitialized: state.isInitialized,

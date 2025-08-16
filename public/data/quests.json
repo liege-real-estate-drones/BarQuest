@@ -4,8 +4,8 @@
         {
             "id": "quest_1",
             "type": "chasse",
-            "name": "Nettoyage de Crypte",
-            "desc": "La crypte locale est infestée de morts-vivants. Éliminez-les.",
+            "name": "Nettoyer la Crypte",
+            "desc": "Les morts se relèvent dans la crypte voisine. Montrez-leur le repos éternel.",
             "requirements": {
                 "dungeonId": "dungeon_1",
                 "killCount": 15
@@ -22,8 +22,8 @@
         {
             "id": "quest_2",
             "type": "chasse",
-            "name": "Purification de la Forêt",
-            "desc": "Des créatures agressives menacent la Forêt des Murmures. Ramenez le calme.",
+            "name": "Éteindre les Flammes",
+            "desc": "Des créatures de feu menacent la région depuis une caverne volcanique. Calmez leurs ardeurs.",
             "requirements": {
                 "dungeonId": "dungeon_2",
                 "killCount": 20
@@ -32,8 +32,8 @@
                 "gold": 75,
                 "xp": 150,
                 "reputation": {
-                    "factionId": "druid_circle",
-                    "amount": 50
+                    "factionId": "town_guard",
+                    "amount": 35
                 }
             }
         }

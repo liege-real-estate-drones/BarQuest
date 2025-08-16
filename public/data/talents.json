@@ -16,8 +16,19 @@
             "classeId": "berserker",
             "type": "passif",
             "rangMax": 1,
-            "effets": ["Vos attaques de base infligent 50% de leurs dégâts à une seconde cible proche."],
-            "exigences": ["berserker_toughness:2"]
+            "niveauRequis": 5,
+            "effets": ["Vos attaques de mêlée infligent 50% de leurs dégâts à une cible proche."],
+            "exigences": []
+        },
+        {
+            "id": "berserker_battle_cry",
+            "nom": "Cri de Guerre",
+            "classeId": "berserker",
+            "type": "passif",
+            "rangMax": 3,
+            "niveauRequis": 10,
+            "effets": ["Vos attaques génèrent 1/2/3 Rage supplémentaire."],
+            "exigences": []
         },
         {
             "id": "mage_arcane_intellect",
@@ -26,6 +37,24 @@
             "type": "passif",
             "rangMax": 5,
             "effets": ["Augmente l'Intelligence de 2/4/6/8/10%."],
+            "exigences": []
+        },
+        {
+            "id": "cleric_divine_fortitude",
+            "nom": "Robustesse Divine",
+            "classeId": "cleric",
+            "type": "passif",
+            "rangMax": 5,
+            "effets": ["Augmente les PV de 2/4/6/8/10%."],
+            "exigences": []
+        },
+        {
+            "id": "rogue_lethality",
+            "nom": "Létalité",
+            "classeId": "rogue",
+            "type": "passif",
+            "rangMax": 5,
+            "effets": ["Augmente les chances de coup critique de 1/2/3/4/5%."],
             "exigences": []
         }
     ]

@@ -8,7 +8,7 @@
             "type": "actif",
             "niveauRequis": 1,
             "rangMax": 5,
-            "effets": ["Inflige 120/130/140/150/160% des dégâts de l'arme.", "Coûte 20 Rage"],
+            "effets": ["Inflige 110/120/130/140/150% des dégâts de l'arme.", "Coûte 15 Rage."],
             "exigences": []
         },
         {
@@ -18,7 +18,7 @@
             "type": "actif",
             "niveauRequis": 5,
             "rangMax": 5,
-            "effets": ["Inflige 60/70/80/90/100% des dégâts de l'arme à tous les ennemis.", "Coûte 40 Rage"],
+            "effets": ["Inflige 60/70/80/90/100% des dégâts de l'arme à tous les ennemis proches.", "Coûte 25 Rage."],
             "exigences": ["berserker_heroic_strike:1"]
         },
         {
@@ -28,17 +28,17 @@
             "type": "actif",
             "niveauRequis": 1,
             "rangMax": 5,
-            "effets": ["Inflige 30/45/60/75/90 dégâts de Feu.", "Coûte 25 Mana"],
+            "effets": ["Inflige 20/30/40/50/60 dégâts de Feu.", "Coûte 10 Mana."],
             "exigences": []
         },
         {
-            "id": "mage_frostbolt",
-            "nom": "Éclair de Givre",
+            "id": "mage_frost_nova",
+            "nom": "Nova de Givre",
             "classeId": "mage",
             "type": "actif",
             "niveauRequis": 5,
-            "rangMax": 5,
-            "effets": ["Inflige 25/35/45/55/65 dégâts de Givre et ralentit la cible.", "Coûte 30 Mana"],
+            "rangMax": 3,
+            "effets": ["Inflige 15/25/35 dégâts de Givre à tous les ennemis.", "Coûte 20 Mana."],
             "exigences": ["mage_fireball:1"]
         },
         {
@@ -48,17 +48,17 @@
             "type": "actif",
             "niveauRequis": 1,
             "rangMax": 5,
-            "effets": ["Inflige 110/120/130/140/150% des dégâts de l'arme.", "Coûte 40 Énergie"],
+            "effets": ["Inflige 120/135/150/165/180% des dégâts de l'arme.", "Coûte 20 Énergie."],
             "exigences": []
         },
         {
-            "id": "rogue_eviscerate",
-            "nom": "Éviscération",
+            "id": "rogue_fan_of_knives",
+            "nom": "Éventail de Couteaux",
             "classeId": "rogue",
             "type": "actif",
             "niveauRequis": 5,
-            "rangMax": 5,
-            "effets": ["Inflige des dégâts basés sur les points de combo.", "Coûte 35 Énergie"],
+            "rangMax": 3,
+            "effets": ["Inflige 50/65/80% des dégâts de l'arme aux ennemis proches.", "Coûte 35 Énergie."],
             "exigences": ["rogue_sinister_strike:1"]
         },
         {
@@ -68,7 +68,7 @@
             "type": "actif",
             "niveauRequis": 1,
             "rangMax": 5,
-            "effets": ["Inflige 20/30/40/50/60 dégâts Sacrés à un ennemi.", "Coûte 20 Mana"],
+            "effets": ["Inflige 15/25/35/45/55 dégâts Sacrés.", "Coûte 10 Mana."],
             "exigences": []
         },
         {
@@ -77,8 +77,8 @@
             "classeId": "cleric",
             "type": "actif",
             "niveauRequis": 5,
-            "rangMax": 5,
-            "effets": ["Inflige 15/25/35/45/55 dégâts Sacrés aux ennemis proches et soigne les alliés.", "Coûte 50 Mana"],
+            "rangMax": 3,
+            "effets": ["Inflige 10/20/30 dégâts Sacrés à tous les ennemis.", "Coûte 25 Mana."],
             "exigences": ["cleric_smite:1"]
         }
     ]

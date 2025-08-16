@@ -2,45 +2,64 @@
 {
     "items": [
         {
-            "id": "rusty_sword",
-            "name": "Épée rouillée",
+            "id": "starter_sword",
+            "name": "Épée Rouillée",
             "slot": "weapon",
             "niveauMin": 1,
             "rarity": "Commun",
-            "affixes": [],
+            "affixes": [
+                { "ref": "AttMin", "val": 3 },
+                { "ref": "AttMax", "val": 5 }
+            ],
             "tagsClasse": ["common"],
             "vendorPrice": 10
         },
         {
-            "id": "apprentice_staff",
-            "name": "Bâton d'apprenti",
+            "id": "starter_staff",
+            "name": "Bâton Tordu",
             "slot": "weapon",
             "niveauMin": 1,
             "rarity": "Commun",
-            "affixes": [],
+            "affixes": [
+                { "ref": "Intelligence", "val": 2 }
+            ],
             "tagsClasse": ["mage", "cleric"],
-            "vendorPrice": 12
+            "vendorPrice": 10
         },
         {
-            "id": "cracked_leather_helm",
-            "name": "Heaume en cuir craquelé",
+            "id": "iron_helm",
+            "name": "Casque en Fer",
             "slot": "head",
-            "niveauMin": 2,
+            "niveauMin": 3,
             "rarity": "Commun",
-            "affixes": [],
+            "affixes": [
+                { "ref": "Armure", "val": 10 }
+            ],
             "tagsClasse": ["common"],
-            "vendorPrice": 8
+            "vendorPrice": 15
         },
         {
             "id": "minor_potion",
-            "name": "Potion mineure",
+            "name": "Potion Mineure",
             "slot": "potion",
             "niveauMin": 1,
             "rarity": "Commun",
             "affixes": [],
+            "effect": "Heals for 15% of max HP.",
+            "vendorPrice": 50
+        },
+        {
+            "id": "gloves_of_haste",
+            "name": "Gants de Hâte",
+            "slot": "hands",
+            "niveauMin": 5,
+            "rarity": "Rare",
+            "affixes": [
+                { "ref": "Vitesse", "val": -0.1 },
+                { "ref": "Armure", "val": 5 }
+            ],
             "tagsClasse": ["common"],
-            "vendorPrice": 50,
-            "effect": "heal_15_percent"
+            "vendorPrice": 50
         }
     ]
 }

@@ -3,18 +3,17 @@
     "monsters": [
         {
             "id": "skel_warrior",
-            "nom": "Guerrier Squelette",
+            "nom": "Squelette Guerrier",
             "level": 1,
             "famille": "Mort-vivant",
             "palier": 1,
             "stats": {
                 "PV": 50,
-                "Force": 5,
                 "AttMin": 5,
                 "AttMax": 8,
                 "CritPct": 5,
                 "CritDmg": 150,
-                "Armure": 20,
+                "Armure": 10,
                 "Vitesse": 2.5,
                 "Precision": 10,
                 "Esquive": 5
@@ -27,16 +26,33 @@
             "famille": "Mort-vivant",
             "palier": 1,
             "stats": {
-                "PV": 75,
-                "Force": 7,
-                "AttMin": 6,
-                "AttMax": 10,
-                "CritPct": 2,
+                "PV": 70,
+                "AttMin": 4,
+                "AttMax": 6,
+                "CritPct": 0,
                 "CritDmg": 150,
-                "Armure": 15,
+                "Armure": 5,
                 "Vitesse": 3.0,
                 "Precision": 8,
                 "Esquive": 2
+            }
+        },
+        {
+            "id": "skel_archer",
+            "nom": "Squelette Archer",
+            "level": 2,
+            "famille": "Mort-vivant",
+            "palier": 1,
+            "stats": {
+                "PV": 40,
+                "AttMin": 6,
+                "AttMax": 10,
+                "CritPct": 8,
+                "CritDmg": 150,
+                "Armure": 5,
+                "Vitesse": 2.0,
+                "Precision": 12,
+                "Esquive": 8
             }
         },
         {
@@ -44,19 +60,73 @@
             "nom": "Roi Squelette",
             "level": 5,
             "famille": "Mort-vivant",
-            "isBoss": true,
             "palier": 1,
+            "isBoss": true,
             "stats": {
-                "PV": 300,
-                "Force": 15,
-                "AttMin": 20,
-                "AttMax": 30,
+                "PV": 250,
+                "AttMin": 15,
+                "AttMax": 25,
                 "CritPct": 10,
                 "CritDmg": 150,
                 "Armure": 50,
                 "Vitesse": 2.2,
                 "Precision": 20,
                 "Esquive": 10
+            }
+        },
+        {
+            "id": "imp",
+            "nom": "Diablotin",
+            "level": 3,
+            "famille": "Démon",
+            "palier": 1,
+            "stats": {
+                "PV": 60,
+                "AttMin": 8,
+                "AttMax": 12,
+                "CritPct": 5,
+                "CritDmg": 150,
+                "Armure": 15,
+                "Vitesse": 1.8,
+                "Precision": 15,
+                "Esquive": 10
+            }
+        },
+        {
+            "id": "fire_elemental",
+            "nom": "Élémentaire de Feu",
+            "level": 4,
+            "famille": "Élémentaire",
+            "palier": 1,
+            "stats": {
+                "PV": 80,
+                "AttMin": 10,
+                "AttMax": 15,
+                "CritPct": 5,
+                "CritDmg": 150,
+                "Armure": 20,
+                "Vitesse": 2.5,
+                "Precision": 18,
+                "Esquive": 5
+            }
+        },
+        {
+            "id": "demon_lord",
+            "nom": "Seigneur Démon",
+            "level": 8,
+            "famille": "Démon",
+            "palier": 1,
+            "isBoss": true,
+            "stats": {
+                "PV": 400,
+                "AttMin": 25,
+                "AttMax": 40,
+                "CritPct": 15,
+                "CritDmg": 160,
+                "Armure": 70,
+                "Vitesse": 2.0,
+                "Precision": 25,
+                "Esquive": 15
             }
         }
     ]

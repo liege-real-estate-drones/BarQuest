@@ -189,8 +189,17 @@ export const useGameStore = create<GameState>()(
 
       initializeGameData: (data) => {
         set((state) => {
-            // This forces the static game data to be updated, even if a save is loaded
-            state.gameData = data;
+            state.gameData = {
+              dungeons: data.dungeons || [],
+              monsters: data.monsters || [],
+              items: data.items || [],
+              talents: data.talents || [],
+              skills: data.skills || [],
+              affixes: data.affixes || [],
+              classes: data.classes || [],
+              quests: data.quests || [],
+              factions: data.factions || [],
+            };
             state.isInitialized = true;
         });
       },
