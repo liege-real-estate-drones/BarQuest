@@ -4,31 +4,37 @@
         {
             "id": "quest_1",
             "type": "chasse",
-            "name": "Menace Gobeline",
-            "desc": "Les grottes locales sont infestées de gobelins. Éliminez-les pour sécuriser la zone.",
+            "name": "Nettoyage de Crypte",
+            "desc": "La crypte locale est infestée de morts-vivants. Éliminez-les.",
             "requirements": {
                 "dungeonId": "dungeon_1",
-                "killCount": 10
+                "killCount": 15
             },
             "rewards": {
                 "gold": 50,
                 "xp": 100,
-                "reputation": { "factionId": "town_guard", "amount": 25 }
+                "reputation": {
+                    "factionId": "town_guard",
+                    "amount": 25
+                }
             }
         },
         {
             "id": "quest_2",
             "type": "chasse",
-            "name": "Nettoyage de Crypte",
-            "desc": "La crypte est profanée par des morts-vivants. Purifiez-la par le fil de l'épée.",
+            "name": "Purification de la Forêt",
+            "desc": "Des créatures agressives menacent la Forêt des Murmures. Ramenez le calme.",
             "requirements": {
                 "dungeonId": "dungeon_2",
-                "killCount": 15
+                "killCount": 20
             },
             "rewards": {
-                "gold": 100,
-                "xp": 250,
-                "reputation": { "factionId": "silver_hand", "amount": 50 }
+                "gold": 75,
+                "xp": 150,
+                "reputation": {
+                    "factionId": "druid_circle",
+                    "amount": 50
+                }
             }
         }
     ]

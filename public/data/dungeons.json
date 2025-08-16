@@ -4,38 +4,47 @@
         {
             "id": "dungeon_1",
             "palier": 1,
-            "name": "The Whispering Caves",
-            "biome": "nature",
-            "monsters": ["goblin_grunt", "goblin_shaman"],
-            "killTarget": 10,
-            "bossId": "goblin_king"
+            "name": "The Decrepit Crypt",
+            "biome": "occult",
+            "monsters": ["skel_warrior", "skel_archer", "zombie"],
+            "killTarget": 15,
+            "bossId": "skel_king"
         },
         {
             "id": "dungeon_2",
             "palier": 1,
-            "name": "The Frozen Crypt",
-            "biome": "frost",
-            "monsters": ["skeleton_warrior", "ghoul"],
-            "killTarget": 15,
-            "bossId": "lich_apprentice"
+            "name": "The Whispering Woods",
+            "biome": "nature",
+            "monsters": ["wolf", "bear", "treant"],
+            "killTarget": 20,
+            "bossId": "ancient_treant"
         },
         {
             "id": "dungeon_3",
             "palier": 2,
-            "name": "The Sunken Grotto",
-            "biome": "nature",
-            "monsters": ["murloc_tidehunter", "murloc_nightcrawler"],
-            "killTarget": 20,
-            "bossId": "murloc_warlord"
+            "name": "The Frozen Caverns",
+            "biome": "frost",
+            "monsters": ["ice_elemental", "frost_spider", "yeti"],
+            "killTarget": 25,
+            "bossId": "ice_giant"
         },
         {
             "id": "dungeon_4",
             "palier": 2,
             "name": "The Volcanic Forge",
             "biome": "fire",
-            "monsters": ["fire_elemental", "obsidian_golem"],
-            "killTarget": 25,
-            "bossId": "magma_hydra"
+            "monsters": ["fire_elemental", "lava_golem", "imp"],
+            "killTarget": 30,
+            "bossId": "efreeti_lord"
+        },
+        {
+            "id": "dungeon_5",
+            "palier": 3,
+            "name": "The Shadowed Keep",
+            "biome": "occult",
+            "monsters": ["skel_knight", "lich_acolyte", "gargoyle"],
+            "killTarget": 35,
+            "bossId": "death_knight"
         }
     ]
 }

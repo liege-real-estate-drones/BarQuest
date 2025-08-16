@@ -1,7 +1,15 @@
 
 {
     "factions": [
-        { "id": "town_guard", "name": "Garde de la Ville", "ranks": ["Étranger", "Ami", "Défenseur", "Héros"] },
-        { "id": "silver_hand", "name": "Main d'Argent", "ranks": ["Initié", "Adepte", "Exorciste", "Paladin"] }
+        {
+            "id": "town_guard",
+            "name": "Garde de la Ville",
+            "ranks": ["Neutre", "Ami", "Honoré", "Révéré", "Exalté"]
+        },
+        {
+            "id": "druid_circle",
+            "name": "Cercle des Druides",
+            "ranks": ["Neutre", "Ami", "Honoré", "Révéré", "Exalté"]
+        }
     ]
 }

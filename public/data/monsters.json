@@ -1,17 +1,63 @@
 
 {
     "monsters": [
-        { "id": "goblin_grunt", "nom": "Goblin Grunt", "level": 1, "famille": "Goblinoid", "palier": 1, "stats": { "PV": 50, "AttMin": 5, "AttMax": 8, "CritPct": 5, "CritDmg": 150, "Armure": 20, "Vitesse": 2.5, "Precision": 100, "Esquive": 5 } },
-        { "id": "goblin_shaman", "nom": "Goblin Shaman", "level": 2, "famille": "Goblinoid", "palier": 1, "stats": { "PV": 40, "AttMin": 7, "AttMax": 10, "CritPct": 5, "CritDmg": 150, "Armure": 10, "Vitesse": 2.0, "Precision": 100, "Esquive": 5 } },
-        { "id": "goblin_king", "nom": "Goblin King", "level": 5, "famille": "Goblinoid", "isBoss": true, "palier": 1, "stats": { "PV": 250, "AttMin": 15, "AttMax": 20, "CritPct": 10, "CritDmg": 150, "Armure": 50, "Vitesse": 2.2, "Precision": 110, "Esquive": 10 } },
-        { "id": "skeleton_warrior", "nom": "Skeleton Warrior", "level": 3, "famille": "Undead", "palier": 1, "stats": { "PV": 60, "AttMin": 8, "AttMax": 12, "CritPct": 5, "CritDmg": 150, "Armure": 30, "Vitesse": 2.8, "Precision": 100, "Esquive": 0 } },
-        { "id": "ghoul", "nom": "Ghoul", "level": 4, "famille": "Undead", "palier": 1, "stats": { "PV": 70, "AttMin": 10, "AttMax": 15, "CritPct": 10, "CritDmg": 150, "Armure": 15, "Vitesse": 1.8, "Precision": 100, "Esquive": 8 } },
-        { "id": "lich_apprentice", "nom": "Lich Apprentice", "level": 8, "famille": "Undead", "isBoss": true, "palier": 1, "stats": { "PV": 400, "AttMin": 25, "AttMax": 35, "CritPct": 10, "CritDmg": 150, "Armure": 40, "Vitesse": 2.0, "Precision": 120, "Esquive": 15 } },
-        { "id": "murloc_tidehunter", "nom": "Murloc Tidehunter", "level": 6, "famille": "Murloc", "palier": 2, "stats": { "PV": 80, "AttMin": 15, "AttMax": 22, "CritPct": 8, "CritDmg": 150, "Armure": 40, "Vitesse": 2.0, "Precision": 110, "Esquive": 12 } },
-        { "id": "murloc_nightcrawler", "nom": "Murloc Nightcrawler", "level": 7, "famille": "Murloc", "palier": 2, "stats": { "PV": 90, "AttMin": 18, "AttMax": 25, "CritPct": 12, "CritDmg": 160, "Armure": 30, "Vitesse": 1.7, "Precision": 110, "Esquive": 15 } },
-        { "id": "murloc_warlord", "nom": "Murloc Warlord", "level": 12, "famille": "Murloc", "isBoss": true, "palier": 2, "stats": { "PV": 800, "AttMin": 40, "AttMax": 55, "CritPct": 15, "CritDmg": 160, "Armure": 80, "Vitesse": 1.9, "Precision": 130, "Esquive": 20 } },
-        { "id": "fire_elemental", "nom": "Fire Elemental", "level": 8, "famille": "Elemental", "palier": 2, "stats": { "PV": 120, "AttMin": 25, "AttMax": 35, "CritPct": 10, "CritDmg": 150, "Armure": 50, "Vitesse": 2.3, "Precision": 115, "Esquive": 10 } },
-        { "id": "obsidian_golem", "nom": "Obsidian Golem", "level": 9, "famille": "Construct", "palier": 2, "stats": { "PV": 200, "AttMin": 20, "AttMax": 30, "CritPct": 5, "CritDmg": 150, "Armure": 100, "Vitesse": 3.0, "Precision": 115, "Esquive": 5 } },
-        { "id": "magma_hydra", "nom": "Magma Hydra", "level": 15, "famille": "Beast", "isBoss": true, "palier": 2, "stats": { "PV": 1200, "AttMin": 50, "AttMax": 70, "CritPct": 15, "CritDmg": 175, "Armure": 120, "Vitesse": 2.0, "Precision": 140, "Esquive": 15 } }
+        {
+            "id": "skel_warrior",
+            "nom": "Guerrier Squelette",
+            "level": 1,
+            "famille": "Mort-vivant",
+            "palier": 1,
+            "stats": {
+                "PV": 50,
+                "Force": 5,
+                "AttMin": 5,
+                "AttMax": 8,
+                "CritPct": 5,
+                "CritDmg": 150,
+                "Armure": 20,
+                "Vitesse": 2.5,
+                "Precision": 10,
+                "Esquive": 5
+            }
+        },
+        {
+            "id": "zombie",
+            "nom": "Zombie",
+            "level": 2,
+            "famille": "Mort-vivant",
+            "palier": 1,
+            "stats": {
+                "PV": 75,
+                "Force": 7,
+                "AttMin": 6,
+                "AttMax": 10,
+                "CritPct": 2,
+                "CritDmg": 150,
+                "Armure": 15,
+                "Vitesse": 3.0,
+                "Precision": 8,
+                "Esquive": 2
+            }
+        },
+        {
+            "id": "skel_king",
+            "nom": "Roi Squelette",
+            "level": 5,
+            "famille": "Mort-vivant",
+            "isBoss": true,
+            "palier": 1,
+            "stats": {
+                "PV": 300,
+                "Force": 15,
+                "AttMin": 20,
+                "AttMax": 30,
+                "CritPct": 10,
+                "CritDmg": 150,
+                "Armure": 50,
+                "Vitesse": 2.2,
+                "Precision": 20,
+                "Esquive": 10
+            }
+        }
     ]
 }

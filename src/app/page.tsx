@@ -20,10 +20,15 @@ export default function Home() {
     rehydrateComplete: state.rehydrateComplete
   }));
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function loadGameData() {
-        if (isInitialized) return;
+        if (isInitialized) {
+            setIsLoading(false);
+            return;
+        };
+
         try {
             const responses = await Promise.all([
                 fetch('/data/dungeons.json'),
@@ -37,6 +42,12 @@ export default function Home() {
                 fetch('/data/factions.json'),
             ]);
 
+            for (const response of responses) {
+              if (!response.ok) {
+                throw new Error(`Failed to fetch ${response.url}: ${response.statusText}`);
+              }
+            }
+
             const [
                 dungeonsData,
                 monstersData,
@@ -48,20 +59,32 @@ export default function Home() {
                 questsData,
                 factionsData
             ] = await Promise.all(responses.map(r => r.json()));
+
+            const gameDataPayload = {
+                dungeons: dungeonsData?.dungeons || [],
+                monsters: monstersData?.monsters || [],
+                items: itemsData?.items || [],
+                talents: talentsData?.talents || [],
+                skills: skillsData?.skills || [],
+                affixes: affixesData?.affixes || [],
+                classes: classesData?.classes || [],
+                quests: questsData?.quests || [],
+                factions: factionsData?.factions || []
+            };
+
+            // Data validation
+            for (const key in gameDataPayload) {
+                if (!Array.isArray(gameDataPayload[key as keyof typeof gameDataPayload])) {
+                    throw new Error(`Data validation failed: ${key} is not an array.`);
+                }
+            }
             
-            initializeGameData({
-                dungeons: dungeonsData.dungeons,
-                monsters: monstersData.monsters,
-                items: itemsData.items,
-                talents: talentsData.talents,
-                skills: skillsData.skills,
-                affixes: affixesData.affixes,
-                classes: classesData.classes,
-                quests: questsData.quests,
-                factions: factionsData.factions
-            });
-        } catch (error) {
-            console.error("Failed to load game data:", error);
+            initializeGameData(gameDataPayload);
+            setIsLoading(false);
+        } catch (err) {
+            console.error("Failed to load game data:", err);
+            setError(err instanceof Error ? err.message : "An unknown error occurred while loading game data.");
+            setIsLoading(false);
         }
     }
     
@@ -71,14 +94,20 @@ export default function Home() {
   }, [hydrated, rehydrateComplete, initializeGameData, isInitialized]);
 
   useEffect(() => {
-    if (isInitialized) {
-        setIsLoading(false);
-        if(player.classeId) {
-            checkAndAssignStarterSkill();
-        }
+    if (isInitialized && player.classeId) {
+        checkAndAssignStarterSkill();
     }
   }, [isInitialized, player.classeId, checkAndAssignStarterSkill]);
   
+  if (error) {
+    return (
+      <main className="flex min-h-screen flex-col items-center justify-center p-24 bg-background text-red-500">
+        <h1 className="text-2xl mb-4">Error Loading Game Data</h1>
+        <p className="font-mono bg-destructive/20 p-4 rounded">{error}</p>
+      </main>
+    );
+  }
+
   if (!hydrated || isLoading || !rehydrateComplete) {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center p-24 bg-background">
