@@ -33,6 +33,7 @@ import {
 import { LogOut, Settings, Trash2 } from 'lucide-react';
 import { InnView } from './InnView';
 import { SkillsView } from '../skills/SkillsView';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 export function TownView() {
   const { player, resetGame } = useGameStore(state => ({
@@ -41,8 +42,8 @@ export function TownView() {
   }));
 
   return (
-      <div className="container mx-auto p-4 md:p-8">
-        <header className="flex justify-between items-center mb-8">
+      <div className="flex flex-col h-screen">
+        <header className="flex-shrink-0 container mx-auto px-4 md:px-8 py-4 flex justify-between items-center border-b">
           <div>
               <h1 className="text-4xl font-headline text-primary">BarQuest</h1>
               <p className="text-muted-foreground">Welcome back, {player.name}.</p>
@@ -91,41 +92,47 @@ export function TownView() {
 
         </header>
         
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-1 flex flex-col gap-8">
-            <PlayerStatsView />
-            <QuestsView />
-            <ReputationView />
-            <EquipmentView />
-          </div>
-          <div className="lg:col-span-2">
-              <Tabs defaultValue="dungeons" className="w-full">
-                  <TabsList className="grid w-full grid-cols-6">
-                  <TabsTrigger value="dungeons">Dungeons</TabsTrigger>
-                  <TabsTrigger value="inventory">Inventory</TabsTrigger>
-                  <TabsTrigger value="talents">Talents</TabsTrigger>
-                  <TabsTrigger value="skills">Skills</TabsTrigger>
-                  <TabsTrigger value="vendors">Vendors</TabsTrigger>
-                  <TabsTrigger value="inn">Inn</TabsTrigger>
+        <div className="flex-grow container mx-auto px-4 md:px-8 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8 overflow-hidden">
+          <ScrollArea className="lg:col-span-1 h-full">
+            <div className="flex flex-col gap-8 pr-6">
+              <PlayerStatsView />
+              <QuestsView />
+              <ReputationView />
+              <EquipmentView />
+            </div>
+          </ScrollArea>
+          <div className="lg:col-span-2 flex flex-col h-full">
+              <Tabs defaultValue="dungeons" className="w-full flex flex-col h-full">
+                  <TabsList className="grid w-full grid-cols-6 flex-shrink-0">
+                    <TabsTrigger value="dungeons">Dungeons</TabsTrigger>
+                    <TabsTrigger value="inventory">Inventory</TabsTrigger>
+                    <TabsTrigger value="talents">Talents</TabsTrigger>
+                    <TabsTrigger value="skills">Skills</TabsTrigger>
+                    <TabsTrigger value="vendors">Vendors</TabsTrigger>
+                    <TabsTrigger value="inn">Inn</TabsTrigger>
                   </TabsList>
-                    <TabsContent value="dungeons" className="mt-4">
-                      <DungeonsView />
-                    </TabsContent>
-                    <TabsContent value="inventory" className="mt-4">
-                      <InventoryView />
-                    </TabsContent>
-                    <TabsContent value="talents" className="mt-4">
-                      <TalentsView />
-                    </TabsContent>
-                    <TabsContent value="skills" className="mt-4">
-                      <SkillsView />
-                    </TabsContent>
-                    <TabsContent value="vendors" className="mt-4">
-                      <VendorsView />
-                    </TabsContent>
-                    <TabsContent value="inn" className="mt-4">
-                      <InnView />
-                    </TabsContent>
+                  <ScrollArea className="flex-grow mt-4">
+                    <div className="pr-2">
+                      <TabsContent value="dungeons">
+                        <DungeonsView />
+                      </TabsContent>
+                      <TabsContent value="inventory">
+                        <InventoryView />
+                      </TabsContent>
+                      <TabsContent value="talents">
+                        <TalentsView />
+                      </TabsContent>
+                      <TabsContent value="skills">
+                        <SkillsView />
+                      </TabsContent>
+                      <TabsContent value="vendors">
+                        <VendorsView />
+                      </TabsContent>
+                      <TabsContent value="inn">
+                        <InnView />
+                      </TabsContent>
+                    </div>
+                  </ScrollArea>
               </Tabs>
           </div>
         </div>
