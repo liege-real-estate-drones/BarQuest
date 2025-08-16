@@ -11,11 +11,12 @@ import { Progress } from '@/components/ui/progress';
 import { ActionStrip } from './components/ActionStrip';
 import type { Talent } from '@/lib/types';
 import { Card } from '@/components/ui/card';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 export function CombatView() {
   const {
     player,
-    enemy,
+    enemies,
     flee,
     playerAttackProgress,
     startCombat,
@@ -25,16 +26,14 @@ export function CombatView() {
     gameData,
   } = useGameStore((state) => ({
     player: state.player,
-    enemy: state.combat.enemy,
+    enemies: state.combat.enemies,
     flee: state.flee,
     playerAttackProgress: state.combat.playerAttackProgress,
     startCombat: state.startCombat,
     combatLog: state.combat.log,
-    autoAttack: state.combat.autoAttack,
     currentDungeon: state.currentDungeon,
     killCount: state.combat.killCount,
     gameData: state.gameData,
-    toggleAutoAttack: state.toggleAutoAttack,
   }));
 
   const activeSkills = useMemo(() => {
@@ -52,16 +51,17 @@ export function CombatView() {
   }, [player.talents, gameData.talents]);
 
   useEffect(() => {
-    if (!enemy) {
+    if (enemies.length === 0) {
       startCombat();
     }
-  }, [enemy, startCombat]);
+  }, [enemies, startCombat]);
   
-  if (!enemy || !currentDungeon) {
+  if (enemies.length === 0 || !currentDungeon) {
     return <div className="flex items-center justify-center h-screen">Finding a target...</div>;
   }
 
   const dungeonProgress = (killCount / currentDungeon.killTarget) * 100;
+  const mainTarget = enemies[0];
 
   return (
     <div className="flex flex-col h-screen w-full p-4 gap-4 font-code bg-background text-foreground">
@@ -85,9 +85,15 @@ export function CombatView() {
       <main className="flex-grow grid grid-cols-1 lg:grid-cols-3 gap-4 min-h-0">
           <div className="lg:col-span-1 flex flex-col gap-4">
             <EntityDisplay entity={player} isPlayer />
-            <EntityDisplay entity={enemy} />
+             <ScrollArea className="h-full">
+                <div className="flex flex-col gap-4 pr-4">
+                    {enemies.map((enemy, index) => (
+                        <EntityDisplay key={enemy.id} entity={enemy} isTarget={index === 0} />
+                    ))}
+                </div>
+            </ScrollArea>
           </div>
-          <div className="lg:col-span-2 flex flex-col gap-4">
+          <div className="lg:col-span-2 flex flex-col gap-4 min-h-0">
             <CombatLog log={combatLog} />
             <Card className="flex-shrink-0">
                 <ActionStrip 

@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -6,10 +7,12 @@ import { useGameStore } from '@/state/gameStore';
 import { Monstre, Stats, PlayerState, ResourceType } from '@/lib/types';
 import * as formulas from '@/core/formulas';
 import { Separator } from '@/components/ui/separator';
+import { cn } from '@/lib/utils';
 
 interface EntityDisplayProps {
   entity: PlayerState | Monstre;
   isPlayer?: boolean;
+  isTarget?: boolean;
 }
 
 function StatGrid({ stats }: { stats: Stats }) {
@@ -30,7 +33,7 @@ const resourceConfig: Record<ResourceType, { color: string; indicator: string }>
     'Énergie': { color: 'text-yellow-400', indicator: 'bg-gradient-to-r from-yellow-500 to-yellow-700' },
 };
 
-export default function EntityDisplay({ entity, isPlayer = false }: EntityDisplayProps) {
+export default function EntityDisplay({ entity, isPlayer = false, isTarget = false }: EntityDisplayProps) {
   const getXpToNextLevel = useGameStore(s => s.getXpToNextLevel);
   
   const { level } = entity;
@@ -56,10 +59,10 @@ export default function EntityDisplay({ entity, isPlayer = false }: EntityDispla
   const currentResourceConfig = (playerResources?.type && resourceConfig[playerResources.type]) || { color: 'text-gray-400', indicator: 'bg-gray-500' };
 
   return (
-    <Card className="flex flex-col h-full bg-card/50">
+    <Card className={cn("flex flex-col h-full bg-card/50 transition-all", isTarget && "border-primary shadow-lg shadow-primary/20")}>
       <CardHeader className="flex-shrink-0">
         <CardTitle className="font-headline flex justify-between items-baseline">
-          <span>{name}</span>
+          <span>{name} {isTarget && <span className="text-xs text-primary">(Cible)</span>}</span>
           <span className="text-sm text-muted-foreground">Lvl {level}</span>
         </CardTitle>
         {isPlayer && <CardDescription>The Hero</CardDescription>}

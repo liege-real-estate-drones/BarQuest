@@ -21,7 +21,7 @@ export type Stats = z.infer<typeof StatsSchema>;
 export type Affixe = z.infer<typeof AffixSchema>;
 export type Item = z.infer<typeof ItemSchema> & { vendorPrice?: number };
 export type Talent = z.infer<typeof TalentSchema>;
-export type Monstre = z.infer<typeof MonsterSchema>;
+export type Monstre = z.infer<typeof MonsterSchema> & { id: string };
 export type Dungeon = z.infer<typeof DungeonSchema>;
 export type Classe = z.infer<typeof ClasseSchema>;
 
@@ -70,6 +70,8 @@ export interface InventoryState {
   };
 }
 
+export type CombatEnemy = Monstre & { initialHp: number; attackProgress: number };
+
 export interface CombatLogEntry {
     message: string;
     type: 'player_attack' | 'enemy_attack' | 'crit' | 'loot' | 'info' | 'flee' | 'levelup' | 'heal';
@@ -78,26 +80,11 @@ export interface CombatLogEntry {
 }
 
 export interface CombatState {
-  enemy: (Monstre & { initialHp?: number }) | null;
+  enemies: CombatEnemy[];
   playerAttackInterval: number; // in ms
   playerAttackProgress: number; // 0 to 1
-  enemyAttackInterval: number; // in ms
-  enemyAttackProgress: number; // 0 to 1
   killCount: number;
   log: CombatLogEntry[];
   autoAttack: boolean;
   dungeonRunItems: Item[];
 }
-
-export interface GameData {
-  dungeons: Dungeon[];
-  monsters: Monstre[];
-  items: Item[];
-  talents: Talent[];
-  affixes: Affixe[];
-  classes: Classe[];
-  quests: Quete[];
-  factions: Faction[];
-}
-
-    
