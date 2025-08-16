@@ -1,30 +1,8 @@
 
 [
-    {
-        "id": "berserker_toughness",
-        "nom": "Toughness",
-        "classeId": "berserker",
-        "type": "passif",
-        "rangMax": 5,
-        "effets": ["Augmente les PV maximums de 2/4/6/8/10%."],
-        "exigences": []
-    },
-    {
-        "id": "berserker_cleave",
-        "nom": "Cleave",
-        "classeId": "berserker",
-        "type": "passif",
-        "rangMax": 3,
-        "effets": ["Vos attaques de mêlée infligent 15/25/35% de leurs dégâts à une cible secondaire proche."],
-        "exigences": ["berserker_toughness:1"]
-    },
-    {
-        "id": "mage_arcane_intellect",
-        "nom": "Arcane Intellect",
-        "classeId": "mage",
-        "type": "passif",
-        "rangMax": 5,
-        "effets": ["Augmente l'Intelligence de 2/4/6/8/10%."],
-        "exigences": []
-    }
+    { "id": "berserker_toughness", "nom": "Robustesse", "classeId": "berserker", "type": "passif", "rangMax": 5, "effets": ["Augmente les PV maximum de 2/4/6/8/10%."], "exigences": [] },
+    { "id": "berserker_cleave", "nom": "Enchaînement", "classeId": "berserker", "type": "passif", "rangMax": 3, "effets": ["Vos attaques de mêlée touchent une cible supplémentaire pour 25/35/50% des dégâts."], "exigences": ["berserker_toughness:2"] },
+    { "id": "berserker_battle_cry", "nom": "Cri de Guerre", "classeId": "berserker", "type": "passif", "rangMax": 3, "effets": ["Augmente la Rage générée par les attaques de 1/2/3."], "exigences": [] },
+    { "id": "mage_arcane_intellect", "nom": "Intelligence Arcanique", "classeId": "mage", "type": "passif", "rangMax": 5, "effets": ["Augmente l'Intelligence de 2/4/6/8/10%."], "exigences": [] },
+    { "id": "mage_fire_mastery", "nom": "Maîtrise du Feu", "classeId": "mage", "type": "passif", "rangMax": 3, "effets": ["Augmente les dégâts de Feu de 5/10/15%."], "exigences": ["mage_arcane_intellect:2"] }
 ]

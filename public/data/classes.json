@@ -4,28 +4,28 @@
         "id": "berserker",
         "nom": "Berserker",
         "ressource": "Rage",
-        "archétype": "Melee Warrior",
-        "statsBase": { "PV": 120, "RessourceMax": 100, "Force": 10, "Intelligence": 2, "Dexterite": 5, "Esprit": 4, "AttMin": 8, "AttMax": 12, "CritPct": 5, "CritDmg": 150, "Armure": 15, "Vitesse": 2.8, "Precision": 100, "Esquive": 5 }
+        "archétype": "Combattant en mêlée sauvage",
+        "statsBase": { "PV": 150, "Force": 15, "Intelligence": 5, "Dexterite": 10, "Esprit": 8, "AttMin": 10, "AttMax": 15, "CritPct": 5, "CritDmg": 150, "Armure": 50, "Vitesse": 2.5, "Precision": 80, "Esquive": 5 }
     },
     {
         "id": "mage",
         "nom": "Mage",
         "ressource": "Mana",
-        "archétype": "Ranged Caster",
-        "statsBase": { "PV": 80, "RessourceMax": 120, "Force": 2, "Intelligence": 12, "Dexterite": 4, "Esprit": 8, "AttMin": 3, "AttMax": 5, "CritPct": 5, "CritDmg": 150, "Armure": 5, "Vitesse": 2.0, "Precision": 100, "Esquive": 3 }
+        "archétype": "Lanceur de sorts arcaniques",
+        "statsBase": { "PV": 80, "Force": 5, "Intelligence": 18, "Dexterite": 8, "Esprit": 12, "AttMin": 2, "AttMax": 4, "CritPct": 5, "CritDmg": 150, "Armure": 20, "Vitesse": 2.0, "Precision": 85, "Esquive": 5 }
     },
     {
         "id": "rogue",
         "nom": "Rogue",
         "ressource": "Énergie",
-        "archétype": "Melee Assassin",
-        "statsBase": { "PV": 90, "RessourceMax": 100, "Force": 4, "Intelligence": 4, "Dexterite": 12, "Esprit": 5, "AttMin": 6, "AttMax": 9, "CritPct": 8, "CritDmg": 160, "Armure": 8, "Vitesse": 1.8, "Precision": 110, "Esquive": 10 }
+        "archétype": "Maître des ombres et des poisons",
+        "statsBase": { "PV": 100, "Force": 8, "Intelligence": 8, "Dexterite": 18, "Esprit": 6, "AttMin": 8, "AttMax": 12, "CritPct": 10, "CritDmg": 160, "Armure": 35, "Vitesse": 1.8, "Precision": 90, "Esquive": 10 }
     },
     {
         "id": "cleric",
         "nom": "Cleric",
         "ressource": "Mana",
-        "archétype": "Hybrid Healer",
-        "statsBase": { "PV": 100, "RessourceMax": 100, "Force": 6, "Intelligence": 8, "Dexterite": 3, "Esprit": 10, "AttMin": 5, "AttMax": 7, "CritPct": 4, "CritDmg": 150, "Armure": 12, "Vitesse": 2.4, "Precision": 100, "Esquive": 4 }
+        "archétype": "Guerrier sacré et soigneur",
+        "statsBase": { "PV": 120, "Force": 12, "Intelligence": 12, "Dexterite": 6, "Esprit": 15, "AttMin": 7, "AttMax": 10, "CritPct": 5, "CritDmg": 150, "Armure": 60, "Vitesse": 2.8, "Precision": 80, "Esquive": 5 }
     }
 ]

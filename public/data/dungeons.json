@@ -1,21 +1,15 @@
 
 [
     {
-        "id": "dungeon_1",
-        "palier": 1,
-        "name": "The Decrepit Cellar",
-        "biome": "frost",
-        "monsters": ["skel_warrior", "skel_archer"],
-        "killTarget": 10,
-        "bossId": "skel_boss"
+        "id": "dungeon_1", "palier": 1, "name": "Les cryptes gelées", "biome": "frost", "monsters": ["mon_squelette_1", "mon_gobelin_1"], "killTarget": 10, "bossId": "mon_boss_yeti"
     },
     {
-        "id": "dungeon_2",
-        "palier": 1,
-        "name": "The Blazing Pit",
-        "biome": "fire",
-        "monsters": ["imp_berserker", "imp_mage"],
-        "killTarget": 15,
-        "bossId": "imp_overlord"
+        "id": "dungeon_2", "palier": 1, "name": "Le repaire des gobelins", "biome": "nature", "monsters": ["mon_gobelin_1", "mon_loup_1"], "killTarget": 15, "bossId": "mon_boss_gobelin"
+    },
+    {
+        "id": "dungeon_3", "palier": 2, "name": "La fournaise ignée", "biome": "fire", "monsters": ["mon_elementaire_feu_2", "mon_diablotin_2"], "killTarget": 20, "bossId": "mon_boss_demon"
+    },
+    {
+        "id": "dungeon_4", "palier": 2, "name": "Le sanctuaire impie", "biome": "occult", "monsters": ["mon_acolyte_2", "mon_fantome_2"], "killTarget": 25, "bossId": "mon_boss_liche"
     }
 ]

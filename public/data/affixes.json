@@ -1,7 +1,10 @@
 
 [
-    { "id": "affix_str", "ref": "Force", "type": "suffix", "portée": [1, 20], "échelonnage": "lin" },
-    { "id": "affix_int", "ref": "Intelligence", "type": "suffix", "portée": [1, 20], "échelonnage": "lin" },
-    { "id": "affix_crit", "ref": "CritPct", "type": "suffix", "portée": [1, 5], "échelonnage": "lin" },
-    { "id": "affix_hp", "ref": "PV", "type": "prefix", "portée": [10, 100], "échelonnage": "lin" }
+    { "id": "affix_str", "ref": "Force", "type": "prefix", "portée": [1, 50], "échelonnage": "lin" },
+    { "id": "affix_int", "ref": "Intelligence", "type": "prefix", "portée": [1, 50], "échelonnage": "lin" },
+    { "id": "affix_dex", "ref": "Dexterite", "type": "prefix", "portée": [1, 50], "échelonnage": "lin" },
+    { "id": "affix_spi", "ref": "Esprit", "type": "prefix", "portée": [1, 50], "échelonnage": "lin" },
+    { "id": "affix_vit", "ref": "Vitesse", "type": "suffix", "portée": [0.1, 1.0], "échelonnage": "lin" },
+    { "id": "affix_crit", "ref": "CritPct", "type": "suffix", "portée": [1, 10], "échelonnage": "lin" },
+    { "id": "affix_critdmg", "ref": "CritDmg", "type": "suffix", "portée": [5, 50], "échelonnage": "lin" }
 ]

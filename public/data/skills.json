@@ -1,33 +1,7 @@
 
 [
-    {
-        "id": "berserker_heroic_strike",
-        "nom": "Heroic Strike",
-        "classeId": "berserker",
-        "type": "actif",
-        "niveauRequis": 1,
-        "rangMax": 5,
-        "effets": ["Inflige 120/130/140/150/160% des dégâts de l'arme.", "Coûte 15 Rage."],
-        "exigences": []
-    },
-    {
-        "id": "berserker_whirlwind",
-        "nom": "Whirlwind",
-        "classeId": "berserker",
-        "type": "actif",
-        "niveauRequis": 5,
-        "rangMax": 5,
-        "effets": ["Inflige 80/90/100/110/120% des dégâts de l'arme à tous les ennemis proches.", "Coûte 30 Rage."],
-        "exigences": ["berserker_heroic_strike:1"]
-    },
-    {
-        "id": "mage_fireball",
-        "nom": "Fireball",
-        "classeId": "mage",
-        "type": "actif",
-        "niveauRequis": 1,
-        "rangMax": 5,
-        "effets": ["Inflige 20/25/30/35/40 dégâts de Feu.", "Coûte 20 Mana."],
-        "exigences": []
-    }
+    { "id": "berserker_heroic_strike", "nom": "Frappe Héroïque", "classeId": "berserker", "type": "actif", "niveauRequis": 1, "rangMax": 5, "effets": ["Inflige 120/130/140/150/160% des dégâts de l'arme. Coûte 15 Rage."], "exigences": [] },
+    { "id": "berserker_whirlwind", "nom": "Tourbillon", "classeId": "berserker", "type": "actif", "niveauRequis": 5, "rangMax": 5, "effets": ["Frappe tous les ennemis proches pour 80/90/100/110/120% des dégâts de l'arme. Coûte 30 Rage."], "exigences": ["berserker_heroic_strike:1"] },
+    { "id": "mage_fireball", "nom": "Boule de Feu", "classeId": "mage", "type": "actif", "niveauRequis": 1, "rangMax": 5, "effets": ["Inflige 50/65/80/95/110 dégâts de Feu. Coûte 20 Mana."], "exigences": [] },
+    { "id": "mage_frostbolt", "nom": "Éclair de Givre", "classeId": "mage", "type": "actif", "niveauRequis": 5, "rangMax": 5, "effets": ["Inflige 40/50/60/70/80 dégâts de Givre et ralentit la cible. Coûte 25 Mana."], "exigences": ["mage_fireball:1"] }
 ]

@@ -1,39 +1,5 @@
 
 [
-    {
-        "id": "quest_1",
-        "type": "chasse",
-        "name": "Cellar Cleanup",
-        "desc": "Clear out the undead infesting the Decrepit Cellar.",
-        "requirements": {
-            "dungeonId": "dungeon_1",
-            "killCount": 10
-        },
-        "rewards": {
-            "gold": 50,
-            "xp": 100,
-            "reputation": {
-                "factionId": "town_guard",
-                "amount": 25
-            }
-        }
-    },
-    {
-        "id": "quest_2",
-        "type": "chasse",
-        "name": "Imp-losion",
-        "desc": "Deal with the imp problem in the Blazing Pit.",
-        "requirements": {
-            "dungeonId": "dungeon_2",
-            "killCount": 15
-        },
-        "rewards": {
-            "gold": 75,
-            "xp": 150,
-            "reputation": {
-                "factionId": "town_guard",
-                "amount": 35
-            }
-        }
-    }
+    { "id": "quest_1", "type": "chasse", "name": "Nettoyage des cryptes", "desc": "Éliminez les créatures qui hantent les cryptes gelées.", "requirements": { "dungeonId": "dungeon_1", "killCount": 10 }, "rewards": { "gold": 50, "xp": 100, "reputation": { "factionId": "faction_gardes", "amount": 25 } } },
+    { "id": "quest_2", "type": "chasse", "name": "Infestation de gobelins", "desc": "Le repaire des gobelins est devenu trop dangereux. Réduisez leur nombre.", "requirements": { "dungeonId": "dungeon_2", "killCount": 15 }, "rewards": { "gold": 75, "xp": 150, "reputation": { "factionId": "faction_gardes", "amount": 35 } } }
 ]

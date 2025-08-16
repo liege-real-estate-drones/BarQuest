@@ -1,13 +1,6 @@
 
 [
-    {
-        "id": "town_guard",
-        "name": "Town Guard",
-        "ranks": ["Neutral", "Friendly", "Honored", "Revered", "Exalted"]
-    },
-    {
-        "id": "arcanum",
-        "name": "The Arcanum",
-        "ranks": ["Neutral", "Friendly", "Honored", "Revered", "Exalted"]
-    }
+    { "id": "faction_gardes", "name": "Gardes de la Cité", "ranks": ["Recrue", "Soldat", "Sergent", "Capitaine", "Commandant"] },
+    { "id": "faction_mages", "name": "Cercle des Mages", "ranks": ["Apprenti", "Initié", "Adepte", "Maître", "Archimage"] },
+    { "id": "faction_voleurs", "name": "Guilde des Ombres", "ranks": ["Initié", "Coupe-gorge", "Maître-voleur", "Assassin", "Nuit-qui-marche"] }
 ]
