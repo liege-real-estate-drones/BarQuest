@@ -1,9 +1,4 @@
 
-
-
-
-
-
 import create from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
@@ -199,6 +194,17 @@ export const useGameStore = create<GameState>()(
                 ...savedPlayer,
                 baseStats: currentClass ? currentClass.statsBase : getInitialPlayerState().baseStats,
              };
+             const startingSkillId = state.gameData.talents.find(t => t.classeId === state.player.classeId && t.type === 'actif' && t.exigences.length === 0)?.id;
+             if(startingSkillId && !state.player.talents[startingSkillId]){
+                state.player.talents[startingSkillId] = 1;
+                if(!state.player.equippedSkills.includes(startingSkillId)){
+                   const emptySlot = state.player.equippedSkills.indexOf(null);
+                   if(emptySlot !== -1){
+                      state.player.equippedSkills[emptySlot] = startingSkillId;
+                   }
+                }
+             }
+
           } else {
             state.isInitialized = true;
             return;
@@ -222,6 +228,13 @@ export const useGameStore = create<GameState>()(
 
             state.player = getInitialPlayerState();
             state.inventory = initialInventoryState;
+            state.combat = initialCombatState;
+            state.activeQuests = [];
+            
+            const firstQuest = state.gameData.quests[0];
+            if(firstQuest){
+                 state.activeQuests.push({ quete: firstQuest, progress: 0 });
+            }
 
             state.player.classeId = chosenClass.id as PlayerClassId;
             state.player.baseStats = chosenClass.statsBase;
@@ -542,7 +555,7 @@ export const useGameStore = create<GameState>()(
               state.combat.enemies = newEnemies;
               state.combat.playerAttackProgress = 0;
               state.combat.playerAttackInterval = state.player.stats.Vitesse * 1000;
-              state.combat.log.push({ message: `A group of ${newEnemies.length} monster(s) appears!`, type: 'info', timestamp: Date.now() });
+              state.combat.log.push({ message: `A group of ${newEnemies.map(e => e.nom).join(', ')} appears!`, type: 'info', timestamp: Date.now() });
             });
         }
       },
@@ -857,3 +870,5 @@ export const useGameStore = create<GameState>()(
     }
   )
 );
+
+    
