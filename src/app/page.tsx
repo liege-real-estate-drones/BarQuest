@@ -26,37 +26,47 @@ export default function Home() {
         if (isInitialized) return;
         try {
             const [
-                dungeonsData,
-                monstersData,
-                itemsData,
-                talentsData,
-                skillsData,
-                affixesData,
-                classesData,
-                questsData,
-                factionsData
+                dungeonsResponse,
+                monstersResponse,
+                itemsResponse,
+                talentsResponse,
+                skillsResponse,
+                affixesResponse,
+                classesResponse,
+                questsResponse,
+                factionsResponse
             ] = await Promise.all([
-                fetch('/data/dungeons.json').then(res => res.json()),
-                fetch('/data/monsters.json').then(res => res.json()),
-                fetch('/data/items.json').then(res => res.json()),
-                fetch('/data/talents.json').then(res => res.json()),
-                fetch('/data/skills.json').then(res => res.json()),
-                fetch('/data/affixes.json').then(res => res.json()),
-                fetch('/data/classes.json').then(res => res.json()),
-                fetch('/data/quests.json').then(res => res.json()),
-                fetch('/data/factions.json').then(res => res.json()),
+                fetch('/data/dungeons.json'),
+                fetch('/data/monsters.json'),
+                fetch('/data/items.json'),
+                fetch('/data/talents.json'),
+                fetch('/data/skills.json'),
+                fetch('/data/affixes.json'),
+                fetch('/data/classes.json'),
+                fetch('/data/quests.json'),
+                fetch('/data/factions.json'),
             ]);
+
+            const dungeonsData = await dungeonsResponse.json();
+            const monstersData = await monstersResponse.json();
+            const itemsData = await itemsResponse.json();
+            const talentsData = await talentsResponse.json();
+            const skillsData = await skillsResponse.json();
+            const affixesData = await affixesResponse.json();
+            const classesData = await classesResponse.json();
+            const questsData = await questsResponse.json();
+            const factionsData = await factionsResponse.json();
             
             initializeGameData({
-                dungeons: dungeonsData,
-                monsters: monstersData,
-                items: itemsData,
-                talents: talentsData,
-                skills: skillsData,
-                affixes: affixesData,
-                classes: classesData,
-                quests: questsData,
-                factions: factionsData
+                dungeons: dungeonsData.dungeons,
+                monsters: monstersData.monsters,
+                items: itemsData.items,
+                talents: talentsData.talents,
+                skills: skillsData.skills,
+                affixes: affixesData.affixes,
+                classes: classesData.classes,
+                quests: questsData.quests,
+                factions: factionsData.factions
             });
         } catch (error) {
             console.error("Failed to load game data:", error);
