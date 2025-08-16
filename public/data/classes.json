@@ -1,9 +1,9 @@
 
 {
     "classes": [
-        { "id": "berserker", "nom": "Berserker", "ressource": "Rage", "archétype": "Guerrier féroce au corps à corps", "statsBase": { "PV": 120, "RessourceMax": 100, "Force": 12, "Intelligence": 5, "Dexterite": 8, "Esprit": 7, "AttMin": 5, "AttMax": 8, "CritPct": 5, "CritDmg": 150, "Armure": 10, "Vitesse": 2.8, "Precision": 85, "Esquive": 5 } },
-        { "id": "mage", "nom": "Mage", "ressource": "Mana", "archétype": "Maître des arcanes", "statsBase": { "PV": 80, "RessourceMax": 150, "Force": 5, "Intelligence": 12, "Dexterite": 7, "Esprit": 10, "AttMin": 2, "AttMax": 4, "CritPct": 5, "CritDmg": 150, "Armure": 2, "Vitesse": 2.0, "Precision": 90, "Esquive": 5 } },
-        { "id": "rogue", "nom": "Voleur", "ressource": "Énergie", "archétype": "Assassin rapide et mortel", "statsBase": { "PV": 100, "RessourceMax": 100, "Force": 7, "Intelligence": 6, "Dexterite": 12, "Esprit": 6, "AttMin": 4, "AttMax": 6, "CritPct": 10, "CritDmg": 160, "Armure": 5, "Vitesse": 1.8, "Precision": 95, "Esquive": 10 } },
-        { "id": "cleric", "nom": "Clerc", "ressource": "Mana", "archétype": "Guerrier sacré et soigneur", "statsBase": { "PV": 110, "RessourceMax": 120, "Force": 8, "Intelligence": 8, "Dexterite": 6, "Esprit": 12, "AttMin": 3, "AttMax": 5, "CritPct": 5, "CritDmg": 150, "Armure": 8, "Vitesse": 2.5, "Precision": 88, "Esquive": 5 } }
+        { "id": "berserker", "nom": "Berserker", "ressource": "Rage", "archétype": "Guerrier féroce au corps à corps", "statsBase": { "PV": 120, "Force": 12, "Intelligence": 5, "Dexterite": 8, "Esprit": 7, "AttMin": 4, "AttMax": 6, "CritPct": 5, "CritDmg": 150, "Armure": 15, "Vitesse": 2.8, "Precision": 100, "Esquive": 5 } },
+        { "id": "mage", "nom": "Mage", "ressource": "Mana", "archétype": "Lanceur de sorts arcaniques", "statsBase": { "PV": 80, "Force": 5, "Intelligence": 12, "Dexterite": 7, "Esprit": 10, "AttMin": 2, "AttMax": 3, "CritPct": 5, "CritDmg": 150, "Armure": 5, "Vitesse": 2.0, "Precision": 100, "Esquive": 5 } },
+        { "id": "rogue", "nom": "Voleur", "ressource": "Énergie", "archétype": "Maître assassin rapide", "statsBase": { "PV": 100, "Force": 8, "Intelligence": 6, "Dexterite": 12, "Esprit": 6, "AttMin": 3, "AttMax": 5, "CritPct": 10, "CritDmg": 160, "Armure": 10, "Vitesse": 1.8, "Precision": 105, "Esquive": 10 } },
+        { "id": "cleric", "nom": "Clerc", "ressource": "Mana", "archétype": "Guerrier sacré et guérisseur", "statsBase": { "PV": 90, "Force": 7, "Intelligence": 10, "Dexterite": 6, "Esprit": 12, "AttMin": 2, "AttMax": 4, "CritPct": 5, "CritDmg": 150, "Armure": 12, "Vitesse": 2.5, "Precision": 100, "Esquive": 5 } }
     ]
 }

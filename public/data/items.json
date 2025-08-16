@@ -1,10 +1,11 @@
 
 {
     "items": [
-        { "id": "starter_sword", "name": "Épée Rouillée", "slot": "weapon", "niveauMin": 1, "rarity": "Commun", "affixes": [{"ref": "AttMin", "val": 1}, {"ref": "AttMax", "val": 3}], "tagsClasse": ["berserker"], "vendorPrice": 10 },
-        { "id": "starter_wand", "name": "Baguette en bois tortu", "slot": "weapon", "niveauMin": 1, "rarity": "Commun", "affixes": [{"ref": "Intelligence", "val": 1}], "tagsClasse": ["mage"], "vendorPrice": 10 },
-        { "id": "common_helm", "name": "Casque en cuir", "slot": "head", "niveauMin": 2, "rarity": "Commun", "affixes": [{"ref": "Armure", "val": 5}], "tagsClasse": ["common"], "vendorPrice": 15 },
-        { "id": "rare_sword", "name": "Épée longue de soldat", "slot": "weapon", "niveauMin": 5, "rarity": "Rare", "affixes": [{"ref": "AttMin", "val": 5}, {"ref": "AttMax", "val": 8}, {"ref": "Force", "val": 3}], "tagsClasse": ["berserker"], "vendorPrice": 50 },
-        { "id": "epic_staff", "name": "Bâton du mage apprenti", "slot": "weapon", "niveauMin": 10, "rarity": "Épique", "affixes": [{"ref": "Intelligence", "val": 10}, {"ref": "CritPct", "val": 5}], "tagsClasse": ["mage"], "vendorPrice": 200 }
+        { "id": "item_rusty_sword", "name": "Rusty Sword", "slot": "weapon", "niveauMin": 1, "rarity": "Commun", "affixes": [{ "ref": "AttMin", "val": 2 }, { "ref": "AttMax", "val": 4 }], "tagsClasse": ["berserker", "rogue"], "vendorPrice": 10 },
+        { "id": "item_worn_leather_cap", "name": "Worn Leather Cap", "slot": "head", "niveauMin": 1, "rarity": "Commun", "affixes": [{ "ref": "Armure", "val": 5 }], "tagsClasse": ["common"], "vendorPrice": 8 },
+        { "id": "item_apprentice_staff", "name": "Apprentice's Staff", "slot": "weapon", "niveauMin": 1, "rarity": "Commun", "affixes": [{ "ref": "Intelligence", "val": 2 }], "tagsClasse": ["mage", "cleric"], "vendorPrice": 12 },
+        { "id": "item_goblin_axe", "name": "Goblin Axe", "slot": "weapon", "niveauMin": 3, "rarity": "Rare", "affixes": [{ "ref": "AttMin", "val": 5 }, { "ref": "AttMax", "val": 8 }, { "ref": "Force", "val": 3 }], "tagsClasse": ["berserker"], "vendorPrice": 50 },
+        { "id": "item_lich_phylactery", "name": "Lich's Phylactery", "slot": "offhand", "niveauMin": 8, "rarity": "Épique", "affixes": [{ "ref": "Intelligence", "val": 10 }, { "ref": "CritPct", "val": 5 }], "tagsClasse": ["mage", "cleric"], "vendorPrice": 250 },
+        { "id": "item_potion_minor_healing", "name": "Minor Healing Potion", "slot": "potion", "niveauMin": 1, "rarity": "Commun", "affixes": [], "vendorPrice": 50 }
     ]
 }

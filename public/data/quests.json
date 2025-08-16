@@ -4,8 +4,8 @@
         {
             "id": "quest_1",
             "type": "chasse",
-            "name": "Nettoyer la crypte",
-            "desc": "Les morts-vivants des Cryptes Glaciales menacent les voyageurs. Éliminez-en 10.",
+            "name": "Menace Gobeline",
+            "desc": "Les grottes locales sont infestées de gobelins. Éliminez-les pour sécuriser la zone.",
             "requirements": {
                 "dungeonId": "dungeon_1",
                 "killCount": 10
@@ -19,16 +19,16 @@
         {
             "id": "quest_2",
             "type": "chasse",
-            "name": "Infestation de gobelins",
-            "desc": "Les gobelins de la Forêt des Ombres sont devenus trop audacieux. Réduisez leur nombre.",
+            "name": "Nettoyage de Crypte",
+            "desc": "La crypte est profanée par des morts-vivants. Purifiez-la par le fil de l'épée.",
             "requirements": {
                 "dungeonId": "dungeon_2",
                 "killCount": 15
             },
             "rewards": {
-                "gold": 75,
-                "xp": 150,
-                "reputation": { "factionId": "town_guard", "amount": 35 }
+                "gold": 100,
+                "xp": 250,
+                "reputation": { "factionId": "silver_hand", "amount": 50 }
             }
         }
     ]

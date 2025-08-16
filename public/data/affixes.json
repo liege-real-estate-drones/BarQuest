@@ -1,8 +1,9 @@
 
 {
     "affixes": [
-        { "id": "affix_str", "ref": "Force", "type": "prefix", "portée": [1, 50], "échelonnage": "lin" },
-        { "id": "affix_int", "ref": "Intelligence", "type": "prefix", "portée": [1, 50], "échelonnage": "lin" },
-        { "id": "affix_crit_pct", "ref": "CritPct", "type": "suffix", "portée": [1, 10], "échelonnage": "palier" }
+      { "id": "affix_str", "ref": "Force", "type": "suffix", "portée": [1, 50], "échelonnage": "lin" },
+      { "id": "affix_int", "ref": "Intelligence", "type": "suffix", "portée": [1, 50], "échelonnage": "lin" },
+      { "id": "affix_crit", "ref": "CritPct", "type": "prefix", "portée": [1, 15], "échelonnage": "palier" },
+      { "id": "affix_armor", "ref": "Armure", "type": "suffix", "portée": [10, 500], "échelonnage": "lin" }
     ]
 }

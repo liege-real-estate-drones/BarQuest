@@ -1,15 +1,7 @@
 
 {
     "factions": [
-        {
-            "id": "town_guard",
-            "name": "Garde de la ville",
-            "ranks": ["Neutre", "Amical", "Honoré", "Révéré", "Exalté"]
-        },
-        {
-            "id": "mages_guild",
-            "name": "Guilde des Mages",
-            "ranks": ["Neutre", "Amical", "Honoré", "Révéré", "Exalté"]
-        }
+        { "id": "town_guard", "name": "Garde de la Ville", "ranks": ["Étranger", "Ami", "Défenseur", "Héros"] },
+        { "id": "silver_hand", "name": "Main d'Argent", "ranks": ["Initié", "Adepte", "Exorciste", "Paladin"] }
     ]
 }

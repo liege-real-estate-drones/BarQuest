@@ -4,38 +4,38 @@
         {
             "id": "dungeon_1",
             "palier": 1,
-            "name": "Cryptes Glaciales",
-            "biome": "frost",
-            "monsters": ["skelly_1", "zombie_1"],
+            "name": "The Whispering Caves",
+            "biome": "nature",
+            "monsters": ["goblin_grunt", "goblin_shaman"],
             "killTarget": 10,
-            "bossId": "skelly_boss_1"
+            "bossId": "goblin_king"
         },
         {
             "id": "dungeon_2",
             "palier": 1,
-            "name": "Forêt des Ombres",
-            "biome": "nature",
-            "monsters": ["goblin_1", "wolf_1"],
+            "name": "The Frozen Crypt",
+            "biome": "frost",
+            "monsters": ["skeleton_warrior", "ghoul"],
             "killTarget": 15,
-            "bossId": "goblin_boss_1"
+            "bossId": "lich_apprentice"
         },
         {
             "id": "dungeon_3",
             "palier": 2,
-            "name": "Cavernes Ardentes",
-            "biome": "fire",
-            "monsters": ["imp_1", "fire_elemental_1"],
+            "name": "The Sunken Grotto",
+            "biome": "nature",
+            "monsters": ["murloc_tidehunter", "murloc_nightcrawler"],
             "killTarget": 20,
-            "bossId": "demon_boss_1"
+            "bossId": "murloc_warlord"
         },
         {
             "id": "dungeon_4",
-            "palier": 3,
-            "name": "Le Sanctuaire Oublié",
-            "biome": "occult",
-            "monsters": ["cultist_1", "shade_1"],
+            "palier": 2,
+            "name": "The Volcanic Forge",
+            "biome": "fire",
+            "monsters": ["fire_elemental", "obsidian_golem"],
             "killTarget": 25,
-            "bossId": "cultist_boss_1"
+            "bossId": "magma_hydra"
         }
     ]
 }
