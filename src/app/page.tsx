@@ -37,44 +37,34 @@ export default function Home() {
         };
 
         try {
-            const [
-                dungeonsResponse,
-                monstersResponse,
-                itemsResponse,
-                talentsResponse,
-                skillsResponse,
-                affixesResponse,
-                classesResponse,
-                questsResponse,
-                factionsResponse,
-            ] = await Promise.all([
-                fetch('/data/dungeons.json'),
-                fetch('/data/monsters.json'),
-                fetch('/data/items.json'),
-                fetch('/data/talents.json'),
-                fetch('/data/skills.json'),
-                fetch('/data/affixes.json'),
-                fetch('/data/classes.json'),
-                fetch('/data/quests.json'),
-                fetch('/data/factions.json'),
-            ]);
+            const dataPaths = [
+                'dungeons', 'monsters', 'items', 'talents', 'skills', 
+                'affixes', 'classes', 'quests', 'factions'
+            ];
+            
+            const responses = await Promise.all(
+                dataPaths.map(path => fetch(`/data/${path}.json`))
+            );
 
-            const responses = [dungeonsResponse, monstersResponse, itemsResponse, talentsResponse, skillsResponse, affixesResponse, classesResponse, questsResponse, factionsResponse];
             for (const response of responses) {
               if (!response.ok) {
                 throw new Error(`Failed to fetch ${response.url}: ${response.statusText}`);
               }
             }
 
-            const dungeonsData = await dungeonsResponse.json();
-            const monstersData = await monstersResponse.json();
-            const itemsData = await itemsResponse.json();
-            const talentsData = await talentsResponse.json();
-            const skillsData = await skillsResponse.json();
-            const affixesData = await affixesResponse.json();
-            const classesData = await classesResponse.json();
-            const questsData = await questsResponse.json();
-            const factionsData = await factionsResponse.json();
+            const jsonData = await Promise.all(responses.map(res => res.json()));
+
+            const [
+                dungeonsData,
+                monstersData,
+                itemsData,
+                talentsData,
+                skillsData,
+                affixesData,
+                classesData,
+                questsData,
+                factionsData,
+            ] = jsonData;
 
             const gameDataPayload = {
                 dungeons: dungeonsData.dungeons || [],
@@ -88,7 +78,6 @@ export default function Home() {
                 factions: factionsData.factions || []
             };
 
-            // Data validation
             for (const key in gameDataPayload) {
                 if (!Array.isArray((gameDataPayload as any)[key])) {
                     throw new Error(`Data validation failed: ${key} is not an array.`);
