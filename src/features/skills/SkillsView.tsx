@@ -8,23 +8,29 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 
 export function SkillsView() {
-    const { player, gameData, equipSkill, unequipSkill } = useGameStore(state => ({
+    const { player, gameData, equipSkill, unequipSkill, learnSkill } = useGameStore(state => ({
         player: state.player,
         gameData: state.gameData,
         equipSkill: state.equipSkill,
         unequipSkill: state.unequipSkill,
+        learnSkill: state.learnSkill
     }));
 
     if (!player.classeId) return null;
 
-    const learnedActiveSkills = gameData.talents.filter(talent =>
-        talent.classeId === player.classeId &&
-        talent.type === 'actif' &&
-        (player.talents[talent.id] || 0) > 0
+    const learnedSkills = gameData.skills.filter(skill =>
+        skill.classeId === player.classeId &&
+        (player.learnedSkills[skill.id] || 0) > 0
     );
 
-    const availableSkills = learnedActiveSkills.filter(skill => !player.equippedSkills.includes(skill.id));
-    const equippedSkills = player.equippedSkills.map(skillId => skillId ? gameData.talents.find(t => t.id === skillId) : null);
+    const availableToDisplay = learnedSkills.filter(skill => !player.equippedSkills.includes(skill.id));
+    const equippedSkillsDetails = player.equippedSkills.map(skillId => skillId ? gameData.skills.find(s => s.id === skillId) : null);
+    
+    const unlockedButNotLearnedSkills = gameData.skills.filter(skill => 
+        skill.classeId === player.classeId &&
+        player.level >= (skill.niveauRequis || 1) &&
+        (player.learnedSkills[skill.id] || 0) === 0
+    );
 
     const handleEquip = (skillId: string) => {
         const firstEmptySlot = player.equippedSkills.indexOf(null);
@@ -32,19 +38,51 @@ export function SkillsView() {
             equipSkill(skillId, firstEmptySlot);
         }
     };
+    
+     const canLearnSkill = (skillId: string): boolean => {
+        if (player.talentPoints <= 0) return false;
+        const skill = gameData.skills.find(t => t.id === skillId);
+        if (!skill) return false;
+        if ((player.learnedSkills[skill.id] || 0) >= skill.rangMax) return false;
+
+        return (skill.exigences || []).every(req => {
+            const [reqId, reqRankStr] = req.split(':');
+            const reqRank = parseInt(reqRankStr, 10);
+            return (player.learnedSkills[reqId] || 0) >= reqRank;
+        });
+    };
 
     return (
         <Card className="h-full flex flex-col">
             <CardHeader>
                 <CardTitle>Compétences Actives</CardTitle>
-                <CardDescription>Équipez jusqu'à 4 compétences à utiliser en combat.</CardDescription>
+                <CardDescription>Apprenez et équipez jusqu'à 4 compétences à utiliser en combat.</CardDescription>
             </CardHeader>
-            <CardContent className="flex-grow flex flex-col gap-8">
+            <CardContent className="flex-grow flex flex-col gap-4">
+                 <div>
+                    <h3 className="font-semibold mb-2 text-center">Compétences à Apprendre ({player.talentPoints} points)</h3>
+                    <Separator className="mb-4"/>
+                    <div className="space-y-2 p-4 rounded-lg bg-background/50 min-h-[100px]">
+                        {unlockedButNotLearnedSkills.length > 0 ? unlockedButNotLearnedSkills.map(skill => (
+                            <div key={skill.id} className="p-2 border rounded-md bg-card/80 flex items-center justify-between gap-2">
+                                <div className="flex items-center gap-2">
+                                    <Zap className="h-4 w-4 text-muted-foreground" />
+                                    <span>{skill.nom} <span className="text-xs text-muted-foreground">(Niv. {skill.niveauRequis})</span></span>
+                                </div>
+                                <Button size="sm" variant="outline" onClick={() => learnSkill(skill.id)} disabled={!canLearnSkill(skill.id)}>
+                                    <PlusCircle className="h-4 w-4 mr-2"/>
+                                    Apprendre
+                                </Button>
+                            </div>
+                        )) : <p className="text-center text-sm text-muted-foreground pt-8">Aucune nouvelle compétence à ce niveau.</p>}
+                    </div>
+                </div>
+
                 <div>
-                    <h3 className="font-semibold mb-2 text-center">Compétences Apprises</h3>
+                    <h3 className="font-semibold mb-2 text-center">Compétences Disponibles</h3>
                     <Separator className="mb-4"/>
                     <div className="space-y-2 p-4 rounded-lg bg-background/50 min-h-[150px]">
-                        {availableSkills.length > 0 ? availableSkills.map(skill => (
+                        {availableToDisplay.length > 0 ? availableToDisplay.map(skill => (
                             <div key={skill.id} className="p-2 border rounded-md bg-card/80 flex items-center justify-between gap-2">
                                 <div className="flex items-center gap-2">
                                     <Zap className="h-4 w-4 text-yellow-400" />
@@ -58,11 +96,12 @@ export function SkillsView() {
                         )) : <p className="text-center text-sm text-muted-foreground pt-8">Aucune autre compétence à équiper.</p>}
                     </div>
                 </div>
+
                 <div>
                     <h3 className="font-semibold mb-2 text-center">Barre d'Action</h3>
                      <Separator className="mb-4"/>
                     <div className="grid grid-cols-4 gap-2">
-                        {equippedSkills.map((skill, index) => (
+                        {equippedSkillsDetails.map((skill, index) => (
                              <div key={index} className={cn("h-24 border-2 border-dashed rounded-lg flex items-center justify-center transition-colors text-center", skill && "border-solid border-primary/50 bg-card/50")}>
                                 {skill ? (
                                     <div className="relative w-full h-full p-2 flex items-center justify-center">
@@ -85,5 +124,3 @@ export function SkillsView() {
         </Card>
     );
 }
-
-    

@@ -23,17 +23,18 @@ export default function Home() {
   useEffect(() => {
     async function loadGameData() {
       try {
-        const [dungeons, monsters, items, talents, affixes, classes, quests, factions] = await Promise.all([
+        const [dungeons, monsters, items, talents, skills, affixes, classes, quests, factions] = await Promise.all([
           fetch('/data/dungeons.json').then(res => res.json()),
           fetch('/data/monsters.json').then(res => res.json()),
           fetch('/data/items.json').then(res => res.json()),
           fetch('/data/talents.json').then(res => res.json()),
+          fetch('/data/skills.json').then(res => res.json()),
           fetch('/data/affixes.json').then(res => res.json()),
           fetch('/data/classes.json').then(res => res.json()),
           fetch('/data/quests.json').then(res => res.json()),
           fetch('/data/factions.json').then(res => res.json()),
         ]);
-        initializeGameData({ dungeons, monsters, items, talents, affixes, classes, quests, factions });
+        initializeGameData({ dungeons, monsters, items, talents, skills, affixes, classes, quests, factions });
       } catch (error) {
         console.error("Failed to load game data:", error);
       } finally {

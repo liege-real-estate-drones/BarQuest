@@ -12,6 +12,7 @@ import type {
   ClasseSchema,
   QueteSchema,
   FactionSchema,
+  SkillSchema,
 } from '@/data/schemas';
 
 export type Rareté = z.infer<typeof RaretéEnum>;
@@ -20,6 +21,7 @@ export type Faction = z.infer<typeof FactionSchema>;
 export type Stats = z.infer<typeof StatsSchema>;
 export type Affixe = z.infer<typeof AffixSchema>;
 export type Item = z.infer<typeof ItemSchema> & { vendorPrice?: number };
+export type Skill = z.infer<typeof SkillSchema>;
 export type Talent = z.infer<typeof TalentSchema>;
 export type Monstre = z.infer<typeof MonsterSchema> & { id: string };
 export type Dungeon = z.infer<typeof DungeonSchema>;
@@ -29,6 +31,18 @@ export type PlayerClassId = 'berserker' | 'mage' | 'rogue' | 'cleric';
 
 export type ResourceType = 'Mana' | 'Rage' | 'Énergie';
 
+export interface GameData {
+  dungeons: Dungeon[];
+  monsters: Monstre[];
+  items: Item[];
+  talents: Talent[];
+  skills: Skill[];
+  affixes: Affixe[];
+  classes: Classe[];
+  quests: Quete[];
+  factions: Faction[];
+}
+
 export interface PlayerState {
   name: string;
   classeId: PlayerClassId | null;
@@ -37,7 +51,8 @@ export interface PlayerState {
   baseStats: Stats; // Unmodified stats from class + level
   stats: Stats; // Current stats with equipment
   talentPoints: number;
-  talents: { [talentId: string]: number }; // e.g. { 'wr1': 2, 'wr5': 1 }
+  learnedSkills: { [skillId: string]: number }; // e.g. { 'berserker_heroic_strike': 1 }
+  learnedTalents: { [talentId: string]: number }; // e.g. { 'berserker_toughness': 2 }
   equippedSkills: (string | null)[]; // Array of 4 slots for equipped skills
   resources: {
     current: number;

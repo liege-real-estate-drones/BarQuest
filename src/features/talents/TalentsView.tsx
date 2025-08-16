@@ -11,7 +11,6 @@ import { Talent } from '@/lib/types';
 
 const TalentCard = ({ talent, player, gameData, canLearn, currentRank, isMaxRank, onLearn }: { talent: Talent, player: any, gameData: any, canLearn: boolean, currentRank: number, isMaxRank: boolean, onLearn: (id: string) => void }) => {
     const isLockedByLevel = talent.niveauRequis && player.level < talent.niveauRequis;
-    const playerTalents = gameData.talents.filter((t: Talent) => t.classeId === player.classeId);
     
     return (
         <Popover>
@@ -19,7 +18,7 @@ const TalentCard = ({ talent, player, gameData, canLearn, currentRank, isMaxRank
                 <PopoverTrigger asChild>
                     <div className="flex-grow cursor-pointer">
                       <div className="flex items-center gap-2">
-                        {talent.type === 'actif' ? <Zap className="h-4 w-4 text-yellow-400" /> : <Star className="h-4 w-4 text-green-400" />}
+                        <Star className="h-4 w-4 text-green-400" />
                         <p className="font-semibold">{talent.nom}</p>
                       </div>
                       <p className="text-xs text-muted-foreground ml-6">Rang {currentRank}/{talent.rangMax}</p>
@@ -40,7 +39,7 @@ const TalentCard = ({ talent, player, gameData, canLearn, currentRank, isMaxRank
             <PopoverContent side="bottom" align="start">
                 <div className="max-w-xs p-2">
                     <p className="font-bold text-base text-primary mb-1">{talent.nom}</p>
-                    <p className="text-sm text-muted-foreground capitalize">{talent.type === 'actif' ? 'Compétence Active' : 'Talent Passif'}</p>
+                    <p className="text-sm text-muted-foreground capitalize">Talent Passif</p>
                     <Separator className="my-2" />
                     <p className="text-sm mb-2">Effets (Rang {currentRank > 0 ? currentRank : 1}):</p>
                     <ul className="list-disc list-inside space-y-1">
@@ -54,8 +53,8 @@ const TalentCard = ({ talent, player, gameData, canLearn, currentRank, isMaxRank
                                 {talent.niveauRequis && <p className={`text-xs ${player.level >= talent.niveauRequis ? 'text-muted-foreground' : 'text-amber-400'}`}>- Niveau {talent.niveauRequis}</p>}
                                 {talent.exigences.map(req => {
                                     const [reqId, reqRankStr] = req.split(':');
-                                    const reqTalent = playerTalents.find(t => t.id === reqId);
-                                    const hasReq = (player.talents[reqId] || 0) >= parseInt(reqRankStr, 10);
+                                    const reqTalent = [...gameData.talents, ...gameData.skills].find(t => t.id === reqId);
+                                    const hasReq = (player.learnedTalents[reqId] || player.learnedSkills[reqId] || 0) >= parseInt(reqRankStr, 10);
                                     return <p key={req} className={`text-xs ${hasReq ? 'text-muted-foreground' : 'text-amber-400'}`}>- {reqTalent?.nom} (Rang {reqRankStr})</p>
                                 })}
                             </div>
@@ -85,7 +84,7 @@ export function TalentsView() {
 
         if (talent.niveauRequis && player.level < talent.niveauRequis) return false;
 
-        const currentRank = player.talents[talent.id] || 0;
+        const currentRank = player.learnedTalents[talent.id] || 0;
         if (currentRank >= talent.rangMax) return false;
 
         if (talent.exigences.length === 0) return true;
@@ -93,7 +92,7 @@ export function TalentsView() {
         return talent.exigences.every(req => {
             const [reqId, reqRankStr] = req.split(':');
             const reqRank = parseInt(reqRankStr, 10);
-            return (player.talents[reqId] || 0) >= reqRank;
+            return (player.learnedSkills[reqId] || 0) >= reqRank || (player.learnedTalents[reqId] || 0) >= reqRank;
         });
     };
 
@@ -104,13 +103,13 @@ export function TalentsView() {
                     <span>Arbre de Talents</span>
                     <span className="text-sm font-medium text-primary">{talentPoints} points restants</span>
                 </CardTitle>
-                <CardDescription>Dépensez vos points pour apprendre ou améliorer compétences et talents.</CardDescription>
+                <CardDescription>Dépensez vos points pour apprendre ou améliorer vos talents passifs.</CardDescription>
             </CardHeader>
             <CardContent className="flex-grow">
                 <ScrollArea className="h-full pr-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             {playerTalents.map(talent => {
-                                const currentRank = player.talents[talent.id] || 0;
+                                const currentRank = player.learnedTalents[talent.id] || 0;
                                 const isMaxRank = currentRank >= talent.rangMax;
                                 const canLearn = canLearnTalent(talent.id);
 

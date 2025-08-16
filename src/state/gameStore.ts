@@ -2,7 +2,7 @@
 import create from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import type { Dungeon, Monstre, Item, Talent, Affixe, Stats, PlayerState, InventoryState, CombatLogEntry, CombatState, GameData, Classe, Quete, PlayerClassId, ResourceType, Rareté, CombatEnemy, Faction } from '@/lib/types';
+import type { Dungeon, Monstre, Item, Talent, Skill, Affixe, Stats, PlayerState, InventoryState, CombatLogEntry, CombatState, GameData, Classe, Quete, PlayerClassId, ResourceType, Rareté, CombatEnemy, Faction } from '@/lib/types';
 import * as formulas from '@/core/formulas';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -20,7 +20,8 @@ const getInitialPlayerState = (): PlayerState => {
     baseStats: {} as Stats,
     stats: {} as Stats,
     talentPoints: 0,
-    talents: {},
+    learnedSkills: {},
+    learnedTalents: {},
     equippedSkills: [null, null, null, null],
     resources: {
       current: 0,
@@ -50,18 +51,12 @@ const initialCombatState: CombatState = {
   dungeonRunItems: [],
 };
 
-interface GameDataExtended extends GameData {
-  classes: Classe[];
-  quests: Quete[];
-  factions: Faction[];
-}
-
 interface GameState {
   isInitialized: boolean;
   lastPlayed: number | null;
   view: 'TOWN' | 'COMBAT';
   currentDungeon: Dungeon | null;
-  gameData: GameDataExtended;
+  gameData: GameData;
   player: PlayerState;
   inventory: InventoryState;
   combat: CombatState;
@@ -75,6 +70,7 @@ interface GameState {
   unequipItem: (slot: keyof InventoryState['equipment']) => void;
   buyItem: (item: Item) => boolean;
   sellItem: (itemId: string) => void;
+  learnSkill: (skillId: string) => void;
   learnTalent: (talentId: string) => void;
   equipSkill: (skillId: string, slot: number) => void;
   unequipSkill: (slot: number) => void;
@@ -177,7 +173,7 @@ export const useGameStore = create<GameState>()(
       lastPlayed: null,
       view: 'TOWN',
       currentDungeon: null,
-      gameData: { dungeons: [], monsters: [], items: [], talents: [], affixes: [], classes: [], quests: [], factions: [] },
+      gameData: { dungeons: [], monsters: [], items: [], talents: [], skills: [], affixes: [], classes: [], quests: [], factions: [] },
       player: getInitialPlayerState(),
       inventory: initialInventoryState,
       combat: initialCombatState,
@@ -240,23 +236,17 @@ export const useGameStore = create<GameState>()(
       checkAndAssignStarterSkill: () => {
         set(state => {
             const { player, gameData } = state;
-            if (!player.classeId || !gameData.talents || gameData.talents.length === 0) return;
+            if (!player.classeId || !gameData.skills || gameData.skills.length === 0) return;
 
-            const hasAnyActiveSkillLearned = Object.keys(player.talents).some(talentId => {
-                const talent = gameData.talents.find(t => t.id === talentId);
-                return talent && talent.type === 'actif' && (player.talents[talentId] || 0) > 0;
-            });
-            
-            if (hasAnyActiveSkillLearned) return;
+            const hasAnySkillLearned = Object.keys(player.learnedSkills).length > 0;
+            if (hasAnySkillLearned) return;
 
-            const startingSkill = gameData.talents.find(t => 
-                t.classeId === player.classeId && 
-                t.type === 'actif' && 
-                (!t.exigences || t.exigences.length === 0)
+            const startingSkill = gameData.skills.find(s => 
+                s.classeId === player.classeId && s.niveauRequis === 1
             );
 
             if (startingSkill) {
-                player.talents[startingSkill.id] = 1;
+                player.learnedSkills[startingSkill.id] = 1;
                 if (player.equippedSkills.every(s => s === null)) {
                     player.equippedSkills[0] = startingSkill.id;
                 }
@@ -269,7 +259,8 @@ export const useGameStore = create<GameState>()(
           const { player, inventory, gameData } = state;
           if (!player.classeId) return;
 
-          player.talents = player.talents || {};
+          player.learnedSkills = player.learnedSkills || {};
+          player.learnedTalents = player.learnedTalents || {};
           player.equippedSkills = player.equippedSkills || [null, null, null, null];
           player.reputation = player.reputation || {};
           player.activeEffects = player.activeEffects || [];
@@ -296,13 +287,13 @@ export const useGameStore = create<GameState>()(
             }
           });
           
-          Object.entries(player.talents).forEach(([talentId, rank]) => {
+          Object.entries(player.learnedTalents).forEach(([talentId, rank]) => {
               const talentData = gameData.talents.find(t => t.id === talentId);
-              if (!talentData || talentData.type !== 'passif') return;
+              if (!talentData) return;
               
               talentData.effets.forEach(effectString => {
                   const value = getTalentEffectValue(effectString, rank);
-                   if (effectString.includes('armure')) {
+                   if (effectString.includes('Armure')) {
                       newStats.Armure += (newStats.Armure * value) / 100;
                   } else if (effectString.includes('PV')) {
                       newStats.PV += (newStats.PV * value) / 100;
@@ -412,27 +403,53 @@ export const useGameStore = create<GameState>()(
         });
       },
 
-      learnTalent: (talentId: string) => {
+      learnSkill: (skillId: string) => {
         set(state => {
           const { player, gameData } = state;
-          const talent = gameData.talents.find(t => t.id === talentId);
-          if (!talent || player.talentPoints <= 0) return;
+          const skill = gameData.skills.find(s => s.id === skillId);
+          if (!skill || player.talentPoints <= 0) return;
 
-          const currentRank = player.talents[talentId] || 0;
-          if (currentRank >= talent.rangMax) return;
+          const currentRank = player.learnedSkills[skillId] || 0;
+          if (currentRank >= skill.rangMax) return;
           
           let canLearn = true;
-          if (talent.exigences && talent.exigences.length > 0) {
-            talent.exigences.forEach(req => {
+          if (skill.exigences && skill.exigences.length > 0) {
+            skill.exigences.forEach(req => {
               const [reqId, reqRank] = req.split(':');
-              if ((player.talents[reqId] || 0) < Number(reqRank)) {
+              if ((player.learnedSkills[reqId] || 0) < Number(reqRank)) {
                 canLearn = false;
               }
             });
           }
 
           if (canLearn) {
-            player.talents[talentId] = currentRank + 1;
+            player.learnedSkills[skillId] = currentRank + 1;
+            player.talentPoints -= 1;
+          }
+        });
+      },
+
+      learnTalent: (talentId: string) => {
+        set(state => {
+          const { player, gameData } = state;
+          const talent = gameData.talents.find(t => t.id === talentId);
+          if (!talent || player.talentPoints <= 0) return;
+
+          const currentRank = player.learnedTalents[talentId] || 0;
+          if (currentRank >= talent.rangMax) return;
+          
+          let canLearn = true;
+          if (talent.exigences && talent.exigences.length > 0) {
+            talent.exigences.forEach(req => {
+              const [reqId, reqRank] = req.split(':');
+              if ((player.learnedSkills[reqId] || 0) < Number(reqRank)) {
+                canLearn = false;
+              }
+            });
+          }
+
+          if (canLearn) {
+            player.learnedTalents[talentId] = currentRank + 1;
             player.talentPoints -= 1;
           }
         });
@@ -625,7 +642,7 @@ export const useGameStore = create<GameState>()(
 
             if(player.resources.type === 'Rage' && !isCleave) {
               let rageGained = 5;
-              const criDeGuerreRank = player.talents['berserker_battle_cry'] || 0;
+              const criDeGuerreRank = player.learnedTalents['berserker_battle_cry'] || 0;
               if (criDeGuerreRank > 0) {
                  const talent = state.gameData.talents.find(t => t.id === 'berserker_battle_cry');
                  if(talent) {
@@ -637,7 +654,7 @@ export const useGameStore = create<GameState>()(
         });
         
         const { player } = get();
-        const cleaveRank = player.talents['berserker_cleave'] || 0;
+        const cleaveRank = player.learnedTalents['berserker_cleave'] || 0;
         const enemies = get().combat.enemies;
         if (!isCleave && cleaveRank > 0 && enemies.length > 1) {
             const secondaryTarget = enemies.find(e => e.id !== targetId);
@@ -655,8 +672,8 @@ export const useGameStore = create<GameState>()(
             const { player, combat, gameData } = state;
             if (combat.enemies.length === 0) return;
 
-            const rank = player.talents[skillId];
-            const skill = gameData.talents.find(t => t.id === skillId);
+            const rank = player.learnedSkills[skillId];
+            const skill = gameData.skills.find(t => t.id === skillId);
             if (!skill || !rank) return;
 
             const resourceCostMatch = skill.effets.join(' ').match(/Coûte (\d+) (Rage|Mana|Énergie)/);

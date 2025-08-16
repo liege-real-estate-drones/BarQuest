@@ -51,17 +51,25 @@ export const ClasseSchema = z.object({
   statsBase: StatsSchema,
 });
 
-
-export const TalentSchema = z.object({
+const BaseSkillTalentSchema = z.object({
   id: z.string(),
   nom: z.string(),
   classeId: z.string(),
-  type: z.enum(["actif", "passif"]).default("passif"),
+  type: z.enum(["actif", "passif"]),
   niveauRequis: z.number().int().optional(),
   rangMax: z.number().int(),
   effets: z.array(z.string()),
   exigences: z.array(z.string()),
 });
+
+export const SkillSchema = BaseSkillTalentSchema.extend({
+  type: z.literal("actif"),
+});
+
+export const TalentSchema = BaseSkillTalentSchema.extend({
+  type: z.literal("passif"),
+});
+
 
 export const MonsterSchema = z.object({
   id: z.string(),
