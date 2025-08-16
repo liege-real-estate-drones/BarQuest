@@ -1,31 +1,31 @@
 
 [
   {
-    "id": "warrior",
-    "nom": "Guerrier",
+    "id": "berserker",
+    "nom": "Berserker",
     "ressource": "Rage",
     "archétype": "Mêlée lourde",
-    "statsBase": { "PV": 150, "RessourceMax": 100, "AttMin": 8, "AttMax": 12, "CritPct": 0.05, "CritDmg": 1.5, "Armure": 25, "ResElems": {"feu": 0, "glace": 0}, "Vitesse": 1.8, "Precision": 0.9, "Esquive": 0.05, "Force": 12, "Intelligence": 4, "Dexterite": 8, "Esprit": 6 }
-  },
-  {
-    "id": "rogue",
-    "nom": "Voleur",
-    "ressource": "Énergie",
-    "archétype": "DPS rapide",
-    "statsBase": { "PV": 100, "RessourceMax": 100, "AttMin": 6, "AttMax": 9, "CritPct": 0.15, "CritDmg": 1.75, "Armure": 10, "ResElems": {"feu": 0, "glace": 0}, "Vitesse": 1.4, "Precision": 0.95, "Esquive": 0.15, "Force": 6, "Intelligence": 6, "Dexterite": 12, "Esprit": 6 }
+    "statsBase": { "Force": 10, "Intelligence": 2, "Dexterite": 5, "Esprit": 4, "PV": 120, "AttMin": 6, "AttMax": 10, "CritPct": 5, "CritDmg": 150, "Armure": 15, "Vitesse": 2, "Precision": 90, "Esquive": 5 }
   },
   {
     "id": "mage",
     "nom": "Mage",
     "ressource": "Mana",
     "archétype": "Caster",
-    "statsBase": { "PV": 80, "RessourceMax": 200, "AttMin": 4, "AttMax": 6, "CritPct": 0.1, "CritDmg": 1.5, "Armure": 5, "ResElems": {"feu": 5, "glace": 5}, "Vitesse": 2.2, "Precision": 0.95, "Esquive": 0.05, "Force": 4, "Intelligence": 12, "Dexterite": 6, "Esprit": 8 }
+    "statsBase": { "Force": 2, "Intelligence": 10, "Dexterite": 4, "Esprit": 8, "PV": 80, "AttMin": 2, "AttMax": 4, "CritPct": 5, "CritDmg": 150, "Armure": 3, "Vitesse": 2.5, "Precision": 90, "Esquive": 5 }
+  },
+  {
+    "id": "rogue",
+    "nom": "Voleur",
+    "ressource": "Énergie",
+    "archétype": "DPS rapide",
+    "statsBase": { "Force": 5, "Intelligence": 4, "Dexterite": 10, "Esprit": 3, "PV": 100, "AttMin": 5, "AttMax": 8, "CritPct": 10, "CritDmg": 160, "Armure": 8, "Vitesse": 1.5, "Precision": 95, "Esquive": 10 }
   },
   {
     "id": "cleric",
     "nom": "Clerc",
     "ressource": "Mana",
     "archétype": "Soutien",
-    "statsBase": { "PV": 120, "RessourceMax": 150, "AttMin": 5, "AttMax": 8, "CritPct": 0.08, "CritDmg": 1.5, "Armure": 15, "ResElems": {"feu": 2, "glace": 2}, "Vitesse": 2.0, "Precision": 0.9, "Esquive": 0.1, "Force": 8, "Intelligence": 8, "Dexterite": 6, "Esprit": 10 }
+    "statsBase": { "Force": 6, "Intelligence": 6, "Dexterite": 3, "Esprit": 10, "PV": 110, "AttMin": 4, "AttMax": 6, "CritPct": 5, "CritDmg": 150, "Armure": 12, "Vitesse": 2.2, "Precision": 90, "Esquive": 5 }
   }
 ]
