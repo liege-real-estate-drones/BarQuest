@@ -210,7 +210,7 @@ export const useGameStore = create<GameState>()(
 
             state.player.classeId = chosenClass.id as PlayerClassId;
             state.player.baseStats = chosenClass.statsBase;
-            state.player.talentPoints = 0;
+            state.player.talentPoints = 1;
 
             let maxResource = formulas.calculateMaxMana(1, chosenClass.statsBase);
             let currentResource = maxResource;
@@ -237,6 +237,8 @@ export const useGameStore = create<GameState>()(
         set(state => {
             const { player, gameData } = state;
             if (!player.classeId || !gameData.skills || gameData.skills.length === 0) return;
+            
+            player.learnedSkills = player.learnedSkills || {};
 
             const hasAnySkillLearned = Object.keys(player.learnedSkills).length > 0;
             if (hasAnySkillLearned) return;
@@ -247,6 +249,7 @@ export const useGameStore = create<GameState>()(
 
             if (startingSkill) {
                 player.learnedSkills[startingSkill.id] = 1;
+                player.talentPoints -= 1;
                 if (player.equippedSkills.every(s => s === null)) {
                     player.equippedSkills[0] = startingSkill.id;
                 }
@@ -577,7 +580,7 @@ export const useGameStore = create<GameState>()(
       gameTick: (delta) => {
           const { view, combat } = get();
           
-          if(view !== 'COMBAT' || combat.enemies.length === 0) {
+          if(view !== 'COMBAT' || !combat.enemies || combat.enemies.length === 0) {
             if(gameLoop) clearInterval(gameLoop);
             return;
           }
@@ -670,7 +673,7 @@ export const useGameStore = create<GameState>()(
       useSkill: (skillId: string) => {
         set(state => {
             const { player, combat, gameData } = state;
-            if (combat.enemies.length === 0) return;
+            if (!combat.enemies || combat.enemies.length === 0) return;
 
             const rank = player.learnedSkills[skillId];
             const skill = gameData.skills.find(t => t.id === skillId);
@@ -897,3 +900,5 @@ export const useGameStore = create<GameState>()(
     }
   )
 );
+
+    
