@@ -41,30 +41,30 @@ export function CombatView() {
   const [targetIndex, setTargetIndex] = useState(0);
 
   const equippedSkills = useMemo(() => {
-    if (!player.equippedSkills) return [];
+    if (!player?.equippedSkills) return [];
     return player.equippedSkills
       .map(skillId => {
         if (!skillId) return null;
         return gameData.talents.find(t => t.id === skillId) || null;
       })
       .filter((t): t is Talent => t !== null);
-  }, [player.equippedSkills, gameData.talents]);
+  }, [player?.equippedSkills, gameData.talents]);
 
   useEffect(() => {
-    if (enemies.length === 0) {
+    if (enemies && enemies.length === 0) {
       startCombat();
     }
   }, [enemies, startCombat]);
   
   useEffect(() => {
     setTargetIndex(0);
-  }, [enemies.length]);
+  }, [enemies?.length]);
 
   const handleCycleTarget = () => {
     cycleTarget();
   };
   
-  if (enemies.length === 0 || !currentDungeon) {
+  if (!enemies || enemies.length === 0 || !currentDungeon) {
     return <div className="flex items-center justify-center h-screen">Finding a target...</div>;
   }
 
