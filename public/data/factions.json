@@ -1,6 +1,13 @@
 
-{
-    "factions": [
-        { "id": "town_guard", "name": "Town Guard", "ranks": ["Neutral", "Friendly", "Honored", "Revered", "Exalted"] }
-    ]
-}
+[
+    {
+        "id": "town_guard",
+        "name": "Town Guard",
+        "ranks": ["Neutral", "Friendly", "Honored", "Revered", "Exalted"]
+    },
+    {
+        "id": "arcanum",
+        "name": "The Arcanum",
+        "ranks": ["Neutral", "Friendly", "Honored", "Revered", "Exalted"]
+    }
+]

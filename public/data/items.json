@@ -1,7 +1,50 @@
 
-{
-    "items": [
-        { "id": "rusty_sword", "name": "Rusty Sword", "slot": "weapon", "niveauMin": 1, "rarity": "Commun", "tagsClasse": ["common"], "affixes": [{ "ref": "Force", "val": 1 }] },
-        { "id": "apprentice_wand", "name": "Apprentice's Wand", "slot": "weapon", "niveauMin": 1, "rarity": "Commun", "tagsClasse": ["mage", "cleric"], "affixes": [{ "ref": "Intelligence", "val": 1 }] }
-    ]
-}
+[
+    {
+        "id": "rusty_sword",
+        "name": "Rusty Sword",
+        "slot": "weapon",
+        "niveauMin": 1,
+        "rarity": "Commun",
+        "affixes": [{ "ref": "AttMin", "val": 2 }, { "ref": "AttMax", "val": 4 }],
+        "vendorPrice": 10
+    },
+    {
+        "id": "sharpened_axe",
+        "name": "Sharpened Axe",
+        "slot": "weapon",
+        "niveauMin": 3,
+        "rarity": "Rare",
+        "affixes": [{ "ref": "AttMin", "val": 5 }, { "ref": "AttMax", "val": 8 }, { "ref": "CritPct", "val": 2 }],
+        "vendorPrice": 50,
+        "tagsClasse": ["berserker"]
+    },
+    {
+        "id": "glowing_staff",
+        "name": "Glowing Staff",
+        "slot": "weapon",
+        "niveauMin": 3,
+        "rarity": "Rare",
+        "affixes": [{ "ref": "Intelligence", "val": 5 }, { "ref": "CritDmg", "val": 10 }],
+        "vendorPrice": 55,
+        "tagsClasse": ["mage", "cleric"]
+    },
+    {
+        "id": "leather_cap",
+        "name": "Leather Cap",
+        "slot": "head",
+        "niveauMin": 1,
+        "rarity": "Commun",
+        "affixes": [{ "ref": "Armure", "val": 5 }],
+        "vendorPrice": 8
+    },
+    {
+        "id": "potion_minor_healing",
+        "name": "Minor Healing Potion",
+        "slot": "potion",
+        "niveauMin": 1,
+        "rarity": "Commun",
+        "effect": "Heals for 15% of max HP.",
+        "vendorPrice": 50
+    }
+]

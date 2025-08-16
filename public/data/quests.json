@@ -1,6 +1,39 @@
 
-{
-    "quests": [
-        { "id": "quest_1", "type": "chasse", "name": "Clearing the Cellar", "desc": "Slay 10 monsters in the Decrepit Cellar.", "requirements": { "dungeonId": "dungeon_1", "killCount": 10 }, "rewards": { "gold": 50, "xp": 100, "reputation": { "factionId": "town_guard", "amount": 25 } } }
-    ]
-}
+[
+    {
+        "id": "quest_1",
+        "type": "chasse",
+        "name": "Cellar Cleanup",
+        "desc": "Clear out the undead infesting the Decrepit Cellar.",
+        "requirements": {
+            "dungeonId": "dungeon_1",
+            "killCount": 10
+        },
+        "rewards": {
+            "gold": 50,
+            "xp": 100,
+            "reputation": {
+                "factionId": "town_guard",
+                "amount": 25
+            }
+        }
+    },
+    {
+        "id": "quest_2",
+        "type": "chasse",
+        "name": "Imp-losion",
+        "desc": "Deal with the imp problem in the Blazing Pit.",
+        "requirements": {
+            "dungeonId": "dungeon_2",
+            "killCount": 15
+        },
+        "rewards": {
+            "gold": 75,
+            "xp": 150,
+            "reputation": {
+                "factionId": "town_guard",
+                "amount": 35
+            }
+        }
+    }
+]

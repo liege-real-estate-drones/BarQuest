@@ -1,32 +1,21 @@
 
-{
-    "dungeons": [
-        {
-            "id": "dungeon_1",
-            "palier": 1,
-            "name": "The Decrepit Cellar",
-            "biome": "occult",
-            "monsters": ["skel_warrior", "skel_archer"],
-            "killTarget": 10,
-            "bossId": "skel_champion"
-        },
-        {
-            "id": "dungeon_2",
-            "palier": 1,
-            "name": "The Howling Den",
-            "biome": "nature",
-            "monsters": ["wolf", "bear"],
-            "killTarget": 15,
-            "bossId": "alpha_wolf"
-        },
-        {
-            "id": "dungeon_3",
-            "palier": 2,
-            "name": "Ice-Veined Caverns",
-            "biome": "frost",
-            "monsters": ["ice_elemental", "frost_spider"],
-            "killTarget": 20,
-            "bossId": "frost_golem"
-        }
-    ]
-}
+[
+    {
+        "id": "dungeon_1",
+        "palier": 1,
+        "name": "The Decrepit Cellar",
+        "biome": "frost",
+        "monsters": ["skel_warrior", "skel_archer"],
+        "killTarget": 10,
+        "bossId": "skel_boss"
+    },
+    {
+        "id": "dungeon_2",
+        "palier": 1,
+        "name": "The Blazing Pit",
+        "biome": "fire",
+        "monsters": ["imp_berserker", "imp_mage"],
+        "killTarget": 15,
+        "bossId": "imp_overlord"
+    }
+]

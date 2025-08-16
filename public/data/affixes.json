@@ -1,7 +1,7 @@
 
-{
-    "affixes": [
-        { "id": "affix_force", "ref": "Force", "type": "prefix", "portée": [1, 20], "échelonnage": "lin" },
-        { "id": "affix_intel", "ref": "Intelligence", "type": "prefix", "portée": [1, 20], "échelonnage": "lin" }
-    ]
-}
+[
+    { "id": "affix_str", "ref": "Force", "type": "suffix", "portée": [1, 20], "échelonnage": "lin" },
+    { "id": "affix_int", "ref": "Intelligence", "type": "suffix", "portée": [1, 20], "échelonnage": "lin" },
+    { "id": "affix_crit", "ref": "CritPct", "type": "suffix", "portée": [1, 5], "échelonnage": "lin" },
+    { "id": "affix_hp", "ref": "PV", "type": "prefix", "portée": [10, 100], "échelonnage": "lin" }
+]

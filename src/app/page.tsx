@@ -54,35 +54,17 @@ export default function Home() {
 
             const jsonData = await Promise.all(responses.map(res => res.json()));
 
-            const [
-                dungeonsData,
-                monstersData,
-                itemsData,
-                talentsData,
-                skillsData,
-                affixesData,
-                classesData,
-                questsData,
-                factionsData,
-            ] = jsonData;
-
             const gameDataPayload = {
-                dungeons: dungeonsData.dungeons || [],
-                monsters: monstersData.monsters || [],
-                items: itemsData.items || [],
-                talents: talentsData.talents || [],
-                skills: skillsData.skills || [],
-                affixes: affixesData.affixes || [],
-                classes: classesData.classes || [],
-                quests: questsData.quests || [],
-                factions: factionsData.factions || []
+                dungeons: jsonData[0] || [],
+                monsters: jsonData[1] || [],
+                items: jsonData[2] || [],
+                talents: jsonData[3] || [],
+                skills: jsonData[4] || [],
+                affixes: jsonData[5] || [],
+                classes: jsonData[6] || [],
+                quests: jsonData[7] || [],
+                factions: jsonData[8] || []
             };
-
-            for (const key in gameDataPayload) {
-                if (!Array.isArray((gameDataPayload as any)[key])) {
-                    throw new Error(`Data validation failed: ${key} is not an array.`);
-                }
-            }
             
             initializeGameData(gameDataPayload);
             setIsLoading(false);

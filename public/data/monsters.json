@@ -1,8 +1,53 @@
 
-{
-    "monsters": [
-        { "id": "skel_warrior", "nom": "Skeletal Warrior", "level": 1, "palier": 1, "famille": "undead", "stats": { "PV": 40, "AttMin": 5, "AttMax": 8, "CritPct": 5, "CritDmg": 150, "Armure": 10, "Vitesse": 2.5, "Precision": 10, "Esquive": 5 } },
-        { "id": "skel_archer", "nom": "Skeletal Archer", "level": 1, "palier": 1, "famille": "undead", "stats": { "PV": 30, "AttMin": 6, "AttMax": 9, "CritPct": 5, "CritDmg": 150, "Armure": 5, "Vitesse": 2.2, "Precision": 15, "Esquive": 5 } },
-        { "id": "skel_champion", "nom": "Skeletal Champion", "level": 3, "palier": 1, "famille": "undead", "isBoss": true, "stats": { "PV": 150, "AttMin": 10, "AttMax": 15, "CritPct": 10, "CritDmg": 150, "Armure": 25, "Vitesse": 2.0, "Precision": 20, "Esquive": 10 } }
-    ]
-}
+[
+    {
+        "id": "skel_warrior",
+        "nom": "Skeletal Warrior",
+        "level": 1,
+        "famille": "Undead",
+        "palier": 1,
+        "stats": { "PV": 50, "Force": 5, "AttMin": 5, "AttMax": 8, "CritPct": 5, "CritDmg": 150, "Armure": 10, "Vitesse": 2.5, "Precision": 100, "Esquive": 5 }
+    },
+    {
+        "id": "skel_archer",
+        "nom": "Skeletal Archer",
+        "level": 1,
+        "famille": "Undead",
+        "palier": 1,
+        "stats": { "PV": 35, "Dexterite": 7, "AttMin": 6, "AttMax": 9, "CritPct": 8, "CritDmg": 150, "Armure": 5, "Vitesse": 2.2, "Precision": 120, "Esquive": 8 }
+    },
+    {
+        "id": "skel_boss",
+        "nom": "Grave Lord",
+        "level": 3,
+        "famille": "Undead",
+        "isBoss": true,
+        "palier": 1,
+        "stats": { "PV": 200, "Force": 10, "AttMin": 12, "AttMax": 18, "CritPct": 10, "CritDmg": 150, "Armure": 25, "Vitesse": 2.8, "Precision": 110, "Esquive": 10 }
+    },
+    {
+        "id": "imp_berserker",
+        "nom": "Imp Berserker",
+        "level": 2,
+        "famille": "Demon",
+        "palier": 1,
+        "stats": { "PV": 60, "Force": 8, "AttMin": 7, "AttMax": 11, "CritPct": 6, "CritDmg": 160, "Armure": 8, "Vitesse": 2.0, "Precision": 100, "Esquive": 7 }
+    },
+    {
+        "id": "imp_mage",
+        "nom": "Imp Mage",
+        "level": 2,
+        "famille": "Demon",
+        "palier": 1,
+        "stats": { "PV": 45, "Intelligence": 9, "AttMin": 8, "AttMax": 12, "CritPct": 5, "CritDmg": 150, "Armure": 4, "Vitesse": 2.4, "Precision": 100, "Esquive": 5 }
+    },
+    {
+        "id": "imp_overlord",
+        "nom": "Imp Overlord",
+        "level": 4,
+        "famille": "Demon",
+        "isBoss": true,
+        "palier": 1,
+        "stats": { "PV": 250, "Force": 12, "Intelligence": 12, "AttMin": 15, "AttMax": 22, "CritPct": 12, "CritDmg": 160, "Armure": 20, "Vitesse": 2.5, "Precision": 120, "Esquive": 12 }
+    }
+]
