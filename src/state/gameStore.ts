@@ -2,7 +2,7 @@
 import create from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import type { Dungeon, Monstre, Item, Talent, Affixe, Stats, PlayerState, InventoryState, CombatLogEntry, CombatState, GameData, Classe, Quete, PlayerClassId, ResourceType, Rareté, CombatEnemy } from '@/lib/types';
+import type { Dungeon, Monstre, Item, Talent, Affixe, Stats, PlayerState, InventoryState, CombatLogEntry, CombatState, GameData, Classe, Quete, PlayerClassId, ResourceType, Rareté, CombatEnemy, Faction } from '@/lib/types';
 import * as formulas from '@/core/formulas';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -50,12 +50,18 @@ const initialCombatState: CombatState = {
   dungeonRunItems: [],
 };
 
+interface GameDataExtended extends GameData {
+  classes: Classe[];
+  quests: Quete[];
+  factions: Faction[];
+}
+
 interface GameState {
   isInitialized: boolean;
   lastPlayed: number | null;
   view: 'TOWN' | 'COMBAT';
   currentDungeon: Dungeon | null;
-  gameData: GameData;
+  gameData: GameDataExtended;
   player: PlayerState;
   inventory: InventoryState;
   combat: CombatState;
@@ -184,7 +190,7 @@ export const useGameStore = create<GameState>()(
       initializeGameData: (data) => {
         set((state) => {
           if (state.isInitialized) return;
-          state.gameData = data;
+          state.gameData = { ...state.gameData, ...data };
           
           if (state.player.classeId) {
              const savedPlayer = JSON.parse(JSON.stringify(state.player));
@@ -194,8 +200,10 @@ export const useGameStore = create<GameState>()(
                 ...savedPlayer,
                 baseStats: currentClass ? currentClass.statsBase : getInitialPlayerState().baseStats,
              };
-             const startingSkillId = state.gameData.talents.find(t => t.classeId === state.player.classeId && t.type === 'actif' && t.exigences.length === 0)?.id;
-             if(startingSkillId && !state.player.talents[startingSkillId]){
+             
+            // Retroactively grant the starting skill if it's missing for some reason
+            const startingSkillId = state.gameData.talents.find(t => t.classeId === state.player.classeId && t.type === 'actif' && t.exigences.length === 0)?.id;
+            if(startingSkillId && !state.player.talents[startingSkillId]){
                 state.player.talents[startingSkillId] = 1;
                 if(!state.player.equippedSkills.includes(startingSkillId)){
                    const emptySlot = state.player.equippedSkills.indexOf(null);
@@ -203,7 +211,7 @@ export const useGameStore = create<GameState>()(
                       state.player.equippedSkills[emptySlot] = startingSkillId;
                    }
                 }
-             }
+            }
 
           } else {
             state.isInitialized = true;
@@ -226,6 +234,7 @@ export const useGameStore = create<GameState>()(
             const chosenClass = state.gameData.classes.find(c => c.id === classId);
             if (!chosenClass) return;
 
+            // Full Reset
             state.player = getInitialPlayerState();
             state.inventory = initialInventoryState;
             state.combat = initialCombatState;
@@ -238,7 +247,6 @@ export const useGameStore = create<GameState>()(
 
             state.player.classeId = chosenClass.id as PlayerClassId;
             state.player.baseStats = chosenClass.statsBase;
-            state.player.stats = chosenClass.statsBase;
             
             const startingSkillId = state.gameData.talents.find(t => t.classeId === classId && t.type === 'actif' && t.exigences.length === 0)?.id;
             if (startingSkillId) {
@@ -262,8 +270,6 @@ export const useGameStore = create<GameState>()(
                 max: maxResource,
                 type: chosenClass.ressource as ResourceType,
             };
-            
-            state.player.stats.PV = formulas.calculateMaxHP(1, chosenClass.statsBase);
         });
         get().recalculateStats();
       },
@@ -340,9 +346,12 @@ export const useGameStore = create<GameState>()(
              player.resources.max = 100;
           }
           
+          // Don't set HP to max on stat recalculation, only cap it if it's over.
           const currentHp = player.stats.PV;
           if (currentHp > maxHp) {
             player.stats.PV = maxHp;
+          } else if(currentHp <= 0 && state.view !== 'COMBAT') { // If dead outside of combat, set to 1
+             player.stats.PV = 1;
           }
         });
       },
@@ -516,9 +525,7 @@ export const useGameStore = create<GameState>()(
           set(state => {
             state.view = 'COMBAT';
             state.currentDungeon = dungeon;
-            state.combat.killCount = 0;
-            state.combat.dungeonRunItems = [];
-            state.combat.log = [{ message: `Entered ${dungeon.name}.`, type: 'info', timestamp: Date.now() }];
+            state.combat = { ...initialCombatState, log: [{ message: `Entered ${dungeon.name}.`, type: 'info', timestamp: Date.now() }]};
             if (state.player.resources.type === 'Rage') {
               state.player.resources.current = 0;
             }
@@ -639,7 +646,6 @@ export const useGameStore = create<GameState>()(
             }
         });
         
-        // Handle cleave passive
         const { player } = get();
         const cleaveRank = player.talents['berserker_cleave'] || 0;
         const enemies = get().combat.enemies;
@@ -773,7 +779,7 @@ export const useGameStore = create<GameState>()(
 
             // Quest progress
             state.activeQuests.forEach((activeQuest, index) => {
-              if (activeQuest.quete.requirements.dungeonId === currentDungeon?.id) {
+              if (currentDungeon && activeQuest.quete.requirements.dungeonId === currentDungeon.id) {
                 activeQuest.progress++;
                 if (activeQuest.progress >= activeQuest.quete.requirements.killCount) {
                   const quest = activeQuest.quete;
@@ -806,6 +812,7 @@ export const useGameStore = create<GameState>()(
                 state.player.level += 1;
                 state.player.talentPoints += 1;
                 leveledUp = true;
+                 state.player.xp -= xpToNext;
                 state.combat.log.push({ message: `Congratulations! You have reached level ${state.player.level}!`, type: 'levelup', timestamp: Date.now() });
                 xpToNext = get().getXpToNextLevel();
             }
@@ -870,5 +877,3 @@ export const useGameStore = create<GameState>()(
     }
   )
 );
-
-    
