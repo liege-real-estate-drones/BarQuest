@@ -1,10 +1,26 @@
-
 {
-  "factions": [
-    {
-      "id": "town_guard",
-      "name": "Town Guard",
-      "ranks": ["Neutral", "Friendly", "Honored", "Revered", "Exalted"]
-    }
-  ]
+    "factions": [
+        {
+            "id": "garde_de_la_ville",
+            "name": "Garde de la Ville",
+            "ranks": [
+                "Neutre",
+                "Amical",
+                "Honoré",
+                "Révéré",
+                "Exalté"
+            ]
+        },
+        {
+            "id": "cercle_des_mages",
+            "name": "Cercle des Mages",
+            "ranks": [
+                "Neutre",
+                "Amical",
+                "Honoré",
+                "Révéré",
+                "Exalté"
+            ]
+        }
+    ]
 }

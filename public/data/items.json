@@ -1,33 +1,79 @@
-
 {
   "items": [
     {
-      "id": "item_1",
-      "name": "Rusty Sword",
+      "id": "epee_courte_rouillee",
+      "name": "Épée Courte Rouillée",
       "slot": "weapon",
       "niveauMin": 1,
       "rarity": "Commun",
-      "affixes": [{ "ref": "Force", "val": 1 }],
+      "affixes": [
+        { "ref": "AttMin", "val": 3 },
+        { "ref": "AttMax", "val": 5 }
+      ],
+      "tagsClasse": ["berserker", "rogue"],
       "vendorPrice": 10
     },
     {
-      "id": "item_2",
-      "name": "Worn Leather Cap",
+      "id": "baton_noueux",
+      "name": "Bâton Noueux",
+      "slot": "weapon",
+      "niveauMin": 1,
+      "rarity": "Commun",
+      "affixes": [
+        { "ref": "AttMin", "val": 2 },
+        { "ref": "AttMax", "val": 4 },
+        { "ref": "Intelligence", "val": 1 }
+      ],
+      "tagsClasse": ["mage", "cleric"],
+      "vendorPrice": 12
+    },
+    {
+      "id": "chapeau_de_paysan",
+      "name": "Chapeau de Paysan",
       "slot": "head",
       "niveauMin": 1,
       "rarity": "Commun",
       "affixes": [{ "ref": "Armure", "val": 5 }],
+      "tagsClasse": ["common"],
       "vendorPrice": 8
     },
     {
-      "id": "item_3",
-      "name": "Apprentice's Staff",
-      "slot": "weapon",
-      "niveauMin": 2,
-      "rarity": "Rare",
-      "affixes": [{ "ref": "Intelligence", "val": 3 }],
-      "vendorPrice": 50,
-      "tagsClasse": ["mage"]
+      "id": "robe_usee",
+      "name": "Robe Usée",
+      "slot": "chest",
+      "niveauMin": 1,
+      "rarity": "Commun",
+      "affixes": [{ "ref": "Armure", "val": 10 }],
+      "tagsClasse": ["common"],
+      "vendorPrice": 15
+    },
+    {
+        "id": "hache_de_guerre_solide",
+        "name": "Hache de Guerre Solide",
+        "slot": "weapon",
+        "niveauMin": 5,
+        "rarity": "Rare",
+        "affixes": [
+            { "ref": "AttMin", "val": 10 },
+            { "ref": "AttMax", "val": 18 },
+            { "ref": "Force", "val": 3 }
+        ],
+        "tagsClasse": ["berserker"],
+        "vendorPrice": 50
+    },
+    {
+        "id": "sceptre_de_lacolyte",
+        "name": "Sceptre de l'Acolyte",
+        "slot": "weapon",
+        "niveauMin": 5,
+        "rarity": "Rare",
+        "affixes": [
+            { "ref": "AttMin", "val": 8 },
+            { "ref": "AttMax", "val": 15 },
+            { "ref": "Esprit", "val": 3 }
+        ],
+        "tagsClasse": ["cleric"],
+        "vendorPrice": 55
     }
   ]
 }

@@ -1,125 +1,108 @@
-
 {
   "skills": [
     {
-      "id": "berserker_heroic_strike",
-      "nom": "Frappe Héroïque",
+      "id": "berserker_charge",
+      "nom": "Charge",
       "classeId": "berserker",
       "type": "actif",
+      "niveauRequis": 1,
       "rangMax": 5,
-      "effets": ["Inflige 110/120/130/140/150% des dégâts de l'arme. Coûte 15 Rage."],
-      "exigences": [],
-      "niveauRequis": 1
+      "effets": [
+        "Charge un ennemi, infligeant 150/175/200/225/250% des dégâts de l'arme.",
+        "Coûte 20 Rage."
+      ],
+      "exigences": []
     },
     {
-      "id": "berserker_whirlwind",
+      "id": "berserker_tourbillon",
       "nom": "Tourbillon",
       "classeId": "berserker",
       "type": "actif",
-      "rangMax": 3,
-      "effets": ["Inflige 80/90/100% des dégâts de l'arme à tous les ennemis proches. Coûte 25 Rage."],
-      "exigences": ["berserker_heroic_strike:2"],
-      "niveauRequis": 8
-    },
-     {
-      "id": "berserker_enrage",
-      "nom": "Rage",
-      "classeId": "berserker",
-      "type": "actif",
-      "rangMax": 3,
-      "effets": ["Augmente les chances de critique de 10/15/20% pendant 10 secondes. Coûte 20 Rage."],
-      "exigences": ["berserker_whirlwind:1"],
-      "niveauRequis": 16
+      "niveauRequis": 5,
+      "rangMax": 5,
+      "effets": [
+        "Attaque tous les ennemis proches pour 80/90/100/110/120% des dégâts de l'arme.",
+        "Coûte 35 Rage."
+      ],
+      "exigences": ["berserker_charge:1"]
     },
     {
-      "id": "mage_fireball",
+      "id": "mage_boule_de_feu",
       "nom": "Boule de Feu",
       "classeId": "mage",
       "type": "actif",
+      "niveauRequis": 1,
       "rangMax": 5,
-      "effets": ["Inflige 25/50/75/100/125 dégâts de Feu. Coûte 20 Mana."],
-      "exigences": [],
-      "niveauRequis": 1
+      "effets": [
+        "Inflige 20/30/40/50/60 dégâts de Feu.",
+        "Coûte 15 Mana."
+      ],
+      "exigences": []
     },
-     {
-      "id": "mage_frostbolt",
+    {
+      "id": "mage_eclair_de_givre",
       "nom": "Éclair de Givre",
       "classeId": "mage",
       "type": "actif",
-      "rangMax": 3,
-      "effets": ["Inflige 40/60/80 dégâts de Givre et ralentit la vitesse d'attaque de l'ennemi. Coûte 15 Mana."],
-      "exigences": ["mage_fireball:2"],
-      "niveauRequis": 8
+      "niveauRequis": 5,
+      "rangMax": 5,
+      "effets": [
+        "Inflige 15/25/35/45/55 dégâts de Givre et ralentit l'ennemi.",
+        "Coûte 20 Mana."
+      ],
+      "exigences": ["mage_boule_de_feu:1"]
     },
     {
-      "id": "mage_arcane_explosion",
-      "nom": "Explosion des Arcanes",
-      "classeId": "mage",
-      "type": "actif",
-      "rangMax": 3,
-      "effets": ["Inflige 100/150/200 dégâts des Arcanes à tous les ennemis. Coûte 40 Mana."],
-      "exigences": ["mage_frostbolt:1"],
-      "niveauRequis": 16
-    },
-    {
-      "id": "rogue_sinister_strike",
-      "nom": "Attaque pernicieuse",
+      "id": "rogue_attaque_pernicieuse",
+      "nom": "Attaque Pernicieuse",
       "classeId": "rogue",
       "type": "actif",
+      "niveauRequis": 1,
       "rangMax": 5,
-      "effets": ["Inflige 120/130/140/150/160% des dégâts de l'arme. Coûte 40 Énergie."],
-      "exigences": [],
-      "niveauRequis": 1
+      "effets": [
+        "Inflige 120/130/140/150/160% des dégâts de l'arme.",
+        "Coûte 25 Énergie."
+      ],
+      "exigences": []
+    },
+    {
+      "id": "rogue_eventail_de_couteaux",
+      "nom": "Éventail de Couteaux",
+      "classeId": "rogue",
+      "type": "actif",
+      "niveauRequis": 5,
+      "rangMax": 5,
+      "effets": [
+        "Lance des couteaux sur tous les ennemis, infligeant 70/80/90/100/110% des dégâts de l'arme.",
+        "Coûte 40 Énergie."
+      ],
+      "exigences": ["rogue_attaque_pernicieuse:1"]
     },
      {
-      "id": "rogue_eviscerate",
-      "nom": "Éviscération",
-      "classeId": "rogue",
+      "id": "cleric_soin_leger",
+      "nom": "Soin Léger",
+      "classeId": "cleric",
       "type": "actif",
-      "rangMax": 3,
-      "effets": ["Inflige des dégâts en fonction de vos points de combo. Coûte 25 Énergie."],
-      "exigences": ["rogue_sinister_strike:2"],
-      "niveauRequis": 8
+      "niveauRequis": 1,
+      "rangMax": 5,
+      "effets": [
+        "Soigne la cible de 25/35/45/55/65 points de vie.",
+        "Coûte 20 Mana."
+      ],
+      "exigences": []
     },
     {
-      "id": "rogue_fan_of_knives",
-      "nom": "Éventail de couteaux",
-      "classeId": "rogue",
-      "type": "actif",
-      "rangMax": 3,
-      "effets": ["Lance des couteaux sur tous les ennemis, infligeant 70/85/100% des dégâts de l'arme. Coûte 35 Énergie."],
-      "exigences": ["rogue_eviscerate:1"],
-      "niveauRequis": 16
-    },
-    {
-      "id": "cleric_smite",
+      "id": "cleric_chatiment",
       "nom": "Châtiment",
       "classeId": "cleric",
       "type": "actif",
+      "niveauRequis": 5,
       "rangMax": 5,
-      "effets": ["Inflige 20/40/60/80/100 dégâts Sacrés. Coûte 15 Mana."],
-      "exigences": [],
-      "niveauRequis": 1
-    },
-    {
-      "id": "cleric_holy_nova",
-      "nom": "Nova Sacrée",
-      "classeId": "cleric",
-      "type": "actif",
-      "rangMax": 3,
-      "effets": ["Inflige 50/75/100 dégâts Sacrés à tous les ennemis et soigne le lanceur de sorts. Coûte 30 Mana."],
-      "exigences": ["cleric_smite:2"],
-      "niveauRequis": 8
-    },
-    {
-      "id": "cleric_divine_hymn",
-      "nom": "Hymne Divin",
-      "classeId": "cleric",
-      "type": "actif",
-      "rangMax": 3,
-      "effets": ["Soigne le lanceur de sorts de 150/250/350 points de vie sur 5 secondes. Coûte 40 Mana."],
-      "exigences": ["cleric_holy_nova:1"],
-      "niveauRequis": 16
+      "effets": [
+        "Inflige 18/28/38/48/58 dégâts Sacrés à un ennemi.",
+        "Coûte 15 Mana."
+      ],
+      "exigences": ["cleric_soin_leger:1"]
     }
   ]
 }

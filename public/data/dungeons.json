@@ -1,41 +1,44 @@
-
 {
   "dungeons": [
     {
       "id": "dungeon_1",
       "palier": 1,
-      "name": "The Crypt of the Damned",
-      "biome": "frost",
-      "monsters": ["skel_warrior", "skel_archer"],
+      "name": "Cryptes des Déchus",
+      "biome": "occult",
+      "monsters": ["squelette_archer", "zombie_male"],
+      "modifiers": ["Magie Occulte Amplifiée"],
       "killTarget": 10,
-      "bossId": "skel_king"
+      "bossId": "boss_necrophage"
     },
     {
       "id": "dungeon_2",
-      "palier": 2,
-      "name": "The Volcanic Forge",
-      "biome": "fire",
-      "monsters": ["fire_elemental", "lava_golem"],
+      "palier": 1,
+      "name": "Forêt de Givre-Éternel",
+      "biome": "frost",
+      "monsters": ["loup_givre", "elementaire_givre"],
+      "modifiers": ["Froid Mordant"],
       "killTarget": 15,
-      "bossId": "fire_lord"
+      "bossId": "boss_yeti"
     },
     {
       "id": "dungeon_3",
-      "palier": 3,
-      "name": "The Sunken Grotto",
-      "biome": "nature",
-      "monsters": ["murloc_shaman", "murloc_warrior"],
+      "palier": 2,
+      "name": "Cavernes de Magma",
+      "biome": "fire",
+      "monsters": ["diablotin_feu", "elementaire_feu"],
+      "modifiers": ["Chaleur Insoutenable"],
       "killTarget": 20,
-      "bossId": "murloc_chief"
+      "bossId": "boss_demon_majeur"
     },
     {
       "id": "dungeon_4",
-      "palier": 4,
-      "name": "The Shadowy Sepulcher",
-      "biome": "occult",
-      "monsters": ["cultist_acolyte", "shadow_beast"],
+      "palier": 3,
+      "name": "Bosquet Verdoyant",
+      "biome": "nature",
+      "monsters": ["geant_nature", "loup_nature"],
+      "modifiers": ["Croissance Sauvage"],
       "killTarget": 25,
-      "bossId": "shadow_lich"
+      "bossId": "boss_treant"
     }
   ]
 }

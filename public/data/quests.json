@@ -1,41 +1,40 @@
-
 {
-  "quests": [
-    {
-      "id": "quest_1",
-      "type": "chasse",
-      "name": "First Steps",
-      "desc": "Kill 10 monsters in the Crypt of the Damned.",
-      "requirements": {
-        "dungeonId": "dungeon_1",
-        "killCount": 10
-      },
-      "rewards": {
-        "gold": 50,
-        "xp": 100,
-        "reputation": {
-          "factionId": "town_guard",
-          "amount": 10
+    "quests": [
+        {
+            "id": "quest_1",
+            "type": "chasse",
+            "name": "Nettoyage des Cryptes",
+            "desc": "Les morts-vivants dans les cryptes deviennent un problème. Allez en éliminer quelques-uns.",
+            "requirements": {
+                "dungeonId": "dungeon_1",
+                "killCount": 10
+            },
+            "rewards": {
+                "gold": 50,
+                "xp": 100,
+                "reputation": {
+                    "factionId": "garde_de_la_ville",
+                    "amount": 25
+                }
+            }
+        },
+        {
+            "id": "quest_2",
+            "type": "chasse",
+            "name": "Un Froid Glacial",
+            "desc": "Les créatures de la forêt de givre menacent les voyageurs. Réduisez leur nombre.",
+            "requirements": {
+                "dungeonId": "dungeon_2",
+                "killCount": 15
+            },
+            "rewards": {
+                "gold": 75,
+                "xp": 150,
+                "reputation": {
+                    "factionId": "garde_de_la_ville",
+                    "amount": 35
+                }
+            }
         }
-      }
-    },
-     {
-      "id": "quest_2",
-      "type": "chasse",
-      "name": "Cleansing the Crypt",
-      "desc": "Kill the Skeleton King in the Crypt of the Damned.",
-      "requirements": {
-        "dungeonId": "dungeon_1",
-        "killCount": 1
-      },
-      "rewards": {
-        "gold": 100,
-        "xp": 250,
-        "reputation": {
-          "factionId": "town_guard",
-          "amount": 25
-        }
-      }
-    }
-  ]
+    ]
 }

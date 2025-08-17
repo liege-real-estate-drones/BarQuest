@@ -1,33 +1,88 @@
-
 {
   "classes": [
     {
       "id": "berserker",
       "nom": "Berserker",
       "ressource": "Rage",
-      "archétype": "Melee Warrior",
-      "statsBase": { "PV": 150, "Force": 12, "Intelligence": 5, "Dexterite": 8, "Esprit": 5, "AttMin": 8, "AttMax": 12, "CritPct": 5, "CritDmg": 150, "Armure": 20, "Vitesse": 2.8, "Precision": 85, "Esquive": 5 }
+      "archétype": "Guerrier féroce qui se complaît dans le chaos du combat.",
+      "statsBase": {
+        "PV": 120,
+        "Force": 12,
+        "Intelligence": 5,
+        "Dexterite": 8,
+        "Esprit": 5,
+        "AttMin": 5,
+        "AttMax": 8,
+        "CritPct": 5,
+        "CritDmg": 150,
+        "Armure": 15,
+        "Vitesse": 2.8,
+        "Precision": 95,
+        "Esquive": 5
+      }
     },
     {
       "id": "mage",
       "nom": "Mage",
       "ressource": "Mana",
-      "archétype": "Ranged Caster",
-      "statsBase": { "PV": 100, "Force": 5, "Intelligence": 12, "Dexterite": 6, "Esprit": 8, "AttMin": 2, "AttMax": 4, "CritPct": 5, "CritDmg": 150, "Armure": 5, "Vitesse": 2.0, "Precision": 90, "Esquive": 5 }
+      "archétype": "Maître des arcanes, manipulant les éléments pour anéantir ses ennemis.",
+      "statsBase": {
+        "PV": 80,
+        "Force": 5,
+        "Intelligence": 12,
+        "Dexterite": 6,
+        "Esprit": 7,
+        "AttMin": 2,
+        "AttMax": 4,
+        "CritPct": 5,
+        "CritDmg": 150,
+        "Armure": 5,
+        "Vitesse": 2.5,
+        "Precision": 95,
+        "Esquive": 5
+      }
     },
     {
       "id": "rogue",
       "nom": "Rogue",
       "ressource": "Énergie",
-      "archétype": "Melee Assassin",
-      "statsBase": { "PV": 120, "Force": 8, "Intelligence": 6, "Dexterite": 12, "Esprit": 4, "AttMin": 6, "AttMax": 9, "CritPct": 10, "CritDmg": 160, "Armure": 10, "Vitesse": 1.8, "Precision": 95, "Esquive": 10 }
+      "archétype": "Assassin agile qui frappe depuis l'ombre avec une précision mortelle.",
+      "statsBase": {
+        "PV": 100,
+        "Force": 7,
+        "Intelligence": 6,
+        "Dexterite": 12,
+        "Esprit": 5,
+        "AttMin": 4,
+        "AttMax": 6,
+        "CritPct": 10,
+        "CritDmg": 160,
+        "Armure": 10,
+        "Vitesse": 2.0,
+        "Precision": 100,
+        "Esquive": 10
+      }
     },
     {
       "id": "cleric",
-      "nom": "Cleric",
+      "nom": "Clerc",
       "ressource": "Mana",
-      "archétype": "Healer/Caster",
-      "statsBase": { "PV": 110, "Force": 7, "Intelligence": 10, "Dexterite": 5, "Esprit": 12, "AttMin": 4, "AttMax": 6, "CritPct": 5, "CritDmg": 150, "Armure": 15, "Vitesse": 2.5, "Precision": 88, "Esquive": 5 }
+      "archétype": "Guerrier saint qui manie la lumière pour soigner ses alliés et punir ses ennemis.",
+      "statsBase": {
+        "PV": 90,
+        "Force": 8,
+        "Intelligence": 8,
+        "Dexterite": 5,
+        "Esprit": 10,
+        "AttMin": 3,
+        "AttMax": 5,
+        "CritPct": 5,
+        "CritDmg": 150,
+        "Armure": 12,
+        "Vitesse": 2.7,
+        "Precision": 95,
+        "Esquive": 5
+      }
     }
   ]
 }

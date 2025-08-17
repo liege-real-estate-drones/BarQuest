@@ -1,18 +1,24 @@
-
 {
   "affixes": [
     {
-      "id": "affix_str_1",
+      "id": "force_1",
       "ref": "Force",
       "type": "suffix",
       "portée": [1, 5],
       "échelonnage": "lin"
     },
     {
-      "id": "affix_int_1",
+      "id": "intel_1",
       "ref": "Intelligence",
       "type": "suffix",
       "portée": [1, 5],
+      "échelonnage": "lin"
+    },
+    {
+      "id": "crit_1",
+      "ref": "CritPct",
+      "type": "prefix",
+      "portée": [1, 3],
       "échelonnage": "lin"
     }
   ]

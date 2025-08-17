@@ -1,105 +1,95 @@
-
 {
   "monsters": [
     {
-      "id": "skel_warrior",
-      "nom": "Skeletal Warrior",
+      "id": "squelette_archer",
+      "nom": "Squelette Archer",
       "level": 1,
-      "famille": "Undead",
+      "famille": "Mort-vivant",
       "palier": 1,
-      "stats": { "PV": 50, "AttMin": 5, "AttMax": 8, "CritPct": 5, "CritDmg": 150, "Armure": 10, "Vitesse": 2.5, "Precision": 10, "Esquive": 5 }
+      "stats": {
+        "PV": 50,
+        "AttMin": 8,
+        "AttMax": 12,
+        "CritPct": 5,
+        "CritDmg": 150,
+        "Armure": 20,
+        "Vitesse": 2.5,
+        "Precision": 100,
+        "Esquive": 5
+      }
     },
     {
-      "id": "skel_archer",
-      "nom": "Skeletal Archer",
+      "id": "zombie_male",
+      "nom": "Zombie",
+      "level": 1,
+      "famille": "Mort-vivant",
+      "palier": 1,
+      "stats": {
+        "PV": 70,
+        "AttMin": 10,
+        "AttMax": 15,
+        "CritPct": 2,
+        "CritDmg": 150,
+        "Armure": 30,
+        "Vitesse": 3,
+        "Precision": 90,
+        "Esquive": 2
+      }
+    },
+    {
+      "id": "loup_givre",
+      "nom": "Loup de Givre",
       "level": 2,
-      "famille": "Undead",
+      "famille": "Bête",
       "palier": 1,
-      "stats": { "PV": 35, "AttMin": 6, "AttMax": 9, "CritPct": 5, "CritDmg": 150, "Armure": 5, "Vitesse": 2.2, "Precision": 15, "Esquive": 5 }
+      "stats": {
+        "PV": 60,
+        "AttMin": 12,
+        "AttMax": 18,
+        "CritPct": 10,
+        "CritDmg": 160,
+        "Armure": 25,
+        "Vitesse": 2.2,
+        "Precision": 110,
+        "Esquive": 10
+      }
+    },
+     {
+      "id": "elementaire_givre",
+      "nom": "Élémentaire de Givre",
+      "level": 3,
+      "famille": "Élémentaire",
+      "palier": 1,
+      "stats": {
+        "PV": 80,
+        "AttMin": 15,
+        "AttMax": 22,
+        "CritPct": 5,
+        "CritDmg": 150,
+        "Armure": 40,
+        "Vitesse": 2.8,
+        "Precision": 100,
+        "Esquive": 5
+      }
     },
     {
-      "id": "skel_king",
-      "nom": "The Skeleton King",
+      "id": "boss_necrophage",
+      "nom": "Nécrophage Ancien",
       "level": 5,
-      "famille": "Undead",
+      "famille": "Mort-vivant",
       "isBoss": true,
       "palier": 1,
-      "stats": { "PV": 300, "AttMin": 15, "AttMax": 25, "CritPct": 10, "CritDmg": 150, "Armure": 50, "Vitesse": 3.0, "Precision": 20, "Esquive": 10 }
-    },
-    {
-      "id": "fire_elemental",
-      "nom": "Fire Elemental",
-      "level": 6,
-      "famille": "Elemental",
-      "palier": 2,
-      "stats": { "PV": 120, "AttMin": 18, "AttMax": 28, "CritPct": 5, "CritDmg": 150, "Armure": 30, "Vitesse": 2.0, "Precision": 25, "Esquive": 8 }
-    },
-    {
-      "id": "lava_golem",
-      "nom": "Lava Golem",
-      "level": 7,
-      "famille": "Construct",
-      "palier": 2,
-      "stats": { "PV": 200, "AttMin": 25, "AttMax": 35, "CritPct": 2, "CritDmg": 150, "Armure": 80, "Vitesse": 3.5, "Precision": 22, "Esquive": 3 }
-    },
-    {
-      "id": "fire_lord",
-      "nom": "Ragnaros the Firelord",
-      "level": 10,
-      "famille": "Elemental",
-      "isBoss": true,
-      "palier": 2,
-      "stats": { "PV": 1000, "AttMin": 50, "AttMax": 80, "CritPct": 15, "CritDmg": 175, "Armure": 120, "Vitesse": 2.8, "Precision": 40, "Esquive": 15 }
-    },
-     {
-      "id": "murloc_shaman",
-      "nom": "Murloc Shaman",
-      "level": 11,
-      "famille": "Murloc",
-      "palier": 3,
-      "stats": { "PV": 250, "AttMin": 40, "AttMax": 55, "CritPct": 8, "CritDmg": 150, "Armure": 50, "Vitesse": 2.4, "Precision": 35, "Esquive": 20 }
-    },
-    {
-      "id": "murloc_warrior",
-      "nom": "Murloc Warrior",
-      "level": 12,
-      "famille": "Murloc",
-      "palier": 3,
-      "stats": { "PV": 350, "AttMin": 50, "AttMax": 65, "CritPct": 5, "CritDmg": 150, "Armure": 100, "Vitesse": 2.8, "Precision": 30, "Esquive": 15 }
-    },
-    {
-      "id": "murloc_chief",
-      "nom": "Chief Murgle",
-      "level": 15,
-      "famille": "Murloc",
-      "isBoss": true,
-      "palier": 3,
-      "stats": { "PV": 1500, "AttMin": 80, "AttMax": 120, "CritPct": 10, "CritDmg": 160, "Armure": 150, "Vitesse": 2.5, "Precision": 50, "Esquive": 25 }
-    },
-     {
-      "id": "cultist_acolyte",
-      "nom": "Cultist Acolyte",
-      "level": 16,
-      "famille": "Humanoid",
-      "palier": 4,
-      "stats": { "PV": 400, "AttMin": 60, "AttMax": 80, "CritPct": 10, "CritDmg": 150, "Armure": 70, "Vitesse": 2.2, "Precision": 45, "Esquive": 25 }
-    },
-    {
-      "id": "shadow_beast",
-      "nom": "Shadow Beast",
-      "level": 17,
-      "famille": "Beast",
-      "palier": 4,
-      "stats": { "PV": 600, "AttMin": 70, "AttMax": 90, "CritPct": 12, "CritDmg": 160, "Armure": 120, "Vitesse": 2.6, "Precision": 40, "Esquive": 20 }
-    },
-    {
-      "id": "shadow_lich",
-      "nom": "Kel'Thuzad the Lich",
-      "level": 20,
-      "famille": "Undead",
-      "isBoss": true,
-      "palier": 4,
-      "stats": { "PV": 2500, "AttMin": 120, "AttMax": 180, "CritPct": 20, "CritDmg": 180, "Armure": 200, "Vitesse": 2.3, "Precision": 60, "Esquive": 30 }
+      "stats": {
+        "PV": 300,
+        "AttMin": 25,
+        "AttMax": 40,
+        "CritPct": 10,
+        "CritDmg": 150,
+        "Armure": 100,
+        "Vitesse": 2.5,
+        "Precision": 120,
+        "Esquive": 10
+      }
     }
   ]
 }

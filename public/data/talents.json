@@ -1,65 +1,49 @@
-
 {
-  "talents": [
-    {
-      "id": "berserker_toughness",
-      "nom": "Toughness",
-      "classeId": "berserker",
-      "type": "passif",
-      "rangMax": 5,
-      "effets": ["Augmente les PV de 2/4/6/8/10%"],
-      "exigences": [],
-      "niveauRequis": 1
-    },
-    {
-      "id": "berserker_battle_cry",
-      "nom": "Cri de Guerre",
-      "classeId": "berserker",
-      "type": "passif",
-      "rangMax": 3,
-      "effets": ["Génère 1/2/3 points de rage supplémentaires par coup."],
-      "exigences": [],
-      "niveauRequis": 5
-    },
-    {
-      "id": "berserker_cleave",
-      "nom": "Enchaînement",
-      "classeId": "berserker",
-      "type": "passif",
-      "rangMax": 1,
-      "effets": ["Vos attaques de base infligent 50% de leurs dégâts à une cible supplémentaire."],
-      "exigences": ["berserker_heroic_strike:1"],
-      "niveauRequis": 10
-    },
-    {
-      "id": "mage_arcane_intellect",
-      "nom": "Arcane Intellect",
-      "classeId": "mage",
-      "type": "passif",
-      "rangMax": 5,
-      "effets": ["Augmente l'Intelligence de 2/4/6/8/10%"],
-      "exigences": [],
-      "niveauRequis": 1
-    },
-    {
-      "id": "rogue_fleet_footed",
-      "nom": "Pieds légers",
-      "classeId": "rogue",
-      "type": "passif",
-      "rangMax": 3,
-      "effets": ["Augmente l'Esquive de 1/2/3%"],
-      "exigences": [],
-      "niveauRequis": 1
-    },
-    {
-      "id": "cleric_healing_touch",
-      "nom": "Guérison améliorée",
-      "classeId": "cleric",
-      "type": "passif",
-      "rangMax": 5,
-      "effets": ["Augmente l'Esprit de 2/4/6/8/10%"],
-      "exigences": [],
-      "niveauRequis": 1
-    }
-  ]
+    "talents": [
+        {
+            "id": "berserker_toughness",
+            "nom": "Robustesse",
+            "classeId": "berserker",
+            "type": "passif",
+            "rangMax": 5,
+            "effets": ["Augmente l'Armure de 2/4/6/8/10%."],
+            "exigences": []
+        },
+        {
+            "id": "berserker_battle_cry",
+            "nom": "Cri de Guerre",
+            "classeId": "berserker",
+            "type": "passif",
+            "rangMax": 3,
+            "effets": ["Les attaques de base génèrent 1/2/3 Rage supplémentaire."],
+            "exigences": ["berserker_toughness:1"]
+        },
+        {
+            "id": "mage_intellect",
+            "nom": "Intellect Arcanique",
+            "classeId": "mage",
+            "type": "passif",
+            "rangMax": 5,
+            "effets": ["Augmente l'Intelligence de 2/4/6/8/10%."],
+            "exigences": []
+        },
+        {
+            "id": "rogue_precision",
+            "nom": "Précision",
+            "classeId": "rogue",
+            "type": "passif",
+            "rangMax": 5,
+            "effets": ["Augmente les chances de critique de 1/2/3/4/5%."],
+            "exigences": []
+        },
+        {
+            "id": "cleric_divine_fortitude",
+            "nom": "Volonté Divine",
+            "classeId": "cleric",
+            "type": "passif",
+            "rangMax": 5,
+            "effets": ["Augmente l'Esprit de 2/4/6/8/10%."],
+            "exigences": []
+        }
+    ]
 }
