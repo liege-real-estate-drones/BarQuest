@@ -1,5 +1,6 @@
 
 
+
 import { z } from 'zod';
 import type {
   StatsSchema,
@@ -13,6 +14,7 @@ import type {
   QueteSchema,
   FactionSchema,
   SkillSchema,
+  ItemSetSchema,
 } from '@/data/schemas';
 
 export type Rareté = z.infer<typeof RaretéEnum>;
@@ -26,6 +28,7 @@ export type Talent = z.infer<typeof TalentSchema>;
 export type Monstre = z.infer<typeof MonsterSchema> & { id: string };
 export type Dungeon = z.infer<typeof DungeonSchema>;
 export type Classe = z.infer<typeof ClasseSchema>;
+export type ItemSet = z.infer<typeof ItemSetSchema>;
 
 export type PlayerClassId = 'berserker' | 'mage' | 'rogue' | 'cleric';
 
@@ -41,6 +44,7 @@ export interface GameData {
   classes: Classe[];
   quests: Quete[];
   factions: Faction[];
+  sets: ItemSet[];
 }
 
 export interface PlayerState {
@@ -60,9 +64,13 @@ export interface PlayerState {
     type: ResourceType;
   };
   reputation: {
-    [factionId: string]: number;
+    [factionId: string]: {
+        value: number,
+        claimedRewards: string[],
+    };
   };
   activeEffects: string[];
+  activeSetBonuses: string[];
   completedDungeons: string[];
 }
 

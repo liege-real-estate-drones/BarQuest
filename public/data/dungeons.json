@@ -1,44 +1,23 @@
+
 {
-  "dungeons": [
-    {
-      "id": "dungeon_1",
-      "palier": 1,
-      "name": "Cryptes des Déchus",
-      "biome": "occult",
-      "monsters": ["squelette_archer", "zombie_male"],
-      "modifiers": ["Magie Occulte Amplifiée"],
-      "killTarget": 10,
-      "bossId": "boss_necrophage"
-    },
-    {
-      "id": "dungeon_2",
-      "palier": 1,
-      "name": "Forêt de Givre-Éternel",
-      "biome": "frost",
-      "monsters": ["loup_givre", "elementaire_givre"],
-      "modifiers": ["Froid Mordant"],
-      "killTarget": 15,
-      "bossId": "boss_yeti"
-    },
-    {
-      "id": "dungeon_3",
-      "palier": 2,
-      "name": "Cavernes de Magma",
-      "biome": "fire",
-      "monsters": ["diablotin_feu", "elementaire_feu"],
-      "modifiers": ["Chaleur Insoutenable"],
-      "killTarget": 20,
-      "bossId": "boss_demon_majeur"
-    },
-    {
-      "id": "dungeon_4",
-      "palier": 3,
-      "name": "Bosquet Verdoyant",
-      "biome": "nature",
-      "monsters": ["geant_nature", "loup_nature"],
-      "modifiers": ["Croissance Sauvage"],
-      "killTarget": 25,
-      "bossId": "boss_treant"
-    }
-  ]
+    "dungeons": [
+        {
+            "id": "dungeon_crypt_1",
+            "palier": 1,
+            "name": "Crypte des Profanateurs",
+            "biome": "occult",
+            "monsters": ["mon_undead_ghoul", "mon_undead_skeleton_warrior", "mon_undead_acolyte"],
+            "bossId": "mon_undead_lich_1",
+            "factionId": "faction_argent_guard"
+        },
+        {
+            "id": "dungeon_volcano_1",
+            "palier": 1,
+            "name": "Caverne de Magma",
+            "biome": "fire",
+            "monsters": ["mon_elemental_fire_1", "mon_humanoid_goblin_shaman"],
+            "bossId": "mon_elemental_fire_lord_1",
+            "factionId": "faction_magma_watchers"
+        }
+    ]
 }

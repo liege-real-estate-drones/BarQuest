@@ -29,6 +29,12 @@ export const AffixSchema = z.object({
   échelonnage: z.enum(["lin", "exp", "palier"]),
 });
 
+export const ItemSetSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  bonuses: z.record(z.number(), z.string())
+});
+
 export const ItemSchema = z.object({
   id: z.string(),
   name: z.string(),
@@ -41,6 +47,7 @@ export const ItemSchema = z.object({
   affixes: z.array(z.object({ ref: z.string(), val: z.number() })).default([]),
   tagsClasse: z.array(z.string()).default([]),
   effect: z.string().optional(),
+  set: z.object({ id: z.string(), name: z.string() }).optional(),
 });
 
 export const ClasseSchema = z.object({
@@ -92,6 +99,7 @@ export const DungeonSchema = z.object({
   modifiers: z.array(z.string()).default([]),
   killTarget: z.number().int().default(25),
   bossId: z.string(),
+  factionId: z.string().optional(),
 });
 
 export const QueteSchema = z.object({
@@ -113,8 +121,14 @@ export const QueteSchema = z.object({
   }),
 });
 
+export const FactionRankSchema = z.object({
+  name: z.string(),
+  threshold: z.number().int(),
+  rewardItemId: z.string().optional(),
+});
+
 export const FactionSchema = z.object({
     id: z.string(),
     name: z.string(),
-    ranks: z.array(z.string()),
+    ranks: z.array(FactionRankSchema),
 });

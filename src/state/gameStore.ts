@@ -1,9 +1,10 @@
 
 
+
 import create from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import type { Dungeon, Monstre, Item, Talent, Skill, Stats, PlayerState, InventoryState, CombatLogEntry, CombatState, GameData, Quete, PlayerClassId, ResourceType, Rareté, CombatEnemy } from '@/lib/types';
+import type { Dungeon, Monstre, Item, Talent, Skill, Stats, PlayerState, InventoryState, CombatLogEntry, CombatState, GameData, Quete, PlayerClassId, ResourceType, Rareté, CombatEnemy, ItemSet } from '@/lib/types';
 import * as formulas from '@/core/formulas';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -31,6 +32,7 @@ const getInitialPlayerState = (): PlayerState => {
     },
     reputation: {},
     activeEffects: [],
+    activeSetBonuses: [],
     completedDungeons: [],
   };
 };
@@ -130,6 +132,7 @@ const resolveLoot = (monster: Monstre, gameData: GameData, playerClassId: Player
 
   const possibleItems = gameData.items.filter(item => 
       item.rarity === chosenRarity &&
+      !item.set && // Don't drop set items randomly
       item.slot !== 'potion' &&
       (item.tagsClasse?.includes('common') || (playerClassId && item.tagsClasse?.includes(playerClassId))) && 
       item.niveauMin <= monster.level + 2 &&
@@ -177,7 +180,7 @@ export const useGameStore = create<GameState>()(
       lastPlayed: null,
       view: 'TOWN',
       currentDungeon: null,
-      gameData: { dungeons: [], monsters: [], items: [], talents: [], skills: [], affixes: [], classes: [], quests: [], factions: [] },
+      gameData: { dungeons: [], monsters: [], items: [], talents: [], skills: [], affixes: [], classes: [], quests: [], factions: [], sets: [] },
       player: getInitialPlayerState(),
       inventory: initialInventoryState,
       combat: initialCombatState,
@@ -200,6 +203,7 @@ export const useGameStore = create<GameState>()(
             state.gameData.classes = Array.isArray(data.classes) ? data.classes : [];
             state.gameData.quests = Array.isArray(data.quests) ? data.quests : [];
             state.gameData.factions = Array.isArray(data.factions) ? data.factions : [];
+            state.gameData.sets = Array.isArray(data.sets) ? data.sets : [];
             state.isInitialized = true;
         });
       },
@@ -247,8 +251,6 @@ export const useGameStore = create<GameState>()(
             state.player.stats.PV = maxHp;
             state.player.resources.current = maxResource;
 
-
-            // Learn and equip starting skills
             const startingSkills = state.gameData.skills.filter(s => s.classeId === classId && s.niveauRequis === 1);
             
             startingSkills.slice(0, 4).forEach((skill, index) => {
@@ -271,6 +273,7 @@ export const useGameStore = create<GameState>()(
           player.equippedSkills = player.equippedSkills || [null, null, null, null];
           player.reputation = player.reputation || {};
           player.activeEffects = player.activeEffects || [];
+          player.activeSetBonuses = [];
           player.completedDungeons = player.completedDungeons || [];
           inventory.potions = inventory.potions || 0;
 
@@ -278,7 +281,7 @@ export const useGameStore = create<GameState>()(
           if (!classe) return;
 
           const newStats: Stats = JSON.parse(JSON.stringify(player.baseStats));
-          const newEffects: string[] = [];
+          const equippedSetCounts: Record<string, number> = {};
 
           Object.values(inventory.equipment).forEach(item => {
             if (item) {
@@ -289,9 +292,24 @@ export const useGameStore = create<GameState>()(
                 }
               });
               if (item.effect) {
-                newEffects.push(item.effect);
+                player.activeEffects.push(item.effect);
+              }
+              if (item.set) {
+                equippedSetCounts[item.set.id] = (equippedSetCounts[item.set.id] || 0) + 1;
               }
             }
+          });
+
+          Object.entries(equippedSetCounts).forEach(([setId, count]) => {
+              const setInfo = gameData.sets.find(s => s.id === setId);
+              if (setInfo) {
+                  Object.entries(setInfo.bonuses).forEach(([bonusCount, effect]) => {
+                      if (count >= parseInt(bonusCount, 10)) {
+                          player.activeSetBonuses.push(effect);
+                          // Apply direct stats from set bonus here
+                      }
+                  });
+              }
           });
           
           Object.entries(player.learnedTalents).forEach(([talentId, rank]) => {
@@ -321,7 +339,6 @@ export const useGameStore = create<GameState>()(
 
 
           player.stats = newStats;
-          player.activeEffects = newEffects;
           
           const maxHp = formulas.calculateMaxHP(player.level, player.stats);
           if (classe.ressource !== 'Rage') {
@@ -334,11 +351,10 @@ export const useGameStore = create<GameState>()(
              player.resources.max = 100;
           }
           
-          // Don't set HP to max on stat recalculation, only cap it if it's over.
           const currentHp = player.stats.PV;
           if (currentHp > maxHp) {
             player.stats.PV = maxHp;
-          } else if(currentHp <= 0 && state.view !== 'COMBAT') { // If dead outside of combat, set to 1
+          } else if(currentHp <= 0 && state.view !== 'COMBAT') {
              player.stats.PV = 1;
           }
         });
@@ -469,7 +485,6 @@ export const useGameStore = create<GameState>()(
         set(state => {
             if (slot < 0 || slot >= state.player.equippedSkills.length) return;
             
-            // Unequip if it's already equipped in another slot
             const existingSlot = state.player.equippedSkills.indexOf(skillId);
             if (existingSlot !== -1) {
                 state.player.equippedSkills[existingSlot] = null;
@@ -593,14 +608,12 @@ export const useGameStore = create<GameState>()(
           }
 
           set(state => {
-              // Player auto-attack progress
               if (state.combat.autoAttack && state.combat.playerAttackProgress < 1) {
                   state.combat.playerAttackProgress += delta / state.combat.playerAttackInterval;
               } else if (state.combat.autoAttack) {
                   state.combat.playerAttackProgress = 1;
               }
               
-              // Individual skill cooldown progress
               for (const skillId in state.combat.skillCooldowns) {
                   state.combat.skillCooldowns[skillId] -= delta;
                   if (state.combat.skillCooldowns[skillId] <= 0) {
@@ -608,7 +621,6 @@ export const useGameStore = create<GameState>()(
                   }
               }
 
-              // Enemy attack progress
               state.combat.enemies.forEach(enemy => {
                   if(enemy.stats.PV > 0) {
                     const attackInterval = enemy.stats.Vitesse * 1000;
@@ -727,7 +739,6 @@ export const useGameStore = create<GameState>()(
             
             if (targets.length === 0) return;
 
-
             targets.forEach(target => {
                 const currentTarget = combat.enemies.find(e => e.id === target.id);
                 if (!currentTarget) return;
@@ -759,7 +770,6 @@ export const useGameStore = create<GameState>()(
             });
         });
 
-        // Process deaths after the state update
         deadEnemyIds.forEach(id => get().handleEnemyDeath(id));
       },
 
@@ -767,12 +777,10 @@ export const useGameStore = create<GameState>()(
         const attackingEnemies = get().combat.enemies.filter(e => e.attackProgress >= 1 && e.stats.PV > 0);
         
         attackingEnemies.forEach(enemy => {
-             // Re-fetch state inside loop to ensure player HP is current after each attack
             const { player } = get();
             if (player.stats.PV <= 0) return;
 
             set(state => {
-                 // Find the enemy again in the current state draft
                 const enemyInState = state.combat.enemies.find(e => e.id === enemy.id);
                 if (!enemyInState || enemyInState.stats.PV <= 0) return;
 
@@ -816,7 +824,7 @@ export const useGameStore = create<GameState>()(
             if (!state.combat.enemies.some(e => e.id === enemyId)) return;
              const enemyInState = state.combat.enemies.find(e => e.id === enemyId);
              if (enemyInState) {
-                enemyInState.attackProgress = 0; // Stop attacks from dead enemies
+                enemyInState.attackProgress = 0;
              }
         });
 
@@ -846,17 +854,11 @@ export const useGameStore = create<GameState>()(
 
             state.combat.killCount += 1;
             
-            // Do not filter out the enemy yet, just mark as dead essentially by having hp <= 0.
-            // This prevents layout shifts and keeps them visible for a moment.
-            // They will be cleared on the next `startCombat` or `flee`.
-
             if (state.combat.targetIndex === state.combat.enemies.findIndex(e => e.id === enemyId)) {
                 const nextTargetIndex = state.combat.enemies.findIndex(e => e.stats.PV > 0);
                 state.combat.targetIndex = nextTargetIndex !== -1 ? nextTargetIndex : 0;
             }
-            
 
-            // Quest progress
             state.activeQuests.forEach((activeQuest, index) => {
               if (currentDungeon && activeQuest.quete.requirements.dungeonId === currentDungeon.id) {
                 activeQuest.progress++;
@@ -869,7 +871,9 @@ export const useGameStore = create<GameState>()(
 
                   if (quest.rewards.reputation) {
                     const rep = quest.rewards.reputation;
-                    state.player.reputation[rep.factionId] = (state.player.reputation[rep.factionId] || 0) + rep.amount;
+                    const repData = state.player.reputation[rep.factionId] || { value: 0, claimedRewards: [] };
+                    repData.value += rep.amount;
+                    state.player.reputation[rep.factionId] = repData;
                     state.combat.log.push({ message: `Your reputation with ${gameData.factions.find(f => f.id === rep.factionId)?.name || 'a faction'} increased by ${rep.amount}.`, type: 'info', timestamp: Date.now() });
                   }
 
@@ -884,12 +888,11 @@ export const useGameStore = create<GameState>()(
               }
             });
 
-            // Level up check
             let leveledUp = false;
             let xpToNext = get().getXpToNextLevel();
             while(state.player.xp >= xpToNext) {
                 state.player.level += 1;
-                state.player.talentPoints += 2; // Gain 2 talent points per level
+                state.player.talentPoints += 2;
                 leveledUp = true;
                  state.player.xp -= xpToNext;
                 state.combat.log.push({ message: `Congratulations! You have reached level ${state.player.level}!`, type: 'levelup', timestamp: Date.now() });
@@ -914,19 +917,42 @@ export const useGameStore = create<GameState>()(
                 if (currentDungeon && get().combat.killCount >= currentDungeon.killTarget) {
                     set(state => {
                         if (!state.player.completedDungeons.includes(currentDungeon.id)) {
-                        state.player.completedDungeons.push(currentDungeon.id);
+                          state.player.completedDungeons.push(currentDungeon.id);
                         }
+                        if (currentDungeon.factionId) {
+                            const repData = state.player.reputation[currentDungeon.factionId] || { value: 0, claimedRewards: [] };
+                            repData.value += 250;
+                            state.player.reputation[currentDungeon.factionId] = repData;
+                        }
+
                         state.inventory.items.push(...state.combat.dungeonRunItems);
                         state.combat.dungeonRunItems = [];
                         state.combat.log.push({ message: `Dungeon complete! Returning to town.`, type: 'info', timestamp: Date.now() });
                         state.view = 'TOWN';
+
+                        const faction = state.gameData.factions.find(f => f.id === currentDungeon.factionId);
+                        if (faction && state.player.reputation[faction.id]) {
+                            const playerRep = state.player.reputation[faction.id];
+                            faction.ranks.forEach(rank => {
+                                if (rank.rewardItemId && playerRep.value >= rank.threshold && !playerRep.claimedRewards.includes(rank.rewardItemId)) {
+                                    const rewardItem = state.gameData.items.find(i => i.id === rank.rewardItemId);
+                                    if (rewardItem) {
+                                        state.inventory.items.push({ ...rewardItem, id: uuidv4() });
+                                        playerRep.claimedRewards.push(rank.rewardItemId);
+                                        // A toast would be better here, but for now a log is fine.
+                                        console.log(`You have been awarded ${rewardItem.name} for reaching ${rank.name} with ${faction.name}.`);
+                                    }
+                                }
+                            });
+                        }
+
                     });
                     if(gameLoop) clearInterval(gameLoop);
                 } else {
                     set(state => { state.combat.enemies = [] });
                     get().startCombat();
                 }
-            }, 1000); // Wait 1s before starting next combat or leaving
+            }, 1000);
         }
       },
 
@@ -973,6 +999,7 @@ export const useGameStore = create<GameState>()(
             state.view = 'TOWN';
             state.combat = initialCombatState;
             state.player.learnedTalents = state.player.learnedTalents || {};
+            state.player.reputation = state.player.reputation || {};
         }
       }
     }
