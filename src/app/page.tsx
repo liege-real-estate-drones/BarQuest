@@ -8,6 +8,7 @@ import { CombatView } from '@/features/combat/CombatView';
 import { useHydrated } from '@/hooks/useHydrated';
 import { LoaderCircle } from 'lucide-react';
 import { ChooseClassView } from '@/features/player/ChooseClassView';
+import type { GameData } from '@/lib/types';
 
 export default function Home() {
   const hydrated = useHydrated();
@@ -37,7 +38,7 @@ export default function Home() {
         };
 
         try {
-            const dataPaths = [
+            const dataPaths: (keyof GameData)[] = [
                 'dungeons', 'monsters', 'items', 'talents', 'skills', 
                 'affixes', 'classes', 'quests', 'factions'
             ];
@@ -54,17 +55,12 @@ export default function Home() {
 
             const jsonData = await Promise.all(responses.map(res => res.json()));
             
-            const gameDataPayload = {
-                dungeons: jsonData[0]?.dungeons,
-                monsters: jsonData[1]?.monsters,
-                items: jsonData[2]?.items,
-                talents: jsonData[3]?.talents,
-                skills: jsonData[4]?.skills,
-                affixes: jsonData[5]?.affixes,
-                classes: jsonData[6]?.classes,
-                quests: jsonData[7]?.quests,
-                factions: jsonData[8]?.factions,
-            };
+            const gameDataPayload = dataPaths.reduce((acc, path, index) => {
+              // The JSON files have a root key that is the same as the file name
+              // e.g. dungeons.json contains { "dungeons": [...] }
+              acc[path] = jsonData[index]?.[path] || [];
+              return acc;
+            }, {} as GameData);
             
             initializeGameData(gameDataPayload);
             setIsLoading(false);

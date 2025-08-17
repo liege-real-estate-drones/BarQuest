@@ -220,7 +220,7 @@ export const useGameStore = create<GameState>()(
 
             state.player.classeId = chosenClass.id as PlayerClassId;
             state.player.baseStats = chosenClass.statsBase;
-            state.player.talentPoints = 1; // Start with 1 point
+            state.player.talentPoints = 1;
 
             let maxResource = formulas.calculateMaxMana(1, chosenClass.statsBase);
             let currentResource = maxResource;
