@@ -223,8 +223,13 @@ export const useGameStore = create<GameState>()(
             }
 
             state.player.classeId = chosenClass.id as PlayerClassId;
-            state.player.baseStats = chosenClass.statsBase;
+            state.player.baseStats = { ...chosenClass.statsBase };
             state.player.talentPoints = 1;
+
+            // Start with full health
+            const maxHp = formulas.calculateMaxHP(1, state.player.baseStats);
+            state.player.baseStats.PV = maxHp;
+            state.player.stats.PV = maxHp;
 
             let maxResource = formulas.calculateMaxMana(1, chosenClass.statsBase);
             let currentResource = maxResource;
@@ -370,7 +375,7 @@ export const useGameStore = create<GameState>()(
         get().recalculateStats();
       },
 
-      buyItem: (item) => {
+      buyItem: (item: Item) => {
           const { inventory } = get();
           const price = item.vendorPrice || 0;
           if (price <= 0 || inventory.gold < price) {
