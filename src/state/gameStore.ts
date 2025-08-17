@@ -189,17 +189,15 @@ export const useGameStore = create<GameState>()(
 
       initializeGameData: (data) => {
         set((state) => {
-            state.gameData = {
-              dungeons: Array.isArray(data.dungeons) ? data.dungeons : [],
-              monsters: Array.isArray(data.monsters) ? data.monsters : [],
-              items: Array.isArray(data.items) ? data.items : [],
-              talents: Array.isArray(data.talents) ? data.talents : [],
-              skills: Array.isArray(data.skills) ? data.skills : [],
-              affixes: Array.isArray(data.affixes) ? data.affixes : [],
-              classes: Array.isArray(data.classes) ? data.classes : [],
-              quests: Array.isArray(data.quests) ? data.quests : [],
-              factions: Array.isArray(data.factions) ? data.factions : [],
-            };
+            state.gameData.dungeons = Array.isArray(data.dungeons) ? data.dungeons : [];
+            state.gameData.monsters = Array.isArray(data.monsters) ? data.monsters : [];
+            state.gameData.items = Array.isArray(data.items) ? data.items : [];
+            state.gameData.talents = Array.isArray(data.talents) ? data.talents : [];
+            state.gameData.skills = Array.isArray(data.skills) ? data.skills : [];
+            state.gameData.affixes = Array.isArray(data.affixes) ? data.affixes : [];
+            state.gameData.classes = Array.isArray(data.classes) ? data.classes : [];
+            state.gameData.quests = Array.isArray(data.quests) ? data.quests : [];
+            state.gameData.factions = Array.isArray(data.factions) ? data.factions : [];
             state.isInitialized = true;
         });
       },
@@ -909,6 +907,7 @@ export const useGameStore = create<GameState>()(
             state.rehydrateComplete = true;
             state.view = 'TOWN';
             state.combat = initialCombatState;
+            state.player.learnedTalents = state.player.learnedTalents || {};
         }
       }
     }
