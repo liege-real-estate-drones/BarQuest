@@ -620,18 +620,23 @@ export const useGameStore = create<GameState>()(
 
               // Enemy attack progress
               state.combat.enemies.forEach(enemy => {
-                  const attackInterval = enemy.stats.Vitesse * 1000;
-                  if (enemy.attackProgress < 1) {
-                      enemy.attackProgress += delta / attackInterval;
-                  } else {
-                      enemy.attackProgress = 1;
+                  if(enemy.stats.PV > 0) {
+                    const attackInterval = enemy.stats.Vitesse * 1000;
+                    if (enemy.attackProgress < 1) {
+                        enemy.attackProgress += delta / attackInterval;
+                    } else {
+                        enemy.attackProgress = 1;
+                    }
                   }
               });
           });
 
           const updatedState = get();
           if (updatedState.combat.autoAttack && updatedState.combat.playerAttackProgress >= 1 && updatedState.combat.enemies.length > 0) {
-              get().playerAttack(updatedState.combat.enemies[updatedState.combat.targetIndex].id);
+              const target = updatedState.combat.enemies[updatedState.combat.targetIndex];
+              if(target && target.stats.PV > 0) {
+                get().playerAttack(target.id);
+              }
           }
 
           if (updatedState.combat.enemies.some(e => e.attackProgress >= 1)) {
@@ -681,17 +686,22 @@ export const useGameStore = create<GameState>()(
               }
               state.player.resources.current = Math.min(state.player.resources.max, state.player.resources.current + rageGained);
             }
+
+            if(state.player.resources.type === 'Mana' && !isCleave) {
+              const manaGained = 5;
+              state.player.resources.current = Math.min(state.player.resources.max, state.player.resources.current + manaGained);
+            }
         });
         
         const target = get().combat.enemies.find(e => e.id === targetId);
         if (target && target.stats.PV <= 0) {
-            get().handleEnemyDeath(targetId);
+            get().handleEnemyDeath(target.id);
         } else {
             const { player } = get();
             const cleaveRank = player.learnedTalents['berserker_cleave'] || 0;
             const enemies = get().combat.enemies;
             if (!isCleave && cleaveRank > 0 && enemies.length > 1) {
-                const secondaryTarget = enemies.find(e => e.id !== targetId);
+                const secondaryTarget = enemies.find(e => e.id !== targetId && e.stats.PV > 0);
                 if (secondaryTarget) {
                     get().playerAttack(secondaryTarget.id, true);
                 }
@@ -700,14 +710,11 @@ export const useGameStore = create<GameState>()(
       },
       
       useSkill: (skillId: string) => {
-        const { combat } = get();
-        if (combat.globalCooldown > 0) return;
-
         const deadEnemyIds: string[] = [];
-
+        
         set(state => {
             const { player, combat, gameData } = state;
-            if (!combat.enemies || combat.enemies.length === 0) return;
+            if (!combat.enemies || combat.enemies.length === 0 || combat.globalCooldown > 0) return;
 
             const rank = player.learnedSkills[skillId];
             const skill = gameData.skills.find(t => t.id === skillId);
@@ -724,7 +731,11 @@ export const useGameStore = create<GameState>()(
             combat.globalCooldown = 1; // Start GCD
 
             const isAoE = skill.effets.join(' ').includes("tous les ennemis") || skill.effets.join(' ').includes("ennemis proches");
-            const targets = isAoE ? [...combat.enemies] : [combat.enemies[combat.targetIndex]];
+            const primaryTarget = combat.enemies[combat.targetIndex];
+            const targets = isAoE ? [...combat.enemies.filter(e => e.stats.PV > 0)] : (primaryTarget && primaryTarget.stats.PV > 0 ? [primaryTarget] : []);
+            
+            if (targets.length === 0) return;
+
 
             targets.forEach(target => {
                 const currentTarget = combat.enemies.find(e => e.id === target.id);
@@ -762,7 +773,7 @@ export const useGameStore = create<GameState>()(
       },
 
       enemyAttacks: () => {
-        const attackingEnemies = get().combat.enemies.filter(e => e.attackProgress >= 1);
+        const attackingEnemies = get().combat.enemies.filter(e => e.attackProgress >= 1 && e.stats.PV > 0);
         
         attackingEnemies.forEach(enemy => {
              // Re-fetch state inside loop to ensure player HP is current after each attack
@@ -772,7 +783,7 @@ export const useGameStore = create<GameState>()(
             set(state => {
                  // Find the enemy again in the current state draft
                 const enemyInState = state.combat.enemies.find(e => e.id === enemy.id);
-                if (!enemyInState) return;
+                if (!enemyInState || enemyInState.stats.PV <= 0) return;
 
                 const playerDr = formulas.calculateArmorDR(state.player.stats.Armure, enemy.level);
                 const enemyDamage = formulas.calculateMeleeDamage(enemy.stats.AttMin, enemy.stats.AttMax, formulas.calculateAttackPower(enemy.stats));
@@ -807,14 +818,18 @@ export const useGameStore = create<GameState>()(
       },
 
       handleEnemyDeath: (enemyId: string) => {
-        // Find enemy before set state
         const enemy = get().combat.enemies.find(e => e.id === enemyId);
         if (!enemy) return;
+        
+        set(state => {
+            if (!state.combat.enemies.some(e => e.id === enemyId)) return;
+             const enemyInState = state.combat.enemies.find(e => e.id === enemyId);
+             if (enemyInState) {
+                enemyInState.attackProgress = 0; // Stop attacks from dead enemies
+             }
+        });
 
         set(state => {
-            // Re-check enemy existence inside set in case of race conditions
-            if (!state.combat.enemies.some(e => e.id === enemyId)) return;
-
             const { gameData, currentDungeon } = state;
 
             const goldDrop = 5;
@@ -839,10 +854,16 @@ export const useGameStore = create<GameState>()(
             }
 
             state.combat.killCount += 1;
-            state.combat.enemies = state.combat.enemies.filter(e => e.id !== enemyId);
-            if (state.combat.targetIndex >= state.combat.enemies.length) {
-                state.combat.targetIndex = Math.max(0, state.combat.enemies.length - 1);
+            
+            // Do not filter out the enemy yet, just mark as dead essentially by having hp <= 0.
+            // This prevents layout shifts and keeps them visible for a moment.
+            // They will be cleared on the next `startCombat` or `flee`.
+
+            if (state.combat.targetIndex === state.combat.enemies.findIndex(e => e.id === enemyId)) {
+                const nextTargetIndex = state.combat.enemies.findIndex(e => e.stats.PV > 0);
+                state.combat.targetIndex = nextTargetIndex !== -1 ? nextTargetIndex : 0;
             }
+            
 
             // Quest progress
             state.activeQuests.forEach((activeQuest, index) => {
@@ -895,32 +916,41 @@ export const useGameStore = create<GameState>()(
             }
         });
         
-        const remainingEnemies = get().combat.enemies;
+        const allEnemiesDead = get().combat.enemies.every(e => e.stats.PV <= 0);
         const currentDungeon = get().currentDungeon;
-        if (remainingEnemies.length === 0) {
-            if (currentDungeon && get().combat.killCount >= currentDungeon.killTarget) {
-                 set(state => {
-                    if (!state.player.completedDungeons.includes(currentDungeon.id)) {
-                      state.player.completedDungeons.push(currentDungeon.id);
-                    }
-                    state.inventory.items.push(...state.combat.dungeonRunItems);
-                    state.combat.dungeonRunItems = [];
-                    state.combat.log.push({ message: `Dungeon complete! Returning to town.`, type: 'info', timestamp: Date.now() });
-                    state.view = 'TOWN';
-                 });
-                 if(gameLoop) clearInterval(gameLoop);
-            } else {
-                 get().startCombat();
-            }
+        if (allEnemiesDead) {
+             setTimeout(() => {
+                if (currentDungeon && get().combat.killCount >= currentDungeon.killTarget) {
+                    set(state => {
+                        if (!state.player.completedDungeons.includes(currentDungeon.id)) {
+                        state.player.completedDungeons.push(currentDungeon.id);
+                        }
+                        state.inventory.items.push(...state.combat.dungeonRunItems);
+                        state.combat.dungeonRunItems = [];
+                        state.combat.log.push({ message: `Dungeon complete! Returning to town.`, type: 'info', timestamp: Date.now() });
+                        state.view = 'TOWN';
+                    });
+                    if(gameLoop) clearInterval(gameLoop);
+                } else {
+                    set(state => { state.combat.enemies = [] });
+                    get().startCombat();
+                }
+            }, 1000); // Wait 1s before starting next combat or leaving
         }
       },
 
       cycleTarget: () => {
         set(state => {
-            if (state.combat.enemies.length > 1) {
-                const newIndex = (state.combat.targetIndex + 1) % state.combat.enemies.length;
-                state.combat.targetIndex = newIndex;
-                state.combat.log.push({ message: `You are now targeting ${state.combat.enemies[newIndex].nom}.`, type: 'info', timestamp: Date.now() });
+            const livingEnemies = state.combat.enemies.filter(e => e.stats.PV > 0);
+            if (livingEnemies.length > 1) {
+                const currentTargetId = state.combat.enemies[state.combat.targetIndex].id;
+                const currentTargetIndexInLiving = livingEnemies.findIndex(e => e.id === currentTargetId);
+                const nextLivingIndex = (currentTargetIndexInLiving + 1) % livingEnemies.length;
+                const newTargetId = livingEnemies[nextLivingIndex].id;
+                const newTargetIndexInAll = state.combat.enemies.findIndex(e => e.id === newTargetId);
+
+                state.combat.targetIndex = newTargetIndexInAll;
+                state.combat.log.push({ message: `You are now targeting ${state.combat.enemies[newTargetIndexInAll].nom}.`, type: 'info', timestamp: Date.now() });
             }
         });
       },
