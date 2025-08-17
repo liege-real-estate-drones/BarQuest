@@ -59,7 +59,10 @@ export default function EntityDisplay({ entity, isPlayer = false, isTarget = fal
   const currentResourceConfig = (playerResources?.type && resourceConfig[playerResources.type]) || { color: 'text-gray-400', indicator: 'bg-gray-500' };
 
   return (
-    <Card className={cn("flex flex-col h-full bg-card/50 transition-all", isTarget && "border-primary shadow-lg shadow-primary/20")}>
+    <Card className={cn("flex flex-col h-full bg-card/50 transition-all border-2 border-transparent", 
+        isPlayer && "border-green-500/30",
+        isTarget && "border-primary shadow-lg shadow-primary/20 scale-105"
+    )}>
       <CardHeader className="flex-shrink-0 pb-2">
         <CardTitle className="font-headline flex justify-between items-baseline">
           <span>{name} {isTarget && <span className="text-xs text-primary">(Cible)</span>}</span>

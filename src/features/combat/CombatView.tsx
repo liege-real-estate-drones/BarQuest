@@ -10,10 +10,8 @@ import { ArrowLeft } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { ActionStrip } from './components/ActionStrip';
 import type { Skill } from '@/lib/types';
-import { Card } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { DungeonInfo } from './components/DungeonInfo';
-import { ActiveSkills } from './components/ActiveSkills';
 
 export function CombatView() {
   const {
@@ -27,6 +25,7 @@ export function CombatView() {
     gameData,
     cycleTarget,
     targetIndex,
+    playerAttackProgress
   } = useGameStore((state) => ({
     player: state.player,
     enemies: state.combat.enemies,
@@ -74,47 +73,60 @@ export function CombatView() {
   const dungeonProgress = (killCount / currentDungeon.killTarget) * 100;
 
   return (
-    <div className="flex flex-col h-screen w-full p-4 gap-4 font-code bg-background text-foreground">
-      <header className="flex-shrink-0 flex justify-between items-center border-b pb-2 gap-4">
-        <Button variant="ghost" size="icon" onClick={flee}>
+    <div className="flex flex-col h-screen w-full font-code bg-background text-foreground">
+      {/* Header */}
+      <header className="flex-shrink-0 flex justify-between items-center border-b p-4 gap-4">
+        <Button variant="ghost" size="icon" onClick={flee} className="flex-shrink-0">
             <ArrowLeft />
         </Button>
         <div className="flex-grow">
-            <div className="flex justify-between text-sm mb-1">
+            <div className="flex justify-between items-center text-sm mb-1">
                 <h1 className="text-xl font-bold font-headline text-primary">{currentDungeon.name}</h1>
-                <span>{killCount} / {currentDungeon.killTarget}</span>
+                <div className="flex items-center gap-4">
+                    <span className="text-lg">Kills: {killCount} / {currentDungeon.killTarget}</span>
+                    <div className="w-48 text-center">
+                        <p className="text-xs text-muted-foreground">Attack</p>
+                        <Progress value={playerAttackProgress * 100} className="h-2 mt-1" />
+                    </div>
+                </div>
             </div>
             <Progress value={dungeonProgress} className="h-2" />
         </div>
-        <Progress value={useGameStore.getState().combat.playerAttackProgress * 100} className="w-48 h-2" />
       </header>
 
-      <main className="flex-grow grid grid-cols-1 lg:grid-cols-4 gap-4 min-h-0">
+      {/* Main Content */}
+      <main className="flex-grow grid grid-cols-1 lg:grid-cols-4 gap-4 p-4 min-h-0">
+          {/* Left Column - Player */}
           <div className="lg:col-span-1 flex flex-col gap-4">
             <EntityDisplay entity={player} isPlayer />
+          </div>
+
+          {/* Middle Column - Enemies */}
+          <div className="lg:col-span-2 flex flex-col gap-4">
              <ScrollArea className="h-full">
-                <div className="flex flex-col gap-4 pr-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pr-4">
                     {enemies.map((enemy, index) => (
                         <EntityDisplay key={enemy.id} entity={enemy} isTarget={index === targetIndex} />
                     ))}
                 </div>
             </ScrollArea>
           </div>
-          <div className="lg:col-span-2 flex flex-col gap-4 min-h-0">
-            <CombatLog log={combatLog} />
-            <Card className="flex-shrink-0">
-                <ActionStrip 
-                    onRetreat={flee}
-                    skills={equippedSkills}
-                    onCycleTarget={handleCycleTarget}
-                />
-            </Card>
-          </div>
-          <div className="lg:col-span-1 flex flex-col gap-4">
+          
+          {/* Right Column - Info */}
+          <div className="lg:col-span-1 flex flex-col gap-4 min-h-0">
             <DungeonInfo dungeon={currentDungeon} />
-            <ActiveSkills skills={equippedSkills} />
+            <CombatLog log={combatLog} />
           </div>
       </main>
+
+      {/* Footer - Action Strip */}
+       <footer className="flex-shrink-0 border-t bg-background/80 backdrop-blur-sm">
+            <ActionStrip 
+                onRetreat={flee}
+                skills={equippedSkills}
+                onCycleTarget={handleCycleTarget}
+            />
+        </footer>
     </div>
   );
 }
