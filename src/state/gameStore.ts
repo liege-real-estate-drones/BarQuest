@@ -1,4 +1,5 @@
 
+
 import create from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
@@ -251,16 +252,19 @@ export const useGameStore = create<GameState>()(
             
             player.learnedSkills = player.learnedSkills || {};
 
-            const hasAnySkillLearned = Object.keys(player.learnedSkills).length > 0;
+            const hasAnySkillLearned = Object.values(player.learnedSkills).some(rank => rank > 0);
             if (hasAnySkillLearned) return;
 
             const startingSkill = gameData.skills.find(s => 
                 s.classeId === player.classeId && s.niveauRequis === 1
             );
-
-            if (startingSkill && player.talentPoints > 0) {
-                player.learnedSkills[startingSkill.id] = 1;
-                player.talentPoints -= 1;
+            
+            if (startingSkill && (player.learnedSkills[startingSkill.id] || 0) === 0) {
+                 if (player.talentPoints > 0) {
+                    player.learnedSkills[startingSkill.id] = 1;
+                    player.talentPoints -= 1;
+                }
+                // Always equip the starter skill if the bar is empty
                 if (player.equippedSkills.every(s => s === null)) {
                     player.equippedSkills[0] = startingSkill.id;
                 }

@@ -1,70 +1,95 @@
 {
-  "skills": [
-    {
-      "id": "berserker_charge",
-      "nom": "Charge",
-      "classeId": "berserker",
-      "type": "actif",
-      "niveauRequis": 2,
-      "rangMax": 1,
-      "effets": [
-        "Charge un ennemi, l'étourdissant pendant 1s et générant 10 Rage."
-      ],
-      "exigences": []
-    },
-    {
-      "id": "berserker_whirlwind",
-      "nom": "Tourbillon",
-      "classeId": "berserker",
-      "type": "actif",
-      "niveauRequis": 5,
-      "rangMax": 3,
-      "effets": [
-        "Coûte 25 Rage",
-        "Inflige 75/90/105% des dégâts de l'arme à tous les ennemis proches."
-      ],
-      "exigences": []
-    },
-    {
-      "id": "berserker_heroic_strike",
-      "nom": "Frappe Héroïque",
-      "classeId": "berserker",
-      "type": "actif",
-      "niveauRequis": 1,
-      "rangMax": 5,
-      "effets": [
-        "Coûte 10 Rage",
-        "Inflige 120/140/160/180/200% des dégâts de l'arme en tant que dégâts physiques."
-      ],
-      "exigences": []
-    },
-    {
-      "id": "berserker_battle_shout",
-      "nom": "Cri de Guerre",
-      "classeId": "berserker",
-      "type": "actif",
-      "niveauRequis": 8,
-      "rangMax": 3,
-      "effets": [
-        "Génère 15 Rage",
-        "Augmente la puissance d'attaque de 10/15/20% pendant 10s."
-      ],
-      "exigences": []
-    },
-    {
-      "id": "berserker_execute",
-      "nom": "Exécution",
-      "classeId": "berserker",
-      "type": "actif",
-      "niveauRequis": 10,
-      "rangMax": 3,
-      "effets": [
-        "Coûte 30 Rage",
-        "Tente d'exécuter un ennemi, infligeant 300/400/500% des dégâts de l'arme. Ne peut être utilisé que sur les ennemis ayant moins de 20% de PV."
-      ],
-      "exigences": [
-        "berserker_heroic_strike:2"
-      ]
-    }
-  ]
+    "skills": [
+        {
+            "id": "berserker_heroic_strike",
+            "nom": "Frappe Héroïque",
+            "classeId": "berserker",
+            "type": "actif",
+            "niveauRequis": 1,
+            "rangMax": 5,
+            "effets": ["Inflige 110/120/130/140/150% des dégâts de l'arme.", "Coûte 15 Rage"]
+        },
+        {
+            "id": "berserker_charge",
+            "nom": "Charge",
+            "classeId": "berserker",
+            "type": "actif",
+            "niveauRequis": 5,
+            "rangMax": 1,
+            "effets": ["Charge un ennemi, infligeant 50% des dégâts de l'arme et l'étourdissant pendant 1.5s.", "Génère 20 Rage."]
+        },
+        {
+            "id": "berserker_whirlwind",
+            "nom": "Tourbillon",
+            "classeId": "berserker",
+            "type": "actif",
+            "niveauRequis": 10,
+            "rangMax": 3,
+            "effets": ["Attaque tous les ennemis proches pour 70/85/100% des dégâts de l'arme.", "Coûte 25 Rage"]
+        },
+        {
+            "id": "berserker_raging_blow",
+            "nom": "Coup Déchaîné",
+            "classeId": "berserker",
+            "type": "actif",
+            "niveauRequis": 15,
+            "rangMax": 3,
+            "effets": ["Un coup sauvage qui inflige 250/300/350% des dégâts de l'arme.", "Coûte 40 Rage", "Nécessite d'être Enragé."],
+            "exigences": ["berserker_charge:1"]
+        },
+        {
+            "id": "mage_frostbolt",
+            "nom": "Éclair de Givre",
+            "classeId": "mage",
+            "type": "actif",
+            "niveauRequis": 1,
+            "rangMax": 5,
+            "effets": ["Inflige 20/25/30/35/40 dégâts de Givre et ralentit la cible.", "Coûte 10 Mana"]
+        },
+        {
+            "id": "mage_fireball",
+            "nom": "Boule de Feu",
+            "classeId": "mage",
+            "type": "actif",
+            "niveauRequis": 5,
+            "rangMax": 5,
+            "effets": ["Inflige 35/45/55/65/75 dégâts de Feu à la cible.", "Coûte 15 Mana"]
+        },
+        {
+            "id": "rogue_sinister_strike",
+            "nom": "Attaque Sournoise",
+            "classeId": "rogue",
+            "type": "actif",
+            "niveauRequis": 1,
+            "rangMax": 5,
+            "effets": ["Une attaque rapide qui inflige 120/135/150/165/180% des dégâts de l'arme.", "Coûte 40 Énergie"]
+        },
+        {
+            "id": "rogue_eviscerate",
+            "nom": "Éviscération",
+            "classeId": "rogue",
+            "type": "actif",
+            "niveauRequis": 5,
+            "rangMax": 5,
+            "effets": ["Finishing move qui inflige des dégâts par point de combo.", "Coûte 25 Énergie"]
+        },
+        {
+            "id": "cleric_smite",
+            "nom": "Châtiment Sacré",
+            "classeId": "cleric",
+            "type": "actif",
+            "niveauRequis": 1,
+            "rangMax": 5,
+            "effets": ["Inflige 15/20/25/30/35 dégâts Sacrés à un ennemi.", "Coûte 10 Mana"]
+        },
+        {
+            "id": "cleric_flash_heal",
+            "nom": "Soin Rapide",
+            "classeId": "cleric",
+            "type": "actif",
+            "niveauRequis": 5,
+            "rangMax": 5,
+            "effets": ["Soigne une cible alliée de 40/55/70/85/100 PV.", "Coûte 20 Mana"]
+        }
+    ]
 }

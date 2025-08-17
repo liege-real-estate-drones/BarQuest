@@ -6,10 +6,24 @@
             "classeId": "berserker",
             "type": "passif",
             "rangMax": 5,
-            "effets": [
-                "Augmente vos PV maximum de 2%/4%/6%/8%/10%."
-            ],
-            "exigences": []
+            "effets": ["Augmente l'Armure de 2/4/6/8/10%."]
+        },
+        {
+            "id": "berserker_endless_rage",
+            "nom": "Rage sans fin",
+            "classeId": "berserker",
+            "type": "passif",
+            "rangMax": 3,
+            "effets": ["Augmente votre Rage maximale de 10/20/30."]
+        },
+        {
+            "id": "berserker_battle_cry",
+            "nom": "Cri de guerre",
+            "classeId": "berserker",
+            "type": "passif",
+            "rangMax": 5,
+            "effets": ["Vos attaques de base génèrent 1/2/3/4/5 Rage supplémentaire."],
+            "exigences": ["berserker_toughness:2"]
         },
         {
             "id": "berserker_cleave",
@@ -17,59 +31,67 @@
             "classeId": "berserker",
             "type": "passif",
             "rangMax": 1,
-            "effets": [
-                "Vos attaques de base infligent 50% de leurs dégâts à une cible secondaire proche."
-            ],
-            "exigences": [
-                "berserker_heroic_strike:1"
-            ]
-        },
-        {
-            "id": "berserker_battle_cry",
-            "nom": "Cri de Guerre",
-            "classeId": "berserker",
-            "type": "passif",
-            "rangMax": 3,
-            "effets": [
-                "Vos attaques de base génèrent 1/2/3 point(s) de Rage supplémentaire(s)."
-            ],
-            "exigences": []
+            "niveauRequis": 10,
+            "effets": ["Vos attaques de base infligent 50% de leurs dégâts à une cible proche supplémentaire."],
+            "exigences": ["berserker_battle_cry:5"]
         },
         {
             "id": "berserker_last_stand",
-            "nom": "Dernier Rempart",
-            "classeId": "berserker",
-            "type": "passif",
-            "rangMax": 1,
-            "effets": [
-                "Lorsque vous tombez sous 30% de PV, vous gagnez 50% de réduction de dégâts pendant 5s. Ne peut se produire qu'une fois toutes les 60s."
-            ],
-            "niveauRequis": 10,
-            "exigences": []
-        },
-        {
-            "id": "berserker_frenzy",
-            "nom": "Frénésie",
-            "classeId": "berserker",
-            "type": "passif",
-            "rangMax": 5,
-            "effets": [
-                "Augmente votre vitesse d'attaque de 2%/4%/6%/8%/10%."
-            ],
-            "niveauRequis": 5,
-            "exigences": []
-        },
-        {
-            "id": "berserker_bloodthirst",
-            "nom": "Soif de Sang",
+            "nom": "Dernier rempart",
             "classeId": "berserker",
             "type": "passif",
             "rangMax": 3,
-            "effets": [
-                "Vos coups critiques vous soignent à hauteur de 1%/2%/3% de vos PV maximum."
-            ],
-            "niveauRequis": 8,
-            "exigences": []
+            "niveauRequis": 15,
+            "effets": ["Augmente vos dégâts de 1% pour chaque 1% de PV manquants."],
+            "exigences": ["berserker_cleave:1"]
+        },
+        {
+            "id": "mage_arcane_intellect",
+            "nom": "Intelligence des Arcanes",
+            "classeId": "mage",
+            "type": "passif",
+            "rangMax": 5,
+            "effets": ["Augmente l'Intelligence de 2/4/6/8/10%."]
+        },
+        {
+            "id": "mage_frost_warding",
+            "nom": "Garde de Givre",
+            "classeId": "mage",
+            "type": "passif",
+            "rangMax": 3,
+            "effets": ["Augmente votre Résistance au Givre de 10/20/30."]
+        },
+        {
+            "id": "rogue_precision",
+            "nom": "Précision",
+            "classeId": "rogue",
+            "type": "passif",
+            "rangMax": 5,
+            "effets": ["Augmente vos chances de coup critique de 1/2/3/4/5%."]
+        },
+        {
+            "id": "rogue_fleet_footed",
+            "nom": "Pieds légers",
+            "classeId": "rogue",
+            "type": "passif",
+            "rangMax": 3,
+            "effets": ["Augmente votre vitesse de déplacement de 5/10/15%."]
+        },
+        {
+            "id": "cleric_divine_spirit",
+            "nom": "Esprit Divin",
+            "classeId": "cleric",
+            "type": "passif",
+            "rangMax": 5,
+            "effets": ["Augmente l'Esprit de 3/6/9/12/15%."]
+        },
+        {
+            "id": "cleric_healing_prayers",
+            "nom": "Prières de Guérison",
+            "classeId": "cleric",
+            "type": "passif",
+            "rangMax": 3,
+            "effets": ["Augmente l'efficacité de vos sorts de soin de 5/10/15%."]
         }
     ]
 }
