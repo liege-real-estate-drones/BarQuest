@@ -243,30 +243,7 @@ export const useGameStore = create<GameState>()(
             state.player.classeId = chosenClass.id as PlayerClassId;
             state.player.baseStats = { ...chosenClass.statsBase };
             state.player.talentPoints = 1;
-
-            const maxHp = formulas.calculateMaxHP(1, state.player.baseStats);
-            state.player.baseStats.PV = maxHp;
             
-            let maxResource = formulas.calculateMaxMana(1, chosenClass.statsBase);
-            let currentResource = maxResource;
-            
-            if (chosenClass.ressource === 'Rage') {
-              maxResource = 100;
-              currentResource = 0;
-            } else if (chosenClass.ressource === 'Énergie') {
-                maxResource = 100;
-                currentResource = 100;
-            }
-
-            state.player.resources = {
-                current: currentResource,
-                max: maxResource,
-                type: chosenClass.ressource as ResourceType,
-            };
-            
-            state.player.stats.PV = maxHp;
-            state.player.resources.current = maxResource;
-
             const startingSkills = state.gameData.skills.filter(s => s.classeId === classId && s.niveauRequis === 1);
             
             startingSkills.slice(0, 4).forEach((skill, index) => {
@@ -275,13 +252,20 @@ export const useGameStore = create<GameState>()(
                     state.player.equippedSkills[index] = skill.id;
                 }
             });
-            
-            state.player.stats.PV = formulas.calculateMaxHP(state.player.level, state.player.stats);
-            if(state.player.resources.type !== 'Rage') {
-                 state.player.resources.current = state.player.resources.max;
-            }
         });
         get().recalculateStats();
+
+        // After stats are calculated, set HP and resource to full.
+        set(state => {
+          const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
+          state.player.stats.PV = maxHp;
+
+          if (state.player.resources.type === 'Rage') {
+            state.player.resources.current = 0;
+          } else {
+            state.player.resources.current = state.player.resources.max;
+          }
+        });
       },
 
       recalculateStats: () => {
@@ -814,6 +798,11 @@ export const useGameStore = create<GameState>()(
                 state.player.stats.PV -= mitigatedEnemyDamage;
                 state.combat.log.push({ message: `${enemy.nom} hits you for ${mitigatedEnemyDamage} damage.`, type: 'enemy_attack', timestamp: Date.now() });
                 
+                if (state.player.resources.type === 'Rage') {
+                  const rageGained = 10;
+                  state.player.resources.current = Math.min(state.player.resources.max, state.player.resources.current + rageGained);
+                }
+
                 enemyInState.attackProgress = 0;
             });
         });
