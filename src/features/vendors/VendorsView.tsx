@@ -51,7 +51,7 @@ function BuyTab() {
 
     const vendorItems = React.useMemo(() => 
         gameItems.filter(item => 
-            item.vendorPrice && item.vendorPrice > 0 && item.niveauMin <= playerLevel + 5
+            item.vendorPrice && item.vendorPrice > 0 && item.niveauMin <= playerLevel + 2
         ).sort((a,b) => a.niveauMin - b.niveauMin), 
     [gameItems, playerLevel]);
 
@@ -70,6 +70,10 @@ function BuyTab() {
             });
         }
     };
+    
+    if (vendorItems.length === 0) {
+        return <p className="text-center text-muted-foreground p-8">Le forgeron n'a rien à vendre pour le moment.</p>
+    }
 
     return (
         <Table>
@@ -203,3 +207,5 @@ export function VendorsView() {
         </Card>
     );
 }
+
+    
