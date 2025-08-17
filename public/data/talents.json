@@ -2,436 +2,157 @@
 {
     "talents": [
         {
-            "id": "berserker_arms_1",
-            "nom": "Maîtrise de la Frappe Héroïque",
+            "id": "berserker_heroic_strike_talent_1",
+            "nom": "Frappe Améliorée",
             "classeId": "berserker",
             "type": "passif",
             "rangMax": 5,
-            "effets": [ "Réduit le coût en Rage de Frappe Héroïque de 1/2/3/4/5." ],
+            "effets": ["Augmente les dégâts de Frappe Héroïque de 3/6/9/12/15%."],
             "exigences": []
         },
         {
-            "id": "berserker_arms_2",
-            "nom": "Charge Améliorée",
+            "id": "berserker_heroic_strike_talent_2",
+            "nom": "Commotion",
             "classeId": "berserker",
             "type": "passif",
-            "rangMax": 2,
-            "effets": [ "Augmente la Rage générée par Charge de 5/10." ],
+            "rangMax": 3,
+            "effets": ["Frappe Héroïque a 5/10/15% de chance de réduire la vitesse d'attaque de la cible."],
+            "exigences": ["berserker_heroic_strike_talent_1:2"]
+        },
+        {
+            "id": "berserker_shield_slam_talent_1",
+            "nom": "Heurtoir Puissant",
+            "classeId": "berserker",
+            "type": "passif",
+            "rangMax": 5,
+            "effets": ["Augmente les dégâts de Heurtoir de 4/8/12/16/20%."],
             "exigences": []
         },
         {
-            "id": "berserker_arms_3",
+            "id": "berserker_rend_talent_1",
             "nom": "Blessures Profondes",
             "classeId": "berserker",
             "type": "passif",
             "rangMax": 3,
-            "effets": [ "Vos coups critiques font saigner la cible pour 20/40/60% des dégâts sur 6s." ],
-            "exigences": [ "berserker_arms_1:2" ]
-        },
-        {
-            "id": "berserker_arms_4",
-            "nom": "Goût du Sang",
-            "classeId": "berserker",
-            "type": "passif",
-            "rangMax": 3,
-            "effets": [ "Après avoir utilisé Déchirure, vous avez 33/66/100% de chances que votre prochaine Frappe Héroïque soit gratuite." ],
-            "exigences": [ "berserker_arms_3:3" ]
-        },
-        {
-            "id": "berserker_fury_1",
-            "nom": "Cruauté",
-            "classeId": "berserker",
-            "type": "passif",
-            "rangMax": 5,
-            "effets": [ "Augmente vos chances de coup critique de 1/2/3/4/5%." ],
+            "effets": ["Augmente les dégâts de saignement de Rage sanguinaire de 10/20/30%."],
             "exigences": []
         },
         {
-            "id": "berserker_fury_2",
-            "nom": "Rage Débridée",
+            "id": "berserker_battle_shout_talent_1",
+            "nom": "Cri d'Intimidation",
             "classeId": "berserker",
             "type": "passif",
-            "rangMax": 5,
-            "effets": [ "Vous avez 8/16/24/32/40% de chances de générer 1 point de Rage supplémentaire lorsque vous infligez des dégâts." ],
+            "rangMax": 2,
+            "effets": ["Cri de guerre réduit également l'armure des ennemis proches de 5/10%."],
             "exigences": []
         },
         {
-            "id": "berserker_fury_3",
-            "nom": "Enrager",
-            "classeId": "berserker",
-            "type": "passif",
-            "rangMax": 5,
-            "effets": [ "Vos coups critiques en mêlée vous enragent, augmentant les dégâts infligés de 5/10/15/20/25% pendant 12s." ],
-            "exigences": [ "berserker_fury_1:5" ]
-        },
-        {
-            "id": "berserker_fury_4",
-            "nom": "Sanguinaire",
-            "classeId": "berserker",
-            "type": "passif",
-            "rangMax": 1,
-            "effets": [ "Vous soigne de 1% de vos PV maximum chaque fois que vous infligez un coup critique." ],
-            "exigences": [ "berserker_fury_3:5" ]
-        },
-        {
-            "id": "berserker_prot_1",
-            "nom": "Peau Dure",
-            "classeId": "berserker",
-            "type": "passif",
-            "rangMax": 5,
-            "effets": [ "Augmente votre valeur d'Armure de 2/4/6/8/10%." ],
-            "exigences": []
-        },
-        {
-            "id": "berserker_prot_2",
-            "nom": "Anticipation",
-            "classeId": "berserker",
-            "type": "passif",
-            "rangMax": 5,
-            "effets": [ "Augmente votre score d'Esquive de 1/2/3/4/5%." ],
-            "exigences": []
-        },
-        {
-            "id": "berserker_prot_3",
-            "nom": "Maîtrise du Blocage",
-            "classeId": "berserker",
-            "type": "passif",
-            "rangMax": 1,
-            "effets": [ "Vous permet de bloquer avec un bouclier, réduisant les dégâts subis." ],
-            "exigences": [ "berserker_prot_1:5" ]
-        },
-        {
-            "id": "berserker_prot_4",
-            "nom": "Rire à la Mort",
-            "classeId": "berserker",
-            "type": "passif",
-            "rangMax": 3,
-            "effets": [ "Lorsque votre santé passe sous les 20%, vous générez 10/15/20 Rage et les coûts en Rage sont réduits de 50% pendant 10s." ],
-            "exigences": [ "berserker_prot_3:1" ]
-        },
-        {
-            "id": "mage_frost_1",
+            "id": "mage_frostbolt_talent_1",
             "nom": "Givre Persistant",
             "classeId": "mage",
             "type": "passif",
-            "rangMax": 2,
-            "effets": [ "Augmente la durée du ralentissement d'Éclair de Givre de 1/2s." ],
+            "rangMax": 5,
+            "effets": ["Augmente les dégâts d'Éclair de Givre de 3/6/9/12/15%."],
             "exigences": []
         },
         {
-            "id": "mage_frost_2",
-            "nom": "Froid Pénétrant",
+            "id": "mage_fireball_talent_1",
+            "nom": "Brûlure Intense",
             "classeId": "mage",
             "type": "passif",
             "rangMax": 3,
-            "effets": [ "Augmente les dégâts de tous les sorts de Givre de 2/4/6%." ],
+            "effets": ["Augmente les dégâts sur la durée de Boule de Feu de 10/20/30%."],
             "exigences": []
         },
         {
-            "id": "mage_frost_3",
-            "nom": "Fracasser",
-            "classeId": "mage",
-            "type": "passif",
-            "rangMax": 5,
-            "effets": [ "Augmente les chances de coup critique de tous les sorts contre les cibles gelées de 10/20/30/40/50%." ],
-            "exigences": [ "mage_frost_1:2" ]
-        },
-        {
-            "id": "mage_frost_4",
-            "nom": "Barrière de Glace",
-            "classeId": "mage",
-            "type": "passif",
-            "rangMax": 1,
-            "effets": [ "Confère un bouclier qui absorbe des dégâts. Le bouclier se reforme si vous ne subissez pas de dégâts pendant 10s." ],
-            "exigences": [ "mage_frost_3:5" ]
-        },
-        {
-            "id": "mage_fire_1",
-            "nom": "Impact",
-            "classeId": "mage",
-            "type": "passif",
-            "rangMax": 5,
-            "effets": [ "Vos sorts de Feu ont 2/4/6/8/10% de chances d'étourdir la cible pendant 2s." ],
-            "exigences": []
-        },
-        {
-            "id": "mage_fire_2",
-            "nom": "Allumage",
-            "classeId": "mage",
-            "type": "passif",
-            "rangMax": 5,
-            "effets": [ "Vos coups critiques de Feu enflamment la cible, lui infligeant 8/16/24/32/40% de dégâts supplémentaires sur 4s." ],
-            "exigences": []
-        },
-        {
-            "id": "mage_fire_3",
-            "nom": "Monde en Flammes",
-            "classeId": "mage",
-            "type": "passif",
-            "rangMax": 3,
-            "effets": [ "Augmente les chances de coup critique de Choc de Flammes et Blizzard de 5/10/15%." ],
-            "exigences": [ "mage_fire_2:5" ]
-        },
-        {
-            "id": "mage_fire_4",
-            "nom": "Vitesse Flamboyante",
-            "classeId": "mage",
-            "type": "passif",
-            "rangMax": 1,
-            "effets": [ "Subir des dégâts a une chance d'augmenter votre vitesse de déplacement de 50% pendant 3s." ],
-            "exigences": [ "mage_fire_3:3" ]
-        },
-        {
-            "id": "mage_arcane_1",
+            "id": "mage_arcane_missiles_talent_1",
             "nom": "Focalisation des Arcanes",
             "classeId": "mage",
             "type": "passif",
             "rangMax": 5,
-            "effets": [ "Réduit le coût en Mana de vos sorts des Arcanes de 1/2/3/4/5%." ],
+            "effets": ["Augmente les dégâts de Projectiles des Arcanes de 2/4/6/8/10%."],
             "exigences": []
         },
         {
-            "id": "mage_arcane_2",
-            "nom": "Esprit des Arcanes",
-            "classeId": "mage",
-            "type": "passif",
-            "rangMax": 5,
-            "effets": [ "Augmente votre total de Mana de 3/6/9/12/15%." ],
-            "exigences": []
-        },
-        {
-            "id": "mage_arcane_3",
-            "nom": "Puissance des Arcanes",
+            "id": "mage_mana_shield_talent_1",
+            "nom": "Barrière Efficace",
             "classeId": "mage",
             "type": "passif",
             "rangMax": 3,
-            "effets": [ "Augmente les dégâts de vos sorts de 1/2/3% de votre Mana total." ],
-            "exigences": [ "mage_arcane_2:5" ]
-        },
-        {
-            "id": "mage_arcane_4",
-            "nom": "Présence Spirituelle",
-            "classeId": "mage",
-            "type": "passif",
-            "rangMax": 1,
-            "effets": [ "Votre prochain sort lancé est instantané. Temps de recharge de 3 minutes." ],
-            "exigences": [ "mage_arcane_3:3" ]
-        },
-        {
-            "id": "rogue_assassination_1",
-            "nom": "Malice",
-            "classeId": "rogue",
-            "type": "passif",
-            "rangMax": 5,
-            "effets": [ "Augmente vos chances de coup critique de 1/2/3/4/5%." ],
+            "effets": ["Bouclier de Mana absorbe 5/10/15% de dégâts supplémentaires."],
             "exigences": []
         },
         {
-            "id": "rogue_assassination_2",
-            "nom": "Poisons Améliorés",
+            "id": "rogue_sinister_strike_talent_1",
+            "nom": "Frappes Chirurgicales",
             "classeId": "rogue",
             "type": "passif",
             "rangMax": 5,
-            "effets": [ "Augmente les chances d'application de vos poisons de 5/10/15/20/25%." ],
+            "effets": ["Augmente les chances de coup critique d'Attaque Sournoise de 2/4/6/8/10%."],
             "exigences": []
         },
         {
-            "id": "rogue_assassination_3",
-            "nom": "Létalité",
-            "classeId": "rogue",
-            "type": "passif",
-            "rangMax": 5,
-            "effets": [ "Augmente les dégâts de vos coups critiques de 6/12/18/24/30%." ],
-            "exigences": [ "rogue_assassination_1:5" ]
-        },
-        {
-            "id": "rogue_assassination_4",
-            "nom": "Sang Froid",
-            "classeId": "rogue",
-            "type": "passif",
-            "rangMax": 1,
-            "effets": [ "Votre prochaine compétence est un coup critique garanti. Temps de recharge de 3 minutes." ],
-            "exigences": [ "rogue_assassination_3:5" ]
-        },
-        {
-            "id": "rogue_combat_1",
-            "nom": "Gouge Améliorée",
+            "id": "rogue_eviscerate_talent_1",
+            "nom": "Éviscération Brutale",
             "classeId": "rogue",
             "type": "passif",
             "rangMax": 3,
-            "effets": [ "Augmente la durée de Gouge de 0.5/1/1.5s." ],
+            "effets": ["Augmente les dégâts d'Éviscération de 5/10/15%."],
             "exigences": []
         },
         {
-            "id": "rogue_combat_2",
-            "nom": "Vigueur",
+            "id": "rogue_slice_and_dice_talent_1",
+            "nom": "Précipitation",
             "classeId": "rogue",
             "type": "passif",
             "rangMax": 2,
-            "effets": [ "Augmente votre Énergie maximale de 10/20." ],
+            "effets": ["Débiter augmente également vos chances d'esquive de 3/6%."],
             "exigences": []
         },
         {
-            "id": "rogue_combat_3",
-            "nom": "Spécialisation Épée",
+            "id": "rogue_stealth_talent_1",
+            "nom": "Maître de la Discrétion",
             "classeId": "rogue",
             "type": "passif",
-            "rangMax": 5,
-            "effets": [ "Vous donne 1/2/3/4/5% de chance d'obtenir une attaque supplémentaire." ],
-            "exigences": [ "rogue_combat_2:2" ]
-        },
-        {
-            "id": "rogue_combat_4",
-            "nom": "Poussée d'Adrénaline",
-            "classeId": "rogue",
-            "type": "passif",
-            "rangMax": 1,
-            "effets": [ "Augmente votre régénération d'Énergie de 100% pendant 15s. Temps de recharge de 3 minutes." ],
-            "exigences": [ "rogue_combat_3:5" ]
-        },
-        {
-            "id": "rogue_subtlety_1",
-            "nom": "Maître de la Tromperie",
-            "classeId": "rogue",
-            "type": "passif",
-            "rangMax": 5,
-            "effets": [ "Améliore votre Camouflage, le rendant plus difficile à détecter." ],
+            "rangMax": 3,
+            "effets": ["Réduit le coût en Énergie de Camouflage de 10/20/30%."],
             "exigences": []
         },
         {
-            "id": "rogue_subtlety_2",
-            "nom": "Opportuniste",
-            "classeId": "rogue",
-            "type": "passif",
-            "rangMax": 5,
-            "effets": [ "Augmente les dégâts de Embuscade et Attaque Sournoise de 4/8/12/16/20%." ],
-            "exigences": []
-        },
-        {
-            "id": "rogue_subtlety_3",
-            "nom": "Fantôme",
-            "classeId": "rogue",
-            "type": "passif",
-            "rangMax": 2,
-            "effets": [ "Réduit le temps de recharge de Disparition de 30s/1m." ],
-            "exigences": [ "rogue_subtlety_1:5" ]
-        },
-        {
-            "id": "rogue_subtlety_4",
-            "nom": "Hémorragie",
-            "classeId": "rogue",
-            "type": "passif",
-            "rangMax": 1,
-            "effets": [ "Une attaque instantanée qui augmente les dégâts physiques subis par la cible." ],
-            "exigences": [ "rogue_subtlety_3:2" ]
-        },
-        {
-            "id": "cleric_discipline_1",
-            "nom": "Volonté Inébranlable",
+            "id": "cleric_smite_talent_1",
+            "nom": "Châtiment Amélioré",
             "classeId": "cleric",
             "type": "passif",
             "rangMax": 5,
-            "effets": [ "Augmente l'absorption de Mot de Pouvoir : Bouclier de 3/6/9/12/15%." ],
+            "effets": ["Augmente les dégâts de Châtiment Sacré de 4/8/12/16/20%."],
             "exigences": []
         },
         {
-            "id": "cleric_discipline_2",
-            "nom": "Focalisation Intérieure",
+            "id": "cleric_flash_heal_talent_1",
+            "nom": "Soins Bienveillants",
             "classeId": "cleric",
             "type": "passif",
             "rangMax": 3,
-            "effets": [ "Réduit le coût en Mana de vos sorts de 2/4/6%." ],
+            "effets": ["Augmente les soins de Soin Rapide de 5/10/15%."],
             "exigences": []
         },
         {
-            "id": "cleric_discipline_3",
-            "nom": "Méditation",
+            "id": "cleric_power_word_shield_talent_1",
+            "nom": "Bouclier Divin",
             "classeId": "cleric",
             "type": "passif",
             "rangMax": 3,
-            "effets": [ "Permet à 5/10/15% de votre régénération de Mana de continuer pendant le combat." ],
-            "exigences": [ "cleric_discipline_2:3" ]
-        },
-        {
-            "id": "cleric_discipline_4",
-            "nom": "Chagrin",
-            "classeId": "cleric",
-            "type": "passif",
-            "rangMax": 1,
-            "effets": [ "Lorsque vous lancez Mot de l'Ombre : Douleur, vous avez une chance de rendre votre prochain Châtiment Sacré instantané." ],
-            "exigences": [ "cleric_discipline_3:3" ]
-        },
-        {
-            "id": "cleric_holy_1",
-            "nom": "Soins Améliorés",
-            "classeId": "cleric",
-            "type": "passif",
-            "rangMax": 5,
-            "effets": [ "Réduit le temps d'incantation de Soin Inférieur et Guérison de 0.1/0.2/0.3/0.4/0.5s." ],
+            "effets": ["Le Bouclier de pouvoir absorbe 5/10/15% de dégâts supplémentaires."],
             "exigences": []
         },
         {
-            "id": "cleric_holy_2",
-            "nom": "Inspiration",
-            "classeId": "cleric",
-            "type": "passif",
-            "rangMax": 3,
-            "effets": [ "Vos soins critiques augmentent l'armure de la cible de 8/16/25% pendant 15s." ],
-            "exigences": []
-        },
-        {
-            "id": "cleric_holy_3",
-            "nom": "Spécialisation du Sacré",
-            "classeId": "cleric",
-            "type": "passif",
-            "rangMax": 5,
-            "effets": [ "Augmente les chances de critique de vos sorts Sacrés de 1/2/3/4/5%." ],
-            "exigences": [ "cleric_holy_2:3" ]
-        },
-        {
-            "id": "cleric_holy_4",
-            "nom": "Soins Supérieurs",
-            "classeId": "cleric",
-            "type": "passif",
-            "rangMax": 1,
-            "effets": [ "Débloque un sort de soin très puissant mais coûteux en mana." ],
-            "exigences": [ "cleric_holy_3:5" ]
-        },
-        {
-            "id": "cleric_shadow_1",
-            "nom": "Mot de l'Ombre Amélioré",
+            "id": "cleric_shadow_word_pain_talent_1",
+            "nom": "Douleur persistante",
             "classeId": "cleric",
             "type": "passif",
             "rangMax": 2,
-            "effets": [ "Augmente les dégâts de Mot de l'Ombre : Douleur de 5/10%." ],
+            "effets": ["Augmente la durée de Mot de l'ombre : Douleur de 1/2s."],
             "exigences": []
-        },
-        {
-            "id": "cleric_shadow_2",
-            "nom": "Tissage de l'Ombre",
-            "classeId": "cleric",
-            "type": "passif",
-            "rangMax": 5,
-            "effets": [ "Vos sorts d'Ombre augmentent les dégâts d'Ombre subis par la cible de 3/6/9/12/15% pendant 12s." ],
-            "exigences": []
-        },
-        {
-            "id": "cleric_shadow_3",
-            "nom": "Étreinte Vampirique",
-            "classeId": "cleric",
-            "type": "passif",
-            "rangMax": 1,
-            "effets": [ "Vous et vos alliés êtes soignés pour 20% des dégâts d'Ombre que vous infligez." ],
-            "exigences": [ "cleric_shadow_2:5" ]
-        },
-        {
-            "id": "cleric_shadow_4",
-            "nom": "Forme d'Ombre",
-            "classeId": "cleric",
-            "type": "passif",
-            "rangMax": 1,
-            "effets": [ "Adopte une forme d'ombre, augmentant les dégâts d'Ombre de 15% et réduisant les dégâts subis de 15%, mais vous ne pouvez lancer que des sorts d'Ombre." ],
-            "exigences": [ "cleric_shadow_3:1" ]
         }
     ]
 }

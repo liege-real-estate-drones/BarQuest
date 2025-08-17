@@ -443,9 +443,11 @@ export const useGameStore = create<GameState>()(
           let canLearn = true;
           if (talent.exigences && talent.exigences.length > 0) {
             talent.exigences.forEach(req => {
-              const [reqId, reqRank] = req.split(':');
-              if ((player.learnedSkills[reqId] || 0) < Number(reqRank)) {
-                canLearn = false;
+              const [reqId, reqRankStr] = req.split(':');
+              const reqRank = parseInt(reqRankStr, 10);
+              const hasReq = (player.learnedTalents[reqId] || 0) >= reqRank;
+              if (!hasReq) {
+                  canLearn = false;
               }
             });
           }
