@@ -53,17 +53,17 @@ export default function Home() {
             }
 
             const jsonData = await Promise.all(responses.map(res => res.json()));
-
+            
             const gameDataPayload = {
-                dungeons: jsonData[0] || [],
-                monsters: jsonData[1] || [],
-                items: jsonData[2] || [],
-                talents: jsonData[3] || [],
-                skills: jsonData[4] || [],
-                affixes: jsonData[5] || [],
-                classes: jsonData[6] || [],
-                quests: jsonData[7] || [],
-                factions: jsonData[8] || [],
+                dungeons: jsonData[0]?.dungeons || [],
+                monsters: jsonData[1]?.monsters || [],
+                items: jsonData[2]?.items || [],
+                talents: jsonData[3]?.talents || [],
+                skills: jsonData[4]?.skills || [],
+                affixes: jsonData[5]?.affixes || [],
+                classes: jsonData[6]?.classes || [],
+                quests: jsonData[7]?.quests || [],
+                factions: jsonData[8]?.factions || [],
             };
             
             initializeGameData(gameDataPayload);
