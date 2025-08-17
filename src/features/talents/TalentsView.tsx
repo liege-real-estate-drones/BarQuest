@@ -46,7 +46,7 @@ const TalentCard = ({ talent, player, gameData, canLearn, currentRank, isMaxRank
                     <ul className="list-disc list-inside space-y-1">
                         {talent.effets.map((effet, i) => <li key={i} className="text-xs text-green-400">{effet}</li>)}
                     </ul>
-                    {(talent.exigences.length > 0 || talent.niveauRequis) && (
+                    {(talent.exigences?.length > 0 || talent.niveauRequis) && (
                         <>
                             <Separator className="my-2" />
                             <div className="space-y-1">
@@ -89,7 +89,7 @@ export function TalentsView() {
         const currentRank = learnedTalents[talent.id] || 0;
         if (currentRank >= talent.rangMax) return false;
 
-        if (talent.exigences.length === 0) return true;
+        if (!talent.exigences || talent.exigences.length === 0) return true;
 
         return talent.exigences.every(req => {
             const [reqId, reqRankStr] = req.split(':');
