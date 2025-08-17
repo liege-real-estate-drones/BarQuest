@@ -6,8 +6,23 @@
             "classeId": "berserker",
             "type": "passif",
             "rangMax": 5,
-            "effets": ["Augmente l'Armure de 2/4/6/8/10%."],
+            "effets": [
+                "Augmente vos PV maximum de 2%/4%/6%/8%/10%."
+            ],
             "exigences": []
+        },
+        {
+            "id": "berserker_cleave",
+            "nom": "Enchaînement",
+            "classeId": "berserker",
+            "type": "passif",
+            "rangMax": 1,
+            "effets": [
+                "Vos attaques de base infligent 50% de leurs dégâts à une cible secondaire proche."
+            ],
+            "exigences": [
+                "berserker_heroic_strike:1"
+            ]
         },
         {
             "id": "berserker_battle_cry",
@@ -15,34 +30,45 @@
             "classeId": "berserker",
             "type": "passif",
             "rangMax": 3,
-            "effets": ["Les attaques de base génèrent 1/2/3 Rage supplémentaire."],
-            "exigences": ["berserker_toughness:1"]
-        },
-        {
-            "id": "mage_intellect",
-            "nom": "Intellect Arcanique",
-            "classeId": "mage",
-            "type": "passif",
-            "rangMax": 5,
-            "effets": ["Augmente l'Intelligence de 2/4/6/8/10%."],
+            "effets": [
+                "Vos attaques de base génèrent 1/2/3 point(s) de Rage supplémentaire(s)."
+            ],
             "exigences": []
         },
         {
-            "id": "rogue_precision",
-            "nom": "Précision",
-            "classeId": "rogue",
+            "id": "berserker_last_stand",
+            "nom": "Dernier Rempart",
+            "classeId": "berserker",
             "type": "passif",
-            "rangMax": 5,
-            "effets": ["Augmente les chances de critique de 1/2/3/4/5%."],
+            "rangMax": 1,
+            "effets": [
+                "Lorsque vous tombez sous 30% de PV, vous gagnez 50% de réduction de dégâts pendant 5s. Ne peut se produire qu'une fois toutes les 60s."
+            ],
+            "niveauRequis": 10,
             "exigences": []
         },
         {
-            "id": "cleric_divine_fortitude",
-            "nom": "Volonté Divine",
-            "classeId": "cleric",
+            "id": "berserker_frenzy",
+            "nom": "Frénésie",
+            "classeId": "berserker",
             "type": "passif",
             "rangMax": 5,
-            "effets": ["Augmente l'Esprit de 2/4/6/8/10%."],
+            "effets": [
+                "Augmente votre vitesse d'attaque de 2%/4%/6%/8%/10%."
+            ],
+            "niveauRequis": 5,
+            "exigences": []
+        },
+        {
+            "id": "berserker_bloodthirst",
+            "nom": "Soif de Sang",
+            "classeId": "berserker",
+            "type": "passif",
+            "rangMax": 3,
+            "effets": [
+                "Vos coups critiques vous soignent à hauteur de 1%/2%/3% de vos PV maximum."
+            ],
+            "niveauRequis": 8,
             "exigences": []
         }
     ]
