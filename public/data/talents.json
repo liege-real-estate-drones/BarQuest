@@ -1,4 +1,3 @@
-
 {
     "talents": [
         {
@@ -7,152 +6,419 @@
             "classeId": "berserker",
             "type": "passif",
             "rangMax": 5,
-            "effets": ["Augmente les dégâts de Frappe Héroïque de 3/6/9/12/15%."],
+            "effets": [
+                "Augmente les dégâts de Frappe Héroïque de 5/10/15/20/25%."
+            ],
             "exigences": []
         },
         {
             "id": "berserker_heroic_strike_talent_2",
-            "nom": "Commotion",
+            "nom": "Impact Lourd",
             "classeId": "berserker",
             "type": "passif",
             "rangMax": 3,
-            "effets": ["Frappe Héroïque a 5/10/15% de chance de réduire la vitesse d'attaque de la cible."],
-            "exigences": ["berserker_heroic_strike_talent_1:2"]
+            "effets": [
+                "Frappe Héroïque a 10/20/30% de chances d'étourdir les cibles pendant 1 seconde."
+            ],
+            "exigences": [
+                "berserker_heroic_strike_talent_1:2"
+            ]
         },
         {
-            "id": "berserker_shield_slam_talent_1",
-            "nom": "Heurtoir Puissant",
-            "classeId": "berserker",
-            "type": "passif",
-            "rangMax": 5,
-            "effets": ["Augmente les dégâts de Heurtoir de 4/8/12/16/20%."],
-            "exigences": []
-        },
-        {
-            "id": "berserker_rend_talent_1",
-            "nom": "Blessures Profondes",
-            "classeId": "berserker",
-            "type": "passif",
-            "rangMax": 3,
-            "effets": ["Augmente les dégâts de saignement de Rage sanguinaire de 10/20/30%."],
-            "exigences": []
-        },
-        {
-            "id": "berserker_battle_shout_talent_1",
-            "nom": "Cri d'Intimidation",
+            "id": "berserker_heroic_strike_talent_3",
+            "nom": "Fureur sans fin",
             "classeId": "berserker",
             "type": "passif",
             "rangMax": 2,
-            "effets": ["Cri de guerre réduit également l'armure des ennemis proches de 5/10%."],
+            "effets": [
+                "Réduit le coût en Rage de Frappe Héroïque de 2/4."
+            ],
+            "exigences": [
+                "berserker_heroic_strike_talent_1:2"
+            ]
+        },
+        {
+            "id": "berserker_cleave_talent_1",
+            "nom": "Fendoir Large",
+            "classeId": "berserker",
+            "type": "passif",
+            "rangMax": 5,
+            "effets": [
+                "Augmente les dégâts de Fendoir de 6/12/18/24/30%."
+            ],
             "exigences": []
+        },
+        {
+            "id": "berserker_cleave_talent_2",
+            "nom": "Hémorragie",
+            "classeId": "berserker",
+            "type": "passif",
+            "rangMax": 3,
+            "effets": [
+                "Fendoir applique un saignement infligeant 5/10/15% des dégâts sur 3 secondes."
+            ],
+            "exigences": [
+                "berserker_cleave_talent_1:3"
+            ]
+        },
+        {
+            "id": "berserker_charge_talent_1",
+            "nom": "Charge Imparable",
+            "classeId": "berserker",
+            "type": "passif",
+            "rangMax": 5,
+            "effets": [
+                "Augmente la durée de l'étourdissement de Charge de 0.2/0.4/0.6/0.8/1 seconde."
+            ],
+            "exigences": []
+        },
+        {
+            "id": "berserker_charge_talent_2",
+            "nom": "Bélier",
+            "classeId": "berserker",
+            "type": "passif",
+            "rangMax": 3,
+            "effets": [
+                "Charge inflige 50/100/150% des dégâts de l'arme à l'impact."
+            ],
+            "exigences": [
+                "berserker_charge_talent_1:2"
+            ]
+        },
+        {
+            "id": "berserker_whirlwind_talent_1",
+            "nom": "Tourbillon Acéré",
+            "classeId": "berserker",
+            "type": "passif",
+            "rangMax": 5,
+            "effets": [
+                "Augmente les dégâts de Tourbillon de 8/16/24/32/40%."
+            ],
+            "exigences": [],
+            "niveauRequis": 5
+        },
+        {
+            "id": "berserker_whirlwind_talent_2",
+            "nom": "Vortex",
+            "classeId": "berserker",
+            "type": "passif",
+            "rangMax": 1,
+            "effets": [
+                "Tourbillon attire les ennemis proches vers vous."
+            ],
+            "exigences": [
+                "berserker_whirlwind_talent_1:3"
+            ],
+            "niveauRequis": 5
         },
         {
             "id": "mage_frostbolt_talent_1",
-            "nom": "Givre Persistant",
+            "nom": "Givre Amélioré",
             "classeId": "mage",
             "type": "passif",
             "rangMax": 5,
-            "effets": ["Augmente les dégâts d'Éclair de Givre de 3/6/9/12/15%."],
+            "effets": [
+                "Augmente les dégâts d'Éclair de Givre de 5/10/15/20/25%."
+            ],
             "exigences": []
+        },
+        {
+            "id": "mage_frostbolt_talent_2",
+            "nom": "Froid Mordant",
+            "classeId": "mage",
+            "type": "passif",
+            "rangMax": 3,
+            "effets": [
+                "Augmente l'effet de ralentissement d'Éclair de Givre de 10/20/30%."
+            ],
+            "exigences": [
+                "mage_frostbolt_talent_1:2"
+            ]
+        },
+        {
+            "id": "mage_frostbolt_talent_3",
+            "nom": "Éclat Glacial",
+            "classeId": "mage",
+            "type": "passif",
+            "rangMax": 2,
+            "effets": [
+                "Éclair de Givre a 10/20% de chances de lancer un second éclair sur une cible proche pour 50% de dégâts."
+            ],
+            "exigences": [
+                "mage_frostbolt_talent_1:3"
+            ]
         },
         {
             "id": "mage_fireball_talent_1",
-            "nom": "Brûlure Intense",
+            "nom": "Boule de Feu Instable",
+            "classeId": "mage",
+            "type": "passif",
+            "rangMax": 5,
+            "effets": [
+                "Augmente les dégâts de Boule de Feu de 6/12/18/24/30%."
+            ],
+            "exigences": []
+        },
+        {
+            "id": "mage_fireball_talent_2",
+            "nom": "Combustion",
             "classeId": "mage",
             "type": "passif",
             "rangMax": 3,
-            "effets": ["Augmente les dégâts sur la durée de Boule de Feu de 10/20/30%."],
-            "exigences": []
+            "effets": [
+                "Boule de Feu applique un effet de brûlure infligeant 10/20/30% des dégâts sur 3 secondes."
+            ],
+            "exigences": [
+                "mage_fireball_talent_1:3"
+            ]
         },
         {
             "id": "mage_arcane_missiles_talent_1",
-            "nom": "Focalisation des Arcanes",
+            "nom": "Missiles Surpuissants",
             "classeId": "mage",
             "type": "passif",
             "rangMax": 5,
-            "effets": ["Augmente les dégâts de Projectiles des Arcanes de 2/4/6/8/10%."],
+            "effets": [
+                "Augmente les dégâts de chaque Projectile des Arcanes de 4/8/12/16/20%."
+            ],
             "exigences": []
         },
         {
-            "id": "mage_mana_shield_talent_1",
-            "nom": "Barrière Efficace",
+            "id": "mage_arcane_missiles_talent_2",
+            "nom": "Barrage des Arcanes",
+            "classeId": "mage",
+            "type": "passif",
+            "rangMax": 1,
+            "effets": [
+                "Ajoute un projectile supplémentaire à Projectiles des Arcanes."
+            ],
+            "exigences": [
+                "mage_arcane_missiles_talent_1:5"
+            ]
+        },
+        {
+            "id": "mage_frost_nova_talent_1",
+            "nom": "Nova Glaciale",
+            "classeId": "mage",
+            "type": "passif",
+            "rangMax": 5,
+            "effets": [
+                "Augmente la durée de l'immobilisation de Nova de Givre de 0.4/0.8/1.2/1.6/2 secondes."
+            ],
+            "exigences": [],
+            "niveauRequis": 5
+        },
+        {
+            "id": "mage_frost_nova_talent_2",
+            "nom": "Froid jusqu'à l'os",
             "classeId": "mage",
             "type": "passif",
             "rangMax": 3,
-            "effets": ["Bouclier de Mana absorbe 5/10/15% de dégâts supplémentaires."],
-            "exigences": []
+            "effets": [
+                "Les ennemis touchés par Nova de Givre subissent 10/20/30% de dégâts de Givre supplémentaires pendant 5 secondes."
+            ],
+            "exigences": [
+                "mage_frost_nova_talent_1:2"
+            ],
+            "niveauRequis": 5
         },
         {
             "id": "rogue_sinister_strike_talent_1",
-            "nom": "Frappes Chirurgicales",
+            "nom": "Frappe Précise",
             "classeId": "rogue",
             "type": "passif",
             "rangMax": 5,
-            "effets": ["Augmente les chances de coup critique d'Attaque Sournoise de 2/4/6/8/10%."],
+            "effets": [
+                "Augmente les dégâts de Frappe Sinistre de 5/10/15/20/25%."
+            ],
             "exigences": []
+        },
+        {
+            "id": "rogue_sinister_strike_talent_2",
+            "nom": "Points de Combo Améliorés",
+            "classeId": "rogue",
+            "type": "passif",
+            "rangMax": 3,
+            "effets": [
+                "Frappe Sinistre a 15/30/45% de chances de générer un point de combo supplémentaire."
+            ],
+            "exigences": [
+                "rogue_sinister_strike_talent_1:2"
+            ]
         },
         {
             "id": "rogue_eviscerate_talent_1",
             "nom": "Éviscération Brutale",
             "classeId": "rogue",
             "type": "passif",
-            "rangMax": 3,
-            "effets": ["Augmente les dégâts d'Éviscération de 5/10/15%."],
+            "rangMax": 5,
+            "effets": [
+                "Augmente les dégâts d'Éviscération par point de combo de 4/8/12/16/20%."
+            ],
             "exigences": []
         },
         {
-            "id": "rogue_slice_and_dice_talent_1",
-            "nom": "Précipitation",
+            "id": "rogue_eviscerate_talent_2",
+            "nom": "Hémorragie Interne",
             "classeId": "rogue",
             "type": "passif",
-            "rangMax": 2,
-            "effets": ["Débiter augmente également vos chances d'esquive de 3/6%."],
-            "exigences": []
+            "rangMax": 3,
+            "effets": [
+                "Éviscération applique un saignement basé sur les points de combo utilisés."
+            ],
+            "exigences": [
+                "rogue_eviscerate_talent_1:3"
+            ]
         },
         {
             "id": "rogue_stealth_talent_1",
-            "nom": "Maître de la Discrétion",
+            "nom": "Camouflage",
+            "classeId": "rogue",
+            "type": "passif",
+            "rangMax": 5,
+            "effets": [
+                "Réduit le temps de recharge de Camouflage de 1/2/3/4/5 secondes."
+            ],
+            "exigences": []
+        },
+        {
+            "id": "rogue_stealth_talent_2",
+            "nom": "Attaque Surprise",
             "classeId": "rogue",
             "type": "passif",
             "rangMax": 3,
-            "effets": ["Réduit le coût en Énergie de Camouflage de 10/20/30%."],
-            "exigences": []
+            "effets": [
+                "Votre première attaque depuis Camouflage inflige 20/40/60% de dégâts supplémentaires."
+            ],
+            "exigences": [
+                "rogue_stealth_talent_1:2"
+            ]
+        },
+        {
+            "id": "rogue_fan_of_knives_talent_1",
+            "nom": "Éventail Tranchant",
+            "classeId": "rogue",
+            "type": "passif",
+            "rangMax": 5,
+            "effets": [
+                "Augmente les dégâts d'Éventail de Couteaux de 8/16/24/32/40%."
+            ],
+            "exigences": [],
+            "niveauRequis": 5
+        },
+        {
+            "id": "rogue_fan_of_knives_talent_2",
+            "nom": "Lames Empoisonnées",
+            "classeId": "rogue",
+            "type": "passif",
+            "rangMax": 1,
+            "effets": [
+                "Éventail de Couteaux applique un poison faible aux cibles."
+            ],
+            "exigences": [
+                "rogue_fan_of_knives_talent_1:3"
+            ],
+            "niveauRequis": 5
         },
         {
             "id": "cleric_smite_talent_1",
-            "nom": "Châtiment Amélioré",
+            "nom": "Châtiment Divin",
             "classeId": "cleric",
             "type": "passif",
             "rangMax": 5,
-            "effets": ["Augmente les dégâts de Châtiment Sacré de 4/8/12/16/20%."],
+            "effets": [
+                "Augmente les dégâts de Châtiment de 5/10/15/20/25%."
+            ],
             "exigences": []
+        },
+        {
+            "id": "cleric_smite_talent_2",
+            "nom": "Jugement",
+            "classeId": "cleric",
+            "type": "passif",
+            "rangMax": 3,
+            "effets": [
+                "Châtiment a 10/20/30% de chances de rendre la cible vulnérable, augmentant les dégâts subis de 5%."
+            ],
+            "exigences": [
+                "cleric_smite_talent_1:2"
+            ]
         },
         {
             "id": "cleric_flash_heal_talent_1",
-            "nom": "Soins Bienveillants",
+            "nom": "Soins Rapides Améliorés",
+            "classeId": "cleric",
+            "type": "passif",
+            "rangMax": 5,
+            "effets": [
+                "Augmente les soins de Soins Rapides de 5/10/15/20/25%."
+            ],
+            "exigences": []
+        },
+        {
+            "id": "cleric_flash_heal_talent_2",
+            "nom": "Vague de Lumière",
             "classeId": "cleric",
             "type": "passif",
             "rangMax": 3,
-            "effets": ["Augmente les soins de Soin Rapide de 5/10/15%."],
+            "effets": [
+                "Soins Rapides vous soigne également pour 15/30/45% du montant."
+            ],
+            "exigences": [
+                "cleric_flash_heal_talent_1:3"
+            ]
+        },
+        {
+            "id": "cleric_holy_nova_talent_1",
+            "nom": "Nova Sacrée Éclatante",
+            "classeId": "cleric",
+            "type": "passif",
+            "rangMax": 5,
+            "effets": [
+                "Augmente les dégâts et les soins de Nova Sacrée de 6/12/18/24/30%."
+            ],
             "exigences": []
+        },
+        {
+            "id": "cleric_holy_nova_talent_2",
+            "nom": "Réverbération Sacrée",
+            "classeId": "cleric",
+            "type": "passif",
+            "rangMax": 1,
+            "effets": [
+                "Nova Sacrée se déclenche une seconde fois pour 50% de son effet après 1 seconde."
+            ],
+            "exigences": [
+                "cleric_holy_nova_talent_1:5"
+            ]
         },
         {
             "id": "cleric_power_word_shield_talent_1",
-            "nom": "Bouclier Divin",
+            "nom": "Bouclier Renforcé",
+            "classeId": "cleric",
+            "type": "passif",
+            "rangMax": 5,
+            "effets": [
+                "Augmente l'absorption de Mot de Pouvoir : Bouclier de 8/16/24/32/40%."
+            ],
+            "exigences": [],
+            "niveauRequis": 5
+        },
+        {
+            "id": "cleric_power_word_shield_talent_2",
+            "nom": "Volonté Focalisée",
             "classeId": "cleric",
             "type": "passif",
             "rangMax": 3,
-            "effets": ["Le Bouclier de pouvoir absorbe 5/10/15% de dégâts supplémentaires."],
-            "exigences": []
-        },
-        {
-            "id": "cleric_shadow_word_pain_talent_1",
-            "nom": "Douleur persistante",
-            "classeId": "cleric",
-            "type": "passif",
-            "rangMax": 2,
-            "effets": ["Augmente la durée de Mot de l'ombre : Douleur de 1/2s."],
-            "exigences": []
+            "effets": [
+                "Tant que Mot de Pouvoir : Bouclier est actif sur vous, vos dégâts sont augmentés de 5/10/15%."
+            ],
+            "exigences": [
+                "cleric_power_word_shield_talent_1:2"
+            ],
+            "niveauRequis": 5
         }
     ]
 }
+
+    
