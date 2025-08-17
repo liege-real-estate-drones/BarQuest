@@ -67,6 +67,34 @@ const TalentCard = ({ talent, player, gameData, canLearn, currentRank, isMaxRank
     );
 };
 
+const TalentTreeBranch = ({ title, talents, ...props }: { title: string, talents: Talent[], [key: string]: any }) => {
+    return (
+        <div className="flex flex-col gap-4">
+            <h3 className="text-lg font-headline text-center text-primary">{title}</h3>
+            <div className="space-y-4">
+                 {talents.map(talent => {
+                    const currentRank = props.learnedTalents[talent.id] || 0;
+                    const isMaxRank = currentRank >= talent.rangMax;
+                    const canLearn = props.canLearnTalent(talent.id);
+
+                    return (
+                        <TalentCard 
+                            key={talent.id}
+                            talent={talent}
+                            player={props.player}
+                            gameData={props.gameData}
+                            canLearn={canLearn}
+                            currentRank={currentRank}
+                            isMaxRank={isMaxRank}
+                            onLearn={props.learnTalent}
+                        />
+                    );
+                })}
+            </div>
+        </div>
+    )
+}
+
 export function TalentsView() {
     const { player, gameData, learnTalent, talentPoints } = useGameStore(state => ({
         player: state.player,
@@ -77,6 +105,35 @@ export function TalentsView() {
 
     const playerTalents = (gameData.talents || []).filter(t => t.classeId === player.classeId);
     const learnedTalents = player.learnedTalents || {};
+    
+    let branches: { title: string, talents: Talent[] }[] = [];
+
+    if (player.classeId === 'berserker') {
+        branches = [
+            { title: "Armes", talents: playerTalents.filter(t => t.id.includes('_arms_'))},
+            { title: "Furie", talents: playerTalents.filter(t => t.id.includes('_fury_'))},
+            { title: "Protection", talents: playerTalents.filter(t => t.id.includes('_prot_'))}
+        ]
+    } else if (player.classeId === 'mage') {
+         branches = [
+            { title: "Givre", talents: playerTalents.filter(t => t.id.includes('_frost_'))},
+            { title: "Feu", talents: playerTalents.filter(t => t.id.includes('_fire_'))},
+            { title: "Arcane", talents: playerTalents.filter(t => t.id.includes('_arcane_'))}
+        ]
+    } else if (player.classeId === 'rogue') {
+         branches = [
+            { title: "Assassinat", talents: playerTalents.filter(t => t.id.includes('_assassination_'))},
+            { title: "Combat", talents: playerTalents.filter(t => t.id.includes('_combat_'))},
+            { title: "Finesse", talents: playerTalents.filter(t => t.id.includes('_subtlety_'))}
+        ]
+    } else if (player.classeId === 'cleric') {
+         branches = [
+            { title: "Discipline", talents: playerTalents.filter(t => t.id.includes('_discipline_'))},
+            { title: "Sacré", talents: playerTalents.filter(t => t.id.includes('_holy_'))},
+            { title: "Ombre", talents: playerTalents.filter(t => t.id.includes('_shadow_'))}
+        ]
+    }
+
 
     const canLearnTalent = (talentId: string): boolean => {
         if (talentPoints <= 0) return false;
@@ -109,25 +166,19 @@ export function TalentsView() {
             </CardHeader>
             <CardContent className="flex-grow">
                 <ScrollArea className="h-full pr-4">
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {playerTalents.map(talent => {
-                                const currentRank = learnedTalents[talent.id] || 0;
-                                const isMaxRank = currentRank >= talent.rangMax;
-                                const canLearn = canLearnTalent(talent.id);
-
-                                return (
-                                    <TalentCard 
-                                        key={talent.id}
-                                        talent={talent}
-                                        player={player}
-                                        gameData={gameData}
-                                        canLearn={canLearn}
-                                        currentRank={currentRank}
-                                        isMaxRank={isMaxRank}
-                                        onLearn={learnTalent}
-                                    />
-                                );
-                            })}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            {branches.map(branch => (
+                                <TalentTreeBranch 
+                                    key={branch.title}
+                                    title={branch.title}
+                                    talents={branch.talents}
+                                    canLearnTalent={canLearnTalent}
+                                    learnedTalents={learnedTalents}
+                                    player={player}
+                                    gameData={gameData}
+                                    learnTalent={learnTalent}
+                                />
+                            ))}
                         </div>
                 </ScrollArea>
             </CardContent>

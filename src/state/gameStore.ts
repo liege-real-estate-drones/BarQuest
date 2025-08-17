@@ -389,7 +389,7 @@ export const useGameStore = create<GameState>()(
         get().recalculateStats();
       },
 
-      buyItem: (item: Item): boolean => {
+      buyItem: (item: Item) => {
           const { inventory } = get();
           const price = item.vendorPrice || 0;
           if (price <= 0 || inventory.gold < price) {
@@ -688,8 +688,7 @@ export const useGameStore = create<GameState>()(
             }
 
             if(state.player.resources.type === 'Mana' && !isCleave) {
-              const manaGained = 5;
-              state.player.resources.current = Math.min(state.player.resources.max, state.player.resources.current + manaGained);
+              state.player.resources.current = Math.min(state.player.resources.max, state.player.resources.current + 5);
             }
         });
         
@@ -898,7 +897,7 @@ export const useGameStore = create<GameState>()(
             let xpToNext = get().getXpToNextLevel();
             while(state.player.xp >= xpToNext) {
                 state.player.level += 1;
-                state.player.talentPoints += 1;
+                state.player.talentPoints += 2; // Gain 2 talent points per level
                 leveledUp = true;
                  state.player.xp -= xpToNext;
                 state.combat.log.push({ message: `Congratulations! You have reached level ${state.player.level}!`, type: 'levelup', timestamp: Date.now() });
