@@ -625,61 +625,67 @@ export const useGameStore = create<GameState>()(
       },
 
       playerAttack: (targetId, isCleave = false) => {
+        const { player, combat } = get();
+        const target = combat.enemies.find(e => e.id === targetId);
+        if (!target) return;
+
+        const damage = formulas.calculateMeleeDamage(player.stats.AttMin, player.stats.AttMax, formulas.calculateAttackPower(player.stats));
+        const isCrit = formulas.isCriticalHit(player.stats.CritPct, player.stats.Precision, target.stats.Esquive);
+        let finalDamage = isCrit ? damage * (player.stats.CritDmg / 100) : damage;
+        
+        if (player.activeEffects && player.activeEffects.includes('dernier_cri')) {
+            const maxHp = formulas.calculateMaxHP(player.level, player.stats);
+            const hpPercent = (player.stats.PV / maxHp) * 100;
+            const damageMultiplier = 1 + (100 - hpPercent) / 100;
+            finalDamage *= damageMultiplier;
+        }
+
+        const dr = formulas.calculateArmorDR(target.stats.Armure, player.level);
+        const mitigatedDamage = Math.round(finalDamage * (isCleave ? 0.5 : 1) * (1 - dr));
+        
+        const newHp = target.stats.PV - mitigatedDamage;
+
         set(state => {
-            const { player, combat } = state;
-            const target = combat.enemies.find(e => e.id === targetId);
-            if (!target) return;
+            const currentTarget = state.combat.enemies.find(e => e.id === targetId);
+            if (currentTarget) {
+                currentTarget.stats.PV = newHp;
 
-            const damage = formulas.calculateMeleeDamage(player.stats.AttMin, player.stats.AttMax, formulas.calculateAttackPower(player.stats));
-            const isCrit = formulas.isCriticalHit(player.stats.CritPct, player.stats.Precision, target.stats.Esquive);
-            let finalDamage = isCrit ? damage * (player.stats.CritDmg / 100) : damage;
-            
-            if (player.activeEffects && player.activeEffects.includes('dernier_cri')) {
-                const maxHp = formulas.calculateMaxHP(player.level, player.stats);
-                const hpPercent = (player.stats.PV / maxHp) * 100;
-                const damageMultiplier = 1 + (100 - hpPercent) / 100;
-                finalDamage *= damageMultiplier;
-            }
+                const attackMsg = `You hit ${currentTarget.nom} for ${mitigatedDamage} damage.`;
+                const critMsg = `CRITICAL! You hit ${currentTarget.nom} for ${mitigatedDamage} damage.`;
+                if(!isCleave) {
+                    state.combat.log.push({ message: isCrit ? critMsg : attackMsg, type: isCrit ? 'crit' : 'player_attack', timestamp: Date.now() });
+                    state.combat.playerAttackProgress = 0;
+                } else {
+                     state.combat.log.push({ message: `Your cleave hits ${currentTarget.nom} for ${mitigatedDamage} damage.`, type: 'player_attack', timestamp: Date.now() });
+                }
 
-            const dr = formulas.calculateArmorDR(target.stats.Armure, player.level);
-            const mitigatedDamage = Math.round(finalDamage * (isCleave ? 0.5 : 1) * (1 - dr));
-            
-            target.stats.PV -= mitigatedDamage;
-
-            const attackMsg = `You hit ${target.nom} for ${mitigatedDamage} damage.`;
-            const critMsg = `CRITICAL! You hit ${target.nom} for ${mitigatedDamage} damage.`;
-            if(!isCleave) {
-                combat.log.push({ message: isCrit ? critMsg : attackMsg, type: isCrit ? 'crit' : 'player_attack', timestamp: Date.now() });
-                combat.playerAttackProgress = 0;
-            } else {
-                 combat.log.push({ message: `Your cleave hits ${target.nom} for ${mitigatedDamage} damage.`, type: 'player_attack', timestamp: Date.now() });
-            }
-
-            if(player.resources.type === 'Rage' && !isCleave) {
-              let rageGained = 5;
-              const criDeGuerreRank = player.learnedTalents['berserker_battle_cry'] || 0;
-              if (criDeGuerreRank > 0) {
-                 const talent = state.gameData.talents.find(t => t.id === 'berserker_battle_cry');
-                 if(talent) {
-                   rageGained += getTalentEffectValue(talent.effets[0], criDeGuerreRank);
-                 }
-              }
-              player.resources.current = Math.min(player.resources.max, player.resources.current + rageGained);
+                if(state.player.resources.type === 'Rage' && !isCleave) {
+                  let rageGained = 5;
+                  const criDeGuerreRank = state.player.learnedTalents['berserker_battle_cry'] || 0;
+                  if (criDeGuerreRank > 0) {
+                     const talent = state.gameData.talents.find(t => t.id === 'berserker_battle_cry');
+                     if(talent) {
+                       rageGained += getTalentEffectValue(talent.effets[0], criDeGuerreRank);
+                     }
+                  }
+                  state.player.resources.current = Math.min(state.player.resources.max, state.player.resources.current + rageGained);
+                }
             }
         });
         
-        const { player } = get();
-        const cleaveRank = player.learnedTalents['berserker_cleave'] || 0;
-        const enemies = get().combat.enemies;
-        if (!isCleave && cleaveRank > 0 && enemies.length > 1) {
-            const secondaryTarget = enemies.find(e => e.id !== targetId);
-            if (secondaryTarget) {
-                get().playerAttack(secondaryTarget.id, true);
+        if (newHp <= 0) {
+            get().handleEnemyDeath(targetId);
+        } else {
+            const { player } = get();
+            const cleaveRank = player.learnedTalents['berserker_cleave'] || 0;
+            const enemies = get().combat.enemies;
+            if (!isCleave && cleaveRank > 0 && enemies.length > 1) {
+                const secondaryTarget = enemies.find(e => e.id !== targetId);
+                if (secondaryTarget) {
+                    get().playerAttack(secondaryTarget.id, true);
+                }
             }
         }
-
-        const deadEnemies = get().combat.enemies.filter(e => e.stats.PV <= 0).map(e => e.id);
-        deadEnemies.forEach(id => get().handleEnemyDeath(id));
       },
       
       useSkill: (skillId: string) => {
@@ -704,7 +710,10 @@ export const useGameStore = create<GameState>()(
             const targets = isAoE ? [...combat.enemies] : [combat.enemies[combat.targetIndex]];
 
             targets.forEach(target => {
-                 let damage = 0;
+                const currentTarget = combat.enemies.find(e => e.id === target.id);
+                if (!currentTarget) return;
+
+                let damage = 0;
                 if (skill.classeId === 'berserker' || skill.classeId === 'rogue') {
                     const dmgMultiplier = getTalentEffectValue(skill.effets[0], rank) / 100;
                     const baseDmg = formulas.calculateMeleeDamage(player.stats.AttMin, player.stats.AttMax, formulas.calculateAttackPower(player.stats));
@@ -714,20 +723,23 @@ export const useGameStore = create<GameState>()(
                     damage = formulas.calculateSpellDamage(baseDmg, formulas.calculateSpellPower(player.stats));
                 }
                 
-                const isCrit = formulas.isCriticalHit(player.stats.CritPct, player.stats.Precision, target.stats.Esquive);
+                const isCrit = formulas.isCriticalHit(player.stats.CritPct, player.stats.Precision, currentTarget.stats.Esquive);
                 let finalDamage = isCrit ? damage * (player.stats.CritDmg / 100) : damage;
-                const dr = formulas.calculateArmorDR(target.stats.Armure, player.level);
+                const dr = formulas.calculateArmorDR(currentTarget.stats.Armure, player.level);
                 const mitigatedDamage = Math.round(finalDamage * (1 - dr));
 
-                const msg = `You use ${skill.nom} on ${target.nom} for ${mitigatedDamage} damage.`;
-                const critMsg = `CRITICAL! Your ${skill.nom} hits ${target.nom} for ${mitigatedDamage} damage.`;
+                const msg = `You use ${skill.nom} on ${currentTarget.nom} for ${mitigatedDamage} damage.`;
+                const critMsg = `CRITICAL! Your ${skill.nom} hits ${currentTarget.nom} for ${mitigatedDamage} damage.`;
 
-                target.stats.PV -= mitigatedDamage;
+                currentTarget.stats.PV -= mitigatedDamage;
                 combat.log.push({ message: isCrit ? critMsg : msg, type: isCrit ? 'crit' : 'player_attack', timestamp: Date.now() });
+
+                if (currentTarget.stats.PV <= 0) {
+                    // Schedule death processing after this loop to avoid mutation issues
+                    setTimeout(() => get().handleEnemyDeath(currentTarget.id), 0);
+                }
             });
         });
-        const deadEnemies = get().combat.enemies.filter(e => e.stats.PV <= 0).map(e => e.id);
-        deadEnemies.forEach(id => get().handleEnemyDeath(id));
       },
 
       enemyAttacks: () => {
@@ -770,10 +782,15 @@ export const useGameStore = create<GameState>()(
       },
 
       handleEnemyDeath: (enemyId: string) => {
+        // Find enemy before set state
+        const enemy = get().combat.enemies.find(e => e.id === enemyId);
+        if (!enemy) return;
+
         set(state => {
+            // Re-check enemy existence inside set in case of race conditions
+            if (!state.combat.enemies.some(e => e.id === enemyId)) return;
+
             const { gameData, currentDungeon } = state;
-            const enemy = state.combat.enemies.find(e => e.id === enemyId);
-            if (!enemy) return;
 
             const goldDrop = 5;
             const itemDrop = resolveLoot(enemy, gameData, state.player.classeId);
@@ -798,6 +815,9 @@ export const useGameStore = create<GameState>()(
 
             state.combat.killCount += 1;
             state.combat.enemies = state.combat.enemies.filter(e => e.id !== enemyId);
+            if (state.combat.targetIndex >= state.combat.enemies.length) {
+                state.combat.targetIndex = Math.max(0, state.combat.enemies.length - 1);
+            }
 
             // Quest progress
             state.activeQuests.forEach((activeQuest, index) => {

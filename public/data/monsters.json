@@ -1,94 +1,185 @@
+
 {
   "monsters": [
     {
-      "id": "squelette_archer",
-      "nom": "Squelette Archer",
+      "id": "skel_warrior",
+      "nom": "Squelette Guerrier",
       "level": 1,
       "famille": "Mort-vivant",
+      "isBoss": false,
       "palier": 1,
       "stats": {
-        "PV": 50,
-        "AttMin": 8,
-        "AttMax": 12,
+        "PV": 80,
+        "Force": 5,
+        "AttMin": 4,
+        "AttMax": 6,
         "CritPct": 5,
         "CritDmg": 150,
         "Armure": 20,
         "Vitesse": 2.5,
-        "Precision": 100,
+        "Precision": 90,
         "Esquive": 5
       }
     },
     {
-      "id": "zombie_male",
-      "nom": "Zombie",
+      "id": "skel_archer",
+      "nom": "Squelette Archer",
       "level": 1,
       "famille": "Mort-vivant",
-      "palier": 1,
-      "stats": {
-        "PV": 70,
-        "AttMin": 10,
-        "AttMax": 15,
-        "CritPct": 2,
-        "CritDmg": 150,
-        "Armure": 30,
-        "Vitesse": 3,
-        "Precision": 90,
-        "Esquive": 2
-      }
-    },
-    {
-      "id": "loup_givre",
-      "nom": "Loup de Givre",
-      "level": 2,
-      "famille": "Bête",
+      "isBoss": false,
       "palier": 1,
       "stats": {
         "PV": 60,
-        "AttMin": 12,
-        "AttMax": 18,
-        "CritPct": 10,
-        "CritDmg": 160,
-        "Armure": 25,
+        "Dexterite": 7,
+        "AttMin": 5,
+        "AttMax": 7,
+        "CritPct": 8,
+        "CritDmg": 150,
+        "Armure": 10,
         "Vitesse": 2.2,
-        "Precision": 110,
-        "Esquive": 10
+        "Precision": 95,
+        "Esquive": 8
       }
     },
-     {
-      "id": "elementaire_givre",
-      "nom": "Élémentaire de Givre",
-      "level": 3,
-      "famille": "Élémentaire",
+    {
+      "id": "ghoul",
+      "nom": "Goule",
+      "level": 2,
+      "famille": "Mort-vivant",
+      "isBoss": false,
       "palier": 1,
       "stats": {
-        "PV": 80,
-        "AttMin": 15,
-        "AttMax": 22,
+        "PV": 120,
+        "Force": 8,
+        "AttMin": 6,
+        "AttMax": 9,
         "CritPct": 5,
         "CritDmg": 150,
-        "Armure": 40,
-        "Vitesse": 2.8,
-        "Precision": 100,
+        "Armure": 15,
+        "Vitesse": 2.0,
+        "Precision": 92,
         "Esquive": 5
       }
     },
     {
-      "id": "boss_necrophage",
-      "nom": "Nécrophage Ancien",
+      "id": "necromancer_adept",
+      "nom": "Adepte Nécromancien",
+      "level": 3,
+      "famille": "Humanoïde",
+      "isBoss": false,
+      "palier": 1,
+      "stats": {
+        "PV": 90,
+        "Intelligence": 10,
+        "AttMin": 8,
+        "AttMax": 12,
+        "CritPct": 10,
+        "CritDmg": 160,
+        "Armure": 5,
+        "Vitesse": 2.8,
+        "Precision": 90,
+        "Esquive": 3
+      }
+    },
+    {
+      "id": "bone_golem",
+      "nom": "Golem d'Os",
       "level": 5,
-      "famille": "Mort-vivant",
+      "famille": "Construction",
       "isBoss": true,
       "palier": 1,
       "stats": {
-        "PV": 300,
-        "AttMin": 25,
-        "AttMax": 40,
+        "PV": 500,
+        "Force": 15,
+        "AttMin": 15,
+        "AttMax": 20,
+        "CritPct": 5,
+        "CritDmg": 150,
+        "Armure": 50,
+        "Vitesse": 3.5,
+        "Precision": 95,
+        "Esquive": 0
+      }
+    },
+    {
+      "id": "fire_elemental",
+      "nom": "Élémentaire de Feu",
+      "level": 4,
+      "famille": "Élémentaire",
+      "isBoss": false,
+      "palier": 2,
+      "stats": {
+        "PV": 150,
+        "Intelligence": 12,
+        "AttMin": 10,
+        "AttMax": 15,
+        "CritPct": 8,
+        "CritDmg": 150,
+        "Armure": 25,
+        "Vitesse": 2.3,
+        "Precision": 90,
+        "Esquive": 10
+      }
+    },
+    {
+      "id": "imp",
+      "nom": "Diablotin",
+      "level": 3,
+      "famille": "Démon",
+      "isBoss": false,
+      "palier": 2,
+      "stats": {
+        "PV": 100,
+        "Dexterite": 15,
+        "AttMin": 8,
+        "AttMax": 12,
+        "CritPct": 12,
+        "CritDmg": 150,
+        "Armure": 15,
+        "Vitesse": 1.8,
+        "Precision": 93,
+        "Esquive": 15
+      }
+    },
+    {
+      "id": "cerberus_pup",
+      "nom": "Jeune Cerbère",
+      "level": 5,
+      "famille": "Bête",
+      "isBoss": false,
+      "palier": 2,
+      "stats": {
+        "PV": 250,
+        "Force": 18,
+        "AttMin": 12,
+        "AttMax": 18,
         "CritPct": 10,
         "CritDmg": 150,
-        "Armure": 100,
+        "Armure": 30,
         "Vitesse": 2.5,
-        "Precision": 120,
-        "Esquive": 10
+        "Precision": 95,
+        "Esquive": 8
+      }
+    },
+    {
+      "id": "pit_lord",
+      "nom": "Seigneur des Abîmes",
+      "level": 8,
+      "famille": "Démon",
+      "isBoss": true,
+      "palier": 2,
+      "stats": {
+        "PV": 800,
+        "Force": 25,
+        "Intelligence": 20,
+        "AttMin": 25,
+        "AttMax": 35,
+        "CritPct": 15,
+        "CritDmg": 170,
+        "Armure": 60,
+        "Vitesse": 3.0,
+        "Precision": 100,
+        "Esquive": 5
       }
     }
   ]
