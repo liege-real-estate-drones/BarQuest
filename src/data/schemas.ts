@@ -64,6 +64,7 @@ const BaseSkillTalentSchema = z.object({
 
 export const SkillSchema = BaseSkillTalentSchema.extend({
   type: z.literal("actif"),
+  cooldown: z.number().default(0), // in seconds
 });
 
 export const TalentSchema = BaseSkillTalentSchema.extend({

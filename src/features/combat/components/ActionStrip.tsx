@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Button } from "@/components/ui/button";
@@ -8,7 +9,6 @@ import { useEffect } from "react";
 import { useGameStore } from "@/state/gameStore";
 import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 import { Separator } from "@/components/ui/separator";
-import { cn } from "@/lib/utils";
 import { Progress } from "@/components/ui/progress";
 
 function SkillTooltipContent({ skill }: { skill: Skill }) {
@@ -19,6 +19,7 @@ function SkillTooltipContent({ skill }: { skill: Skill }) {
     return (
         <div className="max-w-xs p-2">
             <p className="font-bold text-base text-primary mb-1">{skill.nom}</p>
+            {skill.cooldown > 0 && <p className="text-xs text-muted-foreground">Temps de recharge: {skill.cooldown}s</p>}
             {resourceCost && <p className="text-xs text-blue-400">Coût: {resourceCost}</p>}
             <Separator className="my-2" />
             <p className="text-sm mb-2">Effets :</p>
@@ -36,15 +37,13 @@ interface ActionStripProps {
 }
 
 export function ActionStrip({ onRetreat, onCycleTarget, skills }: ActionStripProps) {
-    const { usePotion, inventory, useSkill, globalCooldown } = useGameStore(state => ({
+    const { usePotion, inventory, useSkill, skillCooldowns } = useGameStore(state => ({
         usePotion: state.usePotion,
         inventory: state.inventory,
         useSkill: state.useSkill,
-        globalCooldown: state.combat.globalCooldown,
+        skillCooldowns: state.combat.skillCooldowns,
     }));
     
-    const isGcdActive = globalCooldown > 0;
-
     useEffect(() => {
         const handleKeyPress = (event: KeyboardEvent) => {
             if (document.activeElement?.tagName === 'INPUT' || document.activeElement?.tagName === 'TEXTAREA') return;
@@ -79,23 +78,39 @@ export function ActionStrip({ onRetreat, onCycleTarget, skills }: ActionStripPro
             <div className="flex flex-col items-center justify-center gap-2 w-full">
                  {/* Skills */}
                 <div className="flex justify-center items-center gap-2">
-                    {skills.map((skill, index) => (
-                         <Tooltip key={skill.id}>
-                            <TooltipTrigger asChild>
-                                <Button variant="secondary" className="w-24 h-16 flex-col gap-1 text-xs relative overflow-hidden" onClick={() => useSkill(skill.id)} disabled={isGcdActive}>
-                                    <Zap />
-                                    <span className="truncate">{skill.nom}</span>
-                                    <span className="text-secondary-foreground/70">[{index + 1}]</span>
-                                    {isGcdActive && (
-                                        <Progress value={globalCooldown * 100} className="absolute bottom-0 left-0 w-full h-1 bg-black/50" indicatorClassName="bg-white/30" />
-                                    )}
-                                </Button>
-                            </TooltipTrigger>
-                            <TooltipContent side="top">
-                                 <SkillTooltipContent skill={skill} />
-                            </TooltipContent>
-                         </Tooltip>
-                    ))}
+                    {skills.map((skill, index) => {
+                         const cooldown = skillCooldowns[skill.id];
+                         const isCoolingDown = cooldown > 0;
+                         const cooldownProgress = (cooldown / (skill.cooldown * 1000)) * 100;
+
+                         return (
+                             <Tooltip key={skill.id}>
+                                <TooltipTrigger asChild>
+                                    <Button 
+                                        variant="secondary" 
+                                        className="w-24 h-16 flex-col gap-1 text-xs relative overflow-hidden" 
+                                        onClick={() => useSkill(skill.id)} 
+                                        disabled={isCoolingDown}
+                                    >
+                                        <Zap />
+                                        <span className="truncate">{skill.nom}</span>
+                                        <span className="text-secondary-foreground/70">[{index + 1}]</span>
+                                        {isCoolingDown && (
+                                            <div className="absolute inset-0 bg-black/70 flex items-center justify-center text-lg font-bold">
+                                               {Math.ceil(cooldown / 1000)}
+                                            </div>
+                                        )}
+                                        {isCoolingDown && (
+                                             <Progress value={100 - cooldownProgress} className="absolute bottom-0 left-0 w-full h-1 bg-transparent" indicatorClassName="bg-white/30" />
+                                        )}
+                                    </Button>
+                                </TooltipTrigger>
+                                <TooltipContent side="top">
+                                     <SkillTooltipContent skill={skill} />
+                                </TooltipContent>
+                             </Tooltip>
+                         )
+                    })}
 
                     {[...Array(4 - (skills?.length || 0))].map((_, index) => (
                         <div key={`empty-${index}`} className="w-24 h-16 rounded-md bg-secondary/30 flex items-center justify-center text-xs text-muted-foreground">

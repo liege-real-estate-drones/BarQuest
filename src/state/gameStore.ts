@@ -46,7 +46,7 @@ const initialCombatState: CombatState = {
   enemies: [],
   playerAttackInterval: 2000,
   playerAttackProgress: 0,
-  globalCooldown: 0,
+  skillCooldowns: {},
   killCount: 0,
   log: [],
   autoAttack: true,
@@ -169,8 +169,6 @@ export const getItemSellPrice = (item: Item): number => {
 
 const storage = createJSONStorage(() => localStorage);
 
-const GLOBAL_COOLDOWN_TIME = 1500; // 1.5 seconds
-
 export const useGameStore = create<GameState>()(
   persist(
     immer((set, get) => ({
@@ -226,14 +224,12 @@ export const useGameStore = create<GameState>()(
             state.player.baseStats = { ...chosenClass.statsBase };
             state.player.talentPoints = 1;
 
-            // Start with full health
             const maxHp = formulas.calculateMaxHP(1, state.player.baseStats);
             state.player.baseStats.PV = maxHp;
-            state.player.stats.PV = maxHp;
-
+            
             let maxResource = formulas.calculateMaxMana(1, chosenClass.statsBase);
             let currentResource = maxResource;
-
+            
             if (chosenClass.ressource === 'Rage') {
               maxResource = 100;
               currentResource = 0;
@@ -247,6 +243,10 @@ export const useGameStore = create<GameState>()(
                 max: maxResource,
                 type: chosenClass.ressource as ResourceType,
             };
+            
+            state.player.stats.PV = maxHp;
+            state.player.resources.current = maxResource;
+
 
             // Learn and equip starting skills
             const startingSkills = state.gameData.skills.filter(s => s.classeId === classId && s.niveauRequis === 1);
@@ -600,10 +600,12 @@ export const useGameStore = create<GameState>()(
                   state.combat.playerAttackProgress = 1;
               }
               
-              // Skill global cooldown progress
-              if (state.combat.globalCooldown > 0) {
-                  state.combat.globalCooldown -= delta / GLOBAL_COOLDOWN_TIME;
-                  if (state.combat.globalCooldown < 0) state.combat.globalCooldown = 0;
+              // Individual skill cooldown progress
+              for (const skillId in state.combat.skillCooldowns) {
+                  state.combat.skillCooldowns[skillId] -= delta;
+                  if (state.combat.skillCooldowns[skillId] <= 0) {
+                      delete state.combat.skillCooldowns[skillId];
+                  }
               }
 
               // Enemy attack progress
@@ -701,7 +703,9 @@ export const useGameStore = create<GameState>()(
         
         set(state => {
             const { player, combat, gameData } = state;
-            if (!combat.enemies || combat.enemies.length === 0 || combat.globalCooldown > 0) return;
+            if (!combat.enemies || combat.enemies.length === 0 || (combat.skillCooldowns[skillId] || 0) > 0) {
+                return;
+            }
 
             const rank = player.learnedSkills[skillId];
             const skill = gameData.skills.find(t => t.id === skillId);
@@ -715,7 +719,7 @@ export const useGameStore = create<GameState>()(
                 return;
             }
             player.resources.current -= resourceCost;
-            combat.globalCooldown = 1; // Start GCD
+            combat.skillCooldowns[skillId] = (skill.cooldown || 0) * 1000;
 
             const isAoE = skill.effets.join(' ').includes("tous les ennemis") || skill.effets.join(' ').includes("ennemis proches");
             const primaryTarget = combat.enemies[combat.targetIndex];
