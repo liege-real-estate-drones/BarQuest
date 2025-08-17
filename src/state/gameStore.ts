@@ -1,6 +1,5 @@
 
 
-
 import create from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
@@ -110,6 +109,23 @@ const rarityDropChances: Record<Rareté, number> = {
 };
 
 const resolveLoot = (monster: Monstre, gameData: GameData, playerClassId: PlayerClassId | null): Item | null => {
+  // Set item drop check (e.g., 2% chance)
+  if (Math.random() < 0.02) {
+    const possibleSetItems = gameData.items.filter(item => 
+      item.set &&
+      (item.tagsClasse?.includes('common') || (playerClassId && item.tagsClasse?.includes(playerClassId))) && 
+      item.niveauMin <= monster.level + 2 &&
+      item.niveauMin >= monster.level - 5
+    );
+    if (possibleSetItems.length > 0) {
+      const droppedItemTemplate = possibleSetItems[Math.floor(Math.random() * possibleSetItems.length)];
+      const newItem: Item = JSON.parse(JSON.stringify(droppedItemTemplate));
+      newItem.id = uuidv4();
+      return newItem;
+    }
+  }
+
+  // Regular item drop
   if (Math.random() > 0.5) { // 50% chance to drop anything
     return null;
   }
@@ -132,7 +148,7 @@ const resolveLoot = (monster: Monstre, gameData: GameData, playerClassId: Player
 
   const possibleItems = gameData.items.filter(item => 
       item.rarity === chosenRarity &&
-      !item.set && // Don't drop set items randomly
+      !item.set && // Don't drop set items from the general pool
       item.slot !== 'potion' &&
       (item.tagsClasse?.includes('common') || (playerClassId && item.tagsClasse?.includes(playerClassId))) && 
       item.niveauMin <= monster.level + 2 &&
@@ -259,6 +275,11 @@ export const useGameStore = create<GameState>()(
                     state.player.equippedSkills[index] = skill.id;
                 }
             });
+            
+            state.player.stats.PV = formulas.calculateMaxHP(state.player.level, state.player.stats);
+            if(state.player.resources.type !== 'Rage') {
+                 state.player.resources.current = state.player.resources.max;
+            }
         });
         get().recalculateStats();
       },
@@ -282,6 +303,8 @@ export const useGameStore = create<GameState>()(
 
           const newStats: Stats = JSON.parse(JSON.stringify(player.baseStats));
           const equippedSetCounts: Record<string, number> = {};
+          player.activeEffects = [];
+          player.activeSetBonuses = [];
 
           Object.values(inventory.equipment).forEach(item => {
             if (item) {
@@ -306,7 +329,7 @@ export const useGameStore = create<GameState>()(
                   Object.entries(setInfo.bonuses).forEach(([bonusCount, effect]) => {
                       if (count >= parseInt(bonusCount, 10)) {
                           player.activeSetBonuses.push(effect);
-                          // Apply direct stats from set bonus here
+                          // TODO: Apply direct stats from set bonus here
                       }
                   });
               }
@@ -650,7 +673,7 @@ export const useGameStore = create<GameState>()(
         set(state => {
             const { player, combat } = state;
             const target = combat.enemies.find(e => e.id === targetId);
-            if (!target) return;
+            if (!target || target.stats.PV <= 0) return;
 
             const damage = formulas.calculateMeleeDamage(player.stats.AttMin, player.stats.AttMax, formulas.calculateAttackPower(player.stats));
             const isCrit = formulas.isCriticalHit(player.stats.CritPct, player.stats.Precision, target.stats.Esquive);

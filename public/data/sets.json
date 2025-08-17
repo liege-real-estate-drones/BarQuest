@@ -1,19 +1,75 @@
 
 [
-    {
-        "id": "berserker_silver_guardian",
-        "name": "Tenue du Gardien d'Argent",
-        "bonuses": {
-            "2": "Augmente les dégâts de Frappe Héroïque de 15%.",
-            "3": "Tourbillon a 25% de chance de vous faire entrer en rage, augmentant les dégâts de 10% pendant 5 secondes."
-        }
-    },
-    {
-        "id": "mage_magma_watcher",
-        "name": "Regalia du Veilleur du Magma",
-        "bonuses": {
-            "2": "Boule de Feu a 20% de chance de ne coûter aucune mana.",
-            "3": "Vos sorts de feu appliquent une brûlure qui inflige des dégâts sur la durée."
-        }
+  {
+    "id": "set_berserker_garde_du_nord",
+    "name": "Tenue de la Garde du Nord",
+    "bonuses": {
+      "2": "Augmente l'armure de 10%",
+      "3": "Augmente les dégâts de Frappe Héroïque de 15%",
+      "4": "Les attaques de base ont 10% de chance d'augmenter votre Force de 50 pendant 8 secondes."
     }
+  },
+  {
+    "id": "set_mage_regalia_arcanique",
+    "name": "Regalia Arcanique de Dalaran",
+    "bonuses": {
+      "2": "Augmente l'Intelligence de 5%",
+      "3": "Réduit le coût en mana d'Éclair de Givre de 10%",
+      "4": "Vos sorts de Givre ont une chance de geler la cible sur place pendant 2 secondes."
+    }
+  },
+  {
+    "id": "set_rogue_ombres_silencieuses",
+    "name": "Habits des Ombres Silencieuses",
+    "bonuses": {
+      "2": "+10% de vitesse d'attaque",
+      "3": "Augmente les dégâts critiques de 25%",
+      "4": "Utiliser Embuscade vous rend invisible pendant 3 secondes."
+    }
+  },
+  {
+    "id": "set_cleric_jugement_sacre",
+    "name": "Armure du Jugement Sacré",
+    "bonuses": {
+      "2": "Augmente l'Esprit de 10%",
+      "3": "Vos sorts de soins soignent 15% de plus",
+      "4": "Châtiment a une chance de réinitialiser son propre temps de recharge."
+    }
+  },
+  {
+    "id": "set_berserker_brise_montagne",
+    "name": "Ensemble du Brise-Montagne",
+    "bonuses": {
+      "2": "+250 PV",
+      "3": "Tourbillon attire les ennemis proches vers vous.",
+      "4": "Chaque fois que vous bloquez, vous gagnez un bouclier absorbant 5% de vos PV max."
+    }
+  },
+  {
+    "id": "set_mage_tisse_givre",
+    "name": "Tisse-Givre de l'Archimage",
+    "bonuses": {
+      "2": "+15% de dégâts des sorts de Givre",
+      "3": "Nova de Givre a une portée augmentée de 50%",
+      "4": "Chaque fois que vous tuez un ennemi gelé, le temps de recharge de vos sorts est réduit de 1 seconde."
+    }
+  },
+  {
+    "id": "set_rogue_lame_funeste",
+    "name": "Garde-Lame Funeste",
+    "bonuses": {
+      "2": "+15% de chance de coup critique",
+      "3": "Vos poisons infligent 20% de dégâts supplémentaires.",
+      "4": "Lorsque vous esquivez, votre prochaine compétence ne coûte aucune Énergie."
+    }
+  },
+  {
+    "id": "set_cleric_lumiere_resolue",
+    "name": "Armure de la Lumière Résolue",
+    "bonuses": {
+      "2": "Réduit les dégâts subis de 5%",
+      "3": "Mot de pouvoir : Bouclier absorbe 25% de dégâts en plus.",
+      "4": "Lancer un sort de soin sur un allié vous soigne également pour 20% du montant."
+    }
+  }
 ]
