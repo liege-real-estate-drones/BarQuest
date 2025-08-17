@@ -13,6 +13,14 @@ export function DungeonsView() {
   }));
   
   const completedDungeons = player.completedDungeons || [];
+  
+  if (!Array.isArray(dungeons)) {
+    return (
+        <div className="flex items-center justify-center h-full">
+            <p className="text-muted-foreground">Error loading dungeons...</p>
+        </div>
+    );
+  }
 
   return (
     <ScrollArea className="h-full w-full">
@@ -46,3 +54,5 @@ export function DungeonsView() {
     </ScrollArea>
   );
 }
+
+    
