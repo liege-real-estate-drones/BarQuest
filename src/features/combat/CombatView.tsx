@@ -92,8 +92,8 @@ export function CombatView() {
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="flex-grow grid grid-cols-1 lg:grid-cols-4 gap-4 p-4 min-h-0">
+      {/* Main Content Area - takes remaining height */}
+      <main className="flex-grow grid grid-cols-1 lg:grid-cols-4 gap-4 p-4 min-h-0 overflow-y-auto">
           {/* Left Column - Player */}
           <div className="lg:col-span-1 flex flex-col gap-4">
             <EntityDisplay entity={player} isPlayer />
@@ -117,14 +117,14 @@ export function CombatView() {
           </div>
       </main>
 
-      {/* Footer - Action Strip */}
-       <footer className="flex-shrink-0 border-t bg-background/80 backdrop-blur-sm p-2">
+      {/* Action Bar Container - fixed at the bottom */}
+       <div className="flex-shrink-0 border-t bg-background/80 backdrop-blur-sm p-2">
             <ActionStrip 
                 onRetreat={flee}
                 skills={equippedSkills}
                 onCycleTarget={handleCycleTarget}
             />
-        </footer>
+        </div>
     </div>
   );
 }
