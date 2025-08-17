@@ -46,7 +46,16 @@ export function ActionStrip({ onRetreat, onCycleTarget, skills }: ActionStripPro
 
             switch (event.key.toUpperCase()) {
                 case '1':
-                    usePotion();
+                    if (skills[0]) useSkill(skills[0].id);
+                    break;
+                case '2':
+                     if (skills[1]) useSkill(skills[1].id);
+                    break;
+                case '3':
+                     if (skills[2]) useSkill(skills[2].id);
+                    break;
+                case '4':
+                     if (skills[3]) useSkill(skills[3].id);
                     break;
                 case 'R':
                     onRetreat();
@@ -54,14 +63,8 @@ export function ActionStrip({ onRetreat, onCycleTarget, skills }: ActionStripPro
                 case 'T':
                     onCycleTarget();
                     break;
-                case '2':
-                case '3':
-                case '4':
-                case '5':
-                    const skillIndex = parseInt(event.key) - 2;
-                    if (skills[skillIndex]) {
-                        useSkill(skills[skillIndex].id);
-                    }
+                case 'Q':
+                    usePotion();
                     break;
             }
         };
@@ -73,58 +76,62 @@ export function ActionStrip({ onRetreat, onCycleTarget, skills }: ActionStripPro
 
     return (
         <TooltipProvider>
-            <div className="flex justify-center items-center gap-2 p-2">
-                <Button variant="secondary" onClick={usePotion} className="w-24 h-20 flex-col gap-1 text-xs relative" disabled={inventory.potions <= 0}>
-                    <div className="flex items-center gap-2">
-                        <Heart />
-                        <span>Potion</span>
-                    </div>
-                    <span className="text-secondary-foreground/70">[1]</span>
-                    {inventory.potions > 0 && (
-                        <div className="absolute -top-1 -right-1 bg-primary text-primary-foreground rounded-full h-5 w-5 flex items-center justify-center text-xs">
-                            {inventory.potions}
+            <div className="flex flex-col items-center gap-2 p-2">
+                 {/* Main action row */}
+                <div className="flex justify-center items-center gap-2">
+                    {skills.map((skill, index) => (
+                         <Tooltip key={skill.id}>
+                            <TooltipTrigger asChild>
+                                <Button variant="secondary" className="w-24 h-20 flex-col gap-1 text-xs" onClick={() => useSkill(skill.id)}>
+                                    <div className="flex items-center gap-2">
+                                        <Zap />
+                                        <span className="truncate">{skill.nom}</span>
+                                    </div>
+                                    <span className="text-secondary-foreground/70">[{index + 1}]</span>
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent side="top">
+                                 <SkillTooltipContent skill={skill} />
+                            </TooltipContent>
+                         </Tooltip>
+                    ))}
+
+                    {[...Array(4 - (skills?.length || 0))].map((_, index) => (
+                        <div key={`empty-${index}`} className="w-24 h-20 rounded-md bg-secondary/30 flex items-center justify-center text-xs text-muted-foreground">
+                            Vide
                         </div>
-                    )}
-                </Button>
+                    ))}
 
-                {skills.map((skill, index) => (
-                     <Tooltip key={skill.id}>
-                        <TooltipTrigger asChild>
-                            <Button variant="secondary" className="w-24 h-20 flex-col gap-1 text-xs" onClick={() => useSkill(skill.id)}>
-                                <div className="flex items-center gap-2">
-                                    <Zap />
-                                    <span className="truncate">{skill.nom}</span>
-                                </div>
-                                <span className="text-secondary-foreground/70">[{index + 2}]</span>
-                            </Button>
-                        </TooltipTrigger>
-                        <TooltipContent side="top">
-                             <SkillTooltipContent skill={skill} />
-                        </TooltipContent>
-                     </Tooltip>
-                ))}
-
-                {[...Array(4 - (skills?.length || 0))].map((_, index) => (
-                    <div key={`empty-${index}`} className="w-24 h-20 rounded-md bg-secondary/30 flex items-center justify-center text-xs text-muted-foreground">
-                        Vide
-                    </div>
-                ))}
-
-                <Button variant="outline" onClick={onCycleTarget} className="w-24 h-20 flex-col gap-1 text-xs">
-                    <div className="flex items-center gap-2">
-                        <ArrowRightLeft />
-                        <span>Cible</span>
-                    </div>
-                    <span className="text-muted-foreground/70">[T]</span>
-                </Button>
-                
-                <Button variant="outline" onClick={onRetreat} className="w-24 h-20 flex-col gap-1 text-xs">
-                    <div className="flex items-center gap-2">
-                        <Shield />
-                        <span>Retraite</span>
-                    </div>
-                    <span className="text-muted-foreground/70">[R]</span>
-                </Button>
+                    <Button variant="outline" onClick={onCycleTarget} className="w-24 h-20 flex-col gap-1 text-xs">
+                        <div className="flex items-center gap-2">
+                            <ArrowRightLeft />
+                            <span>Cible</span>
+                        </div>
+                        <span className="text-muted-foreground/70">[T]</span>
+                    </Button>
+                </div>
+                 {/* Secondary action row */}
+                 <div className="flex justify-center items-center gap-2">
+                    <Button variant="outline" size="sm" onClick={usePotion} className="flex-col gap-1 text-xs relative h-auto px-4 py-2" disabled={inventory.potions <= 0}>
+                        <div className="flex items-center gap-2">
+                            <Heart className="h-4 w-4"/>
+                            <span>Potion</span>
+                        </div>
+                        <span className="text-secondary-foreground/70">[Q]</span>
+                        {inventory.potions > 0 && (
+                            <div className="absolute -top-1 -right-1 bg-primary text-primary-foreground rounded-full h-5 w-5 flex items-center justify-center text-xs">
+                                {inventory.potions}
+                            </div>
+                        )}
+                    </Button>
+                    <Button variant="outline" size="sm" onClick={onRetreat} className="flex-col gap-1 text-xs h-auto px-4 py-2">
+                        <div className="flex items-center gap-2">
+                            <Shield className="h-4 w-4" />
+                            <span>Retraite</span>
+                        </div>
+                        <span className="text-muted-foreground/70">[R]</span>
+                    </Button>
+                 </div>
             </div>
         </TooltipProvider>
     );
