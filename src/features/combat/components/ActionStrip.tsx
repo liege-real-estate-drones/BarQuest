@@ -101,7 +101,9 @@ export function ActionStrip({ onRetreat, onCycleTarget, skills }: ActionStripPro
                             Vide
                         </div>
                     ))}
-
+                </div>
+                 {/* Secondary action row */}
+                 <div className="flex justify-center items-center gap-2">
                     <Button variant="outline" onClick={onCycleTarget} className="w-24 h-20 flex-col gap-1 text-xs">
                         <div className="flex items-center gap-2">
                             <ArrowRightLeft />
@@ -109,10 +111,7 @@ export function ActionStrip({ onRetreat, onCycleTarget, skills }: ActionStripPro
                         </div>
                         <span className="text-muted-foreground/70">[T]</span>
                     </Button>
-                </div>
-                 {/* Secondary action row */}
-                 <div className="flex justify-center items-center gap-2">
-                    <Button variant="outline" size="sm" onClick={usePotion} className="flex-col gap-1 text-xs relative h-auto px-4 py-2" disabled={inventory.potions <= 0}>
+                    <Button variant="outline" size="sm" onClick={usePotion} className="flex-col gap-1 text-xs relative h-20 w-24" disabled={inventory.potions <= 0}>
                         <div className="flex items-center gap-2">
                             <Heart className="h-4 w-4"/>
                             <span>Potion</span>
@@ -124,7 +123,7 @@ export function ActionStrip({ onRetreat, onCycleTarget, skills }: ActionStripPro
                             </div>
                         )}
                     </Button>
-                    <Button variant="outline" size="sm" onClick={onRetreat} className="flex-col gap-1 text-xs h-auto px-4 py-2">
+                    <Button variant="outline" size="sm" onClick={onRetreat} className="flex-col gap-1 text-xs h-20 w-24">
                         <div className="flex items-center gap-2">
                             <Shield className="h-4 w-4" />
                             <span>Retraite</span>

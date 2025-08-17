@@ -70,8 +70,6 @@ export function CombatView() {
     return <div className="flex items-center justify-center h-screen">Finding a target...</div>;
   }
 
-  const dungeonProgress = (killCount / currentDungeon.killTarget) * 100;
-
   return (
     <div className="flex flex-col h-screen w-full font-code bg-background text-foreground">
       {/* Header */}
@@ -90,7 +88,7 @@ export function CombatView() {
                     </div>
                 </div>
             </div>
-            <Progress value={dungeonProgress} className="h-2" />
+            <Progress value={(killCount / currentDungeon.killTarget) * 100} className="h-2" />
         </div>
       </header>
 
