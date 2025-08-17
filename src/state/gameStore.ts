@@ -689,6 +689,8 @@ export const useGameStore = create<GameState>()(
       },
       
       useSkill: (skillId: string) => {
+        const deadEnemyIds: string[] = [];
+
         set(state => {
             const { player, combat, gameData } = state;
             if (!combat.enemies || combat.enemies.length === 0) return;
@@ -735,11 +737,13 @@ export const useGameStore = create<GameState>()(
                 combat.log.push({ message: isCrit ? critMsg : msg, type: isCrit ? 'crit' : 'player_attack', timestamp: Date.now() });
 
                 if (currentTarget.stats.PV <= 0) {
-                    // Schedule death processing after this loop to avoid mutation issues
-                    setTimeout(() => get().handleEnemyDeath(currentTarget.id), 0);
+                    deadEnemyIds.push(currentTarget.id);
                 }
             });
         });
+
+        // Process deaths after the state update
+        deadEnemyIds.forEach(id => get().handleEnemyDeath(id));
       },
 
       enemyAttacks: () => {
