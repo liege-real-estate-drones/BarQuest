@@ -59,7 +59,7 @@ const BaseSkillTalentSchema = z.object({
   niveauRequis: z.number().int().optional(),
   rangMax: z.number().int(),
   effets: z.array(z.string()),
-  exigences: z.array(z.string()),
+  exigences: z.array(z.string()).default([]),
 });
 
 export const SkillSchema = BaseSkillTalentSchema.extend({
@@ -117,4 +117,3 @@ export const FactionSchema = z.object({
     name: z.string(),
     ranks: z.array(z.string()),
 });
-

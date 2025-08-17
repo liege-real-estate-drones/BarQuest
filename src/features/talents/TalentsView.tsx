@@ -5,11 +5,12 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useGameStore } from '@/state/gameStore';
-import { PlusCircle, Zap, Star } from 'lucide-react';
+import { PlusCircle, Star } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { Talent } from '@/lib/types';
+import type { GameData, PlayerState } from '@/lib/types';
 
-const TalentCard = ({ talent, player, gameData, canLearn, currentRank, isMaxRank, onLearn }: { talent: Talent, player: any, gameData: any, canLearn: boolean, currentRank: number, isMaxRank: boolean, onLearn: (id: string) => void }) => {
+const TalentCard = ({ talent, player, gameData, canLearn, currentRank, isMaxRank, onLearn }: { talent: Talent, player: PlayerState, gameData: GameData, canLearn: boolean, currentRank: number, isMaxRank: boolean, onLearn: (id: string) => void }) => {
     const isLockedByLevel = talent.niveauRequis && player.level < talent.niveauRequis;
     
     return (
