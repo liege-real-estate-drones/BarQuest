@@ -58,6 +58,7 @@ export default function Home() {
             const gameDataPayload = dataPaths.reduce((acc, path, index) => {
               // The JSON files have a root key that is the same as the file name
               // e.g. dungeons.json contains { "dungeons": [...] }
+              // We need to extract the array from the root key.
               acc[path] = jsonData[index]?.[path] || [];
               return acc;
             }, {} as GameData);
