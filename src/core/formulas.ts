@@ -26,7 +26,8 @@ export const calculateAttackInterval = (weaponSpeed: number, hastePct: number): 
 
 export const calculateMeleeDamage = (min: number, max: number, attackPower: number): number => {
   const roll = min + Math.random() * (max - min);
-  return roll * (1 + attackPower / 100);
+  // Attack power now provides a more significant boost to melee damage.
+  return roll + (attackPower / 4);
 };
 
 export const calculateSpellDamage = (baseDamage: number, spellPower: number): number => {

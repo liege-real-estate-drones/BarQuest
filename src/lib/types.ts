@@ -99,8 +99,10 @@ export interface CombatState {
   enemies: CombatEnemy[];
   playerAttackInterval: number; // in ms
   playerAttackProgress: number; // 0 to 1
+  globalCooldown: number; // 0 to 1, for skills
   killCount: number;
   log: CombatLogEntry[];
   autoAttack: boolean;
   dungeonRunItems: Item[];
+  targetIndex: number;
 }

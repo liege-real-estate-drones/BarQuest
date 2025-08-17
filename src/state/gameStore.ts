@@ -46,6 +46,7 @@ const initialCombatState: CombatState = {
   enemies: [],
   playerAttackInterval: 2000,
   playerAttackProgress: 0,
+  globalCooldown: 0,
   killCount: 0,
   log: [],
   autoAttack: true,
@@ -168,6 +169,8 @@ export const getItemSellPrice = (item: Item): number => {
 };
 
 const storage = createJSONStorage(() => localStorage);
+
+const GLOBAL_COOLDOWN_TIME = 1500; // 1.5 seconds
 
 export const useGameStore = create<GameState>()(
   persist(
@@ -602,12 +605,20 @@ export const useGameStore = create<GameState>()(
           }
 
           set(state => {
+              // Player auto-attack progress
               if (state.combat.autoAttack && state.combat.playerAttackProgress < 1) {
                   state.combat.playerAttackProgress += delta / state.combat.playerAttackInterval;
               } else if (state.combat.autoAttack) {
                   state.combat.playerAttackProgress = 1;
               }
+              
+              // Skill global cooldown progress
+              if (state.combat.globalCooldown > 0) {
+                  state.combat.globalCooldown -= delta / GLOBAL_COOLDOWN_TIME;
+                  if (state.combat.globalCooldown < 0) state.combat.globalCooldown = 0;
+              }
 
+              // Enemy attack progress
               state.combat.enemies.forEach(enemy => {
                   const attackInterval = enemy.stats.Vitesse * 1000;
                   if (enemy.attackProgress < 1) {
@@ -689,6 +700,9 @@ export const useGameStore = create<GameState>()(
       },
       
       useSkill: (skillId: string) => {
+        const { combat } = get();
+        if (combat.globalCooldown > 0) return;
+
         const deadEnemyIds: string[] = [];
 
         set(state => {
@@ -707,6 +721,7 @@ export const useGameStore = create<GameState>()(
                 return;
             }
             player.resources.current -= resourceCost;
+            combat.globalCooldown = 1; // Start GCD
 
             const isAoE = skill.effets.join(' ').includes("tous les ennemis") || skill.effets.join(' ').includes("ennemis proches");
             const targets = isAoE ? [...combat.enemies] : [combat.enemies[combat.targetIndex]];
@@ -748,8 +763,17 @@ export const useGameStore = create<GameState>()(
 
       enemyAttacks: () => {
         const attackingEnemies = get().combat.enemies.filter(e => e.attackProgress >= 1);
+        
         attackingEnemies.forEach(enemy => {
+             // Re-fetch state inside loop to ensure player HP is current after each attack
+            const { player } = get();
+            if (player.stats.PV <= 0) return;
+
             set(state => {
+                 // Find the enemy again in the current state draft
+                const enemyInState = state.combat.enemies.find(e => e.id === enemy.id);
+                if (!enemyInState) return;
+
                 const playerDr = formulas.calculateArmorDR(state.player.stats.Armure, enemy.level);
                 const enemyDamage = formulas.calculateMeleeDamage(enemy.stats.AttMin, enemy.stats.AttMax, formulas.calculateAttackPower(enemy.stats));
                 const mitigatedEnemyDamage = Math.round(enemyDamage * (1 - playerDr));
@@ -757,10 +781,7 @@ export const useGameStore = create<GameState>()(
                 state.player.stats.PV -= mitigatedEnemyDamage;
                 state.combat.log.push({ message: `${enemy.nom} hits you for ${mitigatedEnemyDamage} damage.`, type: 'enemy_attack', timestamp: Date.now() });
                 
-                const enemyInState = state.combat.enemies.find(e => e.id === enemy.id);
-                if (enemyInState) {
-                    enemyInState.attackProgress = 0;
-                }
+                enemyInState.attackProgress = 0;
             });
         });
         

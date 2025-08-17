@@ -8,6 +8,8 @@ import { useEffect } from "react";
 import { useGameStore } from "@/state/gameStore";
 import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
+import { Progress } from "@/components/ui/progress";
 
 function SkillTooltipContent({ skill }: { skill: Skill }) {
     const effects = skill.effets || [];
@@ -34,29 +36,27 @@ interface ActionStripProps {
 }
 
 export function ActionStrip({ onRetreat, onCycleTarget, skills }: ActionStripProps) {
-    const { usePotion, inventory, useSkill } = useGameStore(state => ({
+    const { usePotion, inventory, useSkill, globalCooldown } = useGameStore(state => ({
         usePotion: state.usePotion,
         inventory: state.inventory,
-        useSkill: state.useSkill
+        useSkill: state.useSkill,
+        globalCooldown: state.combat.globalCooldown,
     }));
+    
+    const isGcdActive = globalCooldown > 0;
 
     useEffect(() => {
         const handleKeyPress = (event: KeyboardEvent) => {
             if (document.activeElement?.tagName === 'INPUT' || document.activeElement?.tagName === 'TEXTAREA') return;
 
+            if (event.key >= '1' && event.key <= '4') {
+                const skillIndex = parseInt(event.key, 10) - 1;
+                if (skills[skillIndex]) {
+                    useSkill(skills[skillIndex].id);
+                }
+            }
+
             switch (event.key.toUpperCase()) {
-                case '1':
-                    if (skills[0]) useSkill(skills[0].id);
-                    break;
-                case '2':
-                     if (skills[1]) useSkill(skills[1].id);
-                    break;
-                case '3':
-                     if (skills[2]) useSkill(skills[2].id);
-                    break;
-                case '4':
-                     if (skills[3]) useSkill(skills[3].id);
-                    break;
                 case 'R':
                     onRetreat();
                     break;
@@ -82,10 +82,13 @@ export function ActionStrip({ onRetreat, onCycleTarget, skills }: ActionStripPro
                     {skills.map((skill, index) => (
                          <Tooltip key={skill.id}>
                             <TooltipTrigger asChild>
-                                <Button variant="secondary" className="w-24 h-16 flex-col gap-1 text-xs" onClick={() => useSkill(skill.id)}>
+                                <Button variant="secondary" className="w-24 h-16 flex-col gap-1 text-xs relative overflow-hidden" onClick={() => useSkill(skill.id)} disabled={isGcdActive}>
                                     <Zap />
                                     <span className="truncate">{skill.nom}</span>
                                     <span className="text-secondary-foreground/70">[{index + 1}]</span>
+                                    {isGcdActive && (
+                                        <Progress value={globalCooldown * 100} className="absolute bottom-0 left-0 w-full h-1 bg-black/50" indicatorClassName="bg-white/30" />
+                                    )}
                                 </Button>
                             </TooltipTrigger>
                             <TooltipContent side="top">
