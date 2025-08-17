@@ -4,23 +4,28 @@
 
 import { Button } from "@/components/ui/button";
 import type { Skill } from "@/lib/types";
-import { Heart, Shield, Zap, ArrowRightLeft } from "lucide-react";
+import { Heart, Shield, Zap, ArrowRightLeft, Coins } from "lucide-react";
 import { useEffect } from "react";
 import { useGameStore } from "@/state/gameStore";
 import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
 
-function SkillTooltipContent({ skill }: { skill: Skill }) {
+const getResourceCost = (skill: Skill) => {
     const effects = skill.effets || [];
     const resourceCostMatch = effects.join(' ').match(/Coûte (\d+) (Mana|Rage|Énergie)/);
-    const resourceCost = resourceCostMatch ? `${resourceCostMatch[1]} ${resourceCostMatch[2]}` : null;
+    return resourceCostMatch ? { amount: resourceCostMatch[1], type: resourceCostMatch[2] } : null;
+}
+
+function SkillTooltipContent({ skill }: { skill: Skill }) {
+    const effects = skill.effets || [];
+    const resourceCost = getResourceCost(skill);
     
     return (
         <div className="max-w-xs p-2">
             <p className="font-bold text-base text-primary mb-1">{skill.nom}</p>
             {skill.cooldown > 0 && <p className="text-xs text-muted-foreground">Temps de recharge: {skill.cooldown}s</p>}
-            {resourceCost && <p className="text-xs text-blue-400">Coût: {resourceCost}</p>}
+            {resourceCost && <p className="text-xs text-blue-400">Coût: {resourceCost.amount} {resourceCost.type}</p>}
             <Separator className="my-2" />
             <p className="text-sm mb-2">Effets :</p>
             <ul className="list-disc list-inside space-y-1">
@@ -34,6 +39,12 @@ interface ActionStripProps {
     onRetreat: () => void;
     onCycleTarget: () => void;
     skills: Skill[];
+}
+
+const resourceColorMap = {
+    'Mana': 'text-blue-400',
+    'Rage': 'text-orange-400',
+    'Énergie': 'text-yellow-400',
 }
 
 export function ActionStrip({ onRetreat, onCycleTarget, skills }: ActionStripProps) {
@@ -82,19 +93,25 @@ export function ActionStrip({ onRetreat, onCycleTarget, skills }: ActionStripPro
                          const cooldown = skillCooldowns[skill.id];
                          const isCoolingDown = cooldown > 0;
                          const cooldownProgress = (cooldown / (skill.cooldown * 1000)) * 100;
+                         const resourceCost = getResourceCost(skill);
+                         const colorClass = resourceCost ? resourceColorMap[resourceCost.type as keyof typeof resourceColorMap] : 'text-muted-foreground';
 
                          return (
                              <Tooltip key={skill.id}>
                                 <TooltipTrigger asChild>
                                     <Button 
                                         variant="secondary" 
-                                        className="w-24 h-16 flex-col gap-1 text-xs relative overflow-hidden" 
+                                        className="w-24 h-20 flex-col gap-1 text-xs relative overflow-hidden" 
                                         onClick={() => useSkill(skill.id)} 
                                         disabled={isCoolingDown}
                                     >
                                         <Zap />
                                         <span className="truncate">{skill.nom}</span>
-                                        <span className="text-secondary-foreground/70">[{index + 1}]</span>
+                                        {resourceCost && (
+                                            <span className={`font-mono text-xs ${colorClass}`}>
+                                                {resourceCost.amount}
+                                            </span>
+                                        )}
                                         {isCoolingDown && (
                                             <div className="absolute inset-0 bg-black/70 flex items-center justify-center text-lg font-bold">
                                                {Math.ceil(cooldown / 1000)}
@@ -113,7 +130,7 @@ export function ActionStrip({ onRetreat, onCycleTarget, skills }: ActionStripPro
                     })}
 
                     {[...Array(4 - (skills?.length || 0))].map((_, index) => (
-                        <div key={`empty-${index}`} className="w-24 h-16 rounded-md bg-secondary/30 flex items-center justify-center text-xs text-muted-foreground">
+                        <div key={`empty-${index}`} className="w-24 h-20 rounded-md bg-secondary/30 flex items-center justify-center text-xs text-muted-foreground">
                             Vide
                         </div>
                     ))}
