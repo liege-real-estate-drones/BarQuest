@@ -1,9 +1,19 @@
 
 {
   "affixes": [
-    { "id": "force_1", "ref": "Force", "type": "prefix", "portée": [1, 5], "échelonnage": "lin" },
-    { "id": "intel_1", "ref": "Intelligence", "type": "prefix", "portée": [1, 5], "échelonnage": "lin" },
-    { "id": "vie_1", "ref": "PV", "type": "suffix", "portée": [5, 25], "échelonnage": "lin" },
-    { "id": "crit_1", "ref": "CritPct", "type": "suffix", "portée": [1, 3], "échelonnage": "palier" }
+    {
+      "id": "affix_str_1",
+      "ref": "Force",
+      "type": "suffix",
+      "portée": [1, 5],
+      "échelonnage": "lin"
+    },
+    {
+      "id": "affix_int_1",
+      "ref": "Intelligence",
+      "type": "suffix",
+      "portée": [1, 5],
+      "échelonnage": "lin"
+    }
   ]
 }

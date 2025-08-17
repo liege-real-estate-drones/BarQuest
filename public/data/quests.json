@@ -2,38 +2,38 @@
 {
   "quests": [
     {
-      "id": "den_of_evil_clear",
+      "id": "quest_1",
       "type": "chasse",
-      "name": "Clear the Den of Evil",
-      "desc": "A dark presence has taken over the nearby cave. Clear it of all monsters.",
+      "name": "First Steps",
+      "desc": "Kill 10 monsters in the Crypt of the Damned.",
       "requirements": {
-        "dungeonId": "den_of_evil",
-        "killCount": 15
+        "dungeonId": "dungeon_1",
+        "killCount": 10
+      },
+      "rewards": {
+        "gold": 50,
+        "xp": 100,
+        "reputation": {
+          "factionId": "town_guard",
+          "amount": 10
+        }
+      }
+    },
+     {
+      "id": "quest_2",
+      "type": "chasse",
+      "name": "Cleansing the Crypt",
+      "desc": "Kill the Skeleton King in the Crypt of the Damned.",
+      "requirements": {
+        "dungeonId": "dungeon_1",
+        "killCount": 1
       },
       "rewards": {
         "gold": 100,
         "xp": 250,
         "reputation": {
           "factionId": "town_guard",
-          "amount": 50
-        }
-      }
-    },
-    {
-      "id": "crypt_run",
-      "type": "chasse",
-      "name": "Cleanse the Crypt",
-      "desc": "The dead stir in the old crypt. Put them back to rest.",
-      "requirements": {
-        "dungeonId": "the_crypt",
-        "killCount": 20
-      },
-      "rewards": {
-        "gold": 150,
-        "xp": 400,
-        "reputation": {
-          "factionId": "town_guard",
-          "amount": 75
+          "amount": 25
         }
       }
     }

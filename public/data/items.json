@@ -1,10 +1,33 @@
 
 {
   "items": [
-    { "id": "short_sword", "name": "Short Sword", "slot": "weapon", "niveauMin": 1, "rarity": "Commun", "affixes": [{"ref": "AttMin", "val": 2}, {"ref": "AttMax", "val": 4}], "tagsClasse": ["berserker", "rogue"], "vendorPrice": 10 },
-    { "id": "cracked_sash", "name": "Cracked Sash", "slot": "belt", "niveauMin": 1, "rarity": "Commun", "affixes": [{"ref": "Armure", "val": 2}], "tagsClasse": ["common"], "vendorPrice": 5 },
-    { "id": "apprentice_wand", "name": "Apprentice Wand", "slot": "weapon", "niveauMin": 1, "rarity": "Commun", "affixes": [{"ref": "AttMin", "val": 1}, {"ref": "AttMax", "val": 3}, {"ref": "Intelligence", "val": 1}], "tagsClasse": ["mage", "cleric"], "vendorPrice": 12 },
-    { "id": "wolf_pelt", "name": "Wolf Pelt", "slot": "head", "niveauMin": 2, "rarity": "Rare", "affixes": [{"ref": "Armure", "val": 5}, {"ref": "Force", "val": 1}], "tagsClasse": ["berserker"], "vendorPrice": 25 },
-    { "id": "glowing_orb", "name": "Glowing Orb", "slot": "offhand", "niveauMin": 5, "rarity": "Rare", "affixes": [{"ref": "Intelligence", "val": 3}, {"ref": "CritPct", "val": 2}], "tagsClasse": ["mage", "cleric"], "vendorPrice": 75 }
+    {
+      "id": "item_1",
+      "name": "Rusty Sword",
+      "slot": "weapon",
+      "niveauMin": 1,
+      "rarity": "Commun",
+      "affixes": [{ "ref": "Force", "val": 1 }],
+      "vendorPrice": 10
+    },
+    {
+      "id": "item_2",
+      "name": "Worn Leather Cap",
+      "slot": "head",
+      "niveauMin": 1,
+      "rarity": "Commun",
+      "affixes": [{ "ref": "Armure", "val": 5 }],
+      "vendorPrice": 8
+    },
+    {
+      "id": "item_3",
+      "name": "Apprentice's Staff",
+      "slot": "weapon",
+      "niveauMin": 2,
+      "rarity": "Rare",
+      "affixes": [{ "ref": "Intelligence", "val": 3 }],
+      "vendorPrice": 50,
+      "tagsClasse": ["mage"]
+    }
   ]
 }

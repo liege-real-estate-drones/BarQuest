@@ -1,43 +1,41 @@
 
-[
-  {
-    "id": "dungeon_1",
-    "palier": 1,
-    "name": "Crypte des Profanateurs",
-    "biome": "occult",
-    "monsters": ["undead_warrior", "bone_mage"],
-    "modifiers": [],
-    "killTarget": 10,
-    "bossId": "lich_lord"
-  },
-  {
-    "id": "dungeon_2",
-    "palier": 2,
-    "name": "Forêt des Crocs de Givre",
-    "biome": "frost",
-    "monsters": ["ice_elemental", "frost_spider"],
-    "modifiers": ["Ralentissement glacial"],
-    "killTarget": 15,
-    "bossId": "yeti_chieftain"
-  },
-  {
-    "id": "dungeon_3",
-    "palier": 3,
-    "name": "Le Coeur du Volcan",
-    "biome": "fire",
-    "monsters": ["fire_elemental", "magma_hound"],
-    "modifiers": ["Aura brûlante"],
-    "killTarget": 20,
-    "bossId": "infernal_golem"
-  },
-  {
-    "id": "dungeon_4",
-    "palier": 4,
-    "name": "Bosquet Verdoyant Perverti",
-    "biome": "nature",
-    "monsters": ["corrupted_treant", "venomous_flytrap"],
-    "modifiers": ["Poison persistant"],
-    "killTarget": 25,
-    "bossId": "ancient_leshen"
-  }
-]
+{
+  "dungeons": [
+    {
+      "id": "dungeon_1",
+      "palier": 1,
+      "name": "The Crypt of the Damned",
+      "biome": "frost",
+      "monsters": ["skel_warrior", "skel_archer"],
+      "killTarget": 10,
+      "bossId": "skel_king"
+    },
+    {
+      "id": "dungeon_2",
+      "palier": 2,
+      "name": "The Volcanic Forge",
+      "biome": "fire",
+      "monsters": ["fire_elemental", "lava_golem"],
+      "killTarget": 15,
+      "bossId": "fire_lord"
+    },
+    {
+      "id": "dungeon_3",
+      "palier": 3,
+      "name": "The Sunken Grotto",
+      "biome": "nature",
+      "monsters": ["murloc_shaman", "murloc_warrior"],
+      "killTarget": 20,
+      "bossId": "murloc_chief"
+    },
+    {
+      "id": "dungeon_4",
+      "palier": 4,
+      "name": "The Shadowy Sepulcher",
+      "biome": "occult",
+      "monsters": ["cultist_acolyte", "shadow_beast"],
+      "killTarget": 25,
+      "bossId": "shadow_lich"
+    }
+  ]
+}

@@ -1,9 +1,65 @@
 
 {
   "talents": [
-    { "id": "berserker_toughness", "nom": "Toughness", "classeId": "berserker", "type": "passif", "rangMax": 5, "effets": ["Augmente les PV max de 3/6/9/12/15%"], "exigences": [] },
-    { "id": "berserker_cleave", "nom": "Cleave", "classeId": "berserker", "type": "passif", "rangMax": 1, "effets": ["Vos attaques de base infligent 50% de leurs dégâts à un deuxième ennemi proche."], "exigences": ["berserker_toughness:2"], "niveauRequis": 5 },
-    { "id": "berserker_battle_cry", "nom": "Cri de Guerre", "classeId": "berserker", "type": "passif", "rangMax": 3, "effets": ["Génère 1/2/3 points de Rage supplémentaires par attaque de base."], "exigences": [], "niveauRequis": 3 },
-    { "id": "mage_fireball_mastery", "nom": "Fireball Mastery", "classeId": "mage", "type": "passif", "rangMax": 3, "effets": ["Augmente les dégâts de Boule de Feu de 10/20/30%"], "exigences": [] }
+    {
+      "id": "berserker_toughness",
+      "nom": "Toughness",
+      "classeId": "berserker",
+      "type": "passif",
+      "rangMax": 5,
+      "effets": ["Augmente les PV de 2/4/6/8/10%"],
+      "exigences": [],
+      "niveauRequis": 1
+    },
+    {
+      "id": "berserker_battle_cry",
+      "nom": "Cri de Guerre",
+      "classeId": "berserker",
+      "type": "passif",
+      "rangMax": 3,
+      "effets": ["Génère 1/2/3 points de rage supplémentaires par coup."],
+      "exigences": [],
+      "niveauRequis": 5
+    },
+    {
+      "id": "berserker_cleave",
+      "nom": "Enchaînement",
+      "classeId": "berserker",
+      "type": "passif",
+      "rangMax": 1,
+      "effets": ["Vos attaques de base infligent 50% de leurs dégâts à une cible supplémentaire."],
+      "exigences": ["berserker_heroic_strike:1"],
+      "niveauRequis": 10
+    },
+    {
+      "id": "mage_arcane_intellect",
+      "nom": "Arcane Intellect",
+      "classeId": "mage",
+      "type": "passif",
+      "rangMax": 5,
+      "effets": ["Augmente l'Intelligence de 2/4/6/8/10%"],
+      "exigences": [],
+      "niveauRequis": 1
+    },
+    {
+      "id": "rogue_fleet_footed",
+      "nom": "Pieds légers",
+      "classeId": "rogue",
+      "type": "passif",
+      "rangMax": 3,
+      "effets": ["Augmente l'Esquive de 1/2/3%"],
+      "exigences": [],
+      "niveauRequis": 1
+    },
+    {
+      "id": "cleric_healing_touch",
+      "nom": "Guérison améliorée",
+      "classeId": "cleric",
+      "type": "passif",
+      "rangMax": 5,
+      "effets": ["Augmente l'Esprit de 2/4/6/8/10%"],
+      "exigences": [],
+      "niveauRequis": 1
+    }
   ]
 }
