@@ -259,7 +259,7 @@ export const useGameStore = create<GameState>()(
 
             if (startingSkill) {
                 player.learnedSkills[startingSkill.id] = 1;
-                player.talentPoints -= 1;
+                // The first skill is free and does not cost a talent point.
                 if (player.equippedSkills.every(s => s === null)) {
                     player.equippedSkills[0] = startingSkill.id;
                 }
