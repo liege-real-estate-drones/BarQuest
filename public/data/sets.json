@@ -1,0 +1,19 @@
+
+[
+    {
+        "id": "berserker_silver_guardian",
+        "name": "Tenue du Gardien d'Argent",
+        "bonuses": {
+            "2": "Augmente les dégâts de Frappe Héroïque de 15%.",
+            "3": "Tourbillon a 25% de chance de vous faire entrer en rage, augmentant les dégâts de 10% pendant 5 secondes."
+        }
+    },
+    {
+        "id": "mage_magma_watcher",
+        "name": "Regalia du Veilleur du Magma",
+        "bonuses": {
+            "2": "Boule de Feu a 20% de chance de ne coûter aucune mana.",
+            "3": "Vos sorts de feu appliquent une brûlure qui inflige des dégâts sur la durée."
+        }
+    }
+]

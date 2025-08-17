@@ -2,22 +2,24 @@
 {
     "dungeons": [
         {
-            "id": "dungeon_crypt_1",
+            "id": "dungeon_1",
             "palier": 1,
-            "name": "Crypte des Profanateurs",
-            "biome": "occult",
-            "monsters": ["mon_undead_ghoul", "mon_undead_skeleton_warrior", "mon_undead_acolyte"],
-            "bossId": "mon_undead_lich_1",
-            "factionId": "faction_argent_guard"
+            "name": "Caveaux Givre-Nés",
+            "biome": "frost",
+            "monsters": ["skel_warrior_1", "skel_archer_1", "ghoul_1", "necro_adept_2"],
+            "killTarget": 25,
+            "bossId": "boss_lich_5",
+            "factionId": "gardiens_argent"
         },
         {
-            "id": "dungeon_volcano_1",
+            "id": "dungeon_2",
             "palier": 1,
-            "name": "Caverne de Magma",
+            "name": "Le Coeur du Magma",
             "biome": "fire",
-            "monsters": ["mon_elemental_fire_1", "mon_humanoid_goblin_shaman"],
-            "bossId": "mon_elemental_fire_lord_1",
-            "factionId": "faction_magma_watchers"
+            "monsters": ["fire_elemental_2", "imp_3"],
+            "killTarget": 30,
+            "bossId": "boss_fire_giant_8",
+            "factionId": "veilleurs_magma"
         }
     ]
 }

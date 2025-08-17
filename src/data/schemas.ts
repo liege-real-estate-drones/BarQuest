@@ -1,4 +1,5 @@
 
+
 import { z } from "zod";
 
 export const RaretéEnum = z.enum(["Commun", "Rare", "Épique", "Légendaire", "Unique"]);
@@ -48,6 +49,7 @@ export const ItemSchema = z.object({
   tagsClasse: z.array(z.string()).default([]),
   effect: z.string().optional(),
   set: z.object({ id: z.string(), name: z.string() }).optional(),
+  vendorPrice: z.number().optional(),
 });
 
 export const ClasseSchema = z.object({

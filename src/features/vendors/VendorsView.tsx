@@ -175,7 +175,7 @@ export function VendorsView() {
         <Card className="h-full flex flex-col">
             <CardHeader>
                 <CardTitle className="flex justify-between items-center">
-                    <span>Blacksmith</span>
+                    <span>Forgeron</span>
                      <Badge variant="secondary" className="flex items-center gap-2">
                         <Coins className="h-4 w-4" />
                         {gold} Or

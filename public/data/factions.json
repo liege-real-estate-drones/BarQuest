@@ -1,27 +1,25 @@
 
-{
-  "factions": [
+[
     {
-      "id": "faction_argent_guard",
-      "name": "Gardiens d'Argent",
-      "ranks": [
-        { "name": "Neutre", "threshold": 0 },
-        { "name": "Amical", "threshold": 1000 },
-        { "name": "Honoré", "threshold": 3000, "rewardItemId": "item_set_cleric_t1_shoulders" },
-        { "name": "Révéré", "threshold": 7000, "rewardItemId": "item_set_cleric_t1_chest" },
-        { "name": "Exalté", "threshold": 12000, "rewardItemId": "item_set_cleric_t1_head" }
-      ]
+        "id": "gardiens_argent",
+        "name": "Gardiens d'Argent",
+        "ranks": [
+            { "name": "Neutre", "threshold": 0 },
+            { "name": "Amical", "threshold": 1000 },
+            { "name": "Honoré", "threshold": 3000, "rewardItemId": "berserker_set_silver_head" },
+            { "name": "Révéré", "threshold": 6000, "rewardItemId": "berserker_set_silver_chest" },
+            { "name": "Exalté", "threshold": 12000, "rewardItemId": "berserker_set_silver_weapon" }
+        ]
     },
     {
-      "id": "faction_magma_watchers",
-      "name": "Veilleurs du Magma",
-      "ranks": [
-        { "name": "Neutre", "threshold": 0 },
-        { "name": "Amical", "threshold": 1000 },
-        { "name": "Honoré", "threshold": 3000, "rewardItemId": "item_set_berserker_t1_hands" },
-        { "name": "Révéré", "threshold": 7000, "rewardItemId": "item_set_berserker_t1_legs" },
-        { "name": "Exalté", "threshold": 12000, "rewardItemId": "item_set_berserker_t1_chest" }
-      ]
+        "id": "veilleurs_magma",
+        "name": "Veilleurs du Magma",
+        "ranks": [
+            { "name": "Neutre", "threshold": 0 },
+            { "name": "Amical", "threshold": 1000 },
+            { "name": "Honoré", "threshold": 3000, "rewardItemId": "mage_set_magma_hands" },
+            { "name": "Révéré", "threshold": 6000, "rewardItemId": "mage_set_magma_feet" },
+            { "name": "Exalté", "threshold": 12000, "rewardItemId": "mage_set_magma_weapon" }
+        ]
     }
-  ]
-}
+]
