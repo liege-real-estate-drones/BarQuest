@@ -243,6 +243,7 @@ export const useGameStore = create<GameState>()(
             state.player.classeId = chosenClass.id as PlayerClassId;
             state.player.baseStats = { ...chosenClass.statsBase };
             state.player.talentPoints = 1;
+            state.player.resources.type = chosenClass.ressource;
             
             const startingSkills = state.gameData.skills.filter(s => s.classeId === classId && s.niveauRequis === 1);
             
