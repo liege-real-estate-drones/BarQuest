@@ -76,8 +76,8 @@ export function ActionStrip({ onRetreat, onCycleTarget, skills }: ActionStripPro
 
     return (
         <TooltipProvider>
-            <div className="flex flex-col items-center gap-2 p-2">
-                 {/* Main action row */}
+            <div className="flex justify-center items-center gap-4 w-full">
+                 {/* Skills */}
                 <div className="flex justify-center items-center gap-2">
                     {skills.map((skill, index) => (
                          <Tooltip key={skill.id}>
@@ -102,7 +102,10 @@ export function ActionStrip({ onRetreat, onCycleTarget, skills }: ActionStripPro
                         </div>
                     ))}
                 </div>
-                 {/* Secondary action row */}
+                
+                <Separator orientation="vertical" className="h-20" />
+
+                 {/* Utilities */}
                  <div className="flex justify-center items-center gap-2">
                     <Button variant="outline" onClick={onCycleTarget} className="w-24 h-20 flex-col gap-1 text-xs">
                         <div className="flex items-center gap-2">

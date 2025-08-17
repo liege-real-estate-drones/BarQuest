@@ -118,7 +118,7 @@ export function CombatView() {
       </main>
 
       {/* Footer - Action Strip */}
-       <footer className="flex-shrink-0 border-t bg-background/80 backdrop-blur-sm">
+       <footer className="flex-shrink-0 border-t bg-background/80 backdrop-blur-sm p-2">
             <ActionStrip 
                 onRetreat={flee}
                 skills={equippedSkills}
