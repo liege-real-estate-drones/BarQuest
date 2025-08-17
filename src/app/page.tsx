@@ -55,7 +55,14 @@ export default function Home() {
         const jsonData = await Promise.all(responses.map(res => res.json()));
         
         const gameDataPayload = dataPaths.reduce((acc, path, index) => {
-          acc[path] = jsonData[index]?.[path] || [];
+          const data = jsonData[index];
+          // Check if the loaded data is an object with a key matching the path, which is the case for files like dungeons.json which have a { "dungeons": [...] } structure
+          if (data && typeof data === 'object' && !Array.isArray(data) && path in data) {
+             acc[path] = data[path] || [];
+          } else {
+             // Otherwise, assume the data is an array directly
+             acc[path] = data || [];
+          }
           return acc;
         }, {} as GameData);
         
