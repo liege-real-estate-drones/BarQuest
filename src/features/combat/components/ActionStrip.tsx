@@ -76,17 +76,15 @@ export function ActionStrip({ onRetreat, onCycleTarget, skills }: ActionStripPro
 
     return (
         <TooltipProvider>
-            <div className="flex justify-center items-center gap-4 w-full">
+            <div className="flex flex-col items-center justify-center gap-2 w-full">
                  {/* Skills */}
                 <div className="flex justify-center items-center gap-2">
                     {skills.map((skill, index) => (
                          <Tooltip key={skill.id}>
                             <TooltipTrigger asChild>
-                                <Button variant="secondary" className="w-24 h-20 flex-col gap-1 text-xs" onClick={() => useSkill(skill.id)}>
-                                    <div className="flex items-center gap-2">
-                                        <Zap />
-                                        <span className="truncate">{skill.nom}</span>
-                                    </div>
+                                <Button variant="secondary" className="w-24 h-16 flex-col gap-1 text-xs" onClick={() => useSkill(skill.id)}>
+                                    <Zap />
+                                    <span className="truncate">{skill.nom}</span>
                                     <span className="text-secondary-foreground/70">[{index + 1}]</span>
                                 </Button>
                             </TooltipTrigger>
@@ -97,42 +95,46 @@ export function ActionStrip({ onRetreat, onCycleTarget, skills }: ActionStripPro
                     ))}
 
                     {[...Array(4 - (skills?.length || 0))].map((_, index) => (
-                        <div key={`empty-${index}`} className="w-24 h-20 rounded-md bg-secondary/30 flex items-center justify-center text-xs text-muted-foreground">
+                        <div key={`empty-${index}`} className="w-24 h-16 rounded-md bg-secondary/30 flex items-center justify-center text-xs text-muted-foreground">
                             Vide
                         </div>
                     ))}
                 </div>
                 
-                <Separator orientation="vertical" className="h-20" />
-
                  {/* Utilities */}
                  <div className="flex justify-center items-center gap-2">
-                    <Button variant="outline" onClick={onCycleTarget} className="w-24 h-20 flex-col gap-1 text-xs">
-                        <div className="flex items-center gap-2">
-                            <ArrowRightLeft />
-                            <span>Cible</span>
-                        </div>
-                        <span className="text-muted-foreground/70">[T]</span>
-                    </Button>
-                    <Button variant="outline" size="sm" onClick={usePotion} className="flex-col gap-1 text-xs relative h-20 w-24" disabled={inventory.potions <= 0}>
-                        <div className="flex items-center gap-2">
-                            <Heart className="h-4 w-4"/>
-                            <span>Potion</span>
-                        </div>
-                        <span className="text-secondary-foreground/70">[Q]</span>
-                        {inventory.potions > 0 && (
-                            <div className="absolute -top-1 -right-1 bg-primary text-primary-foreground rounded-full h-5 w-5 flex items-center justify-center text-xs">
-                                {inventory.potions}
-                            </div>
-                        )}
-                    </Button>
-                    <Button variant="outline" size="sm" onClick={onRetreat} className="flex-col gap-1 text-xs h-20 w-24">
-                        <div className="flex items-center gap-2">
-                            <Shield className="h-4 w-4" />
-                            <span>Retraite</span>
-                        </div>
-                        <span className="text-muted-foreground/70">[R]</span>
-                    </Button>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <Button variant="outline" onClick={onCycleTarget} className="w-20 h-12 flex-col gap-1 text-xs">
+                                <ArrowRightLeft />
+                                <span className="text-muted-foreground/70">[T]</span>
+                            </Button>
+                        </TooltipTrigger>
+                        <TooltipContent side="top"><p>Changer de Cible</p></TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                             <Button variant="outline" size="sm" onClick={usePotion} className="flex-col gap-1 text-xs relative h-12 w-20" disabled={inventory.potions <= 0}>
+                                <Heart />
+                                <span className="text-secondary-foreground/70">[Q]</span>
+                                {inventory.potions > 0 && (
+                                    <div className="absolute -top-1 -right-1 bg-primary text-primary-foreground rounded-full h-5 w-5 flex items-center justify-center text-xs">
+                                        {inventory.potions}
+                                    </div>
+                                )}
+                            </Button>
+                        </TooltipTrigger>
+                        <TooltipContent side="top"><p>Utiliser une Potion</p></TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                         <TooltipTrigger asChild>
+                            <Button variant="outline" size="sm" onClick={onRetreat} className="flex-col gap-1 text-xs h-12 w-20">
+                                <Shield />
+                                <span className="text-muted-foreground/70">[R]</span>
+                            </Button>
+                        </TooltipTrigger>
+                        <TooltipContent side="top"><p>Retraite</p></TooltipContent>
+                    </Tooltip>
                  </div>
             </div>
         </TooltipProvider>
