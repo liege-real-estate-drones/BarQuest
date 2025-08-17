@@ -111,25 +111,23 @@ export function TownView() {
                     <TabsTrigger value="vendors">Vendors</TabsTrigger>
                     <TabsTrigger value="inn">Inn</TabsTrigger>
                   </TabsList>
-                  <div className="flex-grow mt-4 relative">
-                    <TabsContent value="dungeons" className="absolute inset-0">
-                      <ScrollArea className="h-full w-full">
+                  <div className="flex-grow mt-4 overflow-y-auto">
+                    <TabsContent value="dungeons">
                         <DungeonsView />
-                      </ScrollArea>
                     </TabsContent>
-                    <TabsContent value="inventory" className="absolute inset-0">
+                    <TabsContent value="inventory">
                       <InventoryView />
                     </TabsContent>
-                    <TabsContent value="talents" className="absolute inset-0">
+                    <TabsContent value="talents">
                        <TalentsView />
                     </TabsContent>
-                    <TabsContent value="skills" className="absolute inset-0">
+                    <TabsContent value="skills">
                       <SkillsView />
                     </TabsContent>
-                    <TabsContent value="vendors" className="absolute inset-0">
+                    <TabsContent value="vendors">
                       <VendorsView />
                     </TabsContent>
-                    <TabsContent value="inn" className="absolute inset-0">
+                    <TabsContent value="inn">
                       <InnView />
                     </TabsContent>
                   </div>
