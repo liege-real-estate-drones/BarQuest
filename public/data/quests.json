@@ -1,41 +1,41 @@
 
 {
-  "quests": [
-    {
-      "id": "quest_1_undead",
-      "type": "chasse",
-      "name": "Cleansing the Crypt",
-      "desc": "Slay 15 undead creatures in The Whispering Crypt.",
-      "requirements": {
-        "dungeonId": "dungeon_1",
-        "killCount": 15
-      },
-      "rewards": {
-        "gold": 50,
-        "xp": 100,
-        "reputation": {
-          "factionId": "town_guard",
-          "amount": 25
-        }
-      }
-    },
-    {
-        "id": "quest_2_frost",
-        "type": "chasse",
-        "name": "Glacial Eradication",
-        "desc": "Defeat 20 creatures in The Howling Glacier.",
-        "requirements": {
-          "dungeonId": "dungeon_2",
-          "killCount": 20
+    "quests": [
+        {
+            "id": "quest_1",
+            "type": "chasse",
+            "name": "Nettoyage des cryptes",
+            "desc": "Les morts ne restent pas en paix. Nettoyez les cryptes des squelettes qui les hantent.",
+            "requirements": {
+                "dungeonId": "dungeon_1",
+                "killCount": 15
+            },
+            "rewards": {
+                "gold": 50,
+                "xp": 100,
+                "reputation": {
+                    "factionId": "silver_hand",
+                    "amount": 25
+                }
+            }
         },
-        "rewards": {
-          "gold": 75,
-          "xp": 150,
-          "reputation": {
-            "factionId": "mages_guild",
-            "amount": 25
-          }
+        {
+            "id": "quest_2",
+            "type": "chasse",
+            "name": "Forger dans les flammes",
+            "desc": "La forge des anciens est envahie par des créatures de feu. Reprenez-la.",
+            "requirements": {
+                "dungeonId": "dungeon_2",
+                "killCount": 20
+            },
+            "rewards": {
+                "gold": 100,
+                "xp": 250,
+                 "reputation": {
+                    "factionId": "iron_dwarves",
+                    "amount": 50
+                }
+            }
         }
-      }
-  ]
+    ]
 }

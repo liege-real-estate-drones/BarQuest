@@ -1,34 +1,45 @@
 
 {
-  "dungeons": [
-    {
-      "id": "dungeon_1",
-      "palier": 1,
-      "name": "The Whispering Crypt",
-      "biome": "occult",
-      "monsters": ["skel_warrior", "skel_archer", "zombie"],
-      "modifiers": [],
-      "killTarget": 15,
-      "bossId": "skel_champion"
-    },
-    {
-      "id": "dungeon_2",
-      "palier": 1,
-      "name": "The Howling Glacier",
-      "biome": "frost",
-      "monsters": ["ice_elemental", "frost_wolf"],
-      "modifiers": [],
-      "killTarget": 20,
-      "bossId": "ice_golem"
-    },
-    {
-        "id": "dungeon_3",
-        "palier": 2,
-        "name": "The Verdant Labyrinth",
-        "biome": "nature",
-        "monsters": ["dire_wolf", "treant", "giant_spider"],
-        "killTarget": 25,
-        "bossId": "forest_guardian"
-    }
-  ]
+    "dungeons": [
+        {
+            "id": "dungeon_1",
+            "palier": 1,
+            "name": "The Frostfang Crypts",
+            "biome": "frost",
+            "monsters": ["skelly_1", "skelly_2", "frost_elemental_1"],
+            "modifiers": [],
+            "killTarget": 15,
+            "bossId": "boss_lich_1"
+        },
+        {
+            "id": "dungeon_2",
+            "palier": 2,
+            "name": "The Ember-Heart Forge",
+            "biome": "fire",
+            "monsters": ["imp_1", "fire_elemental_1", "skelly_3"],
+            "modifiers": [],
+            "killTarget": 20,
+            "bossId": "boss_demon_1"
+        },
+        {
+            "id": "dungeon_3",
+            "palier": 3,
+            "name": "The Root-Bound Labyrinth",
+            "biome": "nature",
+            "monsters": ["treant_1", "dire_wolf_1", "goblin_shaman_1"],
+            "modifiers": [],
+            "killTarget": 25,
+            "bossId": "boss_hydra_1"
+        },
+        {
+            "id": "dungeon_4",
+            "palier": 4,
+            "name": "The Shadow-Veiled Sanctum",
+            "biome": "occult",
+            "monsters": ["cultist_1", "shadow_beast_1", "skelly_4"],
+            "modifiers": [],
+            "killTarget": 30,
+            "bossId": "boss_cthuloid_1"
+        }
+    ]
 }

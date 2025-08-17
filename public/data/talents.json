@@ -1,43 +1,11 @@
 
 {
-  "talents": [
-    {
-      "id": "berserker_toughness",
-      "nom": "Toughness",
-      "classeId": "berserker",
-      "type": "passif",
-      "rangMax": 5,
-      "effets": ["Augmente les PV maximum de 2/4/6/8/10%."],
-      "exigences": []
-    },
-    {
-      "id": "berserker_cleave",
-      "nom": "Cleave",
-      "classeId": "berserker",
-      "type": "passif",
-      "rangMax": 1,
-      "effets": ["Vos attaques de base infligent 50% de leurs dégâts à une cible secondaire proche."],
-      "exigences": [],
-      "niveauRequis": 5
-    },
-    {
-      "id": "berserker_battle_cry",
-      "nom": "Cri de Guerre",
-      "classeId": "berserker",
-      "type": "passif",
-      "rangMax": 3,
-      "effets": ["Augmente la Rage générée par les attaques de base de 1/2/3."],
-      "exigences": [],
-      "niveauRequis": 2
-    },
-    {
-      "id": "mage_fire_mastery",
-      "nom": "Fire Mastery",
-      "classeId": "mage",
-      "type": "passif",
-      "rangMax": 3,
-      "effets": ["Augmente les dégâts de feu de 5/10/15%."],
-      "exigences": []
-    }
-  ]
+    "talents": [
+        { "id": "berserker_toughness", "nom": "Robustesse", "classeId": "berserker", "type": "passif", "rangMax": 5, "effets": ["Augmente les PV de 2/4/6/8/10%"], "exigences": [] },
+        { "id": "berserker_cleave", "nom": "Enchaînement", "classeId": "berserker", "type": "passif", "niveauRequis": 5, "rangMax": 3, "effets": ["Vos attaques de mêlée infligent 10/15/20% de leurs dégâts à un ennemi proche."], "exigences": ["berserker_toughness:1"] },
+        { "id": "berserker_battle_cry", "nom": "Cri de guerre", "classeId": "berserker", "type": "passif", "niveauRequis": 10, "rangMax": 3, "effets": ["Vos attaques génèrent 1/2/3 points de Rage supplémentaires."], "exigences": ["berserker_cleave:1"] },
+        { "id": "berserker_last_stand", "nom": "Dernier rempart", "classeId": "berserker", "type": "passif", "niveauRequis": 15, "rangMax": 1, "effets": ["Lorsque vos PV sont bas, vos dégâts sont augmentés."], "exigences": ["berserker_battle_cry:2"], "effect": "dernier_cri" },
+        { "id": "mage_intellect", "nom": "Intellect Arcanique", "classeId": "mage", "type": "passif", "rangMax": 5, "effets": ["Augmente l'Intelligence de 2/4/6/8/10%"], "exigences": [] },
+        { "id": "mage_crit_mass", "nom": "Masse critique", "classeId": "mage", "type": "passif", "niveauRequis": 5, "rangMax": 3, "effets": ["Augmente les chances de coup critique de vos sorts de 2/4/6%."], "exigences": ["mage_intellect:1"] }
+    ]
 }
