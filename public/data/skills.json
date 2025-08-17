@@ -1,8 +1,123 @@
 
-{
-  "skills": [
-    { "id": "berserker_bash", "nom": "Bash", "classeId": "berserker", "type": "actif", "rangMax": 5, "effets": ["Inflige 120/130/140/150/160% des dégâts de l'arme. Coûte 10 Rage"], "exigences": [], "niveauRequis": 1 },
-    { "id": "berserker_whirlwind", "nom": "Whirlwind", "classeId": "berserker", "type": "actif", "rangMax": 3, "effets": ["Inflige 80/90/100% des dégâts de l'arme à tous les ennemis proches. Coûte 25 Rage"], "exigences": ["berserker_bash:1"], "niveauRequis": 5 },
-    { "id": "mage_fireball", "nom": "Fireball", "classeId": "mage", "type": "actif", "rangMax": 5, "effets": ["Inflige 10/20/30/40/50 dégâts de Feu. Coûte 15 Mana"], "exigences": [], "niveauRequis": 1 }
-  ]
-}
+[
+  {
+    "id": "berserker_heroic_strike",
+    "nom": "Frappe Héroïque",
+    "classeId": "berserker",
+    "type": "actif",
+    "niveauRequis": 1,
+    "rangMax": 5,
+    "effets": ["Inflige 120/140/160/180/200% des dégâts de l'arme.", "Coûte 10 Rage"],
+    "exigences": []
+  },
+  {
+    "id": "berserker_whirlwind",
+    "nom": "Tourbillon",
+    "classeId": "berserker",
+    "type": "actif",
+    "niveauRequis": 5,
+    "rangMax": 5,
+    "effets": ["Inflige 80/90/100/110/120% des dégâts de l'arme à tous les ennemis proches.", "Coûte 25 Rage"],
+    "exigences": ["berserker_heroic_strike:1"]
+  },
+  {
+    "id": "berserker_charge",
+    "nom": "Charge",
+    "classeId": "berserker",
+    "type": "actif",
+    "niveauRequis": 10,
+    "rangMax": 3,
+    "effets": ["Inflige 50/75/100% des dégâts de l'arme et étourdit la cible pendant 1/1.5/2 secondes.", "Génère 20 Rage", "Temps de recharge: 15s"],
+    "exigences": ["berserker_whirlwind:2"]
+  },
+  {
+    "id": "mage_fireball",
+    "nom": "Boule de Feu",
+    "classeId": "mage",
+    "type": "actif",
+    "niveauRequis": 1,
+    "rangMax": 5,
+    "effets": ["Inflige 30/45/60/75/90 dégâts de Feu.", "Coûte 15 Mana"],
+    "exigences": []
+  },
+  {
+    "id": "mage_ice_nova",
+    "nom": "Nova de Givre",
+    "classeId": "mage",
+    "type": "actif",
+    "niveauRequis": 5,
+    "rangMax": 5,
+    "effets": ["Inflige 20/30/40/50/60 dégâts de Givre aux ennemis proches et les gèle pendant 2 secondes.", "Coûte 25 Mana"],
+    "exigences": ["mage_fireball:1"]
+  },
+  {
+    "id": "mage_arcane_missiles",
+    "nom": "Projectiles des Arcanes",
+    "classeId": "mage",
+    "type": "actif",
+    "niveauRequis": 10,
+    "rangMax": 3,
+    "effets": ["Tire 3/4/5 projectiles qui infligent chacun 15 dégâts des Arcanes.", "Coûte 30 Mana"],
+    "exigences": ["mage_ice_nova:2"]
+  },
+  {
+    "id": "rogue_sinister_strike",
+    "nom": "Attaque Pernicieuse",
+    "classeId": "rogue",
+    "type": "actif",
+    "niveauRequis": 1,
+    "rangMax": 5,
+    "effets": ["Inflige 110/120/130/140/150% des dégâts de l'arme.", "Coûte 20 Énergie"],
+    "exigences": []
+  },
+  {
+    "id": "rogue_eviscerate",
+    "nom": "Éviscération",
+    "classeId": "rogue",
+    "type": "actif",
+    "niveauRequis": 5,
+    "rangMax": 5,
+    "effets": ["Coup de grâce qui inflige 150/175/200/225/250% des dégâts de l'arme. Nécessite que la cible ait moins de 50% de PV.", "Coûte 35 Énergie"],
+    "exigences": ["rogue_sinister_strike:1"]
+  },
+  {
+    "id": "rogue_vanish",
+    "nom": "Disparition",
+    "classeId": "rogue",
+    "type": "actif",
+    "niveauRequis": 10,
+    "rangMax": 1,
+    "effets": ["Vous rend invisible pendant 5 secondes, interrompant l'aggro des ennemis.", "Temps de recharge: 30s", "Coûte 15 Énergie"],
+    "exigences": ["rogue_eviscerate:2"]
+  },
+  {
+    "id": "cleric_smite",
+    "nom": "Châtiment",
+    "classeId": "cleric",
+    "type": "actif",
+    "niveauRequis": 1,
+    "rangMax": 5,
+    "effets": ["Inflige 25/40/55/70/85 dégâts Sacrés.", "Coûte 12 Mana"],
+    "exigences": []
+  },
+  {
+    "id": "cleric_holy_light",
+    "nom": "Lumière Sacrée",
+    "classeId": "cleric",
+    "type": "actif",
+    "niveauRequis": 5,
+    "rangMax": 5,
+    "effets": ["Soigne une cible alliée (ou vous-même) de 50/75/100/125/150 PV.", "Coûte 20 Mana"],
+    "exigences": ["cleric_smite:1"]
+  },
+  {
+    "id": "cleric_consecration",
+    "nom": "Consécration",
+    "classeId": "cleric",
+    "type": "actif",
+    "niveauRequis": 10,
+    "rangMax": 3,
+    "effets": ["Consacre le sol sous vos pieds, infligeant 10/15/20 dégâts Sacrés par seconde aux ennemis dans la zone pendant 8 secondes.", "Coûte 40 Mana"],
+    "exigences": ["cleric_holy_light:2"]
+  }
+]

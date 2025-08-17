@@ -1,32 +1,43 @@
 
-{
-  "dungeons": [
-    {
-      "id": "den_of_evil",
-      "palier": 1,
-      "name": "Den of Evil",
-      "biome": "occult",
-      "monsters": ["fallen_shaman", "fallen_one", "zombie"],
-      "killTarget": 15,
-      "bossId": "corpsefire"
-    },
-    {
-      "id": "the_crypt",
-      "palier": 1,
-      "name": "The Crypt",
-      "biome": "occult",
-      "monsters": ["skeleton", "zombie"],
-      "killTarget": 20,
-      "bossId": "bonebreaker"
-    },
-    {
-      "id": "frigid_highlands",
-      "palier": 2,
-      "name": "Frigid Highlands",
-      "biome": "frost",
-      "monsters": ["yeti", "ice_clan_warrior"],
-      "killTarget": 25,
-      "bossId": "shenk_the_overseer"
-    }
-  ]
-}
+[
+  {
+    "id": "dungeon_1",
+    "palier": 1,
+    "name": "Crypte des Profanateurs",
+    "biome": "occult",
+    "monsters": ["undead_warrior", "bone_mage"],
+    "modifiers": [],
+    "killTarget": 10,
+    "bossId": "lich_lord"
+  },
+  {
+    "id": "dungeon_2",
+    "palier": 2,
+    "name": "Forêt des Crocs de Givre",
+    "biome": "frost",
+    "monsters": ["ice_elemental", "frost_spider"],
+    "modifiers": ["Ralentissement glacial"],
+    "killTarget": 15,
+    "bossId": "yeti_chieftain"
+  },
+  {
+    "id": "dungeon_3",
+    "palier": 3,
+    "name": "Le Coeur du Volcan",
+    "biome": "fire",
+    "monsters": ["fire_elemental", "magma_hound"],
+    "modifiers": ["Aura brûlante"],
+    "killTarget": 20,
+    "bossId": "infernal_golem"
+  },
+  {
+    "id": "dungeon_4",
+    "palier": 4,
+    "name": "Bosquet Verdoyant Perverti",
+    "biome": "nature",
+    "monsters": ["corrupted_treant", "venomous_flytrap"],
+    "modifiers": ["Poison persistant"],
+    "killTarget": 25,
+    "bossId": "ancient_leshen"
+  }
+]
