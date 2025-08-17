@@ -5,11 +5,11 @@ import { useGameStore } from '@/state/gameStore';
 import { Button } from '@/components/ui/button';
 import { CombatLog } from './components/CombatLog';
 import EntityDisplay from './components/EntityDisplay';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { User, ArrowLeft } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { ActionStrip } from './components/ActionStrip';
-import type { Talent } from '@/lib/types';
+import type { Skill } from '@/lib/types';
 import { Card } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
@@ -25,6 +25,7 @@ export function CombatView() {
     killCount,
     gameData,
     cycleTarget,
+    targetIndex,
   } = useGameStore((state) => ({
     player: state.player,
     enemies: state.combat.enemies,
@@ -36,29 +37,25 @@ export function CombatView() {
     killCount: state.combat.killCount,
     gameData: state.gameData,
     cycleTarget: state.cycleTarget,
+    targetIndex: state.combat.targetIndex,
   }));
-  
-  const [targetIndex, setTargetIndex] = useState(0);
 
   const equippedSkills = useMemo(() => {
     if (!player?.equippedSkills) return [];
     return player.equippedSkills
       .map(skillId => {
         if (!skillId) return null;
-        return gameData.talents.find(t => t.id === skillId) || null;
+        // Skills are in skills table, not talents table
+        return gameData.skills.find(t => t.id === skillId) || null;
       })
-      .filter((t): t is Talent => t !== null);
-  }, [player?.equippedSkills, gameData.talents]);
+      .filter((t): t is Skill => t !== null);
+  }, [player?.equippedSkills, gameData.skills]);
 
   useEffect(() => {
     if (enemies && enemies.length === 0) {
       startCombat();
     }
   }, [enemies, startCombat]);
-  
-  useEffect(() => {
-    setTargetIndex(0);
-  }, [enemies?.length]);
 
   const handleCycleTarget = () => {
     cycleTarget();

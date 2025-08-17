@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useGameStore } from '@/state/gameStore';
 import { TownView } from '@/features/town/TownView';
 import { CombatView } from '@/features/combat/CombatView';
@@ -30,52 +30,49 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    async function loadGameData() {
-        if (isInitialized) {
-            setIsLoading(false);
-            return;
-        };
+  const loadGameData = useCallback(async () => {
+    if (isInitialized) {
+        setIsLoading(false);
+        return;
+    };
 
-        try {
-            const dataPaths: (keyof GameData)[] = [
-                'dungeons', 'monsters', 'items', 'talents', 'skills', 
-                'affixes', 'classes', 'quests', 'factions'
-            ];
-            
-            const responses = await Promise.all(
-                dataPaths.map(path => fetch(`/data/${path}.json`))
-            );
+    try {
+        const dataPaths: (keyof GameData)[] = [
+            'dungeons', 'monsters', 'items', 'talents', 'skills', 
+            'affixes', 'classes', 'quests', 'factions'
+        ];
+        
+        const responses = await Promise.all(
+            dataPaths.map(path => fetch(`/data/${path}.json`))
+        );
 
-            for (const response of responses) {
-              if (!response.ok) {
-                throw new Error(`Failed to fetch ${response.url}: ${response.statusText}`);
-              }
-            }
-
-            const jsonData = await Promise.all(responses.map(res => res.json()));
-            
-            const gameDataPayload = dataPaths.reduce((acc, path, index) => {
-              // The JSON files have a root key that is the same as the file name
-              // e.g. dungeons.json contains { "dungeons": [...] }
-              // We need to extract the array from the root key.
-              acc[path] = jsonData[index]?.[path] || [];
-              return acc;
-            }, {} as GameData);
-            
-            initializeGameData(gameDataPayload);
-            setIsLoading(false);
-        } catch (err) {
-            console.error("Failed to load game data:", err);
-            setError(err instanceof Error ? err.message : "An unknown error occurred while loading game data.");
-            setIsLoading(false);
+        for (const response of responses) {
+          if (!response.ok) {
+            throw new Error(`Failed to fetch ${response.url}: ${response.statusText}`);
+          }
         }
+
+        const jsonData = await Promise.all(responses.map(res => res.json()));
+        
+        const gameDataPayload = dataPaths.reduce((acc, path, index) => {
+          acc[path] = jsonData[index]?.[path] || [];
+          return acc;
+        }, {} as GameData);
+        
+        initializeGameData(gameDataPayload);
+        setIsLoading(false);
+    } catch (err) {
+        console.error("Failed to load game data:", err);
+        setError(err instanceof Error ? err.message : "An unknown error occurred while loading game data.");
+        setIsLoading(false);
     }
-    
+  }, [isInitialized, initializeGameData]);
+
+  useEffect(() => {
     if (hydrated && rehydrateComplete) {
         loadGameData();
     }
-  }, [hydrated, rehydrateComplete, initializeGameData, isInitialized]);
+  }, [hydrated, rehydrateComplete, loadGameData]);
 
   useEffect(() => {
     if (isInitialized && player.classeId) {

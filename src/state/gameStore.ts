@@ -2,7 +2,7 @@
 import create from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import type { Dungeon, Monstre, Item, Talent, Skill, Affixe, Stats, PlayerState, InventoryState, CombatLogEntry, CombatState, GameData, Classe, Quete, PlayerClassId, ResourceType, Rareté, CombatEnemy, Faction } from '@/lib/types';
+import type { Dungeon, Monstre, Item, Talent, Skill, Stats, PlayerState, InventoryState, CombatLogEntry, CombatState, GameData, Quete, PlayerClassId, ResourceType, Rareté, CombatEnemy } from '@/lib/types';
 import * as formulas from '@/core/formulas';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -49,6 +49,7 @@ const initialCombatState: CombatState = {
   log: [],
   autoAttack: true,
   dungeonRunItems: [],
+  targetIndex: 0,
 };
 
 interface GameState {
@@ -95,7 +96,7 @@ interface GameState {
   getXpToNextLevel: () => number;
 }
 
-let gameLoop: any = null;
+let gameLoop: NodeJS.Timeout | null = null;
 
 const rarityDropChances: Record<Rareté, number> = {
   Commun: 0.7,
@@ -145,7 +146,7 @@ const resolveLoot = (monster: Monstre, gameData: GameData, playerClassId: Player
 };
 
 const getTalentEffectValue = (effect: string, rank: number): number => {
-    const matches = effect.match(/([\d\.\/]+)/);
+    const matches = effect.match(/([\d./]+)/);
     if (!matches) return 0;
     const values = matches[1].split('/').map(Number);
     return values[Math.min(rank - 1, values.length - 1)] || 0;
@@ -257,9 +258,9 @@ export const useGameStore = create<GameState>()(
                 s.classeId === player.classeId && s.niveauRequis === 1
             );
 
-            if (startingSkill) {
-                // This skill is free and does not cost a talent point.
+            if (startingSkill && player.talentPoints > 0) {
                 player.learnedSkills[startingSkill.id] = 1;
+                player.talentPoints -= 1;
                 if (player.equippedSkills.every(s => s === null)) {
                     player.equippedSkills[0] = startingSkill.id;
                 }
@@ -381,7 +382,7 @@ export const useGameStore = create<GameState>()(
         get().recalculateStats();
       },
 
-      buyItem: (item: Item) => boolean => {
+      buyItem: (item: Item): boolean => {
           const { inventory } = get();
           const price = item.vendorPrice || 0;
           if (price <= 0 || inventory.gold < price) {
@@ -583,6 +584,7 @@ export const useGameStore = create<GameState>()(
               state.combat.playerAttackProgress = 0;
               state.combat.playerAttackInterval = state.player.stats.Vitesse * 1000;
               state.combat.log.push({ message: `A group of ${newEnemies.map(e => e.nom).join(', ')} appears!`, type: 'info', timestamp: Date.now() });
+              state.combat.targetIndex = 0;
             });
         }
       },
@@ -614,7 +616,7 @@ export const useGameStore = create<GameState>()(
 
           const updatedState = get();
           if (updatedState.combat.autoAttack && updatedState.combat.playerAttackProgress >= 1 && updatedState.combat.enemies.length > 0) {
-              get().playerAttack(updatedState.combat.enemies[0].id);
+              get().playerAttack(updatedState.combat.enemies[updatedState.combat.targetIndex].id);
           }
 
           if (updatedState.combat.enemies.some(e => e.attackProgress >= 1)) {
@@ -699,7 +701,7 @@ export const useGameStore = create<GameState>()(
             player.resources.current -= resourceCost;
 
             const isAoE = skill.effets.join(' ').includes("tous les ennemis") || skill.effets.join(' ').includes("ennemis proches");
-            const targets = isAoE ? [...combat.enemies] : [combat.enemies[0]];
+            const targets = isAoE ? [...combat.enemies] : [combat.enemies[combat.targetIndex]];
 
             targets.forEach(target => {
                  let damage = 0;
@@ -871,12 +873,9 @@ export const useGameStore = create<GameState>()(
       cycleTarget: () => {
         set(state => {
             if (state.combat.enemies.length > 1) {
-                // Move the first enemy to the end of the array
-                const newTarget = state.combat.enemies.shift();
-                if (newTarget) {
-                    state.combat.enemies.push(newTarget);
-                    state.combat.log.push({ message: `You are now targeting ${state.combat.enemies[0].nom}.`, type: 'info', timestamp: Date.now() });
-                }
+                const newIndex = (state.combat.targetIndex + 1) % state.combat.enemies.length;
+                state.combat.targetIndex = newIndex;
+                state.combat.log.push({ message: `You are now targeting ${state.combat.enemies[newIndex].nom}.`, type: 'info', timestamp: Date.now() });
             }
         });
       },
@@ -902,7 +901,7 @@ export const useGameStore = create<GameState>()(
     {
       name: 'barquest-save',
       storage: storage,
-      onRehydrateStorage: () => (state, error) => {
+      onRehydrateStorage: () => (state) => {
         if (state) {
             state.rehydrateComplete = true;
             state.view = 'TOWN';

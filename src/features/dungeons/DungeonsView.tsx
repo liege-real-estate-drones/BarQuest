@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useGameStore } from '@/state/gameStore';
+import { Dungeon } from '@/lib/types';
 
 export function DungeonsView() {
   const { dungeons, enterDungeon, player } = useGameStore(state => ({
@@ -27,7 +28,7 @@ export function DungeonsView() {
       <div className="p-1">
         <h2 className="text-2xl font-headline mb-4">Select a Dungeon</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {dungeons.map((dungeon, index) => {
+        {dungeons.map((dungeon: Dungeon, index: number) => {
             const isCompleted = completedDungeons.includes(dungeon.id);
             const isUnlocked = index === 0 || completedDungeons.includes(dungeons[index - 1]?.id);
 
@@ -54,5 +55,3 @@ export function DungeonsView() {
     </ScrollArea>
   );
 }
-
-    

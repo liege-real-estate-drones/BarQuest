@@ -2,15 +2,15 @@
 'use client';
 
 import { Button } from "@/components/ui/button";
-import type { Talent } from "@/lib/types";
-import { Heart, Shield, Zap, Shuffle, ArrowRightLeft } from "lucide-react";
+import type { Skill } from "@/lib/types";
+import { Heart, Shield, Zap, ArrowRightLeft } from "lucide-react";
 import { useEffect } from "react";
 import { useGameStore } from "@/state/gameStore";
 
 interface ActionStripProps {
     onRetreat: () => void;
     onCycleTarget: () => void;
-    skills: Talent[];
+    skills: Skill[];
 }
 
 export function ActionStrip({ onRetreat, onCycleTarget, skills }: ActionStripProps) {
