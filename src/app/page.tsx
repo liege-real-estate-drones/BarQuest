@@ -16,15 +16,15 @@ export default function Home() {
     view, 
     initializeGameData, 
     isInitialized, 
-    player, 
-    checkAndAssignStarterSkill, 
+    player,
+    recalculateStats,
     rehydrateComplete 
   } = useGameStore((state) => ({
     view: state.view,
     initializeGameData: state.initializeGameData,
     isInitialized: state.isInitialized,
     player: state.player,
-    checkAndAssignStarterSkill: state.checkAndAssignStarterSkill,
+    recalculateStats: state.recalculateStats,
     rehydrateComplete: state.rehydrateComplete
   }));
   const [isLoading, setIsLoading] = useState(true);
@@ -83,9 +83,9 @@ export default function Home() {
 
   useEffect(() => {
     if (isInitialized && player.classeId) {
-        checkAndAssignStarterSkill();
+        recalculateStats();
     }
-  }, [isInitialized, player.classeId, checkAndAssignStarterSkill]);
+  }, [isInitialized, player.classeId, recalculateStats]);
   
   if (error) {
     return (

@@ -68,7 +68,6 @@ interface GameState {
   
   initializeGameData: (data: Partial<GameData>) => void;
   setPlayerClass: (classId: PlayerClassId) => void;
-  checkAndAssignStarterSkill: () => void;
   recalculateStats: () => void;
   equipItem: (itemId: string) => void;
   unequipItem: (slot: keyof InventoryState['equipment']) => void;
@@ -243,36 +242,18 @@ export const useGameStore = create<GameState>()(
                 max: maxResource,
                 type: chosenClass.ressource as ResourceType,
             };
+
+            // Learn and equip starting skills
+            const startingSkills = state.gameData.skills.filter(s => s.classeId === classId && s.niveauRequis === 1);
+            
+            startingSkills.slice(0, 4).forEach((skill, index) => {
+                if (skill) {
+                    state.player.learnedSkills[skill.id] = 1;
+                    state.player.equippedSkills[index] = skill.id;
+                }
+            });
         });
-        get().checkAndAssignStarterSkill();
         get().recalculateStats();
-      },
-
-      checkAndAssignStarterSkill: () => {
-        set(state => {
-            const { player, gameData } = state;
-            if (!player.classeId || !gameData.skills || gameData.skills.length === 0) return;
-            
-            player.learnedSkills = player.learnedSkills || {};
-
-            const hasAnySkillLearned = Object.values(player.learnedSkills).some(rank => rank > 0);
-            if (hasAnySkillLearned) return;
-
-            const startingSkill = gameData.skills.find(s => 
-                s.classeId === player.classeId && s.niveauRequis === 1
-            );
-            
-            if (startingSkill && (player.learnedSkills[startingSkill.id] || 0) === 0) {
-                 if (player.talentPoints > 0) {
-                    player.learnedSkills[startingSkill.id] = 1;
-                    player.talentPoints -= 1;
-                }
-                // Always equip the starter skill if the bar is empty
-                if (player.equippedSkills.every(s => s === null)) {
-                    player.equippedSkills[0] = startingSkill.id;
-                }
-            }
-        });
       },
 
       recalculateStats: () => {
@@ -389,7 +370,7 @@ export const useGameStore = create<GameState>()(
         get().recalculateStats();
       },
 
-      buyItem: (item: Item) => {
+      buyItem: (item) => {
           const { inventory } = get();
           const price = item.vendorPrice || 0;
           if (price <= 0 || inventory.gold < price) {
