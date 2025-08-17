@@ -1,17 +1,10 @@
 
 {
-    "items": [
-        { "id": "item_longsword_1", "name": "Épée longue rouillée", "slot": "weapon", "niveauMin": 1, "rarity": "Commun", "affixes": [{ "ref": "AttMin", "val": 2 }, { "ref": "AttMax", "val": 4 }], "vendorPrice": 10 },
-        { "id": "item_longsword_2", "name": "Épée longue de soldat", "slot": "weapon", "niveauMin": 3, "rarity": "Rare", "affixes": [{ "ref": "AttMin", "val": 5 }, { "ref": "AttMax", "val": 8 }, { "ref": "Force", "val": 2 }], "vendorPrice": 50 },
-        { "id": "item_wand_1", "name": "Baguette tordue", "slot": "weapon", "niveauMin": 1, "rarity": "Commun", "affixes": [{ "ref": "AttMin", "val": 1 }, { "ref": "AttMax", "val": 5 }], "tagsClasse": ["mage", "cleric"], "vendorPrice": 10 },
-        { "id": "item_wand_2", "name": "Baguette d'apprenti", "slot": "weapon", "niveauMin": 3, "rarity": "Rare", "affixes": [{ "ref": "AttMin", "val": 4 }, { "ref": "AttMax", "val": 9 }, { "ref": "Intelligence", "val": 2 }], "tagsClasse": ["mage", "cleric"], "vendorPrice": 50 },
-        { "id": "item_dagger_1", "name": "Dague ébréchée", "slot": "weapon", "niveauMin": 1, "rarity": "Commun", "affixes": [{ "ref": "AttMin", "val": 1 }, { "ref": "AttMax", "val": 3 }], "tagsClasse": ["rogue"], "vendorPrice": 10 },
-        { "id": "item_dagger_2", "name": "Dague équilibrée", "slot": "weapon", "niveauMin": 3, "rarity": "Rare", "affixes": [{ "ref": "AttMin", "val": 3 }, { "ref": "AttMax", "val": 6 }, { "ref": "CritPct", "val": 1 }], "tagsClasse": ["rogue"], "vendorPrice": 50 },
-        { "id": "item_axe_1", "name": "Hache de bûcheron", "slot": "weapon", "niveauMin": 1, "rarity": "Commun", "affixes": [{ "ref": "AttMin", "val": 3 }, { "ref": "AttMax", "val": 5 }], "tagsClasse": ["berserker"], "vendorPrice": 12 },
-        { "id": "item_axe_2", "name": "Hache de guerre", "slot": "weapon", "niveauMin": 3, "rarity": "Rare", "affixes": [{ "ref": "AttMin", "val": 6 }, { "ref": "AttMax", "val": 10 }, { "ref": "Force", "val": 2 }], "tagsClasse": ["berserker"], "vendorPrice": 55 },
-        { "id": "item_leather_helm_1", "name": "Casque en cuir usé", "slot": "head", "niveauMin": 1, "rarity": "Commun", "affixes": [{ "ref": "Armure", "val": 5 }], "vendorPrice": 8 },
-        { "id": "item_iron_helm_1", "name": "Casque en fer", "slot": "head", "niveauMin": 4, "rarity": "Rare", "affixes": [{ "ref": "Armure", "val": 15 }, { "ref": "PV", "val": 10 }], "vendorPrice": 40 },
-        { "id": "item_cloth_chest_1", "name": "Robe en tissu", "slot": "chest", "niveauMin": 1, "rarity": "Commun", "affixes": [{ "ref": "Armure", "val": 8 }], "tagsClasse": ["mage", "cleric"], "vendorPrice": 15 },
-        { "id": "item_silken_robe_1", "name": "Robe en soie enchantée", "slot": "chest", "niveauMin": 5, "rarity": "Épique", "affixes": [{ "ref": "Armure", "val": 20 }, { "ref": "Intelligence", "val": 5 }, { "ref": "Esprit", "val": 3 }], "tagsClasse": ["mage", "cleric"], "vendorPrice": 200 }
-    ]
+  "items": [
+    { "id": "short_sword", "name": "Short Sword", "slot": "weapon", "niveauMin": 1, "rarity": "Commun", "affixes": [{"ref": "AttMin", "val": 2}, {"ref": "AttMax", "val": 4}], "tagsClasse": ["berserker", "rogue"], "vendorPrice": 10 },
+    { "id": "cracked_sash", "name": "Cracked Sash", "slot": "belt", "niveauMin": 1, "rarity": "Commun", "affixes": [{"ref": "Armure", "val": 2}], "tagsClasse": ["common"], "vendorPrice": 5 },
+    { "id": "apprentice_wand", "name": "Apprentice Wand", "slot": "weapon", "niveauMin": 1, "rarity": "Commun", "affixes": [{"ref": "AttMin", "val": 1}, {"ref": "AttMax", "val": 3}, {"ref": "Intelligence", "val": 1}], "tagsClasse": ["mage", "cleric"], "vendorPrice": 12 },
+    { "id": "wolf_pelt", "name": "Wolf Pelt", "slot": "head", "niveauMin": 2, "rarity": "Rare", "affixes": [{"ref": "Armure", "val": 5}, {"ref": "Force", "val": 1}], "tagsClasse": ["berserker"], "vendorPrice": 25 },
+    { "id": "glowing_orb", "name": "Glowing Orb", "slot": "offhand", "niveauMin": 5, "rarity": "Rare", "affixes": [{"ref": "Intelligence", "val": 3}, {"ref": "CritPct", "val": 2}], "tagsClasse": ["mage", "cleric"], "vendorPrice": 75 }
+  ]
 }

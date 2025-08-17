@@ -1,20 +1,15 @@
 
 {
-    "factions": [
-        {
-            "id": "silver_hand",
-            "name": "La Main d'Argent",
-            "ranks": ["Initié", "Chevalier", "Paladin", "Champion"]
-        },
-        {
-            "id": "iron_dwarves",
-            "name": "Les Nains de Fer",
-            "ranks": ["Approuvé", "Ami", "Honoré", "Exalté"]
-        },
-        {
-            "id": "shadow_syndicate",
-            "name": "Le Syndicat de l'Ombre",
-            "ranks": ["Contact", "Agent", "Fantôme", "Maître de l'Ombre"]
-        }
-    ]
+  "factions": [
+    {
+      "id": "town_guard",
+      "name": "The Town Guard",
+      "ranks": ["Neutral", "Friendly", "Honored", "Revered", "Exalted"]
+    },
+    {
+      "id": "arcanum",
+      "name": "The Arcanum",
+      "ranks": ["Neutral", "Friendly", "Honored", "Revered", "Exalted"]
+    }
+  ]
 }

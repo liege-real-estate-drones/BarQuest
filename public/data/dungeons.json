@@ -1,45 +1,32 @@
 
 {
-    "dungeons": [
-        {
-            "id": "dungeon_1",
-            "palier": 1,
-            "name": "The Frostfang Crypts",
-            "biome": "frost",
-            "monsters": ["skelly_1", "skelly_2", "frost_elemental_1"],
-            "modifiers": [],
-            "killTarget": 15,
-            "bossId": "boss_lich_1"
-        },
-        {
-            "id": "dungeon_2",
-            "palier": 2,
-            "name": "The Ember-Heart Forge",
-            "biome": "fire",
-            "monsters": ["imp_1", "fire_elemental_1", "skelly_3"],
-            "modifiers": [],
-            "killTarget": 20,
-            "bossId": "boss_demon_1"
-        },
-        {
-            "id": "dungeon_3",
-            "palier": 3,
-            "name": "The Root-Bound Labyrinth",
-            "biome": "nature",
-            "monsters": ["treant_1", "dire_wolf_1", "goblin_shaman_1"],
-            "modifiers": [],
-            "killTarget": 25,
-            "bossId": "boss_hydra_1"
-        },
-        {
-            "id": "dungeon_4",
-            "palier": 4,
-            "name": "The Shadow-Veiled Sanctum",
-            "biome": "occult",
-            "monsters": ["cultist_1", "shadow_beast_1", "skelly_4"],
-            "modifiers": [],
-            "killTarget": 30,
-            "bossId": "boss_cthuloid_1"
-        }
-    ]
+  "dungeons": [
+    {
+      "id": "den_of_evil",
+      "palier": 1,
+      "name": "Den of Evil",
+      "biome": "occult",
+      "monsters": ["fallen_shaman", "fallen_one", "zombie"],
+      "killTarget": 15,
+      "bossId": "corpsefire"
+    },
+    {
+      "id": "the_crypt",
+      "palier": 1,
+      "name": "The Crypt",
+      "biome": "occult",
+      "monsters": ["skeleton", "zombie"],
+      "killTarget": 20,
+      "bossId": "bonebreaker"
+    },
+    {
+      "id": "frigid_highlands",
+      "palier": 2,
+      "name": "Frigid Highlands",
+      "biome": "frost",
+      "monsters": ["yeti", "ice_clan_warrior"],
+      "killTarget": 25,
+      "bossId": "shenk_the_overseer"
+    }
+  ]
 }

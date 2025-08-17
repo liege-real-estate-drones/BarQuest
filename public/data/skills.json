@@ -1,12 +1,8 @@
 
 {
-    "skills": [
-        { "id": "berserker_heroic_strike", "nom": "Frappe héroïque", "classeId": "berserker", "type": "actif", "niveauRequis": 1, "rangMax": 5, "effets": ["Inflige 110/120/130/140/150% des dégâts de l'arme.", "Coûte 15 Rage"], "exigences": [] },
-        { "id": "berserker_whirlwind", "nom": "Tourbillon", "classeId": "berserker", "type": "actif", "niveauRequis": 10, "rangMax": 5, "effets": ["Frappe tous les ennemis proches pour 80/90/100/110/120% des dégâts de l'arme.", "Coûte 25 Rage"], "exigences": ["berserker_heroic_strike:2"] },
-        { "id": "mage_fireball", "nom": "Boule de feu", "classeId": "mage", "type": "actif", "niveauRequis": 1, "rangMax": 5, "effets": ["Inflige 20/35/50/65/80 dégâts de Feu.", "Coûte 10 Mana"], "exigences": [] },
-        { "id": "mage_frostbolt", "nom": "Éclair de givre", "classeId": "mage", "type": "actif", "niveauRequis": 2, "rangMax": 5, "effets": ["Inflige 15/28/42/55/70 dégâts de Givre et ralentit la cible.", "Coûte 12 Mana"], "exigences": ["mage_fireball:1"] },
-        { "id": "mage_arcane_explosion", "nom": "Explosion des arcanes", "classeId": "mage", "type": "actif", "niveauRequis": 10, "rangMax": 5, "effets": ["Inflige 30/45/60/75/90 dégâts des Arcanes à tous les ennemis.", "Coûte 30 Mana"], "exigences": ["mage_frostbolt:2"] },
-        { "id": "rogue_sinister_strike", "nom": "Attaque sournoise", "classeId": "rogue", "type": "actif", "niveauRequis": 1, "rangMax": 5, "effets": ["Inflige 120/135/150/165/180% des dégâts de l'arme.", "Coûte 40 Énergie"], "exigences": [] },
-        { "id": "cleric_smite", "nom": "Châtiment", "classeId": "cleric", "type": "actif", "niveauRequis": 1, "rangMax": 5, "effets": ["Inflige 15/25/35/45/55 dégâts Sacrés.", "Coûte 8 Mana"], "exigences": [] }
-    ]
+  "skills": [
+    { "id": "berserker_bash", "nom": "Bash", "classeId": "berserker", "type": "actif", "rangMax": 5, "effets": ["Inflige 120/130/140/150/160% des dégâts de l'arme. Coûte 10 Rage"], "exigences": [], "niveauRequis": 1 },
+    { "id": "berserker_whirlwind", "nom": "Whirlwind", "classeId": "berserker", "type": "actif", "rangMax": 3, "effets": ["Inflige 80/90/100% des dégâts de l'arme à tous les ennemis proches. Coûte 25 Rage"], "exigences": ["berserker_bash:1"], "niveauRequis": 5 },
+    { "id": "mage_fireball", "nom": "Fireball", "classeId": "mage", "type": "actif", "rangMax": 5, "effets": ["Inflige 10/20/30/40/50 dégâts de Feu. Coûte 15 Mana"], "exigences": [], "niveauRequis": 1 }
+  ]
 }

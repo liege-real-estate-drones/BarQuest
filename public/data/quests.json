@@ -1,41 +1,41 @@
 
 {
-    "quests": [
-        {
-            "id": "quest_1",
-            "type": "chasse",
-            "name": "Nettoyage des cryptes",
-            "desc": "Les morts ne restent pas en paix. Nettoyez les cryptes des squelettes qui les hantent.",
-            "requirements": {
-                "dungeonId": "dungeon_1",
-                "killCount": 15
-            },
-            "rewards": {
-                "gold": 50,
-                "xp": 100,
-                "reputation": {
-                    "factionId": "silver_hand",
-                    "amount": 25
-                }
-            }
-        },
-        {
-            "id": "quest_2",
-            "type": "chasse",
-            "name": "Forger dans les flammes",
-            "desc": "La forge des anciens est envahie par des créatures de feu. Reprenez-la.",
-            "requirements": {
-                "dungeonId": "dungeon_2",
-                "killCount": 20
-            },
-            "rewards": {
-                "gold": 100,
-                "xp": 250,
-                 "reputation": {
-                    "factionId": "iron_dwarves",
-                    "amount": 50
-                }
-            }
+  "quests": [
+    {
+      "id": "den_of_evil_clear",
+      "type": "chasse",
+      "name": "Clear the Den of Evil",
+      "desc": "A dark presence has taken over the nearby cave. Clear it of all monsters.",
+      "requirements": {
+        "dungeonId": "den_of_evil",
+        "killCount": 15
+      },
+      "rewards": {
+        "gold": 100,
+        "xp": 250,
+        "reputation": {
+          "factionId": "town_guard",
+          "amount": 50
         }
-    ]
+      }
+    },
+    {
+      "id": "crypt_run",
+      "type": "chasse",
+      "name": "Cleanse the Crypt",
+      "desc": "The dead stir in the old crypt. Put them back to rest.",
+      "requirements": {
+        "dungeonId": "the_crypt",
+        "killCount": 20
+      },
+      "rewards": {
+        "gold": 150,
+        "xp": 400,
+        "reputation": {
+          "factionId": "town_guard",
+          "amount": 75
+        }
+      }
+    }
+  ]
 }

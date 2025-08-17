@@ -1,21 +1,14 @@
 
 {
-    "monsters": [
-        { "id": "skelly_1", "nom": "Frêle squelette", "level": 1, "palier": 1, "famille": "Mort-vivant", "stats": { "PV": 30, "AttMin": 3, "AttMax": 5, "CritPct": 5, "CritDmg": 150, "Armure": 10, "Vitesse": 2.5, "Precision": 100, "Esquive": 5 } },
-        { "id": "skelly_2", "nom": "Guerrier squelette", "level": 2, "palier": 1, "famille": "Mort-vivant", "stats": { "PV": 50, "AttMin": 5, "AttMax": 8, "CritPct": 5, "CritDmg": 150, "Armure": 20, "Vitesse": 2.2, "Precision": 100, "Esquive": 5 } },
-        { "id": "frost_elemental_1", "nom": "Élémentaire de givre mineur", "level": 3, "palier": 1, "famille": "Élémentaire", "stats": { "PV": 40, "AttMin": 4, "AttMax": 6, "CritPct": 5, "CritDmg": 150, "Armure": 15, "Vitesse": 2.8, "Precision": 100, "Esquive": 5 } },
-        { "id": "boss_lich_1", "nom": "Liche Frimas", "level": 5, "palier": 1, "famille": "Mort-vivant", "isBoss": true, "stats": { "PV": 250, "AttMin": 15, "AttMax": 25, "CritPct": 10, "CritDmg": 150, "Armure": 50, "Vitesse": 2, "Precision": 120, "Esquive": 10 } },
-        { "id": "imp_1", "nom": "Diablotin des flammes", "level": 4, "palier": 2, "famille": "Démon", "stats": { "PV": 60, "AttMin": 8, "AttMax": 12, "CritPct": 5, "CritDmg": 150, "Armure": 30, "Vitesse": 1.8, "Precision": 110, "Esquive": 8 } },
-        { "id": "fire_elemental_1", "nom": "Élémentaire de feu", "level": 5, "palier": 2, "famille": "Élémentaire", "stats": { "PV": 80, "AttMin": 10, "AttMax": 15, "CritPct": 8, "CritDmg": 150, "Armure": 40, "Vitesse": 2.5, "Precision": 110, "Esquive": 5 } },
-        { "id": "skelly_3", "nom": "Archer squelette calciné", "level": 5, "palier": 2, "famille": "Mort-vivant", "stats": { "PV": 55, "AttMin": 9, "AttMax": 14, "CritPct": 10, "CritDmg": 160, "Armure": 25, "Vitesse": 2, "Precision": 130, "Esquive": 5 } },
-        { "id": "boss_demon_1", "nom": "Seigneur des Cendres", "level": 8, "palier": 2, "famille": "Démon", "isBoss": true, "stats": { "PV": 500, "AttMin": 25, "AttMax": 40, "CritPct": 15, "CritDmg": 160, "Armure": 80, "Vitesse": 1.9, "Precision": 130, "Esquive": 12 } },
-        { "id": "treant_1", "nom": "Tréant ancien", "level": 7, "palier": 3, "famille": "Plante", "stats": { "PV": 150, "AttMin": 15, "AttMax": 22, "CritPct": 5, "CritDmg": 150, "Armure": 100, "Vitesse": 3.5, "Precision": 120, "Esquive": 2 } },
-        { "id": "dire_wolf_1", "nom": "Loup sinistre", "level": 6, "palier": 3, "famille": "Bête", "stats": { "PV": 90, "AttMin": 12, "AttMax": 18, "CritPct": 15, "CritDmg": 160, "Armure": 50, "Vitesse": 1.6, "Precision": 125, "Esquive": 15 } },
-        { "id": "goblin_shaman_1", "nom": "Chaman gobelin", "level": 8, "palier": 3, "famille": "Gobelinoïde", "stats": { "PV": 110, "AttMin": 18, "AttMax": 25, "CritPct": 8, "CritDmg": 150, "Armure": 60, "Vitesse": 2.3, "Precision": 120, "Esquive": 10 } },
-        { "id": "boss_hydra_1", "nom": "Hydre des tourbières", "level": 12, "palier": 3, "famille": "Bête", "isBoss": true, "stats": { "PV": 1000, "AttMin": 40, "AttMax": 60, "CritPct": 10, "CritDmg": 170, "Armure": 120, "Vitesse": 2.2, "Precision": 140, "Esquive": 10 } },
-        { "id": "cultist_1", "nom": "Cultiste dément", "level": 10, "palier": 4, "famille": "Humanoïde", "stats": { "PV": 180, "AttMin": 25, "AttMax": 35, "CritPct": 10, "CritDmg": 150, "Armure": 80, "Vitesse": 2.1, "Precision": 130, "Esquive": 12 } },
-        { "id": "shadow_beast_1", "nom": "Bête d'ombre", "level": 11, "palier": 4, "famille": "Aberration", "stats": { "PV": 220, "AttMin": 30, "AttMax": 45, "CritPct": 15, "CritDmg": 160, "Armure": 100, "Vitesse": 1.8, "Precision": 135, "Esquive": 20 } },
-        { "id": "skelly_4", "nom": "Seigneur squelette", "level": 12, "palier": 4, "famille": "Mort-vivant", "stats": { "PV": 300, "AttMin": 35, "AttMax": 50, "CritPct": 12, "CritDmg": 150, "Armure": 150, "Vitesse": 2.4, "Precision": 130, "Esquive": 8 } },
-        { "id": "boss_cthuloid_1", "nom": "Horreur indicible", "level": 15, "palier": 4, "famille": "Aberration", "isBoss": true, "stats": { "PV": 1500, "AttMin": 60, "AttMax": 90, "CritPct": 20, "CritDmg": 180, "Armure": 200, "Vitesse": 2, "Precision": 150, "Esquive": 15 } }
-    ]
+  "monsters": [
+    { "id": "fallen_one", "nom": "Fallen One", "level": 1, "palier": 1, "famille": "demon", "stats": { "PV": 10, "AttMin": 1, "AttMax": 3, "CritPct": 5, "CritDmg": 150, "Armure": 5, "Vitesse": 1.8, "Precision": 10, "Esquive": 5 } },
+    { "id": "fallen_shaman", "nom": "Fallen Shaman", "level": 2, "palier": 1, "famille": "demon", "stats": { "PV": 15, "AttMin": 2, "AttMax": 4, "CritPct": 5, "CritDmg": 150, "Armure": 8, "Vitesse": 2.2, "Precision": 12, "Esquive": 5 } },
+    { "id": "zombie", "nom": "Zombie", "level": 1, "palier": 1, "famille": "undead", "stats": { "PV": 20, "AttMin": 2, "AttMax": 3, "CritPct": 0, "CritDmg": 150, "Armure": 3, "Vitesse": 2.5, "Precision": 8, "Esquive": 1 } },
+    { "id": "skeleton", "nom": "Skeleton", "level": 2, "palier": 1, "famille": "undead", "stats": { "PV": 12, "AttMin": 3, "AttMax": 5, "CritPct": 5, "CritDmg": 150, "Armure": 10, "Vitesse": 2.0, "Precision": 15, "Esquive": 8 } },
+    { "id": "corpsefire", "nom": "Corpsefire", "level": 5, "palier": 1, "famille": "undead", "isBoss": true, "stats": { "PV": 100, "AttMin": 5, "AttMax": 10, "CritPct": 10, "CritDmg": 150, "Armure": 25, "Vitesse": 2.0, "Precision": 25, "Esquive": 10 } },
+    { "id": "bonebreaker", "nom": "Bonebreaker", "level": 6, "palier": 1, "famille": "undead", "isBoss": true, "stats": { "PV": 120, "AttMin": 8, "AttMax": 12, "CritPct": 5, "CritDmg": 150, "Armure": 30, "Vitesse": 2.2, "Precision": 28, "Esquive": 8 } },
+    { "id": "yeti", "nom": "Yeti", "level": 8, "palier": 2, "famille": "beast", "stats": { "PV": 80, "AttMin": 10, "AttMax": 15, "CritPct": 5, "CritDmg": 150, "Armure": 40, "Vitesse": 2.0, "Precision": 30, "Esquive": 12 } },
+    { "id": "ice_clan_warrior", "nom": "Ice Clan Warrior", "level": 7, "palier": 2, "famille": "humanoid", "stats": { "PV": 60, "AttMin": 8, "AttMax": 12, "CritPct": 10, "CritDmg": 150, "Armure": 35, "Vitesse": 1.8, "Precision": 35, "Esquive": 15 } },
+    { "id": "shenk_the_overseer", "nom": "Shenk the Overseer", "level": 10, "palier": 2, "famille": "humanoid", "isBoss": true, "stats": { "PV": 250, "AttMin": 15, "AttMax": 25, "CritPct": 10, "CritDmg": 150, "Armure": 60, "Vitesse": 1.9, "Precision": 50, "Esquive": 20 } }
+  ]
 }
