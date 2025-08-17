@@ -74,7 +74,8 @@ export function TalentsView() {
         talentPoints: state.player.talentPoints
     }));
 
-    const playerTalents = gameData.talents.filter(t => t.classeId === player.classeId);
+    const playerTalents = (gameData.talents || []).filter(t => t.classeId === player.classeId);
+    const learnedTalents = player.learnedTalents || {};
 
     const canLearnTalent = (talentId: string): boolean => {
         if (talentPoints <= 0) return false;
@@ -84,7 +85,7 @@ export function TalentsView() {
 
         if (talent.niveauRequis && player.level < talent.niveauRequis) return false;
 
-        const currentRank = player.learnedTalents[talent.id] || 0;
+        const currentRank = learnedTalents[talent.id] || 0;
         if (currentRank >= talent.rangMax) return false;
 
         if (talent.exigences.length === 0) return true;
@@ -92,7 +93,7 @@ export function TalentsView() {
         return talent.exigences.every(req => {
             const [reqId, reqRankStr] = req.split(':');
             const reqRank = parseInt(reqRankStr, 10);
-            return (player.learnedSkills[reqId] || 0) >= reqRank || (player.learnedTalents[reqId] || 0) >= reqRank;
+            return (player.learnedSkills[reqId] || 0) >= reqRank || (learnedTalents[reqId] || 0) >= reqRank;
         });
     };
 
@@ -109,7 +110,7 @@ export function TalentsView() {
                 <ScrollArea className="h-full pr-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             {playerTalents.map(talent => {
-                                const currentRank = player.learnedTalents[talent.id] || 0;
+                                const currentRank = learnedTalents[talent.id] || 0;
                                 const isMaxRank = currentRank >= talent.rangMax;
                                 const canLearn = canLearnTalent(talent.id);
 
