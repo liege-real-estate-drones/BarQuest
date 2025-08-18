@@ -87,6 +87,9 @@ interface GameState {
   rest: () => boolean;
   usePotion: (potionType: PotionType) => void;
 
+  // Quest actions
+  acceptQuest: (questId: string) => void;
+
   enterDungeon: (dungeonId: string) => void;
   startCombat: () => void;
   gameTick: (delta: number) => void;
@@ -293,15 +296,6 @@ export const useGameStore = create<GameState>()(
             state.combat = initialCombatState;
             state.activeQuests = [];
             
-            // Assign first quest for each dungeon chain
-            const firstQuests = state.gameData.dungeons.map(d => state.gameData.quests.find(q => q.requirements.dungeonId === d.id && q.id.endsWith('_q1'))).filter(Boolean) as Quete[];
-            
-            firstQuests.forEach(quest => {
-                if(quest) {
-                    state.activeQuests.push({ quete: quest, progress: 0 });
-                }
-            })
-
             state.player.classeId = chosenClass.id as PlayerClassId;
             state.player.baseStats = { ...chosenClass.statsBase };
             state.player.talentPoints = 1;
@@ -634,6 +628,20 @@ export const useGameStore = create<GameState>()(
           });
       },
 
+      acceptQuest: (questId: string) => {
+        set(state => {
+            const questToAccept = state.gameData.quests.find(q => q.id === questId);
+            if (!questToAccept) return;
+
+            // Check if already active or completed
+            if (state.activeQuests.some(q => q.quete.id === questId) || state.player.completedQuests.includes(questId)) {
+                return;
+            }
+
+            state.activeQuests.push({ quete: questToAccept, progress: 0 });
+        });
+      },
+
       enterDungeon: (dungeonId) => {
         const dungeon = get().gameData.dungeons.find(d => d.id === dungeonId);
         if (dungeon) {
@@ -955,7 +963,7 @@ export const useGameStore = create<GameState>()(
                 state.combat.targetIndex = nextTargetIndex !== -1 ? nextTargetIndex : 0;
             }
 
-            state.activeQuests.forEach((activeQuest, index) => {
+            state.activeQuests.forEach((activeQuest) => {
               if (currentDungeon && activeQuest.quete.requirements.dungeonId === currentDungeon.id) {
                 activeQuest.progress++;
                 if (activeQuest.progress >= activeQuest.quete.requirements.killCount) {
@@ -977,16 +985,6 @@ export const useGameStore = create<GameState>()(
                     repData.value += rep.amount;
                     state.player.reputation[rep.factionId] = repData;
                     state.combat.log.push({ message: `Your reputation with ${gameData.factions.find(f => f.id === rep.factionId)?.name || 'a faction'} increased by ${rep.amount}.`, type: 'info', timestamp: Date.now() });
-                  }
-
-                  // Start next quest in the chain
-                  const [dungeonPrefix, questNumStr] = quest.id.split('_q');
-                  const nextQuestNum = parseInt(questNumStr) + 1;
-                  const nextQuestId = `${dungeonPrefix}_q${nextQuestNum}`;
-                  const nextQuest = gameData.quests.find(q => q.id === nextQuestId);
-                  if (nextQuest) {
-                    state.activeQuests.push({ quete: nextQuest, progress: 0 });
-                     state.combat.log.push({ message: `New Quest: ${nextQuest.name}!`, type: 'quest', timestamp: Date.now() });
                   }
                 }
               }
@@ -1103,19 +1101,8 @@ export const useGameStore = create<GameState>()(
             if(typeof state.inventory.potions !== 'object') {
               state.inventory.potions = { health: state.inventory.potions || 0, resource: 0};
             }
-
-            // Backfill quests for old saves
-            if (state.isInitialized && state.activeQuests.length === 0 && state.player.completedQuests.length === 0) {
-                const firstQuests = state.gameData.dungeons.map(d => state.gameData.quests.find(q => q.requirements.dungeonId === d.id && q.id.endsWith('_q1'))).filter(Boolean) as Quete[];
-                firstQuests.forEach(quest => {
-                    if (quest) {
-                        state.activeQuests.push({ quete: quest, progress: 0 });
-                    }
-                });
-            }
         }
       }
     }
   )
 );
-
