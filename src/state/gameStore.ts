@@ -281,7 +281,7 @@ export const useGameStore = create<GameState>()(
         });
         get().recalculateStats();
 
-        // After stats are calculated, set HP and resource to full.
+        // After stats are calculated, set HP and resource to full. This is the fix.
         set(state => {
           const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
           state.player.stats.PV = maxHp;
@@ -393,10 +393,8 @@ export const useGameStore = create<GameState>()(
           }
           
           const currentHp = player.stats.PV;
-          if (currentHp > maxHp) {
+          if (currentHp > maxHp || currentHp <= 0 && state.view !== 'COMBAT') {
             player.stats.PV = maxHp;
-          } else if(currentHp <= 0 && state.view !== 'COMBAT') {
-             player.stats.PV = 1;
           }
         });
       },
