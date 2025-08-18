@@ -23,16 +23,37 @@ const STAT_ORDER: StatKey[] = [
     'Armure', 'Vitesse', 'Precision', 'Esquive'
 ];
 
-function ItemStat({ label, value, diff }: { label: string, value: number | string, diff?: number }) {
+type ComparisonResult = { diff: number; type: 'better' | 'worse' | 'equal' | 'new' };
+
+function ItemStat({ label, value, comparison }: { label: string, value: number | string, comparison?: ComparisonResult }) {
+    let comparisonColor = 'text-green-400'; // Default color for stats without comparison
     let diffElement = null;
-    if (diff !== undefined && diff !== 0) {
-        const diffColor = diff > 0 ? 'text-green-500' : 'text-red-500';
-        const diffSign = diff > 0 ? '+' : '';
-        diffElement = <span className={cn("ml-2 font-mono", diffColor)}>({diffSign}{diff})</span>;
+
+    if (comparison) {
+        switch (comparison.type) {
+            case 'better':
+                comparisonColor = 'text-green-500';
+                break;
+            case 'worse':
+                comparisonColor = 'text-red-500';
+                break;
+            case 'equal':
+                comparisonColor = 'text-gray-500';
+                break;
+            case 'new':
+                comparisonColor = 'text-yellow-400';
+                break;
+        }
+
+        if (comparison.type !== 'equal' && comparison.type !== 'new' && comparison.diff !== 0) {
+            const diffSign = comparison.diff > 0 ? '+' : '';
+            diffElement = <span className={cn("ml-2 font-mono", comparisonColor)}>({diffSign}{comparison.diff})</span>;
+        }
     }
 
+
     return (
-        <p className="text-green-400">
+        <p className={comparisonColor}>
             {value} {label} {diffElement}
         </p>
     );
@@ -41,17 +62,41 @@ function ItemStat({ label, value, diff }: { label: string, value: number | strin
 function ItemTooltipContent({ item, equippedItem }: { item: Item, equippedItem?: Item | null }) {
     if (!item) return null;
 
-    const comparisonStats: Partial<Record<StatKey, number>> = {};
+    const comparisonStats: Partial<Record<StatKey, ComparisonResult>> = {};
+
     if (equippedItem) {
-        STAT_ORDER.forEach(key => {
+        const allKeys = new Set([...STAT_ORDER, ...item.affixes.map(a => a.ref), ...equippedItem.affixes.map(a => a.ref)]) as Set<StatKey>;
+        
+        allKeys.forEach(key => {
             const itemStat = item.affixes.find(a => a.ref === key)?.val || (item.stats?.[key] as number) || 0;
             const equippedStat = equippedItem.affixes.find(a => a.ref === key)?.val || (equippedItem.stats?.[key] as number) || 0;
+            
+            if (itemStat === 0 && equippedStat === 0) return;
+
             const diff = itemStat - equippedStat;
-            if (diff !== 0) {
-                 comparisonStats[key] = diff;
+            
+            if (itemStat > 0 && equippedStat === 0) {
+                comparisonStats[key] = { diff, type: 'new' };
+            } else if (diff > 0) {
+                comparisonStats[key] = { diff, type: 'better' };
+            } else if (diff < 0) {
+                comparisonStats[key] = { diff, type: 'worse' };
+            } else {
+                comparisonStats[key] = { diff, type: 'equal' };
             }
         });
     }
+
+    const allAffixes = [...item.affixes];
+     if (item.stats) {
+        STAT_ORDER.forEach(key => {
+            const val = item.stats![key as StatKey];
+            if (val) {
+                 allAffixes.push({ ref: key, val: val });
+            }
+        });
+    }
+
 
     return (
         <div className="p-2 text-xs w-64">
@@ -62,21 +107,14 @@ function ItemTooltipContent({ item, equippedItem }: { item: Item, equippedItem?:
             </div>
             <Separator className="my-2" />
             <div className="space-y-1">
-                {item.affixes.map((affix, i) => (
+                {allAffixes.map((affix, i) => (
                     <ItemStat 
                         key={i} 
                         label={affix.ref} 
-                        value={`+${affix.val}`}
-                        diff={comparisonStats[affix.ref as StatKey]}
+                        value={`${affix.val > 0 ? '+' : ''}${affix.val}`}
+                        comparison={comparisonStats[affix.ref as StatKey]}
                     />
                 ))}
-                 {item.stats && STAT_ORDER.map(key => {
-                     const val = item.stats![key as StatKey];
-                     if (val) {
-                         return <ItemStat key={key} label={key} value={val} diff={comparisonStats[key]} />
-                     }
-                     return null;
-                 })}
             </div>
              {item.set && (
                  <>
