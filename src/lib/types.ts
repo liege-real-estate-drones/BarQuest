@@ -71,7 +71,7 @@ export interface PlayerState {
   };
   activeEffects: string[];
   activeSetBonuses: string[];
-  completedDungeons: string[];
+  completedDungeons: Record<string, number>; // { [dungeonId]: count }
   completedQuests: string[];
 }
 

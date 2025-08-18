@@ -13,7 +13,13 @@ import React from 'react';
 
 function QuestCard({ quest, progress, onAccept, isAvailable }: { quest: Quete; progress?: number; onAccept?: (id: string) => void; isAvailable?: boolean; }) {
   const isCompleted = progress === undefined && !isAvailable;
-  const progressPercent = isCompleted ? 100 : progress !== undefined ? (progress / quest.requirements.killCount) * 100 : 0;
+  
+  const targetCount = quest.requirements.killCount || quest.requirements.clearCount || 0;
+  const progressPercent = isCompleted ? 100 : progress !== undefined ? (progress / targetCount) * 100 : 0;
+  const objectiveText = quest.type === 'chasse' 
+    ? `Tuer ${targetCount} monstres dans ${quest.requirements.dungeonId}`
+    : `Terminer le donjon ${quest.requirements.dungeonId} ${targetCount} fois`;
+
 
   return (
     <div className="border p-4 rounded-lg bg-card-foreground/5 space-y-2">
@@ -31,8 +37,8 @@ function QuestCard({ quest, progress, onAccept, isAvailable }: { quest: Quete; p
       {!isCompleted && !isAvailable && progress !== undefined && (
          <div className="space-y-1 pt-1">
             <div className="flex justify-between text-xs text-muted-foreground">
-                <span>Progrès</span>
-                <span>{progress} / {quest.requirements.killCount}</span>
+                <span>{objectiveText}</span>
+                <span>{progress} / {targetCount}</span>
             </div>
             <Progress value={progressPercent} className="h-2" />
          </div>
@@ -61,7 +67,7 @@ export function QuestsView() {
   const availableQuests = React.useMemo(() => {
     const unlockedDungeonIds = new Set<string>();
     gameData.dungeons.forEach((dungeon, index) => {
-        const isUnlocked = index === 0 || player.completedDungeons.includes(gameData.dungeons[index - 1]?.id);
+        const isUnlocked = index === 0 || (player.completedDungeons[gameData.dungeons[index - 1]?.id] || 0) > 0;
         if (isUnlocked) {
             unlockedDungeonIds.add(dungeon.id);
         }

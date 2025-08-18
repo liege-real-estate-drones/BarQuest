@@ -32,7 +32,7 @@ const getInitialPlayerState = (): PlayerState => {
     reputation: {},
     activeEffects: [],
     activeSetBonuses: [],
-    completedDungeons: [],
+    completedDungeons: {},
     completedQuests: [],
   };
 };
@@ -324,7 +324,7 @@ export const useGameStore = create<GameState>()(
           player.reputation = player.reputation || {};
           player.activeEffects = player.activeEffects || [];
           player.activeSetBonuses = [];
-          player.completedDungeons = player.completedDungeons || [];
+          player.completedDungeons = player.completedDungeons || {};
           player.completedQuests = player.completedQuests || [];
           inventory.potions = inventory.potions || { health: 0, resource: 0 };
           state.activeQuests = state.activeQuests || [];
@@ -964,9 +964,9 @@ export const useGameStore = create<GameState>()(
             }
 
             state.activeQuests.forEach((activeQuest) => {
-              if (currentDungeon && activeQuest.quete.requirements.dungeonId === currentDungeon.id) {
+              if (currentDungeon && activeQuest.quete.type === 'chasse' && activeQuest.quete.requirements.dungeonId === currentDungeon.id) {
                 activeQuest.progress++;
-                if (activeQuest.progress >= activeQuest.quete.requirements.killCount) {
+                if (activeQuest.progress >= (activeQuest.quete.requirements.killCount || Infinity)) {
                   const quest = activeQuest.quete;
                   state.combat.log.push({ message: `Quest Complete: ${quest.name}!`, type: 'quest', timestamp: Date.now() });
                   state.inventory.gold += quest.rewards.gold;
@@ -1012,9 +1012,26 @@ export const useGameStore = create<GameState>()(
              setTimeout(() => {
                 if (currentDungeon && get().combat.killCount >= currentDungeon.killTarget) {
                     set(state => {
-                        if (!state.player.completedDungeons.includes(currentDungeon.id)) {
-                          state.player.completedDungeons.push(currentDungeon.id);
-                        }
+                        state.player.completedDungeons[currentDungeon.id] = (state.player.completedDungeons[currentDungeon.id] || 0) + 1;
+                        
+                        state.activeQuests.forEach((activeQuest) => {
+                          if (activeQuest.quete.type === 'nettoyage' && activeQuest.quete.requirements.dungeonId === currentDungeon.id) {
+                            activeQuest.progress = state.player.completedDungeons[currentDungeon.id];
+                            if (activeQuest.progress >= (activeQuest.quete.requirements.clearCount || Infinity)) {
+                              const quest = activeQuest.quete;
+                              state.combat.log.push({ message: `Quest Complete: ${quest.name}!`, type: 'quest', timestamp: Date.now() });
+                              state.inventory.gold += quest.rewards.gold;
+                              state.player.xp += quest.rewards.xp;
+                              state.combat.log.push({ message: `You received ${quest.rewards.gold} gold and ${quest.rewards.xp} XP.`, type: 'loot', timestamp: Date.now() });
+                              state.player.completedQuests.push(quest.id);
+                            }
+                          }
+                        });
+                        
+                        // Remove completed cleaning quests after check
+                        state.activeQuests = state.activeQuests.filter(aq => !state.player.completedQuests.includes(aq.quete.id));
+
+
                         if (currentDungeon.factionId) {
                             const repData = state.player.reputation[currentDungeon.factionId] || { value: 0, claimedRewards: [] };
                             repData.value += 250;
@@ -1097,7 +1114,13 @@ export const useGameStore = create<GameState>()(
             state.player.learnedTalents = state.player.learnedTalents || {};
             state.player.reputation = state.player.reputation || {};
             state.player.completedQuests = state.player.completedQuests || [];
+            state.player.completedDungeons = state.player.completedDungeons || {};
             state.activeQuests = state.activeQuests || [];
+            
+            if (!Array.isArray(state.player.completedDungeons)) {
+                state.player.completedDungeons = {};
+            }
+
             if(typeof state.inventory.potions !== 'object') {
               state.inventory.potions = { health: state.inventory.potions || 0, resource: 0};
             }

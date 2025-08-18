@@ -106,12 +106,13 @@ export const DungeonSchema = z.object({
 
 export const QueteSchema = z.object({
   id: z.string(),
-  type: z.enum(["chasse"]),
+  type: z.enum(["chasse", "nettoyage"]),
   name: z.string(),
   desc: z.string(),
   requirements: z.object({
     dungeonId: z.string(),
-    killCount: z.number().int(),
+    killCount: z.number().int().optional(),
+    clearCount: z.number().int().optional(),
   }),
   rewards: z.object({
     gold: z.number().int(),

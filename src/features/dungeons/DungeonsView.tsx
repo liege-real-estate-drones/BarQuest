@@ -7,13 +7,14 @@ import { useGameStore } from '@/state/gameStore';
 import { Dungeon } from '@/lib/types';
 
 export function DungeonsView() {
-  const { dungeons, enterDungeon, player } = useGameStore(state => ({
+  const { dungeons, enterDungeon, player, gameData } = useGameStore(state => ({
     dungeons: state.gameData.dungeons,
     enterDungeon: state.enterDungeon,
     player: state.player,
+    gameData: state.gameData,
   }));
   
-  const completedDungeons = player.completedDungeons || [];
+  const completedDungeons = player.completedDungeons || {};
   
   if (!Array.isArray(dungeons)) {
     return (
@@ -29,14 +30,18 @@ export function DungeonsView() {
         <h2 className="text-2xl font-headline mb-4">Select a Dungeon</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {dungeons.map((dungeon: Dungeon, index: number) => {
-            const isCompleted = completedDungeons.includes(dungeon.id);
-            const isUnlocked = index === 0 || completedDungeons.includes(dungeons[index - 1]?.id);
+            const completionCount = completedDungeons[dungeon.id] || 0;
+            const isCompleted = completionCount > 0;
+            const isUnlocked = index === 0 || (completedDungeons[gameData.dungeons[index - 1]?.id] || 0) > 0;
 
             return (
                 <Card key={dungeon.id} className={`transition-all ${!isUnlocked ? 'bg-background/40 filter grayscale' : ''}`}>
                   <CardHeader>
                       <CardTitle>{dungeon.name}</CardTitle>
-                      <CardDescription>Palier: {dungeon.palier} {isCompleted && <span className="text-primary font-bold ml-2"> (Terminé)</span>}</CardDescription>
+                      <CardDescription>
+                        Palier: {dungeon.palier} 
+                        {isCompleted && <span className="text-primary font-bold ml-2"> (Terminé {completionCount}x)</span>}
+                      </CardDescription>
                   </CardHeader>
                   <CardContent>
                       <p>Biome: <span className="capitalize text-primary">{dungeon.biome}</span></p>
