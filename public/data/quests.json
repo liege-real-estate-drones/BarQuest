@@ -1,245 +1,244 @@
-
 {
   "quests": [
     {
       "id": "foret_sombre_q1",
       "type": "chasse",
-      "name": "Premiers Pas dans l'Ombre",
-      "desc": "La Forêt Sombre grouille de créatures. Prouvez votre valeur en éliminant une poignée d'entre elles.",
+      "name": "Nettoyage de la Forêt",
+      "desc": "La Forêt Sombre grouille de créatures. Éliminez-en quelques-unes pour sécuriser la zone.",
       "requirements": { "dungeonId": "foret_sombre", "killCount": 10 },
       "rewards": { "gold": 50, "xp": 100 }
     },
     {
       "id": "foret_sombre_q2",
-      "type": "chasse",
-      "name": "Éclaircissement",
-      "desc": "Les bêtes sont plus nombreuses que prévu. Continuez à nettoyer la zone pour la rendre plus sûre.",
-      "requirements": { "dungeonId": "foret_sombre", "killCount": 25 },
-      "rewards": { "gold": 100, "xp": 250, "reputation": { "factionId": "gardiens_nature", "amount": 50 } }
+      "type": "nettoyage",
+      "name": "Explorer la Forêt",
+      "desc": "Nous avons besoin d'une reconnaissance complète de la Forêt Sombre. Traversez-la de part en part.",
+      "requirements": { "dungeonId": "foret_sombre", "clearCount": 1 },
+      "rewards": { "gold": 75, "xp": 150 }
     },
     {
       "id": "foret_sombre_q3",
-      "type": "nettoyage",
-      "name": "Exploration Approfondie",
-      "desc": "Nous devons comprendre l'étendue de la corruption. Traversez la forêt de part en part.",
-      "requirements": { "dungeonId": "foret_sombre", "clearCount": 1 },
-      "rewards": { "gold": 150, "xp": 400 }
+      "type": "chasse",
+      "name": "Désherbage Intensif",
+      "desc": "Les créatures reviennent toujours. Retournez dans la Forêt Sombre et taillez dans leurs rangs.",
+      "requirements": { "dungeonId": "foret_sombre", "killCount": 25 },
+      "rewards": { "gold": 100, "xp": 250 }
     },
     {
       "id": "foret_sombre_q4",
-      "type": "chasse",
-      "name": "Abattre le Mal",
-      "desc": "Des créatures plus puissantes ont été repérées. Traquez-les et éliminez-les.",
-      "requirements": { "dungeonId": "foret_sombre", "killCount": 50 },
-      "rewards": { "gold": 250, "xp": 600, "reputation": { "factionId": "gardiens_nature", "amount": 100 } }
+      "type": "nettoyage",
+      "name": "Maîtrise de la Forêt",
+      "desc": "Prouvez votre domination sur la Forêt Sombre en la nettoyant plusieurs fois.",
+      "requirements": { "dungeonId": "foret_sombre", "clearCount": 3 },
+      "rewards": { "gold": 150, "xp": 400 }
     },
     {
       "id": "foret_sombre_q5",
-      "type": "nettoyage",
-      "name": "Maîtrise de la Forêt",
-      "desc": "Prouvez que vous contrôlez la forêt en la nettoyant plusieurs fois. Montrez-leur qui commande.",
-      "requirements": { "dungeonId": "foret_sombre", "clearCount": 3 },
-      "rewards": { "gold": 500, "xp": 1200 }
-    },
-    {
-      "id": "cavernes_gelees_q1",
       "type": "chasse",
-      "name": "Le Froid Mordant",
-      "desc": "Les Cavernes Gelées abritent des bêtes adaptées au froid. Allez les chasser.",
-      "requirements": { "dungeonId": "cavernes_gelees", "killCount": 15 },
-      "rewards": { "gold": 100, "xp": 200 }
+      "name": "Éradication Finale",
+      "desc": "Ne laissons aucune chance à la vermine. Exterminez tout ce qui bouge dans la Forêt Sombre.",
+      "requirements": { "dungeonId": "foret_sombre", "killCount": 50 },
+      "rewards": { "gold": 250, "xp": 600 }
     },
     {
-      "id": "cavernes_gelees_q2",
+      "id": "cavernes_gelee_q1",
+      "type": "chasse",
+      "name": "Premiers Frissons",
+      "desc": "Les Cavernes Gelées sont infestées. Faites un premier nettoyage.",
+      "requirements": { "dungeonId": "cavernes_gelee", "killCount": 10 },
+      "rewards": { "gold": 80, "xp": 180 }
+    },
+    {
+      "id": "cavernes_gelee_q2",
+      "type": "nettoyage",
+      "name": "Au Cœur du Froid",
+      "desc": "Aventurez-vous jusqu'au bout des Cavernes Gelées pour cartographier la zone.",
+      "requirements": { "dungeonId": "cavernes_gelee", "clearCount": 1 },
+      "rewards": { "gold": 100, "xp": 220 }
+    },
+    {
+      "id": "cavernes_gelee_q3",
+      "type": "chasse",
+      "name": "Briser la Glace",
+      "desc": "La menace de glace persiste. Retournez dans les cavernes et éliminez davantage de créatures.",
+      "requirements": { "dungeonId": "cavernes_gelee", "killCount": 25 },
+      "rewards": { "gold": 150, "xp": 350 }
+    },
+    {
+      "id": "cavernes_gelee_q4",
+      "type": "nettoyage",
+      "name": "Conquérant du Givre",
+      "desc": "Montrez que le froid ne vous fait pas peur en purgeant les Cavernes Gelées à plusieurs reprises.",
+      "requirements": { "dungeonId": "cavernes_gelee", "clearCount": 3 },
+      "rewards": { "gold": 200, "xp": 500 }
+    },
+    {
+      "id": "cavernes_gelee_q5",
       "type": "chasse",
       "name": "Tempête de Glace",
-      "desc": "La population de monstres de glace est hors de contrôle. Réduisez leur nombre.",
-      "requirements": { "dungeonId": "cavernes_gelees", "killCount": 30 },
-      "rewards": { "gold": 200, "xp": 450, "reputation": { "factionId": "expedition_glaciale", "amount": 50 } }
+      "desc": "Déchaînez votre fureur et éradiquez la présence hostile des Cavernes Gelées.",
+      "requirements": { "dungeonId": "cavernes_gelee", "killCount": 50 },
+      "rewards": { "gold": 300, "xp": 750 }
     },
     {
-      "id": "cavernes_gelees_q3",
+      "id": "crypte_ossee_q1",
+      "type": "chasse",
+      "name": "Repousser les Morts",
+      "desc": "Les morts ne connaissent pas le repos dans la Crypte Ossée. Forcez-les à retourner dans leurs tombes.",
+      "requirements": { "dungeonId": "crypte_ossee", "killCount": 15 },
+      "rewards": { "gold": 120, "xp": 300 }
+    },
+    {
+      "id": "crypte_ossee_q2",
       "type": "nettoyage",
-      "name": "Coeur de l'Hiver",
-      "desc": "Atteignez le coeur des cavernes pour cartographier la zone.",
-      "requirements": { "dungeonId": "cavernes_gelees", "clearCount": 1 },
+      "name": "Pillage de Tombe",
+      "desc": "Explorez la Crypte Ossée dans son intégralité et survivez pour raconter votre histoire.",
+      "requirements": { "dungeonId": "crypte_ossee", "clearCount": 1 },
+      "rewards": { "gold": 150, "xp": 400 }
+    },
+    {
+      "id": "crypte_ossee_q3",
+      "type": "chasse",
+      "name": "Exorcisme de Masse",
+      "desc": "Les morts-vivants sont une nuisance persistante. Purifiez la crypte par la force.",
+      "requirements": { "dungeonId": "crypte_ossee", "killCount": 30 },
+      "rewards": { "gold": 200, "xp": 550 }
+    },
+    {
+      "id": "crypte_ossee_q4",
+      "type": "nettoyage",
+      "name": "Gardien de la Crypte",
+      "desc": "Devenez le maître des lieux en nettoyant la Crypte Ossée à plusieurs reprises.",
+      "requirements": { "dungeonId": "crypte_ossee", "clearCount": 3 },
+      "rewards": { "gold": 280, "xp": 700 }
+    },
+    {
+      "id": "crypte_ossee_q5",
+      "type": "chasse",
+      "name": "Le Silence des Morts",
+      "desc": "Faites taire les murmures spectraux et les cliquetis d'os pour de bon. Éliminez tout ce qui s'y trouve.",
+      "requirements": { "dungeonId": "crypte_ossee", "killCount": 60 },
+      "rewards": { "gold": 400, "xp": 1000 }
+    },
+    {
+      "id": "fournaise_infernale_q1",
+      "type": "chasse",
+      "name": "Baptême du Feu",
+      "desc": "Les créatures de la Fournaise Infernale sont ardentes. Refroidissez leurs ardeurs.",
+      "requirements": { "dungeonId": "fournaise_infernale", "killCount": 15 },
+      "rewards": { "gold": 180, "xp": 450 }
+    },
+    {
+      "id": "fournaise_infernale_q2",
+      "type": "nettoyage",
+      "name": "Traversée des Braises",
+      "desc": "Survivez à la chaleur écrasante et parcourez la Fournaise Infernale.",
+      "requirements": { "dungeonId": "fournaise_infernale", "clearCount": 1 },
+      "rewards": { "gold": 220, "xp": 550 }
+    },
+    {
+      "id": "fournaise_infernale_q3",
+      "type": "chasse",
+      "name": "Lutte Contre l'Incendie",
+      "desc": "Éteignez la menace grandissante en éliminant les habitants de la fournaise.",
+      "requirements": { "dungeonId": "fournaise_infernale", "killCount": 35 },
       "rewards": { "gold": 300, "xp": 700 }
     },
     {
-      "id": "cavernes_gelees_q4",
-      "type": "chasse",
-      "name": "Brise-Glace",
-      "desc": "Les créatures les plus robustes se cachent dans les profondeurs. Éliminez-les.",
-      "requirements": { "dungeonId": "cavernes_gelees", "killCount": 60 },
-      "rewards": { "gold": 450, "xp": 1000, "reputation": { "factionId": "expedition_glaciale", "amount": 100 } }
-    },
-    {
-      "id": "cavernes_gelees_q5",
+      "id": "fournaise_infernale_q4",
       "type": "nettoyage",
-      "name": "Conquérant du Givre",
-      "desc": "Montrez que le froid ne vous affecte pas en dominant ces cavernes à plusieurs reprises.",
-      "requirements": { "dungeonId": "cavernes_gelees", "clearCount": 3 },
-      "rewards": { "gold": 800, "xp": 2000 }
+      "name": "Danseur du Feu",
+      "desc": "Prouvez que vous pouvez supporter la chaleur en purgeant la Fournaise plusieurs fois.",
+      "requirements": { "dungeonId": "fournaise_infernale", "clearCount": 4 },
+      "rewards": { "gold": 400, "xp": 900 }
     },
     {
-      "id": "pics_ardents_q1",
+      "id": "fournaise_infernale_q5",
       "type": "chasse",
-      "name": "Baptême du Feu",
-      "desc": "Les créatures des Pics Ardents sont nées des flammes. Testez votre résistance à la chaleur.",
-      "requirements": { "dungeonId": "pics_ardents", "killCount": 20 },
-      "rewards": { "gold": 150, "xp": 300 }
+      "name": "Extinction Totale",
+      "desc": "Ne laissez que des cendres. Éliminez toutes les créatures de la Fournaise Infernale.",
+      "requirements": { "dungeonId": "fournaise_infernale", "killCount": 70 },
+      "rewards": { "gold": 550, "xp": 1300 }
     },
     {
-      "id": "pics_ardents_q2",
+      "id": "sanctuaire_occulte_q1",
       "type": "chasse",
-      "name": "Incendie",
-      "desc": "La surpopulation de monstres de feu menace de déborder. Éteignez la flamme.",
-      "requirements": { "dungeonId": "pics_ardents", "killCount": 40 },
-      "rewards": { "gold": 300, "xp": 650, "reputation": { "factionId": "forgerons_magma", "amount": 50 } }
+      "name": "Brouillard d'Ombres",
+      "desc": "Des entités étranges hantent le Sanctuaire Occulte. Dispersez-les.",
+      "requirements": { "dungeonId": "sanctuaire_occulte", "killCount": 20 },
+      "rewards": { "gold": 250, "xp": 600 }
     },
     {
-      "id": "pics_ardents_q3",
+      "id": "sanctuaire_occulte_q2",
       "type": "nettoyage",
-      "name": "Au Bord du Cratère",
-      "desc": "Explorez les pics jusqu'au cratère principal pour évaluer la menace.",
-      "requirements": { "dungeonId": "pics_ardents", "clearCount": 1 },
-      "rewards": { "gold": 500, "xp": 1000 }
+      "name": "Secrets Indicibles",
+      "desc": "Le sanctuaire cache de sombres secrets. Traversez-le pour les découvrir.",
+      "requirements": { "dungeonId": "sanctuaire_occulte", "clearCount": 1 },
+      "rewards": { "gold": 300, "xp": 750 }
     },
     {
-      "id": "pics_ardents_q4",
+      "id": "sanctuaire_occulte_q3",
       "type": "chasse",
-      "name": "Extinction",
-      "desc": "Chassez les élémentaires de feu majeurs qui dirigent les autres créatures.",
-      "requirements": { "dungeonId": "pics_ardents", "killCount": 75 },
-      "rewards": { "gold": 750, "xp": 1500, "reputation": { "factionId": "forgerons_magma", "amount": 100 } }
+      "name": "Purge Rituelle",
+      "desc": "Le mal s'enracine profondément. Menez une purge violente pour le contenir.",
+      "requirements": { "dungeonId": "sanctuaire_occulte", "killCount": 40 },
+      "rewards": { "gold": 400, "xp": 900 }
     },
     {
-      "id": "pics_ardents_q5",
+      "id": "sanctuaire_occulte_q4",
       "type": "nettoyage",
-      "name": "Marcheur de Feu",
-      "desc": "Prouvez votre affinité avec le feu en traversant les pics ardents à de multiples reprises.",
-      "requirements": { "dungeonId": "pics_ardents", "clearCount": 3 },
-      "rewards": { "gold": 1200, "xp": 2800 }
+      "name": "Inquisiteur",
+      "desc": "Devenez le gardien de ce lieu maudit en le purifiant à plusieurs reprises.",
+      "requirements": { "dungeonId": "sanctuaire_occulte", "clearCount": 4 },
+      "rewards": { "gold": 550, "xp": 1200 }
     },
     {
-      "id": "marais_pestilentiel_q1",
+      "id": "sanctuaire_occulte_q5",
       "type": "chasse",
-      "name": "Odeurs nauséabondes",
-      "desc": "Le marais est rempli de créatures mutantes. Commencez le nettoyage.",
-      "requirements": { "dungeonId": "marais_pestilentiel", "killCount": 25 },
-      "rewards": { "gold": 200, "xp": 400 }
-    },
-    {
-      "id": "marais_pestilentiel_q2",
-      "type": "chasse",
-      "name": "Épuration",
-      "desc": "La peste se propage à travers la faune. Éliminez les porteurs.",
-      "requirements": { "dungeonId": "marais_pestilentiel", "killCount": 50 },
-      "rewards": { "gold": 400, "xp": 850, "reputation": { "factionId": "cercle_alchimique", "amount": 50 } }
-    },
-    {
-      "id": "marais_pestilentiel_q3",
-      "type": "nettoyage",
-      "name": "Source de la Peste",
-      "desc": "Trouvez la source de la corruption au plus profond du marais.",
-      "requirements": { "dungeonId": "marais_pestilentiel", "clearCount": 1 },
-      "rewards": { "gold": 700, "xp": 1400 }
-    },
-    {
-      "id": "marais_pestilentiel_q4",
-      "type": "chasse",
-      "name": "Antidote",
-      "desc": "Certaines créatures ont des composants rares. Chassez-les pour créer un antidote.",
-      "requirements": { "dungeonId": "marais_pestilentiel", "killCount": 100 },
-      "rewards": { "gold": 1000, "xp": 2000, "reputation": { "factionId": "cercle_alchimique", "amount": 100 } }
-    },
-    {
-      "id": "marais_pestilentiel_q5",
-      "type": "nettoyage",
-      "name": "Immunisé",
-      "desc": "Votre résistance à la peste est remarquable. Prouvez-le en nettoyant le marais plusieurs fois.",
-      "requirements": { "dungeonId": "marais_pestilentiel", "clearCount": 3 },
-      "rewards": { "gold": 1600, "xp": 3600 }
-    },
-    {
-      "id": "ruines_occultes_q1",
-      "type": "chasse",
-      "name": "Échos du Passé",
-      "desc": "Les ruines sont hantées par des esprits. Donnez-leur le repos éternel.",
-      "requirements": { "dungeonId": "ruines_occultes", "killCount": 30 },
-      "rewards": { "gold": 250, "xp": 500 }
-    },
-    {
-      "id": "ruines_occultes_q2",
-      "type": "chasse",
-      "name": "Exorcisme de Masse",
-      "desc": "Une puissante énergie nécromantique anime les morts. Détruisez-les.",
-      "requirements": { "dungeonId": "ruines_occultes", "killCount": 60 },
-      "rewards": { "gold": 500, "xp": 1050, "reputation": { "factionId": "erudits_sombres", "amount": 50 } }
-    },
-    {
-      "id": "ruines_occultes_q3",
-      "type": "nettoyage",
-      "name": "Le Rituel",
-      "desc": "Un rituel semble être en cours. Traversez les ruines et perturbez-le.",
-      "requirements": { "dungeonId": "ruines_occultes", "clearCount": 1 },
-      "rewards": { "gold": 900, "xp": 1800 }
-    },
-    {
-      "id": "ruines_occultes_q4",
-      "type": "chasse",
-      "name": "Reliques Profanées",
-      "desc": "Les gardiens spectraux protègent des reliques. Éliminez-les pour purifier le site.",
-      "requirements": { "dungeonId": "ruines_occultes", "killCount": 120 },
-      "rewards": { "gold": 1300, "xp": 2500, "reputation": { "factionId": "erudits_sombres", "amount": 100 } }
-    },
-    {
-      "id": "ruines_occultes_q5",
-      "type": "nettoyage",
-      "name": "Gardien des Secrets",
-      "desc": "Les ruines vous ont accepté comme leur gardien. Nettoyez-les régulièrement pour maintenir l'équilibre.",
-      "requirements": { "dungeonId": "ruines_occultes", "clearCount": 3 },
-      "rewards": { "gold": 2000, "xp": 4400 }
+      "name": "Lumière dans les Ténèbres",
+      "desc": "Faites resplendir la lumière en éradiquant toute présence occulte du sanctuaire.",
+      "requirements": { "dungeonId": "sanctuaire_occulte", "killCount": 80 },
+      "rewards": { "gold": 700, "xp": 1600 }
     },
     {
       "id": "bastion_demoniaque_q1",
       "type": "chasse",
-      "name": "Porte des Enfers",
-      "desc": "Le Bastion est une porte vers d'autres plans. Repoussez les premiers envahisseurs.",
-      "requirements": { "dungeonId": "bastion_demoniaque", "killCount": 35 },
-      "rewards": { "gold": 300, "xp": 600 }
+      "name": "Briser les Portes",
+      "desc": "Les démons du Bastion sont la plus grande menace. Repoussez leur avant-garde.",
+      "requirements": { "dungeonId": "bastion_demoniaque", "killCount": 25 },
+      "rewards": { "gold": 400, "xp": 800 }
     },
     {
       "id": "bastion_demoniaque_q2",
-      "type": "chasse",
-      "name": "Légion Ardente",
-      "desc": "Une légion de démons se rassemble. Brisez leurs rangs avant qu'ils ne deviennent trop puissants.",
-      "requirements": { "dungeonId": "bastion_demoniaque", "killCount": 70 },
-      "rewards": { "gold": 600, "xp": 1250, "reputation": { "factionId": "chevaliers_argent", "amount": 50 } }
+      "type": "nettoyage",
+      "name": "Au Cœur de l'Abîme",
+      "desc": "Plongez dans le Bastion Démoniaque et survivez à votre incursion.",
+      "requirements": { "dungeonId": "bastion_demoniaque", "clearCount": 1 },
+      "rewards": { "gold": 500, "xp": 1000 }
     },
     {
       "id": "bastion_demoniaque_q3",
-      "type": "nettoyage",
-      "name": "Le Trône du Tyran",
-      "desc": "Frayez-vous un chemin jusqu'à la salle du trône pour faire face au commandant.",
-      "requirements": { "dungeonId": "bastion_demoniaque", "clearCount": 1 },
-      "rewards": { "gold": 1200, "xp": 2200 }
+      "type": "chasse",
+      "name": "Guerre Contre les Démons",
+      "desc": "Menez une guerre d'usure contre les légions démoniaques.",
+      "requirements": { "dungeonId": "bastion_demoniaque", "killCount": 50 },
+      "rewards": { "gold": 650, "xp": 1300 }
     },
     {
       "id": "bastion_demoniaque_q4",
-      "type": "chasse",
-      "name": "Chasse aux Seigneurs",
-      "desc": "Traquez et éliminez les lieutenants démoniaques qui commandent les troupes.",
-      "requirements": { "dungeonId": "bastion_demoniaque", "killCount": 150 },
-      "rewards": { "gold": 1800, "xp": 3500, "reputation": { "factionId": "chevaliers_argent", "amount": 100 } }
+      "type": "nettoyage",
+      "name": "Fléau des Démons",
+      "desc": "Votre nom doit être une terreur pour les habitants de ce bastion. Nettoyez-le sans relâche.",
+      "requirements": { "dungeonId": "bastion_demoniaque", "clearCount": 5 },
+      "rewards": { "gold": 800, "xp": 1700 }
     },
     {
       "id": "bastion_demoniaque_q5",
-      "type": "nettoyage",
-      "name": "Fléau des Démons",
-      "desc": "Votre nom est murmuré avec crainte en enfer. Maintenez cette réputation.",
-      "requirements": { "dungeonId": "bastion_demoniaque", "clearCount": 3 },
-      "rewards": { "gold": 3000, "xp": 6000 }
+      "type": "chasse",
+      "name": "Fermer la Brèche",
+      "desc": "Assurez-vous qu'aucun démon ne sorte vivant du bastion. Éradiquez-les tous.",
+      "requirements": { "dungeonId": "bastion_demoniaque", "killCount": 100 },
+      "rewards": { "gold": 1000, "xp": 2500 }
     }
   ]
 }
