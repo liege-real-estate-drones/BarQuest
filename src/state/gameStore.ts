@@ -1111,18 +1111,15 @@ export const useGameStore = create<GameState>()(
             state.rehydrateComplete = true;
             state.view = 'TOWN';
             state.combat = initialCombatState;
+            // Sanitize state on load to prevent issues with old save structures
             state.player.learnedTalents = state.player.learnedTalents || {};
             state.player.reputation = state.player.reputation || {};
-            state.player.completedQuests = state.player.completedQuests || [];
-            state.player.completedDungeons = state.player.completedDungeons || {};
-            state.activeQuests = state.activeQuests || [];
+            state.player.completedQuests = Array.isArray(state.player.completedQuests) ? state.player.completedQuests : [];
+            state.activeQuests = Array.isArray(state.activeQuests) ? state.activeQuests : [];
+            state.player.completedDungeons = (state.player.completedDungeons && typeof state.player.completedDungeons === 'object' && !Array.isArray(state.player.completedDungeons)) ? state.player.completedDungeons : {};
             
-            if (!Array.isArray(state.player.completedDungeons)) {
-                state.player.completedDungeons = {};
-            }
-
-            if(typeof state.inventory.potions !== 'object') {
-              state.inventory.potions = { health: state.inventory.potions || 0, resource: 0};
+            if(typeof state.inventory.potions !== 'object' || state.inventory.potions === null) {
+              state.inventory.potions = { health: 0, resource: 0};
             }
         }
       }
