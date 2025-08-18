@@ -1,420 +1,713 @@
 
-[
-  {
-    "id": "set_berserker_lvl10_head",
-    "name": "Heaume du Berserker Sauvage",
-    "slot": "head",
-    "niveauMin": 10,
-    "rarity": "Rare",
-    "affixes": [
-      { "ref": "Force", "val": 8 },
-      { "ref": "PV", "val": 25 }
-    ],
-    "tagsClasse": ["berserker"],
-    "set": {
-      "id": "set_berserker_brutal",
-      "name": "Tenue de guerre brutale"
-    }
-  },
-  {
-    "id": "set_berserker_lvl10_chest",
-    "name": "Cuirasse du Berserker Sauvage",
-    "slot": "chest",
-    "niveauMin": 10,
-    "rarity": "Rare",
-    "affixes": [
-      { "ref": "Force", "val": 12 },
-      { "ref": "Armure", "val": 40 }
-    ],
-    "tagsClasse": ["berserker"],
-    "set": {
-      "id": "set_berserker_brutal",
-      "name": "Tenue de guerre brutale"
-    }
-  },
-  {
-    "id": "set_mage_lvl10_head",
-    "name": "Capuche de l'Invocateur",
-    "slot": "head",
-    "niveauMin": 10,
-    "rarity": "Rare",
-    "affixes": [
-      { "ref": "Intelligence", "val": 8 },
-      { "ref": "RessourceMax", "val": 30 }
-    ],
-    "tagsClasse": ["mage"],
-    "set": {
-      "id": "set_mage_arcane",
-      "name": "Regalia de l'arcaniste"
-    }
-  },
-  {
-    "id": "set_mage_lvl10_chest",
-    "name": "Robe de l'Invocateur",
-    "slot": "chest",
-    "niveauMin": 10,
-    "rarity": "Rare",
-    "affixes": [
-      { "ref": "Intelligence", "val": 12 },
-      { "ref": "CritDmg", "val": 10 }
-    ],
-    "tagsClasse": ["mage"],
-    "set": {
-      "id": "set_mage_arcane",
-      "name": "Regalia de l'arcaniste"
-    }
-  },
-  {
-    "id": "bottes_de_cuir_robustes",
-    "name": "Bottes de cuir robustes",
-    "slot": "feet",
-    "niveauMin": 1,
-    "rarity": "Commun",
-    "vendorPrice": 15,
-    "affixes": [{ "ref": "Armure", "val": 5 }],
-    "tagsClasse": ["common"]
-  },
-  {
-    "id": "gants_en_tissu",
-    "name": "Gants en tissu",
-    "slot": "hands",
-    "niveauMin": 1,
-    "rarity": "Commun",
-    "vendorPrice": 12,
-    "affixes": [{ "ref": "Armure", "val": 3 }],
-    "tagsClasse": ["common"]
-  },
-  {
-    "id": "ceinture_en_corde",
-    "name": "Ceinture en corde",
-    "slot": "belt",
-    "niveauMin": 2,
-    "rarity": "Commun",
-    "vendorPrice": 10,
-    "affixes": [{ "ref": "PV", "val": 10 }],
-    "tagsClasse": ["common"]
-  },
-  {
-    "id": "hache_rouillee",
-    "name": "Hache rouillée",
-    "slot": "weapon",
-    "niveauMin": 1,
-    "rarity": "Commun",
-    "vendorPrice": 25,
-    "affixes": [
-      { "ref": "AttMin", "val": 3 },
-      { "ref": "AttMax", "val": 5 }
-    ],
-    "tagsClasse": ["berserker"]
-  },
-  {
-    "id": "baton_noueux",
-    "name": "Bâton noueux",
-    "slot": "weapon",
-    "niveauMin": 1,
-    "rarity": "Commun",
-    "vendorPrice": 25,
-    "affixes": [
-      { "ref": "AttMin", "val": 2 },
-      { "ref": "AttMax", "val": 4 },
-      { "ref": "Intelligence", "val": 1 }
-    ],
-    "tagsClasse": ["mage", "cleric"]
-  },
-  {
-    "id": "dague_emoussee",
-    "name": "Dague émoussée",
-    "slot": "weapon",
-    "niveauMin": 1,
-    "rarity": "Commun",
-    "vendorPrice": 22,
-    "affixes": [
-      { "ref": "AttMin", "val": 2 },
-      { "ref": "AttMax", "val": 3 },
-      { "ref": "Vitesse", "val": -0.2 }
-    ],
-    "tagsClasse": ["rogue"]
-  },
-  {
-    "id": "casque_en_cuir_simple",
-    "name": "Casque en cuir simple",
-    "slot": "head",
-    "niveauMin": 2,
-    "rarity": "Commun",
-    "vendorPrice": 20,
-    "affixes": [{ "ref": "Armure", "val": 8 }],
-    "tagsClasse": ["common"]
-  },
-  {
-    "id": "plastron_rembourre",
-    "name": "Plastron rembourré",
-    "slot": "chest",
-    "niveauMin": 3,
-    "rarity": "Commun",
-    "vendorPrice": 40,
-    "affixes": [{ "ref": "Armure", "val": 15 }],
-    "tagsClasse": ["common"]
-  },
-  {
-    "id": "jambieres_de_paysan",
-    "name": "Jambières de paysan",
-    "slot": "legs",
-    "niveauMin": 2,
-    "rarity": "Commun",
-    "vendorPrice": 30,
-    "affixes": [{ "ref": "Armure", "val": 10 }],
-    "tagsClasse": ["common"]
-  },
-  {
-    "id": "amulette_en_os",
-    "name": "Amulette en os",
-    "slot": "amulet",
-    "niveauMin": 5,
-    "rarity": "Commun",
-    "vendorPrice": 50,
-    "affixes": [{ "ref": "PV", "val": 15 }],
-    "tagsClasse": ["common"]
-  },
-  {
-    "id": "anneau_en_fer",
-    "name": "Anneau en fer",
-    "slot": "ring",
-    "niveauMin": 5,
-    "rarity": "Commun",
-    "vendorPrice": 50,
-    "affixes": [{ "ref": "Force", "val": 1 }],
-    "tagsClasse": ["common"]
-  },
-  {
-    "id": "bouclier_en_bois",
-    "name": "Bouclier en bois",
-    "slot": "offhand",
-    "niveauMin": 4,
-    "rarity": "Commun",
-    "vendorPrice": 35,
-    "affixes": [{ "ref": "Armure", "val": 12 }],
-    "tagsClasse": ["berserker", "cleric"]
-  },
-  {
-    "id": "gants_de_travailleur",
-    "name": "Gants de travailleur",
-    "slot": "hands",
-    "niveauMin": 6,
-    "rarity": "Commun",
-    "vendorPrice": 28,
-    "affixes": [
-      { "ref": "Armure", "val": 5 },
-      { "ref": "Force", "val": 1 }
-    ],
-    "tagsClasse": ["berserker"]
-  },
-  {
-    "id": "bottes_de_voyage",
-    "name": "Bottes de voyage",
-    "slot": "feet",
-    "niveauMin": 6,
-    "rarity": "Commun",
-    "vendorPrice": 32,
-    "affixes": [
-      { "ref": "Armure", "val": 6 },
-      { "ref": "Esquive", "val": 1 }
-    ],
-    "tagsClasse": ["rogue", "common"]
-  },
-  {
-    "id": "ceinture_de_garde",
-    "name": "Ceinture de garde",
-    "slot": "belt",
-    "niveauMin": 8,
-    "rarity": "Rare",
-    "vendorPrice": 120,
-    "affixes": [
-      { "ref": "Armure", "val": 10 },
-      { "ref": "PV", "val": 20 }
-    ],
-    "tagsClasse": ["common"]
-  },
-  {
-    "id": "hache_de_bucheron",
-    "name": "Hache de bûcheron",
-    "slot": "weapon",
-    "niveauMin": 5,
-    "rarity": "Commun",
-    "vendorPrice": 60,
-    "affixes": [
-      { "ref": "AttMin", "val": 8 },
-      { "ref": "AttMax", "val": 12 },
-      { "ref": "Force", "val": 2 }
-    ],
-    "tagsClasse": ["berserker"]
-  },
-  {
-    "id": "baguette_d_apprenti",
-    "name": "Baguette d'apprenti",
-    "slot": "weapon",
-    "niveauMin": 5,
-    "rarity": "Rare",
-    "vendorPrice": 150,
-    "affixes": [
-      { "ref": "AttMin", "val": 5 },
-      { "ref": "AttMax", "val": 8 },
-      { "ref": "Intelligence", "val": 4 },
-      { "ref": "RessourceMax", "val": 20 }
-    ],
-    "tagsClasse": ["mage", "cleric"]
-  },
-  {
-    "id": "couteau_de_chasse",
-    "name": "Couteau de chasse",
-    "slot": "weapon",
-    "niveauMin": 5,
-    "rarity": "Commun",
-    "vendorPrice": 55,
-    "affixes": [
-      { "ref": "AttMin", "val": 6 },
-      { "ref": "AttMax", "val": 9 },
-      { "ref": "CritPct", "val": 1 }
-    ],
-    "tagsClasse": ["rogue"]
-  },
-  {
-    "id": "cape_usee",
-    "name": "Cape usée",
-    "slot": "chest",
-    "niveauMin": 7,
-    "rarity": "Commun",
-    "vendorPrice": 60,
-    "affixes": [
-      { "ref": "Armure", "val": 18 },
-      { "ref": "Esprit", "val": 2 }
-    ],
-    "tagsClasse": ["mage", "cleric"]
-  },
-  {
-    "id": "jambieres_en_cuir_renforce",
-    "name": "Jambières en cuir renforcé",
-    "slot": "legs",
-    "niveauMin": 8,
-    "rarity": "Rare",
-    "vendorPrice": 180,
-    "affixes": [
-      { "ref": "Armure", "val": 25 },
-      { "ref": "Dexterite", "val": 3 }
-    ],
-    "tagsClasse": ["rogue"]
-  },
-  {
-    "id": "gantelets_en_fer",
-    "name": "Gantelets en fer",
-    "slot": "hands",
-    "niveauMin": 10,
-    "rarity": "Rare",
-    "vendorPrice": 150,
-    "affixes": [
-      { "ref": "Armure", "val": 15 },
-      { "ref": "Force", "val": 4 }
-    ],
-    "tagsClasse": ["berserker", "cleric"]
-  },
-  {
-    "id": "bottes_en_mailles",
-    "name": "Bottes en mailles",
-    "slot": "feet",
-    "niveauMin": 10,
-    "rarity": "Rare",
-    "vendorPrice": 160,
-    "affixes": [
-      { "ref": "Armure", "val": 20 },
-      { "ref": "PV", "val": 25 }
-    ],
-    "tagsClasse": ["berserker", "cleric"]
-  },
-  {
-    "id": "amulette_en_argent",
-    "name": "Amulette en argent",
-    "slot": "amulet",
-    "niveauMin": 12,
-    "rarity": "Rare",
-    "vendorPrice": 250,
-    "affixes": [
-      { "ref": "Intelligence", "val": 5 },
-      { "ref": "RessourceMax", "val": 30 }
-    ],
-    "tagsClasse": ["mage", "cleric"]
-  },
-  {
-    "id": "anneau_grave",
-    "name": "Anneau gravé",
-    "slot": "ring",
-    "niveauMin": 12,
-    "rarity": "Rare",
-    "vendorPrice": 250,
-    "affixes": [
-      { "ref": "CritPct", "val": 2 },
-      { "ref": "Dexterite", "val": 3 }
-    ],
-    "tagsClasse": ["rogue", "berserker"]
-  },
-  {
-    "id": "hache_de_guerre",
-    "name": "Hache de guerre",
-    "slot": "weapon",
-    "niveauMin": 15,
-    "rarity": "Rare",
-    "vendorPrice": 450,
-    "affixes": [
-      { "ref": "AttMin", "val": 25 },
-      { "ref": "AttMax", "val": 35 },
-      { "ref": "Force", "val": 8 },
-      { "ref": "CritDmg", "val": 10 }
-    ],
-    "tagsClasse": ["berserker"]
-  },
-  {
-    "id": "baton_de_mage_de_bataille",
-    "name": "Bâton de mage de bataille",
-    "slot": "weapon",
-    "niveauMin": 15,
-    "rarity": "Rare",
-    "vendorPrice": 480,
-    "affixes": [
-      { "ref": "AttMin", "val": 20 },
-      { "ref": "AttMax", "val": 28 },
-      { "ref": "Intelligence", "val": 10 },
-      { "ref": "CritPct", "val": 3 }
-    ],
-    "tagsClasse": ["mage"]
-  },
-  {
-    "id": "dague_assassin",
-    "name": "Dague d'assassin",
-    "slot": "weapon",
-    "niveauMin": 15,
-    "rarity": "Rare",
-    "vendorPrice": 420,
-    "affixes": [
-      { "ref": "AttMin", "val": 22 },
-      { "ref": "AttMax", "val": 30 },
-      { "ref": "Dexterite", "val": 8 },
-      { "ref": "Vitesse", "val": -0.3 }
-    ],
-    "tagsClasse": ["rogue"]
-  },
-  {
-    "id": "masse_de_zelote",
-    "name": "Masse de zélote",
-    "slot": "weapon",
-    "niveauMin": 15,
-    "rarity": "Rare",
-    "vendorPrice": 460,
-    "affixes": [
-      { "ref": "AttMin", "val": 24 },
-      { "ref": "AttMax", "val": 33 },
-      { "ref": "Esprit", "val": 8 },
-      { "ref": "PV", "val": 50 }
-    ],
-    "tagsClasse": ["cleric"]
-  }
-]
-
-    
+{
+    "items": [
+      {
+        "id": "starter_sword",
+        "name": "Épée Courte Rêche",
+        "slot": "weapon",
+        "niveauMin": 1,
+        "rarity": "Commun",
+        "affixes": [
+          { "ref": "AttMin", "val": 3 },
+          { "ref": "AttMax", "val": 5 }
+        ],
+        "tagsClasse": ["berserker", "rogue"],
+        "vendorPrice": 10
+      },
+      {
+        "id": "starter_wand",
+        "name": "Baguette d'Apprenti",
+        "slot": "weapon",
+        "niveauMin": 1,
+        "rarity": "Commun",
+        "affixes": [
+          { "ref": "AttMin", "val": 2 },
+          { "ref": "AttMax", "val": 4 },
+          { "ref": "Intelligence", "val": 1 }
+        ],
+        "tagsClasse": ["mage", "cleric"],
+        "vendorPrice": 10
+      },
+      {
+        "id": "starter_dagger",
+        "name": "Dague de Recrue",
+        "slot": "weapon",
+        "niveauMin": 1,
+        "rarity": "Commun",
+        "affixes": [
+          { "ref": "AttMin", "val": 2 },
+          { "ref": "AttMax", "val": 4 },
+          { "ref": "CritPct", "val": 1 }
+        ],
+        "tagsClasse": ["rogue"],
+        "vendorPrice": 12
+      },
+      {
+        "id": "starter_mace",
+        "name": "Masse d'Initié",
+        "slot": "weapon",
+        "niveauMin": 1,
+        "rarity": "Commun",
+        "affixes": [
+          { "ref": "AttMin", "val": 4 },
+          { "ref": "AttMax", "val": 6 },
+          { "ref": "Force", "val": 1 }
+        ],
+        "tagsClasse": ["cleric", "berserker"],
+        "vendorPrice": 12
+      },
+      {
+        "id": "ragged_leather_cap",
+        "name": "Coiffe en Cuir en Lambeaux",
+        "slot": "head",
+        "niveauMin": 1,
+        "rarity": "Commun",
+        "affixes": [{ "ref": "Armure", "val": 5 }],
+        "tagsClasse": ["common"],
+        "vendorPrice": 8
+      },
+      {
+        "id": "frayed_cloth_cowl",
+        "name": "Capuche en Tissu Effiloché",
+        "slot": "head",
+        "niveauMin": 1,
+        "rarity": "Commun",
+        "affixes": [
+            { "ref": "Armure", "val": 2 },
+            { "ref": "Intelligence", "val": 1 }
+        ],
+        "tagsClasse": ["mage", "cleric"],
+        "vendorPrice": 9
+      },
+      {
+        "id": "rusty_iron_helm",
+        "name": "Heaume en Fer Rouillé",
+        "slot": "head",
+        "niveauMin": 3,
+        "rarity": "Commun",
+        "affixes": [
+            { "ref": "Armure", "val": 12 },
+            { "ref": "Force", "val": 1 }
+        ],
+        "tagsClasse": ["berserker", "cleric"],
+        "vendorPrice": 15
+      },
+      {
+        "id": "worn_leather_tunic",
+        "name": "Tunique en Cuir Usée",
+        "slot": "chest",
+        "niveauMin": 2,
+        "rarity": "Commun",
+        "affixes": [
+          { "ref": "Armure", "val": 15 },
+          { "ref": "Dexterite", "val": 1 }
+        ],
+        "tagsClasse": ["rogue"],
+        "vendorPrice": 18
+      },
+      {
+        "id": "apprentice_robe",
+        "name": "Robe d'Apprenti",
+        "slot": "chest",
+        "niveauMin": 2,
+        "rarity": "Commun",
+        "affixes": [
+          { "ref": "Armure", "val": 8 },
+          { "ref": "Esprit", "val": 2 }
+        ],
+        "tagsClasse": ["mage", "cleric"],
+        "vendorPrice": 20
+      },
+      {
+        "id": "pants_of_valor",
+        "name": "Pantalon de Vaillance",
+        "slot": "legs",
+        "niveauMin": 5,
+        "rarity": "Rare",
+        "affixes": [
+          { "ref": "Armure", "val": 25 },
+          { "ref": "Force", "val": 3 },
+          { "ref": "PV", "val": 10 }
+        ],
+        "tagsClasse": ["berserker"],
+        "vendorPrice": 50
+      },
+      {
+        "id": "gloves_of_the_adept",
+        "name": "Gants de l'Adepte",
+        "slot": "hands",
+        "niveauMin": 6,
+        "rarity": "Rare",
+        "affixes": [
+          { "ref": "Armure", "val": 15 },
+          { "ref": "Intelligence", "val": 4 },
+          { "ref": "CritPct", "val": 1 }
+        ],
+        "tagsClasse": ["mage"],
+        "vendorPrice": 55
+      },
+      {
+        "id": "boots_of_the_shadow_walker",
+        "name": "Bottes du Marcheur de l'Ombre",
+        "slot": "feet",
+        "niveauMin": 7,
+        "rarity": "Rare",
+        "affixes": [
+          { "ref": "Armure", "val": 20 },
+          { "ref": "Dexterite", "val": 5 },
+          { "ref": "Esquive", "val": 2 }
+        ],
+        "tagsClasse": ["rogue"],
+        "vendorPrice": 60
+      },
+      {
+        "id": "belt_of_the_zealot",
+        "name": "Ceinture du Zélote",
+        "slot": "belt",
+        "niveauMin": 8,
+        "rarity": "Rare",
+        "affixes": [
+          { "ref": "Armure", "val": 18 },
+          { "ref": "Esprit", "val": 4 },
+          { "ref": "Force", "val": 2 }
+        ],
+        "tagsClasse": ["cleric"],
+        "vendorPrice": 65
+      },
+      {
+        "id": "amulet_of_resilience",
+        "name": "Amulette de Résilience",
+        "slot": "amulet",
+        "niveauMin": 10,
+        "rarity": "Rare",
+        "affixes": [
+          { "ref": "PV", "val": 30 },
+          { "ref": "Armure", "val": 10 }
+        ],
+        "tagsClasse": ["common"]
+      },
+      {
+        "id": "ring_of_precision",
+        "name": "Anneau de Précision",
+        "slot": "ring",
+        "niveauMin": 12,
+        "rarity": "Rare",
+        "affixes": [
+          { "ref": "CritPct", "val": 2 },
+          { "ref": "Precision", "val": 5 }
+        ],
+        "tagsClasse": ["common"]
+      },
+      {
+        "id": "ring_of_power",
+        "name": "Anneau de Puissance",
+        "slot": "ring2",
+        "niveauMin": 12,
+        "rarity": "Rare",
+        "affixes": [
+          { "ref": "Force", "val": 3 },
+          { "ref": "Intelligence", "val": 3 }
+        ],
+        "tagsClasse": ["common"]
+      },
+      {
+        "id": "greathelm_of_the_behemoth",
+        "name": "Grand Heaume du Béhémoth",
+        "slot": "head",
+        "niveauMin": 15,
+        "rarity": "Épique",
+        "affixes": [
+          { "ref": "Armure", "val": 50 },
+          { "ref": "Force", "val": 7 },
+          { "ref": "PV", "val": 25 }
+        ],
+        "tagsClasse": ["berserker"]
+      },
+      {
+        "id": "cowl_of_the_archmage",
+        "name": "Capuche de l'Archimage",
+        "slot": "head",
+        "niveauMin": 15,
+        "rarity": "Épique",
+        "affixes": [
+          { "ref": "Armure", "val": 30 },
+          { "ref": "Intelligence", "val": 8 },
+          { "ref": "CritDmg", "val": 10 }
+        ],
+        "tagsClasse": ["mage"]
+      },
+      {
+        "id": "mask_of_the_assassin",
+        "name": "Masque de l'Assassin",
+        "slot": "head",
+        "niveauMin": 15,
+        "rarity": "Épique",
+        "affixes": [
+          { "ref": "Armure", "val": 40 },
+          { "ref": "Dexterite", "val": 8 },
+          { "ref": "CritPct", "val": 3 }
+        ],
+        "tagsClasse": ["rogue"]
+      },
+      {
+        "id": "diadem_of_the_high_priest",
+        "name": "Diadème du Grand Prêtre",
+        "slot": "head",
+        "niveauMin": 15,
+        "rarity": "Épique",
+        "affixes": [
+          { "ref": "Armure", "val": 35 },
+          { "ref": "Esprit", "val": 8 },
+          { "ref": "RessourceMax", "val": 50 }
+        ],
+        "tagsClasse": ["cleric"]
+      },
+      {
+        "id": "axe_of_the_deathbringer",
+        "name": "Hache du Semeur de Mort",
+        "slot": "weapon",
+        "niveauMin": 20,
+        "rarity": "Légendaire",
+        "affixes": [
+          { "ref": "AttMin", "val": 25 },
+          { "ref": "AttMax", "val": 40 },
+          { "ref": "Force", "val": 10 },
+          { "ref": "CritDmg", "val": 20 }
+        ],
+        "tagsClasse": ["berserker"],
+        "effect": "Les coups ont une chance de faire saigner la cible."
+      },
+      {
+        "id": "staff_of_the_comet_caller",
+        "name": "Bâton de l'Invocateur de Comètes",
+        "slot": "weapon",
+        "niveauMin": 20,
+        "rarity": "Légendaire",
+        "affixes": [
+          { "ref": "AttMin", "val": 15 },
+          { "ref": "AttMax", "val": 25 },
+          { "ref": "Intelligence", "val": 15 },
+          { "ref": "CritPct", "val": 5 }
+        ],
+        "tagsClasse": ["mage"],
+        "effect": "Les sorts de feu ont une chance d'invoquer une météorite."
+      },
+      {
+        "id": "kingslayers_fangs",
+        "name": "Crocs du Régicide",
+        "slot": "weapon",
+        "niveauMin": 20,
+        "rarity": "Légendaire",
+        "affixes": [
+          { "ref": "AttMin", "val": 20 },
+          { "ref": "AttMax", "val": 30 },
+          { "ref": "Dexterite", "val": 12 },
+          { "ref": "Vitesse", "val": -0.2 }
+        ],
+        "tagsClasse": ["rogue"],
+        "effect": "Les attaques empoisonnent la cible, infligeant des dégâts sur la durée."
+      },
+      {
+        "id": "hammer_of_divine_light",
+        "name": "Marteau de Lumière Divine",
+        "slot": "weapon",
+        "niveauMin": 20,
+        "rarity": "Légendaire",
+        "affixes": [
+          { "ref": "AttMin", "val": 28 },
+          { "ref": "AttMax", "val": 38 },
+          { "ref": "Esprit", "val": 12 },
+          { "ref": "Force", "val": 8 }
+        ],
+        "tagsClasse": ["cleric"],
+        "effect": "Les attaques ont une chance de déclencher une explosion de lumière sacrée qui soigne les alliés proches."
+      },
+      {
+        "id": "set_silver_guard_helm",
+        "name": "Heaume de la Garde d'Argent",
+        "slot": "head",
+        "niveauMin": 10,
+        "rarity": "Rare",
+        "affixes": [
+            { "ref": "Armure", "val": 30 },
+            { "ref": "Force", "val": 5 }
+        ],
+        "tagsClasse": ["berserker", "cleric"],
+        "set": { "id": "silver_guard", "name": "Garde d'Argent" }
+      },
+      {
+        "id": "set_silver_guard_chest",
+        "name": "Cuirasse de la Garde d'Argent",
+        "slot": "chest",
+        "niveauMin": 12,
+        "rarity": "Rare",
+        "affixes": [
+            { "ref": "Armure", "val": 50 },
+            { "ref": "PV", "val": 20 }
+        ],
+        "tagsClasse": ["berserker", "cleric"],
+        "set": { "id": "silver_guard", "name": "Garde d'Argent" }
+      },
+      {
+        "id": "set_arcanist_cowl",
+        "name": "Capuche de l'Arcaniste",
+        "slot": "head",
+        "niveauMin": 10,
+        "rarity": "Rare",
+        "affixes": [
+            { "ref": "Armure", "val": 20 },
+            { "ref": "Intelligence", "val": 5 }
+        ],
+        "tagsClasse": ["mage", "cleric"],
+        "set": { "id": "arcanist_garb", "name": "Tenue de l'Arcaniste" }
+      },
+      {
+        "id": "set_arcanist_robe",
+        "name": "Robe de l'Arcaniste",
+        "slot": "chest",
+        "niveauMin": 12,
+        "rarity": "Rare",
+        "affixes": [
+            { "ref": "Armure", "val": 35 },
+            { "ref": "RessourceMax", "val": 30 }
+        ],
+        "tagsClasse": ["mage", "cleric"],
+        "set": { "id": "arcanist_garb", "name": "Tenue de l'Arcaniste" }
+      },
+      {
+        "id": "set_shadow_shroud_mask",
+        "name": "Masque du Linceul de l'Ombre",
+        "slot": "head",
+        "niveauMin": 10,
+        "rarity": "Rare",
+        "affixes": [
+            { "ref": "Armure", "val": 25 },
+            { "ref": "Dexterite", "val": 5 }
+        ],
+        "tagsClasse": ["rogue"],
+        "set": { "id": "shadow_shroud", "name": "Linceul de l'Ombre" }
+      },
+      {
+        "id": "set_shadow_shroud_tunic",
+        "name": "Tunique du Linceul de l'Ombre",
+        "slot": "chest",
+        "niveauMin": 12,
+        "rarity": "Rare",
+        "affixes": [
+            { "ref": "Armure", "val": 40 },
+            { "ref": "CritPct", "val": 2 }
+        ],
+        "tagsClasse": ["rogue"],
+        "set": { "id": "shadow_shroud", "name": "Linceul de l'Ombre" }
+      },
+      {
+        "id": "rep_silver_vanguard_helm",
+        "name": "Heaume de l'Avant-garde d'Argent",
+        "slot": "head",
+        "niveauMin": 25,
+        "rarity": "Épique",
+        "affixes": [
+            { "ref": "Armure", "val": 60 },
+            { "ref": "Force", "val": 10 },
+            { "ref": "PV", "val": 30 }
+        ],
+        "tagsClasse": ["berserker"],
+        "set": { "id": "silver_vanguard", "name": "Avant-garde d'Argent" }
+      },
+      {
+        "id": "rep_silver_vanguard_greataxe",
+        "name": "Grande Hache de l'Avant-garde d'Argent",
+        "slot": "weapon",
+        "niveauMin": 30,
+        "rarity": "Légendaire",
+        "affixes": [
+            { "ref": "AttMin", "val": 30 },
+            { "ref": "AttMax", "val": 50 },
+            { "ref": "Force", "val": 15 },
+            { "ref": "CritDmg", "val": 15 }
+        ],
+        "tagsClasse": ["berserker"],
+        "set": { "id": "silver_vanguard", "name": "Avant-garde d'Argent" }
+      },
+      {
+        "id": "rep_magma_callers_cowl",
+        "name": "Capuche de l'Invocateur de Magma",
+        "slot": "head",
+        "niveauMin": 25,
+        "rarity": "Épique",
+        "affixes": [
+            { "ref": "Armure", "val": 40 },
+            { "ref": "Intelligence", "val": 12 },
+            { "ref": "CritPct", "val": 3 }
+        ],
+        "tagsClasse": ["mage"],
+        "set": { "id": "magma_caller", "name": "Invocateur de Magma" }
+      },
+      {
+        "id": "rep_magma_callers_staff",
+        "name": "Bâton de l'Invocateur de Magma",
+        "slot": "weapon",
+        "niveauMin": 30,
+        "rarity": "Légendaire",
+        "affixes": [
+            { "ref": "AttMin", "val": 20 },
+            { "ref": "AttMax", "val": 30 },
+            { "ref": "Intelligence", "val": 20 },
+            { "ref": "RessourceMax", "val": 80 }
+        ],
+        "tagsClasse": ["mage"],
+        "set": { "id": "magma_caller", "name": "Invocateur de Magma" }
+      },
+      {
+        "id": "rep_silent_path_mask",
+        "name": "Masque du Sentier Silencieux",
+        "slot": "head",
+        "niveauMin": 25,
+        "rarity": "Épique",
+        "affixes": [
+            { "ref": "Armure", "val": 50 },
+            { "ref": "Dexterite", "val": 12 },
+            { "ref": "Esquive", "val": 3 }
+        ],
+        "tagsClasse": ["rogue"],
+        "set": { "id": "silent_path", "name": "Sentier Silencieux" }
+      },
+      {
+        "id": "rep_silent_path_daggers",
+        "name": "Dagues du Sentier Silencieux",
+        "slot": "weapon",
+        "niveauMin": 30,
+        "rarity": "Légendaire",
+        "affixes": [
+            { "ref": "AttMin", "val": 25 },
+            { "ref": "AttMax", "val": 35 },
+            { "ref": "Dexterite", "val": 18 },
+            { "ref": "CritPct", "val": 5 }
+        ],
+        "tagsClasse": ["rogue"],
+        "set": { "id": "silent_path", "name": "Sentier Silencieux" }
+      },
+      {
+        "id": "rep_faithsworn_diadem",
+        "name": "Diadème du Gardien du Serment",
+        "slot": "head",
+        "niveauMin": 25,
+        "rarity": "Épique",
+        "affixes": [
+            { "ref": "Armure", "val": 45 },
+            { "ref": "Esprit", "val": 12 },
+            { "ref": "Force", "val": 5 }
+        ],
+        "tagsClasse": ["cleric"],
+        "set": { "id": "faithsworn", "name": "Gardien du Serment" }
+      },
+      {
+        "id": "rep_faithsworn_mace",
+        "name": "Masse du Gardien du Serment",
+        "slot": "weapon",
+        "niveauMin": 30,
+        "rarity": "Légendaire",
+        "affixes": [
+            { "ref": "AttMin", "val": 32 },
+            { "ref": "AttMax", "val": 45 },
+            { "ref": "Esprit", "val": 18 },
+            { "ref": "PV", "val": 50 }
+        ],
+        "tagsClasse": ["cleric"],
+        "set": { "id": "faithsworn", "name": "Gardien du Serment" }
+      },
+       {
+        "id": "iron_greatsword",
+        "name": "Espadon en Fer",
+        "slot": "weapon",
+        "niveauMin": 5,
+        "rarity": "Commun",
+        "affixes": [{ "ref": "AttMin", "val": 8 }, { "ref": "AttMax", "val": 12 }, { "ref": "Force", "val": 2 }],
+        "tagsClasse": ["berserker"]
+      },
+      {
+        "id": "hardened_leather_gloves",
+        "name": "Gants en Cuir Durci",
+        "slot": "hands",
+        "niveauMin": 4,
+        "rarity": "Commun",
+        "affixes": [{ "ref": "Armure", "val": 10 }, { "ref": "Dexterite", "val": 1 }],
+        "tagsClasse": ["common"]
+      },
+      {
+        "id": "scholars_circlet",
+        "name": "Cercle de l'Érudit",
+        "slot": "head",
+        "niveauMin": 6,
+        "rarity": "Rare",
+        "affixes": [{ "ref": "Intelligence", "val": 3 }, { "ref": "RessourceMax", "val": 15 }, { "ref": "Armure", "val": 8 }],
+        "tagsClasse": ["mage", "cleric"]
+      },
+      {
+        "id": "marauders_treads",
+        "name": "Bottes de Maraudeur",
+        "slot": "feet",
+        "niveauMin": 8,
+        "rarity": "Rare",
+        "affixes": [{ "ref": "Armure", "val": 22 }, { "ref": "Force", "val": 3 }, { "ref": "PV", "val": 15 }],
+        "tagsClasse": ["berserker"]
+      },
+      {
+        "id": "cutthroats_leggings",
+        "name": "Jambières de Coupe-gorge",
+        "slot": "legs",
+        "niveauMin": 9,
+        "rarity": "Rare",
+        "affixes": [{ "ref": "Armure", "val": 28 }, { "ref": "Dexterite", "val": 4 }, { "ref": "CritPct", "val": 2 }],
+        "tagsClasse": ["rogue"]
+      },
+      {
+        "id": "priests_stole",
+        "name": "Étole de Prêtre",
+        "slot": "chest",
+        "niveauMin": 11,
+        "rarity": "Rare",
+        "affixes": [{ "ref": "Armure", "val": 30 }, { "ref": "Esprit", "val": 6 }, { "ref": "RessourceMax", "val": 25 }],
+        "tagsClasse": ["cleric"]
+      },
+      {
+        "id": "fireball_staff",
+        "name": "Bâton de Boule de Feu",
+        "slot": "weapon",
+        "niveauMin": 13,
+        "rarity": "Rare",
+        "affixes": [{ "ref": "AttMin", "val": 10 }, { "ref": "AttMax", "val": 18 }, { "ref": "Intelligence", "val": 7 }],
+        "tagsClasse": ["mage"]
+      },
+      {
+        "id": "barbaric_pauldrons",
+        "name": "Épaulières Barbares",
+        "slot": "chest",
+        "niveauMin": 16,
+        "rarity": "Épique",
+        "affixes": [{ "ref": "Armure", "val": 70 }, { "ref": "Force", "val": 8 }, { "ref": "PV", "val": 40 }],
+        "tagsClasse": ["berserker"]
+      },
+      {
+        "id": "silent_step_sandals",
+        "name": "Sandales du Pas Silencieux",
+        "slot": "feet",
+        "niveauMin": 17,
+        "rarity": "Épique",
+        "affixes": [{ "ref": "Armure", "val": 45 }, { "ref": "Dexterite", "val": 9 }, { "ref": "Esquive", "val": 4 }],
+        "tagsClasse": ["rogue"]
+      },
+      {
+        "id": "inquisitors_crown",
+        "name": "Couronne de l'Inquisiteur",
+        "slot": "head",
+        "niveauMin": 18,
+        "rarity": "Épique",
+        "affixes": [{ "ref": "Armure", "val": 40 }, { "ref": "Esprit", "val": 10 }, { "ref": "CritPct", "val": 3 }],
+        "tagsClasse": ["cleric"]
+      },
+      {
+        "id": "frostweavers_gloves",
+        "name": "Gants du Tisseur de Givre",
+        "slot": "hands",
+        "niveauMin": 19,
+        "rarity": "Épique",
+        "affixes": [{ "ref": "Armure", "val": 35 }, { "ref": "Intelligence", "val": 11 }, { "ref": "CritDmg", "val": 15 }],
+        "tagsClasse": ["mage"]
+      },
+      {
+        "id": "plated_belt",
+        "name": "Ceinture Plaquée",
+        "slot": "belt",
+        "niveauMin": 14,
+        "rarity": "Rare",
+        "affixes": [{ "ref": "Armure", "val": 30 }, { "ref": "PV", "val": 20 }],
+        "tagsClasse": ["common"]
+      },
+      {
+        "id": "berserkers_rage",
+        "name": "Rage du Berserker",
+        "slot": "trinket",
+        "niveauMin": 22,
+        "rarity": "Épique",
+        "affixes": [{ "ref": "Force", "val": 8 }, { "ref": "CritPct", "val": 2 }],
+        "tagsClasse": ["berserker"]
+      },
+      {
+        "id": "mana_stone",
+        "name": "Pierre de Mana",
+        "slot": "trinket",
+        "niveauMin": 22,
+        "rarity": "Épique",
+        "affixes": [{ "ref": "Intelligence", "val": 8 }, { "ref": "RessourceMax", "val": 60 }],
+        "tagsClasse": ["mage"]
+      },
+      {
+        "id": "shadow_essence",
+        "name": "Essence d'Ombre",
+        "slot": "trinket",
+        "niveauMin": 22,
+        "rarity": "Épique",
+        "affixes": [{ "ref": "Dexterite", "val": 8 }, { "ref": "CritDmg", "val": 12 }],
+        "tagsClasse": ["rogue"]
+      },
+      {
+        "id": "holy_symbol",
+        "name": "Symbole Sacré",
+        "slot": "trinket",
+        "niveauMin": 22,
+        "rarity": "Épique",
+        "affixes": [{ "ref": "Esprit", "val": 8 }, { "ref": "PV", "val": 40 }],
+        "tagsClasse": ["cleric"]
+      },
+      {
+        "id": "dragonscale_cuirass",
+        "name": "Cuirasse en Écailles de Dragon",
+        "slot": "chest",
+        "niveauMin": 25,
+        "rarity": "Légendaire",
+        "affixes": [{ "ref": "Armure", "val": 120 }, { "ref": "Force", "val": 12 }, { "ref": "PV", "val": 70 }, {"ref": "ResElems.fire", "val": 15}],
+        "tagsClasse": ["berserker"],
+        "effect": "Réduit les dégâts de feu subis."
+      },
+      {
+        "id": "robes_of_the_void",
+        "name": "Robes du Vide",
+        "slot": "chest",
+        "niveauMin": 25,
+        "rarity": "Légendaire",
+        "affixes": [{ "ref": "Armure", "val": 80 }, { "ref": "Intelligence", "val": 18 }, { "ref": "RessourceMax", "val": 100 }],
+        "tagsClasse": ["mage"],
+        "effect": "Les sorts ont une chance de ne coûter aucune ressource."
+      },
+      {
+        "id": "wraithstalker_jerkin",
+        "name": "Pourpoint de Traque-spectre",
+        "slot": "chest",
+        "niveauMin": 25,
+        "rarity": "Légendaire",
+        "affixes": [{ "ref": "Armure", "val": 100 }, { "ref": "Dexterite", "val": 18 }, { "ref": "CritPct", "val": 5 }],
+        "tagsClasse": ["rogue"],
+        "effect": "Entrer en furtivité augmente grandement votre prochaine attaque."
+      },
+      {
+        "id": "vestments_of_the_redeemer",
+        "name": "Vêtements du Rédempteur",
+        "slot": "chest",
+        "niveauMin": 25,
+        "rarity": "Légendaire",
+        "affixes": [{ "ref": "Armure", "val": 90 }, { "ref": "Esprit", "val": 18 }, { "ref": "PV", "val": 80 }],
+        "tagsClasse": ["cleric"],
+        "effect": "Les soins prodigués ont une chance de créer un bouclier sur la cible."
+      },
+      {
+        "id": "talisman_of_endurance",
+        "name": "Talisman d'Endurance",
+        "slot": "amulet",
+        "niveauMin": 15,
+        "rarity": "Épique",
+        "affixes": [{ "ref": "PV", "val": 50 }, { "ref": "Force", "val": 5 }, { "ref": "Armure", "val": 15 }],
+        "tagsClasse": ["common"]
+      }
+    ]
+}

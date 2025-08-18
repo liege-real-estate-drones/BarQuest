@@ -108,19 +108,34 @@ const rarityDropChances: Record<Rareté, number> = {
   Unique: 0.0, // Uniques are special drops
 };
 
+const scaleAffixValue = (baseValue: number, level: number, rarity: Rareté): number => {
+    const rarityMultiplier: Record<Rareté, number> = {
+        Commun: 1,
+        Rare: 1.2,
+        Épique: 1.5,
+        Légendaire: 2,
+        Unique: 2.5,
+    };
+    // A more pronounced scaling factor for level
+    return Math.round(baseValue * (1 + (level * 0.1)) * rarityMultiplier[rarity]);
+};
+
 const resolveLoot = (monster: Monstre, gameData: GameData, playerClassId: PlayerClassId | null): Item | null => {
-  // Set item drop check (e.g., 2% chance)
+  // Set item drop check
   if (Math.random() < 0.02) {
     const possibleSetItems = gameData.items.filter(item => 
       item.set &&
-      (item.tagsClasse?.includes('common') || (playerClassId && item.tagsClasse?.includes(playerClassId))) && 
-      item.niveauMin <= monster.level + 2 &&
-      item.niveauMin >= monster.level - 5
+      (item.tagsClasse?.includes('common') || (playerClassId && item.tagsClasse?.includes(playerClassId)))
     );
     if (possibleSetItems.length > 0) {
       const droppedItemTemplate = possibleSetItems[Math.floor(Math.random() * possibleSetItems.length)];
       const newItem: Item = JSON.parse(JSON.stringify(droppedItemTemplate));
       newItem.id = uuidv4();
+      newItem.niveauMin = monster.level;
+      newItem.affixes = newItem.affixes.map(affix => ({
+          ...affix,
+          val: scaleAffixValue(affix.val, monster.level, newItem.rarity)
+      }));
       return newItem;
     }
   }
@@ -148,11 +163,9 @@ const resolveLoot = (monster: Monstre, gameData: GameData, playerClassId: Player
 
   const possibleItems = gameData.items.filter(item => 
       item.rarity === chosenRarity &&
-      !item.set && // Don't drop set items from the general pool
+      !item.set &&
       item.slot !== 'potion' &&
-      (item.tagsClasse?.includes('common') || (playerClassId && item.tagsClasse?.includes(playerClassId))) && 
-      item.niveauMin <= monster.level + 2 &&
-      item.niveauMin >= monster.level - 5
+      (item.tagsClasse?.includes('common') || (playerClassId && item.tagsClasse?.includes(playerClassId)))
   );
 
   if (possibleItems.length === 0) {
@@ -161,7 +174,14 @@ const resolveLoot = (monster: Monstre, gameData: GameData, playerClassId: Player
 
   const droppedItemTemplate = possibleItems[Math.floor(Math.random() * possibleItems.length)];
   const newItem: Item = JSON.parse(JSON.stringify(droppedItemTemplate));
-  newItem.id = uuidv4(); // Give the dropped item a unique ID
+  newItem.id = uuidv4();
+  newItem.niveauMin = monster.level;
+  
+  newItem.affixes = newItem.affixes.map(affix => ({
+      ...affix,
+      val: scaleAffixValue(affix.val, monster.level, newItem.rarity)
+  }));
+  
   return newItem;
 };
 
@@ -260,6 +280,7 @@ export const useGameStore = create<GameState>()(
         set(state => {
           const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
           state.player.stats.PV = maxHp;
+          state.player.resources.max = formulas.calculateMaxMana(state.player.level, state.player.stats);
 
           if (state.player.resources.type === 'Rage') {
             state.player.resources.current = 0;
