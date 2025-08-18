@@ -9,7 +9,6 @@ import { PlusCircle, Star } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import type { Talent, PlayerState, GameData } from '@/lib/types';
 import { cn } from '@/lib/utils';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const TalentPopoverContent = ({ talent, player, gameData }: { talent: Talent; player: PlayerState; gameData: GameData }) => {
     const currentRank = player.learnedTalents[talent.id] || 0;
@@ -79,19 +78,24 @@ const TalentRow = ({ talent, canLearn, onLearn, player, gameData }: { talent: Ta
     )
 }
 
-const TalentTree = ({ talents, player, gameData, canLearnTalent, learnTalent }: { talents: Talent[], player: PlayerState, gameData: GameData, canLearnTalent: (id: string) => boolean, learnTalent: (id: string) => void }) => {
+const TalentTree = ({ title, talents, player, gameData, canLearnTalent, learnTalent }: { title: string, talents: Talent[], player: PlayerState, gameData: GameData, canLearnTalent: (id: string) => boolean, learnTalent: (id: string) => void }) => {
     return (
-        <div className="space-y-4">
-            {talents.map(talent => (
-                <TalentRow 
-                    key={talent.id} 
-                    talent={talent} 
-                    canLearn={canLearnTalent(talent.id)}
-                    onLearn={learnTalent}
-                    player={player}
-                    gameData={gameData}
-                />
-            ))}
+        <div className="flex flex-col gap-4 p-2 rounded-lg bg-background/50">
+            <h3 className="text-lg font-headline text-center text-primary">{title}</h3>
+            <ScrollArea className="h-[500px] pr-4">
+                 <div className="space-y-4">
+                    {talents.map(talent => (
+                        <TalentRow 
+                            key={talent.id} 
+                            talent={talent} 
+                            canLearn={canLearnTalent(talent.id)}
+                            onLearn={learnTalent}
+                            player={player}
+                            gameData={gameData}
+                        />
+                    ))}
+                </div>
+            </ScrollArea>
         </div>
     );
 }
@@ -150,29 +154,20 @@ export function TalentsView() {
                 </CardTitle>
                 <CardDescription>Dépensez vos points pour apprendre des améliorations passives.</CardDescription>
             </CardHeader>
-            <CardContent className="flex-grow flex flex-col min-h-0">
-                <Tabs defaultValue={classTalentTrees[0]} className="w-full flex flex-col flex-grow min-h-0">
-                    <TabsList className={`grid w-full grid-cols-${classTalentTrees.length}`}>
-                        {classTalentTrees.map(treeName => (
-                            <TabsTrigger key={treeName} value={treeName}>{treeName}</TabsTrigger>
-                        ))}
-                    </TabsList>
-                    <div className="flex-grow mt-4 overflow-y-auto">
-                        {classTalentTrees.map(treeName => (
-                             <TabsContent key={treeName} value={treeName} className="m-0">
-                                <ScrollArea className="h-[500px] pr-4">
-                                     <TalentTree
-                                        talents={getTalentsForTree(treeName)}
-                                        player={player}
-                                        gameData={gameData}
-                                        canLearnTalent={canLearnTalent}
-                                        learnTalent={learnTalent}
-                                    />
-                                </ScrollArea>
-                            </TabsContent>
-                        ))}
-                    </div>
-                </Tabs>
+            <CardContent className="flex-grow min-h-0">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-full">
+                    {classTalentTrees.map(treeName => (
+                        <TalentTree
+                            key={treeName}
+                            title={treeName}
+                            talents={getTalentsForTree(treeName)}
+                            player={player}
+                            gameData={gameData}
+                            canLearnTalent={canLearnTalent}
+                            learnTalent={learnTalent}
+                        />
+                    ))}
+                </div>
             </CardContent>
         </Card>
     );
