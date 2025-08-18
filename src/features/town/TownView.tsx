@@ -1,4 +1,5 @@
 
+
 'use client';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -30,7 +31,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { LogOut, Settings, Trash2 } from 'lucide-react';
+import { LogOut, Settings, Trash2, BookOpen } from 'lucide-react';
 import { InnView } from './InnView';
 import { SkillsView } from '../skills/SkillsView';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -96,15 +97,15 @@ export function TownView() {
           <ScrollArea className="lg:col-span-1">
             <div className="flex flex-col gap-8 pr-6">
               <PlayerStatsView />
-              <QuestsView />
               <ReputationView />
               <EquipmentView />
             </div>
           </ScrollArea>
           <div className="lg:col-span-2 flex flex-col min-h-0">
               <Tabs defaultValue="dungeons" className="w-full flex flex-col flex-grow min-h-0">
-                  <TabsList className="grid w-full grid-cols-6 flex-shrink-0">
+                  <TabsList className="grid w-full grid-cols-7 flex-shrink-0">
                     <TabsTrigger value="dungeons">Dungeons</TabsTrigger>
+                    <TabsTrigger value="quests"><BookOpen className="mr-2 h-4 w-4" />Quests</TabsTrigger>
                     <TabsTrigger value="inventory">Inventory</TabsTrigger>
                     <TabsTrigger value="talents">Talents</TabsTrigger>
                     <TabsTrigger value="skills">Skills</TabsTrigger>
@@ -114,6 +115,9 @@ export function TownView() {
                   <div className="flex-grow mt-4 overflow-y-auto">
                     <TabsContent value="dungeons">
                         <DungeonsView />
+                    </TabsContent>
+                     <TabsContent value="quests" className="h-full">
+                        <QuestsView />
                     </TabsContent>
                     <TabsContent value="inventory">
                       <InventoryView />

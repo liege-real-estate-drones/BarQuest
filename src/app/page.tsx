@@ -39,7 +39,7 @@ export default function Home() {
     try {
         const dataPaths: (keyof GameData)[] = [
             'dungeons', 'monsters', 'items', 'talents', 'skills', 
-            'affixes', 'classes', 'quests', 'factions'
+            'affixes', 'classes', 'quests', 'factions', 'sets'
         ];
         
         const responses = await Promise.all(

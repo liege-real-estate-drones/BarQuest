@@ -72,6 +72,7 @@ export interface PlayerState {
   activeEffects: string[];
   activeSetBonuses: string[];
   completedDungeons: string[];
+  completedQuests: string[];
 }
 
 export interface InventoryState {
@@ -101,7 +102,7 @@ export type CombatEnemy = Monstre & { initialHp: number; attackProgress: number 
 
 export interface CombatLogEntry {
     message: string;
-    type: 'player_attack' | 'enemy_attack' | 'crit' | 'loot' | 'info' | 'flee' | 'levelup' | 'heal';
+    type: 'player_attack' | 'enemy_attack' | 'crit' | 'loot' | 'info' | 'flee' | 'levelup' | 'heal' | 'quest';
     timestamp: number;
     item?: Item;
 }

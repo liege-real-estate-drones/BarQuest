@@ -1,40 +1,35 @@
+
 {
-    "quests": [
-        {
-            "id": "quest_1",
-            "type": "chasse",
-            "name": "Nettoyage des Cryptes",
-            "desc": "Les morts-vivants dans les cryptes deviennent un problème. Allez en éliminer quelques-uns.",
-            "requirements": {
-                "dungeonId": "dungeon_1",
-                "killCount": 10
-            },
-            "rewards": {
-                "gold": 50,
-                "xp": 100,
-                "reputation": {
-                    "factionId": "garde_de_la_ville",
-                    "amount": 25
-                }
-            }
-        },
-        {
-            "id": "quest_2",
-            "type": "chasse",
-            "name": "Un Froid Glacial",
-            "desc": "Les créatures de la forêt de givre menacent les voyageurs. Réduisez leur nombre.",
-            "requirements": {
-                "dungeonId": "dungeon_2",
-                "killCount": 15
-            },
-            "rewards": {
-                "gold": 75,
-                "xp": 150,
-                "reputation": {
-                    "factionId": "garde_de_la_ville",
-                    "amount": 35
-                }
-            }
-        }
-    ]
+  "quests": [
+    { "id": "d1_q1", "type": "chasse", "name": "Cryptes Glaciales : Initiation", "desc": "Prouvez votre valeur en éliminant quelques morts-vivants.", "requirements": { "dungeonId": "dungeon_frost_1", "killCount": 10 }, "rewards": { "gold": 50, "xp": 100 } },
+    { "id": "d1_q2", "type": "chasse", "name": "Cryptes Glaciales : Nettoyage", "desc": "Continuez le nettoyage des cryptes.", "requirements": { "dungeonId": "dungeon_frost_1", "killCount": 20 }, "rewards": { "gold": 100, "xp": 200 } },
+    { "id": "d1_q3", "type": "chasse", "name": "Cryptes Glaciales : Purge", "desc": "Éradiquez la menace des morts-vivants.", "requirements": { "dungeonId": "dungeon_frost_1", "killCount": 30 }, "rewards": { "gold": 150, "xp": 300, "reputation": { "factionId": "gardiens_d_argent", "amount": 50 } } },
+    { "id": "d1_q4", "type": "chasse", "name": "Cryptes Glaciales : Domination", "desc": "Montrez-leur qui commande.", "requirements": { "dungeonId": "dungeon_frost_1", "killCount": 40 }, "rewards": { "gold": 200, "xp": 400 } },
+    { "id": "d1_q5", "type": "chasse", "name": "Cryptes Glaciales : Maîtrise", "desc": "Devenez le maître incontesté des cryptes.", "requirements": { "dungeonId": "dungeon_frost_1", "killCount": 50 }, "rewards": { "gold": 250, "xp": 500, "reputation": { "factionId": "gardiens_d_argent", "amount": 100 } } },
+    { "id": "d2_q1", "type": "chasse", "name": "Cavernes de Feu : Exploration", "desc": "Aventurez-vous dans les profondeurs ardentes.", "requirements": { "dungeonId": "dungeon_fire_1", "killCount": 15 }, "rewards": { "gold": 75, "xp": 150 } },
+    { "id": "d2_q2", "type": "chasse", "name": "Cavernes de Feu : Conquête", "desc": "Soumettez les créatures de feu.", "requirements": { "dungeonId": "dungeon_fire_1", "killCount": 25 }, "rewards": { "gold": 150, "xp": 300 } },
+    { "id": "d2_q3", "type": "chasse", "name": "Cavernes de Feu : Extermination", "desc": "Ne laissez aucun survivant.", "requirements": { "dungeonId": "dungeon_fire_1", "killCount": 35 }, "rewards": { "gold": 225, "xp": 450, "reputation": { "factionId": "forgerons_de_lave", "amount": 50 } } },
+    { "id": "d2_q4", "type": "chasse", "name": "Cavernes de Feu : Annihilation", "desc": "Réduisez tout en cendres.", "requirements": { "dungeonId": "dungeon_fire_1", "killCount": 45 }, "rewards": { "gold": 300, "xp": 600 } },
+    { "id": "d2_q5", "type": "chasse", "name": "Cavernes de Feu : Suprématie", "desc": "Domptez le cœur du volcan.", "requirements": { "dungeonId": "dungeon_fire_1", "killCount": 55 }, "rewards": { "gold": 375, "xp": 750, "reputation": { "factionId": "forgerons_de_lave", "amount": 100 } } },
+    { "id": "d3_q1", "type": "chasse", "name": "Forêt Ancestrale : Incursion", "desc": "Entrez dans la forêt et repoussez ses gardiens.", "requirements": { "dungeonId": "dungeon_nature_1", "killCount": 20 }, "rewards": { "gold": 100, "xp": 200 } },
+    { "id": "d3_q2", "type": "chasse", "name": "Forêt Ancestrale : Pacification", "desc": "Calmez la fureur de la nature.", "requirements": { "dungeonId": "dungeon_nature_1", "killCount": 30 }, "rewards": { "gold": 200, "xp": 400 } },
+    { "id": "d3_q3", "type": "chasse", "name": "Forêt Ancestrale : Purification", "desc": "Libérez la forêt de la corruption.", "requirements": { "dungeonId": "dungeon_nature_1", "killCount": 40 }, "rewards": { "gold": 300, "xp": 600, "reputation": { "factionId": "cercle_emeraude", "amount": 50 } } },
+    { "id": "d3_q4", "type": "chasse", "name": "Forêt Ancestrale : Libération", "desc": "Rendez à la forêt sa tranquillité.", "requirements": { "dungeonId": "dungeon_nature_1", "killCount": 50 }, "rewards": { "gold": 400, "xp": 800 } },
+    { "id": "d3_q5", "type": "chasse", "name": "Forêt Ancestrale : Gardien", "desc": "Devenez le protecteur de la forêt.", "requirements": { "dungeonId": "dungeon_nature_1", "killCount": 60 }, "rewards": { "gold": 500, "xp": 1000, "reputation": { "factionId": "cercle_emeraude", "amount": 100 } } },
+    { "id": "d4_q1", "type": "chasse", "name": "Abysses Occultes : Descente", "desc": "Plongez dans les ténèbres et survivez.", "requirements": { "dungeonId": "dungeon_occult_1", "killCount": 25 }, "rewards": { "gold": 125, "xp": 250 } },
+    { "id": "d4_q2", "type": "chasse", "name": "Abysses Occultes : Confrontation", "desc": "Faites face aux horreurs des profondeurs.", "requirements": { "dungeonId": "dungeon_occult_1", "killCount": 35 }, "rewards": { "gold": 250, "xp": 500 } },
+    { "id": "d4_q3", "type": "chasse", "name": "Abysses Occultes : Bannissement", "desc": "Repoussez les ombres.", "requirements": { "dungeonId": "dungeon_occult_1", "killCount": 45 }, "rewards": { "gold": 375, "xp": 750, "reputation": { "factionId": "veilleur_de_lombre", "amount": 50 } } },
+    { "id": "d4_q4", "type": "chasse", "name": "Abysses Occultes : Illumination", "desc": "Apportez la lumière dans les abysses.", "requirements": { "dungeonId": "dungeon_occult_1", "killCount": 55 }, "rewards": { "gold": 500, "xp": 1000 } },
+    { "id": "d4_q5", "type": "chasse", "name": "Abysses Occultes : Hégémonie", "desc": "Prenez le contrôle des abysses.", "requirements": { "dungeonId": "dungeon_occult_1", "killCount": 65 }, "rewards": { "gold": 625, "xp": 1250, "reputation": { "factionId": "veilleur_de_lombre", "amount": 100 } } },
+    { "id": "d5_q1", "type": "chasse", "name": "Pic du Givre Éternel : Ascension", "desc": "Commencez votre ascension vers le sommet glacial.", "requirements": { "dungeonId": "dungeon_frost_2", "killCount": 30 }, "rewards": { "gold": 150, "xp": 300 } },
+    { "id": "d5_q2", "type": "chasse", "name": "Pic du Givre Éternel : Endurcissement", "desc": "Affrontez le froid mordant et les bêtes qui y vivent.", "requirements": { "dungeonId": "dungeon_frost_2", "killCount": 40 }, "rewards": { "gold": 300, "xp": 600 } },
+    { "id": "d5_q3", "type": "chasse", "name": "Pic du Givre Éternel : Conquête du Pic", "desc": "Atteignez le sommet et purifiez-le de toute présence hostile.", "requirements": { "dungeonId": "dungeon_frost_2", "killCount": 50 }, "rewards": { "gold": 450, "xp": 900, "reputation": { "factionId": "gardiens_d_argent", "amount": 75 } } },
+    { "id": "d5_q4", "type": "chasse", "name": "Pic du Givre Éternel : Avalanche de Violence", "desc": "Déclenchez une avalanche de coups sur vos ennemis.", "requirements": { "dungeonId": "dungeon_frost_2", "killCount": 60 }, "rewards": { "gold": 600, "xp": 1200 } },
+    { "id": "d5_q5", "type": "chasse", "name": "Pic du Givre Éternel : Roi de la Montagne", "desc": "Affirmez votre domination sur le Pic du Givre Éternel.", "requirements": { "dungeonId": "dungeon_frost_2", "killCount": 70 }, "rewards": { "gold": 750, "xp": 1500, "reputation": { "factionId": "gardiens_d_argent", "amount": 150 } } },
+    { "id": "d6_q1", "type": "chasse", "name": "Le Cœur de la Fournaise : Première Chaleur", "desc": "Supportez la chaleur intense et éliminez les gardiens de la fournaise.", "requirements": { "dungeonId": "dungeon_fire_2", "killCount": 35 }, "rewards": { "gold": 175, "xp": 350 } },
+    { "id": "d6_q2", "type": "chasse", "name": "Le Cœur de la Fournaise : Attiser les Flammes", "desc": "Plongez plus profondément et affrontez des ennemis encore plus redoutables.", "requirements": { "dungeonId": "dungeon_fire_2", "killCount": 45 }, "rewards": { "gold": 350, "xp": 700 } },
+    { "id": "d6_q3", "type": "chasse", "name": "Le Cœur de la Fournaise : Incinération", "desc": "Incinérez toute opposition dans le cœur du volcan.", "requirements": { "dungeonId": "dungeon_fire_2", "killCount": 55 }, "rewards": { "gold": 525, "xp": 1050, "reputation": { "factionId": "forgerons_de_lave", "amount": 75 } } },
+    { "id": "d6_q4", "type": "chasse", "name": "Le Cœur de la Fournaise : Tempête de Feu", "desc": "Déchaînez une tempête de feu sur les habitants du Cœur.", "requirements": { "dungeonId": "dungeon_fire_2", "killCount": 65 }, "rewards": { "gold": 700, "xp": 1400 } },
+    { "id": "d6_q5", "type": "chasse", "name": "Le Cœur de la Fournaise : Maître du Magma", "desc": "Devenez le maître incontesté du Cœur de la Fournaise.", "requirements": { "dungeonId": "dungeon_fire_2", "killCount": 75 }, "rewards": { "gold": 875, "xp": 1750, "reputation": { "factionId": "forgerons_de_lave", "amount": 150 } } }
+  ]
 }

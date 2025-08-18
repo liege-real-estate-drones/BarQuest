@@ -33,6 +33,7 @@ const getInitialPlayerState = (): PlayerState => {
     activeEffects: [],
     activeSetBonuses: [],
     completedDungeons: [],
+    completedQuests: [],
   };
 };
 
@@ -292,10 +293,12 @@ export const useGameStore = create<GameState>()(
             state.combat = initialCombatState;
             state.activeQuests = [];
             
-            const firstQuest = state.gameData.quests[0];
-            if(firstQuest){
-                 state.activeQuests.push({ quete: firstQuest, progress: 0 });
-            }
+            // Assign first quest for each dungeon chain
+            const firstQuests = state.gameData.dungeons.map(d => state.gameData.quests.find(q => q.requirements.dungeonId === d.id)).filter(Boolean) as Quete[];
+            
+            firstQuests.forEach(quest => {
+                state.activeQuests.push({ quete: quest, progress: 0 });
+            })
 
             state.player.classeId = chosenClass.id as PlayerClassId;
             state.player.baseStats = { ...chosenClass.statsBase };
@@ -326,6 +329,7 @@ export const useGameStore = create<GameState>()(
           player.activeEffects = player.activeEffects || [];
           player.activeSetBonuses = [];
           player.completedDungeons = player.completedDungeons || [];
+          player.completedQuests = player.completedQuests || [];
           inventory.potions = inventory.potions || { health: 0, resource: 0 };
 
           const classe = gameData.classes.find(c => c.id === player.classeId);
@@ -953,10 +957,16 @@ export const useGameStore = create<GameState>()(
                 activeQuest.progress++;
                 if (activeQuest.progress >= activeQuest.quete.requirements.killCount) {
                   const quest = activeQuest.quete;
-                  state.combat.log.push({ message: `Quest Complete: ${quest.name}!`, type: 'levelup', timestamp: Date.now() });
+                  state.combat.log.push({ message: `Quest Complete: ${quest.name}!`, type: 'quest', timestamp: Date.now() });
                   state.inventory.gold += quest.rewards.gold;
                   state.player.xp += quest.rewards.xp;
                   state.combat.log.push({ message: `You received ${quest.rewards.gold} gold and ${quest.rewards.xp} XP.`, type: 'loot', timestamp: Date.now() });
+                  
+                  state.player.completedQuests.push(quest.id);
+                  const activeQuestIndex = state.activeQuests.findIndex(aq => aq.quete.id === quest.id);
+                  if (activeQuestIndex !== -1) {
+                    state.activeQuests.splice(activeQuestIndex, 1);
+                  }
 
                   if (quest.rewards.reputation) {
                     const rep = quest.rewards.reputation;
@@ -966,12 +976,14 @@ export const useGameStore = create<GameState>()(
                     state.combat.log.push({ message: `Your reputation with ${gameData.factions.find(f => f.id === rep.factionId)?.name || 'a faction'} increased by ${rep.amount}.`, type: 'info', timestamp: Date.now() });
                   }
 
-                  state.activeQuests.splice(index, 1);
-                  const nextQuestIndex = gameData.quests.findIndex(q => q.id === quest.id) + 1;
-                  if (nextQuestIndex < gameData.quests.length) {
-                    const nextQuest = gameData.quests[nextQuestIndex];
+                  // Start next quest in the chain
+                  const [dungeonPrefix, questNumStr] = quest.id.split('_q');
+                  const nextQuestNum = parseInt(questNumStr) + 1;
+                  const nextQuestId = `${dungeonPrefix}_q${nextQuestNum}`;
+                  const nextQuest = gameData.quests.find(q => q.id === nextQuestId);
+                  if (nextQuest) {
                     state.activeQuests.push({ quete: nextQuest, progress: 0 });
-                    state.combat.log.push({ message: `New Quest: ${nextQuest.name}!`, type: 'info', timestamp: Date.now() });
+                     state.combat.log.push({ message: `New Quest: ${nextQuest.name}!`, type: 'quest', timestamp: Date.now() });
                   }
                 }
               }
@@ -1083,6 +1095,7 @@ export const useGameStore = create<GameState>()(
             state.combat = initialCombatState;
             state.player.learnedTalents = state.player.learnedTalents || {};
             state.player.reputation = state.player.reputation || {};
+            state.player.completedQuests = state.player.completedQuests || [];
             if(typeof state.inventory.potions !== 'object') {
               state.inventory.potions = { health: state.inventory.potions || 0, resource: 0};
             }
