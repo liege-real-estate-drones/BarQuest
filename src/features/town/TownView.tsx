@@ -4,7 +4,6 @@
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DungeonsView } from '../dungeons/DungeonsView';
-import { TalentsView } from '../talents/TalentsView';
 import { VendorsView } from '../vendors/VendorsView';
 import { useGameStore } from '@/state/gameStore';
 import { EquipmentView } from '../inventory/EquipmentView';
@@ -32,7 +31,6 @@ import {
 } from "@/components/ui/alert-dialog";
 import { LogOut, Settings, Trash2, BookOpen, User } from 'lucide-react';
 import { InnView } from './InnView';
-import { SkillsView } from '../skills/SkillsView';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { CharacterView } from '../player/CharacterView';
 
@@ -103,7 +101,7 @@ export function TownView() {
           </ScrollArea>
           <div className="lg:col-span-2 flex flex-col min-h-0">
               <Tabs defaultValue="dungeons" className="w-full flex flex-col flex-grow min-h-0">
-                  <TabsList>
+                  <TabsList className="flex flex-wrap h-auto">
                     <TabsTrigger value="dungeons">Dungeons</TabsTrigger>
                     <TabsTrigger value="quests"><BookOpen className="mr-2 h-4 w-4" />Quests</TabsTrigger>
                     <TabsTrigger value="character"><User className="mr-2 h-4 w-4" />Personnage</TabsTrigger>
