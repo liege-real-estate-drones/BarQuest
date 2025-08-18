@@ -10,6 +10,7 @@ import { useGameStore } from "@/state/gameStore";
 import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
+import { cn } from "@/lib/utils";
 
 const getResourceCost = (skill: Skill) => {
     const effects = skill.effets || [];
@@ -101,7 +102,10 @@ export function ActionStrip({ onRetreat, onCycleTarget, skills }: ActionStripPro
                                 <TooltipTrigger asChild>
                                     <Button 
                                         variant="secondary" 
-                                        className="w-24 h-20 flex-col gap-1 text-xs relative overflow-hidden" 
+                                        className={cn(
+                                            "w-24 h-20 flex-col gap-1 text-xs relative overflow-hidden transition-all",
+                                            isCoolingDown && "grayscale"
+                                        )}
                                         onClick={() => useSkill(skill.id)} 
                                         disabled={isCoolingDown}
                                     >
