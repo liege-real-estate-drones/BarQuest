@@ -1,35 +1,245 @@
 
 {
   "quests": [
-    { "id": "d1_q1", "type": "chasse", "name": "Cryptes Glaciales : Initiation", "desc": "Prouvez votre valeur en éliminant quelques morts-vivants.", "requirements": { "dungeonId": "dungeon_frost_1", "killCount": 10 }, "rewards": { "gold": 50, "xp": 100 } },
-    { "id": "d1_q2", "type": "chasse", "name": "Cryptes Glaciales : Nettoyage", "desc": "Continuez le nettoyage des cryptes.", "requirements": { "dungeonId": "dungeon_frost_1", "killCount": 20 }, "rewards": { "gold": 100, "xp": 200 } },
-    { "id": "d1_q3", "type": "chasse", "name": "Cryptes Glaciales : Purge", "desc": "Éradiquez la menace des morts-vivants.", "requirements": { "dungeonId": "dungeon_frost_1", "killCount": 30 }, "rewards": { "gold": 150, "xp": 300, "reputation": { "factionId": "gardiens_d_argent", "amount": 50 } } },
-    { "id": "d1_q4", "type": "chasse", "name": "Cryptes Glaciales : Domination", "desc": "Montrez-leur qui commande.", "requirements": { "dungeonId": "dungeon_frost_1", "killCount": 40 }, "rewards": { "gold": 200, "xp": 400 } },
-    { "id": "d1_q5", "type": "chasse", "name": "Cryptes Glaciales : Maîtrise", "desc": "Devenez le maître incontesté des cryptes.", "requirements": { "dungeonId": "dungeon_frost_1", "killCount": 50 }, "rewards": { "gold": 250, "xp": 500, "reputation": { "factionId": "gardiens_d_argent", "amount": 100 } } },
-    { "id": "d2_q1", "type": "chasse", "name": "Cavernes de Feu : Exploration", "desc": "Aventurez-vous dans les profondeurs ardentes.", "requirements": { "dungeonId": "dungeon_fire_1", "killCount": 15 }, "rewards": { "gold": 75, "xp": 150 } },
-    { "id": "d2_q2", "type": "chasse", "name": "Cavernes de Feu : Conquête", "desc": "Soumettez les créatures de feu.", "requirements": { "dungeonId": "dungeon_fire_1", "killCount": 25 }, "rewards": { "gold": 150, "xp": 300 } },
-    { "id": "d2_q3", "type": "chasse", "name": "Cavernes de Feu : Extermination", "desc": "Ne laissez aucun survivant.", "requirements": { "dungeonId": "dungeon_fire_1", "killCount": 35 }, "rewards": { "gold": 225, "xp": 450, "reputation": { "factionId": "forgerons_de_lave", "amount": 50 } } },
-    { "id": "d2_q4", "type": "chasse", "name": "Cavernes de Feu : Annihilation", "desc": "Réduisez tout en cendres.", "requirements": { "dungeonId": "dungeon_fire_1", "killCount": 45 }, "rewards": { "gold": 300, "xp": 600 } },
-    { "id": "d2_q5", "type": "chasse", "name": "Cavernes de Feu : Suprématie", "desc": "Domptez le cœur du volcan.", "requirements": { "dungeonId": "dungeon_fire_1", "killCount": 55 }, "rewards": { "gold": 375, "xp": 750, "reputation": { "factionId": "forgerons_de_lave", "amount": 100 } } },
-    { "id": "d3_q1", "type": "chasse", "name": "Forêt Ancestrale : Incursion", "desc": "Entrez dans la forêt et repoussez ses gardiens.", "requirements": { "dungeonId": "dungeon_nature_1", "killCount": 20 }, "rewards": { "gold": 100, "xp": 200 } },
-    { "id": "d3_q2", "type": "chasse", "name": "Forêt Ancestrale : Pacification", "desc": "Calmez la fureur de la nature.", "requirements": { "dungeonId": "dungeon_nature_1", "killCount": 30 }, "rewards": { "gold": 200, "xp": 400 } },
-    { "id": "d3_q3", "type": "chasse", "name": "Forêt Ancestrale : Purification", "desc": "Libérez la forêt de la corruption.", "requirements": { "dungeonId": "dungeon_nature_1", "killCount": 40 }, "rewards": { "gold": 300, "xp": 600, "reputation": { "factionId": "cercle_emeraude", "amount": 50 } } },
-    { "id": "d3_q4", "type": "chasse", "name": "Forêt Ancestrale : Libération", "desc": "Rendez à la forêt sa tranquillité.", "requirements": { "dungeonId": "dungeon_nature_1", "killCount": 50 }, "rewards": { "gold": 400, "xp": 800 } },
-    { "id": "d3_q5", "type": "chasse", "name": "Forêt Ancestrale : Gardien", "desc": "Devenez le protecteur de la forêt.", "requirements": { "dungeonId": "dungeon_nature_1", "killCount": 60 }, "rewards": { "gold": 500, "xp": 1000, "reputation": { "factionId": "cercle_emeraude", "amount": 100 } } },
-    { "id": "d4_q1", "type": "chasse", "name": "Abysses Occultes : Descente", "desc": "Plongez dans les ténèbres et survivez.", "requirements": { "dungeonId": "dungeon_occult_1", "killCount": 25 }, "rewards": { "gold": 125, "xp": 250 } },
-    { "id": "d4_q2", "type": "chasse", "name": "Abysses Occultes : Confrontation", "desc": "Faites face aux horreurs des profondeurs.", "requirements": { "dungeonId": "dungeon_occult_1", "killCount": 35 }, "rewards": { "gold": 250, "xp": 500 } },
-    { "id": "d4_q3", "type": "chasse", "name": "Abysses Occultes : Bannissement", "desc": "Repoussez les ombres.", "requirements": { "dungeonId": "dungeon_occult_1", "killCount": 45 }, "rewards": { "gold": 375, "xp": 750, "reputation": { "factionId": "veilleur_de_lombre", "amount": 50 } } },
-    { "id": "d4_q4", "type": "chasse", "name": "Abysses Occultes : Illumination", "desc": "Apportez la lumière dans les abysses.", "requirements": { "dungeonId": "dungeon_occult_1", "killCount": 55 }, "rewards": { "gold": 500, "xp": 1000 } },
-    { "id": "d4_q5", "type": "chasse", "name": "Abysses Occultes : Hégémonie", "desc": "Prenez le contrôle des abysses.", "requirements": { "dungeonId": "dungeon_occult_1", "killCount": 65 }, "rewards": { "gold": 625, "xp": 1250, "reputation": { "factionId": "veilleur_de_lombre", "amount": 100 } } },
-    { "id": "d5_q1", "type": "chasse", "name": "Pic du Givre Éternel : Ascension", "desc": "Commencez votre ascension vers le sommet glacial.", "requirements": { "dungeonId": "dungeon_frost_2", "killCount": 30 }, "rewards": { "gold": 150, "xp": 300 } },
-    { "id": "d5_q2", "type": "chasse", "name": "Pic du Givre Éternel : Endurcissement", "desc": "Affrontez le froid mordant et les bêtes qui y vivent.", "requirements": { "dungeonId": "dungeon_frost_2", "killCount": 40 }, "rewards": { "gold": 300, "xp": 600 } },
-    { "id": "d5_q3", "type": "chasse", "name": "Pic du Givre Éternel : Conquête du Pic", "desc": "Atteignez le sommet et purifiez-le de toute présence hostile.", "requirements": { "dungeonId": "dungeon_frost_2", "killCount": 50 }, "rewards": { "gold": 450, "xp": 900, "reputation": { "factionId": "gardiens_d_argent", "amount": 75 } } },
-    { "id": "d5_q4", "type": "chasse", "name": "Pic du Givre Éternel : Avalanche de Violence", "desc": "Déclenchez une avalanche de coups sur vos ennemis.", "requirements": { "dungeonId": "dungeon_frost_2", "killCount": 60 }, "rewards": { "gold": 600, "xp": 1200 } },
-    { "id": "d5_q5", "type": "chasse", "name": "Pic du Givre Éternel : Roi de la Montagne", "desc": "Affirmez votre domination sur le Pic du Givre Éternel.", "requirements": { "dungeonId": "dungeon_frost_2", "killCount": 70 }, "rewards": { "gold": 750, "xp": 1500, "reputation": { "factionId": "gardiens_d_argent", "amount": 150 } } },
-    { "id": "d6_q1", "type": "chasse", "name": "Le Cœur de la Fournaise : Première Chaleur", "desc": "Supportez la chaleur intense et éliminez les gardiens de la fournaise.", "requirements": { "dungeonId": "dungeon_fire_2", "killCount": 35 }, "rewards": { "gold": 175, "xp": 350 } },
-    { "id": "d6_q2", "type": "chasse", "name": "Le Cœur de la Fournaise : Attiser les Flammes", "desc": "Plongez plus profondément et affrontez des ennemis encore plus redoutables.", "requirements": { "dungeonId": "dungeon_fire_2", "killCount": 45 }, "rewards": { "gold": 350, "xp": 700 } },
-    { "id": "d6_q3", "type": "chasse", "name": "Le Cœur de la Fournaise : Incinération", "desc": "Incinérez toute opposition dans le cœur du volcan.", "requirements": { "dungeonId": "dungeon_fire_2", "killCount": 55 }, "rewards": { "gold": 525, "xp": 1050, "reputation": { "factionId": "forgerons_de_lave", "amount": 75 } } },
-    { "id": "d6_q4", "type": "chasse", "name": "Le Cœur de la Fournaise : Tempête de Feu", "desc": "Déchaînez une tempête de feu sur les habitants du Cœur.", "requirements": { "dungeonId": "dungeon_fire_2", "killCount": 65 }, "rewards": { "gold": 700, "xp": 1400 } },
-    { "id": "d6_q5", "type": "chasse", "name": "Le Cœur de la Fournaise : Maître du Magma", "desc": "Devenez le maître incontesté du Cœur de la Fournaise.", "requirements": { "dungeonId": "dungeon_fire_2", "killCount": 75 }, "rewards": { "gold": 875, "xp": 1750, "reputation": { "factionId": "forgerons_de_lave", "amount": 150 } } }
+    {
+      "id": "foret_sombre_q1",
+      "type": "chasse",
+      "name": "Premiers Pas dans l'Ombre",
+      "desc": "La Forêt Sombre grouille de créatures. Prouvez votre valeur en éliminant une poignée d'entre elles.",
+      "requirements": { "dungeonId": "foret_sombre", "killCount": 10 },
+      "rewards": { "gold": 50, "xp": 100 }
+    },
+    {
+      "id": "foret_sombre_q2",
+      "type": "chasse",
+      "name": "Éclaircissement",
+      "desc": "Les bêtes sont plus nombreuses que prévu. Continuez à nettoyer la zone pour la rendre plus sûre.",
+      "requirements": { "dungeonId": "foret_sombre", "killCount": 25 },
+      "rewards": { "gold": 100, "xp": 250, "reputation": { "factionId": "gardiens_nature", "amount": 50 } }
+    },
+    {
+      "id": "foret_sombre_q3",
+      "type": "nettoyage",
+      "name": "Exploration Approfondie",
+      "desc": "Nous devons comprendre l'étendue de la corruption. Traversez la forêt de part en part.",
+      "requirements": { "dungeonId": "foret_sombre", "clearCount": 1 },
+      "rewards": { "gold": 150, "xp": 400 }
+    },
+    {
+      "id": "foret_sombre_q4",
+      "type": "chasse",
+      "name": "Abattre le Mal",
+      "desc": "Des créatures plus puissantes ont été repérées. Traquez-les et éliminez-les.",
+      "requirements": { "dungeonId": "foret_sombre", "killCount": 50 },
+      "rewards": { "gold": 250, "xp": 600, "reputation": { "factionId": "gardiens_nature", "amount": 100 } }
+    },
+    {
+      "id": "foret_sombre_q5",
+      "type": "nettoyage",
+      "name": "Maîtrise de la Forêt",
+      "desc": "Prouvez que vous contrôlez la forêt en la nettoyant plusieurs fois. Montrez-leur qui commande.",
+      "requirements": { "dungeonId": "foret_sombre", "clearCount": 3 },
+      "rewards": { "gold": 500, "xp": 1200 }
+    },
+    {
+      "id": "cavernes_gelees_q1",
+      "type": "chasse",
+      "name": "Le Froid Mordant",
+      "desc": "Les Cavernes Gelées abritent des bêtes adaptées au froid. Allez les chasser.",
+      "requirements": { "dungeonId": "cavernes_gelees", "killCount": 15 },
+      "rewards": { "gold": 100, "xp": 200 }
+    },
+    {
+      "id": "cavernes_gelees_q2",
+      "type": "chasse",
+      "name": "Tempête de Glace",
+      "desc": "La population de monstres de glace est hors de contrôle. Réduisez leur nombre.",
+      "requirements": { "dungeonId": "cavernes_gelees", "killCount": 30 },
+      "rewards": { "gold": 200, "xp": 450, "reputation": { "factionId": "expedition_glaciale", "amount": 50 } }
+    },
+    {
+      "id": "cavernes_gelees_q3",
+      "type": "nettoyage",
+      "name": "Coeur de l'Hiver",
+      "desc": "Atteignez le coeur des cavernes pour cartographier la zone.",
+      "requirements": { "dungeonId": "cavernes_gelees", "clearCount": 1 },
+      "rewards": { "gold": 300, "xp": 700 }
+    },
+    {
+      "id": "cavernes_gelees_q4",
+      "type": "chasse",
+      "name": "Brise-Glace",
+      "desc": "Les créatures les plus robustes se cachent dans les profondeurs. Éliminez-les.",
+      "requirements": { "dungeonId": "cavernes_gelees", "killCount": 60 },
+      "rewards": { "gold": 450, "xp": 1000, "reputation": { "factionId": "expedition_glaciale", "amount": 100 } }
+    },
+    {
+      "id": "cavernes_gelees_q5",
+      "type": "nettoyage",
+      "name": "Conquérant du Givre",
+      "desc": "Montrez que le froid ne vous affecte pas en dominant ces cavernes à plusieurs reprises.",
+      "requirements": { "dungeonId": "cavernes_gelees", "clearCount": 3 },
+      "rewards": { "gold": 800, "xp": 2000 }
+    },
+    {
+      "id": "pics_ardents_q1",
+      "type": "chasse",
+      "name": "Baptême du Feu",
+      "desc": "Les créatures des Pics Ardents sont nées des flammes. Testez votre résistance à la chaleur.",
+      "requirements": { "dungeonId": "pics_ardents", "killCount": 20 },
+      "rewards": { "gold": 150, "xp": 300 }
+    },
+    {
+      "id": "pics_ardents_q2",
+      "type": "chasse",
+      "name": "Incendie",
+      "desc": "La surpopulation de monstres de feu menace de déborder. Éteignez la flamme.",
+      "requirements": { "dungeonId": "pics_ardents", "killCount": 40 },
+      "rewards": { "gold": 300, "xp": 650, "reputation": { "factionId": "forgerons_magma", "amount": 50 } }
+    },
+    {
+      "id": "pics_ardents_q3",
+      "type": "nettoyage",
+      "name": "Au Bord du Cratère",
+      "desc": "Explorez les pics jusqu'au cratère principal pour évaluer la menace.",
+      "requirements": { "dungeonId": "pics_ardents", "clearCount": 1 },
+      "rewards": { "gold": 500, "xp": 1000 }
+    },
+    {
+      "id": "pics_ardents_q4",
+      "type": "chasse",
+      "name": "Extinction",
+      "desc": "Chassez les élémentaires de feu majeurs qui dirigent les autres créatures.",
+      "requirements": { "dungeonId": "pics_ardents", "killCount": 75 },
+      "rewards": { "gold": 750, "xp": 1500, "reputation": { "factionId": "forgerons_magma", "amount": 100 } }
+    },
+    {
+      "id": "pics_ardents_q5",
+      "type": "nettoyage",
+      "name": "Marcheur de Feu",
+      "desc": "Prouvez votre affinité avec le feu en traversant les pics ardents à de multiples reprises.",
+      "requirements": { "dungeonId": "pics_ardents", "clearCount": 3 },
+      "rewards": { "gold": 1200, "xp": 2800 }
+    },
+    {
+      "id": "marais_pestilentiel_q1",
+      "type": "chasse",
+      "name": "Odeurs nauséabondes",
+      "desc": "Le marais est rempli de créatures mutantes. Commencez le nettoyage.",
+      "requirements": { "dungeonId": "marais_pestilentiel", "killCount": 25 },
+      "rewards": { "gold": 200, "xp": 400 }
+    },
+    {
+      "id": "marais_pestilentiel_q2",
+      "type": "chasse",
+      "name": "Épuration",
+      "desc": "La peste se propage à travers la faune. Éliminez les porteurs.",
+      "requirements": { "dungeonId": "marais_pestilentiel", "killCount": 50 },
+      "rewards": { "gold": 400, "xp": 850, "reputation": { "factionId": "cercle_alchimique", "amount": 50 } }
+    },
+    {
+      "id": "marais_pestilentiel_q3",
+      "type": "nettoyage",
+      "name": "Source de la Peste",
+      "desc": "Trouvez la source de la corruption au plus profond du marais.",
+      "requirements": { "dungeonId": "marais_pestilentiel", "clearCount": 1 },
+      "rewards": { "gold": 700, "xp": 1400 }
+    },
+    {
+      "id": "marais_pestilentiel_q4",
+      "type": "chasse",
+      "name": "Antidote",
+      "desc": "Certaines créatures ont des composants rares. Chassez-les pour créer un antidote.",
+      "requirements": { "dungeonId": "marais_pestilentiel", "killCount": 100 },
+      "rewards": { "gold": 1000, "xp": 2000, "reputation": { "factionId": "cercle_alchimique", "amount": 100 } }
+    },
+    {
+      "id": "marais_pestilentiel_q5",
+      "type": "nettoyage",
+      "name": "Immunisé",
+      "desc": "Votre résistance à la peste est remarquable. Prouvez-le en nettoyant le marais plusieurs fois.",
+      "requirements": { "dungeonId": "marais_pestilentiel", "clearCount": 3 },
+      "rewards": { "gold": 1600, "xp": 3600 }
+    },
+    {
+      "id": "ruines_occultes_q1",
+      "type": "chasse",
+      "name": "Échos du Passé",
+      "desc": "Les ruines sont hantées par des esprits. Donnez-leur le repos éternel.",
+      "requirements": { "dungeonId": "ruines_occultes", "killCount": 30 },
+      "rewards": { "gold": 250, "xp": 500 }
+    },
+    {
+      "id": "ruines_occultes_q2",
+      "type": "chasse",
+      "name": "Exorcisme de Masse",
+      "desc": "Une puissante énergie nécromantique anime les morts. Détruisez-les.",
+      "requirements": { "dungeonId": "ruines_occultes", "killCount": 60 },
+      "rewards": { "gold": 500, "xp": 1050, "reputation": { "factionId": "erudits_sombres", "amount": 50 } }
+    },
+    {
+      "id": "ruines_occultes_q3",
+      "type": "nettoyage",
+      "name": "Le Rituel",
+      "desc": "Un rituel semble être en cours. Traversez les ruines et perturbez-le.",
+      "requirements": { "dungeonId": "ruines_occultes", "clearCount": 1 },
+      "rewards": { "gold": 900, "xp": 1800 }
+    },
+    {
+      "id": "ruines_occultes_q4",
+      "type": "chasse",
+      "name": "Reliques Profanées",
+      "desc": "Les gardiens spectraux protègent des reliques. Éliminez-les pour purifier le site.",
+      "requirements": { "dungeonId": "ruines_occultes", "killCount": 120 },
+      "rewards": { "gold": 1300, "xp": 2500, "reputation": { "factionId": "erudits_sombres", "amount": 100 } }
+    },
+    {
+      "id": "ruines_occultes_q5",
+      "type": "nettoyage",
+      "name": "Gardien des Secrets",
+      "desc": "Les ruines vous ont accepté comme leur gardien. Nettoyez-les régulièrement pour maintenir l'équilibre.",
+      "requirements": { "dungeonId": "ruines_occultes", "clearCount": 3 },
+      "rewards": { "gold": 2000, "xp": 4400 }
+    },
+    {
+      "id": "bastion_demoniaque_q1",
+      "type": "chasse",
+      "name": "Porte des Enfers",
+      "desc": "Le Bastion est une porte vers d'autres plans. Repoussez les premiers envahisseurs.",
+      "requirements": { "dungeonId": "bastion_demoniaque", "killCount": 35 },
+      "rewards": { "gold": 300, "xp": 600 }
+    },
+    {
+      "id": "bastion_demoniaque_q2",
+      "type": "chasse",
+      "name": "Légion Ardente",
+      "desc": "Une légion de démons se rassemble. Brisez leurs rangs avant qu'ils ne deviennent trop puissants.",
+      "requirements": { "dungeonId": "bastion_demoniaque", "killCount": 70 },
+      "rewards": { "gold": 600, "xp": 1250, "reputation": { "factionId": "chevaliers_argent", "amount": 50 } }
+    },
+    {
+      "id": "bastion_demoniaque_q3",
+      "type": "nettoyage",
+      "name": "Le Trône du Tyran",
+      "desc": "Frayez-vous un chemin jusqu'à la salle du trône pour faire face au commandant.",
+      "requirements": { "dungeonId": "bastion_demoniaque", "clearCount": 1 },
+      "rewards": { "gold": 1200, "xp": 2200 }
+    },
+    {
+      "id": "bastion_demoniaque_q4",
+      "type": "chasse",
+      "name": "Chasse aux Seigneurs",
+      "desc": "Traquez et éliminez les lieutenants démoniaques qui commandent les troupes.",
+      "requirements": { "dungeonId": "bastion_demoniaque", "killCount": 150 },
+      "rewards": { "gold": 1800, "xp": 3500, "reputation": { "factionId": "chevaliers_argent", "amount": 100 } }
+    },
+    {
+      "id": "bastion_demoniaque_q5",
+      "type": "nettoyage",
+      "name": "Fléau des Démons",
+      "desc": "Votre nom est murmuré avec crainte en enfer. Maintenez cette réputation.",
+      "requirements": { "dungeonId": "bastion_demoniaque", "clearCount": 3 },
+      "rewards": { "gold": 3000, "xp": 6000 }
+    }
   ]
 }
