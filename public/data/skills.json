@@ -2,196 +2,504 @@
 {
     "skills": [
         {
+            "id": "berserker_charge",
+            "nom": "Charge",
+            "classeId": "berserker",
+            "type": "actif",
+            "rangMax": 1,
+            "niveauRequis": 1,
+            "cooldown": 12,
+            "effets": [
+                "Charge un ennemi, infligeant 50% des dégâts de l'arme et l'étourdissant pendant 1.5 secondes.",
+                "Coûte 10 Rage."
+            ]
+        },
+        {
+            "id": "berserker_rend",
+            "nom": "Déchirure",
+            "classeId": "berserker",
+            "type": "actif",
+            "rangMax": 1,
+            "niveauRequis": 1,
+            "cooldown": 4,
+            "effets": [
+                "Fait saigner la cible, infligeant 120% des dégâts de l'arme sur 8 secondes.",
+                "Coûte 20 Rage."
+            ]
+        },
+        {
             "id": "berserker_heroic_strike",
             "nom": "Frappe Héroïque",
             "classeId": "berserker",
             "type": "actif",
+            "rangMax": 5,
             "niveauRequis": 1,
-            "rangMax": 1,
-            "cooldown": 6,
             "effets": [
-                "Inflige 150% des dégâts de l'arme. Coûte 20 Rage."
-            ]
+                "Inflige 120/130/140/150/160% des dégâts de l'arme.",
+                "Coûte 15 Rage."
+            ],
+            "cooldown": 2
         },
         {
             "id": "berserker_whirlwind",
             "nom": "Tourbillon",
             "classeId": "berserker",
             "type": "actif",
+            "rangMax": 5,
             "niveauRequis": 1,
-            "rangMax": 1,
-            "cooldown": 10,
             "effets": [
-                "Inflige 70% des dégâts de l'arme à tous les ennemis proches. Coûte 25 Rage."
-            ]
+                "Attaque tous les ennemis proches pour 80/90/100/110/120% des dégâts de l'arme.",
+                "Coûte 25 Rage."
+            ],
+            "cooldown": 8
+        },
+        {
+            "id": "berserker_execute",
+            "nom": "Exécution",
+            "classeId": "berserker",
+            "type": "actif",
+            "rangMax": 1,
+            "niveauRequis": 20,
+            "effets": [
+                "Tente d'achever une cible, infligeant 300% des dégâts de l'arme. Uniquement sur les cibles ayant moins de 20% de PV.",
+                "Coûte 30 Rage."
+            ],
+            "cooldown": 5
         },
         {
             "id": "berserker_bloodthirst",
             "nom": "Rage Sanguinaire",
             "classeId": "berserker",
             "type": "actif",
-            "niveauRequis": 1,
             "rangMax": 1,
-            "cooldown": 45,
+            "niveauRequis": 30,
+            "exigences": ["berserker_fury_unleashed:5"],
             "effets": [
-                "Augmente vos dégâts infligés de 20% mais augmente aussi les dégâts subis de 10% pendant 10 secondes. Coûte 15 Rage."
-            ]
+                "Pendant 10s, vos dégâts sont augmentés de 30%, mais les dégâts subis aussi de 15%.",
+                "Coûte 0 Rage."
+            ],
+            "cooldown": 45
         },
         {
-            "id": "berserker_execution",
-            "nom": "Exécution",
+            "id": "berserker_arms_pummel",
+            "nom": "Volée de coups",
             "classeId": "berserker",
             "type": "actif",
-            "niveauRequis": 1,
             "rangMax": 1,
-            "cooldown": 12,
+            "niveauRequis": 10,
             "effets": [
-                "Tente d'exécuter une cible, infligeant 300% des dégâts de l'arme. Utilisable uniquement sur les cibles ayant moins de 20% de leurs PV. Coûte 30 Rage."
+                "Frappe la cible 3 fois pour 50% des dégâts de l'arme à chaque fois.",
+                "Coûte 20 Rage."
+            ],
+            "cooldown": 8
+        },
+        {
+            "id": "berserker_arms_mortal_strike",
+            "nom": "Frappe mortelle",
+            "classeId": "berserker",
+            "type": "actif",
+            "rangMax": 1,
+            "niveauRequis": 25,
+            "exigences": ["berserker_arms_pummel:1"],
+            "effets": [
+                "Une attaque vicieuse qui inflige 200% des dégâts de l'arme et réduit les soins reçus par la cible de 50% pendant 10s.",
+                "Coûte 30 Rage."
+            ],
+            "cooldown": 10
+        },
+        {
+            "id": "berserker_fury_rampage",
+            "nom": "Saccager",
+            "classeId": "berserker",
+            "type": "actif",
+            "rangMax": 1,
+            "niveauRequis": 25,
+            "exigences": ["berserker_whirlwind:5"],
+            "effets": [
+                "Déchaîne une fureur d'attaques, frappant la cible principale 5 fois pour 60% des dégâts de l'arme.",
+                "Coûte 40 Rage."
+            ],
+            "cooldown": 15
+        },
+        {
+            "id": "berserker_titan_shield_wall",
+            "nom": "Mur de bouclier",
+            "classeId": "berserker",
+            "type": "actif",
+            "rangMax": 1,
+            "niveauRequis": 25,
+            "effets": [
+                "Réduit tous les dégâts subis de 40% pendant 12 secondes.",
+                "Coûte 10 Rage."
+            ],
+            "cooldown": 120
+        },
+        {
+            "id": "berserker_titan_last_stand",
+            "nom": "Dernier rempart",
+            "classeId": "berserker",
+            "type": "actif",
+            "rangMax": 1,
+            "niveauRequis": 40,
+            "exigences": ["berserker_titan_shield_wall:1"],
+            "effets": [
+                "Augmente temporairement vos PV maximum de 30% pendant 20 secondes.",
+                "Ne coûte rien."
+            ],
+            "cooldown": 180
+        },
+        {
+            "id": "mage_fire_fireball",
+            "nom": "Boule de feu",
+            "classeId": "mage",
+            "type": "actif",
+            "rangMax": 5,
+            "niveauRequis": 1,
+            "effets": [
+                "Inflige 15/20/25/30/35 dégâts de Feu.",
+                "Coûte 10 Mana."
             ]
         },
         {
-            "id": "mage_fireball",
-            "nom": "Boule de Feu",
+            "id": "mage_fire_scorch",
+            "nom": "Brûlure",
             "classeId": "mage",
             "type": "actif",
-            "niveauRequis": 1,
             "rangMax": 1,
-            "cooldown": 0,
+            "niveauRequis": 10,
             "effets": [
-                "Inflige 25/35/50/70/95 dégâts de Feu à une cible. Coûte 15 Mana."
+                "Inflige 10 dégâts de Feu et augmente les chances de coup critique contre la cible de 5% pendant 30s. Cumulable 5 fois.",
+                "Coûte 5 Mana."
             ]
         },
         {
-            "id": "mage_frostbolt",
-            "nom": "Éclair de Givre",
+            "id": "mage_fire_combustion",
+            "nom": "Combustion",
             "classeId": "mage",
             "type": "actif",
-            "niveauRequis": 1,
             "rangMax": 1,
-            "cooldown": 0,
+            "niveauRequis": 40,
+            "exigences": ["mage_fire_pyroblast:1"],
             "effets": [
-                "Inflige 20/30/40/55/75 dégâts de Givre et ralentit la cible. Coûte 12 Mana."
+                "Augmente votre hâte et vos chances de coup critique de 100% pendant 10s.",
+                "Coûte 50 Mana."
+            ],
+            "cooldown": 120
+        },
+        {
+            "id": "mage_fire_pyroblast",
+            "nom": "Explosion pyrotechnique",
+            "classeId": "mage",
+            "type": "actif",
+            "rangMax": 1,
+            "niveauRequis": 25,
+            "effets": [
+                "Inflige 100 dégâts de Feu. Temps d'incantation de 3.5s.",
+                "Coûte 40 Mana."
             ]
+        },
+        {
+            "id": "mage_frost_frostbolt",
+            "nom": "Éclair de givre",
+            "classeId": "mage",
+            "type": "actif",
+            "rangMax": 5,
+            "niveauRequis": 1,
+            "effets": [
+                "Inflige 12/18/24/30/36 dégâts de Givre et ralentit la vitesse d'attaque de la cible de 20%.",
+                "Coûte 8 Mana."
+            ]
+        },
+        {
+            "id": "mage_frost_blizzard",
+            "nom": "Blizzard",
+            "classeId": "mage",
+            "type": "actif",
+            "rangMax": 1,
+            "niveauRequis": 20,
+            "effets": [
+                "Invoque une tempête de glace qui inflige 15 dégâts de Givre à tous les ennemis chaque seconde pendant 8 secondes.",
+                "Coûte 75 Mana."
+            ],
+            "cooldown": 20
+        },
+        {
+            "id": "mage_frost_ice_block",
+            "nom": "Bloc de glace",
+            "classeId": "mage",
+            "type": "actif",
+            "rangMax": 1,
+            "niveauRequis": 30,
+            "effets": [
+                "Vous enferme dans un bloc de glace, vous rendant invulnérable pendant 10s, mais vous ne pouvez pas agir.",
+                "Coûte 10 Mana."
+            ],
+            "cooldown": 300
         },
         {
             "id": "mage_arcane_missiles",
-            "nom": "Projectiles des Arcanes",
+            "nom": "Missiles des arcanes",
             "classeId": "mage",
             "type": "actif",
+            "rangMax": 5,
             "niveauRequis": 1,
-            "rangMax": 1,
-            "cooldown": 8,
             "effets": [
-                "Tire 3 projectiles qui infligent chacun 15/20/25/30/35 dégâts des Arcanes. Coûte 25 Mana."
+                "Tire 3/3/4/4/5 vagues de missiles infligeant 5 dégâts des Arcanes chacune.",
+                "Coûte 12 Mana."
             ]
         },
         {
-            "id": "mage_ice_nova",
-            "nom": "Nova de Givre",
+            "id": "mage_arcane_blast",
+            "nom": "Déflagration des arcanes",
             "classeId": "mage",
             "type": "actif",
-            "niveauRequis": 1,
             "rangMax": 1,
-            "cooldown": 20,
+            "niveauRequis": 15,
             "effets": [
-                "Inflige 10 dégâts de Givre à tous les ennemis proches et les gèle sur place pendant 3/4/5 secondes. Coûte 30 Mana."
+                "Inflige 20 dégâts des Arcanes. Chaque utilisation augmente son coût en mana de 100% et ses dégâts de 50%. Cumulable 4 fois.",
+                "Coûte 10 Mana."
+            ]
+        },
+        {
+            "id": "mage_arcane_power",
+            "nom": "Pouvoir des arcanes",
+            "classeId": "mage",
+            "type": "actif",
+            "rangMax": 1,
+            "niveauRequis": 40,
+            "effets": [
+                "Augmente les dégâts des sorts de 30% et leur coût en mana de 30% pendant 15s.",
+                "Coûte 20 Mana."
+            ],
+            "cooldown": 180
+        },
+        {
+            "id": "rogue_subtlety_shadowstep",
+            "nom": "Pas de l'ombre",
+            "classeId": "rogue",
+            "type": "actif",
+            "rangMax": 1,
+            "niveauRequis": 20,
+            "effets": [
+                "Passe dans l'ombre et apparaît derrière la cible. La prochaine attaque inflige 50% de dégâts supplémentaires.",
+                "Coûte 15 Énergie."
+            ],
+            "cooldown": 20
+        },
+        {
+            "id": "rogue_subtlety_vanish",
+            "nom": "Disparition",
+            "classeId": "rogue",
+            "type": "actif",
+            "rangMax": 1,
+            "niveauRequis": 30,
+            "effets": [
+                "Disparaît de la vue, mettant fin au combat. Ne peut pas être utilisé si des ennemis sont très proches.",
+                "Coûte 0 Énergie."
+            ],
+            "cooldown": 120
+        },
+        {
+            "id": "rogue_assassination_mutilate",
+            "nom": "Estropier",
+            "classeId": "rogue",
+            "type": "actif",
+            "rangMax": 1,
+            "niveauRequis": 10,
+            "effets": [
+                "Attaque avec les deux armes, infligeant 100% des dégâts de l'arme + 10.",
+                "Coûte 40 Énergie."
+            ]
+        },
+        {
+            "id": "rogue_assassination_envenom",
+            "nom": "Envenimer",
+            "classeId": "rogue",
+            "type": "actif",
+            "rangMax": 1,
+            "niveauRequis": 25,
+            "exigences": ["rogue_poison_deadly:1"],
+            "effets": [
+                "Consomme les charges de Poison mortel sur la cible pour infliger 20 dégâts de Nature par charge.",
+                "Coûte 35 Énergie."
+            ]
+        },
+        {
+            "id": "rogue_poison_deadly",
+            "nom": "Poison mortel",
+            "classeId": "rogue",
+            "type": "actif",
+            "rangMax": 1,
+            "niveauRequis": 5,
+            "effets": [
+                "Enduit vos armes d'un poison qui a 30% de chances d'infliger 5 dégâts de Nature et d'appliquer une charge. Dure 1 heure.",
+                "Coûte 10 Énergie."
+            ]
+        },
+        {
+            "id": "rogue_poison_crippling",
+            "nom": "Poison affaiblissant",
+            "classeId": "rogue",
+            "type": "actif",
+            "rangMax": 1,
+            "niveauRequis": 15,
+            "effets": [
+                "Enduit vos armes d'un poison qui a 50% de chances de réduire la vitesse d'attaque de la cible de 25% pendant 12s.",
+                "Coûte 10 Énergie."
             ]
         },
         {
             "id": "rogue_sinister_strike",
-            "nom": "Attaque Sournoise",
+            "nom": "Attaque sournoise",
             "classeId": "rogue",
             "type": "actif",
+            "rangMax": 5,
             "niveauRequis": 1,
-            "rangMax": 1,
-            "cooldown": 0,
             "effets": [
-                "Une attaque rapide qui inflige 120% des dégâts de l'arme. Coûte 40 Énergie."
+                "Une attaque rapide qui inflige 100% des dégâts de l'arme + 5/10/15/20/25.",
+                "Coûte 30 Énergie."
             ]
         },
         {
-            "id": "rogue_eviscerate",
-            "nom": "Éviscération",
+            "id": "rogue_evasion",
+            "nom": "Évasion",
             "classeId": "rogue",
             "type": "actif",
-            "niveauRequis": 1,
             "rangMax": 1,
-            "cooldown": 8,
+            "niveauRequis": 8,
             "effets": [
-                "Une attaque de finition qui inflige des dégâts en fonction de votre puissance d'attaque. Coûte 35 Énergie."
-            ]
+                "Augmente vos chances d'esquive de 50% pendant 15s.",
+                "Coûte 20 Énergie."
+            ],
+            "cooldown": 120
         },
         {
             "id": "rogue_fan_of_knives",
-            "nom": "Éventail de Couteaux",
+            "nom": "Éventail de couteaux",
             "classeId": "rogue",
             "type": "actif",
-            "niveauRequis": 1,
             "rangMax": 1,
-            "cooldown": 15,
+            "niveauRequis": 18,
             "effets": [
-                "Lance des couteaux dans toutes les directions, infligeant 80% des dégâts de l'arme à tous les ennemis proches. Coûte 50 Énergie."
+                "Projette des couteaux sur tous les ennemis proches, infligeant 60% des dégâts de l'arme.",
+                "Coûte 35 Énergie."
             ]
         },
         {
-            "id": "rogue_stealth",
-            "nom": "Camouflage",
-            "classeId": "rogue",
+            "id": "cleric_holy_flash_heal",
+            "nom": "Soins rapides",
+            "classeId": "cleric",
             "type": "actif",
+            "rangMax": 5,
             "niveauRequis": 1,
-            "rangMax": 1,
-            "cooldown": 30,
             "effets": [
-                "Vous rend invisible aux yeux des ennemis. Votre prochaine attaque infligera 50% de dégâts supplémentaires. Coûte 20 Énergie."
+                "Un sort rapide qui vous rend 20/28/36/45/55 PV.",
+                "Coûte 15 Mana."
             ]
         },
         {
-            "id": "cleric_smite",
+            "id": "cleric_holy_prayer_of_healing",
+            "nom": "Prière de guérison",
+            "classeId": "cleric",
+            "type": "actif",
+            "rangMax": 1,
+            "niveauRequis": 20,
+            "effets": [
+                "Vous soigne, ainsi que tous vos alliés (non fonctionnel), pour 50 PV.",
+                "Coûte 40 Mana."
+            ],
+            "cooldown": 10
+        },
+        {
+            "id": "cleric_holy_guardian_spirit",
+            "nom": "Esprit gardien",
+            "classeId": "cleric",
+            "type": "actif",
+            "rangMax": 1,
+            "niveauRequis": 40,
+            "effets": [
+                "Un esprit vous protège pendant 10s. Si vous subissez des dégâts mortels, l'esprit est consommé et vous rend 50% de vos PV max.",
+                "Coûte 30 Mana."
+            ],
+            "cooldown": 180
+        },
+        {
+            "id": "cleric_discipline_power_word_shield",
+            "nom": "Mot de pouvoir : Bouclier",
+            "classeId": "cleric",
+            "type": "actif",
+            "rangMax": 5,
+            "niveauRequis": 5,
+            "effets": [
+                "Crée un bouclier qui absorbe 30/45/60/75/90 dégâts. Dure 15s.",
+                "Coûte 20 Mana."
+            ]
+        },
+        {
+            "id": "cleric_discipline_penance",
+            "nom": "Pénitence",
+            "classeId": "cleric",
+            "type": "actif",
+            "rangMax": 1,
+            "niveauRequis": 15,
+            "effets": [
+                "Lance une volée de lumière sacrée sur la cible, infligeant 15 dégâts 3 fois en 2s.",
+                "Coûte 25 Mana."
+            ],
+            "cooldown": 9
+        },
+        {
+            "id": "cleric_discipline_pain_suppression",
+            "nom": "Suppression de la douleur",
+            "classeId": "cleric",
+            "type": "actif",
+            "rangMax": 1,
+            "niveauRequis": 30,
+            "effets": [
+                "Réduit les dégâts que vous subissez de 40% pendant 8s.",
+                "Coûte 15 Mana."
+            ],
+            "cooldown": 120
+        },
+        {
+            "id": "cleric_shadow_smite",
             "nom": "Châtiment",
             "classeId": "cleric",
             "type": "actif",
+            "rangMax": 5,
             "niveauRequis": 1,
-            "rangMax": 1,
-            "cooldown": 0,
             "effets": [
-                "Inflige 20/28/38/50/65 dégâts Sacrés à un ennemi. Coûte 18 Mana."
+                "Inflige 18/25/32/40/48 dégâts du Sacré à un ennemi.",
+                "Coûte 12 Mana."
             ]
         },
         {
-            "id": "cleric_holy_nova",
-            "nom": "Nova Sacrée",
+            "id": "cleric_shadow_mind_blast",
+            "nom": "Explosion mentale",
             "classeId": "cleric",
             "type": "actif",
-            "niveauRequis": 1,
             "rangMax": 1,
-            "cooldown": 12,
+            "niveauRequis": 10,
             "effets": [
-                "Une explosion de lumière qui inflige 15/22/30/40/50 dégâts Sacrés aux ennemis et rend 15/22/30/40/50 PV aux alliés proches. Coûte 40 Mana."
-            ]
+                "Inflige 40 dégâts d'Ombre et étourdit la cible pendant 3s.",
+                "Coûte 20 Mana."
+            ],
+            "cooldown": 15
         },
         {
-            "id": "cleric_flash_heal",
-            "nom": "Soins Rapides",
+            "id": "cleric_shadow_shadowform",
+            "nom": "Forme d'ombre",
             "classeId": "cleric",
             "type": "actif",
-            "niveauRequis": 1,
             "rangMax": 1,
-            "cooldown": 3,
+            "niveauRequis": 40,
+            "exigences": ["cleric_shadow_mind_blast:1"],
             "effets": [
-                "Soigne rapidement une cible pour 40/60/80/105/135 PV. Coûte 25 Mana."
-            ]
-        },
-        {
-            "id": "cleric_power_word_shield",
-            "nom": "Mot de Pouvoir : Bouclier",
-            "classeId": "cleric",
-            "type": "actif",
-            "niveauRequis": 1,
-            "rangMax": 1,
-            "cooldown": 10,
-            "effets": [
-                "Protège une cible avec un bouclier qui absorbe 50/75/100/130/160 dégâts. Dure 15 secondes. Coûte 30 Mana."
+                "Adopte une forme d'ombre, augmentant les dégâts d'Ombre de 15% et réduisant les dégâts physiques subis de 15%. Vous ne pouvez plus lancer de sorts Sacrés.",
+                "Coûte 10 Mana."
             ]
         }
     ]
 }
+
+    

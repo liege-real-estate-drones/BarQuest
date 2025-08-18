@@ -180,3 +180,5 @@ export function SkillsView() {
         </Card>
     );
 }
+
+    
