@@ -4,7 +4,6 @@
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DungeonsView } from '../dungeons/DungeonsView';
-import { InventoryView } from '../inventory/InventoryView';
 import { TalentsView } from '../talents/TalentsView';
 import { VendorsView } from '../vendors/VendorsView';
 import { useGameStore } from '@/state/gameStore';
@@ -31,10 +30,11 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { LogOut, Settings, Trash2, BookOpen } from 'lucide-react';
+import { LogOut, Settings, Trash2, BookOpen, User } from 'lucide-react';
 import { InnView } from './InnView';
 import { SkillsView } from '../skills/SkillsView';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { CharacterView } from '../player/CharacterView';
 
 export function TownView() {
   const { player, resetGame } = useGameStore(state => ({
@@ -103,14 +103,12 @@ export function TownView() {
           </ScrollArea>
           <div className="lg:col-span-2 flex flex-col min-h-0">
               <Tabs defaultValue="dungeons" className="w-full flex flex-col flex-grow min-h-0">
-                  <TabsList className="grid w-full grid-cols-7 flex-shrink-0">
+                  <TabsList>
                     <TabsTrigger value="dungeons">Dungeons</TabsTrigger>
                     <TabsTrigger value="quests"><BookOpen className="mr-2 h-4 w-4" />Quests</TabsTrigger>
-                    <TabsTrigger value="inventory">Inventory</TabsTrigger>
-                    <TabsTrigger value="talents">Talents</TabsTrigger>
-                    <TabsTrigger value="skills">Skills</TabsTrigger>
-                    <TabsTrigger value="vendors">Vendors</TabsTrigger>
-                    <TabsTrigger value="inn">Inn</TabsTrigger>
+                    <TabsTrigger value="character"><User className="mr-2 h-4 w-4" />Personnage</TabsTrigger>
+                    <TabsTrigger value="vendors">Vendeurs</TabsTrigger>
+                    <TabsTrigger value="inn">Auberge</TabsTrigger>
                   </TabsList>
                   <div className="flex-grow mt-4 overflow-y-auto">
                     <TabsContent value="dungeons">
@@ -119,14 +117,8 @@ export function TownView() {
                      <TabsContent value="quests" className="h-full">
                         <QuestsView />
                     </TabsContent>
-                    <TabsContent value="inventory">
-                      <InventoryView />
-                    </TabsContent>
-                    <TabsContent value="talents">
-                       <TalentsView />
-                    </TabsContent>
-                    <TabsContent value="skills">
-                      <SkillsView />
+                    <TabsContent value="character" className="h-full">
+                      <CharacterView />
                     </TabsContent>
                     <TabsContent value="vendors">
                       <VendorsView />

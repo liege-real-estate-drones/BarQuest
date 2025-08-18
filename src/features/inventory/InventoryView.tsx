@@ -7,7 +7,6 @@ import { Item } from '@/lib/types';
 import { useGameStore, calculateItemScore } from '@/state/gameStore';
 import { Coins, Swords, FlaskConical, Droplets, Plus, Minus, Equal } from 'lucide-react';
 import { ItemTooltip } from '@/components/ItemTooltip';
-import { cn } from '@/lib/utils';
 
 const ComparisonIndicator = ({ comparison }: { comparison: 'better' | 'worse' | 'equal' }) => {
     if (comparison === 'better') {
@@ -40,12 +39,12 @@ export function InventoryView() {
     };
 
     return (
-        <Card className="h-full flex flex-col">
+        <Card className="h-full flex flex-col border-0 shadow-none">
             <CardHeader>
                 <CardTitle>Inventaire</CardTitle>
             </CardHeader>
             <CardContent className="flex-grow flex flex-col gap-4">
-                <div className="flex gap-4">
+                <div className="flex gap-4 flex-wrap">
                     <Badge variant="secondary" className="text-base"><Coins className="mr-2 h-4 w-4" /> {inventory.gold} Or</Badge>
                     <Badge variant="secondary" className="text-base"><FlaskConical className="mr-2 h-4 w-4" /> {inventory.potions.health} Potions de Vie</Badge>
                     <Badge variant="secondary" className="text-base"><Droplets className="mr-2 h-4 w-4" /> {inventory.potions.resource} Potions de {player.resources.type}</Badge>
