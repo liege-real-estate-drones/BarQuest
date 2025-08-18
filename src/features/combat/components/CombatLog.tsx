@@ -44,7 +44,7 @@ const LogMessage = ({ entry }: { entry: CombatLogEntry }) => {
 
     if (entry.type === 'loot' && entry.item) {
         return (
-            <p className={cn('whitespace-pre-wrap', color)}>
+            <div className={cn('whitespace-pre-wrap', color)}>
                 <span className="text-muted-foreground/50 mr-2">[{new Date(entry.timestamp).toLocaleTimeString()}]</span>
                  Vous avez trouvé :{' '}
                 <ItemTooltip 
@@ -54,7 +54,7 @@ const LogMessage = ({ entry }: { entry: CombatLogEntry }) => {
                 >
                 </ItemTooltip>
                 .
-            </p>
+            </div>
         );
     }
     
