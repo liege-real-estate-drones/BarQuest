@@ -5,11 +5,11 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useGameStore } from '@/state/gameStore';
-import { PlusCircle, Star, Zap } from 'lucide-react';
+import { PlusCircle, Star } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
-import type { Talent, Skill, GameData, PlayerState } from '@/lib/types';
+import type { Talent, PlayerState, GameData } from '@/lib/types';
 import { cn } from '@/lib/utils';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const TalentPopoverContent = ({ talent, player, gameData }: { talent: Talent; player: PlayerState; gameData: GameData }) => {
     const currentRank = player.learnedTalents[talent.id] || 0;
@@ -28,7 +28,7 @@ const TalentPopoverContent = ({ talent, player, gameData }: { talent: Talent; pl
                     <div className="space-y-1">
                         <p className="text-sm">Prérequis:</p>
                         {talent.niveauRequis && <p className={`text-xs ${player.level >= talent.niveauRequis ? 'text-muted-foreground' : 'text-amber-400'}`}>- Niveau {talent.niveauRequis}</p>}
-                        {talent.exigences.map(req => {
+                        {talent.exigences?.map(req => {
                             const [reqId, reqRankStr] = req.split(':');
                             const reqTalent = gameData.talents.find(t => t.id === reqId);
                              const hasReq = (player.learnedTalents[reqId] || 0) >= parseInt(reqRankStr, 10);
@@ -44,14 +44,15 @@ const TalentPopoverContent = ({ talent, player, gameData }: { talent: Talent; pl
 const TalentRow = ({ talent, canLearn, onLearn, player, gameData }: { talent: Talent, canLearn: boolean, onLearn: (id: string) => void, player: PlayerState, gameData: GameData }) => {
     const currentRank = player.learnedTalents[talent.id] || 0;
     const isMaxRank = currentRank >= talent.rangMax;
+    const isUnlocked = player.level >= (talent.niveauRequis || 0);
 
     return (
-        <div className={cn("ml-8 pl-4 border-l border-dashed border-primary/20", { 'opacity-50 grayscale': !canLearn && !isMaxRank })}>
+        <div className={cn("ml-4 pl-4 border-l border-dashed border-primary/20", { 'opacity-50 grayscale': !isUnlocked })}>
             <div className="flex items-center justify-between p-2 rounded-md bg-card-foreground/5">
                 <Popover>
                     <PopoverTrigger asChild>
                         <div className="flex items-center gap-3 cursor-help">
-                            <Star className="h-5 w-5 text-yellow-400/50" />
+                            <Star className={cn("h-5 w-5", isMaxRank ? "text-yellow-400" : "text-yellow-400/30")} />
                             <div>
                                 <p className="font-semibold">{talent.nom}</p>
                                 <p className="text-xs text-muted-foreground">Rang {currentRank}/{talent.rangMax}</p>
@@ -78,32 +79,28 @@ const TalentRow = ({ talent, canLearn, onLearn, player, gameData }: { talent: Ta
     )
 }
 
-
-const SkillTalentNode = ({ skill, talents, player, gameData, canLearnTalent, learnTalent }: { skill: Skill, talents: Talent[], player: PlayerState, gameData: GameData, canLearnTalent: (id: string) => boolean, learnTalent: (id: string) => void }) => {
+const TalentTree = ({ talents, player, gameData, canLearnTalent, learnTalent }: { talents: Talent[], player: PlayerState, gameData: GameData, canLearnTalent: (id: string) => boolean, learnTalent: (id: string) => void }) => {
     return (
-        <AccordionItem value={skill.id}>
-            <AccordionTrigger className="hover:bg-accent/50 px-4 rounded-md">
-                 <div className="flex items-center gap-3">
-                    <Zap className="h-5 w-5 text-yellow-400" />
-                    <p className="text-lg font-headline">{skill.nom}</p>
-                 </div>
-            </AccordionTrigger>
-            <AccordionContent className="pt-2">
-                <div className="space-y-2">
-                    {talents.map(talent => (
-                         <TalentRow 
-                            key={talent.id} 
-                            talent={talent} 
-                            canLearn={canLearnTalent(talent.id)}
-                            onLearn={learnTalent}
-                            player={player}
-                            gameData={gameData}
-                         />
-                    ))}
-                </div>
-            </AccordionContent>
-        </AccordionItem>
+        <div className="space-y-4">
+            {talents.map(talent => (
+                <TalentRow 
+                    key={talent.id} 
+                    talent={talent} 
+                    canLearn={canLearnTalent(talent.id)}
+                    onLearn={learnTalent}
+                    player={player}
+                    gameData={gameData}
+                />
+            ))}
+        </div>
     );
+}
+
+const talentTreesByClass: Record<string, string[]> = {
+  berserker: ['Armes', 'Fureur', 'Titan'],
+  mage: ['Feu', 'Givre', 'Arcane'],
+  rogue: ['Assassinat', 'Subtilité', 'Poison'],
+  cleric: ['Sacré', 'Discipline', 'Châtiment'],
 };
 
 
@@ -117,13 +114,17 @@ export function TalentsView() {
 
     if (!player.classeId) return null;
 
-    const playerSkills = gameData.skills.filter(s => s.classeId === player.classeId && s.niveauRequis && player.level >= s.niveauRequis);
-    const playerTalents = gameData.talents.filter(t => t.classeId === player.classeId);
+    const classTalentTrees = talentTreesByClass[player.classeId] || [];
+
+    const getTalentsForTree = (treeName: string) => {
+        const prefix = `${player.classeId}_${treeName.toLowerCase()}`;
+        return gameData.talents.filter(t => t.id.startsWith(prefix)).sort((a,b) => (a.niveauRequis || 0) - (b.niveauRequis || 0));
+    };
     
     const canLearnTalent = (talentId: string): boolean => {
         if (talentPoints <= 0) return false;
         
-        const talent = playerTalents.find(t => t.id === talentId);
+        const talent = gameData.talents.find(t => t.id === talentId);
         if (!talent) return false;
 
         if (talent.niveauRequis && player.level < talent.niveauRequis) return false;
@@ -144,33 +145,34 @@ export function TalentsView() {
         <Card className="h-full flex flex-col">
             <CardHeader>
                 <CardTitle className="flex justify-between items-center">
-                    <span>Talents & Compétences</span>
+                    <span>Talents</span>
                     <span className="text-sm font-medium text-primary">{talentPoints} points restants</span>
                 </CardTitle>
-                <CardDescription>Dépensez vos points pour améliorer vos compétences actives via des talents passifs.</CardDescription>
+                <CardDescription>Dépensez vos points pour apprendre des améliorations passives.</CardDescription>
             </CardHeader>
-            <CardContent className="flex-grow">
-                <ScrollArea className="h-full pr-4">
-                    <Accordion type="single" collapsible className="w-full">
-                       {playerSkills.map(skill => {
-                           // Find talents that are for this skill. e.g., berserker_heroic_strike_talent_1 is for berserker_heroic_strike
-                           const relatedTalents = playerTalents.filter(t => t.id.startsWith(skill.id));
-                           if (relatedTalents.length === 0) return null;
-                           
-                           return (
-                               <SkillTalentNode 
-                                  key={skill.id}
-                                  skill={skill}
-                                  talents={relatedTalents}
-                                  player={player}
-                                  gameData={gameData}
-                                  canLearnTalent={canLearnTalent}
-                                  learnTalent={learnTalent}
-                                />
-                           );
-                       })}
-                    </Accordion>
-                </ScrollArea>
+            <CardContent className="flex-grow flex flex-col min-h-0">
+                <Tabs defaultValue={classTalentTrees[0]} className="w-full flex flex-col flex-grow min-h-0">
+                    <TabsList className={`grid w-full grid-cols-${classTalentTrees.length}`}>
+                        {classTalentTrees.map(treeName => (
+                            <TabsTrigger key={treeName} value={treeName}>{treeName}</TabsTrigger>
+                        ))}
+                    </TabsList>
+                    <div className="flex-grow mt-4 overflow-y-auto">
+                        {classTalentTrees.map(treeName => (
+                             <TabsContent key={treeName} value={treeName} className="m-0">
+                                <ScrollArea className="h-[500px] pr-4">
+                                     <TalentTree
+                                        talents={getTalentsForTree(treeName)}
+                                        player={player}
+                                        gameData={gameData}
+                                        canLearnTalent={canLearnTalent}
+                                        learnTalent={learnTalent}
+                                    />
+                                </ScrollArea>
+                            </TabsContent>
+                        ))}
+                    </div>
+                </Tabs>
             </CardContent>
         </Card>
     );
