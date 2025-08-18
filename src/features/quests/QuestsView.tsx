@@ -74,35 +74,31 @@ export function QuestsView() {
     });
 
     return gameData.quests.filter(q => {
-        // Not already completed or active
+        // 1. Not already active or completed
         if (player.completedQuests.includes(q.id) || activeQuests.some(aq => aq.quete.id === q.id)) {
             return false;
         }
 
-        // Dungeon must be unlocked
+        // 2. Dungeon must be unlocked
         if (!unlockedDungeonIds.has(q.requirements.dungeonId)) {
             return false;
         }
 
-        // Check for chain quest requirements
+        // 3. Check for chain quest requirements
         const questIdParts = q.id.split('_q');
-        if (questIdParts.length < 2) return false; // Invalid quest ID format
+        if (questIdParts.length < 2) return false; // Invalid quest ID format, filter it out
 
-        const dungeonPrefix = questIdParts[0];
         const questNum = parseInt(questIdParts[1], 10);
         
-        // If it's the first quest in a chain, it's available if the dungeon is unlocked.
+        // If it's the first quest in a chain (q1), it's available.
         if (questNum === 1) {
             return true;
         }
         
-        // For subsequent quests, check if the previous one is completed.
+        // For subsequent quests (q2, q3...), check if the previous one is completed.
+        const dungeonPrefix = questIdParts[0];
         const prevQuestId = `${dungeonPrefix}_q${questNum - 1}`;
-        if (!player.completedQuests.includes(prevQuestId)) {
-            return false;
-        }
-        
-        return true;
+        return player.completedQuests.includes(prevQuestId);
     });
   }, [gameData.quests, gameData.dungeons, player.completedQuests, player.completedDungeons, activeQuests]);
 
@@ -114,7 +110,7 @@ export function QuestsView() {
         <CardDescription>Suivez vos aventures et les tâches à accomplir.</CardDescription>
       </CardHeader>
       <CardContent className="flex-grow p-0">
-         <Tabs defaultValue="active" className="w-full flex-grow flex flex-col">
+         <Tabs defaultValue="available" className="w-full flex-grow flex flex-col">
             <TabsList className="grid w-full grid-cols-3 mx-6">
                 <TabsTrigger value="available">Disponibles ({availableQuests.length})</TabsTrigger>
                 <TabsTrigger value="active">Actives ({activeQuests.length})</TabsTrigger>
