@@ -67,37 +67,32 @@ export function QuestsView() {
   const availableQuests = React.useMemo(() => {
     const unlockedDungeonIds = new Set<string>();
     gameData.dungeons.forEach((dungeon, index) => {
-        const isUnlocked = index === 0 || (player.completedDungeons[gameData.dungeons[index - 1]?.id] || 0) > 0;
+        const prevDungeonId = index > 0 ? gameData.dungeons[index - 1]?.id : null;
+        const isUnlocked = index === 0 || (prevDungeonId && (player.completedDungeons[prevDungeonId] || 0) > 0);
         if (isUnlocked) {
             unlockedDungeonIds.add(dungeon.id);
         }
     });
 
     return gameData.quests.filter(q => {
-        // 1. Not already active or completed
         if (player.completedQuests.includes(q.id) || activeQuests.some(aq => aq.quete.id === q.id)) {
             return false;
         }
 
-        // 2. Dungeon must be unlocked
         if (!unlockedDungeonIds.has(q.requirements.dungeonId)) {
             return false;
         }
-
-        // 3. Check for chain quest requirements
+        
         const questIdParts = q.id.split('_q');
-        if (questIdParts.length < 2) return false; // Invalid quest ID format, filter it out
+        if (questIdParts.length < 2) return false;
 
         const questNum = parseInt(questIdParts[1], 10);
-        
-        // If it's the first quest in a chain (q1), it's available.
         if (questNum === 1) {
             return true;
         }
         
-        // For subsequent quests (q2, q3...), check if the previous one is completed.
-        const dungeonPrefix = questIdParts[0];
-        const prevQuestId = `${dungeonPrefix}_q${questNum - 1}`;
+        const questPrefix = questIdParts[0];
+        const prevQuestId = `${questPrefix}_q${questNum - 1}`;
         return player.completedQuests.includes(prevQuestId);
     });
   }, [gameData.quests, gameData.dungeons, player.completedQuests, player.completedDungeons, activeQuests]);
