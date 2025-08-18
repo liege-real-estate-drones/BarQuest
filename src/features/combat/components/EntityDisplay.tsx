@@ -8,6 +8,7 @@ import { Monstre, Stats, PlayerState, ResourceType, CombatEnemy } from '@/lib/ty
 import * as formulas from '@/core/formulas';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
+import React from 'react';
 
 interface EntityDisplayProps {
   entity: PlayerState | CombatEnemy;
@@ -35,6 +36,7 @@ const resourceConfig: Record<ResourceType, { color: string; indicator: string }>
 
 export default function EntityDisplay({ entity, isPlayer = false, isTarget = false }: EntityDisplayProps) {
   const getXpToNextLevel = useGameStore(s => s.getXpToNextLevel);
+  const [showStats, setShowStats] = React.useState(false);
   
   const { level } = entity;
   const name = isPlayer ? (entity as PlayerState).name : (entity as Monstre).nom;
@@ -59,10 +61,13 @@ export default function EntityDisplay({ entity, isPlayer = false, isTarget = fal
   const currentResourceConfig = (playerResources?.type && resourceConfig[playerResources.type]) || { color: 'text-gray-400', indicator: 'bg-gray-500' };
 
   return (
-    <Card className={cn("flex flex-col h-full bg-card/50 transition-all border-2 border-transparent", 
-        isPlayer && "border-green-500/30",
-        isTarget && "border-primary shadow-lg shadow-primary/20 scale-105"
-    )}>
+    <Card 
+        className={cn("flex flex-col bg-card/50 transition-all border-2 border-transparent cursor-pointer", 
+            isPlayer && "border-green-500/30",
+            isTarget && "border-primary shadow-lg shadow-primary/20 scale-105"
+        )}
+        onClick={() => setShowStats(!showStats)}
+    >
       <CardHeader className="flex-shrink-0 pb-2">
         <CardTitle className="font-headline flex justify-between items-baseline">
           <span>{name} {isTarget && <span className="text-xs text-primary">(Cible)</span>}</span>
@@ -101,8 +106,13 @@ export default function EntityDisplay({ entity, isPlayer = false, isTarget = fal
             <Progress value={xpPercentage} className="h-2" indicatorClassName="bg-gradient-to-r from-yellow-400 to-yellow-600" />
           </div>
         )}
-        <Separator className="my-4" />
-        <StatGrid stats={stats} />
+        
+        {showStats && (
+            <>
+                <Separator className="my-4" />
+                <StatGrid stats={stats} />
+            </>
+        )}
       </CardContent>
     </Card>
   );
