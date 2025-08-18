@@ -108,16 +108,9 @@ const rarityDropChances: Record<Rareté, number> = {
   Unique: 0.0, // Uniques are special drops
 };
 
-const scaleAffixValue = (baseValue: number, level: number, rarity: Rareté): number => {
-    const rarityMultiplier: Record<Rareté, number> = {
-        Commun: 1,
-        Rare: 1.2,
-        Épique: 1.5,
-        Légendaire: 2,
-        Unique: 2.5,
-    };
+const scaleAffixValue = (baseValue: number, level: number): number => {
     // A more pronounced scaling factor for level
-    return Math.round(baseValue * (1 + (level * 0.1)) * rarityMultiplier[rarity]);
+    return Math.round(baseValue + (baseValue * level * 0.15));
 };
 
 const resolveLoot = (monster: Monstre, gameData: GameData, playerClassId: PlayerClassId | null): Item | null => {
@@ -132,9 +125,9 @@ const resolveLoot = (monster: Monstre, gameData: GameData, playerClassId: Player
       const newItem: Item = JSON.parse(JSON.stringify(droppedItemTemplate));
       newItem.id = uuidv4();
       newItem.niveauMin = monster.level;
-      newItem.affixes = newItem.affixes.map(affix => ({
+      newItem.affixes = (newItem.affixes || []).map(affix => ({
           ...affix,
-          val: scaleAffixValue(affix.val, monster.level, newItem.rarity)
+          val: scaleAffixValue(affix.val, monster.level)
       }));
       return newItem;
     }
@@ -160,26 +153,26 @@ const resolveLoot = (monster: Monstre, gameData: GameData, playerClassId: Player
   if (!chosenRarity) {
     return null;
   }
-
-  const possibleItems = gameData.items.filter(item => 
+  
+  const possibleItemTemplates = gameData.items.filter(item => 
       item.rarity === chosenRarity &&
       !item.set &&
       item.slot !== 'potion' &&
       (item.tagsClasse?.includes('common') || (playerClassId && item.tagsClasse?.includes(playerClassId)))
   );
 
-  if (possibleItems.length === 0) {
+  if (possibleItemTemplates.length === 0) {
     return null;
   }
 
-  const droppedItemTemplate = possibleItems[Math.floor(Math.random() * possibleItems.length)];
+  const droppedItemTemplate = possibleItemTemplates[Math.floor(Math.random() * possibleItemTemplates.length)];
   const newItem: Item = JSON.parse(JSON.stringify(droppedItemTemplate));
   newItem.id = uuidv4();
   newItem.niveauMin = monster.level;
   
-  newItem.affixes = newItem.affixes.map(affix => ({
+  newItem.affixes = (newItem.affixes || []).map(affix => ({
       ...affix,
-      val: scaleAffixValue(affix.val, monster.level, newItem.rarity)
+      val: scaleAffixValue(affix.val, monster.level)
   }));
   
   return newItem;
@@ -280,12 +273,19 @@ export const useGameStore = create<GameState>()(
         set(state => {
           const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
           state.player.stats.PV = maxHp;
-          state.player.resources.max = formulas.calculateMaxMana(state.player.level, state.player.stats);
-
-          if (state.player.resources.type === 'Rage') {
-            state.player.resources.current = 0;
-          } else {
-            state.player.resources.current = state.player.resources.max;
+          
+          const chosenClass = state.gameData.classes.find(c => c.id === state.player.classeId);
+          if (chosenClass) {
+              if(chosenClass.ressource === 'Mana') {
+                  state.player.resources.max = formulas.calculateMaxMana(state.player.level, state.player.stats);
+                  state.player.resources.current = state.player.resources.max;
+              } else if (chosenClass.ressource === 'Rage') {
+                  state.player.resources.max = 100;
+                  state.player.resources.current = 0;
+              } else {
+                   state.player.resources.max = 100;
+                   state.player.resources.current = 100;
+              }
           }
         });
       },
@@ -508,6 +508,11 @@ export const useGameStore = create<GameState>()(
           }
         });
         get().recalculateStats();
+        // After stats are recalculated, set HP to full.
+        set(state => {
+            const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
+            state.player.stats.PV = maxHp;
+        });
       },
 
       equipSkill: (skillId: string, slot: number) => {
@@ -600,7 +605,7 @@ export const useGameStore = create<GameState>()(
         const { currentDungeon, gameData } = get();
         if (!currentDungeon) return;
         
-        const possibleMonsters = gameData.monsters.filter(m => m.palier === currentDungeon.palier && !m.isBoss);
+        const possibleMonsters = gameData.monsters.filter(m => currentDungeon.monsters.includes(m.id) && !m.isBoss);
         const monsterCount = Math.floor(Math.random() * 3) + 1; // 1 to 3 monsters
         const newEnemies: CombatEnemy[] = [];
 
@@ -774,12 +779,19 @@ export const useGameStore = create<GameState>()(
 
                 let damage = 0;
                 if (skill.classeId === 'berserker' || skill.classeId === 'rogue') {
-                    const dmgMultiplier = getTalentEffectValue(skill.effets[0], rank) / 100;
+                    const dmgMultiplierMatch = skill.effets.join(' ').match(/(\d+)% des dégâts de l'arme/);
+                    const dmgMultiplier = dmgMultiplierMatch ? parseInt(dmgMultiplierMatch[1], 10) / 100 : 1;
                     const baseDmg = formulas.calculateMeleeDamage(player.stats.AttMin, player.stats.AttMax, formulas.calculateAttackPower(player.stats));
                     damage = baseDmg * dmgMultiplier;
                 } else if (skill.classeId === 'mage' || skill.classeId === 'cleric') {
                     const baseDmg = getTalentEffectValue(skill.effets[0], rank);
                     damage = formulas.calculateSpellDamage(baseDmg, formulas.calculateSpellPower(player.stats));
+                }
+                 if(skill.id === 'berserker_execute') {
+                    const hpPercent = (currentTarget.stats.PV / currentTarget.initialHp) * 100;
+                    if(hpPercent < 20) {
+                        damage *= 3; // Triple damage on low hp targets
+                    }
                 }
                 
                 const isCrit = formulas.isCriticalHit(player.stats.CritPct, player.stats.Precision, currentTarget.stats.Esquive);
@@ -1039,3 +1051,5 @@ export const useGameStore = create<GameState>()(
     }
   )
 );
+
+    
