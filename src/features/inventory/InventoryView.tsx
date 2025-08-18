@@ -5,13 +5,14 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Item } from '@/lib/types';
 import { useGameStore } from '@/state/gameStore';
-import { Coins, Swords, FlaskConical } from 'lucide-react';
+import { Coins, Swords, FlaskConical, Droplets } from 'lucide-react';
 import { ItemTooltip } from '@/components/ItemTooltip';
 
 export function InventoryView() {
-    const { inventory, equipItem } = useGameStore(state => ({
+    const { inventory, equipItem, player } = useGameStore(state => ({
         inventory: state.inventory,
         equipItem: state.equipItem,
+        player: state.player,
     }));
     return (
         <Card className="h-full flex flex-col">
@@ -21,7 +22,8 @@ export function InventoryView() {
             <CardContent className="flex-grow flex flex-col gap-4">
                 <div className="flex gap-4">
                     <Badge variant="secondary" className="text-base"><Coins className="mr-2 h-4 w-4" /> {inventory.gold} Or</Badge>
-                    <Badge variant="secondary" className="text-base"><FlaskConical className="mr-2 h-4 w-4" /> {inventory.potions} Potions</Badge>
+                    <Badge variant="secondary" className="text-base"><FlaskConical className="mr-2 h-4 w-4" /> {inventory.potions.health} Potions de Vie</Badge>
+                    <Badge variant="secondary" className="text-base"><Droplets className="mr-2 h-4 w-4" /> {inventory.potions.resource} Potions de {player.resources.type}</Badge>
                 </div>
                 
                 <div className="flex-grow relative">

@@ -3,8 +3,8 @@
 'use client';
 
 import { Button } from "@/components/ui/button";
-import type { Skill } from "@/lib/types";
-import { Heart, Shield, Zap, ArrowRightLeft, Coins } from "lucide-react";
+import type { PotionType, Skill } from "@/lib/types";
+import { Heart, Shield, Zap, ArrowRightLeft, Coins, Droplets } from "lucide-react";
 import { useEffect } from "react";
 import { useGameStore } from "@/state/gameStore";
 import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
@@ -76,7 +76,10 @@ export function ActionStrip({ onRetreat, onCycleTarget, skills }: ActionStripPro
                     onCycleTarget();
                     break;
                 case 'Q':
-                    usePotion();
+                    usePotion('health');
+                    break;
+                case 'W':
+                    usePotion('resource');
                     break;
             }
         };
@@ -156,19 +159,33 @@ export function ActionStrip({ onRetreat, onCycleTarget, skills }: ActionStripPro
                         </TooltipTrigger>
                         <TooltipContent side="top"><p>Changer de Cible</p></TooltipContent>
                     </Tooltip>
-                    <Tooltip>
+                     <Tooltip>
                         <TooltipTrigger asChild>
-                             <Button variant="outline" size="sm" onClick={usePotion} className="flex-col gap-1 text-xs relative h-12 w-20" disabled={inventory.potions <= 0}>
+                             <Button variant="outline" size="sm" onClick={() => usePotion('health')} className="flex-col gap-1 text-xs relative h-12 w-20" disabled={inventory.potions.health <= 0}>
                                 <Heart />
                                 <span className="text-secondary-foreground/70">[Q]</span>
-                                {inventory.potions > 0 && (
+                                {inventory.potions.health > 0 && (
                                     <div className="absolute -top-1 -right-1 bg-primary text-primary-foreground rounded-full h-5 w-5 flex items-center justify-center text-xs">
-                                        {inventory.potions}
+                                        {inventory.potions.health}
                                     </div>
                                 )}
                             </Button>
                         </TooltipTrigger>
-                        <TooltipContent side="top"><p>Utiliser une Potion</p></TooltipContent>
+                        <TooltipContent side="top"><p>Utiliser une Potion de Vie</p></TooltipContent>
+                    </Tooltip>
+                     <Tooltip>
+                        <TooltipTrigger asChild>
+                             <Button variant="outline" size="sm" onClick={() => usePotion('resource')} className="flex-col gap-1 text-xs relative h-12 w-20" disabled={inventory.potions.resource <= 0}>
+                                <Droplets />
+                                <span className="text-secondary-foreground/70">[W]</span>
+                                {inventory.potions.resource > 0 && (
+                                    <div className="absolute -top-1 -right-1 bg-primary text-primary-foreground rounded-full h-5 w-5 flex items-center justify-center text-xs">
+                                        {inventory.potions.resource}
+                                    </div>
+                                )}
+                            </Button>
+                        </TooltipTrigger>
+                        <TooltipContent side="top"><p>Utiliser une Potion de {playerResources.type}</p></TooltipContent>
                     </Tooltip>
                     <Tooltip>
                          <TooltipTrigger asChild>

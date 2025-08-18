@@ -3,7 +3,7 @@
 import create from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import type { Dungeon, Monstre, Item, Talent, Skill, Stats, PlayerState, InventoryState, CombatLogEntry, CombatState, GameData, Quete, PlayerClassId, ResourceType, Rareté, CombatEnemy, ItemSet } from '@/lib/types';
+import type { Dungeon, Monstre, Item, Talent, Skill, Stats, PlayerState, InventoryState, CombatLogEntry, CombatState, GameData, Quete, PlayerClassId, ResourceType, Rareté, CombatEnemy, ItemSet, PotionType } from '@/lib/types';
 import * as formulas from '@/core/formulas';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -39,7 +39,7 @@ const getInitialPlayerState = (): PlayerState => {
 const initialInventoryState: InventoryState = {
   gold: 100,
   items: [],
-  potions: 3,
+  potions: { health: 3, resource: 1 },
   equipment: { weapon: null, head: null, chest: null, legs: null, hands: null, feet: null, belt: null, amulet: null, ring: null, ring2: null, trinket: null, offhand: null },
 };
 
@@ -74,6 +74,7 @@ interface GameState {
   unequipItem: (slot: keyof InventoryState['equipment']) => void;
   buyItem: (item: Item) => boolean;
   sellItem: (itemId: string) => void;
+  sellAllUnusedItems: () => { soldCount: number; goldGained: number };
   learnSkill: (skillId: string) => void;
   learnTalent: (talentId: string) => void;
   equipSkill: (skillId: string, slot: number) => void;
@@ -81,9 +82,9 @@ interface GameState {
   resetGame: () => void;
 
   // Inn actions
-  buyPotion: () => boolean;
+  buyPotion: (potionType: PotionType) => boolean;
   rest: () => boolean;
-  usePotion: () => void;
+  usePotion: (potionType: PotionType) => void;
 
   enterDungeon: (dungeonId: string) => void;
   startCombat: () => void;
@@ -280,26 +281,6 @@ export const useGameStore = create<GameState>()(
             });
         });
         get().recalculateStats();
-
-        // After stats are calculated, set HP and resource to full. This is the fix.
-        set(state => {
-          const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
-          state.player.stats.PV = maxHp;
-          
-          const chosenClass = state.gameData.classes.find(c => c.id === state.player.classeId);
-          if (chosenClass) {
-              if(chosenClass.ressource === 'Mana') {
-                  state.player.resources.max = formulas.calculateMaxMana(state.player.level, state.player.stats);
-                  state.player.resources.current = state.player.resources.max;
-              } else if (chosenClass.ressource === 'Rage') {
-                  state.player.resources.max = 100;
-                  state.player.resources.current = 0;
-              } else {
-                   state.player.resources.max = 100;
-                   state.player.resources.current = 100;
-              }
-          }
-        });
       },
 
       recalculateStats: () => {
@@ -314,7 +295,7 @@ export const useGameStore = create<GameState>()(
           player.activeEffects = player.activeEffects || [];
           player.activeSetBonuses = [];
           player.completedDungeons = player.completedDungeons || [];
-          inventory.potions = inventory.potions || 0;
+          inventory.potions = inventory.potions || { health: 0, resource: 0 };
 
           const classe = gameData.classes.find(c => c.id === player.classeId);
           if (!classe) return;
@@ -392,9 +373,14 @@ export const useGameStore = create<GameState>()(
              player.resources.max = 100;
           }
           
+          // This ensures that after any stat change, if the player is not in combat, their HP is full.
+          // It also handles the initial character creation case.
           const currentHp = player.stats.PV;
-          if (currentHp > maxHp || currentHp <= 0 && state.view !== 'COMBAT') {
+          if (state.view !== 'COMBAT' || currentHp <= 0 || currentHp > maxHp) {
             player.stats.PV = maxHp;
+            if(state.player.resources.type !== 'Rage') {
+              player.resources.current = player.resources.max;
+            }
           }
         });
       },
@@ -443,11 +429,7 @@ export const useGameStore = create<GameState>()(
 
           set(state => {
               state.inventory.gold -= price;
-              if (newItem.slot === 'potion') {
-                  state.inventory.potions = (state.inventory.potions || 0) + 1;
-              } else {
-                  state.inventory.items.push(newItem);
-              }
+              state.inventory.items.push(newItem);
           });
           return true;
       },
@@ -463,6 +445,22 @@ export const useGameStore = create<GameState>()(
             state.inventory.gold += sellPrice;
             state.inventory.items.splice(itemIndex, 1);
         });
+      },
+
+      sellAllUnusedItems: () => {
+        let soldCount = 0;
+        let goldGained = 0;
+        set(state => {
+            const itemsToSell = [...state.inventory.items];
+            state.inventory.items = [];
+
+            itemsToSell.forEach(item => {
+                goldGained += getItemSellPrice(item);
+                soldCount++;
+            });
+            state.inventory.gold += goldGained;
+        });
+        return { soldCount, goldGained };
       },
 
       learnSkill: (skillId: string) => {
@@ -518,11 +516,6 @@ export const useGameStore = create<GameState>()(
           }
         });
         get().recalculateStats();
-        // After stats are recalculated, set HP to full.
-        set(state => {
-            const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
-            state.player.stats.PV = maxHp;
-        });
       },
 
       equipSkill: (skillId: string, slot: number) => {
@@ -550,15 +543,15 @@ export const useGameStore = create<GameState>()(
         window.location.reload();
       },
 
-      buyPotion: () => {
-          const POTION_COST = 50;
+      buyPotion: (potionType: PotionType) => {
+          const POTION_COST = potionType === 'health' ? 50 : 75;
           const { inventory } = get();
           if (inventory.gold < POTION_COST) {
               return false;
           }
           set(state => {
               state.inventory.gold -= POTION_COST;
-              state.inventory.potions = (state.inventory.potions || 0) + 1;
+              state.inventory.potions[potionType]++;
           });
           return true;
       },
@@ -582,14 +575,23 @@ export const useGameStore = create<GameState>()(
           return true;
       },
 
-      usePotion: () => {
+      usePotion: (potionType: PotionType) => {
           set(state => {
-              if (state.inventory.potions > 0) {
-                  const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
-                  const healAmount = Math.round(maxHp * 0.15);
-                  state.player.stats.PV = Math.min(maxHp, state.player.stats.PV + healAmount);
-                  state.inventory.potions -= 1;
-                  state.combat.log.push({ message: `You use a potion and heal for ${healAmount} HP.`, type: 'heal', timestamp: Date.now() });
+              if (potionType === 'health') {
+                 if (state.inventory.potions.health > 0) {
+                    const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
+                    const healAmount = Math.round(maxHp * 0.15);
+                    state.player.stats.PV = Math.min(maxHp, state.player.stats.PV + healAmount);
+                    state.inventory.potions.health--;
+                    state.combat.log.push({ message: `You use a potion and heal for ${healAmount} HP.`, type: 'heal', timestamp: Date.now() });
+                }
+              } else if (potionType === 'resource') {
+                  if (state.inventory.potions.resource > 0) {
+                      const resourceAmount = Math.round(state.player.resources.max * 0.25);
+                      state.player.resources.current = Math.min(state.player.resources.max, state.player.resources.current + resourceAmount);
+                      state.inventory.potions.resource--;
+                      state.combat.log.push({ message: `You use a potion and restore ${resourceAmount} ${state.player.resources.type}.`, type: 'heal', timestamp: Date.now() });
+                  }
               }
           });
       },
@@ -956,12 +958,6 @@ export const useGameStore = create<GameState>()(
             }
 
             if (leveledUp) {
-                const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
-                const maxMana = formulas.calculateMaxMana(state.player.level, state.player.stats);
-                state.player.stats.PV = maxHp;
-                if(state.player.resources.type !== 'Rage') {
-                    state.player.resources.current = maxMana;
-                }
                 get().recalculateStats();
             }
         });
@@ -1056,10 +1052,11 @@ export const useGameStore = create<GameState>()(
             state.combat = initialCombatState;
             state.player.learnedTalents = state.player.learnedTalents || {};
             state.player.reputation = state.player.reputation || {};
+            if(typeof state.inventory.potions !== 'object') {
+              state.inventory.potions = { health: state.inventory.potions || 0, resource: 0};
+            }
         }
       }
     }
   )
 );
-
-    

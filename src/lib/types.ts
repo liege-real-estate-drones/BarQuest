@@ -32,6 +32,7 @@ export type ItemSet = z.infer<typeof ItemSetSchema>;
 export type PlayerClassId = 'berserker' | 'mage' | 'rogue' | 'cleric';
 
 export type ResourceType = 'Mana' | 'Rage' | 'Énergie';
+export type PotionType = 'health' | 'resource';
 
 export interface GameData {
   dungeons: Dungeon[];
@@ -76,7 +77,10 @@ export interface PlayerState {
 export interface InventoryState {
   gold: number;
   items: Item[];
-  potions: number;
+  potions: {
+    health: number;
+    resource: number;
+  };
   equipment: {
     weapon: Item | null;
     head: Item | null;

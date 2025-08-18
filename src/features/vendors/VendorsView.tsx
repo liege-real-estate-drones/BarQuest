@@ -7,11 +7,22 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { useToast } from '@/hooks/use-toast';
 import type { Item } from '@/lib/types';
 import { useGameStore, getItemSellPrice } from '@/state/gameStore';
-import { Coins, ShoppingCart, Tags } from 'lucide-react';
+import { Coins, ShoppingCart, Tags, Trash2 } from 'lucide-react';
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { ItemTooltip } from '@/components/ItemTooltip';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 function BuyTab() {
     const { gold, gameItems, playerLevel, buyItem, equipment } = useGameStore(state => ({
@@ -80,12 +91,13 @@ function BuyTab() {
 }
 
 function SellTab() {
-    const { inventoryItems, sellItem, equipment } = useGameStore(state => ({
+    const { inventoryItems, sellItem, sellAllUnusedItems, equipment } = useGameStore(state => ({
         inventoryItems: state.inventory.items,
         sellItem: state.sellItem,
+        sellAllUnusedItems: state.sellAllUnusedItems,
         equipment: state.inventory.equipment,
     }));
-     const { toast } = useToast();
+    const { toast } = useToast();
 
     const handleSell = (item: Item) => {
         sellItem(item.id);
@@ -94,38 +106,80 @@ function SellTab() {
             description: `Vous avez vendu [${item.name}] pour ${getItemSellPrice(item)} or.`,
         });
     };
+
+    const handleSellAll = () => {
+        const { soldCount, goldGained } = sellAllUnusedItems();
+        if (soldCount > 0) {
+            toast({
+                title: "Butin vendu !",
+                description: `Vous avez vendu ${soldCount} objet(s) pour ${goldGained} or.`,
+            });
+        } else {
+            toast({
+                title: "Rien à vendre",
+                description: "Vos sacs sont déjà vides.",
+                variant: "destructive",
+            });
+        }
+    };
     
     if(inventoryItems.length === 0) {
         return <p className="text-center text-muted-foreground p-8">Votre inventaire est vide.</p>
     }
 
     return (
-         <Table>
-            <TableHeader>
-                <TableRow>
-                    <TableHead>Objet</TableHead>
-                    <TableHead className="text-right">Valeur</TableHead>
-                    <TableHead className="w-[100px]"></TableHead>
-                </TableRow>
-            </TableHeader>
-            <TableBody>
-                {inventoryItems.map(item => (
-                    <TableRow key={item.id}>
-                        <TableCell>
-                            <ItemTooltip item={item} equippedItem={equipment[item.slot as keyof typeof equipment]}>
-                                 <span className="text-xs text-muted-foreground ml-2">(iLvl {item.niveauMin})</span>
-                            </ItemTooltip>
-                        </TableCell>
-                        <TableCell className="text-right font-mono text-primary">{getItemSellPrice(item)}</TableCell>
-                        <TableCell className="text-right">
-                            <Button size="sm" variant="outline" onClick={() => handleSell(item)}>
-                                <Tags className="mr-2 h-4 w-4" /> Vendre
-                            </Button>
-                        </TableCell>
+        <div>
+            <div className="flex justify-end mb-4">
+                 <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                       <Button variant="destructive" disabled={inventoryItems.length === 0}>
+                            <Trash2 className="mr-2 h-4 w-4" />
+                            Vendre tout le butin
+                        </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>Êtes-vous sûr de vouloir tout vendre ?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                Vous êtes sur le point de vendre tous les objets non équipés de votre inventaire. Cette action est irréversible.
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>Annuler</AlertDialogCancel>
+                            <AlertDialogAction onClick={handleSellAll} className="bg-destructive hover:bg-destructive/90">
+                                Oui, tout vendre
+                            </AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
+            </div>
+             <Table>
+                <TableHeader>
+                    <TableRow>
+                        <TableHead>Objet</TableHead>
+                        <TableHead className="text-right">Valeur</TableHead>
+                        <TableHead className="w-[100px]"></TableHead>
                     </TableRow>
-                ))}
-            </TableBody>
-        </Table>
+                </TableHeader>
+                <TableBody>
+                    {inventoryItems.map(item => (
+                        <TableRow key={item.id}>
+                            <TableCell>
+                                <ItemTooltip item={item} equippedItem={equipment[item.slot as keyof typeof equipment]}>
+                                     <span className="text-xs text-muted-foreground ml-2">(iLvl {item.niveauMin})</span>
+                                </ItemTooltip>
+                            </TableCell>
+                            <TableCell className="text-right font-mono text-primary">{getItemSellPrice(item)}</TableCell>
+                            <TableCell className="text-right">
+                                <Button size="sm" variant="outline" onClick={() => handleSell(item)}>
+                                    <Tags className="mr-2 h-4 w-4" /> Vendre
+                                </Button>
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+        </div>
     )
 }
 
