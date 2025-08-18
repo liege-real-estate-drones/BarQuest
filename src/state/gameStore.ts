@@ -125,10 +125,17 @@ const resolveLoot = (monster: Monstre, gameData: GameData, playerClassId: Player
       const newItem: Item = JSON.parse(JSON.stringify(droppedItemTemplate));
       newItem.id = uuidv4();
       newItem.niveauMin = monster.level;
-      newItem.affixes = (newItem.affixes || []).map(affix => ({
-          ...affix,
-          val: scaleAffixValue(affix.val, monster.level)
-      }));
+      
+      const newAffixes = (newItem.affixes || []).map(affix => {
+          const affixTemplate = gameData.affixes.find(a => a.id === affix.ref);
+          const baseValue = affixTemplate?.portée[0] ?? 1;
+          return {
+              ...affix,
+              val: scaleAffixValue(baseValue, monster.level)
+          }
+      });
+      newItem.affixes = newAffixes;
+
       return newItem;
     }
   }
@@ -170,10 +177,15 @@ const resolveLoot = (monster: Monstre, gameData: GameData, playerClassId: Player
   newItem.id = uuidv4();
   newItem.niveauMin = monster.level;
   
-  newItem.affixes = (newItem.affixes || []).map(affix => ({
-      ...affix,
-      val: scaleAffixValue(affix.val, monster.level)
-  }));
+  const newAffixes = (newItem.affixes || []).map(affix => {
+      const affixTemplate = gameData.affixes.find(a => a.id === affix.ref);
+      const baseValue = affixTemplate?.portée[0] ?? 1;
+      return {
+          ...affix,
+          val: scaleAffixValue(baseValue, monster.level)
+      }
+  });
+  newItem.affixes = newAffixes;
   
   return newItem;
 };
