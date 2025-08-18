@@ -99,6 +99,11 @@ function SellTab() {
     }));
     const { toast } = useToast();
 
+    const totalSellValue = React.useMemo(() =>
+        inventoryItems.reduce((acc, item) => acc + getItemSellPrice(item), 0),
+        [inventoryItems]
+    );
+
     const handleSell = (item: Item) => {
         sellItem(item.id);
         toast({
@@ -135,6 +140,9 @@ function SellTab() {
                        <Button variant="destructive" disabled={inventoryItems.length === 0}>
                             <Trash2 className="mr-2 h-4 w-4" />
                             Vendre tout le butin
+                            {totalSellValue > 0 && (
+                                <span className="ml-2 flex items-center gap-1">({totalSellValue} <Coins className="h-3 w-3" />)</span>
+                            )}
                         </Button>
                     </AlertDialogTrigger>
                     <AlertDialogContent>
