@@ -57,13 +57,16 @@ export function SkillsView() {
     const unlockedButNotLearnedSkills = gameData.skills.filter(skill => 
         skill.classeId === player.classeId &&
         player.level >= (skill.niveauRequis || 1) &&
-        (player.learnedSkills[skill.id] || 0) === 0
+        (!player.learnedSkills[skill.id] || player.learnedSkills[skill.id] === 0)
     );
 
     const handleEquip = (skillId: string) => {
         const firstEmptySlot = player.equippedSkills.indexOf(null);
         if (firstEmptySlot !== -1) {
             equipSkill(skillId, firstEmptySlot);
+        } else {
+            // If no empty slot, maybe show a toast? For now, we just disable the button.
+            console.warn("No empty skill slots available.");
         }
     };
     
@@ -72,6 +75,8 @@ export function SkillsView() {
         const skill = gameData.skills.find(t => t.id === skillId);
         if (!skill) return false;
         if ((player.learnedSkills[skill.id] || 0) >= skill.rangMax) return false;
+        if (player.level < (skill.niveauRequis || 1)) return false;
+
 
         return (skill.exigences || []).every(req => {
             const [reqId, reqRankStr] = req.split(':');
@@ -180,5 +185,3 @@ export function SkillsView() {
         </Card>
     );
 }
-
-    
