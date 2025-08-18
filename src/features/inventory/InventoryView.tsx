@@ -4,9 +4,21 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Item } from '@/lib/types';
-import { useGameStore } from '@/state/gameStore';
-import { Coins, Swords, FlaskConical, Droplets } from 'lucide-react';
+import { useGameStore, calculateItemScore } from '@/state/gameStore';
+import { Coins, Swords, FlaskConical, Droplets, Plus, Minus, Equal } from 'lucide-react';
 import { ItemTooltip } from '@/components/ItemTooltip';
+import { cn } from '@/lib/utils';
+
+const ComparisonIndicator = ({ comparison }: { comparison: 'better' | 'worse' | 'equal' }) => {
+    if (comparison === 'better') {
+        return <span className="text-green-500 flex items-center text-xs">[<Plus className="h-3 w-3" />]</span>;
+    }
+    if (comparison === 'worse') {
+        return <span className="text-red-500 flex items-center text-xs">[<Minus className="h-3 w-3" />]</span>;
+    }
+    return <span className="text-gray-500 flex items-center text-xs">[<Equal className="h-3 w-3" />]</span>;
+};
+
 
 export function InventoryView() {
     const { inventory, equipItem, player } = useGameStore(state => ({
@@ -14,6 +26,19 @@ export function InventoryView() {
         equipItem: state.equipItem,
         player: state.player,
     }));
+
+    const getComparison = (item: Item) => {
+        if (!player.classeId) return 'equal';
+
+        const equippedItem = inventory.equipment[item.slot as keyof typeof inventory.equipment];
+        const itemScore = calculateItemScore(item, player.classeId);
+        const equippedScore = equippedItem ? calculateItemScore(equippedItem, player.classeId) : 0;
+        
+        if (itemScore > equippedScore) return 'better';
+        if (itemScore < equippedScore) return 'worse';
+        return 'equal';
+    };
+
     return (
         <Card className="h-full flex flex-col">
             <CardHeader>
@@ -32,11 +57,14 @@ export function InventoryView() {
                             <ul className="space-y-2 pr-4">
                                 {inventory.items.map((item: Item) => (
                                     <li key={item.id} className="border p-2 rounded flex justify-between items-center bg-card-foreground/5 hover:bg-card-foreground/10">
-                                       <ItemTooltip item={item} equippedItem={inventory.equipment[item.slot as keyof typeof inventory.equipment]}>
-                                            <div className="flex-grow">
-                                                <span className="text-xs text-muted-foreground ml-2">(iLvl {item.niveauMin})</span>
-                                            </div>
-                                       </ItemTooltip>
+                                       <div className="flex items-center gap-2">
+                                            <ComparisonIndicator comparison={getComparison(item)} />
+                                            <ItemTooltip item={item} equippedItem={inventory.equipment[item.slot as keyof typeof inventory.equipment]}>
+                                                <div className="flex-grow">
+                                                    <span className="text-xs text-muted-foreground ml-2">(iLvl {item.niveauMin})</span>
+                                                </div>
+                                            </ItemTooltip>
+                                        </div>
                                        <Button size="sm" variant="outline" onClick={() => equipItem(item.id)}>
                                          <Swords className="mr-2 h-4 w-4"/>
                                          Équiper

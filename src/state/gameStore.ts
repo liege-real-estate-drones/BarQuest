@@ -212,6 +212,37 @@ export const getItemSellPrice = (item: Item): number => {
     return Math.ceil(item.niveauMin * rarityMultiplier[item.rarity]);
 };
 
+const STAT_WEIGHTS: Record<PlayerClassId, Partial<Record<keyof Stats, number>>> = {
+    berserker: { Force: 2, AttMin: 1, AttMax: 1, CritDmg: 0.8, Armure: 0.7, PV: 0.5, CritPct: 0.5 },
+    mage: { Intelligence: 2, Esprit: 1.2, CritPct: 1, CritDmg: 0.8, PV: 0.5, Vitesse: 0.7 },
+    rogue: { Dexterite: 2, CritPct: 1.5, CritDmg: 1.2, Vitesse: 1, AttMin: 0.8, AttMax: 0.8 },
+    cleric: { Esprit: 2, Intelligence: 1.5, PV: 1, Armure: 0.8, Vitesse: 0.5 },
+};
+
+export const calculateItemScore = (item: Item, classId: PlayerClassId): number => {
+    let score = 0;
+    const weights = STAT_WEIGHTS[classId];
+
+    item.affixes.forEach(affix => {
+        const statKey = affix.ref as keyof Stats;
+        const weight = weights[statKey] || 0.1; // Give a small weight to unknown stats
+        score += affix.val * weight;
+    });
+
+    // Also consider base stats on the item if they exist
+    if (item.stats) {
+        Object.entries(item.stats).forEach(([key, value]) => {
+            const statKey = key as keyof Stats;
+            const weight = weights[statKey] || 0.1;
+            if (typeof value === 'number') {
+                score += value * weight;
+            }
+        });
+    }
+
+    return score;
+}
+
 const storage = createJSONStorage(() => localStorage);
 
 export const useGameStore = create<GameState>()(
