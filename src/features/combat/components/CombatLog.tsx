@@ -6,7 +6,8 @@ import { cn } from '@/lib/utils';
 import type { CombatLogEntry, Item, Rareté } from '@/lib/types';
 import { useRef, useEffect } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Separator } from '@/components/ui/separator';
+import { ItemTooltip } from '@/components/ItemTooltip';
+import { useGameStore } from '@/state/gameStore';
 
 const rarityColorMap: Record<Rareté, string> = {
     Commun: 'text-gray-400',
@@ -15,25 +16,6 @@ const rarityColorMap: Record<Rareté, string> = {
     Légendaire: 'text-yellow-500',
     Unique: 'text-orange-500',
 };
-
-function ItemPopoverContent({ item }: { item: Item }) {
-    if (!item) return null;
-    return (
-        <div className="p-2 text-xs w-64">
-            <h4 className={`font-bold ${rarityColorMap[item.rarity]}`}>{item.name}</h4>
-            <div className="flex justify-between text-muted-foreground">
-                <span className="capitalize">{item.slot}</span>
-                <span>Niveau {item.niveauMin}</span>
-            </div>
-            <Separator className="my-2" />
-            <div className="space-y-1">
-                {item.affixes.map((affix, i) => (
-                    <p key={i} className="text-green-400">+{affix.val} {affix.ref}</p>
-                ))}
-            </div>
-        </div>
-    );
-}
 
 const getLogEntryColor = (type: CombatLogEntry['type']) => {
   switch (type) {
@@ -58,20 +40,19 @@ const getLogEntryColor = (type: CombatLogEntry['type']) => {
 
 const LogMessage = ({ entry }: { entry: CombatLogEntry }) => {
     const color = getLogEntryColor(entry.type);
+    const equipment = useGameStore(s => s.inventory.equipment);
 
     if (entry.type === 'loot' && entry.item) {
         return (
             <p className={cn('whitespace-pre-wrap', color)}>
                 <span className="text-muted-foreground/50 mr-2">[{new Date(entry.timestamp).toLocaleTimeString()}]</span>
                  Vous avez trouvé :{' '}
-                <Popover>
-                    <PopoverTrigger asChild>
-                        <span className={`cursor-pointer underline decoration-dashed ${rarityColorMap[entry.item.rarity]}`}>[{entry.item.name}]</span>
-                    </PopoverTrigger>
-                    <PopoverContent>
-                        <ItemPopoverContent item={entry.item} />
-                    </PopoverContent>
-                </Popover>
+                <ItemTooltip 
+                    item={entry.item} 
+                    equippedItem={equipment[entry.item.slot as keyof typeof equipment]}
+                    triggerClassName={rarityColorMap[entry.item.rarity]}
+                >
+                </ItemTooltip>
                 .
             </p>
         );

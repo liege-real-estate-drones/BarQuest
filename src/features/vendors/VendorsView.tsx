@@ -3,55 +3,29 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useToast } from '@/hooks/use-toast';
-import type { Rareté, Item } from '@/lib/types';
+import type { Item } from '@/lib/types';
 import { useGameStore, getItemSellPrice } from '@/state/gameStore';
 import { Coins, ShoppingCart, Tags } from 'lucide-react';
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from '@/components/ui/scroll-area';
-
-const rarityColorMap: Record<Rareté, string> = {
-    Commun: 'text-gray-400',
-    Rare: 'text-blue-400',
-    Épique: 'text-purple-500',
-    Légendaire: 'text-yellow-500',
-    Unique: 'text-orange-500',
-};
-
-function ItemPopoverContent({ item }: { item: Item }) {
-    return (
-        <div className="p-2 text-xs w-64">
-            <h4 className={`font-bold ${rarityColorMap[item.rarity]}`}>{item.name}</h4>
-            <div className="flex justify-between text-muted-foreground">
-                <span className="capitalize">{item.slot}</span>
-                <span>Niveau {item.niveauMin}</span>
-            </div>
-            <Separator className="my-2" />
-            <div className="space-y-1">
-                {item.affixes.map((affix, i) => (
-                    <p key={i} className="text-green-400">+{affix.val} {affix.ref}</p>
-                ))}
-            </div>
-        </div>
-    );
-}
+import { ItemTooltip } from '@/components/ItemTooltip';
 
 function BuyTab() {
-    const { gold, gameItems, playerLevel, buyItem } = useGameStore(state => ({
+    const { gold, gameItems, playerLevel, buyItem, equipment } = useGameStore(state => ({
         gold: state.inventory.gold,
         gameItems: state.gameData.items,
         playerLevel: state.player.level,
-        buyItem: state.buyItem
+        buyItem: state.buyItem,
+        equipment: state.inventory.equipment,
     }));
     const { toast } = useToast();
 
     const vendorItems = React.useMemo(() => 
         gameItems.filter(item => 
-            item.vendorPrice && item.vendorPrice > 0 && item.niveauMin <= playerLevel + 2
+            item.vendorPrice && item.vendorPrice > 0 && item.niveauMin <= playerLevel + 5
         ).sort((a,b) => a.niveauMin - b.niveauMin), 
     [gameItems, playerLevel]);
 
@@ -88,17 +62,9 @@ function BuyTab() {
                 {vendorItems.map(item => (
                     <TableRow key={item.id}>
                         <TableCell>
-                            <Popover>
-                                <PopoverTrigger asChild>
-                                    <div className="cursor-pointer">
-                                        <span className={`${rarityColorMap[item.rarity]} underline decoration-dashed`}>{item.name}</span>
-                                        <span className="text-xs text-muted-foreground ml-2">(iLvl {item.niveauMin})</span>
-                                    </div>
-                                </PopoverTrigger>
-                                <PopoverContent>
-                                    <ItemPopoverContent item={item} />
-                                </PopoverContent>
-                            </Popover>
+                            <ItemTooltip item={item} equippedItem={equipment[item.slot as keyof typeof equipment]}>
+                                <span className="text-xs text-muted-foreground ml-2">(iLvl {item.niveauMin})</span>
+                            </ItemTooltip>
                         </TableCell>
                         <TableCell className="text-right font-mono text-primary">{item.vendorPrice}</TableCell>
                         <TableCell className="text-right">
@@ -114,9 +80,10 @@ function BuyTab() {
 }
 
 function SellTab() {
-    const { inventoryItems, sellItem } = useGameStore(state => ({
+    const { inventoryItems, sellItem, equipment } = useGameStore(state => ({
         inventoryItems: state.inventory.items,
-        sellItem: state.sellItem
+        sellItem: state.sellItem,
+        equipment: state.inventory.equipment,
     }));
      const { toast } = useToast();
 
@@ -145,17 +112,9 @@ function SellTab() {
                 {inventoryItems.map(item => (
                     <TableRow key={item.id}>
                         <TableCell>
-                            <Popover>
-                                <PopoverTrigger asChild>
-                                    <div className="cursor-pointer">
-                                        <span className={`${rarityColorMap[item.rarity]} underline decoration-dashed`}>{item.name}</span>
-                                        <span className="text-xs text-muted-foreground ml-2">(iLvl {item.niveauMin})</span>
-                                    </div>
-                                </PopoverTrigger>
-                                <PopoverContent>
-                                    <ItemPopoverContent item={item} />
-                                </PopoverContent>
-                            </Popover>
+                            <ItemTooltip item={item} equippedItem={equipment[item.slot as keyof typeof equipment]}>
+                                 <span className="text-xs text-muted-foreground ml-2">(iLvl {item.niveauMin})</span>
+                            </ItemTooltip>
                         </TableCell>
                         <TableCell className="text-right font-mono text-primary">{getItemSellPrice(item)}</TableCell>
                         <TableCell className="text-right">
@@ -207,5 +166,3 @@ export function VendorsView() {
         </Card>
     );
 }
-
-    

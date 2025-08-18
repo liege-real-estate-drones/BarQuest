@@ -1,37 +1,10 @@
 'use client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useGameStore } from '@/state/gameStore';
-import { Item, Rareté } from '@/lib/types';
+import { Item } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { BaggageClaim } from 'lucide-react';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Separator } from '@/components/ui/separator';
-
-const rarityColorMap: Record<Rareté, string> = {
-    Commun: 'text-gray-400',
-    Rare: 'text-blue-400',
-    Épique: 'text-purple-500',
-    Légendaire: 'text-yellow-500',
-    Unique: 'text-orange-500',
-};
-
-function ItemPopoverContent({ item }: { item: Item }) {
-    return (
-        <div className="p-2 text-xs w-64">
-            <h4 className={`font-bold ${rarityColorMap[item.rarity]}`}>{item.name}</h4>
-            <div className="flex justify-between text-muted-foreground">
-                <span className="capitalize">{item.slot}</span>
-                <span>Niveau {item.niveauMin}</span>
-            </div>
-            <Separator className="my-2" />
-            <div className="space-y-1">
-                {item.affixes.map((affix, i) => (
-                    <p key={i} className="text-green-400">+{affix.val} {affix.ref}</p>
-                ))}
-            </div>
-        </div>
-    );
-}
+import { ItemTooltip } from '@/components/ItemTooltip';
 
 function EquipmentSlot({ slotName, item }: { slotName: string; item: Item | null }) {
     const unequipItem = useGameStore(s => s.unequipItem);
@@ -41,14 +14,7 @@ function EquipmentSlot({ slotName, item }: { slotName: string; item: Item | null
             <span className="text-sm capitalize text-muted-foreground w-1/4">{slotName}</span>
             <div className="flex-grow text-center">
                 {item ? (
-                     <Popover>
-                        <PopoverTrigger asChild>
-                             <span className={`cursor-pointer underline decoration-dashed ${rarityColorMap[item.rarity]}`}>{item.name}</span>
-                        </PopoverTrigger>
-                        <PopoverContent>
-                            <ItemPopoverContent item={item} />
-                        </PopoverContent>
-                     </Popover>
+                     <ItemTooltip item={item} />
                 ) : (
                     <span className="text-xs text-muted-foreground/50">Vide</span>
                 )}

@@ -3,38 +3,10 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Separator } from '@/components/ui/separator';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Rareté, Item } from '@/lib/types';
+import { Item } from '@/lib/types';
 import { useGameStore } from '@/state/gameStore';
 import { Coins, Swords, FlaskConical } from 'lucide-react';
-
-const rarityColorMap: Record<Rareté, string> = {
-    Commun: 'text-gray-400',
-    Rare: 'text-blue-400',
-    Épique: 'text-purple-500',
-    Légendaire: 'text-yellow-500',
-    Unique: 'text-orange-500',
-};
-
-function ItemPopoverContent({ item }: { item: Item }) {
-    return (
-        <div className="p-2 text-xs w-64">
-            <h4 className={`font-bold ${rarityColorMap[item.rarity]}`}>{item.name}</h4>
-            <div className="flex justify-between text-muted-foreground">
-                <span className="capitalize">{item.slot}</span>
-                <span>Niveau {item.niveauMin}</span>
-            </div>
-            <Separator className="my-2" />
-            <div className="space-y-1">
-                {item.affixes.map((affix, i) => (
-                    <p key={i} className="text-green-400">+{affix.val} {affix.ref}</p>
-                ))}
-            </div>
-        </div>
-    );
-}
-
+import { ItemTooltip } from '@/components/ItemTooltip';
 
 export function InventoryView() {
     const { inventory, equipItem } = useGameStore(state => ({
@@ -56,21 +28,13 @@ export function InventoryView() {
                   <ScrollArea className="absolute inset-0">
                         {inventory.items.length > 0 ? (
                             <ul className="space-y-2 pr-4">
-                                {inventory.items.map((item) => (
+                                {inventory.items.map((item: Item) => (
                                     <li key={item.id} className="border p-2 rounded flex justify-between items-center bg-card-foreground/5 hover:bg-card-foreground/10">
-                                       <Popover>
-                                            <PopoverTrigger asChild>
-                                                <div className="cursor-pointer">
-                                                    <span className={`${rarityColorMap[item.rarity]} underline decoration-dashed`}>
-                                                        {item.name}
-                                                    </span>
-                                                    <span className="text-xs text-muted-foreground ml-2">(iLvl {item.niveauMin})</span>
-                                                </div>
-                                            </PopoverTrigger>
-                                            <PopoverContent side="right" align="start">
-                                                <ItemPopoverContent item={item} />
-                                            </PopoverContent>
-                                       </Popover>
+                                       <ItemTooltip item={item} equippedItem={inventory.equipment[item.slot as keyof typeof inventory.equipment]}>
+                                            <div className="flex-grow">
+                                                <span className="text-xs text-muted-foreground ml-2">(iLvl {item.niveauMin})</span>
+                                            </div>
+                                       </ItemTooltip>
                                        <Button size="sm" variant="outline" onClick={() => equipItem(item.id)}>
                                          <Swords className="mr-2 h-4 w-4"/>
                                          Équiper
