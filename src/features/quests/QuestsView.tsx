@@ -84,13 +84,14 @@ export function QuestsView() {
         }
         
         const questIdParts = q.id.split('_q');
-        if (questIdParts.length < 2) return false;
+        if (questIdParts.length < 2) return false; // Invalid quest ID format
 
         const questNum = parseInt(questIdParts[1], 10);
         if (questNum === 1) {
-            return true;
+            return true; // First quest in a chain is always available if dungeon is unlocked
         }
         
+        // For quests > q1, check if the previous one is completed
         const questPrefix = questIdParts[0];
         const prevQuestId = `${questPrefix}_q${questNum - 1}`;
         return player.completedQuests.includes(prevQuestId);
