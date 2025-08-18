@@ -15,7 +15,7 @@ import { cn } from "@/lib/utils";
 const getResourceCost = (skill: Skill) => {
     const effects = skill.effets || [];
     const resourceCostMatch = effects.join(' ').match(/Coûte (\d+) (Mana|Rage|Énergie)/);
-    return resourceCostMatch ? { amount: resourceCostMatch[1], type: resourceCostMatch[2] } : null;
+    return resourceCostMatch ? { amount: parseInt(resourceCostMatch[1], 10), type: resourceCostMatch[2] } : null;
 }
 
 function SkillTooltipContent({ skill }: { skill: Skill }) {
@@ -49,11 +49,12 @@ const resourceColorMap = {
 }
 
 export function ActionStrip({ onRetreat, onCycleTarget, skills }: ActionStripProps) {
-    const { usePotion, inventory, useSkill, skillCooldowns } = useGameStore(state => ({
+    const { usePotion, inventory, useSkill, skillCooldowns, playerResources } = useGameStore(state => ({
         usePotion: state.usePotion,
         inventory: state.inventory,
         useSkill: state.useSkill,
         skillCooldowns: state.combat.skillCooldowns,
+        playerResources: state.player.resources,
     }));
     
     useEffect(() => {
@@ -94,8 +95,12 @@ export function ActionStrip({ onRetreat, onCycleTarget, skills }: ActionStripPro
                          const cooldown = skillCooldowns[skill.id];
                          const isCoolingDown = cooldown > 0;
                          const cooldownProgress = (cooldown / (skill.cooldown * 1000)) * 100;
+                         
                          const resourceCost = getResourceCost(skill);
+                         const hasEnoughResource = resourceCost ? playerResources.current >= resourceCost.amount : true;
+                         
                          const colorClass = resourceCost ? resourceColorMap[resourceCost.type as keyof typeof resourceColorMap] : 'text-muted-foreground';
+                         const isDisabled = isCoolingDown || !hasEnoughResource;
 
                          return (
                              <Tooltip key={skill.id}>
@@ -104,10 +109,10 @@ export function ActionStrip({ onRetreat, onCycleTarget, skills }: ActionStripPro
                                         variant="secondary" 
                                         className={cn(
                                             "w-24 h-20 flex-col gap-1 text-xs relative overflow-hidden transition-all",
-                                            isCoolingDown && "grayscale"
+                                            isDisabled && "grayscale"
                                         )}
                                         onClick={() => useSkill(skill.id)} 
-                                        disabled={isCoolingDown}
+                                        disabled={isDisabled}
                                     >
                                         <Zap />
                                         <span className="truncate">{skill.nom}</span>
