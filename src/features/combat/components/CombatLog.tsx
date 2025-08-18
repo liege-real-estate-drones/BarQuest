@@ -1,11 +1,8 @@
 
 'use client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 import type { CombatLogEntry, Item, Rareté } from '@/lib/types';
-import { useRef, useEffect } from 'react';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { ItemTooltip } from '@/components/ItemTooltip';
 import { useGameStore } from '@/state/gameStore';
 
@@ -68,31 +65,19 @@ const LogMessage = ({ entry }: { entry: CombatLogEntry }) => {
 
 
 export function CombatLog({ log }: { log: CombatLogEntry[] }) {
-  const scrollAreaRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (scrollAreaRef.current) {
-        const viewport = scrollAreaRef.current.querySelector('div[data-radix-scroll-area-viewport]');
-        if(viewport) {
-             viewport.scrollTop = viewport.scrollHeight;
-        }
-    }
-  }, [log]);
-
+  const latestLog = log.slice(-5).reverse();
 
   return (
     <Card className="flex flex-col h-full">
       <CardHeader className="py-3">
         <CardTitle className="font-headline text-lg">Combat Log</CardTitle>
       </CardHeader>
-      <CardContent className="flex-grow p-0">
-        <ScrollArea className="h-full p-4" ref={scrollAreaRef}>
+      <CardContent className="flex-grow p-4">
         <div className="flex flex-col gap-1 font-code text-xs">
-            {log.map((entry, index) => (
-                <LogMessage key={index} entry={entry} />
+            {latestLog.map((entry, index) => (
+                <LogMessage key={`${entry.timestamp}-${index}`} entry={entry} />
             ))}
         </div>
-        </ScrollArea>
       </CardContent>
     </Card>
   );
