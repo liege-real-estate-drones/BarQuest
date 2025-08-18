@@ -46,37 +46,33 @@ export function SkillsView() {
 
     if (!player.classeId) return null;
 
-    const learnedSkills = gameData.skills.filter(skill =>
-        skill.classeId === player.classeId &&
+    const allClassSkills = gameData.skills.filter(skill => skill.classeId === player.classeId);
+
+    const learnedSkills = allClassSkills.filter(skill =>
         (player.learnedSkills[skill.id] || 0) > 0
     );
 
     const availableToEquip = learnedSkills.filter(skill => !player.equippedSkills.includes(skill.id));
-    const equippedSkillsDetails = player.equippedSkills.map(skillId => skillId ? gameData.skills.find(s => s.id === skillId) : null);
     
-    const unlockedButNotLearnedSkills = gameData.skills.filter(skill => 
-        skill.classeId === player.classeId &&
-        player.level >= (skill.niveauRequis || 1) &&
+    const equippedSkillsDetails = player.equippedSkills.map(skillId => skillId ? allClassSkills.find(s => s.id === skillId) : null);
+    
+    const skillsToLearn = allClassSkills.filter(skill => 
         (!player.learnedSkills[skill.id] || player.learnedSkills[skill.id] === 0)
-    );
+    ).sort((a,b) => (a.niveauRequis || 1) - (b.niveauRequis || 1));
 
     const handleEquip = (skillId: string) => {
         const firstEmptySlot = player.equippedSkills.indexOf(null);
         if (firstEmptySlot !== -1) {
             equipSkill(skillId, firstEmptySlot);
         } else {
-            // If no empty slot, maybe show a toast? For now, we just disable the button.
             console.warn("No empty skill slots available.");
         }
     };
     
-     const canLearnSkill = (skillId: string): boolean => {
+    const canLearnSkill = (skill: Skill): boolean => {
         if (player.talentPoints <= 0) return false;
-        const skill = gameData.skills.find(t => t.id === skillId);
-        if (!skill) return false;
         if ((player.learnedSkills[skill.id] || 0) >= skill.rangMax) return false;
         if (player.level < (skill.niveauRequis || 1)) return false;
-
 
         return (skill.exigences || []).every(req => {
             const [reqId, reqRankStr] = req.split(':');
@@ -100,16 +96,16 @@ export function SkillsView() {
                     <Separator className="mb-4"/>
                     <ScrollArea className="h-[200px] p-1">
                         <div className="space-y-2 p-3 rounded-lg bg-background/50 min-h-[100px]">
-                            {unlockedButNotLearnedSkills.length > 0 ? unlockedButNotLearnedSkills.map(skill => (
+                            {skillsToLearn.length > 0 ? skillsToLearn.map(skill => (
                                 <Popover key={skill.id}>
-                                    <div className="p-2 border rounded-md bg-card/80 flex items-center justify-between gap-2">
+                                    <div className={cn("p-2 border rounded-md bg-card/80 flex items-center justify-between gap-2", player.level < (skill.niveauRequis || 1) && "opacity-50")}>
                                         <PopoverTrigger asChild>
                                             <div className="flex items-center gap-2 cursor-pointer">
                                                 <Zap className="h-4 w-4 text-muted-foreground" />
                                                 <span>{skill.nom} <span className="text-xs text-muted-foreground">(Niv. {skill.niveauRequis})</span></span>
                                             </div>
                                         </PopoverTrigger>
-                                        <Button size="sm" variant="outline" onClick={() => learnSkill(skill.id)} disabled={!canLearnSkill(skill.id)}>
+                                        <Button size="sm" variant="outline" onClick={() => learnSkill(skill.id)} disabled={!canLearnSkill(skill)}>
                                             <PlusCircle className="h-4 w-4 mr-2"/>
                                             Apprendre
                                         </Button>
