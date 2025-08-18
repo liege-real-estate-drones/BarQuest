@@ -294,10 +294,12 @@ export const useGameStore = create<GameState>()(
             state.activeQuests = [];
             
             // Assign first quest for each dungeon chain
-            const firstQuests = state.gameData.dungeons.map(d => state.gameData.quests.find(q => q.requirements.dungeonId === d.id)).filter(Boolean) as Quete[];
+            const firstQuests = state.gameData.dungeons.map(d => state.gameData.quests.find(q => q.requirements.dungeonId === d.id && q.id.endsWith('_q1'))).filter(Boolean) as Quete[];
             
             firstQuests.forEach(quest => {
-                state.activeQuests.push({ quete: quest, progress: 0 });
+                if(quest) {
+                    state.activeQuests.push({ quete: quest, progress: 0 });
+                }
             })
 
             state.player.classeId = chosenClass.id as PlayerClassId;
@@ -331,6 +333,7 @@ export const useGameStore = create<GameState>()(
           player.completedDungeons = player.completedDungeons || [];
           player.completedQuests = player.completedQuests || [];
           inventory.potions = inventory.potions || { health: 0, resource: 0 };
+          state.activeQuests = state.activeQuests || [];
 
           const classe = gameData.classes.find(c => c.id === player.classeId);
           if (!classe) return;
@@ -1096,11 +1099,23 @@ export const useGameStore = create<GameState>()(
             state.player.learnedTalents = state.player.learnedTalents || {};
             state.player.reputation = state.player.reputation || {};
             state.player.completedQuests = state.player.completedQuests || [];
+            state.activeQuests = state.activeQuests || [];
             if(typeof state.inventory.potions !== 'object') {
               state.inventory.potions = { health: state.inventory.potions || 0, resource: 0};
+            }
+
+            // Backfill quests for old saves
+            if (state.isInitialized && state.activeQuests.length === 0 && state.player.completedQuests.length === 0) {
+                const firstQuests = state.gameData.dungeons.map(d => state.gameData.quests.find(q => q.requirements.dungeonId === d.id && q.id.endsWith('_q1'))).filter(Boolean) as Quete[];
+                firstQuests.forEach(quest => {
+                    if (quest) {
+                        state.activeQuests.push({ quete: quest, progress: 0 });
+                    }
+                });
             }
         }
       }
     }
   )
 );
+
