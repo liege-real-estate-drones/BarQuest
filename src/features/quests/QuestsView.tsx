@@ -59,9 +59,22 @@ export function QuestsView() {
   const completedQuests = gameData.quests.filter(q => player.completedQuests.includes(q.id));
 
   const availableQuests = React.useMemo(() => {
+    const unlockedDungeonIds = new Set<string>();
+    gameData.dungeons.forEach((dungeon, index) => {
+        const isUnlocked = index === 0 || player.completedDungeons.includes(gameData.dungeons[index - 1]?.id);
+        if (isUnlocked) {
+            unlockedDungeonIds.add(dungeon.id);
+        }
+    });
+
     return gameData.quests.filter(q => {
         // Not already completed or active
         if (player.completedQuests.includes(q.id) || activeQuests.some(aq => aq.quete.id === q.id)) {
+            return false;
+        }
+
+        // Dungeon must be unlocked
+        if (!unlockedDungeonIds.has(q.requirements.dungeonId)) {
             return false;
         }
 
@@ -75,11 +88,9 @@ export function QuestsView() {
             }
         }
         
-        // Add level requirements or other checks here if needed in the future
-
         return true;
     });
-  }, [gameData.quests, player.completedQuests, activeQuests]);
+  }, [gameData.quests, gameData.dungeons, player.completedQuests, player.completedDungeons, activeQuests]);
 
 
   return (
