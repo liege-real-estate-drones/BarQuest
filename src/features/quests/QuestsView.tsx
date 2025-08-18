@@ -85,13 +85,21 @@ export function QuestsView() {
         }
 
         // Check for chain quest requirements
-        const [dungeonPrefix, questNumStr] = q.id.split('_q');
-        const questNum = parseInt(questNumStr, 10);
-        if (questNum > 1) {
-            const prevQuestId = `${dungeonPrefix}_q${questNum - 1}`;
-            if (!player.completedQuests.includes(prevQuestId)) {
-                return false;
-            }
+        const questIdParts = q.id.split('_q');
+        if (questIdParts.length < 2) return false; // Invalid quest ID format
+
+        const dungeonPrefix = questIdParts[0];
+        const questNum = parseInt(questIdParts[1], 10);
+        
+        // If it's the first quest in a chain, it's available if the dungeon is unlocked.
+        if (questNum === 1) {
+            return true;
+        }
+        
+        // For subsequent quests, check if the previous one is completed.
+        const prevQuestId = `${dungeonPrefix}_q${questNum - 1}`;
+        if (!player.completedQuests.includes(prevQuestId)) {
+            return false;
         }
         
         return true;
