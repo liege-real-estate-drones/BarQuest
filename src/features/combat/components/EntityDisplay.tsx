@@ -18,7 +18,7 @@ interface EntityDisplayProps {
 
 function StatGrid({ stats }: { stats: Stats }) {
     return (
-        <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm font-mono">
+        <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs font-mono">
             <span className="text-muted-foreground">Attaque:</span><span className="text-right">{stats.AttMin ?? 0} - {stats.AttMax ?? 0}</span>
             <span className="text-muted-foreground">Crit %:</span><span className="text-right">{stats.CritPct ?? 0}%</span>
             <span className="text-muted-foreground">Crit Dmg:</span><span className="text-right">{stats.CritDmg ?? 0}%</span>
@@ -68,25 +68,25 @@ export default function EntityDisplay({ entity, isPlayer = false, isTarget = fal
         )}
         onClick={() => setShowStats(!showStats)}
     >
-      <CardHeader className="flex-shrink-0 pb-2">
-        <CardTitle className="font-headline flex justify-between items-baseline">
+      <CardHeader className="flex-shrink-0 p-3">
+        <CardTitle className="font-headline flex justify-between items-baseline text-base">
           <span>{name} {isTarget && <span className="text-xs text-primary">(Cible)</span>}</span>
           <span className="text-sm text-muted-foreground">Lvl {level}</span>
         </CardTitle>
-        <CardDescription className="capitalize">
+        <CardDescription className="capitalize text-xs">
           {isPlayer ? (entity as PlayerState).classeId : (entity as Monstre).famille}
         </CardDescription>
         {!isPlayer && (
             <Progress value={((entity as CombatEnemy).attackProgress || 0) * 100} className="h-1 mt-1 bg-background/50" indicatorClassName="bg-yellow-500" />
         )}
       </CardHeader>
-      <CardContent className="space-y-4 flex-grow pt-4">
+      <CardContent className="space-y-2 flex-grow p-3 pt-0">
         <div>
           <div className="flex justify-between text-xs mb-1 font-mono text-red-400">
             <span>PV</span>
             <span>{Math.round(currentHp)} / {Math.round(maxHp)}</span>
           </div>
-          <Progress value={hpPercentage} className="h-4" indicatorClassName="bg-gradient-to-r from-red-500 to-red-700" />
+          <Progress value={hpPercentage} className="h-3" indicatorClassName="bg-gradient-to-r from-red-500 to-red-700" />
         </div>
         {isPlayer && playerResources && playerResources.type && playerResources.max > 0 && (
           <div>
@@ -94,7 +94,7 @@ export default function EntityDisplay({ entity, isPlayer = false, isTarget = fal
               <span>{playerResources.type.toUpperCase()}</span>
               <span>{Math.round(playerResources.current)} / {Math.round(playerResources.max)}</span>
             </div>
-            <Progress value={(playerResources.current / playerResources.max) * 100} className="h-4" indicatorClassName={currentResourceConfig.indicator} />
+            <Progress value={(playerResources.current / playerResources.max) * 100} className="h-3" indicatorClassName={currentResourceConfig.indicator} />
           </div>
         )}
         {isPlayer && xpToNextLevel !== undefined && (
@@ -109,7 +109,7 @@ export default function EntityDisplay({ entity, isPlayer = false, isTarget = fal
         
         {showStats && (
             <>
-                <Separator className="my-4" />
+                <Separator className="my-2" />
                 <StatGrid stats={stats} />
             </>
         )}

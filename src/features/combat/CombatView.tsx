@@ -113,7 +113,9 @@ export function CombatView() {
           {/* Right Column - Info */}
           <div className="lg:col-span-1 flex flex-col gap-4 min-h-0">
             <DungeonInfo dungeon={currentDungeon} />
-            <CombatLog log={combatLog} />
+            <div className="flex-grow min-h-0">
+                <CombatLog log={combatLog} />
+            </div>
           </div>
       </main>
 
