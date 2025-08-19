@@ -1,4 +1,3 @@
-
 'use client';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -34,10 +33,10 @@ function BuyTab() {
     }));
     const { toast } = useToast();
 
-    const vendorItems = React.useMemo(() => 
-        gameItems.filter(item => 
+    const vendorItems = React.useMemo(() =>
+        gameItems.filter(item =>
             item.vendorPrice && item.vendorPrice > 0 && item.niveauMin <= playerLevel + 5
-        ).sort((a,b) => a.niveauMin - b.niveauMin), 
+        ).sort((a,b) => a.niveauMin - b.niveauMin),
     [gameItems, playerLevel]);
 
     const handleBuy = (item: Item) => {
@@ -55,7 +54,7 @@ function BuyTab() {
             });
         }
     };
-    
+
     if (vendorItems.length === 0) {
         return <p className="text-center text-muted-foreground p-8">Le forgeron n'a rien à vendre pour le moment.</p>
     }
@@ -127,7 +126,7 @@ function SellTab() {
             });
         }
     };
-    
+
     if(inventoryItems.length === 0) {
         return <p className="text-center text-muted-foreground p-8">Votre inventaire est vide.</p>
     }
@@ -195,8 +194,9 @@ export function VendorsView() {
     const { gold } = useGameStore(state => ({
         gold: state.inventory.gold,
     }));
-    
+
     return (
+        // Le Card prendra toute la hauteur disponible de son parent flex
         <Card className="h-full flex flex-col">
             <CardHeader>
                 <CardTitle className="flex justify-between items-center">
@@ -207,20 +207,24 @@ export function VendorsView() {
                     </Badge>
                 </CardTitle>
             </CardHeader>
-            <CardContent className="flex-grow flex flex-col p-0">
+            {/* CardContent prend la hauteur restante, et son enfant direct aussi */}
+            <CardContent className="flex-grow flex flex-col p-0 min-h-0">
                 <Tabs defaultValue="buy" className="w-full flex-grow flex flex-col">
-                    <TabsList className="grid w-full grid-cols-2 mx-6">
+                    <TabsList className="grid w-full grid-cols-2 px-6">
                         <TabsTrigger value="buy">Acheter</TabsTrigger>
                         <TabsTrigger value="sell">Vendre</TabsTrigger>
                     </TabsList>
+                    {/* Ce conteneur a maintenant une hauteur définie (le reste de l'espace) */}
                     <div className="relative flex-grow mt-4">
                         <ScrollArea className="absolute inset-0">
-                            <TabsContent value="buy" className="m-0 px-6">
-                                <BuyTab />
-                            </TabsContent>
-                            <TabsContent value="sell" className="m-0 px-6">
-                                <SellTab />
-                            </TabsContent>
+                            <div className="px-6">
+                                <TabsContent value="buy" className="m-0">
+                                    <BuyTab />
+                                </TabsContent>
+                                <TabsContent value="sell" className="m-0">
+                                    <SellTab />
+                                </TabsContent>
+                            </div>
                         </ScrollArea>
                     </div>
                 </Tabs>
