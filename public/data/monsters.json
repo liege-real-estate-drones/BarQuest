@@ -1540,6 +1540,132 @@
                 "Precision": 160,
                 "Esquive": 22
             }
+        },
+        {
+            "id": "bat_matriarch",
+            "nom": "Matriarche des Cavernes",
+            "level": 5,
+            "famille": "Beast",
+            "isBoss": true,
+            "palier": 1,
+            "stats": { "PV": 200, "AttMin": 15, "AttMax": 22, "CritPct": 12, "CritDmg": 150, "Armure": 40, "Vitesse": 2.0, "Precision": 70, "Esquive": 20 }
+        },
+        {
+            "id": "yeti_chieftain",
+            "nom": "Chef de Clan Yéti",
+            "level": 8,
+            "famille": "Giant",
+            "isBoss": true,
+            "palier": 2,
+            "stats": { "PV": 600, "AttMin": 25, "AttMax": 35, "CritPct": 8, "CritDmg": 150, "Armure": 150, "Vitesse": 3.2, "Precision": 75, "Esquive": 10 }
+        },
+        {
+            "id": "inferno_elemental_lord",
+            "nom": "Seigneur Élémentaire des Cendres",
+            "level": 11,
+            "famille": "Elemental",
+            "isBoss": true,
+            "palier": 3,
+            "stats": { "PV": 800, "AttMin": 45, "AttMax": 55, "CritPct": 10, "CritDmg": 150, "Armure": 180, "Vitesse": 2.7, "Precision": 80, "Esquive": 12 }
+        },
+        {
+            "id": "ancient_dryad_matriarch",
+            "nom": "Matriarche Dryade Ancienne",
+            "level": 14,
+            "famille": "Fey",
+            "isBoss": true,
+            "palier": 4,
+            "stats": { "PV": 1200, "AttMin": 60, "AttMax": 75, "CritPct": 15, "CritDmg": 160, "Armure": 250, "Vitesse": 2.4, "Precision": 85, "Esquive": 18 }
+        },
+        {
+            "id": "void_cultist_leader",
+            "nom": "Chef de Culte du Vide",
+            "level": 17,
+            "famille": "Humanoid",
+            "isBoss": true,
+            "palier": 5,
+            "stats": { "PV": 1800, "AttMin": 70, "AttMax": 85, "CritPct": 12, "CritDmg": 150, "Armure": 350, "Vitesse": 2.8, "Precision": 90, "Esquive": 14 }
+        },
+        {
+            "id": "void_priest",
+            "nom": "Prêtre du Vide",
+            "level": 17,
+            "famille": "Humanoid",
+            "isBoss": true,
+            "palier": 5,
+            "stats": { "PV": 1900, "AttMin": 75, "AttMax": 90, "CritPct": 14, "CritDmg": 160, "Armure": 380, "Vitesse": 2.6, "Precision": 92, "Esquive": 16 }
+        },
+        {
+            "id": "icebound_warlord",
+            "nom": "Seigneur de Guerre Englacé",
+            "level": 20,
+            "famille": "Humanoid",
+            "isBoss": true,
+            "palier": 6,
+            "stats": { "PV": 2500, "AttMin": 95, "AttMax": 115, "CritPct": 15, "CritDmg": 150, "Armure": 500, "Vitesse": 3.2, "Precision": 95, "Esquive": 10 }
+        },
+        {
+            "id": "fire_giant_champion",
+            "nom": "Champion Géant de Feu",
+            "level": 23,
+            "famille": "Giant",
+            "isBoss": true,
+            "palier": 7,
+            "stats": { "PV": 3500, "AttMin": 120, "AttMax": 140, "CritPct": 10, "CritDmg": 150, "Armure": 700, "Vitesse": 3.4, "Precision": 100, "Esquive": 9 }
+        },
+        {
+            "id": "guardian_of_the_grove",
+            "nom": "Gardien du Bosquet",
+            "level": 26,
+            "famille": "Fey",
+            "isBoss": true,
+            "palier": 8,
+            "stats": { "PV": 4500, "AttMin": 150, "AttMax": 180, "CritPct": 18, "CritDmg": 160, "Armure": 800, "Vitesse": 2.6, "Precision": 105, "Esquive": 20 }
+        },
+        {
+            "id": "spectral_overlord",
+            "nom": "Souverain Spectral",
+            "level": 29,
+            "famille": "Undead",
+            "isBoss": true,
+            "palier": 9,
+            "stats": { "PV": 5500, "AttMin": 190, "AttMax": 220, "CritPct": 22, "CritDmg": 180, "Armure": 900, "Vitesse": 2.0, "Precision": 110, "Esquive": 32 }
+        },
+        {
+            "id": "boreal_crusader",
+            "nom": "Croisé Boréal",
+            "level": 32,
+            "famille": "Humanoid",
+            "isBoss": true,
+            "palier": 10,
+            "stats": { "PV": 7000, "AttMin": 230, "AttMax": 270, "CritPct": 15, "CritDmg": 150, "Armure": 1500, "Vitesse": 3.2, "Precision": 115, "Esquive": 14 }
+        },
+        {
+            "id": "ashwing_matriarch",
+            "nom": "Matriarche Aile-de-Cendre",
+            "level": 35,
+            "famille": "Beast",
+            "isBoss": true,
+            "palier": 11,
+            "stats": { "PV": 8000, "AttMin": 280, "AttMax": 320, "CritPct": 25, "CritDmg": 180, "Armure": 1600, "Vitesse": 2.2, "Precision": 120, "Esquive": 30 }
+        },
+        {
+            "id": "colossus_of_the_grove",
+            "nom": "Colosse du Bosquet",
+            "level": 38,
+            "famille": "Construct",
+            "isBoss": true,
+            "palier": 12,
+            "stats": { "PV": 12000, "AttMin": 350, "AttMax": 400, "CritPct": 10, "CritDmg": 150, "Armure": 2500, "Vitesse": 4.2, "Precision": 125, "Esquive": 7 }
+        },
+        {
+            "id": "ancient_tomb_protector",
+            "nom": "Protecteur de Tombe Ancien",
+            "level": 41,
+            "famille": "Construct",
+            "isBoss": true,
+            "palier": 13,
+            "stats": { "PV": 15000, "AttMin": 420, "AttMax": 480, "CritPct": 8, "CritDmg": 150, "Armure": 3500, "Vitesse": 4.5, "Precision": 130, "Esquive": 6 }
         }
     ]
 }
