@@ -98,7 +98,7 @@ export interface InventoryState {
   };
 }
 
-export type CombatEnemy = Monstre & { initialHp: number; attackProgress: number };
+export type CombatEnemy = Monstre & { initialHp: number; attackProgress: number; templateId: string; };
 
 export interface CombatLogEntry {
     message: string;

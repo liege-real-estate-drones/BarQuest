@@ -11,7 +11,7 @@
                 "giant_rat"
             ],
             "killTarget": 10,
-            "bossId": "kobold_miner"
+            "bossId": "kobold_miner_supervisor"
         },
         {
             "id": "dungeon_2",

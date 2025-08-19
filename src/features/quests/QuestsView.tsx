@@ -10,7 +10,7 @@ import type { Quete } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import React from 'react';
 
-function QuestCard({ quest, progress, onAccept, isAvailable }: { quest: Quete; progress?: number; onAccept?: (id: string) => void; isAvailable?: boolean; }) {
+function QuestCard({ quest, progress, onAccept, isAvailable, gameData }: { quest: Quete; progress?: number; onAccept?: (id: string) => void; isAvailable?: boolean; gameData: any; }) {
   const isCompleted = progress === undefined && !isAvailable;
   
   const { requirements } = quest;
@@ -28,7 +28,8 @@ function QuestCard({ quest, progress, onAccept, isAvailable }: { quest: Quete; p
       break;
     case 'chasse_boss':
       targetCount = 1;
-      objectiveText = `Vaincre ${requirements.bossId} dans ${requirements.dungeonId}`;
+      const boss = gameData.monsters.find((m: any) => m.id === requirements.bossId);
+      objectiveText = `Vaincre ${boss ? boss.nom : requirements.bossId} dans ${requirements.dungeonId}`;
       break;
     case 'collecte':
       targetCount = requirements.itemCount || 0;
@@ -156,7 +157,7 @@ export function QuestsView() {
                             {availableQuests.length > 0 ? (
                                 <div className="space-y-4">
                                 {availableQuests.map((quest) => (
-                                    <QuestCard key={quest.id} quest={quest} onAccept={acceptQuest} isAvailable />
+                                    <QuestCard key={quest.id} quest={quest} onAccept={acceptQuest} isAvailable gameData={gameData} />
                                 ))}
                                 </div>
                             ) : (
@@ -167,7 +168,7 @@ export function QuestsView() {
                             {activeQuests.length > 0 ? (
                                 <div className="space-y-4">
                                 {activeQuests.map(({ quete, progress }) => (
-                                    <QuestCard key={quete.id} quest={quete} progress={progress} />
+                                    <QuestCard key={quete.id} quest={quete} progress={progress} gameData={gameData} />
                                 ))}
                                 </div>
                             ) : (
@@ -178,7 +179,7 @@ export function QuestsView() {
                             {completedQuests.length > 0 ? (
                                  <div className="space-y-4">
                                 {completedQuests.map((quete) => (
-                                    <QuestCard key={quete.id} quest={quete} />
+                                    <QuestCard key={quete.id} quest={quete} gameData={gameData} />
                                 ))}
                                 </div>
                             ) : (

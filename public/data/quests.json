@@ -3551,7 +3551,7 @@
       "desc": "Un puissant adversaire, Kobold Miner, a été repéré dans Goblin Mines. Mettez fin à sa menace.",
       "requirements": {
         "dungeonId": "dungeon_1",
-        "bossId": "kobold_miner"
+        "bossId": "kobold_miner_supervisor"
       },
       "rewards": {
         "gold": 150,

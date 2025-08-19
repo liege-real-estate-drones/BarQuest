@@ -40,7 +40,7 @@
             }
         },
         {
-            "id": "kobold_miner",
+            "id": "kobold_miner_supervisor",
             "nom": "Kobold Miner SUPERVISOR", 
             "famille": "Humanoid",
             "level": 3, 
