@@ -91,79 +91,76 @@ export function ActionStrip({ onRetreat, onCycleTarget, skills }: ActionStripPro
 
     return (
         <TooltipProvider>
-            <div className="flex flex-col items-center justify-center gap-2 w-full">
-                 {/* Skills */}
-                <div className="flex justify-center items-center gap-2">
-                    {skills.map((skill, index) => {
-                         const cooldown = skillCooldowns[skill.id];
-                         const isCoolingDown = cooldown > 0;
-                         const cooldownProgress = (cooldown / (skill.cooldown * 1000)) * 100;
-                         
-                         const resourceCost = getResourceCost(skill);
-                         const hasEnoughResource = resourceCost ? playerResources.current >= resourceCost.amount : true;
-                         
-                         const colorClass = resourceCost ? resourceColorMap[resourceCost.type as keyof typeof resourceColorMap] : 'text-muted-foreground';
-                         const isDisabled = isCoolingDown || !hasEnoughResource;
+            <div className="flex flex-col md:flex-row items-center justify-center gap-2 w-full">
+                {/* Skills */}
+                <div className="grid grid-cols-4 gap-2 w-full md:w-auto md:flex md:gap-2">
+                    {skills.map((skill) => {
+                        const cooldown = skillCooldowns[skill.id];
+                        const isCoolingDown = cooldown > 0;
+                        const cooldownProgress = (cooldown / (skill.cooldown * 1000)) * 100;
 
-                         return (
-                             <Tooltip key={skill.id}>
+                        const resourceCost = getResourceCost(skill);
+                        const hasEnoughResource = resourceCost ? playerResources.current >= resourceCost.amount : true;
+
+                        const colorClass = resourceCost ? resourceColorMap[resourceCost.type as keyof typeof resourceColorMap] : 'text-muted-foreground';
+                        const isDisabled = isCoolingDown || !hasEnoughResource;
+
+                        return (
+                            <Tooltip key={skill.id}>
                                 <TooltipTrigger asChild>
                                     <Button 
                                         variant="secondary" 
                                         className={cn(
-                                            "w-24 h-20 flex-col gap-1 text-xs relative overflow-hidden transition-all",
+                                            "h-16 md:w-24 md:h-20 flex-col gap-1 text-xs relative overflow-hidden transition-all",
                                             isDisabled && "grayscale"
                                         )}
                                         onClick={() => useSkill(skill.id)} 
                                         disabled={isDisabled}
                                     >
-                                        <Zap />
+                                        <Zap size={20} className="md:w-6 md:h-6" />
                                         <span className="truncate">{skill.nom}</span>
-                                        {resourceCost && (
-                                            <span className={`font-mono text-xs ${colorClass}`}>
-                                                {resourceCost.amount}
-                                            </span>
-                                        )}
                                         {isCoolingDown && (
                                             <div className="absolute inset-0 bg-black/70 flex items-center justify-center text-lg font-bold">
-                                               {Math.ceil(cooldown / 1000)}
+                                                {Math.ceil(cooldown / 1000)}
                                             </div>
                                         )}
                                         {isCoolingDown && (
-                                             <Progress value={100 - cooldownProgress} className="absolute bottom-0 left-0 w-full h-1 bg-transparent" indicatorClassName="bg-white/30" />
+                                            <Progress value={100 - cooldownProgress} className="absolute bottom-0 left-0 w-full h-1 bg-transparent" indicatorClassName="bg-white/30" />
                                         )}
                                     </Button>
                                 </TooltipTrigger>
                                 <TooltipContent side="top">
-                                     <SkillTooltipContent skill={skill} />
+                                    <SkillTooltipContent skill={skill} />
                                 </TooltipContent>
-                             </Tooltip>
-                         )
+                            </Tooltip>
+                        )
                     })}
-
                     {[...Array(4 - (skills?.length || 0))].map((_, index) => (
-                        <div key={`empty-${index}`} className="w-24 h-20 rounded-md bg-secondary/30 flex items-center justify-center text-xs text-muted-foreground">
+                        <div key={`empty-${index}`} className="h-16 md:w-24 md:h-20 rounded-md bg-secondary/30 flex items-center justify-center text-xs text-muted-foreground">
                             Vide
                         </div>
                     ))}
                 </div>
                 
-                 {/* Utilities */}
-                 <div className="flex justify-center items-center gap-2">
+                <Separator orientation="horizontal" className="w-full my-2 md:hidden" />
+                <Separator orientation="vertical" className="h-16 hidden md:block mx-2" />
+
+                {/* Utilities */}
+                <div className="grid grid-cols-4 gap-2 w-full md:w-auto md:flex md:gap-2">
                     <Tooltip>
                         <TooltipTrigger asChild>
-                            <Button variant="outline" onClick={onCycleTarget} className="w-20 h-12 flex-col gap-1 text-xs">
-                                <ArrowRightLeft />
-                                <span className="text-muted-foreground/70">[T]</span>
+                            <Button variant="outline" onClick={onCycleTarget} className="h-14 md:h-12 flex-col gap-1 text-xs md:w-20">
+                                <ArrowRightLeft size={20} />
+                                <span className="text-muted-foreground/70 text-[10px]">[T]</span>
                             </Button>
                         </TooltipTrigger>
                         <TooltipContent side="top"><p>Changer de Cible</p></TooltipContent>
                     </Tooltip>
-                     <Tooltip>
+                    <Tooltip>
                         <TooltipTrigger asChild>
-                             <Button variant="outline" size="sm" onClick={() => usePotion('health')} className="flex-col gap-1 text-xs relative h-12 w-20" disabled={inventory.potions.health <= 0}>
-                                <Heart />
-                                <span className="text-secondary-foreground/70">[Q]</span>
+                             <Button variant="outline" onClick={() => usePotion('health')} className="flex-col gap-1 text-xs relative h-14 md:h-12 md:w-20" disabled={inventory.potions.health <= 0}>
+                                <Heart size={20} />
+                                <span className="text-muted-foreground/70 text-[10px]">[Q]</span>
                                 {inventory.potions.health > 0 && (
                                     <div className="absolute -top-1 -right-1 bg-primary text-primary-foreground rounded-full h-5 w-5 flex items-center justify-center text-xs">
                                         {inventory.potions.health}
@@ -173,11 +170,11 @@ export function ActionStrip({ onRetreat, onCycleTarget, skills }: ActionStripPro
                         </TooltipTrigger>
                         <TooltipContent side="top"><p>Utiliser une Potion de Vie</p></TooltipContent>
                     </Tooltip>
-                     <Tooltip>
+                    <Tooltip>
                         <TooltipTrigger asChild>
-                             <Button variant="outline" size="sm" onClick={() => usePotion('resource')} className="flex-col gap-1 text-xs relative h-12 w-20" disabled={inventory.potions.resource <= 0}>
-                                <Droplets />
-                                <span className="text-secondary-foreground/70">[W]</span>
+                             <Button variant="outline" onClick={() => usePotion('resource')} className="flex-col gap-1 text-xs relative h-14 md:h-12 md:w-20" disabled={inventory.potions.resource <= 0}>
+                                <Droplets size={20} />
+                                <span className="text-muted-foreground/70 text-[10px]">[W]</span>
                                 {inventory.potions.resource > 0 && (
                                     <div className="absolute -top-1 -right-1 bg-primary text-primary-foreground rounded-full h-5 w-5 flex items-center justify-center text-xs">
                                         {inventory.potions.resource}
@@ -189,14 +186,14 @@ export function ActionStrip({ onRetreat, onCycleTarget, skills }: ActionStripPro
                     </Tooltip>
                     <Tooltip>
                          <TooltipTrigger asChild>
-                            <Button variant="outline" size="sm" onClick={onRetreat} className="flex-col gap-1 text-xs h-12 w-20">
-                                <Shield />
-                                <span className="text-muted-foreground/70">[R]</span>
+                            <Button variant="outline" onClick={onRetreat} className="flex-col gap-1 text-xs h-14 md:h-12 md:w-20">
+                                <Shield size={20} />
+                                <span className="text-muted-foreground/70 text-[10px]">[R]</span>
                             </Button>
                         </TooltipTrigger>
                         <TooltipContent side="top"><p>Retraite</p></TooltipContent>
                     </Tooltip>
-                 </div>
+                </div>
             </div>
         </TooltipProvider>
     );

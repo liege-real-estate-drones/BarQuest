@@ -13,6 +13,7 @@ interface EntityDisplayProps {
   entity: PlayerState | CombatEnemy;
   isPlayer?: boolean;
   isTarget?: boolean;
+  isCompact?: boolean;
 }
 
 function StatGrid({ stats }: { stats: Stats }) {
@@ -33,10 +34,10 @@ const resourceConfig: Record<ResourceType, { color: string; indicator: string }>
     'Énergie': { color: 'text-yellow-400', indicator: 'bg-gradient-to-r from-yellow-500 to-yellow-700' },
 };
 
-export default function EntityDisplay({ entity, isPlayer = false, isTarget = false }: EntityDisplayProps) {
+export default function EntityDisplay({ entity, isPlayer = false, isTarget = false, isCompact = false }: EntityDisplayProps) {
   const getXpToNextLevel = useGameStore(s => s.getXpToNextLevel);
-  const [showStats, setShowStats] = React.useState(false);
-  
+  const [showStats, setShowStats] = React.useState(isPlayer); // Stats affichées par défaut pour le joueur
+
   const { level } = entity;
   const name = isPlayer ? (entity as PlayerState).name : (entity as Monstre).nom;
 
@@ -59,35 +60,41 @@ export default function EntityDisplay({ entity, isPlayer = false, isTarget = fal
   const playerResources = isPlayer ? (entity as PlayerState).resources : undefined;
   const currentResourceConfig = (playerResources?.type && resourceConfig[playerResources.type]) || { color: 'text-gray-400', indicator: 'bg-gray-500' };
 
+  const handleCardClick = () => {
+    if (!isCompact || isPlayer) {
+        setShowStats(!showStats);
+    }
+  }
+
   return (
     <Card 
-        className={cn("flex flex-col bg-card/50 transition-all border-2 border-transparent cursor-pointer", 
+        className={cn("flex flex-col bg-card/50 transition-all border-2 border-transparent",
             isPlayer && "border-green-500/30",
             isTarget && "border-primary shadow-lg shadow-primary/20",
-            // AMÉLIORATION: Ajoute un style distinctif pour le boss
+            (!isCompact || isPlayer) && "cursor-pointer",
             (entity as CombatEnemy).isBoss && "border-destructive shadow-lg shadow-destructive/40"
         )}
-        onClick={() => setShowStats(!showStats)}
+        onClick={handleCardClick}
     >
-      <CardHeader className="flex-shrink-0 p-3 space-y-1">
-        <CardTitle className="font-headline flex justify-between items-center text-base">
+      <CardHeader className={cn("flex-shrink-0 space-y-1", isCompact ? "p-2" : "p-3")}>
+        <CardTitle className={cn("font-headline flex justify-between items-center", isCompact ? "text-sm" : "text-base")}>
           <div className="flex items-center gap-2">
-            <span>{name} {isTarget && <span className="text-xs text-primary">(Cible)</span>}</span>
+            <span className="truncate">{name} {isTarget && <span className="text-xs text-primary">(Cible)</span>}</span>
             {!isPlayer && (
-              <Progress value={((entity as CombatEnemy).attackProgress || 0) * 100} className="h-1 w-16 bg-background/50" indicatorClassName="bg-yellow-500" />
+              <Progress value={((entity as CombatEnemy).attackProgress || 0) * 100} className={cn("h-1 bg-background/50", isCompact ? "w-10" : "w-16")} indicatorClassName="bg-yellow-500" />
             )}
           </div>
-          <span className="text-sm text-muted-foreground">Lvl {level}</span>
+          <span className={cn("text-muted-foreground", isCompact ? "text-xs" : "text-sm")}>Lvl {level}</span>
         </CardTitle>
         <CardDescription className="capitalize text-xs">
           {isPlayer ? (entity as PlayerState).classeId : (entity as Monstre).famille}
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-1.5 flex-grow p-3 pt-0">
+      <CardContent className={cn("space-y-1.5 flex-grow pt-0", isCompact ? "p-2" : "p-3")}>
         <div>
           <div className="flex justify-between text-xs mb-1 font-mono text-red-400">
             <span>PV</span>
-            <span>{Math.round(currentHp)} / {Math.round(maxHp)}</span>
+            <span>{Math.round(currentHp)}/{Math.round(maxHp)}</span>
           </div>
           <Progress value={hpPercentage} className="h-2.5" indicatorClassName="bg-gradient-to-r from-red-500 to-red-700" />
         </div>
@@ -95,7 +102,7 @@ export default function EntityDisplay({ entity, isPlayer = false, isTarget = fal
           <div>
             <div className={`flex justify-between text-xs mb-1 font-mono ${currentResourceConfig.color}`}>
               <span>{playerResources.type.toUpperCase()}</span>
-              <span>{Math.round(playerResources.current)} / {Math.round(playerResources.max)}</span>
+              <span>{Math.round(playerResources.current)}/{Math.round(playerResources.max)}</span>
             </div>
             <Progress value={(playerResources.current / playerResources.max) * 100} className="h-2.5" indicatorClassName={currentResourceConfig.indicator} />
           </div>
@@ -104,7 +111,7 @@ export default function EntityDisplay({ entity, isPlayer = false, isTarget = fal
           <div>
             <div className="flex justify-between text-xs mb-1 font-mono text-yellow-400">
                 <span>XP</span>
-                <span>{Math.round((entity as PlayerState).xp)} / {Math.round(xpToNextLevel)}</span>
+                <span>{Math.round((entity as PlayerState).xp)}/{Math.round(xpToNextLevel)}</span>
             </div>
             <Progress value={xpPercentage} className="h-1.5" indicatorClassName="bg-gradient-to-r from-yellow-400 to-yellow-600" />
           </div>
