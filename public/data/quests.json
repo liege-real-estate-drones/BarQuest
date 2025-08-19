@@ -1,84 +1,3548 @@
 {
   "quests": [
     {
-      "id": "foret_sombre_q1",
+      "id": "dungeon_1_q1",
       "type": "chasse",
-      "name": "Nettoyage des Mines de Gobelins",
-      "desc": "Les mines sont infestées de créatures. Éliminez-en quelques-unes pour sécuriser la zone.",
-      "requirements": { "dungeonId": "dungeon_1", "killCount": 10 },
-      "rewards": { "gold": 50, "xp": 100 }
+      "name": "Exploration de Goblin Mines",
+      "desc": "Commencez par explorer Goblin Mines et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_1",
+        "killCount": 10
+      },
+      "rewards": {
+        "gold": 50,
+        "xp": 100
+      }
     },
     {
-      "id": "foret_sombre_q2",
+      "id": "dungeon_1_q2",
       "type": "nettoyage",
-      "name": "Expert des Mines",
-      "desc": "Vous avez prouvé votre valeur. Maintenant, montrez que vous maîtrisez ce territoire en le nettoyant complètement.",
-      "requirements": { "dungeonId": "dungeon_1", "clearCount": 1 },
-      "rewards": { "gold": 75, "xp": 150 }
+      "name": "Nettoyage de Goblin Mines",
+      "desc": "Nettoyez entièrement Goblin Mines pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_1",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 75,
+        "xp": 150
+      }
     },
     {
-      "id": "foret_sombre_q3",
+      "id": "dungeon_1_q3",
       "type": "chasse",
-      "name": "Infestation Tenace",
-      "desc": "Les créatures reviennent en plus grand nombre. Une seconde vague de nettoyage est nécessaire.",
-      "requirements": { "dungeonId": "dungeon_2", "killCount": 25 },
-      "rewards": { "gold": 100, "xp": 200 }
+      "name": "Infestation dans Goblin Mines",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_1",
+        "killCount": 25
+      },
+      "rewards": {
+        "gold": 100,
+        "xp": 200
+      }
     },
     {
-      "id": "foret_sombre_q4",
+      "id": "dungeon_1_q4",
       "type": "nettoyage",
-      "name": "Gardien des Cavernes",
-      "desc": "Prouvez votre domination sur la Caverne des Chauves-souris en la purgeant à plusieurs reprises.",
-      "requirements": { "dungeonId": "dungeon_2", "clearCount": 3 },
-      "rewards": { "gold": 150, "xp": 300 }
+      "name": "Maîtrise de Goblin Mines",
+      "desc": "Montrez votre domination en nettoyant Goblin Mines plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_1",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 150,
+        "xp": 300
+      }
     },
     {
-      "id": "foret_sombre_q5",
+      "id": "dungeon_1_q5",
       "type": "chasse",
-      "name": "Éradication Totale",
-      "desc": "Il est temps de mettre un terme définitif à la menace. Ne laissez aucun survivant.",
-      "requirements": { "dungeonId": "dungeon_2", "killCount": 50 },
-      "rewards": { "gold": 250, "xp": 500, "reputation": { "factionId": "void_scholars", "amount": 100 } }
+      "name": "Éradication à Goblin Mines",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans Goblin Mines.",
+      "requirements": {
+        "dungeonId": "dungeon_1",
+        "killCount": 50
+      },
+      "rewards": {
+        "gold": 250,
+        "xp": 500
+      }
     },
     {
-      "id": "cavernes_gelee_q1",
+      "id": "dungeon_2_q1",
       "type": "chasse",
-      "name": "Premiers Frissons",
-      "desc": "Les crevasses gelées abritent des bêtes résistantes. Montrez-leur la chaleur de votre acier.",
-      "requirements": { "dungeonId": "dungeon_3", "killCount": 15 },
-      "rewards": { "gold": 100, "xp": 200 }
+      "name": "Exploration de Bat Cave",
+      "desc": "Commencez par explorer Bat Cave et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_2",
+        "killCount": 10
+      },
+      "rewards": {
+        "gold": 50,
+        "xp": 100
+      }
     },
     {
-      "id": "cavernes_gelee_q2",
+      "id": "dungeon_2_q2",
       "type": "nettoyage",
-      "name": "Conquête du Froid",
-      "desc": "Traversez les étendues glaciales et nettoyez les crevasses pour prouver votre endurance.",
-      "requirements": { "dungeonId": "dungeon_3", "clearCount": 1 },
-      "rewards": { "gold": 150, "xp": 250 }
+      "name": "Nettoyage de Bat Cave",
+      "desc": "Nettoyez entièrement Bat Cave pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_2",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 75,
+        "xp": 150
+      }
     },
     {
-      "id": "cavernes_gelee_q3",
+      "id": "dungeon_2_q3",
       "type": "chasse",
-      "name": "Au Cœur du Givre",
-      "desc": "Des créatures plus puissantes se cachent dans les profondeurs. Chassez-les.",
-      "requirements": { "dungeonId": "dungeon_4", "killCount": 30 },
-      "rewards": { "gold": 200, "xp": 350 }
+      "name": "Infestation dans Bat Cave",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_2",
+        "killCount": 25
+      },
+      "rewards": {
+        "gold": 100,
+        "xp": 200
+      }
     },
     {
-      "id": "cavernes_gelee_q4",
+      "id": "dungeon_2_q4",
       "type": "nettoyage",
-      "name": "Maître des Glaces",
-      "desc": "Le froid ne vous affecte plus. Nettoyez le repaire à plusieurs reprises pour le prouver.",
-      "requirements": { "dungeonId": "dungeon_4", "clearCount": 3 },
-      "rewards": { "gold": 300, "xp": 500 }
+      "name": "Maîtrise de Bat Cave",
+      "desc": "Montrez votre domination en nettoyant Bat Cave plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_2",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 150,
+        "xp": 300
+      }
     },
     {
-      "id": "cavernes_gelee_q5",
+      "id": "dungeon_2_q5",
       "type": "chasse",
-      "name": "Tempête de Lames",
-      "desc": "Déchaînez une tempête mortelle et éradiquez la vermine une bonne fois pour toutes.",
-      "requirements": { "dungeonId": "dungeon_4", "killCount": 60 },
-      "rewards": { "gold": 500, "xp": 800, "reputation": { "factionId": "silver_guardians", "amount": 100 } }
+      "name": "Éradication à Bat Cave",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans Bat Cave.",
+      "requirements": {
+        "dungeonId": "dungeon_2",
+        "killCount": 50
+      },
+      "rewards": {
+        "gold": 250,
+        "xp": 500
+      }
+    },
+    {
+      "id": "dungeon_3_q1",
+      "type": "chasse",
+      "name": "Exploration de Icy Crevasse",
+      "desc": "Commencez par explorer Icy Crevasse et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_3",
+        "killCount": 15
+      },
+      "rewards": {
+        "gold": 100,
+        "xp": 200
+      }
+    },
+    {
+      "id": "dungeon_3_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de Icy Crevasse",
+      "desc": "Nettoyez entièrement Icy Crevasse pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_3",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 150,
+        "xp": 300
+      }
+    },
+    {
+      "id": "dungeon_3_q3",
+      "type": "chasse",
+      "name": "Infestation dans Icy Crevasse",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_3",
+        "killCount": 37
+      },
+      "rewards": {
+        "gold": 200,
+        "xp": 400
+      }
+    },
+    {
+      "id": "dungeon_3_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de Icy Crevasse",
+      "desc": "Montrez votre domination en nettoyant Icy Crevasse plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_3",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 300,
+        "xp": 600
+      }
+    },
+    {
+      "id": "dungeon_3_q5",
+      "type": "chasse",
+      "name": "Éradication à Icy Crevasse",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans Icy Crevasse.",
+      "requirements": {
+        "dungeonId": "dungeon_3",
+        "killCount": 75
+      },
+      "rewards": {
+        "gold": 500,
+        "xp": 1000,
+        "reputation": {
+          "factionId": "silver_guardians",
+          "amount": 100
+        }
+      }
+    },
+    {
+      "id": "dungeon_4_q1",
+      "type": "chasse",
+      "name": "Exploration de Yeti Den",
+      "desc": "Commencez par explorer Yeti Den et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_4",
+        "killCount": 15
+      },
+      "rewards": {
+        "gold": 100,
+        "xp": 200
+      }
+    },
+    {
+      "id": "dungeon_4_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de Yeti Den",
+      "desc": "Nettoyez entièrement Yeti Den pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_4",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 150,
+        "xp": 300
+      }
+    },
+    {
+      "id": "dungeon_4_q3",
+      "type": "chasse",
+      "name": "Infestation dans Yeti Den",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_4",
+        "killCount": 37
+      },
+      "rewards": {
+        "gold": 200,
+        "xp": 400
+      }
+    },
+    {
+      "id": "dungeon_4_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de Yeti Den",
+      "desc": "Montrez votre domination en nettoyant Yeti Den plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_4",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 300,
+        "xp": 600
+      }
+    },
+    {
+      "id": "dungeon_4_q5",
+      "type": "chasse",
+      "name": "Éradication à Yeti Den",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans Yeti Den.",
+      "requirements": {
+        "dungeonId": "dungeon_4",
+        "killCount": 75
+      },
+      "rewards": {
+        "gold": 500,
+        "xp": 1000,
+        "reputation": {
+          "factionId": "silver_guardians",
+          "amount": 100
+        }
+      }
+    },
+    {
+      "id": "dungeon_5_q1",
+      "type": "chasse",
+      "name": "Exploration de Scorched Caverns",
+      "desc": "Commencez par explorer Scorched Caverns et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_5",
+        "killCount": 20
+      },
+      "rewards": {
+        "gold": 150,
+        "xp": 300
+      }
+    },
+    {
+      "id": "dungeon_5_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de Scorched Caverns",
+      "desc": "Nettoyez entièrement Scorched Caverns pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_5",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 225,
+        "xp": 450
+      }
+    },
+    {
+      "id": "dungeon_5_q3",
+      "type": "chasse",
+      "name": "Infestation dans Scorched Caverns",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_5",
+        "killCount": 50
+      },
+      "rewards": {
+        "gold": 300,
+        "xp": 600
+      }
+    },
+    {
+      "id": "dungeon_5_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de Scorched Caverns",
+      "desc": "Montrez votre domination en nettoyant Scorched Caverns plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_5",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 450,
+        "xp": 900
+      }
+    },
+    {
+      "id": "dungeon_5_q5",
+      "type": "chasse",
+      "name": "Éradication à Scorched Caverns",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans Scorched Caverns.",
+      "requirements": {
+        "dungeonId": "dungeon_5",
+        "killCount": 100
+      },
+      "rewards": {
+        "gold": 750,
+        "xp": 1500,
+        "reputation": {
+          "factionId": "magma_watchers",
+          "amount": 100
+        }
+      }
+    },
+    {
+      "id": "dungeon_6_q1",
+      "type": "chasse",
+      "name": "Exploration de Cinder Chambers",
+      "desc": "Commencez par explorer Cinder Chambers et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_6",
+        "killCount": 20
+      },
+      "rewards": {
+        "gold": 150,
+        "xp": 300
+      }
+    },
+    {
+      "id": "dungeon_6_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de Cinder Chambers",
+      "desc": "Nettoyez entièrement Cinder Chambers pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_6",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 225,
+        "xp": 450
+      }
+    },
+    {
+      "id": "dungeon_6_q3",
+      "type": "chasse",
+      "name": "Infestation dans Cinder Chambers",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_6",
+        "killCount": 50
+      },
+      "rewards": {
+        "gold": 300,
+        "xp": 600
+      }
+    },
+    {
+      "id": "dungeon_6_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de Cinder Chambers",
+      "desc": "Montrez votre domination en nettoyant Cinder Chambers plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_6",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 450,
+        "xp": 900
+      }
+    },
+    {
+      "id": "dungeon_6_q5",
+      "type": "chasse",
+      "name": "Éradication à Cinder Chambers",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans Cinder Chambers.",
+      "requirements": {
+        "dungeonId": "dungeon_6",
+        "killCount": 100
+      },
+      "rewards": {
+        "gold": 750,
+        "xp": 1500,
+        "reputation": {
+          "factionId": "magma_watchers",
+          "amount": 100
+        }
+      }
+    },
+    {
+      "id": "dungeon_7_q1",
+      "type": "chasse",
+      "name": "Exploration de Whispering Woods",
+      "desc": "Commencez par explorer Whispering Woods et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_7",
+        "killCount": 25
+      },
+      "rewards": {
+        "gold": 200,
+        "xp": 400
+      }
+    },
+    {
+      "id": "dungeon_7_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de Whispering Woods",
+      "desc": "Nettoyez entièrement Whispering Woods pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_7",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 300,
+        "xp": 600
+      }
+    },
+    {
+      "id": "dungeon_7_q3",
+      "type": "chasse",
+      "name": "Infestation dans Whispering Woods",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_7",
+        "killCount": 62
+      },
+      "rewards": {
+        "gold": 400,
+        "xp": 800
+      }
+    },
+    {
+      "id": "dungeon_7_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de Whispering Woods",
+      "desc": "Montrez votre domination en nettoyant Whispering Woods plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_7",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 600,
+        "xp": 1200
+      }
+    },
+    {
+      "id": "dungeon_7_q5",
+      "type": "chasse",
+      "name": "Éradication à Whispering Woods",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans Whispering Woods.",
+      "requirements": {
+        "dungeonId": "dungeon_7",
+        "killCount": 125
+      },
+      "rewards": {
+        "gold": 1000,
+        "xp": 2000,
+        "reputation": {
+          "factionId": "grove_keepers",
+          "amount": 100
+        }
+      }
+    },
+    {
+      "id": "dungeon_8_q1",
+      "type": "chasse",
+      "name": "Exploration de Dryad Grove",
+      "desc": "Commencez par explorer Dryad Grove et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_8",
+        "killCount": 25
+      },
+      "rewards": {
+        "gold": 200,
+        "xp": 400
+      }
+    },
+    {
+      "id": "dungeon_8_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de Dryad Grove",
+      "desc": "Nettoyez entièrement Dryad Grove pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_8",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 300,
+        "xp": 600
+      }
+    },
+    {
+      "id": "dungeon_8_q3",
+      "type": "chasse",
+      "name": "Infestation dans Dryad Grove",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_8",
+        "killCount": 62
+      },
+      "rewards": {
+        "gold": 400,
+        "xp": 800
+      }
+    },
+    {
+      "id": "dungeon_8_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de Dryad Grove",
+      "desc": "Montrez votre domination en nettoyant Dryad Grove plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_8",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 600,
+        "xp": 1200
+      }
+    },
+    {
+      "id": "dungeon_8_q5",
+      "type": "chasse",
+      "name": "Éradication à Dryad Grove",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans Dryad Grove.",
+      "requirements": {
+        "dungeonId": "dungeon_8",
+        "killCount": 125
+      },
+      "rewards": {
+        "gold": 1000,
+        "xp": 2000,
+        "reputation": {
+          "factionId": "grove_keepers",
+          "amount": 100
+        }
+      }
+    },
+    {
+      "id": "dungeon_9_q1",
+      "type": "chasse",
+      "name": "Exploration de Forgotten Crypt",
+      "desc": "Commencez par explorer Forgotten Crypt et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_9",
+        "killCount": 30
+      },
+      "rewards": {
+        "gold": 250,
+        "xp": 500
+      }
+    },
+    {
+      "id": "dungeon_9_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de Forgotten Crypt",
+      "desc": "Nettoyez entièrement Forgotten Crypt pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_9",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 375,
+        "xp": 750
+      }
+    },
+    {
+      "id": "dungeon_9_q3",
+      "type": "chasse",
+      "name": "Infestation dans Forgotten Crypt",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_9",
+        "killCount": 75
+      },
+      "rewards": {
+        "gold": 500,
+        "xp": 1000
+      }
+    },
+    {
+      "id": "dungeon_9_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de Forgotten Crypt",
+      "desc": "Montrez votre domination en nettoyant Forgotten Crypt plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_9",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 750,
+        "xp": 1500
+      }
+    },
+    {
+      "id": "dungeon_9_q5",
+      "type": "chasse",
+      "name": "Éradication à Forgotten Crypt",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans Forgotten Crypt.",
+      "requirements": {
+        "dungeonId": "dungeon_9",
+        "killCount": 150
+      },
+      "rewards": {
+        "gold": 1250,
+        "xp": 2500,
+        "reputation": {
+          "factionId": "void_scholars",
+          "amount": 100
+        }
+      }
+    },
+    {
+      "id": "dungeon_10_q1",
+      "type": "chasse",
+      "name": "Exploration de Void Worshippers' Lair",
+      "desc": "Commencez par explorer Void Worshippers' Lair et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_10",
+        "killCount": 30
+      },
+      "rewards": {
+        "gold": 250,
+        "xp": 500
+      }
+    },
+    {
+      "id": "dungeon_10_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de Void Worshippers' Lair",
+      "desc": "Nettoyez entièrement Void Worshippers' Lair pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_10",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 375,
+        "xp": 750
+      }
+    },
+    {
+      "id": "dungeon_10_q3",
+      "type": "chasse",
+      "name": "Infestation dans Void Worshippers' Lair",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_10",
+        "killCount": 75
+      },
+      "rewards": {
+        "gold": 500,
+        "xp": 1000
+      }
+    },
+    {
+      "id": "dungeon_10_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de Void Worshippers' Lair",
+      "desc": "Montrez votre domination en nettoyant Void Worshippers' Lair plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_10",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 750,
+        "xp": 1500
+      }
+    },
+    {
+      "id": "dungeon_10_q5",
+      "type": "chasse",
+      "name": "Éradication à Void Worshippers' Lair",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans Void Worshippers' Lair.",
+      "requirements": {
+        "dungeonId": "dungeon_10",
+        "killCount": 150
+      },
+      "rewards": {
+        "gold": 1250,
+        "xp": 2500,
+        "reputation": {
+          "factionId": "void_scholars",
+          "amount": 100
+        }
+      }
+    },
+    {
+      "id": "dungeon_11_q1",
+      "type": "chasse",
+      "name": "Exploration de Glacial Depths",
+      "desc": "Commencez par explorer Glacial Depths et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_11",
+        "killCount": 35
+      },
+      "rewards": {
+        "gold": 300,
+        "xp": 600
+      }
+    },
+    {
+      "id": "dungeon_11_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de Glacial Depths",
+      "desc": "Nettoyez entièrement Glacial Depths pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_11",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 450,
+        "xp": 900
+      }
+    },
+    {
+      "id": "dungeon_11_q3",
+      "type": "chasse",
+      "name": "Infestation dans Glacial Depths",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_11",
+        "killCount": 87
+      },
+      "rewards": {
+        "gold": 600,
+        "xp": 1200
+      }
+    },
+    {
+      "id": "dungeon_11_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de Glacial Depths",
+      "desc": "Montrez votre domination en nettoyant Glacial Depths plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_11",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 900,
+        "xp": 1800
+      }
+    },
+    {
+      "id": "dungeon_11_q5",
+      "type": "chasse",
+      "name": "Éradication à Glacial Depths",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans Glacial Depths.",
+      "requirements": {
+        "dungeonId": "dungeon_11",
+        "killCount": 175
+      },
+      "rewards": {
+        "gold": 1500,
+        "xp": 3000,
+        "reputation": {
+          "factionId": "silver_guardians",
+          "amount": 100
+        }
+      }
+    },
+    {
+      "id": "dungeon_12_q1",
+      "type": "chasse",
+      "name": "Exploration de Frozen Berserkers' Hall",
+      "desc": "Commencez par explorer Frozen Berserkers' Hall et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_12",
+        "killCount": 35
+      },
+      "rewards": {
+        "gold": 300,
+        "xp": 600
+      }
+    },
+    {
+      "id": "dungeon_12_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de Frozen Berserkers' Hall",
+      "desc": "Nettoyez entièrement Frozen Berserkers' Hall pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_12",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 450,
+        "xp": 900
+      }
+    },
+    {
+      "id": "dungeon_12_q3",
+      "type": "chasse",
+      "name": "Infestation dans Frozen Berserkers' Hall",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_12",
+        "killCount": 87
+      },
+      "rewards": {
+        "gold": 600,
+        "xp": 1200
+      }
+    },
+    {
+      "id": "dungeon_12_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de Frozen Berserkers' Hall",
+      "desc": "Montrez votre domination en nettoyant Frozen Berserkers' Hall plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_12",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 900,
+        "xp": 1800
+      }
+    },
+    {
+      "id": "dungeon_12_q5",
+      "type": "chasse",
+      "name": "Éradication à Frozen Berserkers' Hall",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans Frozen Berserkers' Hall.",
+      "requirements": {
+        "dungeonId": "dungeon_12",
+        "killCount": 175
+      },
+      "rewards": {
+        "gold": 1500,
+        "xp": 3000,
+        "reputation": {
+          "factionId": "silver_guardians",
+          "amount": 100
+        }
+      }
+    },
+    {
+      "id": "dungeon_13_q1",
+      "type": "chasse",
+      "name": "Exploration de Volcanic Core",
+      "desc": "Commencez par explorer Volcanic Core et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_13",
+        "killCount": 40
+      },
+      "rewards": {
+        "gold": 350,
+        "xp": 700
+      }
+    },
+    {
+      "id": "dungeon_13_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de Volcanic Core",
+      "desc": "Nettoyez entièrement Volcanic Core pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_13",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 525,
+        "xp": 1050
+      }
+    },
+    {
+      "id": "dungeon_13_q3",
+      "type": "chasse",
+      "name": "Infestation dans Volcanic Core",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_13",
+        "killCount": 100
+      },
+      "rewards": {
+        "gold": 700,
+        "xp": 1400
+      }
+    },
+    {
+      "id": "dungeon_13_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de Volcanic Core",
+      "desc": "Montrez votre domination en nettoyant Volcanic Core plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_13",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 1050,
+        "xp": 2100
+      }
+    },
+    {
+      "id": "dungeon_13_q5",
+      "type": "chasse",
+      "name": "Éradication à Volcanic Core",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans Volcanic Core.",
+      "requirements": {
+        "dungeonId": "dungeon_13",
+        "killCount": 200
+      },
+      "rewards": {
+        "gold": 1750,
+        "xp": 3500,
+        "reputation": {
+          "factionId": "magma_watchers",
+          "amount": 100
+        }
+      }
+    },
+    {
+      "id": "dungeon_14_q1",
+      "type": "chasse",
+      "name": "Exploration de Fire Giants' Outpost",
+      "desc": "Commencez par explorer Fire Giants' Outpost et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_14",
+        "killCount": 40
+      },
+      "rewards": {
+        "gold": 350,
+        "xp": 700
+      }
+    },
+    {
+      "id": "dungeon_14_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de Fire Giants' Outpost",
+      "desc": "Nettoyez entièrement Fire Giants' Outpost pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_14",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 525,
+        "xp": 1050
+      }
+    },
+    {
+      "id": "dungeon_14_q3",
+      "type": "chasse",
+      "name": "Infestation dans Fire Giants' Outpost",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_14",
+        "killCount": 100
+      },
+      "rewards": {
+        "gold": 700,
+        "xp": 1400
+      }
+    },
+    {
+      "id": "dungeon_14_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de Fire Giants' Outpost",
+      "desc": "Montrez votre domination en nettoyant Fire Giants' Outpost plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_14",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 1050,
+        "xp": 2100
+      }
+    },
+    {
+      "id": "dungeon_14_q5",
+      "type": "chasse",
+      "name": "Éradication à Fire Giants' Outpost",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans Fire Giants' Outpost.",
+      "requirements": {
+        "dungeonId": "dungeon_14",
+        "killCount": 200
+      },
+      "rewards": {
+        "gold": 1750,
+        "xp": 3500,
+        "reputation": {
+          "factionId": "magma_watchers",
+          "amount": 100
+        }
+      }
+    },
+    {
+      "id": "dungeon_15_q1",
+      "type": "chasse",
+      "name": "Exploration de Verdant Labyrinth",
+      "desc": "Commencez par explorer Verdant Labyrinth et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_15",
+        "killCount": 45
+      },
+      "rewards": {
+        "gold": 400,
+        "xp": 800
+      }
+    },
+    {
+      "id": "dungeon_15_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de Verdant Labyrinth",
+      "desc": "Nettoyez entièrement Verdant Labyrinth pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_15",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 600,
+        "xp": 1200
+      }
+    },
+    {
+      "id": "dungeon_15_q3",
+      "type": "chasse",
+      "name": "Infestation dans Verdant Labyrinth",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_15",
+        "killCount": 112
+      },
+      "rewards": {
+        "gold": 800,
+        "xp": 1600
+      }
+    },
+    {
+      "id": "dungeon_15_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de Verdant Labyrinth",
+      "desc": "Montrez votre domination en nettoyant Verdant Labyrinth plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_15",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 1200,
+        "xp": 2400
+      }
+    },
+    {
+      "id": "dungeon_15_q5",
+      "type": "chasse",
+      "name": "Éradication à Verdant Labyrinth",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans Verdant Labyrinth.",
+      "requirements": {
+        "dungeonId": "dungeon_15",
+        "killCount": 225
+      },
+      "rewards": {
+        "gold": 2000,
+        "xp": 4000,
+        "reputation": {
+          "factionId": "grove_keepers",
+          "amount": 100
+        }
+      }
+    },
+    {
+      "id": "dungeon_16_q1",
+      "type": "chasse",
+      "name": "Exploration de Sylvan Guardians' Domain",
+      "desc": "Commencez par explorer Sylvan Guardians' Domain et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_16",
+        "killCount": 45
+      },
+      "rewards": {
+        "gold": 400,
+        "xp": 800
+      }
+    },
+    {
+      "id": "dungeon_16_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de Sylvan Guardians' Domain",
+      "desc": "Nettoyez entièrement Sylvan Guardians' Domain pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_16",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 600,
+        "xp": 1200
+      }
+    },
+    {
+      "id": "dungeon_16_q3",
+      "type": "chasse",
+      "name": "Infestation dans Sylvan Guardians' Domain",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_16",
+        "killCount": 112
+      },
+      "rewards": {
+        "gold": 800,
+        "xp": 1600
+      }
+    },
+    {
+      "id": "dungeon_16_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de Sylvan Guardians' Domain",
+      "desc": "Montrez votre domination en nettoyant Sylvan Guardians' Domain plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_16",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 1200,
+        "xp": 2400
+      }
+    },
+    {
+      "id": "dungeon_16_q5",
+      "type": "chasse",
+      "name": "Éradication à Sylvan Guardians' Domain",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans Sylvan Guardians' Domain.",
+      "requirements": {
+        "dungeonId": "dungeon_16",
+        "killCount": 225
+      },
+      "rewards": {
+        "gold": 2000,
+        "xp": 4000,
+        "reputation": {
+          "factionId": "grove_keepers",
+          "amount": 100
+        }
+      }
+    },
+    {
+      "id": "dungeon_17_q1",
+      "type": "chasse",
+      "name": "Exploration de Shadowy Necropolis",
+      "desc": "Commencez par explorer Shadowy Necropolis et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_17",
+        "killCount": 50
+      },
+      "rewards": {
+        "gold": 450,
+        "xp": 900
+      }
+    },
+    {
+      "id": "dungeon_17_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de Shadowy Necropolis",
+      "desc": "Nettoyez entièrement Shadowy Necropolis pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_17",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 675,
+        "xp": 1350
+      }
+    },
+    {
+      "id": "dungeon_17_q3",
+      "type": "chasse",
+      "name": "Infestation dans Shadowy Necropolis",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_17",
+        "killCount": 125
+      },
+      "rewards": {
+        "gold": 900,
+        "xp": 1800
+      }
+    },
+    {
+      "id": "dungeon_17_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de Shadowy Necropolis",
+      "desc": "Montrez votre domination en nettoyant Shadowy Necropolis plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_17",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 1350,
+        "xp": 2700
+      }
+    },
+    {
+      "id": "dungeon_17_q5",
+      "type": "chasse",
+      "name": "Éradication à Shadowy Necropolis",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans Shadowy Necropolis.",
+      "requirements": {
+        "dungeonId": "dungeon_17",
+        "killCount": 250
+      },
+      "rewards": {
+        "gold": 2250,
+        "xp": 4500,
+        "reputation": {
+          "factionId": "void_scholars",
+          "amount": 100
+        }
+      }
+    },
+    {
+      "id": "dungeon_18_q1",
+      "type": "chasse",
+      "name": "Exploration de Specters' Sanctuary",
+      "desc": "Commencez par explorer Specters' Sanctuary et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_18",
+        "killCount": 50
+      },
+      "rewards": {
+        "gold": 450,
+        "xp": 900
+      }
+    },
+    {
+      "id": "dungeon_18_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de Specters' Sanctuary",
+      "desc": "Nettoyez entièrement Specters' Sanctuary pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_18",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 675,
+        "xp": 1350
+      }
+    },
+    {
+      "id": "dungeon_18_q3",
+      "type": "chasse",
+      "name": "Infestation dans Specters' Sanctuary",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_18",
+        "killCount": 125
+      },
+      "rewards": {
+        "gold": 900,
+        "xp": 1800
+      }
+    },
+    {
+      "id": "dungeon_18_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de Specters' Sanctuary",
+      "desc": "Montrez votre domination en nettoyant Specters' Sanctuary plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_18",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 1350,
+        "xp": 2700
+      }
+    },
+    {
+      "id": "dungeon_18_q5",
+      "type": "chasse",
+      "name": "Éradication à Specters' Sanctuary",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans Specters' Sanctuary.",
+      "requirements": {
+        "dungeonId": "dungeon_18",
+        "killCount": 250
+      },
+      "rewards": {
+        "gold": 2250,
+        "xp": 4500,
+        "reputation": {
+          "factionId": "void_scholars",
+          "amount": 100
+        }
+      }
+    },
+    {
+      "id": "dungeon_19_q1",
+      "type": "chasse",
+      "name": "Exploration de Frozen Wastes",
+      "desc": "Commencez par explorer Frozen Wastes et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_19",
+        "killCount": 55
+      },
+      "rewards": {
+        "gold": 500,
+        "xp": 1000
+      }
+    },
+    {
+      "id": "dungeon_19_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de Frozen Wastes",
+      "desc": "Nettoyez entièrement Frozen Wastes pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_19",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 750,
+        "xp": 1500
+      }
+    },
+    {
+      "id": "dungeon_19_q3",
+      "type": "chasse",
+      "name": "Infestation dans Frozen Wastes",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_19",
+        "killCount": 137
+      },
+      "rewards": {
+        "gold": 1000,
+        "xp": 2000
+      }
+    },
+    {
+      "id": "dungeon_19_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de Frozen Wastes",
+      "desc": "Montrez votre domination en nettoyant Frozen Wastes plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_19",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 1500,
+        "xp": 3000
+      }
+    },
+    {
+      "id": "dungeon_19_q5",
+      "type": "chasse",
+      "name": "Éradication à Frozen Wastes",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans Frozen Wastes.",
+      "requirements": {
+        "dungeonId": "dungeon_19",
+        "killCount": 275
+      },
+      "rewards": {
+        "gold": 2500,
+        "xp": 5000,
+        "reputation": {
+          "factionId": "silver_guardians",
+          "amount": 100
+        }
+      }
+    },
+    {
+      "id": "dungeon_20_q1",
+      "type": "chasse",
+      "name": "Exploration de Boreal Knights' Fortress",
+      "desc": "Commencez par explorer Boreal Knights' Fortress et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_20",
+        "killCount": 55
+      },
+      "rewards": {
+        "gold": 500,
+        "xp": 1000
+      }
+    },
+    {
+      "id": "dungeon_20_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de Boreal Knights' Fortress",
+      "desc": "Nettoyez entièrement Boreal Knights' Fortress pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_20",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 750,
+        "xp": 1500
+      }
+    },
+    {
+      "id": "dungeon_20_q3",
+      "type": "chasse",
+      "name": "Infestation dans Boreal Knights' Fortress",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_20",
+        "killCount": 137
+      },
+      "rewards": {
+        "gold": 1000,
+        "xp": 2000
+      }
+    },
+    {
+      "id": "dungeon_20_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de Boreal Knights' Fortress",
+      "desc": "Montrez votre domination en nettoyant Boreal Knights' Fortress plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_20",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 1500,
+        "xp": 3000
+      }
+    },
+    {
+      "id": "dungeon_20_q5",
+      "type": "chasse",
+      "name": "Éradication à Boreal Knights' Fortress",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans Boreal Knights' Fortress.",
+      "requirements": {
+        "dungeonId": "dungeon_20",
+        "killCount": 275
+      },
+      "rewards": {
+        "gold": 2500,
+        "xp": 5000,
+        "reputation": {
+          "factionId": "silver_guardians",
+          "amount": 100
+        }
+      }
+    },
+    {
+      "id": "dungeon_21_q1",
+      "type": "chasse",
+      "name": "Exploration de Infernal Forge",
+      "desc": "Commencez par explorer Infernal Forge et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_21",
+        "killCount": 60
+      },
+      "rewards": {
+        "gold": 550,
+        "xp": 1100
+      }
+    },
+    {
+      "id": "dungeon_21_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de Infernal Forge",
+      "desc": "Nettoyez entièrement Infernal Forge pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_21",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 825,
+        "xp": 1650
+      }
+    },
+    {
+      "id": "dungeon_21_q3",
+      "type": "chasse",
+      "name": "Infestation dans Infernal Forge",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_21",
+        "killCount": 150
+      },
+      "rewards": {
+        "gold": 1100,
+        "xp": 2200
+      }
+    },
+    {
+      "id": "dungeon_21_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de Infernal Forge",
+      "desc": "Montrez votre domination en nettoyant Infernal Forge plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_21",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 1650,
+        "xp": 3300
+      }
+    },
+    {
+      "id": "dungeon_21_q5",
+      "type": "chasse",
+      "name": "Éradication à Infernal Forge",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans Infernal Forge.",
+      "requirements": {
+        "dungeonId": "dungeon_21",
+        "killCount": 300
+      },
+      "rewards": {
+        "gold": 2750,
+        "xp": 5500,
+        "reputation": {
+          "factionId": "magma_watchers",
+          "amount": 100
+        }
+      }
+    },
+    {
+      "id": "dungeon_22_q1",
+      "type": "chasse",
+      "name": "Exploration de Ash Harpies' Nest",
+      "desc": "Commencez par explorer Ash Harpies' Nest et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_22",
+        "killCount": 60
+      },
+      "rewards": {
+        "gold": 550,
+        "xp": 1100
+      }
+    },
+    {
+      "id": "dungeon_22_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de Ash Harpies' Nest",
+      "desc": "Nettoyez entièrement Ash Harpies' Nest pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_22",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 825,
+        "xp": 1650
+      }
+    },
+    {
+      "id": "dungeon_22_q3",
+      "type": "chasse",
+      "name": "Infestation dans Ash Harpies' Nest",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_22",
+        "killCount": 150
+      },
+      "rewards": {
+        "gold": 1100,
+        "xp": 2200
+      }
+    },
+    {
+      "id": "dungeon_22_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de Ash Harpies' Nest",
+      "desc": "Montrez votre domination en nettoyant Ash Harpies' Nest plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_22",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 1650,
+        "xp": 3300
+      }
+    },
+    {
+      "id": "dungeon_22_q5",
+      "type": "chasse",
+      "name": "Éradication à Ash Harpies' Nest",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans Ash Harpies' Nest.",
+      "requirements": {
+        "dungeonId": "dungeon_22",
+        "killCount": 300
+      },
+      "rewards": {
+        "gold": 2750,
+        "xp": 5500,
+        "reputation": {
+          "factionId": "magma_watchers",
+          "amount": 100
+        }
+      }
+    },
+    {
+      "id": "dungeon_23_q1",
+      "type": "chasse",
+      "name": "Exploration de Emerald Nightmare",
+      "desc": "Commencez par explorer Emerald Nightmare et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_23",
+        "killCount": 65
+      },
+      "rewards": {
+        "gold": 600,
+        "xp": 1200
+      }
+    },
+    {
+      "id": "dungeon_23_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de Emerald Nightmare",
+      "desc": "Nettoyez entièrement Emerald Nightmare pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_23",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 900,
+        "xp": 1800
+      }
+    },
+    {
+      "id": "dungeon_23_q3",
+      "type": "chasse",
+      "name": "Infestation dans Emerald Nightmare",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_23",
+        "killCount": 162
+      },
+      "rewards": {
+        "gold": 1200,
+        "xp": 2400
+      }
+    },
+    {
+      "id": "dungeon_23_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de Emerald Nightmare",
+      "desc": "Montrez votre domination en nettoyant Emerald Nightmare plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_23",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 1800,
+        "xp": 3600
+      }
+    },
+    {
+      "id": "dungeon_23_q5",
+      "type": "chasse",
+      "name": "Éradication à Emerald Nightmare",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans Emerald Nightmare.",
+      "requirements": {
+        "dungeonId": "dungeon_23",
+        "killCount": 325
+      },
+      "rewards": {
+        "gold": 3000,
+        "xp": 6000,
+        "reputation": {
+          "factionId": "grove_keepers",
+          "amount": 100
+        }
+      }
+    },
+    {
+      "id": "dungeon_24_q1",
+      "type": "chasse",
+      "name": "Exploration de Emerald Golems' Garden",
+      "desc": "Commencez par explorer Emerald Golems' Garden et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_24",
+        "killCount": 65
+      },
+      "rewards": {
+        "gold": 600,
+        "xp": 1200
+      }
+    },
+    {
+      "id": "dungeon_24_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de Emerald Golems' Garden",
+      "desc": "Nettoyez entièrement Emerald Golems' Garden pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_24",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 900,
+        "xp": 1800
+      }
+    },
+    {
+      "id": "dungeon_24_q3",
+      "type": "chasse",
+      "name": "Infestation dans Emerald Golems' Garden",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_24",
+        "killCount": 162
+      },
+      "rewards": {
+        "gold": 1200,
+        "xp": 2400
+      }
+    },
+    {
+      "id": "dungeon_24_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de Emerald Golems' Garden",
+      "desc": "Montrez votre domination en nettoyant Emerald Golems' Garden plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_24",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 1800,
+        "xp": 3600
+      }
+    },
+    {
+      "id": "dungeon_24_q5",
+      "type": "chasse",
+      "name": "Éradication à Emerald Golems' Garden",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans Emerald Golems' Garden.",
+      "requirements": {
+        "dungeonId": "dungeon_24",
+        "killCount": 325
+      },
+      "rewards": {
+        "gold": 3000,
+        "xp": 6000,
+        "reputation": {
+          "factionId": "grove_keepers",
+          "amount": 100
+        }
+      }
+    },
+    {
+      "id": "dungeon_25_q1",
+      "type": "chasse",
+      "name": "Exploration de Cathedral of Eternal Night",
+      "desc": "Commencez par explorer Cathedral of Eternal Night et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_25",
+        "killCount": 70
+      },
+      "rewards": {
+        "gold": 650,
+        "xp": 1300
+      }
+    },
+    {
+      "id": "dungeon_25_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de Cathedral of Eternal Night",
+      "desc": "Nettoyez entièrement Cathedral of Eternal Night pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_25",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 975,
+        "xp": 1950
+      }
+    },
+    {
+      "id": "dungeon_25_q3",
+      "type": "chasse",
+      "name": "Infestation dans Cathedral of Eternal Night",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_25",
+        "killCount": 175
+      },
+      "rewards": {
+        "gold": 1300,
+        "xp": 2600
+      }
+    },
+    {
+      "id": "dungeon_25_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de Cathedral of Eternal Night",
+      "desc": "Montrez votre domination en nettoyant Cathedral of Eternal Night plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_25",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 1950,
+        "xp": 3900
+      }
+    },
+    {
+      "id": "dungeon_25_q5",
+      "type": "chasse",
+      "name": "Éradication à Cathedral of Eternal Night",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans Cathedral of Eternal Night.",
+      "requirements": {
+        "dungeonId": "dungeon_25",
+        "killCount": 350
+      },
+      "rewards": {
+        "gold": 3250,
+        "xp": 6500,
+        "reputation": {
+          "factionId": "void_scholars",
+          "amount": 100
+        }
+      }
+    },
+    {
+      "id": "dungeon_26_q1",
+      "type": "chasse",
+      "name": "Exploration de Tomb Guardians' Crypt",
+      "desc": "Commencez par explorer Tomb Guardians' Crypt et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_26",
+        "killCount": 70
+      },
+      "rewards": {
+        "gold": 650,
+        "xp": 1300
+      }
+    },
+    {
+      "id": "dungeon_26_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de Tomb Guardians' Crypt",
+      "desc": "Nettoyez entièrement Tomb Guardians' Crypt pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_26",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 975,
+        "xp": 1950
+      }
+    },
+    {
+      "id": "dungeon_26_q3",
+      "type": "chasse",
+      "name": "Infestation dans Tomb Guardians' Crypt",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_26",
+        "killCount": 175
+      },
+      "rewards": {
+        "gold": 1300,
+        "xp": 2600
+      }
+    },
+    {
+      "id": "dungeon_26_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de Tomb Guardians' Crypt",
+      "desc": "Montrez votre domination en nettoyant Tomb Guardians' Crypt plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_26",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 1950,
+        "xp": 3900
+      }
+    },
+    {
+      "id": "dungeon_26_q5",
+      "type": "chasse",
+      "name": "Éradication à Tomb Guardians' Crypt",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans Tomb Guardians' Crypt.",
+      "requirements": {
+        "dungeonId": "dungeon_26",
+        "killCount": 350
+      },
+      "rewards": {
+        "gold": 3250,
+        "xp": 6500,
+        "reputation": {
+          "factionId": "void_scholars",
+          "amount": 100
+        }
+      }
+    },
+    {
+      "id": "dungeon_27_q1",
+      "type": "chasse",
+      "name": "Exploration de Glacier's Peak",
+      "desc": "Commencez par explorer Glacier's Peak et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_27",
+        "killCount": 75
+      },
+      "rewards": {
+        "gold": 700,
+        "xp": 1400
+      }
+    },
+    {
+      "id": "dungeon_27_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de Glacier's Peak",
+      "desc": "Nettoyez entièrement Glacier's Peak pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_27",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 1050,
+        "xp": 2100
+      }
+    },
+    {
+      "id": "dungeon_27_q3",
+      "type": "chasse",
+      "name": "Infestation dans Glacier's Peak",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_27",
+        "killCount": 187
+      },
+      "rewards": {
+        "gold": 1400,
+        "xp": 2800
+      }
+    },
+    {
+      "id": "dungeon_27_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de Glacier's Peak",
+      "desc": "Montrez votre domination en nettoyant Glacier's Peak plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_27",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 2100,
+        "xp": 4200
+      }
+    },
+    {
+      "id": "dungeon_27_q5",
+      "type": "chasse",
+      "name": "Éradication à Glacier's Peak",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans Glacier's Peak.",
+      "requirements": {
+        "dungeonId": "dungeon_27",
+        "killCount": 375
+      },
+      "rewards": {
+        "gold": 3500,
+        "xp": 7000,
+        "reputation": {
+          "factionId": "silver_guardians",
+          "amount": 100
+        }
+      }
+    },
+    {
+      "id": "dungeon_28_q1",
+      "type": "chasse",
+      "name": "Exploration de Frost Wyrm's Lair",
+      "desc": "Commencez par explorer Frost Wyrm's Lair et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_28",
+        "killCount": 75
+      },
+      "rewards": {
+        "gold": 700,
+        "xp": 1400
+      }
+    },
+    {
+      "id": "dungeon_28_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de Frost Wyrm's Lair",
+      "desc": "Nettoyez entièrement Frost Wyrm's Lair pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_28",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 1050,
+        "xp": 2100
+      }
+    },
+    {
+      "id": "dungeon_28_q3",
+      "type": "chasse",
+      "name": "Infestation dans Frost Wyrm's Lair",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_28",
+        "killCount": 187
+      },
+      "rewards": {
+        "gold": 1400,
+        "xp": 2800
+      }
+    },
+    {
+      "id": "dungeon_28_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de Frost Wyrm's Lair",
+      "desc": "Montrez votre domination en nettoyant Frost Wyrm's Lair plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_28",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 2100,
+        "xp": 4200
+      }
+    },
+    {
+      "id": "dungeon_28_q5",
+      "type": "chasse",
+      "name": "Éradication à Frost Wyrm's Lair",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans Frost Wyrm's Lair.",
+      "requirements": {
+        "dungeonId": "dungeon_28",
+        "killCount": 375
+      },
+      "rewards": {
+        "gold": 3500,
+        "xp": 7000,
+        "reputation": {
+          "factionId": "silver_guardians",
+          "amount": 100
+        }
+      }
+    },
+    {
+      "id": "dungeon_29_q1",
+      "type": "chasse",
+      "name": "Exploration de Heart of the Volcano",
+      "desc": "Commencez par explorer Heart of the Volcano et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_29",
+        "killCount": 80
+      },
+      "rewards": {
+        "gold": 750,
+        "xp": 1500
+      }
+    },
+    {
+      "id": "dungeon_29_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de Heart of the Volcano",
+      "desc": "Nettoyez entièrement Heart of the Volcano pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_29",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 1125,
+        "xp": 2250
+      }
+    },
+    {
+      "id": "dungeon_29_q3",
+      "type": "chasse",
+      "name": "Infestation dans Heart of the Volcano",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_29",
+        "killCount": 200
+      },
+      "rewards": {
+        "gold": 1500,
+        "xp": 3000
+      }
+    },
+    {
+      "id": "dungeon_29_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de Heart of the Volcano",
+      "desc": "Montrez votre domination en nettoyant Heart of the Volcano plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_29",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 2250,
+        "xp": 4500
+      }
+    },
+    {
+      "id": "dungeon_29_q5",
+      "type": "chasse",
+      "name": "Éradication à Heart of the Volcano",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans Heart of the Volcano.",
+      "requirements": {
+        "dungeonId": "dungeon_29",
+        "killCount": 400
+      },
+      "rewards": {
+        "gold": 3750,
+        "xp": 7500,
+        "reputation": {
+          "factionId": "magma_watchers",
+          "amount": 100
+        }
+      }
+    },
+    {
+      "id": "dungeon_30_q1",
+      "type": "chasse",
+      "name": "Exploration de Magma Dragon's Roost",
+      "desc": "Commencez par explorer Magma Dragon's Roost et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_30",
+        "killCount": 80
+      },
+      "rewards": {
+        "gold": 750,
+        "xp": 1500
+      }
+    },
+    {
+      "id": "dungeon_30_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de Magma Dragon's Roost",
+      "desc": "Nettoyez entièrement Magma Dragon's Roost pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_30",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 1125,
+        "xp": 2250
+      }
+    },
+    {
+      "id": "dungeon_30_q3",
+      "type": "chasse",
+      "name": "Infestation dans Magma Dragon's Roost",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_30",
+        "killCount": 200
+      },
+      "rewards": {
+        "gold": 1500,
+        "xp": 3000
+      }
+    },
+    {
+      "id": "dungeon_30_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de Magma Dragon's Roost",
+      "desc": "Montrez votre domination en nettoyant Magma Dragon's Roost plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_30",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 2250,
+        "xp": 4500
+      }
+    },
+    {
+      "id": "dungeon_30_q5",
+      "type": "chasse",
+      "name": "Éradication à Magma Dragon's Roost",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans Magma Dragon's Roost.",
+      "requirements": {
+        "dungeonId": "dungeon_30",
+        "killCount": 400
+      },
+      "rewards": {
+        "gold": 3750,
+        "xp": 7500,
+        "reputation": {
+          "factionId": "magma_watchers",
+          "amount": 100
+        }
+      }
+    },
+    {
+      "id": "dungeon_31_q1",
+      "type": "chasse",
+      "name": "Exploration de Throne of the Wilds",
+      "desc": "Commencez par explorer Throne of the Wilds et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_31",
+        "killCount": 85
+      },
+      "rewards": {
+        "gold": 800,
+        "xp": 1600
+      }
+    },
+    {
+      "id": "dungeon_31_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de Throne of the Wilds",
+      "desc": "Nettoyez entièrement Throne of the Wilds pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_31",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 1200,
+        "xp": 2400
+      }
+    },
+    {
+      "id": "dungeon_31_q3",
+      "type": "chasse",
+      "name": "Infestation dans Throne of the Wilds",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_31",
+        "killCount": 212
+      },
+      "rewards": {
+        "gold": 1600,
+        "xp": 3200
+      }
+    },
+    {
+      "id": "dungeon_31_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de Throne of the Wilds",
+      "desc": "Montrez votre domination en nettoyant Throne of the Wilds plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_31",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 2400,
+        "xp": 4800
+      }
+    },
+    {
+      "id": "dungeon_31_q5",
+      "type": "chasse",
+      "name": "Éradication à Throne of the Wilds",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans Throne of the Wilds.",
+      "requirements": {
+        "dungeonId": "dungeon_31",
+        "killCount": 425
+      },
+      "rewards": {
+        "gold": 4000,
+        "xp": 8000,
+        "reputation": {
+          "factionId": "grove_keepers",
+          "amount": 100
+        }
+      }
+    },
+    {
+      "id": "dungeon_32_q1",
+      "type": "chasse",
+      "name": "Exploration de World Ash Treant's Grove",
+      "desc": "Commencez par explorer World Ash Treant's Grove et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_32",
+        "killCount": 85
+      },
+      "rewards": {
+        "gold": 800,
+        "xp": 1600
+      }
+    },
+    {
+      "id": "dungeon_32_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de World Ash Treant's Grove",
+      "desc": "Nettoyez entièrement World Ash Treant's Grove pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_32",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 1200,
+        "xp": 2400
+      }
+    },
+    {
+      "id": "dungeon_32_q3",
+      "type": "chasse",
+      "name": "Infestation dans World Ash Treant's Grove",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_32",
+        "killCount": 212
+      },
+      "rewards": {
+        "gold": 1600,
+        "xp": 3200
+      }
+    },
+    {
+      "id": "dungeon_32_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de World Ash Treant's Grove",
+      "desc": "Montrez votre domination en nettoyant World Ash Treant's Grove plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_32",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 2400,
+        "xp": 4800
+      }
+    },
+    {
+      "id": "dungeon_32_q5",
+      "type": "chasse",
+      "name": "Éradication à World Ash Treant's Grove",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans World Ash Treant's Grove.",
+      "requirements": {
+        "dungeonId": "dungeon_32",
+        "killCount": 425
+      },
+      "rewards": {
+        "gold": 4000,
+        "xp": 8000,
+        "reputation": {
+          "factionId": "grove_keepers",
+          "amount": 100
+        }
+      }
+    },
+    {
+      "id": "dungeon_33_q1",
+      "type": "chasse",
+      "name": "Exploration de The Void-Corrupted Sanctum",
+      "desc": "Commencez par explorer The Void-Corrupted Sanctum et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_33",
+        "killCount": 90
+      },
+      "rewards": {
+        "gold": 850,
+        "xp": 1700
+      }
+    },
+    {
+      "id": "dungeon_33_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de The Void-Corrupted Sanctum",
+      "desc": "Nettoyez entièrement The Void-Corrupted Sanctum pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_33",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 1275,
+        "xp": 2550
+      }
+    },
+    {
+      "id": "dungeon_33_q3",
+      "type": "chasse",
+      "name": "Infestation dans The Void-Corrupted Sanctum",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_33",
+        "killCount": 225
+      },
+      "rewards": {
+        "gold": 1700,
+        "xp": 3400
+      }
+    },
+    {
+      "id": "dungeon_33_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de The Void-Corrupted Sanctum",
+      "desc": "Montrez votre domination en nettoyant The Void-Corrupted Sanctum plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_33",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 2550,
+        "xp": 5100
+      }
+    },
+    {
+      "id": "dungeon_33_q5",
+      "type": "chasse",
+      "name": "Éradication à The Void-Corrupted Sanctum",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans The Void-Corrupted Sanctum.",
+      "requirements": {
+        "dungeonId": "dungeon_33",
+        "killCount": 450
+      },
+      "rewards": {
+        "gold": 4250,
+        "xp": 8500,
+        "reputation": {
+          "factionId": "void_scholars",
+          "amount": 100
+        }
+      }
+    },
+    {
+      "id": "dungeon_34_q1",
+      "type": "chasse",
+      "name": "Exploration de Cthulhu's Herald's Antechamber",
+      "desc": "Commencez par explorer Cthulhu's Herald's Antechamber et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_34",
+        "killCount": 90
+      },
+      "rewards": {
+        "gold": 850,
+        "xp": 1700
+      }
+    },
+    {
+      "id": "dungeon_34_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de Cthulhu's Herald's Antechamber",
+      "desc": "Nettoyez entièrement Cthulhu's Herald's Antechamber pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_34",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 1275,
+        "xp": 2550
+      }
+    },
+    {
+      "id": "dungeon_34_q3",
+      "type": "chasse",
+      "name": "Infestation dans Cthulhu's Herald's Antechamber",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_34",
+        "killCount": 225
+      },
+      "rewards": {
+        "gold": 1700,
+        "xp": 3400
+      }
+    },
+    {
+      "id": "dungeon_34_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de Cthulhu's Herald's Antechamber",
+      "desc": "Montrez votre domination en nettoyant Cthulhu's Herald's Antechamber plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_34",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 2550,
+        "xp": 5100
+      }
+    },
+    {
+      "id": "dungeon_34_q5",
+      "type": "chasse",
+      "name": "Éradication à Cthulhu's Herald's Antechamber",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans Cthulhu's Herald's Antechamber.",
+      "requirements": {
+        "dungeonId": "dungeon_34",
+        "killCount": 450
+      },
+      "rewards": {
+        "gold": 4250,
+        "xp": 8500,
+        "reputation": {
+          "factionId": "void_scholars",
+          "amount": 100
+        }
+      }
+    },
+    {
+      "id": "dungeon_35_q1",
+      "type": "chasse",
+      "name": "Exploration de Permafrost Citadel",
+      "desc": "Commencez par explorer Permafrost Citadel et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_35",
+        "killCount": 95
+      },
+      "rewards": {
+        "gold": 900,
+        "xp": 1800
+      }
+    },
+    {
+      "id": "dungeon_35_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de Permafrost Citadel",
+      "desc": "Nettoyez entièrement Permafrost Citadel pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_35",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 1350,
+        "xp": 2700
+      }
+    },
+    {
+      "id": "dungeon_35_q3",
+      "type": "chasse",
+      "name": "Infestation dans Permafrost Citadel",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_35",
+        "killCount": 237
+      },
+      "rewards": {
+        "gold": 1800,
+        "xp": 3600
+      }
+    },
+    {
+      "id": "dungeon_35_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de Permafrost Citadel",
+      "desc": "Montrez votre domination en nettoyant Permafrost Citadel plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_35",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 2700,
+        "xp": 5400
+      }
+    },
+    {
+      "id": "dungeon_35_q5",
+      "type": "chasse",
+      "name": "Éradication à Permafrost Citadel",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans Permafrost Citadel.",
+      "requirements": {
+        "dungeonId": "dungeon_35",
+        "killCount": 475
+      },
+      "rewards": {
+        "gold": 4500,
+        "xp": 9000,
+        "reputation": {
+          "factionId": "silver_guardians",
+          "amount": 100
+        }
+      }
+    },
+    {
+      "id": "dungeon_36_q1",
+      "type": "chasse",
+      "name": "Exploration de Molten Pinnacle",
+      "desc": "Commencez par explorer Molten Pinnacle et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_36",
+        "killCount": 95
+      },
+      "rewards": {
+        "gold": 900,
+        "xp": 1800
+      }
+    },
+    {
+      "id": "dungeon_36_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de Molten Pinnacle",
+      "desc": "Nettoyez entièrement Molten Pinnacle pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_36",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 1350,
+        "xp": 2700
+      }
+    },
+    {
+      "id": "dungeon_36_q3",
+      "type": "chasse",
+      "name": "Infestation dans Molten Pinnacle",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_36",
+        "killCount": 237
+      },
+      "rewards": {
+        "gold": 1800,
+        "xp": 3600
+      }
+    },
+    {
+      "id": "dungeon_36_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de Molten Pinnacle",
+      "desc": "Montrez votre domination en nettoyant Molten Pinnacle plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_36",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 2700,
+        "xp": 5400
+      }
+    },
+    {
+      "id": "dungeon_36_q5",
+      "type": "chasse",
+      "name": "Éradication à Molten Pinnacle",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans Molten Pinnacle.",
+      "requirements": {
+        "dungeonId": "dungeon_36",
+        "killCount": 475
+      },
+      "rewards": {
+        "gold": 4500,
+        "xp": 9000,
+        "reputation": {
+          "factionId": "magma_watchers",
+          "amount": 100
+        }
+      }
+    },
+    {
+      "id": "dungeon_37_q1",
+      "type": "chasse",
+      "name": "Exploration de Heart of the Forest",
+      "desc": "Commencez par explorer Heart of the Forest et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_37",
+        "killCount": 100
+      },
+      "rewards": {
+        "gold": 950,
+        "xp": 1900
+      }
+    },
+    {
+      "id": "dungeon_37_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de Heart of the Forest",
+      "desc": "Nettoyez entièrement Heart of the Forest pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_37",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 1425,
+        "xp": 2850
+      }
+    },
+    {
+      "id": "dungeon_37_q3",
+      "type": "chasse",
+      "name": "Infestation dans Heart of the Forest",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_37",
+        "killCount": 250
+      },
+      "rewards": {
+        "gold": 1900,
+        "xp": 3800
+      }
+    },
+    {
+      "id": "dungeon_37_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de Heart of the Forest",
+      "desc": "Montrez votre domination en nettoyant Heart of the Forest plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_37",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 2850,
+        "xp": 5700
+      }
+    },
+    {
+      "id": "dungeon_37_q5",
+      "type": "chasse",
+      "name": "Éradication à Heart of the Forest",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans Heart of the Forest.",
+      "requirements": {
+        "dungeonId": "dungeon_37",
+        "killCount": 500
+      },
+      "rewards": {
+        "gold": 4750,
+        "xp": 9500,
+        "reputation": {
+          "factionId": "grove_keepers",
+          "amount": 100
+        }
+      }
+    },
+    {
+      "id": "dungeon_38_q1",
+      "type": "chasse",
+      "name": "Exploration de R'lyeh's Threshold",
+      "desc": "Commencez par explorer R'lyeh's Threshold et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_38",
+        "killCount": 100
+      },
+      "rewards": {
+        "gold": 950,
+        "xp": 1900
+      }
+    },
+    {
+      "id": "dungeon_38_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de R'lyeh's Threshold",
+      "desc": "Nettoyez entièrement R'lyeh's Threshold pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_38",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 1425,
+        "xp": 2850
+      }
+    },
+    {
+      "id": "dungeon_38_q3",
+      "type": "chasse",
+      "name": "Infestation dans R'lyeh's Threshold",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_38",
+        "killCount": 250
+      },
+      "rewards": {
+        "gold": 1900,
+        "xp": 3800
+      }
+    },
+    {
+      "id": "dungeon_38_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de R'lyeh's Threshold",
+      "desc": "Montrez votre domination en nettoyant R'lyeh's Threshold plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_38",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 2850,
+        "xp": 5700
+      }
+    },
+    {
+      "id": "dungeon_38_q5",
+      "type": "chasse",
+      "name": "Éradication à R'lyeh's Threshold",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans R'lyeh's Threshold.",
+      "requirements": {
+        "dungeonId": "dungeon_38",
+        "killCount": 500
+      },
+      "rewards": {
+        "gold": 4750,
+        "xp": 9500,
+        "reputation": {
+          "factionId": "void_scholars",
+          "amount": 100
+        }
+      }
+    },
+    {
+      "id": "dungeon_39_q1",
+      "type": "chasse",
+      "name": "Exploration de Frozen Throne",
+      "desc": "Commencez par explorer Frozen Throne et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_39",
+        "killCount": 105
+      },
+      "rewards": {
+        "gold": 1000,
+        "xp": 2000
+      }
+    },
+    {
+      "id": "dungeon_39_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de Frozen Throne",
+      "desc": "Nettoyez entièrement Frozen Throne pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_39",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 1500,
+        "xp": 3000
+      }
+    },
+    {
+      "id": "dungeon_39_q3",
+      "type": "chasse",
+      "name": "Infestation dans Frozen Throne",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_39",
+        "killCount": 262
+      },
+      "rewards": {
+        "gold": 2000,
+        "xp": 4000
+      }
+    },
+    {
+      "id": "dungeon_39_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de Frozen Throne",
+      "desc": "Montrez votre domination en nettoyant Frozen Throne plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_39",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 3000,
+        "xp": 6000
+      }
+    },
+    {
+      "id": "dungeon_39_q5",
+      "type": "chasse",
+      "name": "Éradication à Frozen Throne",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans Frozen Throne.",
+      "requirements": {
+        "dungeonId": "dungeon_39",
+        "killCount": 525
+      },
+      "rewards": {
+        "gold": 5000,
+        "xp": 10000,
+        "reputation": {
+          "factionId": "silver_guardians",
+          "amount": 100
+        }
+      }
+    },
+    {
+      "id": "dungeon_40_q1",
+      "type": "chasse",
+      "name": "Exploration de Inferno's Core",
+      "desc": "Commencez par explorer Inferno's Core et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_40",
+        "killCount": 105
+      },
+      "rewards": {
+        "gold": 1000,
+        "xp": 2000
+      }
+    },
+    {
+      "id": "dungeon_40_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de Inferno's Core",
+      "desc": "Nettoyez entièrement Inferno's Core pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_40",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 1500,
+        "xp": 3000
+      }
+    },
+    {
+      "id": "dungeon_40_q3",
+      "type": "chasse",
+      "name": "Infestation dans Inferno's Core",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_40",
+        "killCount": 262
+      },
+      "rewards": {
+        "gold": 2000,
+        "xp": 4000
+      }
+    },
+    {
+      "id": "dungeon_40_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de Inferno's Core",
+      "desc": "Montrez votre domination en nettoyant Inferno's Core plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_40",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 3000,
+        "xp": 6000
+      }
+    },
+    {
+      "id": "dungeon_40_q5",
+      "type": "chasse",
+      "name": "Éradication à Inferno's Core",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans Inferno's Core.",
+      "requirements": {
+        "dungeonId": "dungeon_40",
+        "killCount": 525
+      },
+      "rewards": {
+        "gold": 5000,
+        "xp": 10000,
+        "reputation": {
+          "factionId": "magma_watchers",
+          "amount": 100
+        }
+      }
+    },
+    {
+      "id": "dungeon_41_q1",
+      "type": "chasse",
+      "name": "Exploration de Verdant Sanctuary",
+      "desc": "Commencez par explorer Verdant Sanctuary et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_41",
+        "killCount": 110
+      },
+      "rewards": {
+        "gold": 1050,
+        "xp": 2100
+      }
+    },
+    {
+      "id": "dungeon_41_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de Verdant Sanctuary",
+      "desc": "Nettoyez entièrement Verdant Sanctuary pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_41",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 1575,
+        "xp": 3150
+      }
+    },
+    {
+      "id": "dungeon_41_q3",
+      "type": "chasse",
+      "name": "Infestation dans Verdant Sanctuary",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_41",
+        "killCount": 275
+      },
+      "rewards": {
+        "gold": 2100,
+        "xp": 4200
+      }
+    },
+    {
+      "id": "dungeon_41_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de Verdant Sanctuary",
+      "desc": "Montrez votre domination en nettoyant Verdant Sanctuary plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_41",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 3150,
+        "xp": 6300
+      }
+    },
+    {
+      "id": "dungeon_41_q5",
+      "type": "chasse",
+      "name": "Éradication à Verdant Sanctuary",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans Verdant Sanctuary.",
+      "requirements": {
+        "dungeonId": "dungeon_41",
+        "killCount": 550
+      },
+      "rewards": {
+        "gold": 5250,
+        "xp": 10500,
+        "reputation": {
+          "factionId": "grove_keepers",
+          "amount": 100
+        }
+      }
+    },
+    {
+      "id": "dungeon_42_q1",
+      "type": "chasse",
+      "name": "Exploration de The Sunken City",
+      "desc": "Commencez par explorer The Sunken City et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_42",
+        "killCount": 110
+      },
+      "rewards": {
+        "gold": 1050,
+        "xp": 2100
+      }
+    },
+    {
+      "id": "dungeon_42_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de The Sunken City",
+      "desc": "Nettoyez entièrement The Sunken City pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_42",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 1575,
+        "xp": 3150
+      }
+    },
+    {
+      "id": "dungeon_42_q3",
+      "type": "chasse",
+      "name": "Infestation dans The Sunken City",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_42",
+        "killCount": 275
+      },
+      "rewards": {
+        "gold": 2100,
+        "xp": 4200
+      }
+    },
+    {
+      "id": "dungeon_42_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de The Sunken City",
+      "desc": "Montrez votre domination en nettoyant The Sunken City plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_42",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 3150,
+        "xp": 6300
+      }
+    },
+    {
+      "id": "dungeon_42_q5",
+      "type": "chasse",
+      "name": "Éradication à The Sunken City",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans The Sunken City.",
+      "requirements": {
+        "dungeonId": "dungeon_42",
+        "killCount": 550
+      },
+      "rewards": {
+        "gold": 5250,
+        "xp": 10500,
+        "reputation": {
+          "factionId": "void_scholars",
+          "amount": 100
+        }
+      }
+    },
+    {
+      "id": "dungeon_43_q1",
+      "type": "chasse",
+      "name": "Exploration de Icecrown Citadel",
+      "desc": "Commencez par explorer Icecrown Citadel et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_43",
+        "killCount": 115
+      },
+      "rewards": {
+        "gold": 1100,
+        "xp": 2200
+      }
+    },
+    {
+      "id": "dungeon_43_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de Icecrown Citadel",
+      "desc": "Nettoyez entièrement Icecrown Citadel pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_43",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 1650,
+        "xp": 3300
+      }
+    },
+    {
+      "id": "dungeon_43_q3",
+      "type": "chasse",
+      "name": "Infestation dans Icecrown Citadel",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_43",
+        "killCount": 287
+      },
+      "rewards": {
+        "gold": 2200,
+        "xp": 4400
+      }
+    },
+    {
+      "id": "dungeon_43_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de Icecrown Citadel",
+      "desc": "Montrez votre domination en nettoyant Icecrown Citadel plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_43",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 3300,
+        "xp": 6600
+      }
+    },
+    {
+      "id": "dungeon_43_q5",
+      "type": "chasse",
+      "name": "Éradication à Icecrown Citadel",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans Icecrown Citadel.",
+      "requirements": {
+        "dungeonId": "dungeon_43",
+        "killCount": 575
+      },
+      "rewards": {
+        "gold": 5500,
+        "xp": 11000,
+        "reputation": {
+          "factionId": "silver_guardians",
+          "amount": 100
+        }
+      }
+    },
+    {
+      "id": "dungeon_44_q1",
+      "type": "chasse",
+      "name": "Exploration de Blackrock Mountain",
+      "desc": "Commencez par explorer Blackrock Mountain et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_44",
+        "killCount": 115
+      },
+      "rewards": {
+        "gold": 1100,
+        "xp": 2200
+      }
+    },
+    {
+      "id": "dungeon_44_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de Blackrock Mountain",
+      "desc": "Nettoyez entièrement Blackrock Mountain pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_44",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 1650,
+        "xp": 3300
+      }
+    },
+    {
+      "id": "dungeon_44_q3",
+      "type": "chasse",
+      "name": "Infestation dans Blackrock Mountain",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_44",
+        "killCount": 287
+      },
+      "rewards": {
+        "gold": 2200,
+        "xp": 4400
+      }
+    },
+    {
+      "id": "dungeon_44_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de Blackrock Mountain",
+      "desc": "Montrez votre domination en nettoyant Blackrock Mountain plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_44",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 3300,
+        "xp": 6600
+      }
+    },
+    {
+      "id": "dungeon_44_q5",
+      "type": "chasse",
+      "name": "Éradication à Blackrock Mountain",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans Blackrock Mountain.",
+      "requirements": {
+        "dungeonId": "dungeon_44",
+        "killCount": 575
+      },
+      "rewards": {
+        "gold": 5500,
+        "xp": 11000,
+        "reputation": {
+          "factionId": "magma_watchers",
+          "amount": 100
+        }
+      }
+    },
+    {
+      "id": "dungeon_45_q1",
+      "type": "chasse",
+      "name": "Exploration de The Emerald Dream",
+      "desc": "Commencez par explorer The Emerald Dream et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_45",
+        "killCount": 120
+      },
+      "rewards": {
+        "gold": 1150,
+        "xp": 2300
+      }
+    },
+    {
+      "id": "dungeon_45_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de The Emerald Dream",
+      "desc": "Nettoyez entièrement The Emerald Dream pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_45",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 1725,
+        "xp": 3450
+      }
+    },
+    {
+      "id": "dungeon_45_q3",
+      "type": "chasse",
+      "name": "Infestation dans The Emerald Dream",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_45",
+        "killCount": 300
+      },
+      "rewards": {
+        "gold": 2300,
+        "xp": 4600
+      }
+    },
+    {
+      "id": "dungeon_45_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de The Emerald Dream",
+      "desc": "Montrez votre domination en nettoyant The Emerald Dream plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_45",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 3450,
+        "xp": 6900
+      }
+    },
+    {
+      "id": "dungeon_45_q5",
+      "type": "chasse",
+      "name": "Éradication à The Emerald Dream",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans The Emerald Dream.",
+      "requirements": {
+        "dungeonId": "dungeon_45",
+        "killCount": 600
+      },
+      "rewards": {
+        "gold": 5750,
+        "xp": 11500,
+        "reputation": {
+          "factionId": "grove_keepers",
+          "amount": 100
+        }
+      }
+    },
+    {
+      "id": "dungeon_46_q1",
+      "type": "chasse",
+      "name": "Exploration de Ny'alotha, the Waking City",
+      "desc": "Commencez par explorer Ny'alotha, the Waking City et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_46",
+        "killCount": 120
+      },
+      "rewards": {
+        "gold": 1150,
+        "xp": 2300
+      }
+    },
+    {
+      "id": "dungeon_46_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de Ny'alotha, the Waking City",
+      "desc": "Nettoyez entièrement Ny'alotha, the Waking City pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_46",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 1725,
+        "xp": 3450
+      }
+    },
+    {
+      "id": "dungeon_46_q3",
+      "type": "chasse",
+      "name": "Infestation dans Ny'alotha, the Waking City",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_46",
+        "killCount": 300
+      },
+      "rewards": {
+        "gold": 2300,
+        "xp": 4600
+      }
+    },
+    {
+      "id": "dungeon_46_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de Ny'alotha, the Waking City",
+      "desc": "Montrez votre domination en nettoyant Ny'alotha, the Waking City plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_46",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 3450,
+        "xp": 6900
+      }
+    },
+    {
+      "id": "dungeon_46_q5",
+      "type": "chasse",
+      "name": "Éradication à Ny'alotha, the Waking City",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans Ny'alotha, the Waking City.",
+      "requirements": {
+        "dungeonId": "dungeon_46",
+        "killCount": 600
+      },
+      "rewards": {
+        "gold": 5750,
+        "xp": 11500,
+        "reputation": {
+          "factionId": "void_scholars",
+          "amount": 100
+        }
+      }
+    },
+    {
+      "id": "dungeon_47_q1",
+      "type": "chasse",
+      "name": "Exploration de The Frozen Halls",
+      "desc": "Commencez par explorer The Frozen Halls et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_47",
+        "killCount": 125
+      },
+      "rewards": {
+        "gold": 1200,
+        "xp": 2400
+      }
+    },
+    {
+      "id": "dungeon_47_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de The Frozen Halls",
+      "desc": "Nettoyez entièrement The Frozen Halls pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_47",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 1800,
+        "xp": 3600
+      }
+    },
+    {
+      "id": "dungeon_47_q3",
+      "type": "chasse",
+      "name": "Infestation dans The Frozen Halls",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_47",
+        "killCount": 312
+      },
+      "rewards": {
+        "gold": 2400,
+        "xp": 4800
+      }
+    },
+    {
+      "id": "dungeon_47_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de The Frozen Halls",
+      "desc": "Montrez votre domination en nettoyant The Frozen Halls plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_47",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 3600,
+        "xp": 7200
+      }
+    },
+    {
+      "id": "dungeon_47_q5",
+      "type": "chasse",
+      "name": "Éradication à The Frozen Halls",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans The Frozen Halls.",
+      "requirements": {
+        "dungeonId": "dungeon_47",
+        "killCount": 625
+      },
+      "rewards": {
+        "gold": 6000,
+        "xp": 12000,
+        "reputation": {
+          "factionId": "silver_guardians",
+          "amount": 100
+        }
+      }
+    },
+    {
+      "id": "dungeon_48_q1",
+      "type": "chasse",
+      "name": "Exploration de The Molten Core",
+      "desc": "Commencez par explorer The Molten Core et tuez quelques monstres.",
+      "requirements": {
+        "dungeonId": "dungeon_48",
+        "killCount": 130
+      },
+      "rewards": {
+        "gold": 1250,
+        "xp": 2500
+      }
+    },
+    {
+      "id": "dungeon_48_q2",
+      "type": "nettoyage",
+      "name": "Nettoyage de The Molten Core",
+      "desc": "Nettoyez entièrement The Molten Core pour prouver votre valeur.",
+      "requirements": {
+        "dungeonId": "dungeon_48",
+        "clearCount": 1
+      },
+      "rewards": {
+        "gold": 1875,
+        "xp": 3750
+      }
+    },
+    {
+      "id": "dungeon_48_q3",
+      "type": "chasse",
+      "name": "Infestation dans The Molten Core",
+      "desc": "Les monstres sont plus nombreux que prévu. Retournez-y et réduisez leur nombre.",
+      "requirements": {
+        "dungeonId": "dungeon_48",
+        "killCount": 325
+      },
+      "rewards": {
+        "gold": 2500,
+        "xp": 5000
+      }
+    },
+    {
+      "id": "dungeon_48_q4",
+      "type": "nettoyage",
+      "name": "Maîtrise de The Molten Core",
+      "desc": "Montrez votre domination en nettoyant The Molten Core plusieurs fois.",
+      "requirements": {
+        "dungeonId": "dungeon_48",
+        "clearCount": 3
+      },
+      "rewards": {
+        "gold": 3750,
+        "xp": 7500
+      }
+    },
+    {
+      "id": "dungeon_48_q5",
+      "type": "chasse",
+      "name": "Éradication à The Molten Core",
+      "desc": "Il est temps de mettre un terme définitif à la menace dans The Molten Core.",
+      "requirements": {
+        "dungeonId": "dungeon_48",
+        "killCount": 650
+      },
+      "rewards": {
+        "gold": 6250,
+        "xp": 12500,
+        "reputation": {
+          "factionId": "magma_watchers",
+          "amount": 100
+        }
+      }
     }
   ]
 }

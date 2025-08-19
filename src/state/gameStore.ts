@@ -1,10 +1,9 @@
 import create from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
+import { persist, createJSONStorage, StateStorage } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 import type { Dungeon, Monstre, Item, Talent, Skill, Stats, PlayerState, InventoryState, CombatLogEntry, CombatState, GameData, Quete, PlayerClassId, ResourceType, Rareté, CombatEnemy, ItemSet, PotionType } from '@/lib/types';
 import * as formulas from '@/core/formulas';
 import { v4 as uuidv4 } from 'uuid';
-import { StateStorage } from 'zustand/middleware';
 
 export interface ActiveQuete {
   quete: Quete;
@@ -277,8 +276,8 @@ export const useGameStore = create<GameState>()(
         return Math.floor(100 * Math.pow(player.level, 1.5));
       },
 
-      initializeGameData: (data) => {
-        set((state) => {
+      initializeGameData: (data: Partial<GameData>) => {
+        set((state: GameState) => {
             state.gameData.dungeons = Array.isArray(data.dungeons) ? data.dungeons : [];
             state.gameData.monsters = Array.isArray(data.monsters) ? data.monsters : [];
             state.gameData.items = Array.isArray(data.items) ? data.items : [];
@@ -294,7 +293,7 @@ export const useGameStore = create<GameState>()(
       },
       
       setPlayerClass: (classId: PlayerClassId) => {
-        set(state => {
+        set((state: GameState) => {
             const chosenClass = state.gameData.classes.find(c => c.id === classId);
             if (!chosenClass) return;
 
@@ -322,7 +321,7 @@ export const useGameStore = create<GameState>()(
       },
 
       recalculateStats: () => {
-        set(state => {
+        set((state: GameState) => {
           const { player, inventory, gameData } = state;
           if (!player.classeId) return;
 
@@ -432,7 +431,7 @@ export const useGameStore = create<GameState>()(
 
         const itemToEquip = inventory.items[itemIndex];
         
-        set(state => {
+        set((state: GameState) => {
             state.inventory.items.splice(itemIndex, 1);
             const slot = itemToEquip.slot as keyof InventoryState['equipment'];
             const currentItem = state.inventory.equipment[slot];
@@ -446,7 +445,7 @@ export const useGameStore = create<GameState>()(
       },
       
       unequipItem: (slot: keyof InventoryState['equipment']) => {
-        set(state => {
+        set((state: GameState) => {
             const item = state.inventory.equipment[slot];
             if (item) {
                 state.inventory.items.push(item);
@@ -467,7 +466,7 @@ export const useGameStore = create<GameState>()(
           newItem.id = uuidv4();
           delete newItem.vendorPrice;
 
-          set(state => {
+          set((state: GameState) => {
               state.inventory.gold -= price;
               state.inventory.items.push(newItem);
           });
@@ -475,7 +474,7 @@ export const useGameStore = create<GameState>()(
       },
       
       sellItem: (itemId: string) => {
-        set(state => {
+        set((state: GameState) => {
             const itemIndex = state.inventory.items.findIndex(i => i.id === itemId);
             if (itemIndex === -1) return;
 
@@ -490,7 +489,7 @@ export const useGameStore = create<GameState>()(
       sellAllUnusedItems: () => {
         let soldCount = 0;
         let goldGained = 0;
-        set(state => {
+        set((state: GameState) => {
             const itemsToSell = [...state.inventory.items];
             state.inventory.items = [];
 
@@ -504,7 +503,7 @@ export const useGameStore = create<GameState>()(
       },
 
       learnSkill: (skillId: string) => {
-        set(state => {
+        set((state: GameState) => {
           const { player, gameData } = state;
           const skill = gameData.skills.find(s => s.id === skillId);
           if (!skill || player.talentPoints <= 0) return;
@@ -530,7 +529,7 @@ export const useGameStore = create<GameState>()(
       },
 
       learnTalent: (talentId: string) => {
-        set(state => {
+        set((state: GameState) => {
           const { player, gameData } = state;
           const talent = gameData.talents.find(t => t.id === talentId);
           if (!talent || player.talentPoints <= 0) return;
@@ -559,7 +558,7 @@ export const useGameStore = create<GameState>()(
       },
 
       equipSkill: (skillId: string, slot: number) => {
-        set(state => {
+        set((state: GameState) => {
             if (slot < 0 || slot >= state.player.equippedSkills.length) return;
             
             const existingSlot = state.player.equippedSkills.indexOf(skillId);
@@ -572,7 +571,7 @@ export const useGameStore = create<GameState>()(
       },
 
       unequipSkill: (slot: number) => {
-        set(state => {
+        set((state: GameState) => {
             if (slot < 0 || slot >= state.player.equippedSkills.length) return;
             state.player.equippedSkills[slot] = null;
         });
@@ -591,7 +590,7 @@ export const useGameStore = create<GameState>()(
           if (inventory.gold < POTION_COST) {
               return false;
           }
-          set(state => {
+          set((state: GameState) => {
               state.inventory.gold -= POTION_COST;
               state.inventory.potions[potionType]++;
           });
@@ -604,7 +603,7 @@ export const useGameStore = create<GameState>()(
           if (inventory.gold < REST_COST) {
               return false;
           }
-          set(state => {
+          set((state: GameState) => {
               state.inventory.gold -= REST_COST;
               const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
               state.player.stats.PV = maxHp;
@@ -618,7 +617,7 @@ export const useGameStore = create<GameState>()(
       },
 
       usePotion: (potionType: PotionType) => {
-          set(state => {
+          set((state: GameState) => {
               if (potionType === 'health') {
                  if (state.inventory.potions.health > 0) {
                     const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
@@ -639,7 +638,7 @@ export const useGameStore = create<GameState>()(
       },
 
       acceptQuest: (questId: string) => {
-        set(state => {
+        set((state: GameState) => {
             const questToAccept = state.gameData.quests.find(q => q.id === questId);
             if (!questToAccept) return;
 
@@ -652,10 +651,10 @@ export const useGameStore = create<GameState>()(
         });
       },
 
-      enterDungeon: (dungeonId) => {
+      enterDungeon: (dungeonId: string) => {
         const dungeon = get().gameData.dungeons.find(d => d.id === dungeonId);
         if (dungeon) {
-          set(state => {
+          set((state: GameState) => {
             state.view = 'COMBAT';
             state.currentDungeon = dungeon;
             state.combat = { ...initialCombatState, log: [{ message: `Entered ${dungeon.name}.`, type: 'info', timestamp: Date.now() }]};
@@ -691,7 +690,7 @@ export const useGameStore = create<GameState>()(
         }
         
         if (newEnemies.length > 0) {
-            set(state => {
+            set((state: GameState) => {
               state.combat.enemies = newEnemies;
               state.combat.playerAttackProgress = 0;
               state.combat.playerAttackInterval = state.player.stats.Vitesse * 1000;
@@ -701,7 +700,7 @@ export const useGameStore = create<GameState>()(
         }
       },
       
-      gameTick: (delta) => {
+      gameTick: (delta: number) => {
           const { view, combat } = get();
           
           if(view !== 'COMBAT' || !combat.enemies || combat.enemies.length === 0) {
@@ -709,7 +708,7 @@ export const useGameStore = create<GameState>()(
             return;
           }
 
-          set(state => {
+          set((state: GameState) => {
               // Réinitialise l'attaque si plus de cibles valides
               const livingEnemies = state.combat.enemies.filter(e => e.stats.PV > 0);
               if (livingEnemies.length === 0) {
@@ -729,6 +728,9 @@ export const useGameStore = create<GameState>()(
               if (state.player.resources.type === 'Énergie') {
                   const energyPerSecond = 20; // Régénère 20 énergie par seconde
                   state.player.resources.current = Math.min(state.player.resources.max, state.player.resources.current + (energyPerSecond * (delta / 1000)));
+              } else if (state.player.resources.type === 'Mana') {
+                  const manaPerSecond = 10; // Régénère 10 mana par seconde
+                  state.player.resources.current = Math.min(state.player.resources.max, state.player.resources.current + (manaPerSecond * (delta / 1000)));
               }
               
               // Cooldowns des compétences
@@ -769,8 +771,8 @@ export const useGameStore = create<GameState>()(
           }
       },
 
-      playerAttack: (targetId, isCleave = false) => {
-        set(state => {
+      playerAttack: (targetId: string, isCleave = false) => {
+        set((state: GameState) => {
             const { player, combat } = state;
             const target = combat.enemies.find(e => e.id === targetId);
             if (!target || target.stats.PV <= 0) return;
@@ -811,10 +813,6 @@ export const useGameStore = create<GameState>()(
               }
               state.player.resources.current = Math.min(state.player.resources.max, state.player.resources.current + rageGained);
             }
-
-            if(state.player.resources.type === 'Mana' && !isCleave) {
-              state.player.resources.current = Math.min(state.player.resources.max, state.player.resources.current + 5);
-            }
         });
         
         const target = get().combat.enemies.find(e => e.id === targetId);
@@ -836,7 +834,7 @@ export const useGameStore = create<GameState>()(
       useSkill: (skillId: string) => {
         const deadEnemyIds: string[] = [];
         
-        set(state => {
+        set((state: GameState) => {
             const { player, combat, gameData } = state;
             if (!combat.enemies || combat.enemies.length === 0 || (combat.skillCooldowns[skillId] || 0) > 0) {
                 return;
@@ -913,7 +911,7 @@ export const useGameStore = create<GameState>()(
             const { player } = get();
             if (player.stats.PV <= 0) return;
 
-            set(state => {
+            set((state: GameState) => {
                 const enemyInState = state.combat.enemies.find(e => e.id === enemy.id);
                 if (!enemyInState || enemyInState.stats.PV <= 0) return;
 
@@ -934,7 +932,7 @@ export const useGameStore = create<GameState>()(
         });
         
         if (get().player.stats.PV <= 0) {
-            set(state => {
+            set((state: GameState) => {
                 const goldPenalty = Math.floor(state.inventory.gold * 0.10);
                 state.inventory.gold -= goldPenalty;
                 state.combat.log.push({ message: `You have been defeated! You lose ${goldPenalty} gold and all items found in the dungeon. Returning to town.`, type: 'info', timestamp: Date.now() });
@@ -958,7 +956,7 @@ export const useGameStore = create<GameState>()(
         const enemy = get().combat.enemies.find(e => e.id === enemyId);
         if (!enemy) return;
         
-        set(state => {
+        set((state: GameState) => {
             if (!state.combat.enemies.some(e => e.id === enemyId)) return;
              const enemyInState = state.combat.enemies.find(e => e.id === enemyId);
              if (enemyInState) {
@@ -966,7 +964,7 @@ export const useGameStore = create<GameState>()(
              }
         });
 
-        set(state => {
+        set((state: GameState) => {
             const { gameData, currentDungeon } = state;
 
             const goldDrop = 5;
@@ -1045,7 +1043,7 @@ export const useGameStore = create<GameState>()(
         if (allEnemiesDead) {
              setTimeout(() => {
                 if (currentDungeon && get().combat.killCount >= currentDungeon.killTarget) {
-                    set(state => {
+                    set((state: GameState) => {
                         state.player.completedDungeons[currentDungeon.id] = (state.player.completedDungeons[currentDungeon.id] || 0) + 1;
                         
                         state.activeQuests.forEach((activeQuest) => {
@@ -1096,7 +1094,7 @@ export const useGameStore = create<GameState>()(
                     });
                     if(gameLoop) clearInterval(gameLoop);
                 } else {
-                    set(state => { state.combat.enemies = [] });
+                    set((state: GameState) => { state.combat.enemies = [] });
                     get().startCombat();
                 }
             }, 1000);
@@ -1104,7 +1102,7 @@ export const useGameStore = create<GameState>()(
       },
 
       cycleTarget: () => {
-        set(state => {
+        set((state: GameState) => {
             const livingEnemies = state.combat.enemies.filter(e => e.stats.PV > 0);
             if (livingEnemies.length > 1) {
                 const currentTargetId = state.combat.enemies[state.combat.targetIndex].id;
@@ -1120,7 +1118,7 @@ export const useGameStore = create<GameState>()(
       },
 
       flee: () => {
-        set(state => {
+        set((state: GameState) => {
             state.view = 'TOWN';
             state.combat.enemies = [];
             state.inventory.items.push(...state.combat.dungeonRunItems);
@@ -1131,7 +1129,7 @@ export const useGameStore = create<GameState>()(
       },
 
       toggleAutoAttack: () => {
-        set(state => {
+        set((state: GameState) => {
           state.combat.autoAttack = !state.combat.autoAttack;
         });
       },
@@ -1140,7 +1138,7 @@ export const useGameStore = create<GameState>()(
     {
       name: 'barquest-save',
       storage: storage,
-      onRehydrateStorage: () => (state) => {
+      onRehydrateStorage: () => (state: GameState | undefined) => {
         if (state) {
             state.rehydrateComplete = true;
             state.view = 'TOWN';
