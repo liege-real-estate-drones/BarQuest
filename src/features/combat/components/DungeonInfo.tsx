@@ -14,27 +14,26 @@ const biomeIcons: Record<Dungeon['biome'], React.ReactNode> = {
 
 export function DungeonInfo({ dungeon }: { dungeon: Dungeon }) {
     return (
-        <Card>
-            <CardHeader>
-                <CardTitle className="flex justify-between items-center">
-                    <span>{dungeon.name}</span>
+        <div className="flex items-center justify-between w-full">
+            <div>
+                <h3 className="font-bold text-base md:text-lg flex items-center gap-2">
                     {biomeIcons[dungeon.biome]}
-                </CardTitle>
-                <CardDescription>Palier {dungeon.palier}</CardDescription>
-            </CardHeader>
-            <CardContent>
-                <h4 className="font-semibold text-sm mb-2">Modificateurs</h4>
-                <Separator className="mb-3" />
-                {dungeon.modifiers && dungeon.modifiers.length > 0 ? (
-                    <ul className="space-y-2">
+                    {dungeon.name}
+                </h3>
+                <p className="text-xs text-muted-foreground ml-6 md:ml-0">Palier {dungeon.palier}</p>
+            </div>
+            <div className="hidden md:block text-right">
+                 <h4 className="font-semibold text-xs mb-1">Modificateurs</h4>
+                 {dungeon.modifiers && dungeon.modifiers.length > 0 ? (
+                    <div className="flex gap-2 justify-end">
                         {dungeon.modifiers.map((mod, index) => (
-                            <li key={index} className="text-xs text-primary bg-primary/10 p-2 rounded-md">{mod}</li>
+                            <span key={index} className="text-xs text-primary bg-primary/10 px-2 py-1 rounded-md">{mod}</span>
                         ))}
-                    </ul>
+                    </div>
                 ) : (
-                    <p className="text-xs text-muted-foreground">Aucun modificateur actif.</p>
+                    <p className="text-xs text-muted-foreground">Aucun.</p>
                 )}
-            </CardContent>
-        </Card>
+            </div>
+        </div>
     );
 }

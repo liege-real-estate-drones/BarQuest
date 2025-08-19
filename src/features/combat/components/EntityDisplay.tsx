@@ -14,6 +14,7 @@ interface EntityDisplayProps {
   isPlayer?: boolean;
   isTarget?: boolean;
   isCompact?: boolean;
+  attackProgress?: number;
 }
 
 function StatGrid({ stats }: { stats: Stats }) {
@@ -34,7 +35,7 @@ const resourceConfig: Record<ResourceType, { color: string; indicator: string }>
     'Énergie': { color: 'text-yellow-400', indicator: 'bg-gradient-to-r from-yellow-500 to-yellow-700' },
 };
 
-export default function EntityDisplay({ entity, isPlayer = false, isTarget = false, isCompact = false }: EntityDisplayProps) {
+export default function EntityDisplay({ entity, isPlayer = false, isTarget = false, isCompact = false, attackProgress: attackProgressProp }: EntityDisplayProps) {
   const getXpToNextLevel = useGameStore(s => s.getXpToNextLevel);
   const [showStats, setShowStats] = React.useState(isPlayer); // Stats affichées par défaut pour le joueur
 
@@ -80,9 +81,7 @@ export default function EntityDisplay({ entity, isPlayer = false, isTarget = fal
         <CardTitle className={cn("font-headline flex justify-between items-center", isCompact ? "text-sm" : "text-base")}>
           <div className="flex items-center gap-2">
             <span className="truncate">{name} {isTarget && <span className="text-xs text-primary">(Cible)</span>}</span>
-            {!isPlayer && (
-              <Progress value={((entity as CombatEnemy).attackProgress || 0) * 100} className={cn("h-1 bg-background/50", isCompact ? "w-10" : "w-16")} indicatorClassName="bg-yellow-500" />
-            )}
+            <Progress value={((attackProgressProp !== undefined ? attackProgressProp : entity.attackProgress) || 0) * 100} className={cn("h-1 bg-background/50", isCompact ? "w-10" : "w-16")} indicatorClassName="bg-yellow-500" />
           </div>
           <span className={cn("text-muted-foreground", isCompact ? "text-xs" : "text-sm")}>Lvl {level}</span>
         </CardTitle>

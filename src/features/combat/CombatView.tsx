@@ -34,6 +34,7 @@ export function CombatView() {
     targetIndex,
     bossEncounter, // NOUVEAU: Récupération de l'état du boss
     setBossEncounter, // NOUVEAU: Récupération de l'action pour le boss
+    playerAttackProgress,
   } = useGameStore((state) => ({
     player: state.player,
     enemies: state.combat.enemies,
@@ -47,6 +48,7 @@ export function CombatView() {
     targetIndex: state.combat.targetIndex,
     bossEncounter: state.bossEncounter, // NOUVEAU
     setBossEncounter: state.setBossEncounter, // NOUVEAU
+    playerAttackProgress: state.combat.playerAttackProgress,
   }));
 
   const equippedSkills = useMemo(() => {
@@ -81,11 +83,16 @@ export function CombatView() {
 
   return (
     <div className="flex flex-col h-screen w-full font-code bg-background text-foreground">
-      <header className="flex-shrink-0 flex items-center border-b p-4 gap-4">
-        <Button variant="ghost" size="icon" onClick={flee} className="flex-shrink-0">
-          <ArrowLeft />
-        </Button>
-        <div className="flex-grow">
+      <header className="flex-shrink-0 flex flex-col md:flex-row items-center border-b p-2 md:p-4 gap-4">
+        <div className="flex items-center justify-between w-full md:w-auto">
+            <Button variant="ghost" size="icon" onClick={flee} className="flex-shrink-0">
+                <ArrowLeft />
+            </Button>
+            <div className="flex-grow md:hidden">
+                <EntityDisplay entity={player} isPlayer isCompact attackProgress={playerAttackProgress} />
+            </div>
+        </div>
+        <div className="flex-grow w-full">
           <DungeonInfo dungeon={currentDungeon} />
         </div>
       </header>
@@ -93,28 +100,12 @@ export function CombatView() {
       <main className="flex-grow flex flex-col md:grid md:grid-cols-2 gap-4 p-4 overflow-hidden">
         {/* --- VUE MOBILE --- */}
         <div className="md:hidden flex flex-col gap-4 min-h-0">
-          {/* Joueur & Cible */}
-          <div className="grid grid-cols-2 gap-4">
-            <EntityDisplay entity={player} isPlayer />
-            {enemies[targetIndex] && <EntityDisplay entity={enemies[targetIndex]} isTarget />}
+          {/* Ennemis */}
+          <div className="grid grid-cols-3 gap-2">
+            {enemies.slice(0, 3).map((enemy, index) => (
+              <EntityDisplay key={enemy.id} entity={enemy} isTarget={index === targetIndex} isCompact />
+            ))}
           </div>
-
-          {/* Autres ennemis */}
-          {enemies.length > 1 && (
-            <div>
-              <p className="text-xs text-muted-foreground font-semibold mb-2 px-1">AUTRES ENNEMIS</p>
-              <ScrollArea className="w-full">
-                <div className="flex gap-3 pb-3">
-                  {enemies.filter((_, i) => i !== targetIndex).map((enemy) => (
-                    <div key={enemy.id} className="w-40 flex-shrink-0">
-                      <EntityDisplay entity={enemy} isCompact />
-                    </div>
-                  ))}
-                </div>
-                <ScrollBar orientation="horizontal" />
-              </ScrollArea>
-            </div>
-          )}
 
           {/* Log de combat */}
           <div className="flex-grow min-h-0">
