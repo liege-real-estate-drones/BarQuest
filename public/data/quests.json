@@ -8350,6 +8350,46 @@
         "gold": 1640,
         "xp": 3230
       }
+        },
+        {
+            "id": "dungeon_1_q1_heroic",
+            "type": "chasse",
+            "name": "Exploration de Goblin Mines Héroïque",
+            "desc": "[Héroïque] Commencez par explorer Goblin Mines et tuez quelques monstres.",
+            "requirements": { "dungeonId": "dungeon_1_heroic", "killCount": 20 },
+            "rewards": { "gold": 250, "xp": 500 }
+        },
+        {
+            "id": "dungeon_1_q2_heroic",
+            "type": "nettoyage",
+            "name": "Nettoyage de Goblin Mines Héroïque",
+            "desc": "[Héroïque] Nettoyez entièrement Goblin Mines pour prouver votre valeur.",
+            "requirements": { "dungeonId": "dungeon_1_heroic", "clearCount": 2 },
+            "rewards": { "gold": 375, "xp": 750 }
+        },
+        {
+            "id": "dungeon_2_q1_heroic",
+            "type": "chasse",
+            "name": "Exploration de Bat Cave Héroïque",
+            "desc": "[Héroïque] Commencez par explorer Bat Cave et tuez quelques monstres.",
+            "requirements": { "dungeonId": "dungeon_2_heroic", "killCount": 20 },
+            "rewards": { "gold": 250, "xp": 500 }
+        },
+        {
+            "id": "dungeon_2_q_collect_bat_fang_heroic",
+            "type": "collecte",
+            "name": "Collecte de Crocs de chauve-souris Héroïque",
+            "desc": "[Héroïque] Un artisan local a besoin de Crocs de chauve-souris. Récupérez-en sur les Chauve-souris des Cavernes Héroïques.",
+            "requirements": { "dungeonId": "dungeon_2_heroic", "itemId": "bat_fang_heroic", "itemCount": 20 },
+            "rewards": { "gold": 600, "xp": 900 }
+        },
+        {
+            "id": "dungeon_3_q5_heroic",
+            "type": "chasse",
+            "name": "Éradication à Icy Crevasse Héroïque",
+            "desc": "[Héroïque] Il est temps de mettre un terme définitif à la menace dans Icy Crevasse.",
+            "requirements": { "dungeonId": "dungeon_3_heroic", "killCount": 150 },
+            "rewards": { "gold": 2500, "xp": 5000, "reputation": { "factionId": "silver_guardians", "amount": 300 } }
     }
   ]
 }

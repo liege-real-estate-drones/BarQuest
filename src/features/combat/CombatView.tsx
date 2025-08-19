@@ -90,23 +90,28 @@ export function CombatView() {
         </div>
       </header>
 
-      <main className="flex-grow flex flex-col p-4 gap-4 min-h-0 overflow-y-auto">
-        <div className="flex-grow">
+      <main className="flex-grow grid grid-cols-1 md:grid-cols-2 gap-4 p-4 overflow-hidden">
+        {/* Colonne de gauche : Infos Joueur et Log */}
+        <div className="flex flex-col gap-4 min-h-0">
+          <EntityDisplay entity={player} isPlayer />
+          <div className="flex-grow min-h-0">
+            <CombatLog log={combatLog} />
+          </div>
+        </div>
+
+        {/* Colonne de droite : Ennemis */}
+        <div className="min-h-0">
           <ScrollArea className="h-full">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pr-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 pr-4">
               {enemies.map((enemy, index) => (
                 <EntityDisplay key={enemy.id} entity={enemy} isTarget={index === targetIndex} />
               ))}
             </div>
           </ScrollArea>
         </div>
-        <div className="flex-shrink-0">
-          <CombatLog log={combatLog} />
-        </div>
       </main>
 
-      <footer className="flex-shrink-0 border-t bg-background/80 backdrop-blur-sm p-4 space-y-4">
-        <EntityDisplay entity={player} isPlayer />
+      <footer className="flex-shrink-0 border-t bg-background/80 backdrop-blur-sm p-4">
         <ActionStrip
           onRetreat={flee}
           skills={equippedSkills}
