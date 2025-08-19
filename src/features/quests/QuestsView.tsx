@@ -1,4 +1,4 @@
-
+// liege-real-estate-drones/barquest/BarQuest-ba29103e759395544a0519632ae86dfb86dc7427/src/features/quests/QuestsView.tsx
 'use client';
 
 import { useGameStore } from '@/state/gameStore';
@@ -100,6 +100,7 @@ export function QuestsView() {
 
 
   return (
+    // Ajout de "h-full flex flex-col" pour que la carte prenne toute la hauteur
     <Card className="h-full flex flex-col">
       <CardHeader>
         <CardTitle>Journal de Quêtes</CardTitle>

@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import { DungeonsView } from '../dungeons/DungeonsView';
 import { VendorsView } from '../vendors/VendorsView';
 import { useGameStore } from '@/state/gameStore';
-import { EquipmentView } from '../inventory/EquipmentView';
 import { PlayerStatsView } from '../player/PlayerStatsView';
 import { QuestsView } from '../quests/QuestsView';
 import { ReputationView } from '../reputation/ReputationView';
@@ -19,7 +18,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { LogOut, Settings, Trash2, BookOpen, User, Swords, Store, Home } from 'lucide-react';
+import { Settings, User, Swords, Store, Home } from 'lucide-react';
 import { InnView } from './InnView';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { CharacterView } from '../player/CharacterView';
@@ -39,22 +38,30 @@ export function TownView() {
     switch (activeTab) {
       case 'town':
         return (
-          // Le padding est appliqué ici pour ne pas interférer avec le layout flex
           <ScrollArea className="h-full">
-            <div className="flex flex-col gap-8 p-4">
+            {/* Utilisation d'une grille pour une mise en page plus riche */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4">
+              {/* Le journal de quêtes prend toute la largeur sur les grands écrans */}
+              <div className="md:col-span-2">
+                <QuestsView />
+              </div>
+              {/* Les stats du joueur, un élément central */}
               <PlayerStatsView />
-              <QuestsView />
-              <ReputationView />
+              {/* L'auberge, une action clé */}
+              <InnView />
+              {/* La réputation, pour suivre la progression à long terme */}
+              <div className="md:col-span-2">
+                <ReputationView />
+              </div>
             </div>
           </ScrollArea>
         );
       case 'dungeons':
-         // La padding est appliqué ici aussi pour la consistance
         return <div className="p-4 h-full"><DungeonsView /></div>;
       case 'character':
-        return <CharacterView />; // Pas de padding ici, il est géré dans le composant enfant
+        return <CharacterView />;
       case 'vendors':
-        return <VendorsView />; // Pas de padding ici non plus
+        return <VendorsView />;
       default:
         return null;
     }
@@ -101,13 +108,6 @@ export function TownView() {
         </AlertDialog>
       </header>
       
-      {/*
-        CHANGEMENT PRINCIPAL ICI :
-        - `flex-grow` permet à main de prendre toute la place restante.
-        - `min-h-0` est la clé : cela permet au conteneur flex de réduire sa taille en dessous de la taille de son contenu,
-          ce qui est nécessaire pour que `overflow-y-auto` fonctionne correctement dans un contexte flex.
-        - `overflow-y-auto` ajoute une barre de défilement si le contenu dépasse.
-      */}
       <main className="flex-grow container mx-auto px-4 min-h-0 overflow-y-auto">
         {renderContent()}
       </main>
