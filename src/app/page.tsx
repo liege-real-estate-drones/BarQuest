@@ -56,12 +56,12 @@ export default function Home() {
         
         const gameDataPayload = dataPaths.reduce((acc, path, index) => {
           const data = jsonData[index];
-          // Check if the loaded data is an object with a key matching the path, which is the case for files like dungeons.json which have a { "dungeons": [...] } structure
-          if (data && typeof data === 'object' && !Array.isArray(data) && path in data) {
-             acc[path] = data[path] || [];
+          // The data can be an array directly, or nested in an object like { "quests": [...] }.
+          // This logic handles both cases by checking for the nested property first.
+          if (data && data[path] && Array.isArray(data[path])) {
+            acc[path] = data[path];
           } else {
-             // Otherwise, assume the data is an array directly
-             acc[path] = data || [];
+            acc[path] = Array.isArray(data) ? data : [];
           }
           return acc;
         }, {} as GameData);

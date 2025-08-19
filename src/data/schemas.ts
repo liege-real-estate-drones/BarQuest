@@ -45,6 +45,7 @@ export const ItemSchema = z.object({
   ]),
   niveauMin: z.number().int(),
   rarity: RaretéEnum,
+  stats: StatsSchema.optional(),
   affixes: z.array(z.object({ ref: z.string(), val: z.number() })).default([]),
   tagsClasse: z.array(z.string()).default([]),
   effect: z.string().optional(),

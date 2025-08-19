@@ -12,6 +12,36 @@
       "exigences": []
     },
     {
+      "id": "berserker_armes_precision_mortelle",
+      "nom": "Précision Mortelle",
+      "classeId": "berserker",
+      "type": "passif",
+      "niveauRequis": 1,
+      "rangMax": 5,
+      "effets": ["Augmente les chances de coup critique de 1/2/3/4/5%."],
+      "exigences": []
+    },
+    {
+      "id": "berserker_armes_frappes_devastatrices",
+      "nom": "Frappes Dévastatrices",
+      "classeId": "berserker",
+      "type": "passif",
+      "niveauRequis": 10,
+      "rangMax": 3,
+      "effets": ["Augmente les dégâts des coups critiques de 10/20/30%."],
+      "exigences": ["berserker_armes_precision_mortelle:1"]
+    },
+    {
+      "id": "berserker_armes_dechainement_critique",
+      "nom": "Déchaînement Critique",
+      "classeId": "berserker",
+      "type": "passif",
+      "niveauRequis": 20,
+      "rangMax": 5,
+      "effets": ["Vos coups critiques ont 5/10/15/20/25% de chance de réduire l'armure de la cible de 10% pendant 5s."],
+      "exigences": ["berserker_armes_frappes_devastatrices:1"]
+    },
+    {
       "id": "berserker_armes_sanguinaire",
       "nom": "Sanguinaire",
       "classeId": "berserker",
@@ -39,7 +69,7 @@
       "niveauRequis": 50,
       "rangMax": 1,
       "effets": ["Augmente les dégâts des armes à deux mains de 15% mais réduit la vitesse d'attaque de 10%."],
-      "exigences": ["berserker_armes_fracas_armure:3"]
+      "exigences": ["berserker_armes_fracas_armure:3", "berserker_armes_dechainement_critique:3"]
     },
      {
       "id": "berserker_armes_execution",
@@ -212,6 +242,36 @@
       "exigences": []
     },
     {
+      "id": "mage_givre_armure_de_givre",
+      "nom": "Armure de Givre",
+      "classeId": "mage",
+      "type": "passif",
+      "niveauRequis": 1,
+      "rangMax": 5,
+      "effets": ["Augmente votre armure de 4/8/12/16/20% et réduit la vitesse d'attaque des ennemis qui vous frappent."],
+      "exigences": []
+    },
+    {
+      "id": "mage_givre_resilience_glaciale",
+      "nom": "Résilience Glaciale",
+      "classeId": "mage",
+      "type": "passif",
+      "niveauRequis": 10,
+      "rangMax": 3,
+      "effets": ["Augmente votre maximum de points de vie de 3/6/9%."],
+      "exigences": ["mage_givre_armure_de_givre:1"]
+    },
+    {
+      "id": "mage_givre_voile_de_froid",
+      "nom": "Voile de Froid",
+      "classeId": "mage",
+      "type": "passif",
+      "niveauRequis": 20,
+      "rangMax": 5,
+      "effets": ["Vous gagnez une charge de Voile de Froid toutes les 10 secondes, jusqu'à 3. Une charge est consommée lorsque vous subissez des dégâts pour réduire le montant de 10/12/14/16/18%."],
+      "exigences": ["mage_givre_resilience_glaciale:1"]
+    },
+    {
       "id": "mage_givre_froid_mordant",
       "nom": "Froid Mordant",
       "classeId": "mage",
@@ -239,7 +299,7 @@
       "niveauRequis": 50,
       "rangMax": 1,
       "effets": ["Vous entoure d'une barrière de glace qui absorbe une quantité de dégâts égale à 20% de votre maximum de points de vie."],
-      "exigences": ["mage_givre_gel_profond:3"]
+      "exigences": ["mage_givre_gel_profond:3", "mage_givre_voile_de_froid:3"]
     },
     {
       "id": "mage_givre_blizzard",
@@ -362,6 +422,36 @@
       "exigences": []
     },
     {
+      "id": "rogue_subtilite_focalisation_mortelle",
+      "nom": "Focalisation Mortelle",
+      "classeId": "rogue",
+      "type": "passif",
+      "niveauRequis": 1,
+      "rangMax": 5,
+      "effets": ["Augmente les dégâts de votre prochaine attaque de 5/10/15/20/25% après ne pas avoir attaqué pendant 3 secondes."],
+      "exigences": []
+    },
+    {
+      "id": "rogue_subtilite_riposte_eclair",
+      "nom": "Riposte Éclair",
+      "classeId": "rogue",
+      "type": "passif",
+      "niveauRequis": 10,
+      "rangMax": 3,
+      "effets": ["Après avoir esquivé une attaque, votre prochaine attaque est 20/35/50% plus rapide."],
+      "exigences": ["rogue_subtilite_focalisation_mortelle:1"]
+    },
+    {
+      "id": "rogue_subtilite_lames_opportunistes",
+      "nom": "Lames Opportunistes",
+      "classeId": "rogue",
+      "type": "passif",
+      "niveauRequis": 20,
+      "rangMax": 5,
+      "effets": ["Vos attaques sur une cible qui ne vous attaque pas ont 2/4/6/8/10% de chances de coup critique supplémentaires."],
+      "exigences": ["rogue_subtilite_riposte_eclair:1"]
+    },
+    {
       "id": "rogue_subtilite_roublardise",
       "nom": "Roublardise",
       "classeId": "rogue",
@@ -389,7 +479,7 @@
       "niveauRequis": 50,
       "rangMax": 1,
       "effets": ["Augmente votre vitesse de déplacement de 15% et vous donne une chance d'esquiver les sorts."],
-      "exigences": ["rogue_subtilite_ombres_dansantes:3"]
+      "exigences": ["rogue_subtilite_ombres_dansantes:3", "rogue_subtilite_lames_opportunistes:3"]
     },
     {
       "id": "rogue_subtilite_disparition",
@@ -512,6 +602,36 @@
       "exigences": []
     },
     {
+      "id": "cleric_discipline_volonte_inflexible",
+      "nom": "Volonté Inflexible",
+      "classeId": "cleric",
+      "type": "passif",
+      "niveauRequis": 1,
+      "rangMax": 5,
+      "effets": ["Augmente la durée de vos boucliers de 10/20/30/40/50%."],
+      "exigences": []
+    },
+    {
+      "id": "cleric_discipline_rempart_personnel",
+      "nom": "Rempart Personnel",
+      "classeId": "cleric",
+      "type": "passif",
+      "niveauRequis": 10,
+      "rangMax": 3,
+      "effets": ["Tant que vous avez un bouclier actif sur vous-même, votre régénération de vie est augmentée de 20/35/50%."],
+      "exigences": ["cleric_discipline_volonte_inflexible:1"]
+    },
+    {
+      "id": "cleric_discipline_egide_scintillante",
+      "nom": "Égide Scintillante",
+      "classeId": "cleric",
+      "type": "passif",
+      "niveauRequis": 20,
+      "rangMax": 5,
+      "effets": ["Tant que vous avez un bouclier actif sur vous-même, vous avez 5/10/15/20/25% de chances d'ignorer les effets de contrôle mental."],
+      "exigences": ["cleric_discipline_rempart_personnel:1"]
+    },
+    {
       "id": "cleric_discipline_absolution",
       "nom": "Absolution",
       "classeId": "cleric",
@@ -539,7 +659,7 @@
       "niveauRequis": 50,
       "rangMax": 1,
       "effets": ["Réduit tous les dégâts subis de 20% pendant 5 secondes après avoir utilisé un sort de soin sur vous-même."],
-      "exigences": ["cleric_discipline_penitence:3"]
+      "exigences": ["cleric_discipline_penitence:3", "cleric_discipline_egide_scintillante:3"]
     },
     {
       "id": "cleric_discipline_dome_de_lumiere",

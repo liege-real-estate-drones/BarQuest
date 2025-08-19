@@ -1,11 +1,10 @@
-
-
 import create from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 import type { Dungeon, Monstre, Item, Talent, Skill, Stats, PlayerState, InventoryState, CombatLogEntry, CombatState, GameData, Quete, PlayerClassId, ResourceType, Rareté, CombatEnemy, ItemSet, PotionType } from '@/lib/types';
 import * as formulas from '@/core/formulas';
 import { v4 as uuidv4 } from 'uuid';
+import { StateStorage } from 'zustand/middleware';
 
 export interface ActiveQuete {
   quete: Quete;
@@ -247,7 +246,16 @@ export const calculateItemScore = (item: Item, classId: PlayerClassId): number =
     return score;
 }
 
-const storage = createJSONStorage(() => localStorage);
+// Define a dummy storage for SSR
+const dummyStorage: StateStorage = {
+  getItem: () => null,
+  setItem: () => {},
+  removeItem: () => {},
+};
+
+const storage = typeof window !== 'undefined'
+  ? createJSONStorage(() => localStorage)
+  : createJSONStorage(() => dummyStorage);
 
 export const useGameStore = create<GameState>()(
   persist(
@@ -571,8 +579,10 @@ export const useGameStore = create<GameState>()(
       },
 
       resetGame: () => {
-        storage.removeItem('barquest-save');
-        window.location.reload();
+        useGameStore.persist.clearStorage();
+        if (typeof window !== 'undefined') {
+          window.location.reload();
+        }
       },
 
       buyPotion: (potionType: PotionType) => {
@@ -700,12 +710,28 @@ export const useGameStore = create<GameState>()(
           }
 
           set(state => {
-              if (state.combat.autoAttack && state.combat.playerAttackProgress < 1) {
+              // Réinitialise l'attaque si plus de cibles valides
+              const livingEnemies = state.combat.enemies.filter(e => e.stats.PV > 0);
+              if (livingEnemies.length === 0) {
+                  state.combat.playerAttackProgress = 0;
+                  return;
+              }
+
+              // Progression de l'attaque automatique
+              if (state.combat.autoAttack) {
                   state.combat.playerAttackProgress += delta / state.combat.playerAttackInterval;
-              } else if (state.combat.autoAttack) {
-                  state.combat.playerAttackProgress = 1;
+                  if (state.combat.playerAttackProgress > 1) {
+                      state.combat.playerAttackProgress = 1;
+                  }
               }
               
+              // Régénération passive des ressources par seconde
+              if (state.player.resources.type === 'Énergie') {
+                  const energyPerSecond = 20; // Régénère 20 énergie par seconde
+                  state.player.resources.current = Math.min(state.player.resources.max, state.player.resources.current + (energyPerSecond * (delta / 1000)));
+              }
+              
+              // Cooldowns des compétences
               for (const skillId in state.combat.skillCooldowns) {
                   state.combat.skillCooldowns[skillId] -= delta;
                   if (state.combat.skillCooldowns[skillId] <= 0) {
@@ -713,6 +739,7 @@ export const useGameStore = create<GameState>()(
                   }
               }
 
+              // Progression de l'attaque des ennemis
               state.combat.enemies.forEach(enemy => {
                   if(enemy.stats.PV > 0) {
                     const attackInterval = enemy.stats.Vitesse * 1000;
@@ -726,10 +753,14 @@ export const useGameStore = create<GameState>()(
           });
 
           const updatedState = get();
-          if (updatedState.combat.autoAttack && updatedState.combat.playerAttackProgress >= 1 && updatedState.combat.enemies.length > 0) {
+          if (updatedState.combat.autoAttack && updatedState.combat.playerAttackProgress >= 1 && updatedState.combat.enemies.some(e => e.stats.PV > 0)) {
               const target = updatedState.combat.enemies[updatedState.combat.targetIndex];
+              // Vérification finale avant d'attaquer
               if(target && target.stats.PV > 0) {
                 get().playerAttack(target.id);
+              } else {
+                // La cible est morte, on trouve une nouvelle cible
+                get().cycleTarget();
               }
           }
 
@@ -819,11 +850,14 @@ export const useGameStore = create<GameState>()(
             const resourceCost = resourceCostMatch ? parseInt(resourceCostMatch[1], 10) : 0;
             
             if (player.resources.current < resourceCost) {
-                combat.log.push({ message: "Not enough resource!", type: 'info', timestamp: Date.now() });
+                combat.log.push({ message: "Pas assez de ressource!", type: 'info', timestamp: Date.now() });
                 return;
             }
             player.resources.current -= resourceCost;
             combat.skillCooldowns[skillId] = (skill.cooldown || 0) * 1000;
+
+            // Réinitialise la progression de l'attaque auto après une compétence
+            state.combat.playerAttackProgress = 0;
 
             const isAoE = skill.effets.join(' ').includes("tous les ennemis") || skill.effets.join(' ').includes("ennemis proches");
             const primaryTarget = combat.enemies[combat.targetIndex];

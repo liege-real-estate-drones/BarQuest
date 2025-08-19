@@ -109,7 +109,7 @@ function ItemTooltipContent({ item, equippedItem }: { item: Item, equippedItem?:
     const itemAffixes = [...item.affixes];
     if (item.stats) {
         Object.entries(item.stats).forEach(([key, val]) => {
-             if (val && !itemAffixes.some(a => a.ref === key)) {
+             if (typeof val === 'number' && val && !itemAffixes.some(a => a.ref === key)) {
                  itemAffixes.push({ ref: key, val: val });
             }
         });

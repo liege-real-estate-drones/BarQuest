@@ -1,7 +1,6 @@
-
 [
     {
-        "id": "gardiens_argent",
+        "id": "silver_guardians",
         "name": "Gardiens d'Argent",
         "ranks": [
             { "name": "Neutre", "threshold": 0 },
@@ -12,7 +11,7 @@
         ]
     },
     {
-        "id": "veilleurs_magma",
+        "id": "magma_watchers",
         "name": "Veilleurs du Magma",
         "ranks": [
             { "name": "Neutre", "threshold": 0 },
@@ -20,6 +19,28 @@
             { "name": "Honoré", "threshold": 3000, "rewardItemId": "mage_set_magma_hands" },
             { "name": "Révéré", "threshold": 6000, "rewardItemId": "mage_set_magma_feet" },
             { "name": "Exalté", "threshold": 12000, "rewardItemId": "mage_set_magma_weapon" }
+        ]
+    },
+    {
+        "id": "grove_keepers",
+        "name": "Gardiens du Bosquet",
+        "ranks": [
+            { "name": "Neutre", "threshold": 0 },
+            { "name": "Amical", "threshold": 1000 },
+            { "name": "Honoré", "threshold": 3000 },
+            { "name": "Révéré", "threshold": 6000 },
+            { "name": "Exalté", "threshold": 12000 }
+        ]
+    },
+    {
+        "id": "void_scholars",
+        "name": "Érudits du Vide",
+        "ranks": [
+            { "name": "Neutre", "threshold": 0 },
+            { "name": "Amical", "threshold": 1000 },
+            { "name": "Honoré", "threshold": 3000 },
+            { "name": "Révéré", "threshold": 6000 },
+            { "name": "Exalté", "threshold": 12000 }
         ]
     }
 ]

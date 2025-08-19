@@ -103,8 +103,8 @@ const TalentTree = ({ title, talents, player, gameData, canLearnTalent, learnTal
 const talentTreesByClass: Record<string, string[]> = {
   berserker: ['Armes', 'Fureur', 'Titan'],
   mage: ['Feu', 'Givre', 'Arcane'],
-  rogue: ['Assassinat', 'Subtilité', 'Poison'],
-  cleric: ['Sacré', 'Discipline', 'Châtiment'],
+  rogue: ['Assassinat', 'Subtilite', 'Poison'],
+  cleric: ['Sacre', 'Discipline', 'Chatiment'],
 };
 
 
