@@ -67,11 +67,11 @@ interface GameState {
   inventory: InventoryState;
   combat: CombatState;
   activeQuests: ActiveQuete[];
-  proposedQuest: Quete | null;
+  proposedQuests: Quete[] | null;
   bossEncounter: Monstre | null; // NOUVEAU: Pour l'alerte d'apparition du boss
 
   setBossEncounter: (monster: Monstre | null) => void; // NOUVEAU: Action pour gérer l'alerte
-  setProposedQuest: (quest: Quete | null) => void;
+  setProposedQuests: (quests: Quete[] | null) => void;
   initializeGameData: (data: Partial<GameData>) => void;
   setPlayerClass: (classId: PlayerClassId) => void;
   recalculateStats: () => void;
@@ -93,6 +93,7 @@ interface GameState {
 
   // Quest actions
   acceptQuest: (questId: string) => void;
+  acceptMultipleQuests: (questIds: string[]) => void;
 
   enterDungeon: (dungeonId: string) => void;
   startCombat: () => void;
@@ -285,7 +286,7 @@ export const useGameStore = create<GameState>()(
       inventory: initialInventoryState,
       combat: initialCombatState,
       activeQuests: [],
-      proposedQuest: null,
+      proposedQuests: null,
       bossEncounter: null, // NOUVEAU: Initialisation de l'état du boss
 
       // NOUVEAU: Implémentation de l'action pour le boss
@@ -293,8 +294,8 @@ export const useGameStore = create<GameState>()(
         set({ bossEncounter: monster });
       },
 
-      setProposedQuest: (quest) => {
-        set({ proposedQuest: quest });
+      setProposedQuests: (quests) => {
+        set({ proposedQuests: quests });
       },
 
       getXpToNextLevel: () => {
@@ -678,37 +679,28 @@ export const useGameStore = create<GameState>()(
         });
       },
 
-      enterDungeon: (dungeonId: string) => {
-        const { gameData, player, activeQuests } = get();
-
-        const availableQuestsForDungeon = gameData.quests.filter(q =>
-            q.requirements.dungeonId === dungeonId &&
-            !player.completedQuests.includes(q.id) &&
-            !activeQuests.some(aq => aq.quete.id === q.id)
-        );
-        
-        const firstAvailableQuest = availableQuestsForDungeon.find(q => {
-            const questIdParts = q.id.split('_q');
-            if (questIdParts.length < 2 || isNaN(parseInt(questIdParts[1], 10))) {
-              if (q.id.includes('_q_boss')) {
-                  const questPrefix = q.id.substring(0, q.id.indexOf('_q_boss'));
-                  const lastNumberedQuestId = `${questPrefix}_q5`;
-                  return player.completedQuests.includes(lastNumberedQuestId);
+      acceptMultipleQuests: (questIds: string[]) => {
+        set((state: GameState) => {
+          const newQuestsToAdd = questIds
+            .map(questId => {
+              const questToAccept = state.gameData.quests.find(q => q.id === questId);
+              if (!questToAccept || state.activeQuests.some(q => q.quete.id === questId) || state.player.completedQuests.includes(questId)) {
+                return null;
               }
-              return true;
-            }
-            const questNum = parseInt(questIdParts[1], 10);
-            if (questNum === 1) return true;
-            const questPrefix = questIdParts[0];
-            const prevQuestId = `${questPrefix}_q${questNum - 1}`;
-            return player.completedQuests.includes(prevQuestId);
+              const newActiveQuest: ActiveQuete = { quete: questToAccept, progress: 0 };
+              if (questToAccept.type === 'defi' && questToAccept.requirements.timeLimit) {
+                  newActiveQuest.startTime = Date.now();
+              }
+              return newActiveQuest;
+            })
+            .filter((q): q is ActiveQuete => q !== null);
+
+          state.activeQuests.push(...newQuestsToAdd);
         });
+      },
 
-        if (firstAvailableQuest) {
-            get().setProposedQuest(firstAvailableQuest);
-            return;
-        }
-
+      enterDungeon: (dungeonId: string) => {
+        const { gameData } = get();
         const dungeon = gameData.dungeons.find(d => d.id === dungeonId);
         if (dungeon) {
           set((state: GameState) => {

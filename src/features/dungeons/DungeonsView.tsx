@@ -17,14 +17,14 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { ActiveQuete } from "@/state/gameStore";
 
 export function DungeonsView() {
-  const { dungeons, enterDungeon, player, gameData, proposedQuest, setProposedQuest, acceptQuest, activeQuests } = useGameStore(state => ({
+  const { dungeons, enterDungeon, player, gameData, proposedQuests, setProposedQuests, acceptMultipleQuests, activeQuests } = useGameStore(state => ({
     dungeons: state.gameData.dungeons,
     enterDungeon: state.enterDungeon,
     player: state.player,
     gameData: state.gameData,
-    proposedQuest: state.proposedQuest,
-    setProposedQuest: state.setProposedQuest,
-    acceptQuest: state.acceptQuest,
+    proposedQuests: state.proposedQuests,
+    setProposedQuests: state.setProposedQuests,
+    acceptMultipleQuests: state.acceptMultipleQuests,
     activeQuests: state.activeQuests,
   }));
 
@@ -34,10 +34,11 @@ export function DungeonsView() {
       const availableQuestsForDungeon = gameData.quests.filter(q =>
           q.requirements.dungeonId === dungeonId &&
           !player.completedQuests.includes(q.id) &&
-          !activeQuests.some((aq: ActiveQuete) => aq.quete.id === q.id)
+          !activeQuests.some((aq: ActiveQuete) => aq.quete.id === q.id) &&
+          (!q.requirements.classId || q.requirements.classId === player.classeId)
       );
 
-      const firstAvailableQuest = availableQuestsForDungeon.find(q => {
+      const allAvailableQuests = availableQuestsForDungeon.filter(q => {
           const questIdParts = q.id.split('_q');
           if (questIdParts.length < 2 || isNaN(parseInt(questIdParts[1], 10))) {
               // Pour les quêtes non-numérotées comme _q_boss
@@ -57,25 +58,26 @@ export function DungeonsView() {
       });
 
 
-      if (firstAvailableQuest) {
-          setProposedQuest(firstAvailableQuest);
+      if (allAvailableQuests.length > 0) {
+          setProposedQuests(allAvailableQuests);
       } else {
           enterDungeon(dungeonId);
       }
   }
 
   const handleAcceptQuestAndEnter = () => {
-    if (proposedQuest && proposedQuest.requirements.dungeonId) {
-      acceptQuest(proposedQuest.id);
-      enterDungeon(proposedQuest.requirements.dungeonId);
-      setProposedQuest(null);
+    if (proposedQuests && proposedQuests.length > 0) {
+      const questIds = proposedQuests.map(q => q.id);
+      acceptMultipleQuests(questIds);
+      enterDungeon(proposedQuests[0].requirements.dungeonId);
+      setProposedQuests(null);
     }
   };
 
   const handleDeclineQuestAndEnter = () => {
-    if (proposedQuest && proposedQuest.requirements.dungeonId) {
-      enterDungeon(proposedQuest.requirements.dungeonId);
-      setProposedQuest(null);
+    if (proposedQuests && proposedQuests.length > 0) {
+      enterDungeon(proposedQuests[0].requirements.dungeonId);
+      setProposedQuests(null);
     }
   };
 
@@ -123,18 +125,23 @@ export function DungeonsView() {
         </div>
       </ScrollArea>
       
-      <AlertDialog open={!!proposedQuest} onOpenChange={() => setProposedQuest(null)}>
+      <AlertDialog open={!!proposedQuests && proposedQuests.length > 0} onOpenChange={() => setProposedQuests(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Quête Disponible!</AlertDialogTitle>
-            <AlertDialogDescription>
-              Vous avez une quête disponible pour ce donjon: "{proposedQuest?.name}". Voulez-vous l'accepter avant d'entrer?
+            <AlertDialogTitle>Quêtes Disponibles!</AlertDialogTitle>
+            <AlertDialogDescription asChild>
+              <div>
+                <p className="mb-4">Les quêtes suivantes sont disponibles pour ce donjon. Voulez-vous toutes les accepter avant d'entrer ?</p>
+                <ul className="list-disc pl-5 space-y-1">
+                  {proposedQuests?.map(q => <li key={q.id}>{q.name}</li>)}
+                </ul>
+              </div>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel onClick={() => setProposedQuest(null)}>Annuler</AlertDialogCancel>
+            <AlertDialogCancel onClick={() => setProposedQuests(null)}>Annuler</AlertDialogCancel>
             <AlertDialogAction onClick={handleDeclineQuestAndEnter}>Entrer sans accepter</AlertDialogAction>
-            <AlertDialogAction onClick={handleAcceptQuestAndEnter}>Accepter et Entrer</AlertDialogAction>
+            <AlertDialogAction onClick={handleAcceptQuestAndEnter}>Tout accepter et Entrer</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

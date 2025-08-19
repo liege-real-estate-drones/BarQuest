@@ -17,31 +17,35 @@ function QuestCard({ quest, progress, onAccept, isAvailable, gameData }: { quest
   let targetCount = 0;
   let objectiveText = '';
 
+  const dungeonName = gameData.dungeons.find((d: any) => d.id === requirements.dungeonId)?.name || requirements.dungeonId;
+
   switch (quest.type) {
     case 'chasse':
       targetCount = requirements.killCount || 0;
-      objectiveText = `Tuer ${targetCount} monstres dans ${requirements.dungeonId}`;
+      objectiveText = `Tuer ${targetCount} monstres dans ${dungeonName}`;
       break;
     case 'nettoyage':
       targetCount = requirements.clearCount || 0;
-      objectiveText = `Terminer le donjon ${requirements.dungeonId} ${targetCount} fois`;
+      objectiveText = `Terminer le donjon ${dungeonName} ${targetCount} fois`;
       break;
     case 'chasse_boss':
       targetCount = 1;
-      const boss = gameData.monsters.find((m: any) => m.id === requirements.bossId);
-      objectiveText = `Vaincre ${boss ? boss.nom : requirements.bossId} dans ${requirements.dungeonId}`;
+      const bossName = gameData.monsters.find((m: any) => m.id === requirements.bossId)?.nom || requirements.bossId;
+      objectiveText = `Vaincre ${bossName} dans ${dungeonName}`;
       break;
     case 'collecte':
       targetCount = requirements.itemCount || 0;
-      objectiveText = `Récupérer ${targetCount} ${requirements.itemId}(s) dans ${requirements.dungeonId}`;
+      const itemName = gameData.items.find((i: any) => i.id === requirements.itemId)?.name || requirements.itemId;
+      objectiveText = `Récupérer ${targetCount} ${itemName}(s) dans ${dungeonName}`;
       break;
     case 'defi':
       if (requirements.timeLimit) {
         targetCount = 1;
-        objectiveText = `Terminer ${requirements.dungeonId} en moins de ${requirements.timeLimit} secondes`;
+        objectiveText = `Terminer ${dungeonName} en moins de ${requirements.timeLimit} secondes`;
       } else if (requirements.skillId) {
         targetCount = requirements.killCount || 0;
-        objectiveText = `Tuer ${targetCount} ${requirements.monsterType}(s) avec ${requirements.skillId} dans ${requirements.dungeonId}`;
+        const skillName = gameData.skills.find((s: any) => s.id === requirements.skillId)?.nom || requirements.skillId;
+        objectiveText = `Tuer ${targetCount} ${requirements.monsterType}(s) avec ${skillName} dans ${dungeonName}`;
       }
       break;
     default:
@@ -85,11 +89,12 @@ function QuestCard({ quest, progress, onAccept, isAvailable, gameData }: { quest
 }
 
 export function QuestsView() {
-  const { activeQuests, player, gameData, acceptQuest } = useGameStore((state) => ({
+  const { activeQuests, player, gameData, acceptQuest, acceptMultipleQuests } = useGameStore((state) => ({
     activeQuests: state.activeQuests,
     player: state.player,
     gameData: state.gameData,
     acceptQuest: state.acceptQuest,
+    acceptMultipleQuests: state.acceptMultipleQuests,
   }));
   
   const completedQuests = gameData.quests.filter(q => player.completedQuests.includes(q.id));
@@ -106,6 +111,11 @@ export function QuestsView() {
 
     return gameData.quests.filter(q => {
         if (player.completedQuests.includes(q.id) || activeQuests.some(aq => aq.quete.id === q.id)) {
+            return false;
+        }
+
+        // Filtrer par classe si la quête a une exigence de classe
+        if (q.requirements.classId && q.requirements.classId !== player.classeId) {
             return false;
         }
 
@@ -156,6 +166,12 @@ export function QuestsView() {
                          <TabsContent value="available" className="m-0">
                             {availableQuests.length > 0 ? (
                                 <div className="space-y-4">
+                                <div className="flex justify-end">
+                                    <Button onClick={() => acceptMultipleQuests(availableQuests.map(q => q.id))}>
+                                        <PlusCircle className="h-4 w-4 mr-2" />
+                                        Tout accepter
+                                    </Button>
+                                </div>
                                 {availableQuests.map((quest) => (
                                     <QuestCard key={quest.id} quest={quest} onAccept={acceptQuest} isAvailable gameData={gameData} />
                                 ))}
