@@ -75,7 +75,8 @@
                 "Vitesse": 1.8,
                 "Precision": 60,
                 "Esquive": 15
-            }
+            },
+            "questItemId": "bat_fang"
         },
         {
             "id": "frost_wolf",

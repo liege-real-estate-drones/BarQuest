@@ -91,6 +91,7 @@ export const MonsterSchema = z.object({
   palier: z.number().int(),
   stats: StatsSchema,
   lootTableId: z.string().optional(),
+  questItemId: z.string().optional(),
 });
 
 export const DungeonSchema = z.object({

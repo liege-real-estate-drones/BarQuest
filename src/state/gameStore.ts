@@ -120,7 +120,23 @@ const scaleAffixValue = (baseValue: number, level: number): number => {
     return Math.round(baseValue + (baseValue * level * 0.15));
 };
 
-const resolveLoot = (monster: Monstre, gameData: GameData, playerClassId: PlayerClassId | null): Item | null => {
+const resolveLoot = (monster: Monstre, gameData: GameData, playerClassId: PlayerClassId | null, activeQuests: ActiveQuete[]): Item | null => {
+  // NOUVEAU: Vérifier si un objet de quête doit être lâché
+  for (const activeQuest of activeQuests) {
+    const { quete } = activeQuest;
+    if (quete.type === 'collecte' && quete.requirements.itemId && monster.questItemId === quete.requirements.itemId) {
+      if ((activeQuest.progress || 0) < (quete.requirements.itemCount || 0)) {
+        const questItem = gameData.items.find(item => item.id === quete.requirements.itemId);
+        if (questItem) {
+          // 30% de chance de drop pour l'objet de quête
+          if (Math.random() < 0.3) {
+            return { ...questItem, id: uuidv4() };
+          }
+        }
+      }
+    }
+  }
+
   // Set item drop check
   if (Math.random() < 0.02) {
     const possibleSetItems = gameData.items.filter(item =>
@@ -1004,10 +1020,10 @@ export const useGameStore = create<GameState>()(
         });
 
         set((state: GameState) => {
-            const { gameData, currentDungeon } = state;
+            const { gameData, currentDungeon, activeQuests } = state;
 
             const goldDrop = 5;
-            const itemDrop = resolveLoot(enemy, gameData, state.player.classeId);
+            const itemDrop = resolveLoot(enemy, gameData, state.player.classeId, activeQuests);
             const xpGained = enemy.level * 10;
 
             state.combat.log.push({ message: `You defeated ${enemy.nom}!`, type: 'info', timestamp: Date.now() });
