@@ -740,6 +740,7 @@ export const useGameStore = create<GameState>()(
             const monsterInstance: CombatEnemy = {
               ...JSON.parse(JSON.stringify(randomMonsterTemplate)),
               id: uuidv4(),
+              templateId: randomMonsterTemplate.id, // <-- Ligne ajoutée
               initialHp: randomMonsterTemplate.stats.PV,
               attackProgress: Math.random()
             };
@@ -1061,7 +1062,7 @@ export const useGameStore = create<GameState>()(
               if (quete.type === 'chasse' && req.dungeonId === currentDungeon?.id && !enemy.isBoss) {
                   activeQuest.progress++;
                   progressMade = true;
-              } else if (quete.type === 'chasse_boss' && enemy.isBoss && enemy.id.startsWith(req.bossId || '')) {
+              } else if (quete.type === 'chasse_boss' && enemy.isBoss && enemy.templateId === req.bossId) { // <-- Ligne modifiée
                   activeQuest.progress++;
                   progressMade = true;
               } else if (quete.type === 'collecte' && req.dungeonId === currentDungeon?.id) {
@@ -1183,7 +1184,8 @@ export const useGameStore = create<GameState>()(
                         if (bossTemplate) {
                             const bossInstance: CombatEnemy = {
                                 ...JSON.parse(JSON.stringify(bossTemplate)),
-                                // id: uuidv4(), // CORRECTION: Ligne supprimée pour corriger le bug de la quête
+                                id: uuidv4(),
+                                templateId: bossTemplate.id, // <-- Ligne ajoutée
                                 initialHp: bossTemplate.stats.PV,
                                 attackProgress: 0,
                                 isBoss: true
