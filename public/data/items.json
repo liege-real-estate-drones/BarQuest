@@ -715,7 +715,19 @@
         "type": "quest",
         "rarity": "Commun",
         "desc": "Un croc pointu prélevé sur une chauve-souris. Utile pour certaines quêtes.",
-        "vendorPrice": 1
+        "vendorPrice": 1,
+        "niveauMin": 1,
+        "affixes": []
+      },
+      {
+        "id": "bat_fang_heroic",
+        "name": "Croc de chauve-souris Héroïque",
+        "type": "quest",
+        "rarity": "Commun",
+        "desc": "[Héroïque] Un croc pointu prélevé sur une chauve-souris héroïque.",
+        "vendorPrice": 5,
+        "niveauMin": 51,
+        "affixes": []
       }
   ]
 }
