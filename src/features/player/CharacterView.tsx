@@ -1,3 +1,4 @@
+// liege-real-estate-drones/barquest/BarQuest-ba29103e759395544a0519632ae86dfb86dc7427/src/features/player/CharacterView.tsx
 'use client';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { InventoryView } from '../inventory/InventoryView';

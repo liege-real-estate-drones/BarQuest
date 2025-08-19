@@ -1,3 +1,4 @@
+// liege-real-estate-drones/barquest/BarQuest-ba29103e759395544a0519632ae86dfb86dc7427/src/features/town/TownView.tsx
 'use client';
 import { Button } from '@/components/ui/button';
 import { DungeonsView } from '../dungeons/DungeonsView';
@@ -38,8 +39,9 @@ export function TownView() {
     switch (activeTab) {
       case 'town':
         return (
+          // Le padding est appliqué ici pour ne pas interférer avec le layout flex
           <ScrollArea className="h-full">
-            <div className="flex flex-col gap-8 pr-4">
+            <div className="flex flex-col gap-8 p-4">
               <PlayerStatsView />
               <QuestsView />
               <ReputationView />
@@ -47,11 +49,12 @@ export function TownView() {
           </ScrollArea>
         );
       case 'dungeons':
-        return <DungeonsView />;
+         // La padding est appliqué ici aussi pour la consistance
+        return <div className="p-4 h-full"><DungeonsView /></div>;
       case 'character':
-        return <CharacterView />;
+        return <CharacterView />; // Pas de padding ici, il est géré dans le composant enfant
       case 'vendors':
-        return <VendorsView />;
+        return <VendorsView />; // Pas de padding ici non plus
       default:
         return null;
     }
@@ -97,8 +100,15 @@ export function TownView() {
           </AlertDialogContent>
         </AlertDialog>
       </header>
-
-      <main className="flex-grow container mx-auto px-4 py-4 min-h-0">
+      
+      {/*
+        CHANGEMENT PRINCIPAL ICI :
+        - `flex-grow` permet à main de prendre toute la place restante.
+        - `min-h-0` est la clé : cela permet au conteneur flex de réduire sa taille en dessous de la taille de son contenu,
+          ce qui est nécessaire pour que `overflow-y-auto` fonctionne correctement dans un contexte flex.
+        - `overflow-y-auto` ajoute une barre de défilement si le contenu dépasse.
+      */}
+      <main className="flex-grow container mx-auto px-4 min-h-0 overflow-y-auto">
         {renderContent()}
       </main>
 
