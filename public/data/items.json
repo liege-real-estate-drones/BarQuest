@@ -708,6 +708,14 @@
         "rarity": "Épique",
         "affixes": [{ "ref": "PV", "val": 50 }, { "ref": "Force", "val": 5 }, { "ref": "Armure", "val": 15 }],
         "tagsClasse": ["common"]
+      },
+      {
+        "id": "bat_fang",
+        "name": "Croc de chauve-souris",
+        "type": "quest",
+        "rarity": "Commun",
+        "desc": "Un croc pointu prélevé sur une chauve-souris. Utile pour certaines quêtes.",
+        "vendorPrice": 1
       }
     ]
 }
