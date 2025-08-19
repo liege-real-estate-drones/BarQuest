@@ -30,6 +30,10 @@ const getLogEntryColor = (type: CombatLogEntry['type']) => {
       return 'text-blue-400';
     case 'flee':
       return 'text-gray-400 italic';
+    case 'heal':
+      return 'text-emerald-400';
+    case 'shield':
+      return 'text-cyan-400';
     default:
       return 'text-foreground';
   }

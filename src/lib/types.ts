@@ -64,7 +64,7 @@ export interface PlayerState {
     type: ResourceType;
   };
   reputation: {
-    [factionId: string]: {
+    [factionId:string]: {
         value: number,
         claimedRewards: string[],
     };
@@ -73,6 +73,7 @@ export interface PlayerState {
   activeSetBonuses: string[];
   completedDungeons: Record<string, number>; // { [dungeonId]: count }
   completedQuests: string[];
+  shield: number;
 }
 
 export interface InventoryState {
@@ -102,7 +103,7 @@ export type CombatEnemy = Monstre & { initialHp: number; attackProgress: number;
 
 export interface CombatLogEntry {
     message: string;
-    type: 'player_attack' | 'enemy_attack' | 'crit' | 'loot' | 'info' | 'flee' | 'levelup' | 'heal' | 'quest';
+    type: 'player_attack' | 'enemy_attack' | 'crit' | 'loot' | 'info' | 'flee' | 'levelup' | 'heal' | 'quest' | 'shield';
     timestamp: number;
     item?: Item;
 }

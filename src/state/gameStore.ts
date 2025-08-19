@@ -33,6 +33,7 @@ const getInitialPlayerState = (): PlayerState => {
     activeSetBonuses: [],
     completedDungeons: {},
     completedQuests: [],
+    shield: 0,
   };
 };
 
@@ -69,7 +70,9 @@ interface GameState {
   activeQuests: ActiveQuete[];
   proposedQuests: Quete[] | null;
   bossEncounter: Monstre | null; // NOUVEAU: Pour l'alerte d'apparition du boss
+  isHeroicMode: boolean;
 
+  setHeroicMode: (isHeroic: boolean) => void;
   setBossEncounter: (monster: Monstre | null) => void; // NOUVEAU: Action pour gérer l'alerte
   setProposedQuests: (quests: Quete[] | null) => void;
   initializeGameData: (data: Partial<GameData>) => void;
@@ -288,6 +291,11 @@ export const useGameStore = create<GameState>()(
       activeQuests: [],
       proposedQuests: null,
       bossEncounter: null, // NOUVEAU: Initialisation de l'état du boss
+      isHeroicMode: false,
+
+      setHeroicMode: (isHeroic: boolean) => {
+        set({ isHeroicMode: isHeroic });
+      },
 
       // NOUVEAU: Implémentation de l'action pour le boss
       setBossEncounter: (monster) => {
@@ -441,6 +449,7 @@ export const useGameStore = create<GameState>()(
           const currentHp = player.stats.PV;
           if (state.view !== 'COMBAT' || currentHp <= 0 || currentHp > maxHp) {
             player.stats.PV = maxHp;
+            player.shield = 0;
             if(state.player.resources.type !== 'Rage') {
               player.resources.current = player.resources.max;
             }
@@ -700,8 +709,10 @@ export const useGameStore = create<GameState>()(
       },
 
       enterDungeon: (dungeonId: string) => {
-        const { gameData } = get();
-        const dungeon = gameData.dungeons.find(d => d.id === dungeonId);
+        const { gameData, isHeroicMode } = get();
+        const finalDungeonId = isHeroicMode ? `${dungeonId}_heroic` : dungeonId;
+        const dungeon = gameData.dungeons.find(d => d.id === finalDungeonId);
+
         if (dungeon) {
           set((state: GameState) => {
             state.view = 'COMBAT';
@@ -880,7 +891,7 @@ export const useGameStore = create<GameState>()(
 
         set((state: GameState) => {
             const { player, combat, gameData } = state;
-            if (!combat.enemies || combat.enemies.length === 0 || (combat.skillCooldowns[skillId] || 0) > 0) {
+            if ((combat.skillCooldowns[skillId] || 0) > 0) {
                 return;
             }
 
@@ -895,53 +906,89 @@ export const useGameStore = create<GameState>()(
                 combat.log.push({ message: "Pas assez de ressource!", type: 'info', timestamp: Date.now() });
                 return;
             }
-            player.resources.current -= resourceCost;
-            combat.skillCooldowns[skillId] = (skill.cooldown || 0) * 1000;
 
-            state.combat.playerAttackProgress = 0;
+            let effectApplied = false;
+            const skillEffects = skill.effets.join(' ');
 
-            const isAoE = skill.effets.join(' ').includes("tous les ennemis") || skill.effets.join(' ').includes("ennemis proches");
-            const primaryTarget = combat.enemies[combat.targetIndex];
-            const targets = isAoE ? [...combat.enemies.filter(e => e.stats.PV > 0)] : (primaryTarget && primaryTarget.stats.PV > 0 ? [primaryTarget] : []);
-
-            if (targets.length === 0) return;
-
-            targets.forEach(target => {
-                const currentTarget = combat.enemies.find(e => e.id === target.id);
-                if (!currentTarget) return;
-
-                let damage = 0;
-                if (skill.classeId === 'berserker' || skill.classeId === 'rogue') {
-                    const dmgMultiplierMatch = skill.effets.join(' ').match(/(\d+)% des dégâts de l'arme/);
-                    const dmgMultiplier = dmgMultiplierMatch ? parseInt(dmgMultiplierMatch[1], 10) / 100 : 1;
-                    const baseDmg = formulas.calculateMeleeDamage(player.stats.AttMin, player.stats.AttMax, formulas.calculateAttackPower(player.stats));
-                    damage = baseDmg * dmgMultiplier;
-                } else if (skill.classeId === 'mage' || skill.classeId === 'cleric') {
-                    const baseDmg = getTalentEffectValue(skill.effets[0], rank);
-                    damage = formulas.calculateSpellDamage(baseDmg, formulas.calculateSpellPower(player.stats));
+            const healMatch = skillEffects.match(/rend ([\d/]+) PV/) || skillEffects.match(/soigne de ([\d/]+) PV/);
+            if (healMatch) {
+                const healValueString = `rend ${healMatch[1]} PV`;
+                const healAmount = getTalentEffectValue(healValueString, rank);
+                const maxHp = formulas.calculateMaxHP(player.level, player.stats);
+                const oldHp = player.stats.PV;
+                player.stats.PV = Math.min(maxHp, player.stats.PV + healAmount);
+                const actualHeal = Math.round(player.stats.PV - oldHp);
+                if (actualHeal > 0) {
+                    combat.log.push({ message: `Vous utilisez ${skill.nom} et récupérez ${actualHeal} PV.`, type: 'heal', timestamp: Date.now() });
+                    effectApplied = true;
                 }
-                 if(skill.id === 'berserker_execute') {
-                    const hpPercent = (currentTarget.stats.PV / currentTarget.initialHp) * 100;
-                    if(hpPercent < 20) {
-                        damage *= 3;
+            }
+
+            const shieldMatch = skillEffects.match(/Absorbe (\d+) points de dégâts/) || skillEffects.match(/absorbe (\d+) dégâts/);
+            if (shieldMatch) {
+                const shieldValue = parseInt(shieldMatch[1], 10);
+                player.shield += shieldValue;
+                combat.log.push({ message: `Vous utilisez ${skill.nom} et gagnez un bouclier de ${shieldValue} points.`, type: 'shield', timestamp: Date.now() });
+                effectApplied = true;
+            }
+
+            const damageMatch = skillEffects.match(/Inflige/) || skillEffects.match(/dégâts de l'arme/);
+            if (damageMatch) {
+                if (!combat.enemies || combat.enemies.length === 0) {
+                    if (!effectApplied) return;
+                } else {
+                    const isAoE = skillEffects.includes("tous les ennemis") || skillEffects.includes("ennemis proches");
+                    const primaryTarget = combat.enemies[combat.targetIndex];
+                    const targets = isAoE ? [...combat.enemies.filter(e => e.stats.PV > 0)] : (primaryTarget && primaryTarget.stats.PV > 0 ? [primaryTarget] : []);
+
+                    if (targets.length > 0) {
+                        effectApplied = true;
+                        targets.forEach(target => {
+                            const currentTarget = combat.enemies.find(e => e.id === target.id);
+                            if (!currentTarget) return;
+
+                            let damage = 0;
+                            if (skill.classeId === 'berserker' || skill.classeId === 'rogue') {
+                                const dmgMultiplierMatch = skillEffects.match(/(\d+)% des dégâts de l'arme/);
+                                const dmgMultiplier = dmgMultiplierMatch ? parseInt(dmgMultiplierMatch[1], 10) / 100 : 1;
+                                const baseDmg = formulas.calculateMeleeDamage(player.stats.AttMin, player.stats.AttMax, formulas.calculateAttackPower(player.stats));
+                                damage = baseDmg * dmgMultiplier;
+                            } else if (skill.classeId === 'mage' || skill.classeId === 'cleric') {
+                                const baseDmg = getTalentEffectValue(skill.effets[0], rank);
+                                damage = formulas.calculateSpellDamage(baseDmg, formulas.calculateSpellPower(player.stats));
+                            }
+
+                            if (skill.id === 'berserker_execute') {
+                                const hpPercent = (currentTarget.stats.PV / currentTarget.initialHp) * 100;
+                                if (hpPercent < 20) {
+                                    damage *= 3;
+                                }
+                            }
+
+                            const isCrit = formulas.isCriticalHit(player.stats.CritPct, player.stats.Precision, currentTarget.stats.Esquive);
+                            let finalDamage = isCrit ? damage * (player.stats.CritDmg / 100) : damage;
+                            const dr = formulas.calculateArmorDR(currentTarget.stats.Armure, player.level);
+                            const mitigatedDamage = Math.round(finalDamage * (1 - dr));
+
+                            const msg = `Vous utilisez ${skill.nom} sur ${currentTarget.nom} pour ${mitigatedDamage} points de dégâts.`;
+                            const critMsg = `CRITIQUE ! Votre ${skill.nom} inflige ${mitigatedDamage} points de dégâts à ${currentTarget.nom}.`;
+
+                            currentTarget.stats.PV -= mitigatedDamage;
+                            combat.log.push({ message: isCrit ? critMsg : msg, type: isCrit ? 'crit' : 'player_attack', timestamp: Date.now() });
+
+                            if (currentTarget.stats.PV <= 0) {
+                                deadEnemyIds.push(currentTarget.id);
+                            }
+                        });
                     }
                 }
+            }
 
-                const isCrit = formulas.isCriticalHit(player.stats.CritPct, player.stats.Precision, currentTarget.stats.Esquive);
-                let finalDamage = isCrit ? damage * (player.stats.CritDmg / 100) : damage;
-                const dr = formulas.calculateArmorDR(currentTarget.stats.Armure, player.level);
-                const mitigatedDamage = Math.round(finalDamage * (1 - dr));
-
-                const msg = `You use ${skill.nom} on ${currentTarget.nom} for ${mitigatedDamage} damage.`;
-                const critMsg = `CRITICAL! Your ${skill.nom} hits ${currentTarget.nom} for ${mitigatedDamage} damage.`;
-
-                currentTarget.stats.PV -= mitigatedDamage;
-                combat.log.push({ message: isCrit ? critMsg : msg, type: isCrit ? 'crit' : 'player_attack', timestamp: Date.now() });
-
-                if (currentTarget.stats.PV <= 0) {
-                    deadEnemyIds.push(currentTarget.id);
-                }
-            });
+            if (effectApplied) {
+                player.resources.current -= resourceCost;
+                combat.skillCooldowns[skillId] = (skill.cooldown || 0) * 1000;
+                state.combat.playerAttackProgress = 0;
+            }
         });
 
         deadEnemyIds.forEach(enemyId => {
@@ -967,12 +1014,22 @@ export const useGameStore = create<GameState>()(
                 const enemyDamage = formulas.calculateMeleeDamage(enemy.stats.AttMin, enemy.stats.AttMax, formulas.calculateAttackPower(enemy.stats));
                 const mitigatedEnemyDamage = Math.round(enemyDamage * (1 - playerDr));
 
-                state.player.stats.PV -= mitigatedEnemyDamage;
-                state.combat.log.push({ message: `${enemy.nom} hits you for ${mitigatedEnemyDamage} damage.`, type: 'enemy_attack', timestamp: Date.now() });
+                let damageToPlayer = mitigatedEnemyDamage;
+                if (state.player.shield > 0) {
+                    const shieldAbsorption = Math.min(state.player.shield, damageToPlayer);
+                    state.player.shield -= shieldAbsorption;
+                    damageToPlayer -= shieldAbsorption;
+                    state.combat.log.push({ message: `L'attaque de ${enemy.nom} est absorbée par votre bouclier pour ${shieldAbsorption} points.`, type: 'shield', timestamp: Date.now() });
+                }
+
+                if (damageToPlayer > 0) {
+                    state.player.stats.PV -= damageToPlayer;
+                    state.combat.log.push({ message: `${enemy.nom} vous inflige ${damageToPlayer} points de dégâts.`, type: 'enemy_attack', timestamp: Date.now() });
+                }
 
                 if (state.player.resources.type === 'Rage') {
-                  const rageGained = 10;
-                  state.player.resources.current = Math.min(state.player.resources.max, state.player.resources.current + rageGained);
+                    const rageGained = 10;
+                    state.player.resources.current = Math.min(state.player.resources.max, state.player.resources.current + rageGained);
                 }
 
                 enemyInState.attackProgress = 0;
@@ -983,19 +1040,19 @@ export const useGameStore = create<GameState>()(
             set((state: GameState) => {
                 const goldPenalty = Math.floor(state.inventory.gold * 0.10);
                 state.inventory.gold -= goldPenalty;
-                state.combat.log.push({ message: `You have been defeated! You lose ${goldPenalty} gold and all items found in the dungeon. Returning to town.`, type: 'info', timestamp: Date.now() });
+                state.combat.log.push({ message: `Vous avez été vaincu ! Vous perdez ${goldPenalty} or et tous les objets trouvés dans le donjon. Retour en ville.`, type: 'info', timestamp: Date.now() });
 
                 const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
                 state.player.stats.PV = maxHp * 0.2;
 
                 if (state.player.resources.type !== 'Rage') {
-                  state.player.resources.current = state.player.resources.max * 0.2;
+                    state.player.resources.current = state.player.resources.max * 0.2;
                 } else {
-                  state.player.resources.current = 0;
+                    state.player.resources.current = 0;
                 }
 
                 state.view = 'TOWN';
-                if(gameLoop) clearInterval(gameLoop);
+                if (gameLoop) clearInterval(gameLoop);
             });
         }
       },
@@ -1014,9 +1071,12 @@ export const useGameStore = create<GameState>()(
         });
 
         set((state: GameState) => {
-            const { gameData, currentDungeon, activeQuests } = state;
+            const { gameData, currentDungeon, activeQuests, isHeroicMode } = state;
 
-            const goldDrop = 5;
+            let goldDrop = 5;
+            if (isHeroicMode) {
+              goldDrop *= 5;
+            }
             const itemDrop = resolveLoot(enemy, gameData, state.player.classeId, activeQuests);
             const xpGained = enemy.level * 10;
 

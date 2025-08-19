@@ -709,6 +709,516 @@
             "killTarget": 100,
             "bossId": "primeval_magma_dragon",
             "factionId": "magma_watchers"
+        },
+        {
+            "id": "dungeon_1_heroic",
+            "palier": 11,
+            "name": "Goblin Mines Héroïque",
+            "biome": "occult",
+            "monsters": [
+                "goblin_scout_heroic",
+                "giant_rat_heroic"
+            ],
+            "killTarget": 20,
+            "bossId": "kobold_miner_supervisor_heroic"
+        },
+        {
+            "id": "dungeon_2_heroic",
+            "palier": 11,
+            "name": "Bat Cave Héroïque",
+            "biome": "occult",
+            "monsters": [
+                "kobold_miner_assistant_heroic",
+                "cave_bat_heroic"
+            ],
+            "killTarget": 30,
+            "bossId": "bat_matriarch_heroic"
+        },
+        {
+            "id": "dungeon_3_heroic",
+            "palier": 12,
+            "name": "Icy Crevasse Héroïque",
+            "biome": "frost",
+            "monsters": [
+                "frost_wolf_heroic",
+                "ice_sprite_heroic"
+            ],
+            "killTarget": 40,
+            "bossId": "yeti_chieftain_heroic",
+            "factionId": "silver_guardians"
+        },
+        {
+            "id": "dungeon_4_heroic",
+            "palier": 12,
+            "name": "Yeti Den Héroïque",
+            "biome": "frost",
+            "monsters": [
+                "ice_sprite_heroic",
+                "yeti_toddler_heroic"
+            ],
+            "killTarget": 40,
+            "bossId": "yeti_chieftain_heroic",
+            "factionId": "silver_guardians"
+        },
+        {
+            "id": "dungeon_5_heroic",
+            "palier": 13,
+            "name": "Scorched Caverns Héroïque",
+            "biome": "fire",
+            "monsters": [
+                "volcanic_imp_heroic",
+                "magma_salamander_heroic"
+            ],
+            "killTarget": 50,
+            "bossId": "inferno_elemental_lord_heroic",
+            "factionId": "magma_watchers"
+        },
+        {
+            "id": "dungeon_6_heroic",
+            "palier": 13,
+            "name": "Cinder Chambers Héroïque",
+            "biome": "fire",
+            "monsters": [
+                "magma_salamander_heroic",
+                "cinder_elemental_heroic"
+            ],
+            "killTarget": 50,
+            "bossId": "inferno_elemental_lord_heroic",
+            "factionId": "magma_watchers"
+        },
+        {
+            "id": "dungeon_7_heroic",
+            "palier": 14,
+            "name": "Whispering Woods Héroïque",
+            "biome": "nature",
+            "monsters": [
+                "cursed_sapling_heroic",
+                "thorn_boar_heroic"
+            ],
+            "killTarget": 60,
+            "bossId": "ancient_dryad_matriarch_heroic",
+            "factionId": "grove_keepers"
+        },
+        {
+            "id": "dungeon_8_heroic",
+            "palier": 14,
+            "name": "Dryad Grove Héroïque",
+            "biome": "nature",
+            "monsters": [
+                "thorn_boar_heroic",
+                "wandering_dryad_heroic"
+            ],
+            "killTarget": 60,
+            "bossId": "ancient_dryad_matriarch_heroic",
+            "factionId": "grove_keepers"
+        },
+        {
+            "id": "dungeon_9_heroic",
+            "palier": 15,
+            "name": "Forgotten Crypt Héroïque",
+            "biome": "occult",
+            "monsters": [
+                "ghoul_heroic",
+                "shadow_wisp_heroic",
+                "acolyte_of_the_void_heroic"
+            ],
+            "killTarget": 70,
+            "bossId": "void_cultist_leader_heroic",
+            "factionId": "void_scholars"
+        },
+        {
+            "id": "dungeon_10_heroic",
+            "palier": 15,
+            "name": "Void Worshippers' Lair Héroïque",
+            "biome": "occult",
+            "monsters": [
+                "shadow_wisp_heroic",
+                "acolyte_of_the_void_heroic",
+                "cultist_initiate_heroic"
+            ],
+            "killTarget": 70,
+            "bossId": "void_priest_heroic",
+            "factionId": "void_scholars"
+        },
+        {
+            "id": "dungeon_11_heroic",
+            "palier": 16,
+            "name": "Glacial Depths Héroïque",
+            "biome": "frost",
+            "monsters": [ "polar_bear_heroic", "glacial_elemental_heroic", "ice_wraith_heroic" ],
+            "killTarget": 80,
+            "bossId": "icebound_warlord_heroic",
+            "factionId": "silver_guardians"
+        },
+        {
+            "id": "dungeon_12_heroic",
+            "palier": 16,
+            "name": "Frozen Berserkers' Hall Héroïque",
+            "biome": "frost",
+            "monsters": [ "glacial_elemental_heroic", "ice_wraith_heroic", "frozen_berserker_heroic" ],
+            "killTarget": 80,
+            "bossId": "icebound_warlord_heroic",
+            "factionId": "silver_guardians"
+        },
+        {
+            "id": "dungeon_13_heroic",
+            "palier": 17,
+            "name": "Volcanic Core Héroïque",
+            "biome": "fire",
+            "monsters": [ "pyroclastic_golem_heroic", "hell_hound_heroic", "obsidian_gargoyle_heroic" ],
+            "killTarget": 90,
+            "bossId": "fire_giant_champion_heroic",
+            "factionId": "magma_watchers"
+        },
+        {
+            "id": "dungeon_14_heroic",
+            "palier": 17,
+            "name": "Fire Giants' Outpost Héroïque",
+            "biome": "fire",
+            "monsters": [ "hell_hound_heroic", "obsidian_gargoyle_heroic", "fire_giant_scout_heroic" ],
+            "killTarget": 90,
+            "bossId": "fire_giant_champion_heroic",
+            "factionId": "magma_watchers"
+        },
+        {
+            "id": "dungeon_15_heroic",
+            "palier": 18,
+            "name": "Verdant Labyrinth Héroïque",
+            "biome": "nature",
+            "monsters": [ "razorvine_creeper_heroic", "ancient_treant_heroic", "grove_sentinel_heroic" ],
+            "killTarget": 100,
+            "bossId": "guardian_of_the_grove_heroic",
+            "factionId": "grove_keepers"
+        },
+        {
+            "id": "dungeon_16_heroic",
+            "palier": 18,
+            "name": "Sylvan Guardians' Domain Héroïque",
+            "biome": "nature",
+            "monsters": [ "ancient_treant_heroic", "grove_sentinel_heroic", "sylvan_protector_heroic" ],
+            "killTarget": 100,
+            "bossId": "guardian_of_the_grove_heroic",
+            "factionId": "grove_keepers"
+        },
+        {
+            "id": "dungeon_17_heroic",
+            "palier": 19,
+            "name": "Shadowy Necropolis Héroïque",
+            "biome": "occult",
+            "monsters": [ "wraith_heroic", "mind_flayer_spawn_heroic", "void_terror_heroic", "shambling_horror_heroic" ],
+            "killTarget": 110,
+            "bossId": "spectral_overlord_heroic",
+            "factionId": "void_scholars"
+        },
+        {
+            "id": "dungeon_18_heroic",
+            "palier": 19,
+            "name": "Specters' Sanctuary Héroïque",
+            "biome": "occult",
+            "monsters": [ "mind_flayer_spawn_heroic", "void_terror_heroic", "shambling_horror_heroic", "specter_heroic" ],
+            "killTarget": 110,
+            "bossId": "spectral_overlord_heroic",
+            "factionId": "void_scholars"
+        },
+        {
+            "id": "dungeon_19_heroic",
+            "palier": 20,
+            "name": "Frozen Wastes Héroïque",
+            "biome": "frost",
+            "monsters": [ "frost_giant_heroic", "rime-scaled_drake_heroic", "mammoth_calf_heroic", "wendigo_spawn_heroic" ],
+            "killTarget": 120,
+            "bossId": "boreal_crusader_heroic",
+            "factionId": "silver_guardians"
+        },
+        {
+            "id": "dungeon_20_heroic",
+            "palier": 20,
+            "name": "Boreal Knights' Fortress Héroïque",
+            "biome": "frost",
+            "monsters": [ "rime-scaled_drake_heroic", "mammoth_calf_heroic", "wendigo_spawn_heroic", "boreal_knight_heroic" ],
+            "killTarget": 120,
+            "bossId": "boreal_crusader_heroic",
+            "factionId": "silver_guardians"
+        },
+        {
+            "id": "dungeon_21_heroic",
+            "palier": 21,
+            "name": "Infernal Forge Héroïque",
+            "biome": "fire",
+            "monsters": [ "infernal_juggernaut_heroic", "magma_dragon_whelp_heroic", "flame_hydra_heroic", "brimstone_devil_heroic" ],
+            "killTarget": 130,
+            "bossId": "ashwing_matriarch_heroic",
+            "factionId": "magma_watchers"
+        },
+        {
+            "id": "dungeon_22_heroic",
+            "palier": 21,
+            "name": "Ash Harpies' Nest Héroïque",
+            "biome": "fire",
+            "monsters": [ "magma_dragon_whelp_heroic", "flame_hydra_heroic", "brimstone_devil_heroic", "ash_harpy_heroic" ],
+            "killTarget": 130,
+            "bossId": "ashwing_matriarch_heroic",
+            "factionId": "magma_watchers"
+        },
+        {
+            "id": "dungeon_23_heroic",
+            "palier": 22,
+            "name": "Emerald Nightmare Héroïque",
+            "biome": "nature",
+            "monsters": [ "colossal_carnivorous_plant_heroic", "verdant_wyrm_heroic", "elf_ranger_heroic", "satyr_trickster_heroic" ],
+            "killTarget": 140,
+            "bossId": "colossus_of_the_grove_heroic",
+            "factionId": "grove_keepers"
+        },
+        {
+            "id": "dungeon_24_heroic",
+            "palier": 22,
+            "name": "Emerald Golems' Garden Héroïque",
+            "biome": "nature",
+            "monsters": [ "verdant_wyrm_heroic", "elf_ranger_heroic", "satyr_trickster_heroic", "emerald_golem_heroic" ],
+            "killTarget": 140,
+            "bossId": "colossus_of_the_grove_heroic",
+            "factionId": "grove_keepers"
+        },
+        {
+            "id": "dungeon_25_heroic",
+            "palier": 23,
+            "name": "Cathedral of Eternal Night Héroïque",
+            "biome": "occult",
+            "monsters": [ "dread_lich_heroic", "elder_thing_heroic", "void_reaver_heroic", "bone_collector_heroic", "soul_eater_heroic" ],
+            "killTarget": 150,
+            "bossId": "ancient_tomb_protector_heroic",
+            "factionId": "void_scholars"
+        },
+        {
+            "id": "dungeon_26_heroic",
+            "palier": 23,
+            "name": "Tomb Guardians' Crypt Héroïque",
+            "biome": "occult",
+            "monsters": [ "elder_thing_heroic", "void_reaver_heroic", "bone_collector_heroic", "soul_eater_heroic", "tomb_guardian_heroic" ],
+            "killTarget": 150,
+            "bossId": "ancient_tomb_protector_heroic",
+            "factionId": "void_scholars"
+        },
+        {
+            "id": "dungeon_27_heroic",
+            "palier": 24,
+            "name": "Glacier's Peak Héroïque",
+            "biome": "frost",
+            "monsters": [ "ice_titan_heroic", "avalanche_spirit_heroic", "yeti_patriarch_heroic", "frost-forged_sentinel_heroic", "seraphim_of_ice_heroic" ],
+            "killTarget": 160,
+            "bossId": "ancient_frost_wyrm_heroic",
+            "factionId": "silver_guardians"
+        },
+        {
+            "id": "dungeon_28_heroic",
+            "palier": 24,
+            "name": "Frost Wyrm's Lair Héroïque",
+            "biome": "frost",
+            "monsters": [ "avalanche_spirit_heroic", "yeti_patriarch_heroic", "frost-forged_sentinel_heroic", "seraphim_of_ice_heroic", "ancient_frost_wyrm_heroic" ],
+            "killTarget": 160,
+            "bossId": "ancient_frost_wyrm_heroic",
+            "factionId": "silver_guardians"
+        },
+        {
+            "id": "dungeon_29_heroic",
+            "palier": 25,
+            "name": "Heart of the Volcano Héroïque",
+            "biome": "fire",
+            "monsters": [ "balrog_heroic", "phoenix_heroic", "efreeti_sultan_heroic", "volcanic_titan_heroic", "charred_legionnaire_heroic" ],
+            "killTarget": 170,
+            "bossId": "primeval_magma_dragon_heroic",
+            "factionId": "magma_watchers"
+        },
+        {
+            "id": "dungeon_30_heroic",
+            "palier": 25,
+            "name": "Magma Dragon's Roost Héroïque",
+            "biome": "fire",
+            "monsters": [ "phoenix_heroic", "efreeti_sultan_heroic", "volcanic_titan_heroic", "charred_legionnaire_heroic", "primeval_magma_dragon_heroic" ],
+            "killTarget": 170,
+            "bossId": "primeval_magma_dragon_heroic",
+            "factionId": "magma_watchers"
+        },
+        {
+            "id": "dungeon_31_heroic",
+            "palier": 26,
+            "name": "Throne of the Wilds Héroïque",
+            "biome": "nature",
+            "monsters": [ "gaia_avatar_heroic", "archdruid_of_the_fang_heroic", "fenrir's_chosen_heroic", "fae_king_heroic", "living_world-tree_heroic" ],
+            "killTarget": 180,
+            "bossId": "world_ash_treant_heroic",
+            "factionId": "grove_keepers"
+        },
+        {
+            "id": "dungeon_32_heroic",
+            "palier": 26,
+            "name": "World Ash Treant's Grove Héroïque",
+            "biome": "nature",
+            "monsters": [ "archdruid_of_the_fang_heroic", "fenrir's_chosen_heroic", "fae_king_heroic", "living_world-tree_heroic", "world_ash_treant_heroic" ],
+            "killTarget": 180,
+            "bossId": "world_ash_treant_heroic",
+            "factionId": "grove_keepers"
+        },
+        {
+            "id": "dungeon_33_heroic",
+            "palier": 27,
+            "name": "The Void-Corrupted Sanctum Héroïque",
+            "biome": "occult",
+            "monsters": [ "archlich_of_nar'thalas_heroic", "gibbering_mouther_heroic", "void_leviathan_heroic", "ethereal_devourer_heroic", "shadow_titan_heroic", "death_knight_champion_heroic" ],
+            "killTarget": 190,
+            "bossId": "herald_of_cthulhu_heroic",
+            "factionId": "void_scholars"
+        },
+        {
+            "id": "dungeon_34_heroic",
+            "palier": 27,
+            "name": "Cthulhu's Herald's Antechamber Héroïque",
+            "biome": "occult",
+            "monsters": [ "gibbering_mouther_heroic", "void_leviathan_heroic", "ethereal_devourer_heroic", "shadow_titan_heroic", "death_knight_champion_heroic", "herald_of_cthulhu_heroic" ],
+            "killTarget": 190,
+            "bossId": "herald_of_cthulhu_heroic",
+            "factionId": "void_scholars"
+        },
+        {
+            "id": "dungeon_35_heroic",
+            "palier": 28,
+            "name": "Permafrost Citadel Héroïque",
+            "biome": "frost",
+            "monsters": [ "ancient_frost_wyrm_heroic", "ice_titan_heroic", "seraphim_of_ice_heroic" ],
+            "killTarget": 200,
+            "bossId": "ancient_frost_wyrm_heroic",
+            "factionId": "silver_guardians"
+        },
+        {
+            "id": "dungeon_36_heroic",
+            "palier": 28,
+            "name": "Molten Pinnacle Héroïque",
+            "biome": "fire",
+            "monsters": [ "primeval_magma_dragon_heroic", "balrog_heroic", "phoenix_heroic" ],
+            "killTarget": 200,
+            "bossId": "primeval_magma_dragon_heroic",
+            "factionId": "magma_watchers"
+        },
+        {
+            "id": "dungeon_37_heroic",
+            "palier": 29,
+            "name": "Heart of the Forest Héroïque",
+            "biome": "nature",
+            "monsters": [ "world_ash_treant_heroic", "gaia_avatar_heroic", "fae_king_heroic" ],
+            "killTarget": 200,
+            "bossId": "world_ash_treant_heroic",
+            "factionId": "grove_keepers"
+        },
+        {
+            "id": "dungeon_38_heroic",
+            "palier": 29,
+            "name": "R'lyeh's Threshold Héroïque",
+            "biome": "occult",
+            "monsters": [ "herald_of_cthulhu_heroic", "void_leviathan_heroic", "archlich_of_nar'thalas_heroic" ],
+            "killTarget": 200,
+            "bossId": "herald_of_cthulhu_heroic",
+            "factionId": "void_scholars"
+        },
+        {
+            "id": "dungeon_39_heroic",
+            "palier": 30,
+            "name": "Frozen Throne Héroïque",
+            "biome": "frost",
+            "monsters": [ "ancient_frost_wyrm_heroic", "ice_titan_heroic", "seraphim_of_ice_heroic", "boreal_knight_heroic" ],
+            "killTarget": 200,
+            "bossId": "ancient_frost_wyrm_heroic",
+            "factionId": "silver_guardians"
+        },
+        {
+            "id": "dungeon_40_heroic",
+            "palier": 30,
+            "name": "Inferno's Core Héroïque",
+            "biome": "fire",
+            "monsters": [ "primeval_magma_dragon_heroic", "balrog_heroic", "phoenix_heroic", "efreeti_sultan_heroic" ],
+            "killTarget": 200,
+            "bossId": "primeval_magma_dragon_heroic",
+            "factionId": "magma_watchers"
+        },
+        {
+            "id": "dungeon_41_heroic",
+            "palier": 31,
+            "name": "Verdant Sanctuary Héroïque",
+            "biome": "nature",
+            "monsters": [ "world_ash_treant_heroic", "gaia_avatar_heroic", "fae_king_heroic", "archdruid_of_the_fang_heroic" ],
+            "killTarget": 200,
+            "bossId": "world_ash_treant_heroic",
+            "factionId": "grove_keepers"
+        },
+        {
+            "id": "dungeon_42_heroic",
+            "palier": 31,
+            "name": "The Sunken City Héroïque",
+            "biome": "occult",
+            "monsters": [ "herald_of_cthulhu_heroic", "void_leviathan_heroic", "archlich_of_nar'thalas_heroic", "shadow_titan_heroic" ],
+            "killTarget": 200,
+            "bossId": "herald_of_cthulhu_heroic",
+            "factionId": "void_scholars"
+        },
+        {
+            "id": "dungeon_43_heroic",
+            "palier": 32,
+            "name": "Icecrown Citadel Héroïque",
+            "biome": "frost",
+            "monsters": [ "ancient_frost_wyrm_heroic", "ice_titan_heroic", "seraphim_of_ice_heroic", "boreal_knight_heroic", "yeti_patriarch_heroic" ],
+            "killTarget": 200,
+            "bossId": "ancient_frost_wyrm_heroic",
+            "factionId": "silver_guardians"
+        },
+        {
+            "id": "dungeon_44_heroic",
+            "palier": 32,
+            "name": "Blackrock Mountain Héroïque",
+            "biome": "fire",
+            "monsters": [ "primeval_magma_dragon_heroic", "balrog_heroic", "phoenix_heroic", "efreeti_sultan_heroic", "volcanic_titan_heroic" ],
+            "killTarget": 200,
+            "bossId": "primeval_magma_dragon_heroic",
+            "factionId": "magma_watchers"
+        },
+        {
+            "id": "dungeon_45_heroic",
+            "palier": 33,
+            "name": "The Emerald Dream Héroïque",
+            "biome": "nature",
+            "monsters": [ "world_ash_treant_heroic", "gaia_avatar_heroic", "fae_king_heroic", "archdruid_of_the_fang_heroic", "fenrir's_chosen_heroic" ],
+            "killTarget": 200,
+            "bossId": "world_ash_treant_heroic",
+            "factionId": "grove_keepers"
+        },
+        {
+            "id": "dungeon_46_heroic",
+            "palier": 33,
+            "name": "Ny'alotha, the Waking City Héroïque",
+            "biome": "occult",
+            "monsters": [ "herald_of_cthulhu_heroic", "void_leviathan_heroic", "archlich_of_nar'thalas_heroic", "shadow_titan_heroic", "death_knight_champion_heroic" ],
+            "killTarget": 200,
+            "bossId": "herald_of_cthulhu_heroic",
+            "factionId": "void_scholars"
+        },
+        {
+            "id": "dungeon_47_heroic",
+            "palier": 34,
+            "name": "The Frozen Halls Héroïque",
+            "biome": "frost",
+            "monsters": [ "ancient_frost_wyrm_heroic", "ice_titan_heroic", "seraphim_of_ice_heroic", "boreal_knight_heroic", "yeti_patriarch_heroic", "frost-forged_sentinel_heroic" ],
+            "killTarget": 200,
+            "bossId": "ancient_frost_wyrm_heroic",
+            "factionId": "silver_guardians"
+        },
+        {
+            "id": "dungeon_48_heroic",
+            "palier": 35,
+            "name": "The Molten Core Héroïque",
+            "biome": "fire",
+            "monsters": [ "primeval_magma_dragon_heroic", "balrog_heroic", "phoenix_heroic", "efreeti_sultan_heroic", "volcanic_titan_heroic", "charred_legionnaire_heroic" ],
+            "killTarget": 200,
+            "bossId": "primeval_magma_dragon_heroic",
+            "factionId": "magma_watchers"
         }
     ]
 }
