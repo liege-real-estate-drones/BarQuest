@@ -890,7 +890,7 @@ export const useGameStore = create<GameState>()(
       },
 
       useSkill: (skillId: string) => {
-        const deadEnemyIds: CombatEnemy[] = [];
+        const deadEnemyIds: string[] = [];
 
         set((state: GameState) => {
             const { player, combat, gameData } = state;
@@ -954,12 +954,17 @@ export const useGameStore = create<GameState>()(
                 combat.log.push({ message: isCrit ? critMsg : msg, type: isCrit ? 'crit' : 'player_attack', timestamp: Date.now() });
 
                 if (currentTarget.stats.PV <= 0) {
-                    deadEnemyIds.push(currentTarget);
+                    deadEnemyIds.push(currentTarget.id);
                 }
             });
         });
 
-        deadEnemyIds.forEach(enemy => get().handleEnemyDeath(enemy, skillId));
+        deadEnemyIds.forEach(enemyId => {
+            const enemy = get().combat.enemies.find(e => e.id === enemyId);
+            if (enemy) {
+                get().handleEnemyDeath(enemy, skillId);
+            }
+        });
       },
 
       enemyAttacks: () => {
@@ -1011,8 +1016,12 @@ export const useGameStore = create<GameState>()(
       },
 
       handleEnemyDeath: (enemy: CombatEnemy, skillId?: string) => {
+        if (!enemy) {
+            console.error("handleEnemyDeath called with undefined enemy");
+            return;
+        }
         set((state: GameState) => {
-            if (!state.combat.enemies.some(e => e.id === enemy.id)) return;
+            if (!state.combat.enemies.some(e => e && e.id === enemy.id)) return;
              const enemyInState = state.combat.enemies.find(e => e.id === enemy.id);
              if (enemyInState) {
                 enemyInState.attackProgress = 0;
