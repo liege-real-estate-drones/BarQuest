@@ -3547,8 +3547,8 @@
     {
       "id": "dungeon_1_q_boss",
       "type": "chasse_boss",
-      "name": "Le Chef des Mineurs",
-      "desc": "Un mineur Kobold particulièrement tenace dirige les opérations dans les mines. Mettez fin à son règne.",
+      "name": "Le maître de Goblin Mines",
+      "desc": "Un puissant adversaire, Kobold Miner, a été repéré dans Goblin Mines. Mettez fin à sa menace.",
       "requirements": {
         "dungeonId": "dungeon_1",
         "bossId": "kobold_miner"
@@ -3559,10 +3559,1524 @@
       }
     },
     {
-      "id": "dungeon_2_q_collect",
+      "id": "dungeon_2_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de Bat Cave",
+      "desc": "Un puissant adversaire, Cave Bat, a été repéré dans Bat Cave. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_2",
+        "bossId": "cave_bat"
+      },
+      "rewards": {
+        "gold": 150,
+        "xp": 250
+      }
+    },
+    {
+      "id": "dungeon_3_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de Icy Crevasse",
+      "desc": "Un puissant adversaire, Yeti Toddler, a été repéré dans Icy Crevasse. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_3",
+        "bossId": "yeti_toddler"
+      },
+      "rewards": {
+        "gold": 200,
+        "xp": 350
+      }
+    },
+    {
+      "id": "dungeon_4_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de Yeti Den",
+      "desc": "Un puissant adversaire, Yeti Toddler, a été repéré dans Yeti Den. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_4",
+        "bossId": "yeti_toddler"
+      },
+      "rewards": {
+        "gold": 200,
+        "xp": 350
+      }
+    },
+    {
+      "id": "dungeon_5_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de Scorched Caverns",
+      "desc": "Un puissant adversaire, Cinder Elemental, a été repéré dans Scorched Caverns. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_5",
+        "bossId": "cinder_elemental"
+      },
+      "rewards": {
+        "gold": 250,
+        "xp": 450
+      }
+    },
+    {
+      "id": "dungeon_6_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de Cinder Chambers",
+      "desc": "Un puissant adversaire, Cinder Elemental, a été repéré dans Cinder Chambers. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_6",
+        "bossId": "cinder_elemental"
+      },
+      "rewards": {
+        "gold": 250,
+        "xp": 450
+      }
+    },
+    {
+      "id": "dungeon_7_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de Whispering Woods",
+      "desc": "Un puissant adversaire, Wandering Dryad, a été repéré dans Whispering Woods. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_7",
+        "bossId": "wandering_dryad"
+      },
+      "rewards": {
+        "gold": 300,
+        "xp": 550
+      }
+    },
+    {
+      "id": "dungeon_8_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de Dryad Grove",
+      "desc": "Un puissant adversaire, Wandering Dryad, a été repéré dans Dryad Grove. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_8",
+        "bossId": "wandering_dryad"
+      },
+      "rewards": {
+        "gold": 300,
+        "xp": 550
+      }
+    },
+    {
+      "id": "dungeon_9_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de Forgotten Crypt",
+      "desc": "Un puissant adversaire, Cultist Initiate, a été repéré dans Forgotten Crypt. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_9",
+        "bossId": "cultist_initiate"
+      },
+      "rewards": {
+        "gold": 350,
+        "xp": 650
+      }
+    },
+    {
+      "id": "dungeon_10_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de Void Worshippers' Lair",
+      "desc": "Un puissant adversaire, Acolyte of the Void, a été repéré dans Void Worshippers' Lair. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_10",
+        "bossId": "acolyte_of_the_void"
+      },
+      "rewards": {
+        "gold": 350,
+        "xp": 650
+      }
+    },
+    {
+      "id": "dungeon_11_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de Glacial Depths",
+      "desc": "Un puissant adversaire, Frozen Berserker, a été repéré dans Glacial Depths. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_11",
+        "bossId": "frozen_berserker"
+      },
+      "rewards": {
+        "gold": 400,
+        "xp": 750
+      }
+    },
+    {
+      "id": "dungeon_12_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de Frozen Berserkers' Hall",
+      "desc": "Un puissant adversaire, Frozen Berserker, a été repéré dans Frozen Berserkers' Hall. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_12",
+        "bossId": "frozen_berserker"
+      },
+      "rewards": {
+        "gold": 400,
+        "xp": 750
+      }
+    },
+    {
+      "id": "dungeon_13_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de Volcanic Core",
+      "desc": "Un puissant adversaire, Fire Giant Scout, a été repéré dans Volcanic Core. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_13",
+        "bossId": "fire_giant_scout"
+      },
+      "rewards": {
+        "gold": 450,
+        "xp": 850
+      }
+    },
+    {
+      "id": "dungeon_14_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de Fire Giants' Outpost",
+      "desc": "Un puissant adversaire, Fire Giant Scout, a été repéré dans Fire Giants' Outpost. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_14",
+        "bossId": "fire_giant_scout"
+      },
+      "rewards": {
+        "gold": 450,
+        "xp": 850
+      }
+    },
+    {
+      "id": "dungeon_15_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de Verdant Labyrinth",
+      "desc": "Un puissant adversaire, Sylvan Protector, a été repéré dans Verdant Labyrinth. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_15",
+        "bossId": "sylvan_protector"
+      },
+      "rewards": {
+        "gold": 500,
+        "xp": 950
+      }
+    },
+    {
+      "id": "dungeon_16_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de Sylvan Guardians' Domain",
+      "desc": "Un puissant adversaire, Sylvan Protector, a été repéré dans Sylvan Guardians' Domain. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_16",
+        "bossId": "sylvan_protector"
+      },
+      "rewards": {
+        "gold": 500,
+        "xp": 950
+      }
+    },
+    {
+      "id": "dungeon_17_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de Shadowy Necropolis",
+      "desc": "Un puissant adversaire, Specter, a été repéré dans Shadowy Necropolis. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_17",
+        "bossId": "specter"
+      },
+      "rewards": {
+        "gold": 550,
+        "xp": 1050
+      }
+    },
+    {
+      "id": "dungeon_18_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de Specters' Sanctuary",
+      "desc": "Un puissant adversaire, Specter, a été repéré dans Specters' Sanctuary. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_18",
+        "bossId": "specter"
+      },
+      "rewards": {
+        "gold": 550,
+        "xp": 1050
+      }
+    },
+    {
+      "id": "dungeon_19_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de Frozen Wastes",
+      "desc": "Un puissant adversaire, Boreal Knight, a été repéré dans Frozen Wastes. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_19",
+        "bossId": "boreal_knight"
+      },
+      "rewards": {
+        "gold": 600,
+        "xp": 1150
+      }
+    },
+    {
+      "id": "dungeon_20_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de Boreal Knights' Fortress",
+      "desc": "Un puissant adversaire, Boreal Knight, a été repéré dans Boreal Knights' Fortress. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_20",
+        "bossId": "boreal_knight"
+      },
+      "rewards": {
+        "gold": 600,
+        "xp": 1150
+      }
+    },
+    {
+      "id": "dungeon_21_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de Infernal Forge",
+      "desc": "Un puissant adversaire, Ash Harpy, a été repéré dans Infernal Forge. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_21",
+        "bossId": "ash_harpy"
+      },
+      "rewards": {
+        "gold": 650,
+        "xp": 1250
+      }
+    },
+    {
+      "id": "dungeon_22_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de Ash Harpies' Nest",
+      "desc": "Un puissant adversaire, Ash Harpy, a été repéré dans Ash Harpies' Nest. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_22",
+        "bossId": "ash_harpy"
+      },
+      "rewards": {
+        "gold": 650,
+        "xp": 1250
+      }
+    },
+    {
+      "id": "dungeon_23_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de Emerald Nightmare",
+      "desc": "Un puissant adversaire, Emerald Golem, a été repéré dans Emerald Nightmare. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_23",
+        "bossId": "emerald_golem"
+      },
+      "rewards": {
+        "gold": 700,
+        "xp": 1350
+      }
+    },
+    {
+      "id": "dungeon_24_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de Emerald Golems' Garden",
+      "desc": "Un puissant adversaire, Emerald Golem, a été repéré dans Emerald Golems' Garden. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_24",
+        "bossId": "emerald_golem"
+      },
+      "rewards": {
+        "gold": 700,
+        "xp": 1350
+      }
+    },
+    {
+      "id": "dungeon_25_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de Cathedral of Eternal Night",
+      "desc": "Un puissant adversaire, Tomb Guardian, a été repéré dans Cathedral of Eternal Night. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_25",
+        "bossId": "tomb_guardian"
+      },
+      "rewards": {
+        "gold": 750,
+        "xp": 1450
+      }
+    },
+    {
+      "id": "dungeon_26_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de Tomb Guardians' Crypt",
+      "desc": "Un puissant adversaire, Tomb Guardian, a été repéré dans Tomb Guardians' Crypt. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_26",
+        "bossId": "tomb_guardian"
+      },
+      "rewards": {
+        "gold": 750,
+        "xp": 1450
+      }
+    },
+    {
+      "id": "dungeon_27_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de Glacier's Peak",
+      "desc": "Un puissant adversaire, Ancient Frost Wyrm, a été repéré dans Glacier's Peak. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_27",
+        "bossId": "ancient_frost_wyrm"
+      },
+      "rewards": {
+        "gold": 800,
+        "xp": 1550
+      }
+    },
+    {
+      "id": "dungeon_28_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de Frost Wyrm's Lair",
+      "desc": "Un puissant adversaire, Ancient Frost Wyrm, a été repéré dans Frost Wyrm's Lair. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_28",
+        "bossId": "ancient_frost_wyrm"
+      },
+      "rewards": {
+        "gold": 800,
+        "xp": 1550
+      }
+    },
+    {
+      "id": "dungeon_29_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de Heart of the Volcano",
+      "desc": "Un puissant adversaire, Primeval Magma Dragon, a été repéré dans Heart of the Volcano. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_29",
+        "bossId": "primeval_magma_dragon"
+      },
+      "rewards": {
+        "gold": 850,
+        "xp": 1650
+      }
+    },
+    {
+      "id": "dungeon_30_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de Magma Dragon's Roost",
+      "desc": "Un puissant adversaire, Primeval Magma Dragon, a été repéré dans Magma Dragon's Roost. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_30",
+        "bossId": "primeval_magma_dragon"
+      },
+      "rewards": {
+        "gold": 850,
+        "xp": 1650
+      }
+    },
+    {
+      "id": "dungeon_31_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de Throne of the Wilds",
+      "desc": "Un puissant adversaire, World Ash Treant, a été repéré dans Throne of the Wilds. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_31",
+        "bossId": "world_ash_treant"
+      },
+      "rewards": {
+        "gold": 900,
+        "xp": 1750
+      }
+    },
+    {
+      "id": "dungeon_32_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de World Ash Treant's Grove",
+      "desc": "Un puissant adversaire, World Ash Treant, a été repéré dans World Ash Treant's Grove. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_32",
+        "bossId": "world_ash_treant"
+      },
+      "rewards": {
+        "gold": 900,
+        "xp": 1750
+      }
+    },
+    {
+      "id": "dungeon_33_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de The Void-Corrupted Sanctum",
+      "desc": "Un puissant adversaire, Herald of Cthulhu, a été repéré dans The Void-Corrupted Sanctum. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_33",
+        "bossId": "herald_of_cthulhu"
+      },
+      "rewards": {
+        "gold": 950,
+        "xp": 1850
+      }
+    },
+    {
+      "id": "dungeon_34_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de Cthulhu's Herald's Antechamber",
+      "desc": "Un puissant adversaire, Herald of Cthulhu, a été repéré dans Cthulhu's Herald's Antechamber. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_34",
+        "bossId": "herald_of_cthulhu"
+      },
+      "rewards": {
+        "gold": 950,
+        "xp": 1850
+      }
+    },
+    {
+      "id": "dungeon_35_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de Permafrost Citadel",
+      "desc": "Un puissant adversaire, Ancient Frost Wyrm, a été repéré dans Permafrost Citadel. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_35",
+        "bossId": "ancient_frost_wyrm"
+      },
+      "rewards": {
+        "gold": 1000,
+        "xp": 1950
+      }
+    },
+    {
+      "id": "dungeon_36_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de Molten Pinnacle",
+      "desc": "Un puissant adversaire, Primeval Magma Dragon, a été repéré dans Molten Pinnacle. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_36",
+        "bossId": "primeval_magma_dragon"
+      },
+      "rewards": {
+        "gold": 1000,
+        "xp": 1950
+      }
+    },
+    {
+      "id": "dungeon_37_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de Heart of the Forest",
+      "desc": "Un puissant adversaire, World Ash Treant, a été repéré dans Heart of the Forest. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_37",
+        "bossId": "world_ash_treant"
+      },
+      "rewards": {
+        "gold": 1050,
+        "xp": 2050
+      }
+    },
+    {
+      "id": "dungeon_38_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de R'lyeh's Threshold",
+      "desc": "Un puissant adversaire, Herald of Cthulhu, a été repéré dans R'lyeh's Threshold. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_38",
+        "bossId": "herald_of_cthulhu"
+      },
+      "rewards": {
+        "gold": 1050,
+        "xp": 2050
+      }
+    },
+    {
+      "id": "dungeon_39_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de Frozen Throne",
+      "desc": "Un puissant adversaire, Ancient Frost Wyrm, a été repéré dans Frozen Throne. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_39",
+        "bossId": "ancient_frost_wyrm"
+      },
+      "rewards": {
+        "gold": 1100,
+        "xp": 2150
+      }
+    },
+    {
+      "id": "dungeon_40_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de Inferno's Core",
+      "desc": "Un puissant adversaire, Primeval Magma Dragon, a été repéré dans Inferno's Core. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_40",
+        "bossId": "primeval_magma_dragon"
+      },
+      "rewards": {
+        "gold": 1100,
+        "xp": 2150
+      }
+    },
+    {
+      "id": "dungeon_41_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de Verdant Sanctuary",
+      "desc": "Un puissant adversaire, World Ash Treant, a été repéré dans Verdant Sanctuary. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_41",
+        "bossId": "world_ash_treant"
+      },
+      "rewards": {
+        "gold": 1150,
+        "xp": 2250
+      }
+    },
+    {
+      "id": "dungeon_42_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de The Sunken City",
+      "desc": "Un puissant adversaire, Herald of Cthulhu, a été repéré dans The Sunken City. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_42",
+        "bossId": "herald_of_cthulhu"
+      },
+      "rewards": {
+        "gold": 1150,
+        "xp": 2250
+      }
+    },
+    {
+      "id": "dungeon_43_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de Icecrown Citadel",
+      "desc": "Un puissant adversaire, Ancient Frost Wyrm, a été repéré dans Icecrown Citadel. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_43",
+        "bossId": "ancient_frost_wyrm"
+      },
+      "rewards": {
+        "gold": 1200,
+        "xp": 2350
+      }
+    },
+    {
+      "id": "dungeon_44_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de Blackrock Mountain",
+      "desc": "Un puissant adversaire, Primeval Magma Dragon, a été repéré dans Blackrock Mountain. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_44",
+        "bossId": "primeval_magma_dragon"
+      },
+      "rewards": {
+        "gold": 1200,
+        "xp": 2350
+      }
+    },
+    {
+      "id": "dungeon_45_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de The Emerald Dream",
+      "desc": "Un puissant adversaire, World Ash Treant, a été repéré dans The Emerald Dream. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_45",
+        "bossId": "world_ash_treant"
+      },
+      "rewards": {
+        "gold": 1250,
+        "xp": 2450
+      }
+    },
+    {
+      "id": "dungeon_46_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de Ny'alotha, the Waking City",
+      "desc": "Un puissant adversaire, Herald of Cthulhu, a été repéré dans Ny'alotha, the Waking City. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_46",
+        "bossId": "herald_of_cthulhu"
+      },
+      "rewards": {
+        "gold": 1250,
+        "xp": 2450
+      }
+    },
+    {
+      "id": "dungeon_47_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de The Frozen Halls",
+      "desc": "Un puissant adversaire, Ancient Frost Wyrm, a été repéré dans The Frozen Halls. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_47",
+        "bossId": "ancient_frost_wyrm"
+      },
+      "rewards": {
+        "gold": 1300,
+        "xp": 2550
+      }
+    },
+    {
+      "id": "dungeon_48_q_boss",
+      "type": "chasse_boss",
+      "name": "Le maître de The Molten Core",
+      "desc": "Un puissant adversaire, Primeval Magma Dragon, a été repéré dans The Molten Core. Mettez fin à sa menace.",
+      "requirements": {
+        "dungeonId": "dungeon_48",
+        "bossId": "primeval_magma_dragon"
+      },
+      "rewards": {
+        "gold": 1350,
+        "xp": 2650
+      }
+    },
+    {
+      "id": "dungeon_1_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : Goblin Mines",
+      "desc": "Traversez Goblin Mines à toute vitesse. Terminez le donjon en moins de 300 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_1",
+        "timeLimit": 300
+      },
+      "rewards": {
+        "gold": 300,
+        "xp": 500
+      }
+    },
+    {
+      "id": "dungeon_2_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : Bat Cave",
+      "desc": "Traversez Bat Cave à toute vitesse. Terminez le donjon en moins de 300 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_2",
+        "timeLimit": 300
+      },
+      "rewards": {
+        "gold": 300,
+        "xp": 500
+      }
+    },
+    {
+      "id": "dungeon_3_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : Icy Crevasse",
+      "desc": "Traversez Icy Crevasse à toute vitesse. Terminez le donjon en moins de 330 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_3",
+        "timeLimit": 330
+      },
+      "rewards": {
+        "gold": 375,
+        "xp": 650,
+        "reputation": {
+          "factionId": "silver_guardians",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_4_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : Yeti Den",
+      "desc": "Traversez Yeti Den à toute vitesse. Terminez le donjon en moins de 330 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_4",
+        "timeLimit": 330
+      },
+      "rewards": {
+        "gold": 375,
+        "xp": 650,
+        "reputation": {
+          "factionId": "silver_guardians",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_5_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : Scorched Caverns",
+      "desc": "Traversez Scorched Caverns à toute vitesse. Terminez le donjon en moins de 360 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_5",
+        "timeLimit": 360
+      },
+      "rewards": {
+        "gold": 450,
+        "xp": 800,
+        "reputation": {
+          "factionId": "magma_watchers",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_6_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : Cinder Chambers",
+      "desc": "Traversez Cinder Chambers à toute vitesse. Terminez le donjon en moins de 360 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_6",
+        "timeLimit": 360
+      },
+      "rewards": {
+        "gold": 450,
+        "xp": 800,
+        "reputation": {
+          "factionId": "magma_watchers",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_7_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : Whispering Woods",
+      "desc": "Traversez Whispering Woods à toute vitesse. Terminez le donjon en moins de 390 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_7",
+        "timeLimit": 390
+      },
+      "rewards": {
+        "gold": 525,
+        "xp": 950,
+        "reputation": {
+          "factionId": "grove_keepers",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_8_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : Dryad Grove",
+      "desc": "Traversez Dryad Grove à toute vitesse. Terminez le donjon en moins de 390 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_8",
+        "timeLimit": 390
+      },
+      "rewards": {
+        "gold": 525,
+        "xp": 950,
+        "reputation": {
+          "factionId": "grove_keepers",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_9_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : Forgotten Crypt",
+      "desc": "Traversez Forgotten Crypt à toute vitesse. Terminez le donjon en moins de 420 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_9",
+        "timeLimit": 420
+      },
+      "rewards": {
+        "gold": 600,
+        "xp": 1100,
+        "reputation": {
+          "factionId": "void_scholars",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_10_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : Void Worshippers' Lair",
+      "desc": "Traversez Void Worshippers' Lair à toute vitesse. Terminez le donjon en moins de 420 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_10",
+        "timeLimit": 420
+      },
+      "rewards": {
+        "gold": 600,
+        "xp": 1100,
+        "reputation": {
+          "factionId": "void_scholars",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_11_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : Glacial Depths",
+      "desc": "Traversez Glacial Depths à toute vitesse. Terminez le donjon en moins de 450 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_11",
+        "timeLimit": 450
+      },
+      "rewards": {
+        "gold": 675,
+        "xp": 1250,
+        "reputation": {
+          "factionId": "silver_guardians",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_12_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : Frozen Berserkers' Hall",
+      "desc": "Traversez Frozen Berserkers' Hall à toute vitesse. Terminez le donjon en moins de 450 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_12",
+        "timeLimit": 450
+      },
+      "rewards": {
+        "gold": 675,
+        "xp": 1250,
+        "reputation": {
+          "factionId": "silver_guardians",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_13_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : Volcanic Core",
+      "desc": "Traversez Volcanic Core à toute vitesse. Terminez le donjon en moins de 480 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_13",
+        "timeLimit": 480
+      },
+      "rewards": {
+        "gold": 750,
+        "xp": 1400,
+        "reputation": {
+          "factionId": "magma_watchers",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_14_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : Fire Giants' Outpost",
+      "desc": "Traversez Fire Giants' Outpost à toute vitesse. Terminez le donjon en moins de 480 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_14",
+        "timeLimit": 480
+      },
+      "rewards": {
+        "gold": 750,
+        "xp": 1400,
+        "reputation": {
+          "factionId": "magma_watchers",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_15_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : Verdant Labyrinth",
+      "desc": "Traversez Verdant Labyrinth à toute vitesse. Terminez le donjon en moins de 510 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_15",
+        "timeLimit": 510
+      },
+      "rewards": {
+        "gold": 825,
+        "xp": 1550,
+        "reputation": {
+          "factionId": "grove_keepers",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_16_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : Sylvan Guardians' Domain",
+      "desc": "Traversez Sylvan Guardians' Domain à toute vitesse. Terminez le donjon en moins de 510 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_16",
+        "timeLimit": 510
+      },
+      "rewards": {
+        "gold": 825,
+        "xp": 1550,
+        "reputation": {
+          "factionId": "grove_keepers",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_17_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : Shadowy Necropolis",
+      "desc": "Traversez Shadowy Necropolis à toute vitesse. Terminez le donjon en moins de 540 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_17",
+        "timeLimit": 540
+      },
+      "rewards": {
+        "gold": 900,
+        "xp": 1700,
+        "reputation": {
+          "factionId": "void_scholars",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_18_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : Specters' Sanctuary",
+      "desc": "Traversez Specters' Sanctuary à toute vitesse. Terminez le donjon en moins de 540 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_18",
+        "timeLimit": 540
+      },
+      "rewards": {
+        "gold": 900,
+        "xp": 1700,
+        "reputation": {
+          "factionId": "void_scholars",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_19_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : Frozen Wastes",
+      "desc": "Traversez Frozen Wastes à toute vitesse. Terminez le donjon en moins de 570 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_19",
+        "timeLimit": 570
+      },
+      "rewards": {
+        "gold": 975,
+        "xp": 1850,
+        "reputation": {
+          "factionId": "silver_guardians",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_20_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : Boreal Knights' Fortress",
+      "desc": "Traversez Boreal Knights' Fortress à toute vitesse. Terminez le donjon en moins de 570 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_20",
+        "timeLimit": 570
+      },
+      "rewards": {
+        "gold": 975,
+        "xp": 1850,
+        "reputation": {
+          "factionId": "silver_guardians",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_21_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : Infernal Forge",
+      "desc": "Traversez Infernal Forge à toute vitesse. Terminez le donjon en moins de 600 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_21",
+        "timeLimit": 600
+      },
+      "rewards": {
+        "gold": 1050,
+        "xp": 2000,
+        "reputation": {
+          "factionId": "magma_watchers",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_22_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : Ash Harpies' Nest",
+      "desc": "Traversez Ash Harpies' Nest à toute vitesse. Terminez le donjon en moins de 600 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_22",
+        "timeLimit": 600
+      },
+      "rewards": {
+        "gold": 1050,
+        "xp": 2000,
+        "reputation": {
+          "factionId": "magma_watchers",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_23_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : Emerald Nightmare",
+      "desc": "Traversez Emerald Nightmare à toute vitesse. Terminez le donjon en moins de 630 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_23",
+        "timeLimit": 630
+      },
+      "rewards": {
+        "gold": 1125,
+        "xp": 2150,
+        "reputation": {
+          "factionId": "grove_keepers",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_24_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : Emerald Golems' Garden",
+      "desc": "Traversez Emerald Golems' Garden à toute vitesse. Terminez le donjon en moins de 630 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_24",
+        "timeLimit": 630
+      },
+      "rewards": {
+        "gold": 1125,
+        "xp": 2150,
+        "reputation": {
+          "factionId": "grove_keepers",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_25_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : Cathedral of Eternal Night",
+      "desc": "Traversez Cathedral of Eternal Night à toute vitesse. Terminez le donjon en moins de 660 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_25",
+        "timeLimit": 660
+      },
+      "rewards": {
+        "gold": 1200,
+        "xp": 2300,
+        "reputation": {
+          "factionId": "void_scholars",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_26_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : Tomb Guardians' Crypt",
+      "desc": "Traversez Tomb Guardians' Crypt à toute vitesse. Terminez le donjon en moins de 660 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_26",
+        "timeLimit": 660
+      },
+      "rewards": {
+        "gold": 1200,
+        "xp": 2300,
+        "reputation": {
+          "factionId": "void_scholars",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_27_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : Glacier's Peak",
+      "desc": "Traversez Glacier's Peak à toute vitesse. Terminez le donjon en moins de 690 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_27",
+        "timeLimit": 690
+      },
+      "rewards": {
+        "gold": 1275,
+        "xp": 2450,
+        "reputation": {
+          "factionId": "silver_guardians",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_28_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : Frost Wyrm's Lair",
+      "desc": "Traversez Frost Wyrm's Lair à toute vitesse. Terminez le donjon en moins de 690 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_28",
+        "timeLimit": 690
+      },
+      "rewards": {
+        "gold": 1275,
+        "xp": 2450,
+        "reputation": {
+          "factionId": "silver_guardians",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_29_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : Heart of the Volcano",
+      "desc": "Traversez Heart of the Volcano à toute vitesse. Terminez le donjon en moins de 720 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_29",
+        "timeLimit": 720
+      },
+      "rewards": {
+        "gold": 1350,
+        "xp": 2600,
+        "reputation": {
+          "factionId": "magma_watchers",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_30_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : Magma Dragon's Roost",
+      "desc": "Traversez Magma Dragon's Roost à toute vitesse. Terminez le donjon en moins de 720 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_30",
+        "timeLimit": 720
+      },
+      "rewards": {
+        "gold": 1350,
+        "xp": 2600,
+        "reputation": {
+          "factionId": "magma_watchers",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_31_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : Throne of the Wilds",
+      "desc": "Traversez Throne of the Wilds à toute vitesse. Terminez le donjon en moins de 750 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_31",
+        "timeLimit": 750
+      },
+      "rewards": {
+        "gold": 1425,
+        "xp": 2750,
+        "reputation": {
+          "factionId": "grove_keepers",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_32_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : World Ash Treant's Grove",
+      "desc": "Traversez World Ash Treant's Grove à toute vitesse. Terminez le donjon en moins de 750 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_32",
+        "timeLimit": 750
+      },
+      "rewards": {
+        "gold": 1425,
+        "xp": 2750,
+        "reputation": {
+          "factionId": "grove_keepers",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_33_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : The Void-Corrupted Sanctum",
+      "desc": "Traversez The Void-Corrupted Sanctum à toute vitesse. Terminez le donjon en moins de 780 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_33",
+        "timeLimit": 780
+      },
+      "rewards": {
+        "gold": 1500,
+        "xp": 2900,
+        "reputation": {
+          "factionId": "void_scholars",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_34_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : Cthulhu's Herald's Antechamber",
+      "desc": "Traversez Cthulhu's Herald's Antechamber à toute vitesse. Terminez le donjon en moins de 780 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_34",
+        "timeLimit": 780
+      },
+      "rewards": {
+        "gold": 1500,
+        "xp": 2900,
+        "reputation": {
+          "factionId": "void_scholars",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_35_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : Permafrost Citadel",
+      "desc": "Traversez Permafrost Citadel à toute vitesse. Terminez le donjon en moins de 810 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_35",
+        "timeLimit": 810
+      },
+      "rewards": {
+        "gold": 1575,
+        "xp": 3050,
+        "reputation": {
+          "factionId": "silver_guardians",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_36_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : Molten Pinnacle",
+      "desc": "Traversez Molten Pinnacle à toute vitesse. Terminez le donjon en moins de 810 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_36",
+        "timeLimit": 810
+      },
+      "rewards": {
+        "gold": 1575,
+        "xp": 3050,
+        "reputation": {
+          "factionId": "magma_watchers",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_37_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : Heart of the Forest",
+      "desc": "Traversez Heart of the Forest à toute vitesse. Terminez le donjon en moins de 840 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_37",
+        "timeLimit": 840
+      },
+      "rewards": {
+        "gold": 1650,
+        "xp": 3200,
+        "reputation": {
+          "factionId": "grove_keepers",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_38_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : R'lyeh's Threshold",
+      "desc": "Traversez R'lyeh's Threshold à toute vitesse. Terminez le donjon en moins de 840 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_38",
+        "timeLimit": 840
+      },
+      "rewards": {
+        "gold": 1650,
+        "xp": 3200,
+        "reputation": {
+          "factionId": "void_scholars",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_39_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : Frozen Throne",
+      "desc": "Traversez Frozen Throne à toute vitesse. Terminez le donjon en moins de 870 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_39",
+        "timeLimit": 870
+      },
+      "rewards": {
+        "gold": 1725,
+        "xp": 3350,
+        "reputation": {
+          "factionId": "silver_guardians",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_40_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : Inferno's Core",
+      "desc": "Traversez Inferno's Core à toute vitesse. Terminez le donjon en moins de 870 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_40",
+        "timeLimit": 870
+      },
+      "rewards": {
+        "gold": 1725,
+        "xp": 3350,
+        "reputation": {
+          "factionId": "magma_watchers",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_41_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : Verdant Sanctuary",
+      "desc": "Traversez Verdant Sanctuary à toute vitesse. Terminez le donjon en moins de 900 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_41",
+        "timeLimit": 900
+      },
+      "rewards": {
+        "gold": 1800,
+        "xp": 3500,
+        "reputation": {
+          "factionId": "grove_keepers",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_42_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : The Sunken City",
+      "desc": "Traversez The Sunken City à toute vitesse. Terminez le donjon en moins de 900 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_42",
+        "timeLimit": 900
+      },
+      "rewards": {
+        "gold": 1800,
+        "xp": 3500,
+        "reputation": {
+          "factionId": "void_scholars",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_43_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : Icecrown Citadel",
+      "desc": "Traversez Icecrown Citadel à toute vitesse. Terminez le donjon en moins de 930 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_43",
+        "timeLimit": 930
+      },
+      "rewards": {
+        "gold": 1875,
+        "xp": 3650,
+        "reputation": {
+          "factionId": "silver_guardians",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_44_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : Blackrock Mountain",
+      "desc": "Traversez Blackrock Mountain à toute vitesse. Terminez le donjon en moins de 930 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_44",
+        "timeLimit": 930
+      },
+      "rewards": {
+        "gold": 1875,
+        "xp": 3650,
+        "reputation": {
+          "factionId": "magma_watchers",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_45_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : The Emerald Dream",
+      "desc": "Traversez The Emerald Dream à toute vitesse. Terminez le donjon en moins de 960 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_45",
+        "timeLimit": 960
+      },
+      "rewards": {
+        "gold": 1950,
+        "xp": 3800,
+        "reputation": {
+          "factionId": "grove_keepers",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_46_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : Ny'alotha, the Waking City",
+      "desc": "Traversez Ny'alotha, the Waking City à toute vitesse. Terminez le donjon en moins de 960 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_46",
+        "timeLimit": 960
+      },
+      "rewards": {
+        "gold": 1950,
+        "xp": 3800,
+        "reputation": {
+          "factionId": "void_scholars",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_47_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : The Frozen Halls",
+      "desc": "Traversez The Frozen Halls à toute vitesse. Terminez le donjon en moins de 990 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_47",
+        "timeLimit": 990
+      },
+      "rewards": {
+        "gold": 2025,
+        "xp": 3950,
+        "reputation": {
+          "factionId": "silver_guardians",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_48_q_challenge",
+      "type": "defi",
+      "name": "Défi de Vitesse : The Molten Core",
+      "desc": "Traversez The Molten Core à toute vitesse. Terminez le donjon en moins de 1020 secondes.",
+      "requirements": {
+        "dungeonId": "dungeon_48",
+        "timeLimit": 1020
+      },
+      "rewards": {
+        "gold": 2100,
+        "xp": 4100,
+        "reputation": {
+          "factionId": "magma_watchers",
+          "amount": 50
+        }
+      }
+    },
+    {
+      "id": "dungeon_2_q_collect_bat_fang",
       "type": "collecte",
-      "name": "Composants de Chauve-souris",
-      "desc": "Un alchimiste local a besoin de crocs de chauve-souris pour une potion. Récupérez-en dans la Caverne des Chauves-souris.",
+      "name": "Collecte de Croc de chauve-souriss",
+      "desc": "Un artisan local a besoin de Croc de chauve-souriss. Récupérez-en sur les Cave Bats dans Bat Cave.",
       "requirements": {
         "dungeonId": "dungeon_2",
         "itemId": "bat_fang",
@@ -3574,38 +5088,3268 @@
       }
     },
     {
-      "id": "dungeon_3_q_challenge",
+      "id": "berserker_dungeon_1_q_skill",
       "type": "defi",
-      "name": "Défi de Vitesse : Crevasse Glacée",
-      "desc": "Traversez la Crevasse Glacée à toute vitesse. Terminez le donjon en moins de 5 minutes.",
+      "name": "Maîtrise de Frappe Héroïque (Goblin Mines)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 10 créatures de type Goblinoid dans Goblin Mines.",
       "requirements": {
-        "dungeonId": "dungeon_3",
-        "timeLimit": 300
+        "dungeonId": "dungeon_1",
+        "killCount": 10,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Goblinoid",
+        "classId": "berserker"
       },
       "rewards": {
-        "gold": 300,
-        "xp": 500,
-        "reputation": {
-          "factionId": "silver_guardians",
-          "amount": 50
-        }
+        "gold": 200,
+        "xp": 350
       }
     },
     {
-        "id": "berserker_skill_challenge_1",
-        "type": "defi",
-        "name": "Fureur du Berserker",
-        "desc": "Prouvez votre maîtrise de la Frappe Héroïque en éliminant 15 créatures dans les Mines des Gobelins en l'utilisant.",
-        "requirements": {
-          "dungeonId": "dungeon_1",
-          "killCount": 15,
-          "skillId": "berserker_heroic_strike",
-          "monsterType": "Goblinoid"
-        },
-        "rewards": {
-          "gold": 200,
-          "xp": 350
-        }
+      "id": "berserker_dungeon_2_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (Bat Cave)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 15 créatures de type Humanoid dans Bat Cave.",
+      "requirements": {
+        "dungeonId": "dungeon_2",
+        "killCount": 15,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Humanoid",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 200,
+        "xp": 350
+      }
+    },
+    {
+      "id": "berserker_dungeon_3_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (Icy Crevasse)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 20 créatures de type Beast dans Icy Crevasse.",
+      "requirements": {
+        "dungeonId": "dungeon_3",
+        "killCount": 20,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Beast",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 260,
+        "xp": 470
+      }
+    },
+    {
+      "id": "berserker_dungeon_4_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (Yeti Den)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 20 créatures de type Elemental dans Yeti Den.",
+      "requirements": {
+        "dungeonId": "dungeon_4",
+        "killCount": 20,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Elemental",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 260,
+        "xp": 470
+      }
+    },
+    {
+      "id": "berserker_dungeon_5_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (Scorched Caverns)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 25 créatures de type Demon dans Scorched Caverns.",
+      "requirements": {
+        "dungeonId": "dungeon_5",
+        "killCount": 25,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Demon",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 320,
+        "xp": 590
+      }
+    },
+    {
+      "id": "berserker_dungeon_6_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (Cinder Chambers)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 25 créatures de type Elemental dans Cinder Chambers.",
+      "requirements": {
+        "dungeonId": "dungeon_6",
+        "killCount": 25,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Elemental",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 320,
+        "xp": 590
+      }
+    },
+    {
+      "id": "berserker_dungeon_7_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (Whispering Woods)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 30 créatures de type Plant dans Whispering Woods.",
+      "requirements": {
+        "dungeonId": "dungeon_7",
+        "killCount": 30,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Plant",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 380,
+        "xp": 710
+      }
+    },
+    {
+      "id": "berserker_dungeon_8_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (Dryad Grove)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 30 créatures de type Beast dans Dryad Grove.",
+      "requirements": {
+        "dungeonId": "dungeon_8",
+        "killCount": 30,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Beast",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 380,
+        "xp": 710
+      }
+    },
+    {
+      "id": "berserker_dungeon_9_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (Forgotten Crypt)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 35 créatures de type Undead dans Forgotten Crypt.",
+      "requirements": {
+        "dungeonId": "dungeon_9",
+        "killCount": 35,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Undead",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 440,
+        "xp": 830
+      }
+    },
+    {
+      "id": "berserker_dungeon_10_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (Void Worshippers' Lair)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 35 créatures de type Aberration dans Void Worshippers' Lair.",
+      "requirements": {
+        "dungeonId": "dungeon_10",
+        "killCount": 35,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Aberration",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 440,
+        "xp": 830
+      }
+    },
+    {
+      "id": "berserker_dungeon_11_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (Glacial Depths)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 40 créatures de type Beast dans Glacial Depths.",
+      "requirements": {
+        "dungeonId": "dungeon_11",
+        "killCount": 40,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Beast",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 500,
+        "xp": 950
+      }
+    },
+    {
+      "id": "berserker_dungeon_12_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (Frozen Berserkers' Hall)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 40 créatures de type Elemental dans Frozen Berserkers' Hall.",
+      "requirements": {
+        "dungeonId": "dungeon_12",
+        "killCount": 40,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Elemental",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 500,
+        "xp": 950
+      }
+    },
+    {
+      "id": "berserker_dungeon_13_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (Volcanic Core)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 45 créatures de type Construct dans Volcanic Core.",
+      "requirements": {
+        "dungeonId": "dungeon_13",
+        "killCount": 45,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Construct",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 560,
+        "xp": 1070
+      }
+    },
+    {
+      "id": "berserker_dungeon_14_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (Fire Giants' Outpost)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 45 créatures de type Beast dans Fire Giants' Outpost.",
+      "requirements": {
+        "dungeonId": "dungeon_14",
+        "killCount": 45,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Beast",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 560,
+        "xp": 1070
+      }
+    },
+    {
+      "id": "berserker_dungeon_15_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (Verdant Labyrinth)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 50 créatures de type Plant dans Verdant Labyrinth.",
+      "requirements": {
+        "dungeonId": "dungeon_15",
+        "killCount": 50,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Plant",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 620,
+        "xp": 1190
+      }
+    },
+    {
+      "id": "berserker_dungeon_16_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (Sylvan Guardians' Domain)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 50 créatures de type Plant dans Sylvan Guardians' Domain.",
+      "requirements": {
+        "dungeonId": "dungeon_16",
+        "killCount": 50,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Plant",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 620,
+        "xp": 1190
+      }
+    },
+    {
+      "id": "berserker_dungeon_17_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (Shadowy Necropolis)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 55 créatures de type Undead dans Shadowy Necropolis.",
+      "requirements": {
+        "dungeonId": "dungeon_17",
+        "killCount": 55,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Undead",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 680,
+        "xp": 1310
+      }
+    },
+    {
+      "id": "berserker_dungeon_18_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (Specters' Sanctuary)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 55 créatures de type Aberration dans Specters' Sanctuary.",
+      "requirements": {
+        "dungeonId": "dungeon_18",
+        "killCount": 55,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Aberration",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 680,
+        "xp": 1310
+      }
+    },
+    {
+      "id": "berserker_dungeon_19_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (Frozen Wastes)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 60 créatures de type Giant dans Frozen Wastes.",
+      "requirements": {
+        "dungeonId": "dungeon_19",
+        "killCount": 60,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Giant",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 740,
+        "xp": 1430
+      }
+    },
+    {
+      "id": "berserker_dungeon_20_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (Boreal Knights' Fortress)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 60 créatures de type Dragonkin dans Boreal Knights' Fortress.",
+      "requirements": {
+        "dungeonId": "dungeon_20",
+        "killCount": 60,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Dragonkin",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 740,
+        "xp": 1430
+      }
+    },
+    {
+      "id": "berserker_dungeon_21_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (Infernal Forge)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 65 créatures de type Demon dans Infernal Forge.",
+      "requirements": {
+        "dungeonId": "dungeon_21",
+        "killCount": 65,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Demon",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 800,
+        "xp": 1550
+      }
+    },
+    {
+      "id": "berserker_dungeon_22_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (Ash Harpies' Nest)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 65 créatures de type Dragonkin dans Ash Harpies' Nest.",
+      "requirements": {
+        "dungeonId": "dungeon_22",
+        "killCount": 65,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Dragonkin",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 800,
+        "xp": 1550
+      }
+    },
+    {
+      "id": "berserker_dungeon_23_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (Emerald Nightmare)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 70 créatures de type Plant dans Emerald Nightmare.",
+      "requirements": {
+        "dungeonId": "dungeon_23",
+        "killCount": 70,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Plant",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 860,
+        "xp": 1670
+      }
+    },
+    {
+      "id": "berserker_dungeon_24_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (Emerald Golems' Garden)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 70 créatures de type Dragonkin dans Emerald Golems' Garden.",
+      "requirements": {
+        "dungeonId": "dungeon_24",
+        "killCount": 70,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Dragonkin",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 860,
+        "xp": 1670
+      }
+    },
+    {
+      "id": "berserker_dungeon_25_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (Cathedral of Eternal Night)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 75 créatures de type Undead dans Cathedral of Eternal Night.",
+      "requirements": {
+        "dungeonId": "dungeon_25",
+        "killCount": 75,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Undead",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 920,
+        "xp": 1790
+      }
+    },
+    {
+      "id": "berserker_dungeon_26_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (Tomb Guardians' Crypt)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 75 créatures de type Aberration dans Tomb Guardians' Crypt.",
+      "requirements": {
+        "dungeonId": "dungeon_26",
+        "killCount": 75,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Aberration",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 920,
+        "xp": 1790
+      }
+    },
+    {
+      "id": "berserker_dungeon_27_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (Glacier's Peak)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 80 créatures de type Giant dans Glacier's Peak.",
+      "requirements": {
+        "dungeonId": "dungeon_27",
+        "killCount": 80,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Giant",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 980,
+        "xp": 1910
+      }
+    },
+    {
+      "id": "berserker_dungeon_28_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (Frost Wyrm's Lair)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 80 créatures de type Elemental dans Frost Wyrm's Lair.",
+      "requirements": {
+        "dungeonId": "dungeon_28",
+        "killCount": 80,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Elemental",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 980,
+        "xp": 1910
+      }
+    },
+    {
+      "id": "berserker_dungeon_29_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (Heart of the Volcano)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 85 créatures de type Demon dans Heart of the Volcano.",
+      "requirements": {
+        "dungeonId": "dungeon_29",
+        "killCount": 85,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Demon",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 1040,
+        "xp": 2030
+      }
+    },
+    {
+      "id": "berserker_dungeon_30_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (Magma Dragon's Roost)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 85 créatures de type Celestial dans Magma Dragon's Roost.",
+      "requirements": {
+        "dungeonId": "dungeon_30",
+        "killCount": 85,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Celestial",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 1040,
+        "xp": 2030
+      }
+    },
+    {
+      "id": "berserker_dungeon_31_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (Throne of the Wilds)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 90 créatures de type Elemental dans Throne of the Wilds.",
+      "requirements": {
+        "dungeonId": "dungeon_31",
+        "killCount": 90,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Elemental",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 1100,
+        "xp": 2150
+      }
+    },
+    {
+      "id": "berserker_dungeon_32_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (World Ash Treant's Grove)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 90 créatures de type Humanoid dans World Ash Treant's Grove.",
+      "requirements": {
+        "dungeonId": "dungeon_32",
+        "killCount": 90,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Humanoid",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 1100,
+        "xp": 2150
+      }
+    },
+    {
+      "id": "berserker_dungeon_33_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (The Void-Corrupted Sanctum)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 95 créatures de type Undead dans The Void-Corrupted Sanctum.",
+      "requirements": {
+        "dungeonId": "dungeon_33",
+        "killCount": 95,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Undead",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 1160,
+        "xp": 2270
+      }
+    },
+    {
+      "id": "berserker_dungeon_34_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (Cthulhu's Herald's Antechamber)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 95 créatures de type Aberration dans Cthulhu's Herald's Antechamber.",
+      "requirements": {
+        "dungeonId": "dungeon_34",
+        "killCount": 95,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Aberration",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 1160,
+        "xp": 2270
+      }
+    },
+    {
+      "id": "berserker_dungeon_35_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (Permafrost Citadel)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 100 créatures de type Dragonkin dans Permafrost Citadel.",
+      "requirements": {
+        "dungeonId": "dungeon_35",
+        "killCount": 100,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Dragonkin",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 1220,
+        "xp": 2390
+      }
+    },
+    {
+      "id": "berserker_dungeon_36_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (Molten Pinnacle)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 100 créatures de type Dragonkin dans Molten Pinnacle.",
+      "requirements": {
+        "dungeonId": "dungeon_36",
+        "killCount": 100,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Dragonkin",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 1220,
+        "xp": 2390
+      }
+    },
+    {
+      "id": "berserker_dungeon_37_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (Heart of the Forest)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 100 créatures de type Plant dans Heart of the Forest.",
+      "requirements": {
+        "dungeonId": "dungeon_37",
+        "killCount": 100,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Plant",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 1280,
+        "xp": 2510
+      }
+    },
+    {
+      "id": "berserker_dungeon_38_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (R'lyeh's Threshold)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 100 créatures de type Aberration dans R'lyeh's Threshold.",
+      "requirements": {
+        "dungeonId": "dungeon_38",
+        "killCount": 100,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Aberration",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 1280,
+        "xp": 2510
+      }
+    },
+    {
+      "id": "berserker_dungeon_39_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (Frozen Throne)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 100 créatures de type Dragonkin dans Frozen Throne.",
+      "requirements": {
+        "dungeonId": "dungeon_39",
+        "killCount": 100,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Dragonkin",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 1340,
+        "xp": 2630
+      }
+    },
+    {
+      "id": "berserker_dungeon_40_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (Inferno's Core)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 100 créatures de type Dragonkin dans Inferno's Core.",
+      "requirements": {
+        "dungeonId": "dungeon_40",
+        "killCount": 100,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Dragonkin",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 1340,
+        "xp": 2630
+      }
+    },
+    {
+      "id": "berserker_dungeon_41_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (Verdant Sanctuary)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 100 créatures de type Plant dans Verdant Sanctuary.",
+      "requirements": {
+        "dungeonId": "dungeon_41",
+        "killCount": 100,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Plant",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 1400,
+        "xp": 2750
+      }
+    },
+    {
+      "id": "berserker_dungeon_42_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (The Sunken City)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 100 créatures de type Aberration dans The Sunken City.",
+      "requirements": {
+        "dungeonId": "dungeon_42",
+        "killCount": 100,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Aberration",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 1400,
+        "xp": 2750
+      }
+    },
+    {
+      "id": "berserker_dungeon_43_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (Icecrown Citadel)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 100 créatures de type Dragonkin dans Icecrown Citadel.",
+      "requirements": {
+        "dungeonId": "dungeon_43",
+        "killCount": 100,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Dragonkin",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 1460,
+        "xp": 2870
+      }
+    },
+    {
+      "id": "berserker_dungeon_44_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (Blackrock Mountain)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 100 créatures de type Dragonkin dans Blackrock Mountain.",
+      "requirements": {
+        "dungeonId": "dungeon_44",
+        "killCount": 100,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Dragonkin",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 1460,
+        "xp": 2870
+      }
+    },
+    {
+      "id": "berserker_dungeon_45_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (The Emerald Dream)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 100 créatures de type Plant dans The Emerald Dream.",
+      "requirements": {
+        "dungeonId": "dungeon_45",
+        "killCount": 100,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Plant",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 1520,
+        "xp": 2990
+      }
+    },
+    {
+      "id": "berserker_dungeon_46_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (Ny'alotha, the Waking City)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 100 créatures de type Aberration dans Ny'alotha, the Waking City.",
+      "requirements": {
+        "dungeonId": "dungeon_46",
+        "killCount": 100,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Aberration",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 1520,
+        "xp": 2990
+      }
+    },
+    {
+      "id": "berserker_dungeon_47_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (The Frozen Halls)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 100 créatures de type Dragonkin dans The Frozen Halls.",
+      "requirements": {
+        "dungeonId": "dungeon_47",
+        "killCount": 100,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Dragonkin",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 1580,
+        "xp": 3110
+      }
+    },
+    {
+      "id": "berserker_dungeon_48_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Frappe Héroïque (The Molten Core)",
+      "desc": "Prouvez votre maîtrise de la compétence Frappe Héroïque en éliminant 100 créatures de type Dragonkin dans The Molten Core.",
+      "requirements": {
+        "dungeonId": "dungeon_48",
+        "killCount": 100,
+        "skillId": "berserker_heroic_strike",
+        "monsterType": "Dragonkin",
+        "classId": "berserker"
+      },
+      "rewards": {
+        "gold": 1640,
+        "xp": 3230
+      }
+    },
+    {
+      "id": "mage_dungeon_1_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (Goblin Mines)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 10 créatures de type Goblinoid dans Goblin Mines.",
+      "requirements": {
+        "dungeonId": "dungeon_1",
+        "killCount": 10,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Goblinoid",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 200,
+        "xp": 350
+      }
+    },
+    {
+      "id": "mage_dungeon_2_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (Bat Cave)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 15 créatures de type Humanoid dans Bat Cave.",
+      "requirements": {
+        "dungeonId": "dungeon_2",
+        "killCount": 15,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Humanoid",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 200,
+        "xp": 350
+      }
+    },
+    {
+      "id": "mage_dungeon_3_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (Icy Crevasse)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 20 créatures de type Beast dans Icy Crevasse.",
+      "requirements": {
+        "dungeonId": "dungeon_3",
+        "killCount": 20,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Beast",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 260,
+        "xp": 470
+      }
+    },
+    {
+      "id": "mage_dungeon_4_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (Yeti Den)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 20 créatures de type Elemental dans Yeti Den.",
+      "requirements": {
+        "dungeonId": "dungeon_4",
+        "killCount": 20,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Elemental",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 260,
+        "xp": 470
+      }
+    },
+    {
+      "id": "mage_dungeon_5_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (Scorched Caverns)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 25 créatures de type Demon dans Scorched Caverns.",
+      "requirements": {
+        "dungeonId": "dungeon_5",
+        "killCount": 25,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Demon",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 320,
+        "xp": 590
+      }
+    },
+    {
+      "id": "mage_dungeon_6_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (Cinder Chambers)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 25 créatures de type Elemental dans Cinder Chambers.",
+      "requirements": {
+        "dungeonId": "dungeon_6",
+        "killCount": 25,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Elemental",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 320,
+        "xp": 590
+      }
+    },
+    {
+      "id": "mage_dungeon_7_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (Whispering Woods)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 30 créatures de type Plant dans Whispering Woods.",
+      "requirements": {
+        "dungeonId": "dungeon_7",
+        "killCount": 30,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Plant",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 380,
+        "xp": 710
+      }
+    },
+    {
+      "id": "mage_dungeon_8_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (Dryad Grove)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 30 créatures de type Beast dans Dryad Grove.",
+      "requirements": {
+        "dungeonId": "dungeon_8",
+        "killCount": 30,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Beast",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 380,
+        "xp": 710
+      }
+    },
+    {
+      "id": "mage_dungeon_9_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (Forgotten Crypt)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 35 créatures de type Undead dans Forgotten Crypt.",
+      "requirements": {
+        "dungeonId": "dungeon_9",
+        "killCount": 35,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Undead",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 440,
+        "xp": 830
+      }
+    },
+    {
+      "id": "mage_dungeon_10_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (Void Worshippers' Lair)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 35 créatures de type Aberration dans Void Worshippers' Lair.",
+      "requirements": {
+        "dungeonId": "dungeon_10",
+        "killCount": 35,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Aberration",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 440,
+        "xp": 830
+      }
+    },
+    {
+      "id": "mage_dungeon_11_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (Glacial Depths)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 40 créatures de type Beast dans Glacial Depths.",
+      "requirements": {
+        "dungeonId": "dungeon_11",
+        "killCount": 40,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Beast",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 500,
+        "xp": 950
+      }
+    },
+    {
+      "id": "mage_dungeon_12_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (Frozen Berserkers' Hall)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 40 créatures de type Elemental dans Frozen Berserkers' Hall.",
+      "requirements": {
+        "dungeonId": "dungeon_12",
+        "killCount": 40,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Elemental",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 500,
+        "xp": 950
+      }
+    },
+    {
+      "id": "mage_dungeon_13_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (Volcanic Core)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 45 créatures de type Construct dans Volcanic Core.",
+      "requirements": {
+        "dungeonId": "dungeon_13",
+        "killCount": 45,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Construct",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 560,
+        "xp": 1070
+      }
+    },
+    {
+      "id": "mage_dungeon_14_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (Fire Giants' Outpost)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 45 créatures de type Beast dans Fire Giants' Outpost.",
+      "requirements": {
+        "dungeonId": "dungeon_14",
+        "killCount": 45,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Beast",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 560,
+        "xp": 1070
+      }
+    },
+    {
+      "id": "mage_dungeon_15_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (Verdant Labyrinth)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 50 créatures de type Plant dans Verdant Labyrinth.",
+      "requirements": {
+        "dungeonId": "dungeon_15",
+        "killCount": 50,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Plant",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 620,
+        "xp": 1190
+      }
+    },
+    {
+      "id": "mage_dungeon_16_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (Sylvan Guardians' Domain)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 50 créatures de type Plant dans Sylvan Guardians' Domain.",
+      "requirements": {
+        "dungeonId": "dungeon_16",
+        "killCount": 50,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Plant",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 620,
+        "xp": 1190
+      }
+    },
+    {
+      "id": "mage_dungeon_17_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (Shadowy Necropolis)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 55 créatures de type Undead dans Shadowy Necropolis.",
+      "requirements": {
+        "dungeonId": "dungeon_17",
+        "killCount": 55,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Undead",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 680,
+        "xp": 1310
+      }
+    },
+    {
+      "id": "mage_dungeon_18_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (Specters' Sanctuary)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 55 créatures de type Aberration dans Specters' Sanctuary.",
+      "requirements": {
+        "dungeonId": "dungeon_18",
+        "killCount": 55,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Aberration",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 680,
+        "xp": 1310
+      }
+    },
+    {
+      "id": "mage_dungeon_19_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (Frozen Wastes)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 60 créatures de type Giant dans Frozen Wastes.",
+      "requirements": {
+        "dungeonId": "dungeon_19",
+        "killCount": 60,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Giant",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 740,
+        "xp": 1430
+      }
+    },
+    {
+      "id": "mage_dungeon_20_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (Boreal Knights' Fortress)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 60 créatures de type Dragonkin dans Boreal Knights' Fortress.",
+      "requirements": {
+        "dungeonId": "dungeon_20",
+        "killCount": 60,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Dragonkin",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 740,
+        "xp": 1430
+      }
+    },
+    {
+      "id": "mage_dungeon_21_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (Infernal Forge)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 65 créatures de type Demon dans Infernal Forge.",
+      "requirements": {
+        "dungeonId": "dungeon_21",
+        "killCount": 65,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Demon",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 800,
+        "xp": 1550
+      }
+    },
+    {
+      "id": "mage_dungeon_22_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (Ash Harpies' Nest)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 65 créatures de type Dragonkin dans Ash Harpies' Nest.",
+      "requirements": {
+        "dungeonId": "dungeon_22",
+        "killCount": 65,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Dragonkin",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 800,
+        "xp": 1550
+      }
+    },
+    {
+      "id": "mage_dungeon_23_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (Emerald Nightmare)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 70 créatures de type Plant dans Emerald Nightmare.",
+      "requirements": {
+        "dungeonId": "dungeon_23",
+        "killCount": 70,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Plant",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 860,
+        "xp": 1670
+      }
+    },
+    {
+      "id": "mage_dungeon_24_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (Emerald Golems' Garden)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 70 créatures de type Dragonkin dans Emerald Golems' Garden.",
+      "requirements": {
+        "dungeonId": "dungeon_24",
+        "killCount": 70,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Dragonkin",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 860,
+        "xp": 1670
+      }
+    },
+    {
+      "id": "mage_dungeon_25_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (Cathedral of Eternal Night)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 75 créatures de type Undead dans Cathedral of Eternal Night.",
+      "requirements": {
+        "dungeonId": "dungeon_25",
+        "killCount": 75,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Undead",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 920,
+        "xp": 1790
+      }
+    },
+    {
+      "id": "mage_dungeon_26_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (Tomb Guardians' Crypt)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 75 créatures de type Aberration dans Tomb Guardians' Crypt.",
+      "requirements": {
+        "dungeonId": "dungeon_26",
+        "killCount": 75,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Aberration",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 920,
+        "xp": 1790
+      }
+    },
+    {
+      "id": "mage_dungeon_27_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (Glacier's Peak)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 80 créatures de type Giant dans Glacier's Peak.",
+      "requirements": {
+        "dungeonId": "dungeon_27",
+        "killCount": 80,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Giant",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 980,
+        "xp": 1910
+      }
+    },
+    {
+      "id": "mage_dungeon_28_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (Frost Wyrm's Lair)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 80 créatures de type Elemental dans Frost Wyrm's Lair.",
+      "requirements": {
+        "dungeonId": "dungeon_28",
+        "killCount": 80,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Elemental",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 980,
+        "xp": 1910
+      }
+    },
+    {
+      "id": "mage_dungeon_29_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (Heart of the Volcano)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 85 créatures de type Demon dans Heart of the Volcano.",
+      "requirements": {
+        "dungeonId": "dungeon_29",
+        "killCount": 85,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Demon",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 1040,
+        "xp": 2030
+      }
+    },
+    {
+      "id": "mage_dungeon_30_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (Magma Dragon's Roost)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 85 créatures de type Celestial dans Magma Dragon's Roost.",
+      "requirements": {
+        "dungeonId": "dungeon_30",
+        "killCount": 85,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Celestial",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 1040,
+        "xp": 2030
+      }
+    },
+    {
+      "id": "mage_dungeon_31_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (Throne of the Wilds)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 90 créatures de type Elemental dans Throne of the Wilds.",
+      "requirements": {
+        "dungeonId": "dungeon_31",
+        "killCount": 90,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Elemental",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 1100,
+        "xp": 2150
+      }
+    },
+    {
+      "id": "mage_dungeon_32_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (World Ash Treant's Grove)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 90 créatures de type Humanoid dans World Ash Treant's Grove.",
+      "requirements": {
+        "dungeonId": "dungeon_32",
+        "killCount": 90,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Humanoid",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 1100,
+        "xp": 2150
+      }
+    },
+    {
+      "id": "mage_dungeon_33_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (The Void-Corrupted Sanctum)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 95 créatures de type Undead dans The Void-Corrupted Sanctum.",
+      "requirements": {
+        "dungeonId": "dungeon_33",
+        "killCount": 95,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Undead",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 1160,
+        "xp": 2270
+      }
+    },
+    {
+      "id": "mage_dungeon_34_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (Cthulhu's Herald's Antechamber)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 95 créatures de type Aberration dans Cthulhu's Herald's Antechamber.",
+      "requirements": {
+        "dungeonId": "dungeon_34",
+        "killCount": 95,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Aberration",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 1160,
+        "xp": 2270
+      }
+    },
+    {
+      "id": "mage_dungeon_35_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (Permafrost Citadel)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 100 créatures de type Dragonkin dans Permafrost Citadel.",
+      "requirements": {
+        "dungeonId": "dungeon_35",
+        "killCount": 100,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Dragonkin",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 1220,
+        "xp": 2390
+      }
+    },
+    {
+      "id": "mage_dungeon_36_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (Molten Pinnacle)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 100 créatures de type Dragonkin dans Molten Pinnacle.",
+      "requirements": {
+        "dungeonId": "dungeon_36",
+        "killCount": 100,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Dragonkin",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 1220,
+        "xp": 2390
+      }
+    },
+    {
+      "id": "mage_dungeon_37_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (Heart of the Forest)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 100 créatures de type Plant dans Heart of the Forest.",
+      "requirements": {
+        "dungeonId": "dungeon_37",
+        "killCount": 100,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Plant",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 1280,
+        "xp": 2510
+      }
+    },
+    {
+      "id": "mage_dungeon_38_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (R'lyeh's Threshold)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 100 créatures de type Aberration dans R'lyeh's Threshold.",
+      "requirements": {
+        "dungeonId": "dungeon_38",
+        "killCount": 100,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Aberration",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 1280,
+        "xp": 2510
+      }
+    },
+    {
+      "id": "mage_dungeon_39_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (Frozen Throne)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 100 créatures de type Dragonkin dans Frozen Throne.",
+      "requirements": {
+        "dungeonId": "dungeon_39",
+        "killCount": 100,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Dragonkin",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 1340,
+        "xp": 2630
+      }
+    },
+    {
+      "id": "mage_dungeon_40_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (Inferno's Core)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 100 créatures de type Dragonkin dans Inferno's Core.",
+      "requirements": {
+        "dungeonId": "dungeon_40",
+        "killCount": 100,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Dragonkin",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 1340,
+        "xp": 2630
+      }
+    },
+    {
+      "id": "mage_dungeon_41_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (Verdant Sanctuary)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 100 créatures de type Plant dans Verdant Sanctuary.",
+      "requirements": {
+        "dungeonId": "dungeon_41",
+        "killCount": 100,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Plant",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 1400,
+        "xp": 2750
+      }
+    },
+    {
+      "id": "mage_dungeon_42_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (The Sunken City)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 100 créatures de type Aberration dans The Sunken City.",
+      "requirements": {
+        "dungeonId": "dungeon_42",
+        "killCount": 100,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Aberration",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 1400,
+        "xp": 2750
+      }
+    },
+    {
+      "id": "mage_dungeon_43_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (Icecrown Citadel)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 100 créatures de type Dragonkin dans Icecrown Citadel.",
+      "requirements": {
+        "dungeonId": "dungeon_43",
+        "killCount": 100,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Dragonkin",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 1460,
+        "xp": 2870
+      }
+    },
+    {
+      "id": "mage_dungeon_44_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (Blackrock Mountain)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 100 créatures de type Dragonkin dans Blackrock Mountain.",
+      "requirements": {
+        "dungeonId": "dungeon_44",
+        "killCount": 100,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Dragonkin",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 1460,
+        "xp": 2870
+      }
+    },
+    {
+      "id": "mage_dungeon_45_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (The Emerald Dream)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 100 créatures de type Plant dans The Emerald Dream.",
+      "requirements": {
+        "dungeonId": "dungeon_45",
+        "killCount": 100,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Plant",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 1520,
+        "xp": 2990
+      }
+    },
+    {
+      "id": "mage_dungeon_46_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (Ny'alotha, the Waking City)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 100 créatures de type Aberration dans Ny'alotha, the Waking City.",
+      "requirements": {
+        "dungeonId": "dungeon_46",
+        "killCount": 100,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Aberration",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 1520,
+        "xp": 2990
+      }
+    },
+    {
+      "id": "mage_dungeon_47_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (The Frozen Halls)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 100 créatures de type Dragonkin dans The Frozen Halls.",
+      "requirements": {
+        "dungeonId": "dungeon_47",
+        "killCount": 100,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Dragonkin",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 1580,
+        "xp": 3110
+      }
+    },
+    {
+      "id": "mage_dungeon_48_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Boule de feu (The Molten Core)",
+      "desc": "Prouvez votre maîtrise de la compétence Boule de feu en éliminant 100 créatures de type Dragonkin dans The Molten Core.",
+      "requirements": {
+        "dungeonId": "dungeon_48",
+        "killCount": 100,
+        "skillId": "mage_fire_fireball",
+        "monsterType": "Dragonkin",
+        "classId": "mage"
+      },
+      "rewards": {
+        "gold": 1640,
+        "xp": 3230
+      }
+    },
+    {
+      "id": "rogue_dungeon_1_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (Goblin Mines)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 10 créatures de type Goblinoid dans Goblin Mines.",
+      "requirements": {
+        "dungeonId": "dungeon_1",
+        "killCount": 10,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Goblinoid",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 200,
+        "xp": 350
+      }
+    },
+    {
+      "id": "rogue_dungeon_2_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (Bat Cave)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 15 créatures de type Humanoid dans Bat Cave.",
+      "requirements": {
+        "dungeonId": "dungeon_2",
+        "killCount": 15,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Humanoid",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 200,
+        "xp": 350
+      }
+    },
+    {
+      "id": "rogue_dungeon_3_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (Icy Crevasse)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 20 créatures de type Beast dans Icy Crevasse.",
+      "requirements": {
+        "dungeonId": "dungeon_3",
+        "killCount": 20,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Beast",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 260,
+        "xp": 470
+      }
+    },
+    {
+      "id": "rogue_dungeon_4_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (Yeti Den)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 20 créatures de type Elemental dans Yeti Den.",
+      "requirements": {
+        "dungeonId": "dungeon_4",
+        "killCount": 20,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Elemental",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 260,
+        "xp": 470
+      }
+    },
+    {
+      "id": "rogue_dungeon_5_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (Scorched Caverns)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 25 créatures de type Demon dans Scorched Caverns.",
+      "requirements": {
+        "dungeonId": "dungeon_5",
+        "killCount": 25,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Demon",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 320,
+        "xp": 590
+      }
+    },
+    {
+      "id": "rogue_dungeon_6_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (Cinder Chambers)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 25 créatures de type Elemental dans Cinder Chambers.",
+      "requirements": {
+        "dungeonId": "dungeon_6",
+        "killCount": 25,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Elemental",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 320,
+        "xp": 590
+      }
+    },
+    {
+      "id": "rogue_dungeon_7_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (Whispering Woods)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 30 créatures de type Plant dans Whispering Woods.",
+      "requirements": {
+        "dungeonId": "dungeon_7",
+        "killCount": 30,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Plant",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 380,
+        "xp": 710
+      }
+    },
+    {
+      "id": "rogue_dungeon_8_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (Dryad Grove)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 30 créatures de type Beast dans Dryad Grove.",
+      "requirements": {
+        "dungeonId": "dungeon_8",
+        "killCount": 30,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Beast",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 380,
+        "xp": 710
+      }
+    },
+    {
+      "id": "rogue_dungeon_9_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (Forgotten Crypt)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 35 créatures de type Undead dans Forgotten Crypt.",
+      "requirements": {
+        "dungeonId": "dungeon_9",
+        "killCount": 35,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Undead",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 440,
+        "xp": 830
+      }
+    },
+    {
+      "id": "rogue_dungeon_10_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (Void Worshippers' Lair)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 35 créatures de type Aberration dans Void Worshippers' Lair.",
+      "requirements": {
+        "dungeonId": "dungeon_10",
+        "killCount": 35,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Aberration",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 440,
+        "xp": 830
+      }
+    },
+    {
+      "id": "rogue_dungeon_11_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (Glacial Depths)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 40 créatures de type Beast dans Glacial Depths.",
+      "requirements": {
+        "dungeonId": "dungeon_11",
+        "killCount": 40,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Beast",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 500,
+        "xp": 950
+      }
+    },
+    {
+      "id": "rogue_dungeon_12_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (Frozen Berserkers' Hall)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 40 créatures de type Elemental dans Frozen Berserkers' Hall.",
+      "requirements": {
+        "dungeonId": "dungeon_12",
+        "killCount": 40,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Elemental",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 500,
+        "xp": 950
+      }
+    },
+    {
+      "id": "rogue_dungeon_13_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (Volcanic Core)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 45 créatures de type Construct dans Volcanic Core.",
+      "requirements": {
+        "dungeonId": "dungeon_13",
+        "killCount": 45,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Construct",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 560,
+        "xp": 1070
+      }
+    },
+    {
+      "id": "rogue_dungeon_14_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (Fire Giants' Outpost)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 45 créatures de type Beast dans Fire Giants' Outpost.",
+      "requirements": {
+        "dungeonId": "dungeon_14",
+        "killCount": 45,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Beast",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 560,
+        "xp": 1070
+      }
+    },
+    {
+      "id": "rogue_dungeon_15_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (Verdant Labyrinth)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 50 créatures de type Plant dans Verdant Labyrinth.",
+      "requirements": {
+        "dungeonId": "dungeon_15",
+        "killCount": 50,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Plant",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 620,
+        "xp": 1190
+      }
+    },
+    {
+      "id": "rogue_dungeon_16_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (Sylvan Guardians' Domain)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 50 créatures de type Plant dans Sylvan Guardians' Domain.",
+      "requirements": {
+        "dungeonId": "dungeon_16",
+        "killCount": 50,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Plant",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 620,
+        "xp": 1190
+      }
+    },
+    {
+      "id": "rogue_dungeon_17_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (Shadowy Necropolis)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 55 créatures de type Undead dans Shadowy Necropolis.",
+      "requirements": {
+        "dungeonId": "dungeon_17",
+        "killCount": 55,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Undead",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 680,
+        "xp": 1310
+      }
+    },
+    {
+      "id": "rogue_dungeon_18_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (Specters' Sanctuary)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 55 créatures de type Aberration dans Specters' Sanctuary.",
+      "requirements": {
+        "dungeonId": "dungeon_18",
+        "killCount": 55,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Aberration",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 680,
+        "xp": 1310
+      }
+    },
+    {
+      "id": "rogue_dungeon_19_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (Frozen Wastes)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 60 créatures de type Giant dans Frozen Wastes.",
+      "requirements": {
+        "dungeonId": "dungeon_19",
+        "killCount": 60,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Giant",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 740,
+        "xp": 1430
+      }
+    },
+    {
+      "id": "rogue_dungeon_20_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (Boreal Knights' Fortress)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 60 créatures de type Dragonkin dans Boreal Knights' Fortress.",
+      "requirements": {
+        "dungeonId": "dungeon_20",
+        "killCount": 60,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Dragonkin",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 740,
+        "xp": 1430
+      }
+    },
+    {
+      "id": "rogue_dungeon_21_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (Infernal Forge)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 65 créatures de type Demon dans Infernal Forge.",
+      "requirements": {
+        "dungeonId": "dungeon_21",
+        "killCount": 65,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Demon",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 800,
+        "xp": 1550
+      }
+    },
+    {
+      "id": "rogue_dungeon_22_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (Ash Harpies' Nest)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 65 créatures de type Dragonkin dans Ash Harpies' Nest.",
+      "requirements": {
+        "dungeonId": "dungeon_22",
+        "killCount": 65,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Dragonkin",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 800,
+        "xp": 1550
+      }
+    },
+    {
+      "id": "rogue_dungeon_23_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (Emerald Nightmare)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 70 créatures de type Plant dans Emerald Nightmare.",
+      "requirements": {
+        "dungeonId": "dungeon_23",
+        "killCount": 70,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Plant",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 860,
+        "xp": 1670
+      }
+    },
+    {
+      "id": "rogue_dungeon_24_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (Emerald Golems' Garden)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 70 créatures de type Dragonkin dans Emerald Golems' Garden.",
+      "requirements": {
+        "dungeonId": "dungeon_24",
+        "killCount": 70,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Dragonkin",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 860,
+        "xp": 1670
+      }
+    },
+    {
+      "id": "rogue_dungeon_25_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (Cathedral of Eternal Night)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 75 créatures de type Undead dans Cathedral of Eternal Night.",
+      "requirements": {
+        "dungeonId": "dungeon_25",
+        "killCount": 75,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Undead",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 920,
+        "xp": 1790
+      }
+    },
+    {
+      "id": "rogue_dungeon_26_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (Tomb Guardians' Crypt)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 75 créatures de type Aberration dans Tomb Guardians' Crypt.",
+      "requirements": {
+        "dungeonId": "dungeon_26",
+        "killCount": 75,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Aberration",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 920,
+        "xp": 1790
+      }
+    },
+    {
+      "id": "rogue_dungeon_27_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (Glacier's Peak)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 80 créatures de type Giant dans Glacier's Peak.",
+      "requirements": {
+        "dungeonId": "dungeon_27",
+        "killCount": 80,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Giant",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 980,
+        "xp": 1910
+      }
+    },
+    {
+      "id": "rogue_dungeon_28_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (Frost Wyrm's Lair)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 80 créatures de type Elemental dans Frost Wyrm's Lair.",
+      "requirements": {
+        "dungeonId": "dungeon_28",
+        "killCount": 80,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Elemental",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 980,
+        "xp": 1910
+      }
+    },
+    {
+      "id": "rogue_dungeon_29_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (Heart of the Volcano)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 85 créatures de type Demon dans Heart of the Volcano.",
+      "requirements": {
+        "dungeonId": "dungeon_29",
+        "killCount": 85,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Demon",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 1040,
+        "xp": 2030
+      }
+    },
+    {
+      "id": "rogue_dungeon_30_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (Magma Dragon's Roost)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 85 créatures de type Celestial dans Magma Dragon's Roost.",
+      "requirements": {
+        "dungeonId": "dungeon_30",
+        "killCount": 85,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Celestial",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 1040,
+        "xp": 2030
+      }
+    },
+    {
+      "id": "rogue_dungeon_31_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (Throne of the Wilds)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 90 créatures de type Elemental dans Throne of the Wilds.",
+      "requirements": {
+        "dungeonId": "dungeon_31",
+        "killCount": 90,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Elemental",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 1100,
+        "xp": 2150
+      }
+    },
+    {
+      "id": "rogue_dungeon_32_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (World Ash Treant's Grove)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 90 créatures de type Humanoid dans World Ash Treant's Grove.",
+      "requirements": {
+        "dungeonId": "dungeon_32",
+        "killCount": 90,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Humanoid",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 1100,
+        "xp": 2150
+      }
+    },
+    {
+      "id": "rogue_dungeon_33_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (The Void-Corrupted Sanctum)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 95 créatures de type Undead dans The Void-Corrupted Sanctum.",
+      "requirements": {
+        "dungeonId": "dungeon_33",
+        "killCount": 95,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Undead",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 1160,
+        "xp": 2270
+      }
+    },
+    {
+      "id": "rogue_dungeon_34_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (Cthulhu's Herald's Antechamber)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 95 créatures de type Aberration dans Cthulhu's Herald's Antechamber.",
+      "requirements": {
+        "dungeonId": "dungeon_34",
+        "killCount": 95,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Aberration",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 1160,
+        "xp": 2270
+      }
+    },
+    {
+      "id": "rogue_dungeon_35_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (Permafrost Citadel)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 100 créatures de type Dragonkin dans Permafrost Citadel.",
+      "requirements": {
+        "dungeonId": "dungeon_35",
+        "killCount": 100,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Dragonkin",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 1220,
+        "xp": 2390
+      }
+    },
+    {
+      "id": "rogue_dungeon_36_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (Molten Pinnacle)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 100 créatures de type Dragonkin dans Molten Pinnacle.",
+      "requirements": {
+        "dungeonId": "dungeon_36",
+        "killCount": 100,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Dragonkin",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 1220,
+        "xp": 2390
+      }
+    },
+    {
+      "id": "rogue_dungeon_37_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (Heart of the Forest)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 100 créatures de type Plant dans Heart of the Forest.",
+      "requirements": {
+        "dungeonId": "dungeon_37",
+        "killCount": 100,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Plant",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 1280,
+        "xp": 2510
+      }
+    },
+    {
+      "id": "rogue_dungeon_38_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (R'lyeh's Threshold)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 100 créatures de type Aberration dans R'lyeh's Threshold.",
+      "requirements": {
+        "dungeonId": "dungeon_38",
+        "killCount": 100,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Aberration",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 1280,
+        "xp": 2510
+      }
+    },
+    {
+      "id": "rogue_dungeon_39_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (Frozen Throne)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 100 créatures de type Dragonkin dans Frozen Throne.",
+      "requirements": {
+        "dungeonId": "dungeon_39",
+        "killCount": 100,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Dragonkin",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 1340,
+        "xp": 2630
+      }
+    },
+    {
+      "id": "rogue_dungeon_40_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (Inferno's Core)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 100 créatures de type Dragonkin dans Inferno's Core.",
+      "requirements": {
+        "dungeonId": "dungeon_40",
+        "killCount": 100,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Dragonkin",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 1340,
+        "xp": 2630
+      }
+    },
+    {
+      "id": "rogue_dungeon_41_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (Verdant Sanctuary)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 100 créatures de type Plant dans Verdant Sanctuary.",
+      "requirements": {
+        "dungeonId": "dungeon_41",
+        "killCount": 100,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Plant",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 1400,
+        "xp": 2750
+      }
+    },
+    {
+      "id": "rogue_dungeon_42_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (The Sunken City)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 100 créatures de type Aberration dans The Sunken City.",
+      "requirements": {
+        "dungeonId": "dungeon_42",
+        "killCount": 100,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Aberration",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 1400,
+        "xp": 2750
+      }
+    },
+    {
+      "id": "rogue_dungeon_43_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (Icecrown Citadel)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 100 créatures de type Dragonkin dans Icecrown Citadel.",
+      "requirements": {
+        "dungeonId": "dungeon_43",
+        "killCount": 100,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Dragonkin",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 1460,
+        "xp": 2870
+      }
+    },
+    {
+      "id": "rogue_dungeon_44_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (Blackrock Mountain)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 100 créatures de type Dragonkin dans Blackrock Mountain.",
+      "requirements": {
+        "dungeonId": "dungeon_44",
+        "killCount": 100,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Dragonkin",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 1460,
+        "xp": 2870
+      }
+    },
+    {
+      "id": "rogue_dungeon_45_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (The Emerald Dream)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 100 créatures de type Plant dans The Emerald Dream.",
+      "requirements": {
+        "dungeonId": "dungeon_45",
+        "killCount": 100,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Plant",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 1520,
+        "xp": 2990
+      }
+    },
+    {
+      "id": "rogue_dungeon_46_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (Ny'alotha, the Waking City)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 100 créatures de type Aberration dans Ny'alotha, the Waking City.",
+      "requirements": {
+        "dungeonId": "dungeon_46",
+        "killCount": 100,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Aberration",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 1520,
+        "xp": 2990
+      }
+    },
+    {
+      "id": "rogue_dungeon_47_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (The Frozen Halls)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 100 créatures de type Dragonkin dans The Frozen Halls.",
+      "requirements": {
+        "dungeonId": "dungeon_47",
+        "killCount": 100,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Dragonkin",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 1580,
+        "xp": 3110
+      }
+    },
+    {
+      "id": "rogue_dungeon_48_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Attaque sournoise (The Molten Core)",
+      "desc": "Prouvez votre maîtrise de la compétence Attaque sournoise en éliminant 100 créatures de type Dragonkin dans The Molten Core.",
+      "requirements": {
+        "dungeonId": "dungeon_48",
+        "killCount": 100,
+        "skillId": "rogue_sinister_strike",
+        "monsterType": "Dragonkin",
+        "classId": "rogue"
+      },
+      "rewards": {
+        "gold": 1640,
+        "xp": 3230
+      }
+    },
+    {
+      "id": "cleric_dungeon_1_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (Goblin Mines)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 10 créatures de type Goblinoid dans Goblin Mines.",
+      "requirements": {
+        "dungeonId": "dungeon_1",
+        "killCount": 10,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Goblinoid",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 200,
+        "xp": 350
+      }
+    },
+    {
+      "id": "cleric_dungeon_2_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (Bat Cave)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 15 créatures de type Humanoid dans Bat Cave.",
+      "requirements": {
+        "dungeonId": "dungeon_2",
+        "killCount": 15,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Humanoid",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 200,
+        "xp": 350
+      }
+    },
+    {
+      "id": "cleric_dungeon_3_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (Icy Crevasse)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 20 créatures de type Beast dans Icy Crevasse.",
+      "requirements": {
+        "dungeonId": "dungeon_3",
+        "killCount": 20,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Beast",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 260,
+        "xp": 470
+      }
+    },
+    {
+      "id": "cleric_dungeon_4_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (Yeti Den)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 20 créatures de type Elemental dans Yeti Den.",
+      "requirements": {
+        "dungeonId": "dungeon_4",
+        "killCount": 20,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Elemental",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 260,
+        "xp": 470
+      }
+    },
+    {
+      "id": "cleric_dungeon_5_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (Scorched Caverns)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 25 créatures de type Demon dans Scorched Caverns.",
+      "requirements": {
+        "dungeonId": "dungeon_5",
+        "killCount": 25,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Demon",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 320,
+        "xp": 590
+      }
+    },
+    {
+      "id": "cleric_dungeon_6_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (Cinder Chambers)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 25 créatures de type Elemental dans Cinder Chambers.",
+      "requirements": {
+        "dungeonId": "dungeon_6",
+        "killCount": 25,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Elemental",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 320,
+        "xp": 590
+      }
+    },
+    {
+      "id": "cleric_dungeon_7_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (Whispering Woods)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 30 créatures de type Plant dans Whispering Woods.",
+      "requirements": {
+        "dungeonId": "dungeon_7",
+        "killCount": 30,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Plant",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 380,
+        "xp": 710
+      }
+    },
+    {
+      "id": "cleric_dungeon_8_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (Dryad Grove)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 30 créatures de type Beast dans Dryad Grove.",
+      "requirements": {
+        "dungeonId": "dungeon_8",
+        "killCount": 30,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Beast",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 380,
+        "xp": 710
+      }
+    },
+    {
+      "id": "cleric_dungeon_9_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (Forgotten Crypt)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 35 créatures de type Undead dans Forgotten Crypt.",
+      "requirements": {
+        "dungeonId": "dungeon_9",
+        "killCount": 35,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Undead",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 440,
+        "xp": 830
+      }
+    },
+    {
+      "id": "cleric_dungeon_10_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (Void Worshippers' Lair)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 35 créatures de type Aberration dans Void Worshippers' Lair.",
+      "requirements": {
+        "dungeonId": "dungeon_10",
+        "killCount": 35,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Aberration",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 440,
+        "xp": 830
+      }
+    },
+    {
+      "id": "cleric_dungeon_11_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (Glacial Depths)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 40 créatures de type Beast dans Glacial Depths.",
+      "requirements": {
+        "dungeonId": "dungeon_11",
+        "killCount": 40,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Beast",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 500,
+        "xp": 950
+      }
+    },
+    {
+      "id": "cleric_dungeon_12_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (Frozen Berserkers' Hall)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 40 créatures de type Elemental dans Frozen Berserkers' Hall.",
+      "requirements": {
+        "dungeonId": "dungeon_12",
+        "killCount": 40,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Elemental",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 500,
+        "xp": 950
+      }
+    },
+    {
+      "id": "cleric_dungeon_13_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (Volcanic Core)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 45 créatures de type Construct dans Volcanic Core.",
+      "requirements": {
+        "dungeonId": "dungeon_13",
+        "killCount": 45,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Construct",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 560,
+        "xp": 1070
+      }
+    },
+    {
+      "id": "cleric_dungeon_14_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (Fire Giants' Outpost)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 45 créatures de type Beast dans Fire Giants' Outpost.",
+      "requirements": {
+        "dungeonId": "dungeon_14",
+        "killCount": 45,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Beast",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 560,
+        "xp": 1070
+      }
+    },
+    {
+      "id": "cleric_dungeon_15_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (Verdant Labyrinth)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 50 créatures de type Plant dans Verdant Labyrinth.",
+      "requirements": {
+        "dungeonId": "dungeon_15",
+        "killCount": 50,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Plant",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 620,
+        "xp": 1190
+      }
+    },
+    {
+      "id": "cleric_dungeon_16_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (Sylvan Guardians' Domain)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 50 créatures de type Plant dans Sylvan Guardians' Domain.",
+      "requirements": {
+        "dungeonId": "dungeon_16",
+        "killCount": 50,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Plant",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 620,
+        "xp": 1190
+      }
+    },
+    {
+      "id": "cleric_dungeon_17_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (Shadowy Necropolis)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 55 créatures de type Undead dans Shadowy Necropolis.",
+      "requirements": {
+        "dungeonId": "dungeon_17",
+        "killCount": 55,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Undead",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 680,
+        "xp": 1310
+      }
+    },
+    {
+      "id": "cleric_dungeon_18_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (Specters' Sanctuary)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 55 créatures de type Aberration dans Specters' Sanctuary.",
+      "requirements": {
+        "dungeonId": "dungeon_18",
+        "killCount": 55,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Aberration",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 680,
+        "xp": 1310
+      }
+    },
+    {
+      "id": "cleric_dungeon_19_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (Frozen Wastes)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 60 créatures de type Giant dans Frozen Wastes.",
+      "requirements": {
+        "dungeonId": "dungeon_19",
+        "killCount": 60,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Giant",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 740,
+        "xp": 1430
+      }
+    },
+    {
+      "id": "cleric_dungeon_20_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (Boreal Knights' Fortress)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 60 créatures de type Dragonkin dans Boreal Knights' Fortress.",
+      "requirements": {
+        "dungeonId": "dungeon_20",
+        "killCount": 60,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Dragonkin",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 740,
+        "xp": 1430
+      }
+    },
+    {
+      "id": "cleric_dungeon_21_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (Infernal Forge)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 65 créatures de type Demon dans Infernal Forge.",
+      "requirements": {
+        "dungeonId": "dungeon_21",
+        "killCount": 65,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Demon",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 800,
+        "xp": 1550
+      }
+    },
+    {
+      "id": "cleric_dungeon_22_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (Ash Harpies' Nest)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 65 créatures de type Dragonkin dans Ash Harpies' Nest.",
+      "requirements": {
+        "dungeonId": "dungeon_22",
+        "killCount": 65,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Dragonkin",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 800,
+        "xp": 1550
+      }
+    },
+    {
+      "id": "cleric_dungeon_23_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (Emerald Nightmare)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 70 créatures de type Plant dans Emerald Nightmare.",
+      "requirements": {
+        "dungeonId": "dungeon_23",
+        "killCount": 70,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Plant",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 860,
+        "xp": 1670
+      }
+    },
+    {
+      "id": "cleric_dungeon_24_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (Emerald Golems' Garden)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 70 créatures de type Dragonkin dans Emerald Golems' Garden.",
+      "requirements": {
+        "dungeonId": "dungeon_24",
+        "killCount": 70,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Dragonkin",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 860,
+        "xp": 1670
+      }
+    },
+    {
+      "id": "cleric_dungeon_25_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (Cathedral of Eternal Night)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 75 créatures de type Undead dans Cathedral of Eternal Night.",
+      "requirements": {
+        "dungeonId": "dungeon_25",
+        "killCount": 75,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Undead",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 920,
+        "xp": 1790
+      }
+    },
+    {
+      "id": "cleric_dungeon_26_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (Tomb Guardians' Crypt)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 75 créatures de type Aberration dans Tomb Guardians' Crypt.",
+      "requirements": {
+        "dungeonId": "dungeon_26",
+        "killCount": 75,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Aberration",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 920,
+        "xp": 1790
+      }
+    },
+    {
+      "id": "cleric_dungeon_27_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (Glacier's Peak)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 80 créatures de type Giant dans Glacier's Peak.",
+      "requirements": {
+        "dungeonId": "dungeon_27",
+        "killCount": 80,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Giant",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 980,
+        "xp": 1910
+      }
+    },
+    {
+      "id": "cleric_dungeon_28_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (Frost Wyrm's Lair)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 80 créatures de type Elemental dans Frost Wyrm's Lair.",
+      "requirements": {
+        "dungeonId": "dungeon_28",
+        "killCount": 80,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Elemental",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 980,
+        "xp": 1910
+      }
+    },
+    {
+      "id": "cleric_dungeon_29_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (Heart of the Volcano)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 85 créatures de type Demon dans Heart of the Volcano.",
+      "requirements": {
+        "dungeonId": "dungeon_29",
+        "killCount": 85,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Demon",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 1040,
+        "xp": 2030
+      }
+    },
+    {
+      "id": "cleric_dungeon_30_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (Magma Dragon's Roost)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 85 créatures de type Celestial dans Magma Dragon's Roost.",
+      "requirements": {
+        "dungeonId": "dungeon_30",
+        "killCount": 85,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Celestial",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 1040,
+        "xp": 2030
+      }
+    },
+    {
+      "id": "cleric_dungeon_31_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (Throne of the Wilds)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 90 créatures de type Elemental dans Throne of the Wilds.",
+      "requirements": {
+        "dungeonId": "dungeon_31",
+        "killCount": 90,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Elemental",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 1100,
+        "xp": 2150
+      }
+    },
+    {
+      "id": "cleric_dungeon_32_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (World Ash Treant's Grove)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 90 créatures de type Humanoid dans World Ash Treant's Grove.",
+      "requirements": {
+        "dungeonId": "dungeon_32",
+        "killCount": 90,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Humanoid",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 1100,
+        "xp": 2150
+      }
+    },
+    {
+      "id": "cleric_dungeon_33_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (The Void-Corrupted Sanctum)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 95 créatures de type Undead dans The Void-Corrupted Sanctum.",
+      "requirements": {
+        "dungeonId": "dungeon_33",
+        "killCount": 95,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Undead",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 1160,
+        "xp": 2270
+      }
+    },
+    {
+      "id": "cleric_dungeon_34_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (Cthulhu's Herald's Antechamber)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 95 créatures de type Aberration dans Cthulhu's Herald's Antechamber.",
+      "requirements": {
+        "dungeonId": "dungeon_34",
+        "killCount": 95,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Aberration",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 1160,
+        "xp": 2270
+      }
+    },
+    {
+      "id": "cleric_dungeon_35_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (Permafrost Citadel)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 100 créatures de type Dragonkin dans Permafrost Citadel.",
+      "requirements": {
+        "dungeonId": "dungeon_35",
+        "killCount": 100,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Dragonkin",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 1220,
+        "xp": 2390
+      }
+    },
+    {
+      "id": "cleric_dungeon_36_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (Molten Pinnacle)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 100 créatures de type Dragonkin dans Molten Pinnacle.",
+      "requirements": {
+        "dungeonId": "dungeon_36",
+        "killCount": 100,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Dragonkin",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 1220,
+        "xp": 2390
+      }
+    },
+    {
+      "id": "cleric_dungeon_37_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (Heart of the Forest)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 100 créatures de type Plant dans Heart of the Forest.",
+      "requirements": {
+        "dungeonId": "dungeon_37",
+        "killCount": 100,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Plant",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 1280,
+        "xp": 2510
+      }
+    },
+    {
+      "id": "cleric_dungeon_38_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (R'lyeh's Threshold)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 100 créatures de type Aberration dans R'lyeh's Threshold.",
+      "requirements": {
+        "dungeonId": "dungeon_38",
+        "killCount": 100,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Aberration",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 1280,
+        "xp": 2510
+      }
+    },
+    {
+      "id": "cleric_dungeon_39_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (Frozen Throne)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 100 créatures de type Dragonkin dans Frozen Throne.",
+      "requirements": {
+        "dungeonId": "dungeon_39",
+        "killCount": 100,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Dragonkin",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 1340,
+        "xp": 2630
+      }
+    },
+    {
+      "id": "cleric_dungeon_40_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (Inferno's Core)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 100 créatures de type Dragonkin dans Inferno's Core.",
+      "requirements": {
+        "dungeonId": "dungeon_40",
+        "killCount": 100,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Dragonkin",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 1340,
+        "xp": 2630
+      }
+    },
+    {
+      "id": "cleric_dungeon_41_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (Verdant Sanctuary)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 100 créatures de type Plant dans Verdant Sanctuary.",
+      "requirements": {
+        "dungeonId": "dungeon_41",
+        "killCount": 100,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Plant",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 1400,
+        "xp": 2750
+      }
+    },
+    {
+      "id": "cleric_dungeon_42_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (The Sunken City)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 100 créatures de type Aberration dans The Sunken City.",
+      "requirements": {
+        "dungeonId": "dungeon_42",
+        "killCount": 100,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Aberration",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 1400,
+        "xp": 2750
+      }
+    },
+    {
+      "id": "cleric_dungeon_43_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (Icecrown Citadel)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 100 créatures de type Dragonkin dans Icecrown Citadel.",
+      "requirements": {
+        "dungeonId": "dungeon_43",
+        "killCount": 100,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Dragonkin",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 1460,
+        "xp": 2870
+      }
+    },
+    {
+      "id": "cleric_dungeon_44_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (Blackrock Mountain)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 100 créatures de type Dragonkin dans Blackrock Mountain.",
+      "requirements": {
+        "dungeonId": "dungeon_44",
+        "killCount": 100,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Dragonkin",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 1460,
+        "xp": 2870
+      }
+    },
+    {
+      "id": "cleric_dungeon_45_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (The Emerald Dream)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 100 créatures de type Plant dans The Emerald Dream.",
+      "requirements": {
+        "dungeonId": "dungeon_45",
+        "killCount": 100,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Plant",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 1520,
+        "xp": 2990
+      }
+    },
+    {
+      "id": "cleric_dungeon_46_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (Ny'alotha, the Waking City)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 100 créatures de type Aberration dans Ny'alotha, the Waking City.",
+      "requirements": {
+        "dungeonId": "dungeon_46",
+        "killCount": 100,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Aberration",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 1520,
+        "xp": 2990
+      }
+    },
+    {
+      "id": "cleric_dungeon_47_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (The Frozen Halls)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 100 créatures de type Dragonkin dans The Frozen Halls.",
+      "requirements": {
+        "dungeonId": "dungeon_47",
+        "killCount": 100,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Dragonkin",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 1580,
+        "xp": 3110
+      }
+    },
+    {
+      "id": "cleric_dungeon_48_q_skill",
+      "type": "defi",
+      "name": "Maîtrise de Châtiment (The Molten Core)",
+      "desc": "Prouvez votre maîtrise de la compétence Châtiment en éliminant 100 créatures de type Dragonkin dans The Molten Core.",
+      "requirements": {
+        "dungeonId": "dungeon_48",
+        "killCount": 100,
+        "skillId": "cleric_shadow_smite",
+        "monsterType": "Dragonkin",
+        "classId": "cleric"
+      },
+      "rewards": {
+        "gold": 1640,
+        "xp": 3230
+      }
     }
   ]
 }

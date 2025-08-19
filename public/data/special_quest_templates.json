@@ -1,0 +1,65 @@
+[
+  {
+    "id": "dungeon_1_q_boss",
+    "type": "chasse_boss",
+    "name": "Le Chef des Mineurs",
+    "desc": "Un mineur Kobold particulièrement tenace dirige les opérations dans les mines. Mettez fin à son règne.",
+    "requirements": {
+      "dungeonId": "dungeon_1",
+      "bossId": "kobold_miner"
+    },
+    "rewards": {
+      "gold": 150,
+      "xp": 250
+    }
+  },
+  {
+    "id": "dungeon_2_q_collect",
+    "type": "collecte",
+    "name": "Composants de Chauve-souris",
+    "desc": "Un alchimiste local a besoin de crocs de chauve-souris pour une potion. Récupérez-en dans la Caverne des Chauves-souris.",
+    "requirements": {
+      "dungeonId": "dungeon_2",
+      "itemId": "bat_fang",
+      "itemCount": 10
+    },
+    "rewards": {
+      "gold": 120,
+      "xp": 180
+    }
+  },
+  {
+    "id": "dungeon_3_q_challenge",
+    "type": "defi",
+    "name": "Défi de Vitesse : Crevasse Glacée",
+    "desc": "Traversez la Crevasse Glacée à toute vitesse. Terminez le donjon en moins de 5 minutes.",
+    "requirements": {
+      "dungeonId": "dungeon_3",
+      "timeLimit": 300
+    },
+    "rewards": {
+      "gold": 300,
+      "xp": 500,
+      "reputation": {
+        "factionId": "silver_guardians",
+        "amount": 50
+      }
+    }
+  },
+  {
+    "id": "berserker_skill_challenge_1",
+    "type": "defi",
+    "name": "Fureur du Berserker",
+    "desc": "Prouvez votre maîtrise de la Frappe Héroïque en éliminant 15 créatures dans les Mines des Gobelins en l'utilisant.",
+    "requirements": {
+      "dungeonId": "dungeon_1",
+      "killCount": 15,
+      "skillId": "berserker_heroic_strike",
+      "monsterType": "Goblinoid"
+    },
+    "rewards": {
+      "gold": 200,
+      "xp": 350
+    }
+  }
+]
