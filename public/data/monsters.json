@@ -41,10 +41,29 @@
         },
         {
             "id": "kobold_miner",
-            "nom": "Kobold Miner",
+            "nom": "Kobold Miner SUPERVISOR", 
+            "famille": "Humanoid",
+            "level": 3, 
+            "isBoss": true,
+            "palier": 1,            
+            "stats": {
+                "PV": 150, 
+                "AttMin": 12, 
+                "AttMax": 18,
+                "CritPct": 10,
+                "CritDmg": 150,
+                "Armure": 50, 
+                "Vitesse": 2.5,
+                "Precision": 65,
+                "Esquive": 5
+            }
+        },
+        {
+            "id": "kobold_miner_assistant",
+            "nom": "Kobold Miner assistant",
             "level": 2,
             "famille": "Humanoid",
-            "isBoss": true,
+            "isBoss": false,
             "palier": 1,
             "stats": {
                 "PV": 40,

@@ -61,14 +61,16 @@ interface GameState {
   lastPlayed: number | null;
   view: 'TOWN' | 'COMBAT';
   currentDungeon: Dungeon | null;
-  dungeonStartTime: number | null; // NOUVEAU: Pour suivre le temps dans les donjons
+  dungeonStartTime: number | null;
   gameData: GameData;
   player: PlayerState;
   inventory: InventoryState;
   combat: CombatState;
   activeQuests: ActiveQuete[];
   proposedQuest: Quete | null;
+  bossEncounter: Monstre | null; // NOUVEAU: Pour l'alerte d'apparition du boss
 
+  setBossEncounter: (monster: Monstre | null) => void; // NOUVEAU: Action pour gérer l'alerte
   setProposedQuest: (quest: Quete | null) => void;
   initializeGameData: (data: Partial<GameData>) => void;
   setPlayerClass: (classId: PlayerClassId) => void;
@@ -95,10 +97,10 @@ interface GameState {
   enterDungeon: (dungeonId: string) => void;
   startCombat: () => void;
   gameTick: (delta: number) => void;
-  playerAttack: (targetId: string, isCleave?: boolean, skillId?: string) => void; // MODIFIÉ
+  playerAttack: (targetId: string, isCleave?: boolean, skillId?: string) => void;
   useSkill: (skillId: string) => void;
   enemyAttacks: () => void;
-  handleEnemyDeath: (enemy: CombatEnemy, skillId?: string) => void; // MODIFIÉ
+  handleEnemyDeath: (enemy: CombatEnemy, skillId?: string) => void;
   cycleTarget: () => void;
   flee: () => void;
   toggleAutoAttack: () => void;
@@ -112,23 +114,20 @@ const rarityDropChances: Record<Rareté, number> = {
   Rare: 0.25,
   Épique: 0.04,
   Légendaire: 0.01,
-  Unique: 0.0, // Uniques are special drops
+  Unique: 0.0,
 };
 
 const scaleAffixValue = (baseValue: number, level: number): number => {
-    // A more pronounced scaling factor for level
     return Math.round(baseValue + (baseValue * level * 0.15));
 };
 
 const resolveLoot = (monster: Monstre, gameData: GameData, playerClassId: PlayerClassId | null, activeQuests: ActiveQuete[]): Item | null => {
-  // NOUVEAU: Vérifier si un objet de quête doit être lâché
   for (const activeQuest of activeQuests) {
     const { quete } = activeQuest;
     if (quete.type === 'collecte' && quete.requirements.itemId && monster.questItemId === quete.requirements.itemId) {
       if ((activeQuest.progress || 0) < (quete.requirements.itemCount || 0)) {
         const questItem = gameData.items.find(item => item.id === quete.requirements.itemId);
         if (questItem) {
-          // 30% de chance de drop pour l'objet de quête
           if (Math.random() < 0.3) {
             return { ...questItem, id: uuidv4() };
           }
@@ -137,7 +136,6 @@ const resolveLoot = (monster: Monstre, gameData: GameData, playerClassId: Player
     }
   }
 
-  // Set item drop check
   if (Math.random() < 0.02) {
     const possibleSetItems = gameData.items.filter(item =>
       item.set &&
@@ -163,8 +161,7 @@ const resolveLoot = (monster: Monstre, gameData: GameData, playerClassId: Player
     }
   }
 
-  // Regular item drop
-  if (Math.random() > 0.5) { // 50% chance to drop anything
+  if (Math.random() > 0.5) {
     return null;
   }
 
@@ -222,7 +219,7 @@ const getTalentEffectValue = (effect: string, rank: number): number => {
 
 export const getItemSellPrice = (item: Item): number => {
     if (item.vendorPrice) {
-        return Math.floor(item.vendorPrice / 4); // Sell for 25% of buy price
+        return Math.floor(item.vendorPrice / 4);
     }
     const rarityMultiplier: Record<Rareté, number> = {
         Commun: 1,
@@ -247,11 +244,10 @@ export const calculateItemScore = (item: Item, classId: PlayerClassId): number =
 
     item.affixes.forEach(affix => {
         const statKey = affix.ref as keyof Stats;
-        const weight = weights[statKey] || 0.1; // Give a small weight to unknown stats
+        const weight = weights[statKey] || 0.1;
         score += affix.val * weight;
     });
 
-    // Also consider base stats on the item if they exist
     if (item.stats) {
         Object.entries(item.stats).forEach(([key, value]) => {
             const statKey = key as keyof Stats;
@@ -265,7 +261,6 @@ export const calculateItemScore = (item: Item, classId: PlayerClassId): number =
     return score;
 }
 
-// Define a dummy storage for SSR
 const dummyStorage: StateStorage = {
   getItem: () => null,
   setItem: () => {},
@@ -291,6 +286,12 @@ export const useGameStore = create<GameState>()(
       combat: initialCombatState,
       activeQuests: [],
       proposedQuest: null,
+      bossEncounter: null, // NOUVEAU: Initialisation de l'état du boss
+
+      // NOUVEAU: Implémentation de l'action pour le boss
+      setBossEncounter: (monster) => {
+        set({ bossEncounter: monster });
+      },
 
       setProposedQuest: (quest) => {
         set({ proposedQuest: quest });
@@ -323,7 +324,6 @@ export const useGameStore = create<GameState>()(
             const chosenClass = state.gameData.classes.find(c => c.id === classId);
             if (!chosenClass) return;
 
-            // Full Reset
             state.player = getInitialPlayerState();
             state.inventory = initialInventoryState;
             state.combat = initialCombatState;
@@ -393,7 +393,6 @@ export const useGameStore = create<GameState>()(
                   Object.entries(setInfo.bonuses).forEach(([bonusCount, effect]) => {
                       if (count >= parseInt(bonusCount, 10)) {
                           player.activeSetBonuses.push(effect);
-                          // TODO: Apply direct stats from set bonus here
                       }
                   });
               }
@@ -437,9 +436,7 @@ export const useGameStore = create<GameState>()(
           } else {
              player.resources.max = 100;
           }
-
-          // This ensures that after any stat change, if the player is not in combat, their HP is full.
-          // It also handles the initial character creation case.
+          
           const currentHp = player.stats.PV;
           if (state.view !== 'COMBAT' || currentHp <= 0 || currentHp > maxHp) {
             player.stats.PV = maxHp;
@@ -668,7 +665,6 @@ export const useGameStore = create<GameState>()(
             const questToAccept = state.gameData.quests.find(q => q.id === questId);
             if (!questToAccept) return;
 
-            // Check if already active or completed
             if (state.activeQuests.some(q => q.quete.id === questId) || state.player.completedQuests.includes(questId)) {
                 return;
             }
@@ -685,17 +681,22 @@ export const useGameStore = create<GameState>()(
       enterDungeon: (dungeonId: string) => {
         const { gameData, player, activeQuests } = get();
 
-        // Check for available quests that are not completed or active
         const availableQuestsForDungeon = gameData.quests.filter(q =>
             q.requirements.dungeonId === dungeonId &&
             !player.completedQuests.includes(q.id) &&
             !activeQuests.some(aq => aq.quete.id === q.id)
         );
         
-        // Find the first available quest in the series
         const firstAvailableQuest = availableQuestsForDungeon.find(q => {
             const questIdParts = q.id.split('_q');
-            if (questIdParts.length < 2) return true; // Non-chained quests
+            if (questIdParts.length < 2 || isNaN(parseInt(questIdParts[1], 10))) {
+              if (q.id.includes('_q_boss')) {
+                  const questPrefix = q.id.substring(0, q.id.indexOf('_q_boss'));
+                  const lastNumberedQuestId = `${questPrefix}_q5`;
+                  return player.completedQuests.includes(lastNumberedQuestId);
+              }
+              return true;
+            }
             const questNum = parseInt(questIdParts[1], 10);
             if (questNum === 1) return true;
             const questPrefix = questIdParts[0];
@@ -705,10 +706,9 @@ export const useGameStore = create<GameState>()(
 
         if (firstAvailableQuest) {
             get().setProposedQuest(firstAvailableQuest);
-            return; // Stop here, let the UI handle the dialog
+            return;
         }
 
-        // If no quest is proposed, enter directly
         const dungeon = gameData.dungeons.find(d => d.id === dungeonId);
         if (dungeon) {
           set((state: GameState) => {
@@ -731,7 +731,7 @@ export const useGameStore = create<GameState>()(
         if (!currentDungeon) return;
 
         const possibleMonsters = gameData.monsters.filter(m => currentDungeon.monsters.includes(m.id) && !m.isBoss);
-        const monsterCount = Math.floor(Math.random() * 3) + 1; // 1 to 3 monsters
+        const monsterCount = Math.floor(Math.random() * 3) + 1;
         const newEnemies: CombatEnemy[] = [];
 
         for(let i=0; i<monsterCount; i++) {
@@ -739,9 +739,9 @@ export const useGameStore = create<GameState>()(
           if (randomMonsterTemplate) {
             const monsterInstance: CombatEnemy = {
               ...JSON.parse(JSON.stringify(randomMonsterTemplate)),
-              id: uuidv4(), // Unique ID for this instance
+              id: uuidv4(),
               initialHp: randomMonsterTemplate.stats.PV,
-              attackProgress: Math.random() // Stagger initial attacks
+              attackProgress: Math.random()
             };
             newEnemies.push(monsterInstance);
           }
@@ -767,14 +767,12 @@ export const useGameStore = create<GameState>()(
           }
 
           set((state: GameState) => {
-              // Réinitialise l'attaque si plus de cibles valides
               const livingEnemies = state.combat.enemies.filter(e => e.stats.PV > 0);
               if (livingEnemies.length === 0) {
                   state.combat.playerAttackProgress = 0;
                   return;
               }
 
-              // Progression de l'attaque automatique
               if (state.combat.autoAttack) {
                   state.combat.playerAttackProgress += delta / state.combat.playerAttackInterval;
                   if (state.combat.playerAttackProgress > 1) {
@@ -782,16 +780,14 @@ export const useGameStore = create<GameState>()(
                   }
               }
 
-              // Régénération passive des ressources par seconde
               if (state.player.resources.type === 'Énergie') {
-                  const energyPerSecond = 20; // Régénère 20 énergie par seconde
+                  const energyPerSecond = 20;
                   state.player.resources.current = Math.min(state.player.resources.max, state.player.resources.current + (energyPerSecond * (delta / 1000)));
               } else if (state.player.resources.type === 'Mana') {
-                  const manaPerSecond = 10; // Régénère 10 mana par seconde
+                  const manaPerSecond = 10;
                   state.player.resources.current = Math.min(state.player.resources.max, state.player.resources.current + (manaPerSecond * (delta / 1000)));
               }
 
-              // Cooldowns des compétences
               for (const skillId in state.combat.skillCooldowns) {
                   state.combat.skillCooldowns[skillId] -= delta;
                   if (state.combat.skillCooldowns[skillId] <= 0) {
@@ -799,7 +795,6 @@ export const useGameStore = create<GameState>()(
                   }
               }
 
-              // Progression de l'attaque des ennemis
               state.combat.enemies.forEach(enemy => {
                   if(enemy.stats.PV > 0) {
                     const attackInterval = enemy.stats.Vitesse * 1000;
@@ -815,11 +810,9 @@ export const useGameStore = create<GameState>()(
           const updatedState = get();
           if (updatedState.combat.autoAttack && updatedState.combat.playerAttackProgress >= 1 && updatedState.combat.enemies.some(e => e.stats.PV > 0)) {
               const target = updatedState.combat.enemies[updatedState.combat.targetIndex];
-              // Vérification finale avant d'attaquer
               if(target && target.stats.PV > 0) {
                 get().playerAttack(target.id);
               } else {
-                // La cible est morte, on trouve une nouvelle cible
                 get().cycleTarget();
               }
           }
@@ -912,7 +905,6 @@ export const useGameStore = create<GameState>()(
             player.resources.current -= resourceCost;
             combat.skillCooldowns[skillId] = (skill.cooldown || 0) * 1000;
 
-            // Réinitialise la progression de l'attaque auto après une compétence
             state.combat.playerAttackProgress = 0;
 
             const isAoE = skill.effets.join(' ').includes("tous les ennemis") || skill.effets.join(' ').includes("ennemis proches");
@@ -938,7 +930,7 @@ export const useGameStore = create<GameState>()(
                  if(skill.id === 'berserker_execute') {
                     const hpPercent = (currentTarget.stats.PV / currentTarget.initialHp) * 100;
                     if(hpPercent < 20) {
-                        damage *= 3; // Triple damage on low hp targets
+                        damage *= 3;
                     }
                 }
 
@@ -1073,7 +1065,6 @@ export const useGameStore = create<GameState>()(
                   activeQuest.progress++;
                   progressMade = true;
               } else if (quete.type === 'collecte' && req.dungeonId === currentDungeon?.id) {
-                  // Simulating a 30% drop chance for the quest item
                   if (Math.random() < 0.3) {
                       activeQuest.progress++;
                       progressMade = true;
@@ -1134,7 +1125,6 @@ export const useGameStore = create<GameState>()(
                 if (currentDungeon) {
                     const bossHasBeenDefeated = get().combat.enemies.some(e => e.isBoss && e.stats.PV <= 0);
 
-                    // Si le boss a été vaincu, on termine le donjon
                     if (bossHasBeenDefeated) {
                         set((state: GameState) => {
                             state.player.completedDungeons[currentDungeon.id] = (state.player.completedDungeons[currentDungeon.id] || 0) + 1;
@@ -1145,7 +1135,7 @@ export const useGameStore = create<GameState>()(
                               if (quete.type === 'nettoyage' && quete.requirements.dungeonId === currentDungeon.id) {
                                 activeQuest.progress = state.player.completedDungeons[currentDungeon.id];
                               } else if (quete.type === 'defi' && quete.requirements.timeLimit && dungeonDuration <= quete.requirements.timeLimit) {
-                                activeQuest.progress = 1; // Marquer comme complété
+                                activeQuest.progress = 1;
                               }
 
                               const target = quete.requirements.clearCount || (quete.requirements.timeLimit ? 1 : 0);
@@ -1189,16 +1179,19 @@ export const useGameStore = create<GameState>()(
                         });
                         if(gameLoop) clearInterval(gameLoop);
                     } else if (get().combat.killCount >= currentDungeon.killTarget) {
-                        // On a atteint le nombre de mobs, on fait apparaître le boss
                         const bossTemplate = gameData.monsters.find(m => m.id === currentDungeon.bossId);
                         if (bossTemplate) {
                             const bossInstance: CombatEnemy = {
                                 ...JSON.parse(JSON.stringify(bossTemplate)),
-                                id: uuidv4(),
+                                // id: uuidv4(), // CORRECTION: Ligne supprimée pour corriger le bug de la quête
                                 initialHp: bossTemplate.stats.PV,
                                 attackProgress: 0,
                                 isBoss: true
                             };
+                            
+                            // NOUVEAU: Déclencher l'état de rencontre avec le boss
+                            get().setBossEncounter(bossTemplate);
+
                             set((state: GameState) => {
                                 state.combat.enemies = [bossInstance];
                                 state.combat.targetIndex = 0;
@@ -1206,7 +1199,6 @@ export const useGameStore = create<GameState>()(
                             });
                         }
                     } else {
-                        // Sinon, on continue avec un autre groupe de mobs
                         get().startCombat();
                     }
                 }
@@ -1257,7 +1249,6 @@ export const useGameStore = create<GameState>()(
             state.rehydrateComplete = true;
             state.view = 'TOWN';
             state.combat = initialCombatState;
-            // Sanitize state on load to prevent issues with old save structures
             state.player.learnedTalents = state.player.learnedTalents || {};
             state.player.reputation = state.player.reputation || {};
             state.player.completedQuests = Array.isArray(state.player.completedQuests) ? state.player.completedQuests : [];

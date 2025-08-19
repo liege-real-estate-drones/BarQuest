@@ -5,11 +5,20 @@ import { CombatLog } from './components/CombatLog';
 import EntityDisplay from './components/EntityDisplay';
 import { useEffect, useMemo } from 'react';
 import { ArrowLeft } from 'lucide-react';
-import { Progress } from '@/components/ui/progress';
 import { ActionStrip } from './components/ActionStrip';
 import type { Skill } from '@/lib/types';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { DungeonInfo } from './components/DungeonInfo';
+// AMÉLIORATION: Import des composants pour la boîte de dialogue
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogAction,
+} from '@/components/ui/alert-dialog';
 
 export function CombatView() {
   const {
@@ -23,12 +32,12 @@ export function CombatView() {
     gameData,
     cycleTarget,
     targetIndex,
-    playerAttackProgress
+    bossEncounter, // NOUVEAU: Récupération de l'état du boss
+    setBossEncounter, // NOUVEAU: Récupération de l'action pour le boss
   } = useGameStore((state) => ({
     player: state.player,
     enemies: state.combat.enemies,
     flee: state.flee,
-    playerAttackProgress: state.combat.playerAttackProgress,
     startCombat: state.startCombat,
     combatLog: state.combat.log,
     currentDungeon: state.currentDungeon,
@@ -36,6 +45,8 @@ export function CombatView() {
     gameData: state.gameData,
     cycleTarget: state.cycleTarget,
     targetIndex: state.combat.targetIndex,
+    bossEncounter: state.bossEncounter, // NOUVEAU
+    setBossEncounter: state.setBossEncounter, // NOUVEAU
   }));
 
   const equippedSkills = useMemo(() => {
@@ -102,6 +113,23 @@ export function CombatView() {
           onCycleTarget={handleCycleTarget}
         />
       </footer>
+
+      {/* AMÉLIORATION: Boîte de dialogue pour l'apparition du boss */}
+      <AlertDialog open={!!bossEncounter} onOpenChange={() => setBossEncounter(null)}>
+        <AlertDialogContent>
+            <AlertDialogHeader>
+                <AlertDialogTitle className="text-destructive text-2xl">
+                    {bossEncounter?.nom} apparaît !
+                </AlertDialogTitle>
+                <AlertDialogDescription>
+                    Préparez-vous au combat ! Le gardien de ce donjon est là.
+                </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+                <AlertDialogAction onClick={() => setBossEncounter(null)}>Combattre !</AlertDialogAction>
+            </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

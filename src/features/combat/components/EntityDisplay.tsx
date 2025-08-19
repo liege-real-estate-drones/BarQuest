@@ -1,4 +1,3 @@
-
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -64,7 +63,9 @@ export default function EntityDisplay({ entity, isPlayer = false, isTarget = fal
     <Card 
         className={cn("flex flex-col bg-card/50 transition-all border-2 border-transparent cursor-pointer", 
             isPlayer && "border-green-500/30",
-            isTarget && "border-primary shadow-lg shadow-primary/20"
+            isTarget && "border-primary shadow-lg shadow-primary/20",
+            // AMÉLIORATION: Ajoute un style distinctif pour le boss
+            (entity as CombatEnemy).isBoss && "border-destructive shadow-lg shadow-destructive/40"
         )}
         onClick={() => setShowStats(!showStats)}
     >
