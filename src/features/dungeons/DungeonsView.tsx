@@ -33,7 +33,7 @@ export function DungeonsView() {
   }
 
   const handleAcceptQuestAndEnter = () => {
-    if (proposedQuest) {
+    if (proposedQuest && proposedQuest.requirements.dungeonId) {
       acceptQuest(proposedQuest.id);
       handleEnterDungeon(proposedQuest.requirements.dungeonId);
       setProposedQuest(null);
@@ -41,7 +41,7 @@ export function DungeonsView() {
   };
 
   const handleDeclineQuestAndEnter = () => {
-    if (proposedQuest) {
+    if (proposedQuest && proposedQuest.requirements.dungeonId) {
       handleEnterDungeon(proposedQuest.requirements.dungeonId);
       setProposedQuest(null);
     }

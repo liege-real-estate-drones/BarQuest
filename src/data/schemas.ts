@@ -1,4 +1,4 @@
-
+// src/data/schemas.ts
 
 import { z } from "zod";
 
@@ -107,13 +107,19 @@ export const DungeonSchema = z.object({
 
 export const QueteSchema = z.object({
   id: z.string(),
-  type: z.enum(["chasse", "nettoyage"]),
+  type: z.enum(["chasse", "nettoyage", "chasse_boss", "collecte", "defi"]),
   name: z.string(),
   desc: z.string(),
   requirements: z.object({
-    dungeonId: z.string(),
+    dungeonId: z.string().optional(),
     killCount: z.number().int().optional(),
     clearCount: z.number().int().optional(),
+    bossId: z.string().optional(),
+    itemId: z.string().optional(),
+    itemCount: z.number().int().optional(),
+    timeLimit: z.number().int().optional(), // en secondes
+    skillId: z.string().optional(),
+    monsterType: z.string().optional()
   }),
   rewards: z.object({
     gold: z.number().int(),
@@ -124,6 +130,7 @@ export const QueteSchema = z.object({
     }).optional(),
   }),
 });
+
 
 export const FactionRankSchema = z.object({
   name: z.string(),

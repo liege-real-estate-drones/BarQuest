@@ -8,6 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 export interface ActiveQuete {
   quete: Quete;
   progress: number;
+  startTime?: number; // Pour les quêtes de temps
 }
 
 const getInitialPlayerState = (): PlayerState => {
@@ -60,6 +61,7 @@ interface GameState {
   lastPlayed: number | null;
   view: 'TOWN' | 'COMBAT';
   currentDungeon: Dungeon | null;
+  dungeonStartTime: number | null; // NOUVEAU: Pour suivre le temps dans les donjons
   gameData: GameData;
   player: PlayerState;
   inventory: InventoryState;
@@ -93,10 +95,10 @@ interface GameState {
   enterDungeon: (dungeonId: string) => void;
   startCombat: () => void;
   gameTick: (delta: number) => void;
-  playerAttack: (targetId: string, isCleave?: boolean) => void;
+  playerAttack: (targetId: string, isCleave?: boolean, skillId?: string) => void; // MODIFIÉ
   useSkill: (skillId: string) => void;
   enemyAttacks: () => void;
-  handleEnemyDeath: (enemyId: string) => void;
+  handleEnemyDeath: (enemy: CombatEnemy, skillId?: string) => void; // MODIFIÉ
   cycleTarget: () => void;
   flee: () => void;
   toggleAutoAttack: () => void;
@@ -266,6 +268,7 @@ export const useGameStore = create<GameState>()(
       lastPlayed: null,
       view: 'TOWN',
       currentDungeon: null,
+      dungeonStartTime: null,
       gameData: { dungeons: [], monsters: [], items: [], talents: [], skills: [], affixes: [], classes: [], quests: [], factions: [], sets: [] },
       player: getInitialPlayerState(),
       inventory: initialInventoryState,
@@ -653,8 +656,13 @@ export const useGameStore = create<GameState>()(
             if (state.activeQuests.some(q => q.quete.id === questId) || state.player.completedQuests.includes(questId)) {
                 return;
             }
+            
+            const newActiveQuest: ActiveQuete = { quete: questToAccept, progress: 0 };
+            if (questToAccept.type === 'defi' && questToAccept.requirements.timeLimit) {
+                newActiveQuest.startTime = Date.now();
+            }
 
-            state.activeQuests.push({ quete: questToAccept, progress: 0 });
+            state.activeQuests.push(newActiveQuest);
         });
       },
 
@@ -671,7 +679,7 @@ export const useGameStore = create<GameState>()(
         // Find the first available quest in the series
         const firstAvailableQuest = availableQuestsForDungeon.find(q => {
             const questIdParts = q.id.split('_q');
-            if (questIdParts.length < 2) return false;
+            if (questIdParts.length < 2) return true; // Non-chained quests
             const questNum = parseInt(questIdParts[1], 10);
             if (questNum === 1) return true;
             const questPrefix = questIdParts[0];
@@ -690,6 +698,7 @@ export const useGameStore = create<GameState>()(
           set((state: GameState) => {
             state.view = 'COMBAT';
             state.currentDungeon = dungeon;
+            state.dungeonStartTime = Date.now();
             state.combat = { ...initialCombatState, log: [{ message: `Entered ${dungeon.name}.`, type: 'info', timestamp: Date.now() }]};
             if (state.player.resources.type === 'Rage') {
               state.player.resources.current = 0;
@@ -804,7 +813,7 @@ export const useGameStore = create<GameState>()(
           }
       },
 
-      playerAttack: (targetId: string, isCleave = false) => {
+      playerAttack: (targetId: string, isCleave = false, skillId?: string) => {
         set((state: GameState) => {
             const { player, combat } = state;
             const target = combat.enemies.find(e => e.id === targetId);
@@ -850,7 +859,7 @@ export const useGameStore = create<GameState>()(
 
         const target = get().combat.enemies.find(e => e.id === targetId);
         if (target && target.stats.PV <= 0) {
-            get().handleEnemyDeath(target.id);
+            get().handleEnemyDeath(target, skillId);
         } else {
             const { player } = get();
             const cleaveRank = player.learnedTalents['berserker_cleave'] || 0;
@@ -865,7 +874,7 @@ export const useGameStore = create<GameState>()(
       },
 
       useSkill: (skillId: string) => {
-        const deadEnemyIds: string[] = [];
+        const deadEnemyIds: CombatEnemy[] = [];
 
         set((state: GameState) => {
             const { player, combat, gameData } = state;
@@ -929,12 +938,12 @@ export const useGameStore = create<GameState>()(
                 combat.log.push({ message: isCrit ? critMsg : msg, type: isCrit ? 'crit' : 'player_attack', timestamp: Date.now() });
 
                 if (currentTarget.stats.PV <= 0) {
-                    deadEnemyIds.push(currentTarget.id);
+                    deadEnemyIds.push(currentTarget);
                 }
             });
         });
 
-        deadEnemyIds.forEach(id => get().handleEnemyDeath(id));
+        deadEnemyIds.forEach(enemy => get().handleEnemyDeath(enemy, skillId));
       },
 
       enemyAttacks: () => {
@@ -985,13 +994,10 @@ export const useGameStore = create<GameState>()(
         }
       },
 
-      handleEnemyDeath: (enemyId: string) => {
-        const enemy = get().combat.enemies.find(e => e.id === enemyId);
-        if (!enemy) return;
-
+      handleEnemyDeath: (enemy: CombatEnemy, skillId?: string) => {
         set((state: GameState) => {
-            if (!state.combat.enemies.some(e => e.id === enemyId)) return;
-             const enemyInState = state.combat.enemies.find(e => e.id === enemyId);
+            if (!state.combat.enemies.some(e => e.id === enemy.id)) return;
+             const enemyInState = state.combat.enemies.find(e => e.id === enemy.id);
              if (enemyInState) {
                 enemyInState.attackProgress = 0;
              }
@@ -1023,37 +1029,58 @@ export const useGameStore = create<GameState>()(
 
             state.combat.killCount += 1;
 
-            if (state.combat.targetIndex === state.combat.enemies.findIndex(e => e.id === enemyId)) {
+            if (state.combat.targetIndex === state.combat.enemies.findIndex(e => e.id === enemy.id)) {
                 const nextTargetIndex = state.combat.enemies.findIndex(e => e.stats.PV > 0);
                 state.combat.targetIndex = nextTargetIndex !== -1 ? nextTargetIndex : 0;
             }
 
             state.activeQuests.forEach((activeQuest) => {
-              if (currentDungeon && activeQuest.quete.type === 'chasse' && activeQuest.quete.requirements.dungeonId === currentDungeon.id) {
-                activeQuest.progress++;
-                if (activeQuest.progress >= (activeQuest.quete.requirements.killCount || Infinity)) {
-                  const quest = activeQuest.quete;
-                  state.combat.log.push({ message: `Quest Complete: ${quest.name}!`, type: 'quest', timestamp: Date.now() });
-                  state.inventory.gold += quest.rewards.gold;
-                  state.player.xp += quest.rewards.xp;
-                  state.combat.log.push({ message: `You received ${quest.rewards.gold} gold and ${quest.rewards.xp} XP.`, type: 'loot', timestamp: Date.now() });
-
-                  state.player.completedQuests.push(quest.id);
-                  const activeQuestIndex = state.activeQuests.findIndex(aq => aq.quete.id === quest.id);
-                  if (activeQuestIndex !== -1) {
-                    state.activeQuests.splice(activeQuestIndex, 1);
+              const { quete } = activeQuest;
+              const req = quete.requirements;
+              let progressMade = false;
+      
+              if (quete.type === 'chasse' && req.dungeonId === currentDungeon?.id) {
+                  activeQuest.progress++;
+                  progressMade = true;
+              } else if (quete.type === 'chasse_boss' && enemy.isBoss && enemy.id.startsWith(req.bossId || '')) {
+                  activeQuest.progress++;
+                  progressMade = true;
+              } else if (quete.type === 'collecte' && req.dungeonId === currentDungeon?.id) {
+                  // Simulating a 30% drop chance for the quest item
+                  if (Math.random() < 0.3) {
+                      activeQuest.progress++;
+                      progressMade = true;
+                      state.combat.log.push({ message: `Vous avez récupéré: ${req.itemId} (${activeQuest.progress}/${req.itemCount})`, type: 'quest', timestamp: Date.now() });
                   }
-
-                  if (quest.rewards.reputation) {
-                    const rep = quest.rewards.reputation;
-                    const repData = state.player.reputation[rep.factionId] || { value: 0, claimedRewards: [] };
-                    repData.value += rep.amount;
-                    state.player.reputation[rep.factionId] = repData;
-                    state.combat.log.push({ message: `Your reputation with ${gameData.factions.find(f => f.id === rep.factionId)?.name || 'a faction'} increased by ${rep.amount}.`, type: 'info', timestamp: Date.now() });
+              } else if (quete.type === 'defi' && req.dungeonId === currentDungeon?.id && req.skillId && req.monsterType) {
+                  if (skillId === req.skillId && enemy.famille === req.monsterType) {
+                      activeQuest.progress++;
+                      progressMade = true;
                   }
-                }
               }
-            });
+      
+              const target = req.killCount || req.itemCount || (req.bossId ? 1 : 0);
+              if (progressMade && target > 0 && activeQuest.progress >= target) {
+                  state.combat.log.push({ message: `Quête terminée: ${quete.name}!`, type: 'quest', timestamp: Date.now() });
+                  state.inventory.gold += quete.rewards.gold;
+                  state.player.xp += quete.rewards.xp;
+                  state.combat.log.push({ message: `Vous avez reçu ${quete.rewards.gold} or et ${quete.rewards.xp} XP.`, type: 'loot', timestamp: Date.now() });
+      
+                  state.player.completedQuests.push(quete.id);
+                  const activeQuestIndex = state.activeQuests.findIndex(aq => aq.quete.id === quete.id);
+                  if (activeQuestIndex !== -1) {
+                      state.activeQuests.splice(activeQuestIndex, 1);
+                  }
+      
+                  if (quete.rewards.reputation) {
+                      const rep = quete.rewards.reputation;
+                      const repData = state.player.reputation[rep.factionId] || { value: 0, claimedRewards: [] };
+                      repData.value += rep.amount;
+                      state.player.reputation[rep.factionId] = repData;
+                      state.combat.log.push({ message: `Votre réputation avec ${gameData.factions.find(f => f.id === rep.factionId)?.name || 'une faction'} a augmenté de ${rep.amount}.`, type: 'info', timestamp: Date.now() });
+                  }
+              }
+          });
 
             let leveledUp = false;
             let xpToNext = get().getXpToNextLevel();
@@ -1078,22 +1105,26 @@ export const useGameStore = create<GameState>()(
                 if (currentDungeon && get().combat.killCount >= currentDungeon.killTarget) {
                     set((state: GameState) => {
                         state.player.completedDungeons[currentDungeon.id] = (state.player.completedDungeons[currentDungeon.id] || 0) + 1;
+                        const dungeonDuration = (Date.now() - (state.dungeonStartTime || Date.now())) / 1000;
 
                         state.activeQuests.forEach((activeQuest) => {
-                          if (activeQuest.quete.type === 'nettoyage' && activeQuest.quete.requirements.dungeonId === currentDungeon.id) {
+                          const { quete } = activeQuest;
+                          if (quete.type === 'nettoyage' && quete.requirements.dungeonId === currentDungeon.id) {
                             activeQuest.progress = state.player.completedDungeons[currentDungeon.id];
-                            if (activeQuest.progress >= (activeQuest.quete.requirements.clearCount || Infinity)) {
-                              const quest = activeQuest.quete;
-                              state.combat.log.push({ message: `Quest Complete: ${quest.name}!`, type: 'quest', timestamp: Date.now() });
-                              state.inventory.gold += quest.rewards.gold;
-                              state.player.xp += quest.rewards.xp;
-                              state.combat.log.push({ message: `You received ${quest.rewards.gold} gold and ${quest.rewards.xp} XP.`, type: 'loot', timestamp: Date.now() });
-                              state.player.completedQuests.push(quest.id);
-                            }
+                          } else if (quete.type === 'defi' && quete.requirements.timeLimit && dungeonDuration <= quete.requirements.timeLimit) {
+                            activeQuest.progress = 1; // Marquer comme complété
+                          }
+
+                          const target = quete.requirements.clearCount || (quete.requirements.timeLimit ? 1 : 0);
+                          if (target > 0 && activeQuest.progress >= target) {
+                            state.combat.log.push({ message: `Quête terminée: ${quete.name}!`, type: 'quest', timestamp: Date.now() });
+                            state.inventory.gold += quete.rewards.gold;
+                            state.player.xp += quete.rewards.xp;
+                            state.combat.log.push({ message: `Vous avez reçu ${quete.rewards.gold} or et ${quete.rewards.xp} XP.`, type: 'loot', timestamp: Date.now() });
+                            state.player.completedQuests.push(quete.id);
                           }
                         });
 
-                        // Remove completed cleaning quests after check
                         state.activeQuests = state.activeQuests.filter(aq => !state.player.completedQuests.includes(aq.quete.id));
 
 
@@ -1107,6 +1138,7 @@ export const useGameStore = create<GameState>()(
                         state.combat.dungeonRunItems = [];
                         state.combat.log.push({ message: `Dungeon complete! Returning to town.`, type: 'info', timestamp: Date.now() });
                         state.view = 'TOWN';
+                        state.dungeonStartTime = null;
 
                         const faction = state.gameData.factions.find(f => f.id === currentDungeon.factionId);
                         if (faction && state.player.reputation[faction.id]) {
@@ -1153,6 +1185,7 @@ export const useGameStore = create<GameState>()(
       flee: () => {
         set((state: GameState) => {
             state.view = 'TOWN';
+            state.dungeonStartTime = null;
             state.combat.enemies = [];
             state.inventory.items.push(...state.combat.dungeonRunItems);
             state.combat.dungeonRunItems = [];

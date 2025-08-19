@@ -1,4 +1,3 @@
-// liege-real-estate-drones/barquest/BarQuest-ba29103e759395544a0519632ae86dfb86dc7427/src/features/quests/QuestsView.tsx
 'use client';
 
 import { useGameStore } from '@/state/gameStore';
@@ -14,11 +13,41 @@ import React from 'react';
 function QuestCard({ quest, progress, onAccept, isAvailable }: { quest: Quete; progress?: number; onAccept?: (id: string) => void; isAvailable?: boolean; }) {
   const isCompleted = progress === undefined && !isAvailable;
   
-  const targetCount = quest.requirements.killCount || quest.requirements.clearCount || 0;
-  const progressPercent = isCompleted ? 100 : progress !== undefined ? (progress / targetCount) * 100 : 0;
-  const objectiveText = quest.type === 'chasse' 
-    ? `Tuer ${targetCount} monstres dans ${quest.requirements.dungeonId}`
-    : `Terminer le donjon ${quest.requirements.dungeonId} ${targetCount} fois`;
+  const { requirements } = quest;
+  let targetCount = 0;
+  let objectiveText = '';
+
+  switch (quest.type) {
+    case 'chasse':
+      targetCount = requirements.killCount || 0;
+      objectiveText = `Tuer ${targetCount} monstres dans ${requirements.dungeonId}`;
+      break;
+    case 'nettoyage':
+      targetCount = requirements.clearCount || 0;
+      objectiveText = `Terminer le donjon ${requirements.dungeonId} ${targetCount} fois`;
+      break;
+    case 'chasse_boss':
+      targetCount = 1;
+      objectiveText = `Vaincre ${requirements.bossId} dans ${requirements.dungeonId}`;
+      break;
+    case 'collecte':
+      targetCount = requirements.itemCount || 0;
+      objectiveText = `Récupérer ${targetCount} ${requirements.itemId}(s) dans ${requirements.dungeonId}`;
+      break;
+    case 'defi':
+      if (requirements.timeLimit) {
+        targetCount = 1;
+        objectiveText = `Terminer ${requirements.dungeonId} en moins de ${requirements.timeLimit} secondes`;
+      } else if (requirements.skillId) {
+        targetCount = requirements.killCount || 0;
+        objectiveText = `Tuer ${targetCount} ${requirements.monsterType}(s) avec ${requirements.skillId} dans ${requirements.dungeonId}`;
+      }
+      break;
+    default:
+      objectiveText = "Objectif inconnu";
+  }
+
+  const progressPercent = isCompleted ? 100 : progress !== undefined && targetCount > 0 ? (progress / targetCount) * 100 : 0;
 
 
   return (
@@ -79,12 +108,12 @@ export function QuestsView() {
             return false;
         }
 
-        if (!unlockedDungeonIds.has(q.requirements.dungeonId)) {
+        if (q.requirements.dungeonId && !unlockedDungeonIds.has(q.requirements.dungeonId)) {
             return false;
         }
         
         const questIdParts = q.id.split('_q');
-        if (questIdParts.length < 2) return false; // Invalid quest ID format
+        if (questIdParts.length < 2) return true; // Non-chained quests are available if dungeon is unlocked
 
         const questNum = parseInt(questIdParts[1], 10);
         if (questNum === 1) {
@@ -100,7 +129,6 @@ export function QuestsView() {
 
 
   return (
-    // Ajout de "h-full flex flex-col" pour que la carte prenne toute la hauteur
     <Card className="h-full flex flex-col">
       <CardHeader>
         <CardTitle>Journal de Quêtes</CardTitle>
