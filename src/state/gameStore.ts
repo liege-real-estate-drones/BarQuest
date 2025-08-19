@@ -65,7 +65,9 @@ interface GameState {
   inventory: InventoryState;
   combat: CombatState;
   activeQuests: ActiveQuete[];
-  
+  proposedQuest: Quete | null;
+
+  setProposedQuest: (quest: Quete | null) => void;
   initializeGameData: (data: Partial<GameData>) => void;
   setPlayerClass: (classId: PlayerClassId) => void;
   recalculateStats: () => void;
@@ -119,7 +121,7 @@ const scaleAffixValue = (baseValue: number, level: number): number => {
 const resolveLoot = (monster: Monstre, gameData: GameData, playerClassId: PlayerClassId | null): Item | null => {
   // Set item drop check
   if (Math.random() < 0.02) {
-    const possibleSetItems = gameData.items.filter(item => 
+    const possibleSetItems = gameData.items.filter(item =>
       item.set &&
       (item.tagsClasse?.includes('common') || (playerClassId && item.tagsClasse?.includes(playerClassId)))
     );
@@ -128,7 +130,7 @@ const resolveLoot = (monster: Monstre, gameData: GameData, playerClassId: Player
       const newItem: Item = JSON.parse(JSON.stringify(droppedItemTemplate));
       newItem.id = uuidv4();
       newItem.niveauMin = monster.level;
-      
+
       const newAffixes = (newItem.affixes || []).map(affix => {
           const affixTemplate = gameData.affixes.find(a => a.id === affix.ref);
           const baseValue = affixTemplate?.portée[0] ?? 1;
@@ -147,7 +149,7 @@ const resolveLoot = (monster: Monstre, gameData: GameData, playerClassId: Player
   if (Math.random() > 0.5) { // 50% chance to drop anything
     return null;
   }
-  
+
   const dropRoll = Math.random();
   let cumulativeChance = 0;
   let chosenRarity: Rareté | null = null;
@@ -163,8 +165,8 @@ const resolveLoot = (monster: Monstre, gameData: GameData, playerClassId: Player
   if (!chosenRarity) {
     return null;
   }
-  
-  const possibleItemTemplates = gameData.items.filter(item => 
+
+  const possibleItemTemplates = gameData.items.filter(item =>
       item.rarity === chosenRarity &&
       !item.set &&
       item.slot !== 'potion' &&
@@ -179,7 +181,7 @@ const resolveLoot = (monster: Monstre, gameData: GameData, playerClassId: Player
   const newItem: Item = JSON.parse(JSON.stringify(droppedItemTemplate));
   newItem.id = uuidv4();
   newItem.niveauMin = monster.level;
-  
+
   const newAffixes = (newItem.affixes || []).map(affix => {
       const affixTemplate = gameData.affixes.find(a => a.id === affix.ref);
       const baseValue = affixTemplate?.portée[0] ?? 1;
@@ -189,7 +191,7 @@ const resolveLoot = (monster: Monstre, gameData: GameData, playerClassId: Player
       }
   });
   newItem.affixes = newAffixes;
-  
+
   return newItem;
 };
 
@@ -269,6 +271,11 @@ export const useGameStore = create<GameState>()(
       inventory: initialInventoryState,
       combat: initialCombatState,
       activeQuests: [],
+      proposedQuest: null,
+
+      setProposedQuest: (quest) => {
+        set({ proposedQuest: quest });
+      },
 
       getXpToNextLevel: () => {
         const player = get().player;
@@ -291,7 +298,7 @@ export const useGameStore = create<GameState>()(
             state.isInitialized = true;
         });
       },
-      
+
       setPlayerClass: (classId: PlayerClassId) => {
         set((state: GameState) => {
             const chosenClass = state.gameData.classes.find(c => c.id === classId);
@@ -302,14 +309,14 @@ export const useGameStore = create<GameState>()(
             state.inventory = initialInventoryState;
             state.combat = initialCombatState;
             state.activeQuests = [];
-            
+
             state.player.classeId = chosenClass.id as PlayerClassId;
             state.player.baseStats = { ...chosenClass.statsBase };
             state.player.talentPoints = 1;
             state.player.resources.type = chosenClass.ressource;
-            
+
             const startingSkills = state.gameData.skills.filter(s => s.classeId === classId && s.niveauRequis === 1);
-            
+
             startingSkills.slice(0, 4).forEach((skill, index) => {
                 if (skill) {
                     state.player.learnedSkills[skill.id] = 1;
@@ -372,11 +379,11 @@ export const useGameStore = create<GameState>()(
                   });
               }
           });
-          
+
           Object.entries(player.learnedTalents).forEach(([talentId, rank]) => {
               const talentData = gameData.talents.find(t => t.id === talentId);
               if (!talentData) return;
-              
+
               talentData.effets.forEach(effectString => {
                   const value = getTalentEffectValue(effectString, rank);
                    if (effectString.includes('Armure')) {
@@ -400,7 +407,7 @@ export const useGameStore = create<GameState>()(
 
 
           player.stats = newStats;
-          
+
           const maxHp = formulas.calculateMaxHP(player.level, player.stats);
           if (classe.ressource !== 'Rage') {
             const maxMana = formulas.calculateMaxMana(player.level, player.stats);
@@ -411,7 +418,7 @@ export const useGameStore = create<GameState>()(
           } else {
              player.resources.max = 100;
           }
-          
+
           // This ensures that after any stat change, if the player is not in combat, their HP is full.
           // It also handles the initial character creation case.
           const currentHp = player.stats.PV;
@@ -430,7 +437,7 @@ export const useGameStore = create<GameState>()(
         if (itemIndex === -1) return;
 
         const itemToEquip = inventory.items[itemIndex];
-        
+
         set((state: GameState) => {
             state.inventory.items.splice(itemIndex, 1);
             const slot = itemToEquip.slot as keyof InventoryState['equipment'];
@@ -443,7 +450,7 @@ export const useGameStore = create<GameState>()(
 
         get().recalculateStats();
       },
-      
+
       unequipItem: (slot: keyof InventoryState['equipment']) => {
         set((state: GameState) => {
             const item = state.inventory.equipment[slot];
@@ -461,7 +468,7 @@ export const useGameStore = create<GameState>()(
           if (price <= 0 || inventory.gold < price) {
               return false;
           }
-          
+
           const newItem: Item = JSON.parse(JSON.stringify(item));
           newItem.id = uuidv4();
           delete newItem.vendorPrice;
@@ -472,7 +479,7 @@ export const useGameStore = create<GameState>()(
           });
           return true;
       },
-      
+
       sellItem: (itemId: string) => {
         set((state: GameState) => {
             const itemIndex = state.inventory.items.findIndex(i => i.id === itemId);
@@ -480,7 +487,7 @@ export const useGameStore = create<GameState>()(
 
             const itemToSell = state.inventory.items[itemIndex];
             const sellPrice = getItemSellPrice(itemToSell);
-            
+
             state.inventory.gold += sellPrice;
             state.inventory.items.splice(itemIndex, 1);
         });
@@ -510,7 +517,7 @@ export const useGameStore = create<GameState>()(
 
           const currentRank = player.learnedSkills[skillId] || 0;
           if (currentRank >= skill.rangMax) return;
-          
+
           let canLearn = true;
           if (skill.exigences && skill.exigences.length > 0) {
             skill.exigences.forEach(req => {
@@ -536,7 +543,7 @@ export const useGameStore = create<GameState>()(
 
           const currentRank = player.learnedTalents[talentId] || 0;
           if (currentRank >= talent.rangMax) return;
-          
+
           let canLearn = true;
           if (talent.exigences && talent.exigences.length > 0) {
             talent.exigences.forEach(req => {
@@ -560,12 +567,12 @@ export const useGameStore = create<GameState>()(
       equipSkill: (skillId: string, slot: number) => {
         set((state: GameState) => {
             if (slot < 0 || slot >= state.player.equippedSkills.length) return;
-            
+
             const existingSlot = state.player.equippedSkills.indexOf(skillId);
             if (existingSlot !== -1) {
                 state.player.equippedSkills[existingSlot] = null;
             }
-            
+
             state.player.equippedSkills[slot] = skillId;
         });
       },
@@ -652,7 +659,33 @@ export const useGameStore = create<GameState>()(
       },
 
       enterDungeon: (dungeonId: string) => {
-        const dungeon = get().gameData.dungeons.find(d => d.id === dungeonId);
+        const { gameData, player, activeQuests } = get();
+
+        // Check for available quests that are not completed or active
+        const availableQuestsForDungeon = gameData.quests.filter(q =>
+            q.requirements.dungeonId === dungeonId &&
+            !player.completedQuests.includes(q.id) &&
+            !activeQuests.some(aq => aq.quete.id === q.id)
+        );
+        
+        // Find the first available quest in the series
+        const firstAvailableQuest = availableQuestsForDungeon.find(q => {
+            const questIdParts = q.id.split('_q');
+            if (questIdParts.length < 2) return false;
+            const questNum = parseInt(questIdParts[1], 10);
+            if (questNum === 1) return true;
+            const questPrefix = questIdParts[0];
+            const prevQuestId = `${questPrefix}_q${questNum - 1}`;
+            return player.completedQuests.includes(prevQuestId);
+        });
+
+        if (firstAvailableQuest) {
+            get().setProposedQuest(firstAvailableQuest);
+            return; // Stop here, let the UI handle the dialog
+        }
+
+        // If no quest is proposed, enter directly
+        const dungeon = gameData.dungeons.find(d => d.id === dungeonId);
         if (dungeon) {
           set((state: GameState) => {
             state.view = 'COMBAT';
@@ -667,11 +700,11 @@ export const useGameStore = create<GameState>()(
           gameLoop = setInterval(() => get().gameTick(50), 50);
         }
       },
-      
+
       startCombat: () => {
         const { currentDungeon, gameData } = get();
         if (!currentDungeon) return;
-        
+
         const possibleMonsters = gameData.monsters.filter(m => currentDungeon.monsters.includes(m.id) && !m.isBoss);
         const monsterCount = Math.floor(Math.random() * 3) + 1; // 1 to 3 monsters
         const newEnemies: CombatEnemy[] = [];
@@ -688,7 +721,7 @@ export const useGameStore = create<GameState>()(
             newEnemies.push(monsterInstance);
           }
         }
-        
+
         if (newEnemies.length > 0) {
             set((state: GameState) => {
               state.combat.enemies = newEnemies;
@@ -699,10 +732,10 @@ export const useGameStore = create<GameState>()(
             });
         }
       },
-      
+
       gameTick: (delta: number) => {
           const { view, combat } = get();
-          
+
           if(view !== 'COMBAT' || !combat.enemies || combat.enemies.length === 0) {
             if(gameLoop) clearInterval(gameLoop);
             return;
@@ -723,7 +756,7 @@ export const useGameStore = create<GameState>()(
                       state.combat.playerAttackProgress = 1;
                   }
               }
-              
+
               // Régénération passive des ressources par seconde
               if (state.player.resources.type === 'Énergie') {
                   const energyPerSecond = 20; // Régénère 20 énergie par seconde
@@ -732,7 +765,7 @@ export const useGameStore = create<GameState>()(
                   const manaPerSecond = 10; // Régénère 10 mana par seconde
                   state.player.resources.current = Math.min(state.player.resources.max, state.player.resources.current + (manaPerSecond * (delta / 1000)));
               }
-              
+
               // Cooldowns des compétences
               for (const skillId in state.combat.skillCooldowns) {
                   state.combat.skillCooldowns[skillId] -= delta;
@@ -780,7 +813,7 @@ export const useGameStore = create<GameState>()(
             const damage = formulas.calculateMeleeDamage(player.stats.AttMin, player.stats.AttMax, formulas.calculateAttackPower(player.stats));
             const isCrit = formulas.isCriticalHit(player.stats.CritPct, player.stats.Precision, target.stats.Esquive);
             let finalDamage = isCrit ? damage * (player.stats.CritDmg / 100) : damage;
-            
+
             if (player.activeEffects && player.activeEffects.includes('dernier_cri')) {
                 const maxHp = formulas.calculateMaxHP(player.level, player.stats);
                 const hpPercent = (player.stats.PV / maxHp) * 100;
@@ -790,7 +823,7 @@ export const useGameStore = create<GameState>()(
 
             const dr = formulas.calculateArmorDR(target.stats.Armure, player.level);
             const mitigatedDamage = Math.round(finalDamage * (isCleave ? 0.5 : 1) * (1 - dr));
-            
+
             target.stats.PV -= mitigatedDamage;
 
             const attackMsg = `You hit ${target.nom} for ${mitigatedDamage} damage.`;
@@ -814,7 +847,7 @@ export const useGameStore = create<GameState>()(
               state.player.resources.current = Math.min(state.player.resources.max, state.player.resources.current + rageGained);
             }
         });
-        
+
         const target = get().combat.enemies.find(e => e.id === targetId);
         if (target && target.stats.PV <= 0) {
             get().handleEnemyDeath(target.id);
@@ -830,10 +863,10 @@ export const useGameStore = create<GameState>()(
             }
         }
       },
-      
+
       useSkill: (skillId: string) => {
         const deadEnemyIds: string[] = [];
-        
+
         set((state: GameState) => {
             const { player, combat, gameData } = state;
             if (!combat.enemies || combat.enemies.length === 0 || (combat.skillCooldowns[skillId] || 0) > 0) {
@@ -846,7 +879,7 @@ export const useGameStore = create<GameState>()(
 
             const resourceCostMatch = skill.effets.join(' ').match(/Coûte (\d+) (Rage|Mana|Énergie)/);
             const resourceCost = resourceCostMatch ? parseInt(resourceCostMatch[1], 10) : 0;
-            
+
             if (player.resources.current < resourceCost) {
                 combat.log.push({ message: "Pas assez de ressource!", type: 'info', timestamp: Date.now() });
                 return;
@@ -860,7 +893,7 @@ export const useGameStore = create<GameState>()(
             const isAoE = skill.effets.join(' ').includes("tous les ennemis") || skill.effets.join(' ').includes("ennemis proches");
             const primaryTarget = combat.enemies[combat.targetIndex];
             const targets = isAoE ? [...combat.enemies.filter(e => e.stats.PV > 0)] : (primaryTarget && primaryTarget.stats.PV > 0 ? [primaryTarget] : []);
-            
+
             if (targets.length === 0) return;
 
             targets.forEach(target => {
@@ -883,7 +916,7 @@ export const useGameStore = create<GameState>()(
                         damage *= 3; // Triple damage on low hp targets
                     }
                 }
-                
+
                 const isCrit = formulas.isCriticalHit(player.stats.CritPct, player.stats.Precision, currentTarget.stats.Esquive);
                 let finalDamage = isCrit ? damage * (player.stats.CritDmg / 100) : damage;
                 const dr = formulas.calculateArmorDR(currentTarget.stats.Armure, player.level);
@@ -906,7 +939,7 @@ export const useGameStore = create<GameState>()(
 
       enemyAttacks: () => {
         const attackingEnemies = get().combat.enemies.filter(e => e.attackProgress >= 1 && e.stats.PV > 0);
-        
+
         attackingEnemies.forEach(enemy => {
             const { player } = get();
             if (player.stats.PV <= 0) return;
@@ -921,7 +954,7 @@ export const useGameStore = create<GameState>()(
 
                 state.player.stats.PV -= mitigatedEnemyDamage;
                 state.combat.log.push({ message: `${enemy.nom} hits you for ${mitigatedEnemyDamage} damage.`, type: 'enemy_attack', timestamp: Date.now() });
-                
+
                 if (state.player.resources.type === 'Rage') {
                   const rageGained = 10;
                   state.player.resources.current = Math.min(state.player.resources.max, state.player.resources.current + rageGained);
@@ -930,22 +963,22 @@ export const useGameStore = create<GameState>()(
                 enemyInState.attackProgress = 0;
             });
         });
-        
+
         if (get().player.stats.PV <= 0) {
             set((state: GameState) => {
                 const goldPenalty = Math.floor(state.inventory.gold * 0.10);
                 state.inventory.gold -= goldPenalty;
                 state.combat.log.push({ message: `You have been defeated! You lose ${goldPenalty} gold and all items found in the dungeon. Returning to town.`, type: 'info', timestamp: Date.now() });
-                
+
                 const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
                 state.player.stats.PV = maxHp * 0.2;
-                
+
                 if (state.player.resources.type !== 'Rage') {
                   state.player.resources.current = state.player.resources.max * 0.2;
                 } else {
                   state.player.resources.current = 0;
                 }
-                
+
                 state.view = 'TOWN';
                 if(gameLoop) clearInterval(gameLoop);
             });
@@ -955,7 +988,7 @@ export const useGameStore = create<GameState>()(
       handleEnemyDeath: (enemyId: string) => {
         const enemy = get().combat.enemies.find(e => e.id === enemyId);
         if (!enemy) return;
-        
+
         set((state: GameState) => {
             if (!state.combat.enemies.some(e => e.id === enemyId)) return;
              const enemyInState = state.combat.enemies.find(e => e.id === enemyId);
@@ -974,22 +1007,22 @@ export const useGameStore = create<GameState>()(
             state.combat.log.push({ message: `You defeated ${enemy.nom}!`, type: 'info', timestamp: Date.now() });
             state.combat.log.push({ message: `You find ${goldDrop} gold.`, type: 'loot', timestamp: Date.now() });
             state.inventory.gold += goldDrop;
-            
+
             state.player.xp += xpGained;
             state.combat.log.push({ message: `You gain ${xpGained} experience.`, type: 'info', timestamp: Date.now() });
-            
+
              if (itemDrop) {
                 state.combat.dungeonRunItems.push(itemDrop);
-                state.combat.log.push({ 
+                state.combat.log.push({
                     message: ``,
-                    type: 'loot', 
+                    type: 'loot',
                     timestamp: Date.now(),
-                    item: itemDrop 
+                    item: itemDrop
                 });
             }
 
             state.combat.killCount += 1;
-            
+
             if (state.combat.targetIndex === state.combat.enemies.findIndex(e => e.id === enemyId)) {
                 const nextTargetIndex = state.combat.enemies.findIndex(e => e.stats.PV > 0);
                 state.combat.targetIndex = nextTargetIndex !== -1 ? nextTargetIndex : 0;
@@ -1004,7 +1037,7 @@ export const useGameStore = create<GameState>()(
                   state.inventory.gold += quest.rewards.gold;
                   state.player.xp += quest.rewards.xp;
                   state.combat.log.push({ message: `You received ${quest.rewards.gold} gold and ${quest.rewards.xp} XP.`, type: 'loot', timestamp: Date.now() });
-                  
+
                   state.player.completedQuests.push(quest.id);
                   const activeQuestIndex = state.activeQuests.findIndex(aq => aq.quete.id === quest.id);
                   if (activeQuestIndex !== -1) {
@@ -1037,7 +1070,7 @@ export const useGameStore = create<GameState>()(
                 get().recalculateStats();
             }
         });
-        
+
         const allEnemiesDead = get().combat.enemies.every(e => e.stats.PV <= 0);
         const currentDungeon = get().currentDungeon;
         if (allEnemiesDead) {
@@ -1045,7 +1078,7 @@ export const useGameStore = create<GameState>()(
                 if (currentDungeon && get().combat.killCount >= currentDungeon.killTarget) {
                     set((state: GameState) => {
                         state.player.completedDungeons[currentDungeon.id] = (state.player.completedDungeons[currentDungeon.id] || 0) + 1;
-                        
+
                         state.activeQuests.forEach((activeQuest) => {
                           if (activeQuest.quete.type === 'nettoyage' && activeQuest.quete.requirements.dungeonId === currentDungeon.id) {
                             activeQuest.progress = state.player.completedDungeons[currentDungeon.id];
@@ -1059,7 +1092,7 @@ export const useGameStore = create<GameState>()(
                             }
                           }
                         });
-                        
+
                         // Remove completed cleaning quests after check
                         state.activeQuests = state.activeQuests.filter(aq => !state.player.completedQuests.includes(aq.quete.id));
 
@@ -1133,7 +1166,7 @@ export const useGameStore = create<GameState>()(
           state.combat.autoAttack = !state.combat.autoAttack;
         });
       },
-      
+
     })),
     {
       name: 'barquest-save',
@@ -1149,7 +1182,7 @@ export const useGameStore = create<GameState>()(
             state.player.completedQuests = Array.isArray(state.player.completedQuests) ? state.player.completedQuests : [];
             state.activeQuests = Array.isArray(state.activeQuests) ? state.activeQuests : [];
             state.player.completedDungeons = (state.player.completedDungeons && typeof state.player.completedDungeons === 'object' && !Array.isArray(state.player.completedDungeons)) ? state.player.completedDungeons : {};
-            
+
             if(typeof state.inventory.potions !== 'object' || state.inventory.potions === null) {
               state.inventory.potions = { health: 0, resource: 0};
             }

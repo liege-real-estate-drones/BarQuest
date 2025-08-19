@@ -1,8 +1,5 @@
-
-
 'use client';
 import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DungeonsView } from '../dungeons/DungeonsView';
 import { VendorsView } from '../vendors/VendorsView';
 import { useGameStore } from '@/state/gameStore';
@@ -10,14 +7,6 @@ import { EquipmentView } from '../inventory/EquipmentView';
 import { PlayerStatsView } from '../player/PlayerStatsView';
 import { QuestsView } from '../quests/QuestsView';
 import { ReputationView } from '../reputation/ReputationView';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -29,105 +18,98 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { LogOut, Settings, Trash2, BookOpen, User } from 'lucide-react';
+import { LogOut, Settings, Trash2, BookOpen, User, Swords, Store, Home } from 'lucide-react';
 import { InnView } from './InnView';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { CharacterView } from '../player/CharacterView';
+import React, { useState } from 'react';
+import { cn } from '@/lib/utils';
+
+type TownTab = 'town' | 'dungeons' | 'character' | 'vendors';
 
 export function TownView() {
   const { player, resetGame } = useGameStore(state => ({
     player: state.player,
     resetGame: state.resetGame
   }));
+  const [activeTab, setActiveTab] = useState<TownTab>('town');
 
-  return (
-      <div className="flex flex-col h-screen max-h-screen">
-        <header className="flex-shrink-0 container mx-auto px-4 md:px-8 py-4 flex justify-between items-center border-b">
-          <div>
-              <h1 className="text-4xl font-headline text-primary">BarQuest</h1>
-              <p className="text-muted-foreground">Welcome back, {player.name}.</p>
-          </div>
-          
-          <AlertDialog>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="icon">
-                  <Settings className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Game Options</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                 <AlertDialogTrigger asChild>
-                    <DropdownMenuItem>
-                      <LogOut className="mr-2 h-4 w-4" />
-                      <span>Change Class</span>
-                    </DropdownMenuItem>
-                 </AlertDialogTrigger>
-                 <AlertDialogTrigger asChild>
-                    <DropdownMenuItem className="text-red-500 focus:text-red-500">
-                      <Trash2 className="mr-2 h-4 w-4" />
-                      <span>Reset Game</span>
-                    </DropdownMenuItem>
-                  </AlertDialogTrigger>
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This action is irreversible and will permanently delete all your character progress, items, and gold.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={resetGame} className="bg-destructive hover:bg-destructive/90">
-                  Yes, reset my game
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-
-        </header>
-        
-        <main className="flex-grow container mx-auto px-4 md:px-8 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8 min-h-0">
-          <ScrollArea className="lg:col-span-1">
-            <div className="flex flex-col gap-8 pr-6">
+  const renderContent = () => {
+    switch (activeTab) {
+      case 'town':
+        return (
+          <ScrollArea className="h-full">
+            <div className="flex flex-col gap-8 pr-4">
               <PlayerStatsView />
+              <QuestsView />
               <ReputationView />
-              <EquipmentView />
             </div>
           </ScrollArea>
-          <div className="lg:col-span-2 flex flex-col min-h-0">
-              <Tabs defaultValue="dungeons" className="w-full flex flex-col flex-grow min-h-0">
-                  <TabsList className="flex flex-wrap h-auto">
-                    <TabsTrigger value="dungeons">Dungeons</TabsTrigger>
-                    <TabsTrigger value="quests"><BookOpen className="mr-2 h-4 w-4" />Quests</TabsTrigger>
-                    <TabsTrigger value="character"><User className="mr-2 h-4 w-4" />Personnage</TabsTrigger>
-                    <TabsTrigger value="vendors">Vendeurs</TabsTrigger>
-                    <TabsTrigger value="inn">Auberge</TabsTrigger>
-                  </TabsList>
-                  <div className="flex-grow mt-4 overflow-y-auto">
-                    <TabsContent value="dungeons">
-                        <DungeonsView />
-                    </TabsContent>
-                     <TabsContent value="quests" className="h-full">
-                        <QuestsView />
-                    </TabsContent>
-                    <TabsContent value="character" className="h-full">
-                      <CharacterView />
-                    </TabsContent>
-                    <TabsContent value="vendors">
-                      <VendorsView />
-                    </TabsContent>
-                    <TabsContent value="inn">
-                      <InnView />
-                    </TabsContent>
-                  </div>
-              </Tabs>
-          </div>
-        </main>
-      </div>
+        );
+      case 'dungeons':
+        return <DungeonsView />;
+      case 'character':
+        return <CharacterView />;
+      case 'vendors':
+        return <VendorsView />;
+      default:
+        return null;
+    }
+  };
+
+  const NavButton = ({ tab, icon: Icon, label }: { tab: TownTab, icon: React.ElementType, label: string }) => (
+    <Button
+      variant="ghost"
+      className={cn("flex-col h-16", activeTab === tab && "text-primary bg-primary/10")}
+      onClick={() => setActiveTab(tab)}
+    >
+      <Icon className="h-6 w-6" />
+      <span className="text-xs">{label}</span>
+    </Button>
+  );
+
+  return (
+    <div className="flex flex-col h-screen max-h-screen">
+      <header className="flex-shrink-0 container mx-auto px-4 py-4 flex justify-between items-center border-b">
+        <div>
+          <h1 className="text-2xl font-headline text-primary">BarQuest</h1>
+          <p className="text-xs text-muted-foreground">Bienvenue, {player.name}.</p>
+        </div>
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button variant="outline" size="icon">
+              <Settings className="h-4 w-4" />
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Êtes-vous sûr de vouloir réinitialiser ?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Cette action est irréversible et supprimera définitivement toute votre progression.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Annuler</AlertDialogCancel>
+              <AlertDialogAction onClick={resetGame} className="bg-destructive hover:bg-destructive/90">
+                Oui, réinitialiser
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </header>
+
+      <main className="flex-grow container mx-auto px-4 py-4 min-h-0">
+        {renderContent()}
+      </main>
+
+      <footer className="flex-shrink-0 border-t bg-background/80 backdrop-blur-sm">
+        <nav className="container mx-auto grid grid-cols-4 gap-2 px-4 py-2">
+          <NavButton tab="town" icon={Home} label="Ville" />
+          <NavButton tab="dungeons" icon={Swords} label="Donjons" />
+          <NavButton tab="character" icon={User} label="Personnage" />
+          <NavButton tab="vendors" icon={Store} label="Marchands" />
+        </nav>
+      </footer>
+    </div>
   );
 }
