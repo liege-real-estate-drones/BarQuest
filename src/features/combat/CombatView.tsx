@@ -7,7 +7,7 @@ import { useEffect, useMemo } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { ActionStrip } from './components/ActionStrip';
 import type { Skill } from '@/lib/types';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { DungeonInfo } from './components/DungeonInfo';
 // AMÉLIORATION: Import des composants pour la boîte de dialogue
 import {
@@ -90,17 +90,46 @@ export function CombatView() {
         </div>
       </header>
 
-      <main className="flex-grow grid grid-cols-1 md:grid-cols-2 gap-4 p-4 overflow-hidden">
-        {/* Colonne de gauche : Infos Joueur et Log */}
-        <div className="flex flex-col gap-4 min-h-0">
-          <EntityDisplay entity={player} isPlayer />
+      <main className="flex-grow flex flex-col md:grid md:grid-cols-2 gap-4 p-4 overflow-hidden">
+        {/* --- VUE MOBILE --- */}
+        <div className="md:hidden flex flex-col gap-4 min-h-0">
+          {/* Joueur & Cible */}
+          <div className="grid grid-cols-2 gap-4">
+            <EntityDisplay entity={player} isPlayer />
+            {enemies[targetIndex] && <EntityDisplay entity={enemies[targetIndex]} isTarget />}
+          </div>
+
+          {/* Autres ennemis */}
+          {enemies.length > 1 && (
+            <div>
+              <p className="text-xs text-muted-foreground font-semibold mb-2 px-1">AUTRES ENNEMIS</p>
+              <ScrollArea className="w-full">
+                <div className="flex gap-3 pb-3">
+                  {enemies.filter((_, i) => i !== targetIndex).map((enemy) => (
+                    <div key={enemy.id} className="w-40 flex-shrink-0">
+                      <EntityDisplay entity={enemy} isCompact />
+                    </div>
+                  ))}
+                </div>
+                <ScrollBar orientation="horizontal" />
+              </ScrollArea>
+            </div>
+          )}
+
+          {/* Log de combat */}
           <div className="flex-grow min-h-0">
             <CombatLog log={combatLog} />
           </div>
         </div>
 
-        {/* Colonne de droite : Ennemis */}
-        <div className="min-h-0">
+        {/* --- VUE DESKTOP --- */}
+        <div className="hidden md:flex flex-col gap-4 min-h-0">
+          <EntityDisplay entity={player} isPlayer />
+          <div className="flex-grow min-h-0">
+            <CombatLog log={combatLog} />
+          </div>
+        </div>
+        <div className="hidden md:block min-h-0">
           <ScrollArea className="h-full">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 pr-4">
               {enemies.map((enemy, index) => (
