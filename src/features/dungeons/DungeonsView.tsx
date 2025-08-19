@@ -69,15 +69,21 @@ export function DungeonsView() {
     if (proposedQuests && proposedQuests.length > 0) {
       const questIds = proposedQuests.map(q => q.id);
       acceptMultipleQuests(questIds);
-      enterDungeon(proposedQuests[0].requirements.dungeonId);
+      const dungeonId = proposedQuests[0].requirements.dungeonId;
+      if (dungeonId) {
+          enterDungeon(dungeonId);
+      }
       setProposedQuests(null);
     }
   };
 
   const handleDeclineQuestAndEnter = () => {
     if (proposedQuests && proposedQuests.length > 0) {
-      enterDungeon(proposedQuests[0].requirements.dungeonId);
-      setProposedQuests(null);
+        const dungeonId = proposedQuests[0].requirements.dungeonId;
+        if (dungeonId) {
+            enterDungeon(dungeonId);
+        }
+        setProposedQuests(null);
     }
   };
 

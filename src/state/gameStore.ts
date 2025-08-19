@@ -1054,7 +1054,7 @@ export const useGameStore = create<GameState>()(
               if (quete.type === 'chasse' && req.dungeonId === currentDungeon?.id && !enemy.isBoss) {
                   activeQuest.progress++;
                   progressMade = true;
-              } else if (quete.type === 'chasse_boss' && enemy.isBoss && enemy.templateId === req.bossId) { // <-- Ligne modifiée
+              } else if (quete.type === 'chasse_boss' && req.dungeonId === currentDungeon?.id && enemy.isBoss && enemy.templateId === req.bossId) {
                   activeQuest.progress++;
                   progressMade = true;
               } else if (quete.type === 'collecte' && req.dungeonId === currentDungeon?.id) {
@@ -1127,7 +1127,7 @@ export const useGameStore = create<GameState>()(
                               const { quete } = activeQuest;
                               if (quete.type === 'nettoyage' && quete.requirements.dungeonId === currentDungeon.id) {
                                 activeQuest.progress = state.player.completedDungeons[currentDungeon.id];
-                              } else if (quete.type === 'defi' && quete.requirements.timeLimit && dungeonDuration <= quete.requirements.timeLimit) {
+                              } else if (quete.type === 'defi' && quete.requirements.dungeonId === currentDungeon.id && quete.requirements.timeLimit && dungeonDuration <= quete.requirements.timeLimit) {
                                 activeQuest.progress = 1;
                               }
 
