@@ -244,9 +244,11 @@ const STAT_WEIGHTS: Record<PlayerClassId, Partial<Record<keyof Stats, number>>> 
 
 export const calculateItemScore = (item: Item, classId: PlayerClassId): number => {
     let score = 0;
+    if (!item || !classId) return 0;
+
     const weights = STAT_WEIGHTS[classId];
 
-    item.affixes.forEach(affix => {
+    (item.affixes || []).forEach(affix => {
         const statKey = affix.ref as keyof Stats;
         const weight = weights[statKey] || 0.1;
         score += affix.val * weight;
