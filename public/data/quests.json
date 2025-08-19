@@ -3565,7 +3565,7 @@
       "desc": "Un puissant adversaire, Cave Bat, a été repéré dans Bat Cave. Mettez fin à sa menace.",
       "requirements": {
         "dungeonId": "dungeon_2",
-        "bossId": "cave_bat"
+        "bossId": "bat_matriarch"
       },
       "rewards": {
         "gold": 150,
@@ -3579,7 +3579,7 @@
       "desc": "Un puissant adversaire, Yeti Toddler, a été repéré dans Icy Crevasse. Mettez fin à sa menace.",
       "requirements": {
         "dungeonId": "dungeon_3",
-        "bossId": "yeti_toddler"
+        "bossId": "yeti_chieftain"
       },
       "rewards": {
         "gold": 200,
@@ -3593,7 +3593,7 @@
       "desc": "Un puissant adversaire, Yeti Toddler, a été repéré dans Yeti Den. Mettez fin à sa menace.",
       "requirements": {
         "dungeonId": "dungeon_4",
-        "bossId": "yeti_toddler"
+        "bossId": "yeti_chieftain"
       },
       "rewards": {
         "gold": 200,
@@ -3607,7 +3607,7 @@
       "desc": "Un puissant adversaire, Cinder Elemental, a été repéré dans Scorched Caverns. Mettez fin à sa menace.",
       "requirements": {
         "dungeonId": "dungeon_5",
-        "bossId": "cinder_elemental"
+        "bossId": "inferno_elemental_lord"
       },
       "rewards": {
         "gold": 250,
@@ -3621,7 +3621,7 @@
       "desc": "Un puissant adversaire, Cinder Elemental, a été repéré dans Cinder Chambers. Mettez fin à sa menace.",
       "requirements": {
         "dungeonId": "dungeon_6",
-        "bossId": "cinder_elemental"
+        "bossId": "inferno_elemental_lord"
       },
       "rewards": {
         "gold": 250,
@@ -3635,7 +3635,7 @@
       "desc": "Un puissant adversaire, Wandering Dryad, a été repéré dans Whispering Woods. Mettez fin à sa menace.",
       "requirements": {
         "dungeonId": "dungeon_7",
-        "bossId": "wandering_dryad"
+        "bossId": "ancient_dryad_matriarch"
       },
       "rewards": {
         "gold": 300,
@@ -3649,7 +3649,7 @@
       "desc": "Un puissant adversaire, Wandering Dryad, a été repéré dans Dryad Grove. Mettez fin à sa menace.",
       "requirements": {
         "dungeonId": "dungeon_8",
-        "bossId": "wandering_dryad"
+        "bossId": "ancient_dryad_matriarch"
       },
       "rewards": {
         "gold": 300,
@@ -3663,7 +3663,7 @@
       "desc": "Un puissant adversaire, Cultist Initiate, a été repéré dans Forgotten Crypt. Mettez fin à sa menace.",
       "requirements": {
         "dungeonId": "dungeon_9",
-        "bossId": "cultist_initiate"
+        "bossId": "void_cultist_leader"
       },
       "rewards": {
         "gold": 350,
@@ -3677,7 +3677,7 @@
       "desc": "Un puissant adversaire, Acolyte of the Void, a été repéré dans Void Worshippers' Lair. Mettez fin à sa menace.",
       "requirements": {
         "dungeonId": "dungeon_10",
-        "bossId": "acolyte_of_the_void"
+        "bossId": "void_priest"
       },
       "rewards": {
         "gold": 350,
@@ -3691,7 +3691,7 @@
       "desc": "Un puissant adversaire, Frozen Berserker, a été repéré dans Glacial Depths. Mettez fin à sa menace.",
       "requirements": {
         "dungeonId": "dungeon_11",
-        "bossId": "frozen_berserker"
+        "bossId": "icebound_warlord"
       },
       "rewards": {
         "gold": 400,
@@ -3705,7 +3705,7 @@
       "desc": "Un puissant adversaire, Frozen Berserker, a été repéré dans Frozen Berserkers' Hall. Mettez fin à sa menace.",
       "requirements": {
         "dungeonId": "dungeon_12",
-        "bossId": "frozen_berserker"
+        "bossId": "icebound_warlord"
       },
       "rewards": {
         "gold": 400,
@@ -3719,7 +3719,7 @@
       "desc": "Un puissant adversaire, Fire Giant Scout, a été repéré dans Volcanic Core. Mettez fin à sa menace.",
       "requirements": {
         "dungeonId": "dungeon_13",
-        "bossId": "fire_giant_scout"
+        "bossId": "fire_giant_champion"
       },
       "rewards": {
         "gold": 450,
@@ -3733,7 +3733,7 @@
       "desc": "Un puissant adversaire, Fire Giant Scout, a été repéré dans Fire Giants' Outpost. Mettez fin à sa menace.",
       "requirements": {
         "dungeonId": "dungeon_14",
-        "bossId": "fire_giant_scout"
+        "bossId": "fire_giant_champion"
       },
       "rewards": {
         "gold": 450,
@@ -3747,7 +3747,7 @@
       "desc": "Un puissant adversaire, Sylvan Protector, a été repéré dans Verdant Labyrinth. Mettez fin à sa menace.",
       "requirements": {
         "dungeonId": "dungeon_15",
-        "bossId": "sylvan_protector"
+        "bossId": "guardian_of_the_grove"
       },
       "rewards": {
         "gold": 500,
@@ -3761,7 +3761,7 @@
       "desc": "Un puissant adversaire, Sylvan Protector, a été repéré dans Sylvan Guardians' Domain. Mettez fin à sa menace.",
       "requirements": {
         "dungeonId": "dungeon_16",
-        "bossId": "sylvan_protector"
+        "bossId": "guardian_of_the_grove"
       },
       "rewards": {
         "gold": 500,
@@ -3775,7 +3775,7 @@
       "desc": "Un puissant adversaire, Specter, a été repéré dans Shadowy Necropolis. Mettez fin à sa menace.",
       "requirements": {
         "dungeonId": "dungeon_17",
-        "bossId": "specter"
+        "bossId": "spectral_overlord"
       },
       "rewards": {
         "gold": 550,
@@ -3789,7 +3789,7 @@
       "desc": "Un puissant adversaire, Specter, a été repéré dans Specters' Sanctuary. Mettez fin à sa menace.",
       "requirements": {
         "dungeonId": "dungeon_18",
-        "bossId": "specter"
+        "bossId": "spectral_overlord"
       },
       "rewards": {
         "gold": 550,
@@ -3803,7 +3803,7 @@
       "desc": "Un puissant adversaire, Boreal Knight, a été repéré dans Frozen Wastes. Mettez fin à sa menace.",
       "requirements": {
         "dungeonId": "dungeon_19",
-        "bossId": "boreal_knight"
+        "bossId": "boreal_crusader"
       },
       "rewards": {
         "gold": 600,
@@ -3817,7 +3817,7 @@
       "desc": "Un puissant adversaire, Boreal Knight, a été repéré dans Boreal Knights' Fortress. Mettez fin à sa menace.",
       "requirements": {
         "dungeonId": "dungeon_20",
-        "bossId": "boreal_knight"
+        "bossId": "boreal_crusader"
       },
       "rewards": {
         "gold": 600,
@@ -3831,7 +3831,7 @@
       "desc": "Un puissant adversaire, Ash Harpy, a été repéré dans Infernal Forge. Mettez fin à sa menace.",
       "requirements": {
         "dungeonId": "dungeon_21",
-        "bossId": "ash_harpy"
+        "bossId": "ashwing_matriarch"
       },
       "rewards": {
         "gold": 650,
@@ -3845,7 +3845,7 @@
       "desc": "Un puissant adversaire, Ash Harpy, a été repéré dans Ash Harpies' Nest. Mettez fin à sa menace.",
       "requirements": {
         "dungeonId": "dungeon_22",
-        "bossId": "ash_harpy"
+        "bossId": "ashwing_matriarch"
       },
       "rewards": {
         "gold": 650,
@@ -3859,7 +3859,7 @@
       "desc": "Un puissant adversaire, Emerald Golem, a été repéré dans Emerald Nightmare. Mettez fin à sa menace.",
       "requirements": {
         "dungeonId": "dungeon_23",
-        "bossId": "emerald_golem"
+        "bossId": "colossus_of_the_grove"
       },
       "rewards": {
         "gold": 700,
@@ -3873,7 +3873,7 @@
       "desc": "Un puissant adversaire, Emerald Golem, a été repéré dans Emerald Golems' Garden. Mettez fin à sa menace.",
       "requirements": {
         "dungeonId": "dungeon_24",
-        "bossId": "emerald_golem"
+        "bossId": "colossus_of_the_grove"
       },
       "rewards": {
         "gold": 700,
@@ -3887,7 +3887,7 @@
       "desc": "Un puissant adversaire, Tomb Guardian, a été repéré dans Cathedral of Eternal Night. Mettez fin à sa menace.",
       "requirements": {
         "dungeonId": "dungeon_25",
-        "bossId": "tomb_guardian"
+        "bossId": "ancient_tomb_protector"
       },
       "rewards": {
         "gold": 750,
@@ -3901,7 +3901,7 @@
       "desc": "Un puissant adversaire, Tomb Guardian, a été repéré dans Tomb Guardians' Crypt. Mettez fin à sa menace.",
       "requirements": {
         "dungeonId": "dungeon_26",
-        "bossId": "tomb_guardian"
+        "bossId": "ancient_tomb_protector"
       },
       "rewards": {
         "gold": 750,

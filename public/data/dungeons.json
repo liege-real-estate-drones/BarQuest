@@ -1,4 +1,3 @@
-
 {
     "dungeons": [
         {
@@ -23,7 +22,7 @@
                 "cave_bat"
             ],
             "killTarget": 15,
-            "bossId": "cave_bat"
+            "bossId": "bat_matriarch"
         },
         {
             "id": "dungeon_3",
@@ -35,7 +34,7 @@
                 "ice_sprite"
             ],
             "killTarget": 20,
-            "bossId": "yeti_toddler",
+            "bossId": "yeti_chieftain",
             "factionId": "silver_guardians"
         },
         {
@@ -48,7 +47,7 @@
                 "yeti_toddler"
             ],
             "killTarget": 20,
-            "bossId": "yeti_toddler",
+            "bossId": "yeti_chieftain",
             "factionId": "silver_guardians"
         },
         {
@@ -61,7 +60,7 @@
                 "magma_salamander"
             ],
             "killTarget": 25,
-            "bossId": "cinder_elemental",
+            "bossId": "inferno_elemental_lord",
             "factionId": "magma_watchers"
         },
         {
@@ -74,7 +73,7 @@
                 "cinder_elemental"
             ],
             "killTarget": 25,
-            "bossId": "cinder_elemental",
+            "bossId": "inferno_elemental_lord",
             "factionId": "magma_watchers"
         },
         {
@@ -87,7 +86,7 @@
                 "thorn_boar"
             ],
             "killTarget": 30,
-            "bossId": "wandering_dryad",
+            "bossId": "ancient_dryad_matriarch",
             "factionId": "grove_keepers"
         },
         {
@@ -100,7 +99,7 @@
                 "wandering_dryad"
             ],
             "killTarget": 30,
-            "bossId": "wandering_dryad",
+            "bossId": "ancient_dryad_matriarch",
             "factionId": "grove_keepers"
         },
         {
@@ -114,7 +113,7 @@
                 "acolyte_of_the_void"
             ],
             "killTarget": 35,
-            "bossId": "cultist_initiate",
+            "bossId": "void_cultist_leader",
             "factionId": "void_scholars"
         },
         {
@@ -128,7 +127,7 @@
                 "cultist_initiate"
             ],
             "killTarget": 35,
-            "bossId": "acolyte_of_the_void",
+            "bossId": "void_priest",
             "factionId": "void_scholars"
         },
         {
@@ -142,7 +141,7 @@
                 "ice_wraith"
             ],
             "killTarget": 40,
-            "bossId": "frozen_berserker",
+            "bossId": "icebound_warlord",
             "factionId": "silver_guardians"
         },
         {
@@ -156,7 +155,7 @@
                 "frozen_berserker"
             ],
             "killTarget": 40,
-            "bossId": "frozen_berserker",
+            "bossId": "icebound_warlord",
             "factionId": "silver_guardians"
         },
         {
@@ -170,7 +169,7 @@
                 "obsidian_gargoyle"
             ],
             "killTarget": 45,
-            "bossId": "fire_giant_scout",
+            "bossId": "fire_giant_champion",
             "factionId": "magma_watchers"
         },
         {
@@ -184,7 +183,7 @@
                 "fire_giant_scout"
             ],
             "killTarget": 45,
-            "bossId": "fire_giant_scout",
+            "bossId": "fire_giant_champion",
             "factionId": "magma_watchers"
         },
         {
@@ -198,7 +197,7 @@
                 "grove_sentinel"
             ],
             "killTarget": 50,
-            "bossId": "sylvan_protector",
+            "bossId": "guardian_of_the_grove",
             "factionId": "grove_keepers"
         },
         {
@@ -212,7 +211,7 @@
                 "sylvan_protector"
             ],
             "killTarget": 50,
-            "bossId": "sylvan_protector",
+            "bossId": "guardian_of_the_grove",
             "factionId": "grove_keepers"
         },
         {
@@ -227,7 +226,7 @@
                 "shambling_horror"
             ],
             "killTarget": 55,
-            "bossId": "specter",
+            "bossId": "spectral_overlord",
             "factionId": "void_scholars"
         },
         {
@@ -242,7 +241,7 @@
                 "specter"
             ],
             "killTarget": 55,
-            "bossId": "specter",
+            "bossId": "spectral_overlord",
             "factionId": "void_scholars"
         },
         {
@@ -257,7 +256,7 @@
                 "wendigo_spawn"
             ],
             "killTarget": 60,
-            "bossId": "boreal_knight",
+            "bossId": "boreal_crusader",
             "factionId": "silver_guardians"
         },
         {
@@ -272,7 +271,7 @@
                 "boreal_knight"
             ],
             "killTarget": 60,
-            "bossId": "boreal_knight",
+            "bossId": "boreal_crusader",
             "factionId": "silver_guardians"
         },
         {
@@ -287,7 +286,7 @@
                 "brimstone_devil"
             ],
             "killTarget": 65,
-            "bossId": "ash_harpy",
+            "bossId": "ashwing_matriarch",
             "factionId": "magma_watchers"
         },
         {
@@ -302,7 +301,7 @@
                 "ash_harpy"
             ],
             "killTarget": 65,
-            "bossId": "ash_harpy",
+            "bossId": "ashwing_matriarch",
             "factionId": "magma_watchers"
         },
         {
@@ -317,7 +316,7 @@
                 "satyr_trickster"
             ],
             "killTarget": 70,
-            "bossId": "emerald_golem",
+            "bossId": "colossus_of_the_grove",
             "factionId": "grove_keepers"
         },
         {
@@ -332,7 +331,7 @@
                 "emerald_golem"
             ],
             "killTarget": 70,
-            "bossId": "emerald_golem",
+            "bossId": "colossus_of_the_grove",
             "factionId": "grove_keepers"
         },
         {
@@ -348,7 +347,7 @@
                 "soul_eater"
             ],
             "killTarget": 75,
-            "bossId": "tomb_guardian",
+            "bossId": "ancient_tomb_protector",
             "factionId": "void_scholars"
         },
         {
@@ -364,7 +363,7 @@
                 "tomb_guardian"
             ],
             "killTarget": 75,
-            "bossId": "tomb_guardian",
+            "bossId": "ancient_tomb_protector",
             "factionId": "void_scholars"
         },
         {
