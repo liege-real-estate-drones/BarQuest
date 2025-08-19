@@ -44,7 +44,7 @@
             "nom": "Kobold Miner",
             "level": 2,
             "famille": "Humanoid",
-            "isBoss": false,
+            "isBoss": true,
             "palier": 1,
             "stats": {
                 "PV": 40,

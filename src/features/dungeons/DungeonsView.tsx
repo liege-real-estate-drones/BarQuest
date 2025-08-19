@@ -10,13 +10,14 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useGameStore } from '@/state/gameStore';
-import { Dungeon } from '@/lib/types';
+import { Dungeon, Quete } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { ActiveQuete } from "@/state/gameStore";
 
 export function DungeonsView() {
-  const { dungeons, enterDungeon, player, gameData, proposedQuest, setProposedQuest, acceptQuest } = useGameStore(state => ({
+  const { dungeons, enterDungeon, player, gameData, proposedQuest, setProposedQuest, acceptQuest, activeQuests } = useGameStore(state => ({
     dungeons: state.gameData.dungeons,
     enterDungeon: state.enterDungeon,
     player: state.player,
@@ -24,25 +25,56 @@ export function DungeonsView() {
     proposedQuest: state.proposedQuest,
     setProposedQuest: state.setProposedQuest,
     acceptQuest: state.acceptQuest,
+    activeQuests: state.activeQuests,
   }));
 
   const completedDungeons = player.completedDungeons || {};
 
   const handleEnterDungeon = (dungeonId: string) => {
-      enterDungeon(dungeonId);
+      const availableQuestsForDungeon = gameData.quests.filter(q =>
+          q.requirements.dungeonId === dungeonId &&
+          !player.completedQuests.includes(q.id) &&
+          !activeQuests.some((aq: ActiveQuete) => aq.quete.id === q.id)
+      );
+
+      const firstAvailableQuest = availableQuestsForDungeon.find(q => {
+          const questIdParts = q.id.split('_q');
+          if (questIdParts.length < 2 || isNaN(parseInt(questIdParts[1], 10))) {
+              // Pour les quêtes non-numérotées comme _q_boss
+              if (q.id.includes('_q_boss')) {
+                  const questPrefix = q.id.substring(0, q.id.indexOf('_q_boss'));
+                  // S'assurer que la dernière quête numérotée (q5) est terminée
+                  const lastNumberedQuestId = `${questPrefix}_q5`;
+                  return player.completedQuests.includes(lastNumberedQuestId);
+              }
+              return true;
+          }
+          const questNum = parseInt(questIdParts[1], 10);
+          if (questNum === 1) return true;
+          const questPrefix = questIdParts[0];
+          const prevQuestId = `${questPrefix}_q${questNum - 1}`;
+          return player.completedQuests.includes(prevQuestId);
+      });
+
+
+      if (firstAvailableQuest) {
+          setProposedQuest(firstAvailableQuest);
+      } else {
+          enterDungeon(dungeonId);
+      }
   }
 
   const handleAcceptQuestAndEnter = () => {
     if (proposedQuest && proposedQuest.requirements.dungeonId) {
       acceptQuest(proposedQuest.id);
-      handleEnterDungeon(proposedQuest.requirements.dungeonId);
+      enterDungeon(proposedQuest.requirements.dungeonId);
       setProposedQuest(null);
     }
   };
 
   const handleDeclineQuestAndEnter = () => {
     if (proposedQuest && proposedQuest.requirements.dungeonId) {
-      handleEnterDungeon(proposedQuest.requirements.dungeonId);
+      enterDungeon(proposedQuest.requirements.dungeonId);
       setProposedQuest(null);
     }
   };

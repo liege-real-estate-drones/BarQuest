@@ -113,7 +113,15 @@ export function QuestsView() {
         }
         
         const questIdParts = q.id.split('_q');
-        if (questIdParts.length < 2) return true; // Non-chained quests are available if dungeon is unlocked
+        if (questIdParts.length < 2 || isNaN(parseInt(questIdParts[1], 10))) {
+            if (q.id.includes('_q_boss')) {
+                const questPrefix = q.id.substring(0, q.id.indexOf('_q_boss'));
+                // Vérifiez si la dernière quête numérotée est terminée
+                const lastNumberedQuestId = `${questPrefix}_q5`; 
+                return player.completedQuests.includes(lastNumberedQuestId);
+            }
+            return true;
+        }
 
         const questNum = parseInt(questIdParts[1], 10);
         if (questNum === 1) {

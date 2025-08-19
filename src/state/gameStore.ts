@@ -1052,7 +1052,9 @@ export const useGameStore = create<GameState>()(
                 });
             }
 
-            state.combat.killCount += 1;
+            if (!enemy.isBoss) {
+              state.combat.killCount += 1;
+            }
 
             if (state.combat.targetIndex === state.combat.enemies.findIndex(e => e.id === enemy.id)) {
                 const nextTargetIndex = state.combat.enemies.findIndex(e => e.stats.PV > 0);
@@ -1064,7 +1066,7 @@ export const useGameStore = create<GameState>()(
               const req = quete.requirements;
               let progressMade = false;
       
-              if (quete.type === 'chasse' && req.dungeonId === currentDungeon?.id) {
+              if (quete.type === 'chasse' && req.dungeonId === currentDungeon?.id && !enemy.isBoss) {
                   activeQuest.progress++;
                   progressMade = true;
               } else if (quete.type === 'chasse_boss' && enemy.isBoss && enemy.id.startsWith(req.bossId || '')) {
@@ -1125,67 +1127,88 @@ export const useGameStore = create<GameState>()(
 
         const allEnemiesDead = get().combat.enemies.every(e => e.stats.PV <= 0);
         const currentDungeon = get().currentDungeon;
+
         if (allEnemiesDead) {
              setTimeout(() => {
-                if (currentDungeon && get().combat.killCount >= currentDungeon.killTarget) {
-                    set((state: GameState) => {
-                        state.player.completedDungeons[currentDungeon.id] = (state.player.completedDungeons[currentDungeon.id] || 0) + 1;
-                        const dungeonDuration = (Date.now() - (state.dungeonStartTime || Date.now())) / 1000;
+                const { gameData } = get();
+                if (currentDungeon) {
+                    const bossHasBeenDefeated = get().combat.enemies.some(e => e.isBoss && e.stats.PV <= 0);
 
-                        state.activeQuests.forEach((activeQuest) => {
-                          const { quete } = activeQuest;
-                          if (quete.type === 'nettoyage' && quete.requirements.dungeonId === currentDungeon.id) {
-                            activeQuest.progress = state.player.completedDungeons[currentDungeon.id];
-                          } else if (quete.type === 'defi' && quete.requirements.timeLimit && dungeonDuration <= quete.requirements.timeLimit) {
-                            activeQuest.progress = 1; // Marquer comme complété
-                          }
+                    // Si le boss a été vaincu, on termine le donjon
+                    if (bossHasBeenDefeated) {
+                        set((state: GameState) => {
+                            state.player.completedDungeons[currentDungeon.id] = (state.player.completedDungeons[currentDungeon.id] || 0) + 1;
+                            const dungeonDuration = (Date.now() - (state.dungeonStartTime || Date.now())) / 1000;
 
-                          const target = quete.requirements.clearCount || (quete.requirements.timeLimit ? 1 : 0);
-                          if (target > 0 && activeQuest.progress >= target) {
-                            state.combat.log.push({ message: `Quête terminée: ${quete.name}!`, type: 'quest', timestamp: Date.now() });
-                            state.inventory.gold += quete.rewards.gold;
-                            state.player.xp += quete.rewards.xp;
-                            state.combat.log.push({ message: `Vous avez reçu ${quete.rewards.gold} or et ${quete.rewards.xp} XP.`, type: 'loot', timestamp: Date.now() });
-                            state.player.completedQuests.push(quete.id);
-                          }
-                        });
+                            state.activeQuests.forEach((activeQuest) => {
+                              const { quete } = activeQuest;
+                              if (quete.type === 'nettoyage' && quete.requirements.dungeonId === currentDungeon.id) {
+                                activeQuest.progress = state.player.completedDungeons[currentDungeon.id];
+                              } else if (quete.type === 'defi' && quete.requirements.timeLimit && dungeonDuration <= quete.requirements.timeLimit) {
+                                activeQuest.progress = 1; // Marquer comme complété
+                              }
 
-                        state.activeQuests = state.activeQuests.filter(aq => !state.player.completedQuests.includes(aq.quete.id));
+                              const target = quete.requirements.clearCount || (quete.requirements.timeLimit ? 1 : 0);
+                              if (target > 0 && activeQuest.progress >= target) {
+                                state.combat.log.push({ message: `Quête terminée: ${quete.name}!`, type: 'quest', timestamp: Date.now() });
+                                state.inventory.gold += quete.rewards.gold;
+                                state.player.xp += quete.rewards.xp;
+                                state.combat.log.push({ message: `Vous avez reçu ${quete.rewards.gold} or et ${quete.rewards.xp} XP.`, type: 'loot', timestamp: Date.now() });
+                                state.player.completedQuests.push(quete.id);
+                              }
+                            });
 
+                            state.activeQuests = state.activeQuests.filter(aq => !state.player.completedQuests.includes(aq.quete.id));
 
-                        if (currentDungeon.factionId) {
-                            const repData = state.player.reputation[currentDungeon.factionId] || { value: 0, claimedRewards: [] };
-                            repData.value += 250;
-                            state.player.reputation[currentDungeon.factionId] = repData;
-                        }
+                            if (currentDungeon.factionId) {
+                                const repData = state.player.reputation[currentDungeon.factionId] || { value: 0, claimedRewards: [] };
+                                repData.value += 250;
+                                state.player.reputation[currentDungeon.factionId] = repData;
+                            }
 
-                        state.inventory.items.push(...state.combat.dungeonRunItems);
-                        state.combat.dungeonRunItems = [];
-                        state.combat.log.push({ message: `Dungeon complete! Returning to town.`, type: 'info', timestamp: Date.now() });
-                        state.view = 'TOWN';
-                        state.dungeonStartTime = null;
+                            state.inventory.items.push(...state.combat.dungeonRunItems);
+                            state.combat.dungeonRunItems = [];
+                            state.combat.log.push({ message: `Dungeon complete! Returning to town.`, type: 'info', timestamp: Date.now() });
+                            state.view = 'TOWN';
+                            state.dungeonStartTime = null;
 
-                        const faction = state.gameData.factions.find(f => f.id === currentDungeon.factionId);
-                        if (faction && state.player.reputation[faction.id]) {
-                            const playerRep = state.player.reputation[faction.id];
-                            faction.ranks.forEach(rank => {
-                                if (rank.rewardItemId && playerRep.value >= rank.threshold && !playerRep.claimedRewards.includes(rank.rewardItemId)) {
-                                    const rewardItem = state.gameData.items.find(i => i.id === rank.rewardItemId);
-                                    if (rewardItem) {
-                                        state.inventory.items.push({ ...rewardItem, id: uuidv4() });
-                                        playerRep.claimedRewards.push(rank.rewardItemId);
-                                        // A toast would be better here, but for now a log is fine.
-                                        console.log(`You have been awarded ${rewardItem.name} for reaching ${rank.name} with ${faction.name}.`);
+                            const faction = state.gameData.factions.find(f => f.id === currentDungeon.factionId);
+                            if (faction && state.player.reputation[faction.id]) {
+                                const playerRep = state.player.reputation[faction.id];
+                                faction.ranks.forEach(rank => {
+                                    if (rank.rewardItemId && playerRep.value >= rank.threshold && !playerRep.claimedRewards.includes(rank.rewardItemId)) {
+                                        const rewardItem = state.gameData.items.find(i => i.id === rank.rewardItemId);
+                                        if (rewardItem) {
+                                            state.inventory.items.push({ ...rewardItem, id: uuidv4() });
+                                            playerRep.claimedRewards.push(rank.rewardItemId);
+                                            console.log(`You have been awarded ${rewardItem.name} for reaching ${rank.name} with ${faction.name}.`);
+                                        }
                                     }
-                                }
+                                });
+                            }
+                        });
+                        if(gameLoop) clearInterval(gameLoop);
+                    } else if (get().combat.killCount >= currentDungeon.killTarget) {
+                        // On a atteint le nombre de mobs, on fait apparaître le boss
+                        const bossTemplate = gameData.monsters.find(m => m.id === currentDungeon.bossId);
+                        if (bossTemplate) {
+                            const bossInstance: CombatEnemy = {
+                                ...JSON.parse(JSON.stringify(bossTemplate)),
+                                id: uuidv4(),
+                                initialHp: bossTemplate.stats.PV,
+                                attackProgress: 0,
+                                isBoss: true
+                            };
+                            set((state: GameState) => {
+                                state.combat.enemies = [bossInstance];
+                                state.combat.targetIndex = 0;
+                                state.combat.log.push({ message: `Le boss, ${bossTemplate.nom}, apparaît !`, type: 'info', timestamp: Date.now() });
                             });
                         }
-
-                    });
-                    if(gameLoop) clearInterval(gameLoop);
-                } else {
-                    set((state: GameState) => { state.combat.enemies = [] });
-                    get().startCombat();
+                    } else {
+                        // Sinon, on continue avec un autre groupe de mobs
+                        get().startCombat();
+                    }
                 }
             }, 1000);
         }
