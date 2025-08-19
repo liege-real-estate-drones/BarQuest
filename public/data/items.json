@@ -717,13 +717,5 @@
         "desc": "Un croc pointu prélevé sur une chauve-souris. Utile pour certaines quêtes.",
         "vendorPrice": 1
       }
-  ],
-  "items": [
-    {
-      "id": "bat_fang",
-      "nom": "Croc de chauve-souris",
-      "type": "junk",
-      "valeur": 5
-    }
-    ]
+  ]
 }
