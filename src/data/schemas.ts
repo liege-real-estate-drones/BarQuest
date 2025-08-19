@@ -121,7 +121,8 @@ export const QueteSchema = z.object({
     itemCount: z.number().int().optional(),
     timeLimit: z.number().int().optional(), // en secondes
     skillId: z.string().optional(),
-    monsterType: z.string().optional()
+    monsterType: z.string().optional(),
+    classId: z.string().optional()
   }),
   rewards: z.object({
     gold: z.number().int(),
