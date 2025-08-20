@@ -67,6 +67,29 @@ export function DungeonCompletionView() {
                             )}
                         </div>
                     </div>
+                    {/* Chest Content */}
+                    {summary.chestRewards && (summary.chestRewards.gold > 0 || summary.chestRewards.items.length > 0) && (
+                        <div>
+                            <h3 className="text-lg font-semibold mb-2 flex items-center">
+                                <img src="/images/icons/chest.png" alt="Chest" className="h-6 w-6 mr-2" />
+                                Contenu du Coffre
+                            </h3>
+                            <div className="p-4 border bg-primary/5 rounded-lg space-y-4">
+                                <div className="flex items-center justify-center text-center">
+                                    <Coins className="h-6 w-6 text-yellow-500 mr-2" />
+                                    <p className="text-lg font-bold">{summary.chestRewards.gold.toLocaleString()}</p>
+                                    <p className="text-sm text-muted-foreground ml-1">Or supplémentaire</p>
+                                </div>
+                                {summary.chestRewards.items.length > 0 && (
+                                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 pt-4 border-t">
+                                        {summary.chestRewards.items.map((item: Item, index: number) => (
+                                            <ItemTooltip key={`${item.id}-${index}`} item={item} />
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
                 </CardContent>
                 <CardFooter>
                     <Button onClick={closeSummary} className="w-full text-lg py-6">

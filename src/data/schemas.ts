@@ -172,4 +172,8 @@ export interface DungeonCompletionSummary {
     goldGained: number;
     xpGained: number;
     itemsGained: Item[];
+    chestRewards?: {
+        gold: number;
+        items: Item[];
+    };
 }

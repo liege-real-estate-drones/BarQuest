@@ -78,7 +78,8 @@
             { "ref": "Force", "val": 5 }
         ],
         "tagsClasse": ["berserker", "cleric"],
-        "set": { "id": "silver_guard", "name": "Garde d'Argent" }
+        "set": { "id": "silver_guard", "name": "Garde d'Argent" },
+        "vendorPrice": 100
       },
       {
         "id": "set_silver_guard_chest",
@@ -91,7 +92,8 @@
             { "ref": "PV", "val": 20 }
         ],
         "tagsClasse": ["berserker", "cleric"],
-        "set": { "id": "silver_guard", "name": "Garde d'Argent" }
+        "set": { "id": "silver_guard", "name": "Garde d'Argent" },
+        "vendorPrice": 120
       },
       {
         "id": "set_arcanist_cowl",
@@ -104,7 +106,8 @@
             { "ref": "Intelligence", "val": 5 }
         ],
         "tagsClasse": ["mage", "cleric"],
-        "set": { "id": "arcanist_garb", "name": "Tenue de l'Arcaniste" }
+        "set": { "id": "arcanist_garb", "name": "Tenue de l'Arcaniste" },
+        "vendorPrice": 100
       },
       {
         "id": "set_arcanist_robe",
@@ -117,7 +120,8 @@
             { "ref": "RessourceMax", "val": 30 }
         ],
         "tagsClasse": ["mage", "cleric"],
-        "set": { "id": "arcanist_garb", "name": "Tenue de l'Arcaniste" }
+        "set": { "id": "arcanist_garb", "name": "Tenue de l'Arcaniste" },
+        "vendorPrice": 120
       },
       {
         "id": "set_shadow_shroud_mask",
@@ -130,7 +134,8 @@
             { "ref": "Dexterite", "val": 5 }
         ],
         "tagsClasse": ["rogue"],
-        "set": { "id": "shadow_shroud", "name": "Linceul de l'Ombre" }
+        "set": { "id": "shadow_shroud", "name": "Linceul de l'Ombre" },
+        "vendorPrice": 100
       },
       {
         "id": "set_shadow_shroud_tunic",
@@ -143,7 +148,8 @@
             { "ref": "CritPct", "val": 2 }
         ],
         "tagsClasse": ["rogue"],
-        "set": { "id": "shadow_shroud", "name": "Linceul de l'Ombre" }
+        "set": { "id": "shadow_shroud", "name": "Linceul de l'Ombre" },
+        "vendorPrice": 120
       },
       {
         "id": "rep_silver_vanguard_helm",
