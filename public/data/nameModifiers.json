@@ -41,15 +41,15 @@
   "naming_patterns": {
     "Rare": [
       "{baseName} {suffix}",
-      "{prefix} {baseName}"
+      "{baseName} {prefix}"
     ],
     "Épique": [
-      "{prefix} {baseName} {suffix}",
+      "{baseName} {prefix} {suffix}",
       "{qualifier} {baseName} {suffix}"
     ],
     "Légendaire": [
-        "{prefix} {baseName} {suffix}",
-        "{qualifier} {prefix} {baseName}",
+        "{baseName} {prefix} {suffix}",
+        "{qualifier} {baseName} {prefix}",
         "{qualifier} {baseName} {suffix}"
     ]
   },

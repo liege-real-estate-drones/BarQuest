@@ -49,6 +49,15 @@ export const generateProceduralItem = (
     dungeonTheme?: string, // Optional: to link the name to the dungeon
     monsterTheme?: string // Optional: to link the name to the monster family
 ): Item => {
+    if (baseItem.type === 'quest') {
+        return {
+            ...baseItem,
+            id: uuidv4(),
+            niveauMin: itemLevel,
+            rarity: rarity,
+        };
+    }
+
     const qualifierCategoryKey = rarityToQualifierKey[rarity] || 'common';
     const qualifierCategory = (qualifiers as any)[qualifierCategoryKey];
     const qualifierMultiplier = qualifierCategory ? qualifierCategory.multiplier : 1.0;

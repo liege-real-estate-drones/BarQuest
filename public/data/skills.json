@@ -539,6 +539,19 @@
             "effets": [
                 "Enduit vos armes d'un poison qui a 30% de chances d'infliger 5 dégâts de Nature. Dure 1 heure.",
                 "Coûte 10 Énergie."
+            ],
+            "effects": [
+                {
+                    "type": "buff",
+                    "id": "deadly_poison_buff",
+                    "name": "Poison mortel",
+                    "duration": 3600,
+                    "buffType": "special"
+                },
+                {
+                    "type": "resource_cost",
+                    "amount": 10
+                }
             ]
         },
         {
