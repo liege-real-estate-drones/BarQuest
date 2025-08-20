@@ -97,6 +97,7 @@ export interface PlayerState {
 export interface InventoryState {
   gold: number;
   items: Item[];
+  craftingMaterials: { [materialId: string]: number };
   potions: {
     health: number;
     resource: number;

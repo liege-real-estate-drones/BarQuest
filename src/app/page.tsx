@@ -111,7 +111,7 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-background text-foreground">
-      {view === 'TOWN' && <TownView />}
+      {view === 'MAIN' && <TownView />}
       {view === 'COMBAT' && <CombatView />}
     </main>
   );

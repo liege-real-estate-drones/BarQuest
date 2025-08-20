@@ -24,15 +24,27 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { CharacterView } from '../player/CharacterView';
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
+import { CraftingView } from './CraftingView';
 
 type TownTab = 'town' | 'dungeons' | 'character' | 'vendors';
 
 export function TownView() {
-  const { player, resetGame } = useGameStore(state => ({
+  const { player, resetGame, townView, setTownView } = useGameStore(state => ({
     player: state.player,
-    resetGame: state.resetGame
+    resetGame: state.resetGame,
+    townView: state.townView,
+    setTownView: state.setTownView,
   }));
   const [activeTab, setActiveTab] = useState<TownTab>('town');
+
+  if (townView === 'CRAFTING') {
+    return (
+        <div>
+            <Button onClick={() => setTownView('TOWN')}>Retour en ville</Button>
+            <CraftingView />
+        </div>
+    );
+  }
 
   const renderContent = () => {
     switch (activeTab) {
@@ -52,6 +64,9 @@ export function TownView() {
               {/* La réputation, pour suivre la progression à long terme */}
               <div className="md:col-span-2">
                 <ReputationView />
+              </div>
+              <div className="md:col-span-2">
+                <Button onClick={() => setTownView('CRAFTING')}>Aller à la forge</Button>
               </div>
             </div>
           </ScrollArea>

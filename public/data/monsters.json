@@ -746,7 +746,8 @@
             "famille": "Giant",
             "isBoss": true,
             "palier": 2,
-            "stats": { "PV": 600, "AttMin": 25, "AttMax": 35, "CritPct": 8, "CritDmg": 150, "Armure": 150, "Vitesse": 3.2, "Precision": 75, "Esquive": 10 }
+            "stats": { "PV": 600, "AttMin": 25, "AttMax": 35, "CritPct": 8, "CritDmg": 150, "Armure": 150, "Vitesse": 3.2, "Precision": 75, "Esquive": 10 },
+            "specificLootTable": ["axe_of_the_deathbringer"]
         },
         {
             "id": "inferno_elemental_lord",

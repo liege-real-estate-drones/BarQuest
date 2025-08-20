@@ -12,6 +12,7 @@ import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { ItemTooltip } from '@/components/ItemTooltip';
+import { GamblerView } from './GamblerView';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -201,7 +202,7 @@ export function VendorsView() {
         <Card className="h-full flex flex-col">
             <CardHeader>
                 <CardTitle className="flex justify-between items-center">
-                    <span>Forgeron</span>
+                    <span>Marchands</span>
                      <Badge variant="secondary" className="flex items-center gap-2">
                         <Coins className="h-4 w-4" />
                         {gold} Or
@@ -211,9 +212,10 @@ export function VendorsView() {
             {/* CardContent prend la hauteur restante, et son enfant direct aussi */}
             <CardContent className="flex-grow flex flex-col p-0 min-h-0">
                 <Tabs defaultValue="buy" className="w-full flex-grow flex flex-col">
-                    <TabsList className="grid w-full grid-cols-2 px-6">
+                    <TabsList className="grid w-full grid-cols-3 px-6">
                         <TabsTrigger value="buy">Acheter</TabsTrigger>
                         <TabsTrigger value="sell">Vendre</TabsTrigger>
+                        <TabsTrigger value="gamble">Parier</TabsTrigger>
                     </TabsList>
                     {/* Ce conteneur a maintenant une hauteur définie (le reste de l'espace) */}
                     <div className="relative flex-grow mt-4">
@@ -224,6 +226,9 @@ export function VendorsView() {
                                 </TabsContent>
                                 <TabsContent value="sell" className="m-0">
                                     <SellTab />
+                                </TabsContent>
+                                <TabsContent value="gamble" className="m-0">
+                                    <GamblerView />
                                 </TabsContent>
                             </div>
                         </ScrollArea>
