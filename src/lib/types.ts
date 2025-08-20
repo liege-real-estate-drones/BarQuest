@@ -36,6 +36,13 @@ export type PlayerClassId = 'berserker' | 'mage' | 'rogue' | 'cleric';
 export type ResourceType = 'Mana' | 'Rage' | 'Énergie';
 export type PotionType = 'health' | 'resource';
 
+export interface DungeonCompletionSummary {
+  gold: number;
+  experience: number;
+  items: Item[];
+  bonusItem: Item | null;
+}
+
 export interface GameData {
   dungeons: Dungeon[];
   monsters: Monstre[];
@@ -147,4 +154,6 @@ export interface CombatState {
   targetIndex: number;
   isStealthed: boolean;
   pendingActions: any[];
+  goldGained: number;
+  xpGained: number;
 }

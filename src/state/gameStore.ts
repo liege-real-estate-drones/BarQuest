@@ -65,11 +65,12 @@ interface GameState {
   isInitialized: boolean;
   rehydrateComplete: boolean;
   lastPlayed: number | null;
-  view: 'MAIN' | 'COMBAT';
+  view: 'MAIN' | 'COMBAT' | 'DUNGEON_COMPLETED';
   townView: 'TOWN' | 'CRAFTING';
   worldTier: number;
   currentDungeon: Dungeon | null;
   dungeonStartTime: number | null;
+  dungeonCompletionSummary: DungeonCompletionSummary | null;
   gameData: GameData;
   player: PlayerState;
   inventory: InventoryState;
@@ -108,6 +109,8 @@ interface GameState {
   acceptQuest: (questId: string) => void;
   acceptMultipleQuests: (questIds: string[]) => void;
 
+  endDungeon: () => void;
+  closeDungeonSummary: () => void;
   enterDungeon: (dungeonId: string) => void;
   startCombat: () => void;
   gameTick: (delta: number) => void;
@@ -303,6 +306,7 @@ export const useGameStore = create<GameState>()(
       worldTier: 1,
       currentDungeon: null,
       dungeonStartTime: null,
+      dungeonCompletionSummary: null,
       gameData: { dungeons: [], monsters: [], items: [], talents: [], skills: [], affixes: [], classes: [], quests: [], factions: [], sets: [], recipes: [] },
       player: getInitialPlayerState(),
       inventory: initialInventoryState,
@@ -866,6 +870,76 @@ export const useGameStore = create<GameState>()(
         });
       },
 
+      closeDungeonSummary: () => {
+        set((state: GameState) => {
+          state.dungeonCompletionSummary = null;
+          state.view = 'MAIN';
+        });
+      },
+
+      endDungeon: () => {
+        set((state: GameState) => {
+          const { combat, player, inventory, gameData, currentDungeon, worldTier } = state;
+
+          // --- Surprise Feature: Bonus Loot Roll ---
+          let bonusItem: Item | null = null;
+          if (Math.random() < 0.2) { // 20% chance for a bonus item
+            const possibleItemTemplates = gameData.items.filter(item =>
+              item.rarity !== "Légendaire" && item.rarity !== "Unique" && !item.set && item.slot !== 'potion' &&
+              (item.tagsClasse?.includes('common') || (player.classeId && item.tagsClasse?.includes(player.classeId)))
+            );
+            if (possibleItemTemplates.length > 0) {
+              const baseItemTemplate = possibleItemTemplates[Math.floor(Math.random() * possibleItemTemplates.length)];
+              const { id, niveauMin, rarity, affixes, ...baseItemProps } = baseItemTemplate;
+              const itemLevel = currentDungeon?.palier ?? player.level;
+              // Give a higher chance for a good rarity on the bonus item
+              const roll = Math.random();
+              let bonusRarity: Rareté = "Rare";
+              if (roll < 0.1) bonusRarity = "Légendaire";
+              else if (roll < 0.3) bonusRarity = "Épique";
+
+              bonusItem = generateProceduralItem(baseItemProps, itemLevel, bonusRarity, gameData.affixes);
+            }
+          }
+
+          // Finalize rewards
+          const summary: DungeonCompletionSummary = {
+            gold: combat.goldGained,
+            experience: combat.xpGained,
+            items: combat.dungeonRunItems,
+            bonusItem: bonusItem,
+          };
+
+          state.dungeonCompletionSummary = summary;
+
+          // Add rewards to player inventory
+          inventory.gold += summary.gold;
+          player.xp += summary.experience;
+          inventory.items.push(...summary.items);
+          if (summary.bonusItem) {
+            inventory.items.push(summary.bonusItem);
+          }
+
+          // Handle quests and other end-of-dungeon logic
+          if (currentDungeon) {
+            player.completedDungeons[currentDungeon.id] = (player.completedDungeons[currentDungeon.id] || 0) + 1;
+            if (currentDungeon.factionId) {
+                const repData = player.reputation[currentDungeon.factionId] || { value: 0, claimedRewards: [] };
+                repData.value += 250;
+                player.reputation[currentDungeon.factionId] = repData;
+            }
+          }
+
+          // Reset combat state and switch view
+          state.combat.dungeonRunItems = [];
+          state.combat.goldGained = 0;
+          state.combat.xpGained = 0;
+          state.dungeonStartTime = null;
+          state.view = 'DUNGEON_COMPLETED';
+          if (gameLoop) clearInterval(gameLoop);
+        });
+      },
+
       enterDungeon: (dungeonId: string) => {
         const { gameData, isHeroicMode } = get();
         const finalDungeonId = isHeroicMode ? `${dungeonId}_heroic` : dungeonId;
@@ -876,7 +950,7 @@ export const useGameStore = create<GameState>()(
             state.view = 'COMBAT';
             state.currentDungeon = dungeon;
             state.dungeonStartTime = Date.now();
-            state.combat = { ...initialCombatState, pendingActions: [], log: [{ message: `Entered ${dungeon.name}.`, type: 'info', timestamp: Date.now() }]};
+            state.combat = { ...initialCombatState, goldGained: 0, xpGained: 0, pendingActions: [], log: [{ message: `Entered ${dungeon.name}.`, type: 'info', timestamp: Date.now() }]};
             if (state.player.resources.type === 'Rage') {
               state.player.resources.current = 0;
             }
@@ -1487,9 +1561,9 @@ export const useGameStore = create<GameState>()(
 
             state.combat.log.push({ message: `You defeated ${enemy.nom}!`, type: 'info', timestamp: Date.now() });
             state.combat.log.push({ message: `You find ${goldDrop} gold.`, type: 'loot', timestamp: Date.now() });
-            state.inventory.gold += goldDrop;
+            state.combat.goldGained += goldDrop;
 
-            state.player.xp += xpGained;
+            state.combat.xpGained += xpGained;
             state.combat.log.push({ message: `You gain ${xpGained} experience.`, type: 'info', timestamp: Date.now() });
 
              if (itemDrop) {
@@ -1584,58 +1658,7 @@ export const useGameStore = create<GameState>()(
                     const bossHasBeenDefeated = get().combat.enemies.some(e => e.isBoss && e.stats.PV <= 0);
 
                     if (bossHasBeenDefeated) {
-                        set((state: GameState) => {
-                            state.player.completedDungeons[currentDungeon.id] = (state.player.completedDungeons[currentDungeon.id] || 0) + 1;
-                            const dungeonDuration = (Date.now() - (state.dungeonStartTime || Date.now())) / 1000;
-
-                            state.activeQuests.forEach((activeQuest) => {
-                              const { quete } = activeQuest;
-                              if (quete.type === 'nettoyage' && quete.requirements.dungeonId === currentDungeon.id) {
-                                activeQuest.progress = state.player.completedDungeons[currentDungeon.id];
-                              } else if (quete.type === 'defi' && quete.requirements.dungeonId === currentDungeon.id && quete.requirements.timeLimit && dungeonDuration <= quete.requirements.timeLimit) {
-                                activeQuest.progress = 1;
-                              }
-
-                              const target = quete.requirements.clearCount || (quete.requirements.timeLimit ? 1 : 0);
-                              if (target > 0 && activeQuest.progress >= target) {
-                                state.combat.log.push({ message: `Quête terminée: ${quete.name}!`, type: 'quest', timestamp: Date.now() });
-                                state.inventory.gold += quete.rewards.gold;
-                                state.player.xp += quete.rewards.xp;
-                                state.combat.log.push({ message: `Vous avez reçu ${quete.rewards.gold} or et ${quete.rewards.xp} XP.`, type: 'loot', timestamp: Date.now() });
-                                state.player.completedQuests.push(quete.id);
-                              }
-                            });
-
-                            state.activeQuests = state.activeQuests.filter(aq => !state.player.completedQuests.includes(aq.quete.id));
-
-                            if (currentDungeon.factionId) {
-                                const repData = state.player.reputation[currentDungeon.factionId] || { value: 0, claimedRewards: [] };
-                                repData.value += 250;
-                                state.player.reputation[currentDungeon.factionId] = repData;
-                            }
-
-                            state.inventory.items.push(...state.combat.dungeonRunItems);
-                            state.combat.dungeonRunItems = [];
-                            state.combat.log.push({ message: `Dungeon complete! Returning to town.`, type: 'info', timestamp: Date.now() });
-                            state.view = 'MAIN';
-                            state.dungeonStartTime = null;
-
-                            const faction = state.gameData.factions.find(f => f.id === currentDungeon.factionId);
-                            if (faction && state.player.reputation[faction.id]) {
-                                const playerRep = state.player.reputation[faction.id];
-                                faction.ranks.forEach(rank => {
-                                    if (rank.rewardItemId && playerRep.value >= rank.threshold && !playerRep.claimedRewards.includes(rank.rewardItemId)) {
-                                        const rewardItem = state.gameData.items.find(i => i.id === rank.rewardItemId);
-                                        if (rewardItem) {
-                                            state.inventory.items.push({ ...rewardItem, id: uuidv4() });
-                                            playerRep.claimedRewards.push(rank.rewardItemId);
-                                            console.log(`You have been awarded ${rewardItem.name} for reaching ${rank.name} with ${faction.name}.`);
-                                        }
-                                    }
-                                });
-                            }
-                        });
-                        if(gameLoop) clearInterval(gameLoop);
+                        get().endDungeon();
                     } else if (get().combat.killCount >= currentDungeon.killTarget) {
                         const bossTemplate = gameData.monsters.find(m => m.id === currentDungeon.bossId);
                         if (bossTemplate) {
