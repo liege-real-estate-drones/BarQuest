@@ -1702,6 +1702,9 @@ export const useGameStore = create<GameState>()(
             if(typeof state.inventory.potions !== 'object' || state.inventory.potions === null) {
               state.inventory.potions = { health: 0, resource: 0};
             }
+            if(typeof state.inventory.craftingMaterials !== 'object' || state.inventory.craftingMaterials === null) {
+                state.inventory.craftingMaterials = {};
+            }
         }
       }
     }
