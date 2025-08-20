@@ -8,7 +8,8 @@ import { useGameStore } from '@/state/gameStore';
 
 const rarityColorMap: Record<Rareté, string> = {
     Commun: 'text-gray-400',
-    Rare: 'text-blue-400',
+    Magique: 'text-blue-300',
+    Rare: 'text-blue-500',
     Épique: 'text-purple-500',
     Légendaire: 'text-yellow-500',
     Unique: 'text-orange-500',

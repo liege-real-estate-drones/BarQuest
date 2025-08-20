@@ -20,7 +20,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ForgeView } from './ForgeView';
 
 const getRarityMultiplier = (rarity: Rareté): number => {
-    const rarityMultiplier = { "Commun": 1, "Rare": 2, "Épique": 3, "Légendaire": 5, "Unique": 5 };
+    const rarityMultiplier: Record<Rareté, number> = { "Commun": 1, "Magique": 1.5, "Rare": 2, "Épique": 3, "Légendaire": 5, "Unique": 5 };
     return rarityMultiplier[rarity] || 1;
 };
 

@@ -15,6 +15,8 @@ import type {
   SkillSchema,
   ItemSetSchema,
   RecipeSchema,
+  MaterialTypeSchema,
+  ThemeSchema,
 } from '@/data/schemas';
 
 export type Rareté = z.infer<typeof RaretéEnum>;
@@ -22,9 +24,11 @@ export type Quete = z.infer<typeof QueteSchema>;
 export type Faction = z.infer<typeof FactionSchema>;
 export type Stats = z.infer<typeof StatsSchema>;
 export type Affixe = z.infer<typeof AffixSchema>;
-export type Item = z.infer<typeof ItemSchema> & { vendorPrice?: number };
+export type Item = z.infer<typeof ItemSchema>;
 export type Skill = z.infer<typeof SkillSchema>;
 export type Talent = z.infer<typeof TalentSchema>;
+export type MaterialType = z.infer<typeof MaterialTypeSchema>;
+export type Theme = z.infer<typeof ThemeSchema>;
 export type Monstre = z.infer<typeof MonsterSchema> & { id: string };
 export type Dungeon = z.infer<typeof DungeonSchema>;
 export type Classe = z.infer<typeof ClasseSchema>;

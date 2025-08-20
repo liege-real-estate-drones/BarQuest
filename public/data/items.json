@@ -4,6 +4,7 @@
         "id": "worn_leather_cap",
         "name": "Coiffe en cuir usé",
         "slot": "head",
+        "material_type": "leather",
         "niveauMin": 1,
         "rarity": "Commun",
         "affixes": [
@@ -16,6 +17,7 @@
         "id": "patched_leather_tunic",
         "name": "Tunique en cuir rapiécé",
         "slot": "chest",
+        "material_type": "leather",
         "niveauMin": 1,
         "rarity": "Commun",
         "affixes": [
@@ -29,6 +31,7 @@
         "id": "chipped_shortsword",
         "name": "Épée courte ébréchée",
         "slot": "weapon",
+        "material_type": "metal",
         "niveauMin": 1,
         "rarity": "Commun",
         "affixes": [
@@ -42,6 +45,7 @@
         "id": "gnarled_staff",
         "name": "Bâton noueux",
         "slot": "weapon",
+        "material_type": "wood",
         "niveauMin": 1,
         "rarity": "Commun",
         "affixes": [
@@ -56,6 +60,7 @@
         "id": "sturdy_iron_greaves",
         "name": "Jambières en fer robuste",
         "slot": "legs",
+        "material_type": "metal",
         "niveauMin": 3,
         "rarity": "Commun",
         "affixes": [
@@ -69,6 +74,7 @@
         "id": "apprentice_gloves",
         "name": "Gants d'apprenti",
         "slot": "hands",
+        "material_type": "cloth",
         "niveauMin": 2,
         "rarity": "Commun",
         "affixes": [
@@ -82,6 +88,7 @@
         "id": "warriors_greathelm",
         "name": "Grand heaume de guerrier",
         "slot": "head",
+        "material_type": "metal",
         "niveauMin": 5,
         "rarity": "Rare",
         "affixes": [
@@ -96,6 +103,7 @@
         "id": "mages_circlet",
         "name": "Cercle de mage",
         "slot": "head",
+        "material_type": "metal",
         "niveauMin": 5,
         "rarity": "Rare",
         "affixes": [
@@ -110,6 +118,7 @@
         "id": "rogues_cowl",
         "name": "Capuche de voleur",
         "slot": "head",
+        "material_type": "leather",
         "niveauMin": 5,
         "rarity": "Rare",
         "affixes": [
@@ -124,6 +133,7 @@
         "id": "clerics_diadem",
         "name": "Diadème de clerc",
         "slot": "head",
+        "material_type": "metal",
         "niveauMin": 5,
         "rarity": "Rare",
         "affixes": [
@@ -138,6 +148,7 @@
         "id": "axe_of_the_deathbringer",
         "name": "Hache du Semeur de Mort",
         "slot": "weapon",
+        "material_type": "metal",
         "niveauMin": 20,
         "rarity": "Légendaire",
         "affixes": [
@@ -160,6 +171,7 @@
         "id": "staff_of_the_comet_caller",
         "name": "Bâton de l'Invocateur de Comètes",
         "slot": "weapon",
+        "material_type": "wood",
         "niveauMin": 20,
         "rarity": "Légendaire",
         "affixes": [
@@ -175,6 +187,7 @@
         "id": "kingslayers_fangs",
         "name": "Crocs du Régicide",
         "slot": "weapon",
+        "material_type": "metal",
         "niveauMin": 20,
         "rarity": "Légendaire",
         "affixes": [
@@ -190,6 +203,7 @@
         "id": "hammer_of_divine_light",
         "name": "Marteau de Lumière Divine",
         "slot": "weapon",
+        "material_type": "metal",
         "niveauMin": 20,
         "rarity": "Légendaire",
         "affixes": [
@@ -205,6 +219,7 @@
         "id": "set_silver_guard_helm",
         "name": "Heaume de la Garde d'Argent",
         "slot": "head",
+        "material_type": "metal",
         "niveauMin": 10,
         "rarity": "Rare",
         "affixes": [
@@ -219,6 +234,7 @@
         "id": "set_silver_guard_chest",
         "name": "Cuirasse de la Garde d'Argent",
         "slot": "chest",
+        "material_type": "metal",
         "niveauMin": 12,
         "rarity": "Rare",
         "affixes": [
@@ -233,6 +249,7 @@
         "id": "set_arcanist_cowl",
         "name": "Capuche de l'Arcaniste",
         "slot": "head",
+        "material_type": "cloth",
         "niveauMin": 10,
         "rarity": "Rare",
         "affixes": [
@@ -247,6 +264,7 @@
         "id": "set_arcanist_robe",
         "name": "Robe de l'Arcaniste",
         "slot": "chest",
+        "material_type": "cloth",
         "niveauMin": 12,
         "rarity": "Rare",
         "affixes": [
@@ -261,6 +279,7 @@
         "id": "set_shadow_shroud_mask",
         "name": "Masque du Linceul de l'Ombre",
         "slot": "head",
+        "material_type": "leather",
         "niveauMin": 10,
         "rarity": "Rare",
         "affixes": [
@@ -275,6 +294,7 @@
         "id": "set_shadow_shroud_tunic",
         "name": "Tunique du Linceul de l'Ombre",
         "slot": "chest",
+        "material_type": "leather",
         "niveauMin": 12,
         "rarity": "Rare",
         "affixes": [
@@ -289,6 +309,7 @@
         "id": "rep_silver_vanguard_helm",
         "name": "Heaume de l'Avant-garde d'Argent",
         "slot": "head",
+        "material_type": "metal",
         "niveauMin": 25,
         "rarity": "Épique",
         "affixes": [
@@ -303,6 +324,7 @@
         "id": "rep_silver_vanguard_greataxe",
         "name": "Grande Hache de l'Avant-garde d'Argent",
         "slot": "weapon",
+        "material_type": "metal",
         "niveauMin": 30,
         "rarity": "Légendaire",
         "affixes": [
@@ -318,6 +340,7 @@
         "id": "rep_magma_callers_cowl",
         "name": "Capuche de l'Invocateur de Magma",
         "slot": "head",
+        "material_type": "cloth",
         "niveauMin": 25,
         "rarity": "Épique",
         "affixes": [
@@ -332,6 +355,7 @@
         "id": "rep_magma_callers_staff",
         "name": "Bâton de l'Invocateur de Magma",
         "slot": "weapon",
+        "material_type": "wood",
         "niveauMin": 30,
         "rarity": "Légendaire",
         "affixes": [
@@ -347,6 +371,7 @@
         "id": "rep_silent_path_mask",
         "name": "Masque du Sentier Silencieux",
         "slot": "head",
+        "material_type": "leather",
         "niveauMin": 25,
         "rarity": "Épique",
         "affixes": [
@@ -361,6 +386,7 @@
         "id": "rep_silent_path_daggers",
         "name": "Dagues du Sentier Silencieux",
         "slot": "weapon",
+        "material_type": "metal",
         "niveauMin": 30,
         "rarity": "Légendaire",
         "affixes": [
@@ -376,6 +402,7 @@
         "id": "rep_faithsworn_diadem",
         "name": "Diadème du Gardien du Serment",
         "slot": "head",
+        "material_type": "metal",
         "niveauMin": 25,
         "rarity": "Épique",
         "affixes": [
@@ -390,6 +417,7 @@
         "id": "rep_faithsworn_mace",
         "name": "Masse du Gardien du Serment",
         "slot": "weapon",
+        "material_type": "metal",
         "niveauMin": 30,
         "rarity": "Légendaire",
         "affixes": [
@@ -405,6 +433,7 @@
         "id": "dragonscale_cuirass",
         "name": "Cuirasse en Écailles de Dragon",
         "slot": "chest",
+        "material_type": "leather",
         "niveauMin": 25,
         "rarity": "Légendaire",
         "affixes": [{ "ref": "Armure", "val": 120 }, { "ref": "Force", "val": 12 }, { "ref": "PV", "val": 70 }, {"ref": "ResElems.fire", "val": 15}],
@@ -415,6 +444,7 @@
         "id": "robes_of_the_void",
         "name": "Robes du Vide",
         "slot": "chest",
+        "material_type": "cloth",
         "niveauMin": 25,
         "rarity": "Légendaire",
         "affixes": [{ "ref": "Armure", "val": 80 }, { "ref": "Intelligence", "val": 18 }, { "ref": "RessourceMax", "val": 100 }],
@@ -425,6 +455,7 @@
         "id": "wraithstalker_jerkin",
         "name": "Pourpoint de Traque-spectre",
         "slot": "chest",
+        "material_type": "leather",
         "niveauMin": 25,
         "rarity": "Légendaire",
         "affixes": [{ "ref": "Armure", "val": 100 }, { "ref": "Dexterite", "val": 18 }, { "ref": "CritPct", "val": 5 }],
@@ -435,6 +466,7 @@
         "id": "vestments_of_the_redeemer",
         "name": "Vêtements du Rédempteur",
         "slot": "chest",
+        "material_type": "cloth",
         "niveauMin": 25,
         "rarity": "Légendaire",
         "affixes": [{ "ref": "Armure", "val": 90 }, { "ref": "Esprit", "val": 18 }, { "ref": "PV", "val": 80 }],

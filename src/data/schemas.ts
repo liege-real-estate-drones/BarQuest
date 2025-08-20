@@ -2,7 +2,10 @@
 
 import { z } from "zod";
 
-export const RaretéEnum = z.enum(["Commun", "Rare", "Épique", "Légendaire", "Unique"]);
+export const RaretéEnum = z.enum(["Commun", "Magique", "Rare", "Épique", "Légendaire", "Unique"]);
+
+export const ThemeSchema = z.enum(["fire", "ice", "nature", "shadow"]);
+export type Theme = z.infer<typeof ThemeSchema>;
 
 export const StatsSchema = z.object({
   PV: z.number().int(),
@@ -28,6 +31,7 @@ export const AffixSchema = z.object({
   type: z.enum(["prefix","suffix"]),
   portée: z.tuple([z.number(), z.number()]),
   échelonnage: z.enum(["lin", "exp", "palier"]),
+  theme: ThemeSchema.optional(),
 });
 
 export const ItemSetSchema = z.object({
@@ -36,9 +40,13 @@ export const ItemSetSchema = z.object({
   bonuses: z.record(z.number(), z.string())
 });
 
+export const MaterialTypeSchema = z.enum(["metal", "leather", "cloth", "wood"]);
+export type MaterialType = z.infer<typeof MaterialTypeSchema>;
+
 export const ItemSchema = z.object({
   id: z.string(),
   name: z.string(),
+  material_type: MaterialTypeSchema.optional(),
   slot: z.enum([
     "weapon","head","chest","legs","hands","feet",
     "belt","amulet","ring","ring2","trinket","offhand", "potion"
