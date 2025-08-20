@@ -66,7 +66,7 @@ function ItemStat({ label, value, comparison }: { label: string, value: string |
     );
 }
 
-function ItemTooltipContent({ item, equippedItem }: { item: Item, equippedItem?: Item | null }) {
+export function ItemTooltipContent({ item, equippedItem }: { item: Item, equippedItem?: Item | null }) {
     if (!item) return null;
 
     const comparisonStats: Partial<Record<StatKey, ComparisonResult>> = {};
