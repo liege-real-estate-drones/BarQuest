@@ -747,7 +747,7 @@
             "isBoss": true,
             "palier": 2,
             "stats": { "PV": 600, "AttMin": 25, "AttMax": 35, "CritPct": 8, "CritDmg": 150, "Armure": 150, "Vitesse": 3.2, "Precision": 75, "Esquive": 10 },
-            "specificLootTable": ["axe_of_the_deathbringer"]
+            "specificLootTable": ["axe_of_the_deathbringer", "set_silver_guard_helm", "set_silver_guard_chest"]
         },
         {
             "id": "inferno_elemental_lord",
@@ -756,7 +756,8 @@
             "famille": "Elemental",
             "isBoss": true,
             "palier": 3,
-            "stats": { "PV": 800, "AttMin": 45, "AttMax": 55, "CritPct": 10, "CritDmg": 150, "Armure": 180, "Vitesse": 2.7, "Precision": 80, "Esquive": 12 }
+            "stats": { "PV": 800, "AttMin": 45, "AttMax": 55, "CritPct": 10, "CritDmg": 150, "Armure": 180, "Vitesse": 2.7, "Precision": 80, "Esquive": 12 },
+            "specificLootTable": ["set_arcanist_cowl", "set_arcanist_robe"]
         },
         {
             "id": "ancient_dryad_matriarch",
@@ -765,7 +766,8 @@
             "famille": "Fey",
             "isBoss": true,
             "palier": 4,
-            "stats": { "PV": 1200, "AttMin": 60, "AttMax": 75, "CritPct": 15, "CritDmg": 160, "Armure": 250, "Vitesse": 2.4, "Precision": 85, "Esquive": 18 }
+            "stats": { "PV": 1200, "AttMin": 60, "AttMax": 75, "CritPct": 15, "CritDmg": 160, "Armure": 250, "Vitesse": 2.4, "Precision": 85, "Esquive": 18 },
+            "specificLootTable": ["set_shadow_shroud_mask", "set_shadow_shroud_tunic"]
         },
         {
             "id": "void_cultist_leader",
@@ -792,7 +794,8 @@
             "famille": "Humanoid",
             "isBoss": true,
             "palier": 6,
-            "stats": { "PV": 2125, "AttMin": 90, "AttMax": 109, "CritPct": 15, "CritDmg": 150, "Armure": 500, "Vitesse": 3.2, "Precision": 95, "Esquive": 10 }
+            "stats": { "PV": 2125, "AttMin": 90, "AttMax": 109, "CritPct": 15, "CritDmg": 150, "Armure": 500, "Vitesse": 3.2, "Precision": 95, "Esquive": 10 },
+            "specificLootTable": ["rep_silver_vanguard_helm", "rep_silver_vanguard_greataxe"]
         },
         {
             "id": "fire_giant_champion",
@@ -801,7 +804,8 @@
             "famille": "Giant",
             "isBoss": true,
             "palier": 7,
-            "stats": { "PV": 2975, "AttMin": 114, "AttMax": 133, "CritPct": 10, "CritDmg": 150, "Armure": 700, "Vitesse": 3.4, "Precision": 100, "Esquive": 9 }
+            "stats": { "PV": 2975, "AttMin": 114, "AttMax": 133, "CritPct": 10, "CritDmg": 150, "Armure": 700, "Vitesse": 3.4, "Precision": 100, "Esquive": 9 },
+            "specificLootTable": ["rep_magma_callers_cowl", "rep_magma_callers_staff"]
         },
         {
             "id": "guardian_of_the_grove",
@@ -810,7 +814,8 @@
             "famille": "Fey",
             "isBoss": true,
             "palier": 8,
-            "stats": { "PV": 3825, "AttMin": 142, "AttMax": 171, "CritPct": 18, "CritDmg": 160, "Armure": 800, "Vitesse": 2.6, "Precision": 105, "Esquive": 20 }
+            "stats": { "PV": 3825, "AttMin": 142, "AttMax": 171, "CritPct": 18, "CritDmg": 160, "Armure": 800, "Vitesse": 2.6, "Precision": 105, "Esquive": 20 },
+            "specificLootTable": ["rep_silent_path_mask", "rep_silent_path_daggers"]
         },
         {
             "id": "spectral_overlord",
@@ -819,7 +824,8 @@
             "famille": "Undead",
             "isBoss": true,
             "palier": 9,
-            "stats": { "PV": 4675, "AttMin": 180, "AttMax": 209, "CritPct": 22, "CritDmg": 180, "Armure": 900, "Vitesse": 2.0, "Precision": 110, "Esquive": 32 }
+            "stats": { "PV": 4675, "AttMin": 180, "AttMax": 209, "CritPct": 22, "CritDmg": 180, "Armure": 900, "Vitesse": 2.0, "Precision": 110, "Esquive": 32 },
+            "specificLootTable": ["rep_faithsworn_diadem", "rep_faithsworn_mace"]
         },
         {
             "id": "boreal_crusader",

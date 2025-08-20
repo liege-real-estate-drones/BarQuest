@@ -14,6 +14,7 @@ import type {
   FactionSchema,
   SkillSchema,
   ItemSetSchema,
+  RecipeSchema,
 } from '@/data/schemas';
 
 export type Rareté = z.infer<typeof RaretéEnum>;
@@ -28,6 +29,7 @@ export type Monstre = z.infer<typeof MonsterSchema> & { id: string };
 export type Dungeon = z.infer<typeof DungeonSchema>;
 export type Classe = z.infer<typeof ClasseSchema>;
 export type ItemSet = z.infer<typeof ItemSetSchema>;
+export type Recipe = z.infer<typeof RecipeSchema>;
 
 export type PlayerClassId = 'berserker' | 'mage' | 'rogue' | 'cleric';
 
@@ -45,6 +47,7 @@ export interface GameData {
   quests: Quete[];
   factions: Faction[];
   sets: ItemSet[];
+  recipes: Recipe[];
 }
 
 export interface Buff {

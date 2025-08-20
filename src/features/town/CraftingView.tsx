@@ -1,7 +1,7 @@
 // src/features/town/CraftingView.tsx
 import React, { useState } from 'react';
 import { useGameStore } from '@/state/gameStore';
-import type { Item } from '@/lib/types';
+import type { Item, Rareté } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -16,14 +16,15 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Rareté } from '@/lib/types';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ForgeView } from './ForgeView';
 
 const getRarityMultiplier = (rarity: Rareté): number => {
     const rarityMultiplier = { "Commun": 1, "Rare": 2, "Épique": 3, "Légendaire": 5, "Unique": 5 };
     return rarityMultiplier[rarity] || 1;
 };
 
-export const CraftingView: React.FC = () => {
+const DismantleEnchantView: React.FC = () => {
     const { inventory, dismantleItem, enchantItem } = useGameStore(state => ({
         inventory: state.inventory,
         dismantleItem: state.dismantleItem,
@@ -104,7 +105,6 @@ export const CraftingView: React.FC = () => {
                                         </div>
                                         <div>
                                             <h3 className="font-semibold">Enchanter</h3>
-                                            {/* TODO: Make enchant cost dynamic */}
                                             <p className="text-sm text-gray-500">Requis: 5 scrap_metal | Possédés: {inventory.craftingMaterials['scrap_metal'] || 0}</p>
                                             <Button onClick={handleEnchant} className="mt-1 bg-purple-500 hover:bg-purple-600">Enchanter</Button>
                                         </div>
@@ -115,21 +115,8 @@ export const CraftingView: React.FC = () => {
                             )}
                         </CardContent>
                     </Card>
-                    <Card className="mt-4">
-                         <CardHeader>
-                            <CardTitle>Matériaux</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <ul>
-                                {Object.entries(inventory.craftingMaterials).map(([materialId, count]) => (
-                                    <li key={materialId}>{materialId}: {count}</li>
-                                ))}
-                            </ul>
-                        </CardContent>
-                    </Card>
                 </div>
             </div>
-
             <AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
@@ -145,5 +132,41 @@ export const CraftingView: React.FC = () => {
                 </AlertDialogContent>
             </AlertDialog>
         </>
+    );
+};
+
+
+export const CraftingView: React.FC = () => {
+    return (
+        <div className="p-4">
+            <Tabs defaultValue="forge">
+                <TabsList className="grid w-full grid-cols-3">
+                    <TabsTrigger value="forge">Forger</TabsTrigger>
+                    <TabsTrigger value="dismantle">Démanteler</TabsTrigger>
+                    <TabsTrigger value="enchant">Enchanter</TabsTrigger>
+                </TabsList>
+                <TabsContent value="forge">
+                    <ForgeView />
+                </TabsContent>
+                <TabsContent value="dismantle">
+                    <DismantleEnchantView />
+                </TabsContent>
+                <TabsContent value="enchant">
+                    <DismantleEnchantView />
+                </TabsContent>
+            </Tabs>
+             <Card className="mt-4">
+                <CardHeader>
+                    <CardTitle>Matériaux</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <ul>
+                        {Object.entries(useGameStore.getState().inventory.craftingMaterials).map(([materialId, count]) => (
+                            <li key={materialId}>{materialId}: {count}</li>
+                        ))}
+                    </ul>
+                </CardContent>
+            </Card>
+        </div>
     );
 };

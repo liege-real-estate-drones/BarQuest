@@ -31,21 +31,26 @@ function EquipmentSlot({ slotName, item }: { slotName: string; item: Item | null
 }
 
 
+import { ActiveSetBonusesView } from './ActiveSetBonusesView';
+
 export function EquipmentView() {
     const { equipment } = useGameStore(state => state.inventory);
 
     return (
-        <Card>
-            <CardHeader>
-                <CardTitle>Équipement</CardTitle>
-            </CardHeader>
-            <CardContent>
-                <div className="space-y-2">
-                {Object.entries(equipment).map(([slot, item]) => (
-                    <EquipmentSlot key={slot} slotName={slot} item={item}/>
-                ))}
-                </div>
-            </CardContent>
-        </Card>
+        <div>
+            <Card>
+                <CardHeader>
+                    <CardTitle>Équipement</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <div className="space-y-2">
+                    {Object.entries(equipment).map(([slot, item]) => (
+                        <EquipmentSlot key={slot} slotName={slot} item={item}/>
+                    ))}
+                    </div>
+                </CardContent>
+            </Card>
+            <ActiveSetBonusesView />
+        </div>
     );
 }

@@ -1,38 +1,64 @@
 {
-  "Force": {
-    "prefix": "Guerrier",
-    "suffix": "du Titan"
+  "affixes": {
+    "Force": {
+      "prefix": "Guerrier",
+      "suffix": "du Titan"
+    },
+    "Intelligence": {
+      "prefix": "Savant",
+      "suffix": "de l'Archimage"
+    },
+    "Dexterite": {
+      "prefix": "Vif",
+      "suffix": "de l'Ombre"
+    },
+    "Esprit": {
+      "prefix": "Spirituel",
+      "suffix": "du Prophète"
+    },
+    "PV": {
+      "prefix": "Robuste",
+      "suffix": "de Jouvence"
+    },
+    "CritPct": {
+      "prefix": "Mortel",
+      "suffix": "de la Frappe Précise"
+    },
+    "CritDmg": {
+      "prefix": "Destructeur",
+      "suffix": "de la Ruine"
+    },
+    "Vitesse": {
+      "prefix": "Rapide",
+      "suffix": "du Zéphyr"
+    },
+    "Armure": {
+      "prefix": "Blindé",
+      "suffix": "d'Indestructibilité"
+    }
   },
-  "Intelligence": {
-    "prefix": "Savant",
-    "suffix": "de l'Archimage"
+  "qualifiers": {
+    "Fragile": 0.7,
+    "Fendu": 0.8,
+    "Usé": 0.9,
+    "Solide": 1.0,
+    "Fiable": 1.05,
+    "Renforcé": 1.1,
+    "Artisanal": 1.15,
+    "Chef-d'œuvre": 1.25,
+    "Royal": 1.35,
+    "Divin": 1.5
   },
-  "Dexterite": {
-    "prefix": "Vif",
-    "suffix": "de l'Ombre"
-  },
-  "Esprit": {
-    "prefix": "Spirituel",
-    "suffix": "du Prophète"
-  },
-  "PV": {
-    "prefix": "Robuste",
-    "suffix": "de Jouvence"
-  },
-  "CritPct": {
-    "prefix": "Mortel",
-    "suffix": "de la Frappe Précise"
-  },
-  "CritDmg": {
-    "prefix": "Destructeur",
-    "suffix": "de la Ruine"
-  },
-  "Vitesse": {
-    "prefix": "Rapide",
-    "suffix": "du Zéphyr"
-  },
-  "Armure": {
-    "prefix": "Blindé",
-    "suffix": "d'Indestructibilité"
-  }
+  "materials": [
+    { "level": 0, "name": "de Bois" },
+    { "level": 5, "name": "de Bronze" },
+    { "level": 10, "name": "de Cuir" },
+    { "level": 15, "name": "de Fer" },
+    { "level": 25, "name": "d'Argent" },
+    { "level": 30, "name": "d'Acier" },
+    { "level": 40, "name": "d'Or" },
+    { "level": 50, "name": "de Mithril" },
+    { "level": 60, "name": "d'Adamantite" },
+    { "level": 75, "name": "Éthéré" }
+  ]
 }

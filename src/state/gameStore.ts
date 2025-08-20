@@ -1,7 +1,7 @@
 import create from 'zustand';
 import { persist, createJSONStorage, StateStorage } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import type { Dungeon, Monstre, Item, Talent, Skill, Stats, PlayerState, InventoryState, CombatLogEntry, CombatState, GameData, Quete, PlayerClassId, ResourceType, Rareté, CombatEnemy, ItemSet, PotionType } from '@/lib/types';
+import type { Dungeon, Monstre, Item, Talent, Skill, Stats, PlayerState, InventoryState, CombatLogEntry, CombatState, GameData, Quete, PlayerClassId, ResourceType, Rareté, CombatEnemy, ItemSet, PotionType, Recipe } from '@/lib/types';
 import * as formulas from '@/core/formulas';
 import { generateProceduralItem } from '@/core/itemGenerator';
 import { v4 as uuidv4 } from 'uuid';
@@ -79,6 +79,7 @@ interface GameState {
   bossEncounter: Monstre | null; // NOUVEAU: Pour l'alerte d'apparition du boss
   isHeroicMode: boolean;
 
+  craftItem: (recipeId: string) => void;
   setHeroicMode: (isHeroic: boolean) => void;
   setTownView: (view: 'TOWN' | 'CRAFTING') => void;
   setWorldTier: (tier: number) => void;
@@ -302,7 +303,7 @@ export const useGameStore = create<GameState>()(
       worldTier: 1,
       currentDungeon: null,
       dungeonStartTime: null,
-      gameData: { dungeons: [], monsters: [], items: [], talents: [], skills: [], affixes: [], classes: [], quests: [], factions: [], sets: [] },
+      gameData: { dungeons: [], monsters: [], items: [], talents: [], skills: [], affixes: [], classes: [], quests: [], factions: [], sets: [], recipes: [] },
       player: getInitialPlayerState(),
       inventory: initialInventoryState,
       combat: initialCombatState,
@@ -350,7 +351,55 @@ export const useGameStore = create<GameState>()(
             state.gameData.quests = Array.isArray(data.quests) ? data.quests : [];
             state.gameData.factions = Array.isArray(data.factions) ? data.factions : [];
             state.gameData.sets = Array.isArray(data.sets) ? data.sets : [];
+            state.gameData.recipes = Array.isArray(data.recipes) ? data.recipes : [];
             state.isInitialized = true;
+        });
+      },
+
+      craftItem: (recipeId: string) => {
+        set((state: GameState) => {
+          const recipe = state.gameData.recipes.find(r => r.id === recipeId);
+          if (!recipe) {
+            console.error(`Recipe ${recipeId} not found.`);
+            return;
+          }
+
+          // 1. Check cost
+          if (state.inventory.gold < recipe.cost) {
+            console.log("Not enough gold.");
+            // TODO: Add user feedback
+            return;
+          }
+
+          // 2. Check materials
+          for (const materialId in recipe.materials) {
+            const requiredAmount = recipe.materials[materialId];
+            const playerAmount = state.inventory.craftingMaterials[materialId] || 0;
+            if (playerAmount < requiredAmount) {
+              console.log(`Not enough ${materialId}.`);
+              // TODO: Add user feedback
+              return;
+            }
+          }
+
+          // 3. Subtract cost and materials
+          state.inventory.gold -= recipe.cost;
+          for (const materialId in recipe.materials) {
+            state.inventory.craftingMaterials[materialId] -= recipe.materials[materialId];
+          }
+
+          // 4. Create and add item
+          const baseItem = state.gameData.items.find(i => i.id === recipe.result);
+          if (!baseItem) {
+            console.error(`Result item ${recipe.result} not found in game data.`);
+            // TODO: Potentially refund materials/gold here
+            return;
+          }
+
+          const newItem = { ...baseItem, id: uuidv4() };
+          state.inventory.items.push(newItem);
+          console.log(`Successfully crafted ${newItem.name}.`);
+          // TODO: Add user feedback
         });
       },
 
