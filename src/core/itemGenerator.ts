@@ -36,7 +36,7 @@ export const generateProceduralItem = (
         rarity: rarity,
         affixes: [],
         // Apply qualifier modifier to base value
-        valeur: Math.round(baseItem.valeur * qualifierMod),
+        vendorPrice: Math.round((baseItem.vendorPrice || 1) * qualifierMod),
     };
 
     const [minAffixes, maxAffixes] = rarityAffixCount[rarity];
