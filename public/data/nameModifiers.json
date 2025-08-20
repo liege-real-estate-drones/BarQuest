@@ -1,0 +1,38 @@
+{
+  "Force": {
+    "prefix": "Guerrier",
+    "suffix": "du Titan"
+  },
+  "Intelligence": {
+    "prefix": "Savant",
+    "suffix": "de l'Archimage"
+  },
+  "Dexterite": {
+    "prefix": "Vif",
+    "suffix": "de l'Ombre"
+  },
+  "Esprit": {
+    "prefix": "Spirituel",
+    "suffix": "du Prophète"
+  },
+  "PV": {
+    "prefix": "Robuste",
+    "suffix": "de Jouvence"
+  },
+  "CritPct": {
+    "prefix": "Mortel",
+    "suffix": "de la Frappe Précise"
+  },
+  "CritDmg": {
+    "prefix": "Destructeur",
+    "suffix": "de la Ruine"
+  },
+  "Vitesse": {
+    "prefix": "Rapide",
+    "suffix": "du Zéphyr"
+  },
+  "Armure": {
+    "prefix": "Blindé",
+    "suffix": "d'Indestructibilité"
+  }
+}
