@@ -1,11 +1,12 @@
 import create from 'zustand';
 import { persist, createJSONStorage, StateStorage } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import type { Dungeon, Monstre, Item, Talent, Skill, Stats, PlayerState, InventoryState, CombatLogEntry, CombatState, GameData, Quete, PlayerClassId, ResourceType, Rareté, CombatEnemy, ItemSet, PotionType, Recipe, Theme } from '@/lib/types';
+import type { Dungeon, Monstre, Item, Talent, Skill, Stats, PlayerState, InventoryState, CombatLogEntry, CombatState, GameData, Quete, PlayerClassId, ResourceType, Rareté, CombatEnemy, ItemSet, PotionType, Recipe, Theme, Affixe } from '@/lib/types';
 import { DungeonCompletionSummary } from '@/data/schemas';
 import * as formulas from '@/core/formulas';
 import { generateProceduralItem } from '@/core/itemGenerator';
 import { v4 as uuidv4 } from 'uuid';
+import { AFFIX_TO_THEME } from '@/lib/constants';
 
 export interface ActiveQuete {
   quete: Quete;
@@ -131,7 +132,7 @@ interface GameState {
   getXpToNextLevel: () => number;
       applySpecialEffect: (trigger: string, context: { targetId: string, isCrit: boolean }) => void;
   dismantleItem: (itemId: string) => void;
-  enchantItem: (itemId: string) => void;
+  enchantItem: (itemId: string, enchantmentId: string) => void;
   gambleForItem: (itemSlot: string) => Item | null;
 }
 
@@ -393,7 +394,7 @@ export const useGameStore = create<GameState>()(
       dungeonState: null,
       dungeonStartTime: null,
       dungeonCompletionSummary: null,
-      gameData: { dungeons: [], monsters: [], items: [], talents: [], skills: [], affixes: [], classes: [], quests: [], factions: [], sets: [], recipes: [] },
+      gameData: { dungeons: [], monsters: [], items: [], talents: [], skills: [], affixes: [], classes: [], quests: [], factions: [], sets: [], recipes: [], enchantments: [] },
       player: getInitialPlayerState(),
       inventory: initialInventoryState,
       combat: initialCombatState,
@@ -442,6 +443,7 @@ export const useGameStore = create<GameState>()(
             state.gameData.factions = Array.isArray(data.factions) ? data.factions : [];
             state.gameData.sets = Array.isArray(data.sets) ? data.sets : [];
             state.gameData.recipes = Array.isArray(data.recipes) ? data.recipes : [];
+            state.gameData.enchantments = Array.isArray(data.enchantments) ? data.enchantments : [];
             state.isInitialized = true;
         });
       },
@@ -539,42 +541,89 @@ export const useGameStore = create<GameState>()(
             const itemToDismantle = state.inventory.items[itemIndex];
             state.inventory.items.splice(itemIndex, 1);
 
-            // Simple dismantling logic: 1-3 generic materials based on rarity
-            const rarityMultiplier: Record<Rareté, number> = { "Commun": 1, "Magique": 1.5, "Rare": 2, "Épique": 3, "Légendaire": 5, "Unique": 5 };
-            const amount = Math.ceil(Math.random() * rarityMultiplier[itemToDismantle.rarity]);
+            // New dismantling logic for enchanting components
+            const rarity = itemToDismantle.rarity;
+            let materialsGained: { id: string, amount: number }[] = [];
 
-            const materialId = "scrap_metal"; // Generic material for now
-            state.inventory.craftingMaterials[materialId] = (state.inventory.craftingMaterials[materialId] || 0) + amount;
+            if (rarity === 'Magique') {
+                materialsGained.push({ id: 'poussiere_arcanique', amount: Math.ceil(Math.random() * 2) });
+            } else if (rarity === 'Rare') {
+                materialsGained.push({ id: 'essence_cosmique', amount: 1 });
+            } else if (rarity === 'Épique') {
+                materialsGained.push({ id: 'cristal_du_vide', amount: 1 });
+            }
+
+            // Check for elemental affixes to grant elemental shards
+            itemToDismantle.affixes?.forEach(affix => {
+                const theme = AFFIX_TO_THEME[affix.ref];
+                if (theme && ['fire', 'ice', 'nature', 'shadow'].includes(theme)) {
+                    materialsGained.push({ id: `eclat_elementaire_${theme}`, amount: 1 });
+                }
+            });
+
+            materialsGained.forEach(mat => {
+                state.inventory.craftingMaterials[mat.id] = (state.inventory.craftingMaterials[mat.id] || 0) + mat.amount;
+            });
         });
       },
 
-      enchantItem: (itemId) => {
+      enchantItem: (itemId, enchantmentId) => {
         set((state: GameState) => {
             const item = state.inventory.items.find(i => i.id === itemId);
-            if (!item || !item.affixes || item.affixes.length === 0) return;
+            const enchantment = state.gameData.enchantments.find(e => e.id === enchantmentId);
 
-            // Cost to enchant: 5 scrap_metal
-            const cost = 5;
-            const materialId = "scrap_metal";
-            if ((state.inventory.craftingMaterials[materialId] || 0) < cost) {
-                console.log("Not enough materials to enchant");
+            if (!item || !enchantment) {
+                console.error("Item or enchantment not found");
                 return;
             }
 
-            state.inventory.craftingMaterials[materialId] -= cost;
+            // Check for existing enchantment
+            if (item.enchantment) {
+                console.log("Item is already enchanted. Overwriting.");
+                // Optional: refund materials from old enchantment? For now, just overwrite.
+            }
 
-            // Reroll one random affix
-            const affixToRerollIndex = Math.floor(Math.random() * item.affixes.length);
-            const affixToReroll = item.affixes[affixToRerollIndex];
+            // Check cost
+            for (const costItem of enchantment.cost) {
+                if ((state.inventory.craftingMaterials[costItem.id] || 0) < costItem.amount) {
+                    console.log(`Not enough ${costItem.id}`);
+                    // TODO: Add user feedback
+                    return;
+                }
+            }
 
-            const affixTemplate = state.gameData.affixes.find(a => a.ref === affixToReroll.ref);
-            if (!affixTemplate) return;
+            // Subtract cost
+            enchantment.cost.forEach(costItem => {
+                state.inventory.craftingMaterials[costItem.id] -= costItem.amount;
+            });
+
+            // Apply new enchantment
+            const affixTemplate = state.gameData.affixes.find(a => a.ref === enchantment.affixRef);
+            if (!affixTemplate) {
+                console.error(`Could not find base affix for enchantment: ${enchantment.affixRef}`);
+                // TODO: Refund materials
+                return;
+            }
 
             const [min, max] = affixTemplate.portée;
             const baseValue = Math.floor(Math.random() * (max - min + 1)) + min;
-            const scaledValue = Math.round(baseValue + (baseValue * item.niveauMin * 0.1) + (item.niveauMin * 0.5));
+            const scaledValue = formulas.scaleAffixValue(baseValue, item.niveauMin);
 
-            item.affixes[affixToRerollIndex].val = scaledValue;
+            const newEnchantmentAffix = {
+                ref: enchantment.affixRef,
+                val: scaledValue,
+                isEnchantment: true
+            };
+
+            // Add to the main affixes array for stat calculation
+            if (!item.affixes) {
+                item.affixes = [];
+            }
+            // Remove old enchantment affix if it exists
+            item.affixes = item.affixes.filter(a => !a.isEnchantment);
+            item.affixes.push(newEnchantmentAffix);
+
+            get().recalculateStats();
         });
       },
 
@@ -1542,10 +1591,29 @@ export const useGameStore = create<GameState>()(
                 const enemyInState = state.combat.enemies.find(e => e.id === enemy.id);
                 if (!enemyInState || enemyInState.stats.PV <= 0) return;
 
-                const playerDr = formulas.calculateArmorDR(state.player.stats.Armure, enemy.level);
-                const enemyDamage = formulas.calculateMeleeDamage(enemy.stats.AttMin, enemy.stats.AttMax, formulas.calculateAttackPower(enemy.stats));
-                const mitigatedEnemyDamage = Math.round(enemyDamage * (1 - playerDr));
+                let enemyDamage = formulas.calculateMeleeDamage(enemy.stats.AttMin, enemy.stats.AttMax, formulas.calculateAttackPower(enemy.stats));
 
+                const { currentDungeon } = state;
+                if (currentDungeon?.damagePenetration) {
+                    const pen = currentDungeon.damagePenetration;
+                    const playerRes = state.player.stats.ResElems?.[pen.type] || 0;
+                    const effectiveRes = Math.max(0, playerRes - pen.value);
+                    const elementalDR = formulas.calculateResistanceDR(effectiveRes, enemy.level);
+
+                    const physicalDamage = enemyDamage * 0.5;
+                    const elementalDamage = enemyDamage * 0.5;
+
+                    const physicalDr = formulas.calculateArmorDR(state.player.stats.Armure, enemy.level);
+                    const mitigatedPhysical = physicalDamage * (1 - physicalDr);
+                    const mitigatedElemental = elementalDamage * (1 - elementalDR);
+
+                    enemyDamage = mitigatedPhysical + mitigatedElemental;
+                } else {
+                    const playerDr = formulas.calculateArmorDR(state.player.stats.Armure, enemy.level);
+                    enemyDamage = enemyDamage * (1 - playerDr);
+                }
+
+                const mitigatedEnemyDamage = Math.round(enemyDamage);
                 let damageToPlayer = mitigatedEnemyDamage;
                 if (state.player.shield > 0) {
                     const manaShieldBuff = state.player.activeBuffs.find(b => b.id === 'mana_shield');

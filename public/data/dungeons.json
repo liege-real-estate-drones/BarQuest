@@ -5,6 +5,7 @@
             "palier": 1,
             "name": "Goblin Mines",
             "biome": "occult",
+            "damagePenetration": { "type": "shadow", "value": 10 },
             "monsters": [
                 "goblin_scout",
                 "giant_rat"
@@ -17,6 +18,7 @@
             "palier": 1,
             "name": "Bat Cave",
             "biome": "occult",
+            "damagePenetration": { "type": "shadow", "value": 10 },
             "monsters": [
                 "kobold_miner",
                 "cave_bat"
@@ -29,6 +31,7 @@
             "palier": 2,
             "name": "Icy Crevasse",
             "biome": "frost",
+            "damagePenetration": { "type": "ice", "value": 15 },
             "monsters": [
                 "frost_wolf",
                 "ice_sprite"
@@ -42,6 +45,7 @@
             "palier": 2,
             "name": "Yeti Den",
             "biome": "frost",
+            "damagePenetration": { "type": "ice", "value": 15 },
             "monsters": [
                 "ice_sprite",
                 "yeti_toddler"
@@ -55,6 +59,7 @@
             "palier": 3,
             "name": "Scorched Caverns",
             "biome": "fire",
+            "damagePenetration": { "type": "fire", "value": 15 },
             "monsters": [
                 "volcanic_imp",
                 "magma_salamander"
@@ -68,6 +73,7 @@
             "palier": 3,
             "name": "Cinder Chambers",
             "biome": "fire",
+            "damagePenetration": { "type": "fire", "value": 15 },
             "monsters": [
                 "magma_salamander",
                 "cinder_elemental"
@@ -81,6 +87,7 @@
             "palier": 4,
             "name": "Whispering Woods",
             "biome": "nature",
+            "damagePenetration": { "type": "nature", "value": 15 },
             "monsters": [
                 "cursed_sapling",
                 "thorn_boar"
@@ -94,6 +101,7 @@
             "palier": 4,
             "name": "Dryad Grove",
             "biome": "nature",
+            "damagePenetration": { "type": "nature", "value": 15 },
             "monsters": [
                 "thorn_boar",
                 "wandering_dryad"
@@ -107,6 +115,7 @@
             "palier": 5,
             "name": "Forgotten Crypt",
             "biome": "occult",
+            "damagePenetration": { "type": "shadow", "value": 15 },
             "monsters": [
                 "ghoul",
                 "shadow_wisp",
@@ -121,6 +130,7 @@
             "palier": 5,
             "name": "Void Worshippers' Lair",
             "biome": "occult",
+            "damagePenetration": { "type": "shadow", "value": 15 },
             "monsters": [
                 "shadow_wisp",
                 "acolyte_of_the_void",
@@ -135,6 +145,7 @@
             "palier": 6,
             "name": "Glacial Depths",
             "biome": "frost",
+            "damagePenetration": { "type": "ice", "value": 20 },
             "monsters": [
                 "polar_bear",
                 "glacial_elemental",
@@ -149,6 +160,7 @@
             "palier": 6,
             "name": "Frozen Berserkers' Hall",
             "biome": "frost",
+            "damagePenetration": { "type": "ice", "value": 20 },
             "monsters": [
                 "glacial_elemental",
                 "ice_wraith",
@@ -163,6 +175,7 @@
             "palier": 7,
             "name": "Volcanic Core",
             "biome": "fire",
+            "damagePenetration": { "type": "fire", "value": 20 },
             "monsters": [
                 "pyroclastic_golem",
                 "hell_hound",
@@ -177,6 +190,7 @@
             "palier": 7,
             "name": "Fire Giants' Outpost",
             "biome": "fire",
+            "damagePenetration": { "type": "fire", "value": 20 },
             "monsters": [
                 "hell_hound",
                 "obsidian_gargoyle",
@@ -191,6 +205,7 @@
             "palier": 8,
             "name": "Verdant Labyrinth",
             "biome": "nature",
+            "damagePenetration": { "type": "nature", "value": 20 },
             "monsters": [
                 "razorvine_creeper",
                 "ancient_treant",
@@ -205,6 +220,7 @@
             "palier": 8,
             "name": "Sylvan Guardians' Domain",
             "biome": "nature",
+            "damagePenetration": { "type": "nature", "value": 20 },
             "monsters": [
                 "ancient_treant",
                 "grove_sentinel",
@@ -219,6 +235,7 @@
             "palier": 9,
             "name": "Shadowy Necropolis",
             "biome": "occult",
+            "damagePenetration": { "type": "shadow", "value": 20 },
             "monsters": [
                 "wraith",
                 "mind_flayer_spawn",
@@ -234,6 +251,7 @@
             "palier": 9,
             "name": "Specters' Sanctuary",
             "biome": "occult",
+            "damagePenetration": { "type": "shadow", "value": 20 },
             "monsters": [
                 "mind_flayer_spawn",
                 "void_terror",
@@ -249,6 +267,7 @@
             "palier": 10,
             "name": "Frozen Wastes",
             "biome": "frost",
+            "damagePenetration": { "type": "ice", "value": 20 },
             "monsters": [
                 "frost_giant",
                 "rime-scaled_drake",
@@ -264,6 +283,7 @@
             "palier": 10,
             "name": "Boreal Knights' Fortress",
             "biome": "frost",
+            "damagePenetration": { "type": "ice", "value": 20 },
             "monsters": [
                 "rime-scaled_drake",
                 "mammoth_calf",
@@ -279,6 +299,7 @@
             "palier": 11,
             "name": "Infernal Forge",
             "biome": "fire",
+            "damagePenetration": { "type": "fire", "value": 25 },
             "monsters": [
                 "infernal_juggernaut",
                 "magma_dragon_whelp",
@@ -294,6 +315,7 @@
             "palier": 11,
             "name": "Ash Harpies' Nest",
             "biome": "fire",
+            "damagePenetration": { "type": "fire", "value": 25 },
             "monsters": [
                 "magma_dragon_whelp",
                 "flame_hydra",
@@ -309,6 +331,7 @@
             "palier": 12,
             "name": "Emerald Nightmare",
             "biome": "nature",
+            "damagePenetration": { "type": "nature", "value": 25 },
             "monsters": [
                 "colossal_carnivorous_plant",
                 "verdant_wyrm",
@@ -324,6 +347,7 @@
             "palier": 12,
             "name": "Emerald Golems' Garden",
             "biome": "nature",
+            "damagePenetration": { "type": "nature", "value": 25 },
             "monsters": [
                 "verdant_wyrm",
                 "elf_ranger",
@@ -339,6 +363,7 @@
             "palier": 13,
             "name": "Cathedral of Eternal Night",
             "biome": "occult",
+            "damagePenetration": { "type": "shadow", "value": 25 },
             "monsters": [
                 "dread_lich",
                 "elder_thing",
@@ -355,6 +380,7 @@
             "palier": 13,
             "name": "Tomb Guardians' Crypt",
             "biome": "occult",
+            "damagePenetration": { "type": "shadow", "value": 25 },
             "monsters": [
                 "elder_thing",
                 "void_reaver",
@@ -371,6 +397,7 @@
             "palier": 14,
             "name": "Glacier's Peak",
             "biome": "frost",
+            "damagePenetration": { "type": "ice", "value": 25 },
             "monsters": [
                 "ice_titan",
                 "avalanche_spirit",
@@ -387,6 +414,7 @@
             "palier": 14,
             "name": "Frost Wyrm's Lair",
             "biome": "frost",
+            "damagePenetration": { "type": "ice", "value": 25 },
             "monsters": [
                 "avalanche_spirit",
                 "yeti_patriarch",
@@ -403,6 +431,7 @@
             "palier": 15,
             "name": "Heart of the Volcano",
             "biome": "fire",
+            "damagePenetration": { "type": "fire", "value": 25 },
             "monsters": [
                 "balrog",
                 "phoenix",
@@ -419,6 +448,7 @@
             "palier": 15,
             "name": "Magma Dragon's Roost",
             "biome": "fire",
+            "damagePenetration": { "type": "fire", "value": 25 },
             "monsters": [
                 "phoenix",
                 "efreeti_sultan",
@@ -435,6 +465,7 @@
             "palier": 16,
             "name": "Throne of the Wilds",
             "biome": "nature",
+            "damagePenetration": { "type": "nature", "value": 25 },
             "monsters": [
                 "gaia_avatar",
                 "archdruid_of_the_fang",
@@ -451,6 +482,7 @@
             "palier": 16,
             "name": "World Ash Treant's Grove",
             "biome": "nature",
+            "damagePenetration": { "type": "nature", "value": 25 },
             "monsters": [
                 "archdruid_of_the_fang",
                 "fenrir's_chosen",
@@ -467,6 +499,7 @@
             "palier": 17,
             "name": "The Void-Corrupted Sanctum",
             "biome": "occult",
+            "damagePenetration": { "type": "shadow", "value": 25 },
             "monsters": [
                 "archlich_of_nar'thalas",
                 "gibbering_mouther",
@@ -484,6 +517,7 @@
             "palier": 17,
             "name": "Cthulhu's Herald's Antechamber",
             "biome": "occult",
+            "damagePenetration": { "type": "shadow", "value": 25 },
             "monsters": [
                 "gibbering_mouther",
                 "void_leviathan",
@@ -501,6 +535,7 @@
             "palier": 18,
             "name": "Permafrost Citadel",
             "biome": "frost",
+            "damagePenetration": { "type": "ice", "value": 25 },
             "monsters": [
                 "ancient_frost_wyrm",
                 "ice_titan",
@@ -515,6 +550,7 @@
             "palier": 18,
             "name": "Molten Pinnacle",
             "biome": "fire",
+            "damagePenetration": { "type": "fire", "value": 25 },
             "monsters": [
                 "primeval_magma_dragon",
                 "balrog",
@@ -529,6 +565,7 @@
             "palier": 19,
             "name": "Heart of the Forest",
             "biome": "nature",
+            "damagePenetration": { "type": "nature", "value": 25 },
             "monsters": [
                 "world_ash_treant",
                 "gaia_avatar",
@@ -543,6 +580,7 @@
             "palier": 19,
             "name": "R'lyeh's Threshold",
             "biome": "occult",
+            "damagePenetration": { "type": "shadow", "value": 25 },
             "monsters": [
                 "herald_of_cthulhu",
                 "void_leviathan",
@@ -557,6 +595,7 @@
             "palier": 20,
             "name": "Frozen Throne",
             "biome": "frost",
+            "damagePenetration": { "type": "ice", "value": 25 },
             "monsters": [
                 "ancient_frost_wyrm",
                 "ice_titan",
@@ -572,6 +611,7 @@
             "palier": 20,
             "name": "Inferno's Core",
             "biome": "fire",
+            "damagePenetration": { "type": "fire", "value": 25 },
             "monsters": [
                 "primeval_magma_dragon",
                 "balrog",
@@ -587,6 +627,7 @@
             "palier": 21,
             "name": "Verdant Sanctuary",
             "biome": "nature",
+            "damagePenetration": { "type": "nature", "value": 25 },
             "monsters": [
                 "world_ash_treant",
                 "gaia_avatar",
@@ -602,6 +643,7 @@
             "palier": 21,
             "name": "The Sunken City",
             "biome": "occult",
+            "damagePenetration": { "type": "shadow", "value": 25 },
             "monsters": [
                 "herald_of_cthulhu",
                 "void_leviathan",
@@ -617,6 +659,7 @@
             "palier": 22,
             "name": "Icecrown Citadel",
             "biome": "frost",
+            "damagePenetration": { "type": "ice", "value": 25 },
             "monsters": [
                 "ancient_frost_wyrm",
                 "ice_titan",
@@ -633,6 +676,7 @@
             "palier": 22,
             "name": "Blackrock Mountain",
             "biome": "fire",
+            "damagePenetration": { "type": "fire", "value": 25 },
             "monsters": [
                 "primeval_magma_dragon",
                 "balrog",
@@ -649,6 +693,7 @@
             "palier": 23,
             "name": "The Emerald Dream",
             "biome": "nature",
+            "damagePenetration": { "type": "nature", "value": 25 },
             "monsters": [
                 "world_ash_treant",
                 "gaia_avatar",
@@ -665,6 +710,7 @@
             "palier": 23,
             "name": "Ny'alotha, the Waking City",
             "biome": "occult",
+            "damagePenetration": { "type": "shadow", "value": 25 },
             "monsters": [
                 "herald_of_cthulhu",
                 "void_leviathan",
@@ -681,6 +727,7 @@
             "palier": 24,
             "name": "The Frozen Halls",
             "biome": "frost",
+            "damagePenetration": { "type": "ice", "value": 25 },
             "monsters": [
                 "ancient_frost_wyrm",
                 "ice_titan",
@@ -698,6 +745,7 @@
             "palier": 25,
             "name": "The Molten Core",
             "biome": "fire",
+            "damagePenetration": { "type": "fire", "value": 25 },
             "monsters": [
                 "primeval_magma_dragon",
                 "balrog",
@@ -715,6 +763,7 @@
             "palier": 11,
             "name": "Goblin Mines Héroïque",
             "biome": "occult",
+            "damagePenetration": { "type": "shadow", "value": 25 },
             "monsters": [
                 "goblin_scout_heroic",
                 "giant_rat_heroic"
@@ -727,6 +776,7 @@
             "palier": 11,
             "name": "Bat Cave Héroïque",
             "biome": "occult",
+            "damagePenetration": { "type": "shadow", "value": 25 },
             "monsters": [
                 "kobold_miner_assistant_heroic",
                 "cave_bat_heroic"
@@ -739,6 +789,7 @@
             "palier": 12,
             "name": "Icy Crevasse Héroïque",
             "biome": "frost",
+            "damagePenetration": { "type": "ice", "value": 25 },
             "monsters": [
                 "frost_wolf_heroic",
                 "ice_sprite_heroic"
@@ -752,6 +803,7 @@
             "palier": 12,
             "name": "Yeti Den Héroïque",
             "biome": "frost",
+            "damagePenetration": { "type": "ice", "value": 25 },
             "monsters": [
                 "ice_sprite_heroic",
                 "yeti_toddler_heroic"
@@ -765,6 +817,7 @@
             "palier": 13,
             "name": "Scorched Caverns Héroïque",
             "biome": "fire",
+            "damagePenetration": { "type": "fire", "value": 25 },
             "monsters": [
                 "volcanic_imp_heroic",
                 "magma_salamander_heroic"
@@ -778,6 +831,7 @@
             "palier": 13,
             "name": "Cinder Chambers Héroïque",
             "biome": "fire",
+            "damagePenetration": { "type": "fire", "value": 25 },
             "monsters": [
                 "magma_salamander_heroic",
                 "cinder_elemental_heroic"
@@ -791,6 +845,7 @@
             "palier": 14,
             "name": "Whispering Woods Héroïque",
             "biome": "nature",
+            "damagePenetration": { "type": "nature", "value": 25 },
             "monsters": [
                 "cursed_sapling_heroic",
                 "thorn_boar_heroic"
@@ -804,6 +859,7 @@
             "palier": 14,
             "name": "Dryad Grove Héroïque",
             "biome": "nature",
+            "damagePenetration": { "type": "nature", "value": 25 },
             "monsters": [
                 "thorn_boar_heroic",
                 "wandering_dryad_heroic"
@@ -817,6 +873,7 @@
             "palier": 15,
             "name": "Forgotten Crypt Héroïque",
             "biome": "occult",
+            "damagePenetration": { "type": "shadow", "value": 25 },
             "monsters": [
                 "ghoul_heroic",
                 "shadow_wisp_heroic",
@@ -831,6 +888,7 @@
             "palier": 15,
             "name": "Void Worshippers' Lair Héroïque",
             "biome": "occult",
+            "damagePenetration": { "type": "shadow", "value": 25 },
             "monsters": [
                 "shadow_wisp_heroic",
                 "acolyte_of_the_void_heroic",
@@ -845,6 +903,7 @@
             "palier": 16,
             "name": "Glacial Depths Héroïque",
             "biome": "frost",
+            "damagePenetration": { "type": "ice", "value": 25 },
             "monsters": [ "polar_bear_heroic", "glacial_elemental_heroic", "ice_wraith_heroic" ],
             "killTarget": 80,
             "bossId": "icebound_warlord_heroic",
@@ -855,6 +914,7 @@
             "palier": 16,
             "name": "Frozen Berserkers' Hall Héroïque",
             "biome": "frost",
+            "damagePenetration": { "type": "ice", "value": 25 },
             "monsters": [ "glacial_elemental_heroic", "ice_wraith_heroic", "frozen_berserker_heroic" ],
             "killTarget": 80,
             "bossId": "icebound_warlord_heroic",
@@ -865,6 +925,7 @@
             "palier": 17,
             "name": "Volcanic Core Héroïque",
             "biome": "fire",
+            "damagePenetration": { "type": "fire", "value": 25 },
             "monsters": [ "pyroclastic_golem_heroic", "hell_hound_heroic", "obsidian_gargoyle_heroic" ],
             "killTarget": 90,
             "bossId": "fire_giant_champion_heroic",
@@ -875,6 +936,7 @@
             "palier": 17,
             "name": "Fire Giants' Outpost Héroïque",
             "biome": "fire",
+            "damagePenetration": { "type": "fire", "value": 25 },
             "monsters": [ "hell_hound_heroic", "obsidian_gargoyle_heroic", "fire_giant_scout_heroic" ],
             "killTarget": 90,
             "bossId": "fire_giant_champion_heroic",
@@ -885,6 +947,7 @@
             "palier": 18,
             "name": "Verdant Labyrinth Héroïque",
             "biome": "nature",
+            "damagePenetration": { "type": "nature", "value": 25 },
             "monsters": [ "razorvine_creeper_heroic", "ancient_treant_heroic", "grove_sentinel_heroic" ],
             "killTarget": 100,
             "bossId": "guardian_of_the_grove_heroic",
@@ -895,6 +958,7 @@
             "palier": 18,
             "name": "Sylvan Guardians' Domain Héroïque",
             "biome": "nature",
+            "damagePenetration": { "type": "nature", "value": 25 },
             "monsters": [ "ancient_treant_heroic", "grove_sentinel_heroic", "sylvan_protector_heroic" ],
             "killTarget": 100,
             "bossId": "guardian_of_the_grove_heroic",
@@ -905,6 +969,7 @@
             "palier": 19,
             "name": "Shadowy Necropolis Héroïque",
             "biome": "occult",
+            "damagePenetration": { "type": "shadow", "value": 25 },
             "monsters": [ "wraith_heroic", "mind_flayer_spawn_heroic", "void_terror_heroic", "shambling_horror_heroic" ],
             "killTarget": 110,
             "bossId": "spectral_overlord_heroic",
@@ -915,6 +980,7 @@
             "palier": 19,
             "name": "Specters' Sanctuary Héroïque",
             "biome": "occult",
+            "damagePenetration": { "type": "shadow", "value": 25 },
             "monsters": [ "mind_flayer_spawn_heroic", "void_terror_heroic", "shambling_horror_heroic", "specter_heroic" ],
             "killTarget": 110,
             "bossId": "spectral_overlord_heroic",
@@ -925,6 +991,7 @@
             "palier": 20,
             "name": "Frozen Wastes Héroïque",
             "biome": "frost",
+            "damagePenetration": { "type": "ice", "value": 25 },
             "monsters": [ "frost_giant_heroic", "rime-scaled_drake_heroic", "mammoth_calf_heroic", "wendigo_spawn_heroic" ],
             "killTarget": 120,
             "bossId": "boreal_crusader_heroic",
@@ -935,6 +1002,7 @@
             "palier": 20,
             "name": "Boreal Knights' Fortress Héroïque",
             "biome": "frost",
+            "damagePenetration": { "type": "ice", "value": 25 },
             "monsters": [ "rime-scaled_drake_heroic", "mammoth_calf_heroic", "wendigo_spawn_heroic", "boreal_knight_heroic" ],
             "killTarget": 120,
             "bossId": "boreal_crusader_heroic",
@@ -945,6 +1013,7 @@
             "palier": 21,
             "name": "Infernal Forge Héroïque",
             "biome": "fire",
+            "damagePenetration": { "type": "fire", "value": 25 },
             "monsters": [ "infernal_juggernaut_heroic", "magma_dragon_whelp_heroic", "flame_hydra_heroic", "brimstone_devil_heroic" ],
             "killTarget": 130,
             "bossId": "ashwing_matriarch_heroic",
@@ -955,6 +1024,7 @@
             "palier": 21,
             "name": "Ash Harpies' Nest Héroïque",
             "biome": "fire",
+            "damagePenetration": { "type": "fire", "value": 25 },
             "monsters": [ "magma_dragon_whelp_heroic", "flame_hydra_heroic", "brimstone_devil_heroic", "ash_harpy_heroic" ],
             "killTarget": 130,
             "bossId": "ashwing_matriarch_heroic",
@@ -965,6 +1035,7 @@
             "palier": 22,
             "name": "Emerald Nightmare Héroïque",
             "biome": "nature",
+            "damagePenetration": { "type": "nature", "value": 25 },
             "monsters": [ "colossal_carnivorous_plant_heroic", "verdant_wyrm_heroic", "elf_ranger_heroic", "satyr_trickster_heroic" ],
             "killTarget": 140,
             "bossId": "colossus_of_the_grove_heroic",
@@ -975,6 +1046,7 @@
             "palier": 22,
             "name": "Emerald Golems' Garden Héroïque",
             "biome": "nature",
+            "damagePenetration": { "type": "nature", "value": 25 },
             "monsters": [ "verdant_wyrm_heroic", "elf_ranger_heroic", "satyr_trickster_heroic", "emerald_golem_heroic" ],
             "killTarget": 140,
             "bossId": "colossus_of_the_grove_heroic",
@@ -985,6 +1057,7 @@
             "palier": 23,
             "name": "Cathedral of Eternal Night Héroïque",
             "biome": "occult",
+            "damagePenetration": { "type": "shadow", "value": 25 },
             "monsters": [ "dread_lich_heroic", "elder_thing_heroic", "void_reaver_heroic", "bone_collector_heroic", "soul_eater_heroic" ],
             "killTarget": 150,
             "bossId": "ancient_tomb_protector_heroic",
@@ -995,6 +1068,7 @@
             "palier": 23,
             "name": "Tomb Guardians' Crypt Héroïque",
             "biome": "occult",
+            "damagePenetration": { "type": "shadow", "value": 25 },
             "monsters": [ "elder_thing_heroic", "void_reaver_heroic", "bone_collector_heroic", "soul_eater_heroic", "tomb_guardian_heroic" ],
             "killTarget": 150,
             "bossId": "ancient_tomb_protector_heroic",
@@ -1005,6 +1079,7 @@
             "palier": 24,
             "name": "Glacier's Peak Héroïque",
             "biome": "frost",
+            "damagePenetration": { "type": "ice", "value": 25 },
             "monsters": [ "ice_titan_heroic", "avalanche_spirit_heroic", "yeti_patriarch_heroic", "frost-forged_sentinel_heroic", "seraphim_of_ice_heroic" ],
             "killTarget": 160,
             "bossId": "ancient_frost_wyrm_heroic",
@@ -1015,6 +1090,7 @@
             "palier": 24,
             "name": "Frost Wyrm's Lair Héroïque",
             "biome": "frost",
+            "damagePenetration": { "type": "ice", "value": 25 },
             "monsters": [ "avalanche_spirit_heroic", "yeti_patriarch_heroic", "frost-forged_sentinel_heroic", "seraphim_of_ice_heroic", "ancient_frost_wyrm_heroic" ],
             "killTarget": 160,
             "bossId": "ancient_frost_wyrm_heroic",
@@ -1025,6 +1101,7 @@
             "palier": 25,
             "name": "Heart of the Volcano Héroïque",
             "biome": "fire",
+            "damagePenetration": { "type": "fire", "value": 25 },
             "monsters": [ "balrog_heroic", "phoenix_heroic", "efreeti_sultan_heroic", "volcanic_titan_heroic", "charred_legionnaire_heroic" ],
             "killTarget": 170,
             "bossId": "primeval_magma_dragon_heroic",
@@ -1035,6 +1112,7 @@
             "palier": 25,
             "name": "Magma Dragon's Roost Héroïque",
             "biome": "fire",
+            "damagePenetration": { "type": "fire", "value": 25 },
             "monsters": [ "phoenix_heroic", "efreeti_sultan_heroic", "volcanic_titan_heroic", "charred_legionnaire_heroic", "primeval_magma_dragon_heroic" ],
             "killTarget": 170,
             "bossId": "primeval_magma_dragon_heroic",
@@ -1045,6 +1123,7 @@
             "palier": 26,
             "name": "Throne of the Wilds Héroïque",
             "biome": "nature",
+            "damagePenetration": { "type": "nature", "value": 25 },
             "monsters": [ "gaia_avatar_heroic", "archdruid_of_the_fang_heroic", "fenrir's_chosen_heroic", "fae_king_heroic", "living_world-tree_heroic" ],
             "killTarget": 180,
             "bossId": "world_ash_treant_heroic",
@@ -1055,6 +1134,7 @@
             "palier": 26,
             "name": "World Ash Treant's Grove Héroïque",
             "biome": "nature",
+            "damagePenetration": { "type": "nature", "value": 25 },
             "monsters": [ "archdruid_of_the_fang_heroic", "fenrir's_chosen_heroic", "fae_king_heroic", "living_world-tree_heroic", "world_ash_treant_heroic" ],
             "killTarget": 180,
             "bossId": "world_ash_treant_heroic",
@@ -1065,6 +1145,7 @@
             "palier": 27,
             "name": "The Void-Corrupted Sanctum Héroïque",
             "biome": "occult",
+            "damagePenetration": { "type": "shadow", "value": 25 },
             "monsters": [ "archlich_of_nar'thalas_heroic", "gibbering_mouther_heroic", "void_leviathan_heroic", "ethereal_devourer_heroic", "shadow_titan_heroic", "death_knight_champion_heroic" ],
             "killTarget": 190,
             "bossId": "herald_of_cthulhu_heroic",
@@ -1075,6 +1156,7 @@
             "palier": 27,
             "name": "Cthulhu's Herald's Antechamber Héroïque",
             "biome": "occult",
+            "damagePenetration": { "type": "shadow", "value": 25 },
             "monsters": [ "gibbering_mouther_heroic", "void_leviathan_heroic", "ethereal_devourer_heroic", "shadow_titan_heroic", "death_knight_champion_heroic", "herald_of_cthulhu_heroic" ],
             "killTarget": 190,
             "bossId": "herald_of_cthulhu_heroic",
@@ -1085,6 +1167,7 @@
             "palier": 28,
             "name": "Permafrost Citadel Héroïque",
             "biome": "frost",
+            "damagePenetration": { "type": "ice", "value": 25 },
             "monsters": [ "ancient_frost_wyrm_heroic", "ice_titan_heroic", "seraphim_of_ice_heroic" ],
             "killTarget": 200,
             "bossId": "ancient_frost_wyrm_heroic",
@@ -1095,6 +1178,7 @@
             "palier": 28,
             "name": "Molten Pinnacle Héroïque",
             "biome": "fire",
+            "damagePenetration": { "type": "fire", "value": 25 },
             "monsters": [ "primeval_magma_dragon_heroic", "balrog_heroic", "phoenix_heroic" ],
             "killTarget": 200,
             "bossId": "primeval_magma_dragon_heroic",
@@ -1105,6 +1189,7 @@
             "palier": 29,
             "name": "Heart of the Forest Héroïque",
             "biome": "nature",
+            "damagePenetration": { "type": "nature", "value": 25 },
             "monsters": [ "world_ash_treant_heroic", "gaia_avatar_heroic", "fae_king_heroic" ],
             "killTarget": 200,
             "bossId": "world_ash_treant_heroic",
@@ -1115,6 +1200,7 @@
             "palier": 29,
             "name": "R'lyeh's Threshold Héroïque",
             "biome": "occult",
+            "damagePenetration": { "type": "shadow", "value": 25 },
             "monsters": [ "herald_of_cthulhu_heroic", "void_leviathan_heroic", "archlich_of_nar'thalas_heroic" ],
             "killTarget": 200,
             "bossId": "herald_of_cthulhu_heroic",
@@ -1125,6 +1211,7 @@
             "palier": 30,
             "name": "Frozen Throne Héroïque",
             "biome": "frost",
+            "damagePenetration": { "type": "ice", "value": 25 },
             "monsters": [ "ancient_frost_wyrm_heroic", "ice_titan_heroic", "seraphim_of_ice_heroic", "boreal_knight_heroic" ],
             "killTarget": 200,
             "bossId": "ancient_frost_wyrm_heroic",
@@ -1135,6 +1222,7 @@
             "palier": 30,
             "name": "Inferno's Core Héroïque",
             "biome": "fire",
+            "damagePenetration": { "type": "fire", "value": 25 },
             "monsters": [ "primeval_magma_dragon_heroic", "balrog_heroic", "phoenix_heroic", "efreeti_sultan_heroic" ],
             "killTarget": 200,
             "bossId": "primeval_magma_dragon_heroic",
@@ -1145,6 +1233,7 @@
             "palier": 31,
             "name": "Verdant Sanctuary Héroïque",
             "biome": "nature",
+            "damagePenetration": { "type": "nature", "value": 25 },
             "monsters": [ "world_ash_treant_heroic", "gaia_avatar_heroic", "fae_king_heroic", "archdruid_of_the_fang_heroic" ],
             "killTarget": 200,
             "bossId": "world_ash_treant_heroic",
@@ -1155,6 +1244,7 @@
             "palier": 31,
             "name": "The Sunken City Héroïque",
             "biome": "occult",
+            "damagePenetration": { "type": "shadow", "value": 25 },
             "monsters": [ "herald_of_cthulhu_heroic", "void_leviathan_heroic", "archlich_of_nar'thalas_heroic", "shadow_titan_heroic" ],
             "killTarget": 200,
             "bossId": "herald_of_cthulhu_heroic",
@@ -1165,6 +1255,7 @@
             "palier": 32,
             "name": "Icecrown Citadel Héroïque",
             "biome": "frost",
+            "damagePenetration": { "type": "ice", "value": 25 },
             "monsters": [ "ancient_frost_wyrm_heroic", "ice_titan_heroic", "seraphim_of_ice_heroic", "boreal_knight_heroic", "yeti_patriarch_heroic" ],
             "killTarget": 200,
             "bossId": "ancient_frost_wyrm_heroic",
@@ -1175,6 +1266,7 @@
             "palier": 32,
             "name": "Blackrock Mountain Héroïque",
             "biome": "fire",
+            "damagePenetration": { "type": "fire", "value": 25 },
             "monsters": [ "primeval_magma_dragon_heroic", "balrog_heroic", "phoenix_heroic", "efreeti_sultan_heroic", "volcanic_titan_heroic" ],
             "killTarget": 200,
             "bossId": "primeval_magma_dragon_heroic",
@@ -1185,6 +1277,7 @@
             "palier": 33,
             "name": "The Emerald Dream Héroïque",
             "biome": "nature",
+            "damagePenetration": { "type": "nature", "value": 25 },
             "monsters": [ "world_ash_treant_heroic", "gaia_avatar_heroic", "fae_king_heroic", "archdruid_of_the_fang_heroic", "fenrir's_chosen_heroic" ],
             "killTarget": 200,
             "bossId": "world_ash_treant_heroic",
@@ -1195,6 +1288,7 @@
             "palier": 33,
             "name": "Ny'alotha, the Waking City Héroïque",
             "biome": "occult",
+            "damagePenetration": { "type": "shadow", "value": 25 },
             "monsters": [ "herald_of_cthulhu_heroic", "void_leviathan_heroic", "archlich_of_nar'thalas_heroic", "shadow_titan_heroic", "death_knight_champion_heroic" ],
             "killTarget": 200,
             "bossId": "herald_of_cthulhu_heroic",
@@ -1205,6 +1299,7 @@
             "palier": 34,
             "name": "The Frozen Halls Héroïque",
             "biome": "frost",
+            "damagePenetration": { "type": "ice", "value": 25 },
             "monsters": [ "ancient_frost_wyrm_heroic", "ice_titan_heroic", "seraphim_of_ice_heroic", "boreal_knight_heroic", "yeti_patriarch_heroic", "frost-forged_sentinel_heroic" ],
             "killTarget": 200,
             "bossId": "ancient_frost_wyrm_heroic",
@@ -1215,6 +1310,7 @@
             "palier": 35,
             "name": "The Molten Core Héroïque",
             "biome": "fire",
+            "damagePenetration": { "type": "fire", "value": 25 },
             "monsters": [ "primeval_magma_dragon_heroic", "balrog_heroic", "phoenix_heroic", "efreeti_sultan_heroic", "volcanic_titan_heroic", "charred_legionnaire_heroic" ],
             "killTarget": 200,
             "bossId": "primeval_magma_dragon_heroic",

@@ -25,3 +25,10 @@ export const STAT_DISPLAY_NAMES: Record<string, string> = {
     'ResElems.nature': 'Résistance Nature',
     'BonusDmg.shadow': "Dégâts d'Ombre",
 };
+
+export const AFFIX_TO_THEME: Record<string, string> = {
+    'ResElems.fire': 'fire',
+    'ResElems.ice': 'ice',
+    'Esprit': 'holy',
+    'Dexterite': 'shadow',
+};

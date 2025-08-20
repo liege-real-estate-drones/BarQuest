@@ -2,6 +2,8 @@
 import type { Item, Rareté, Affixe } from '@/lib/types';
 import { v4 as uuidv4 } from 'uuid';
 import nameModifiersData from '../../public/data/nameModifiers.json';
+import { AFFIX_TO_THEME } from '@/lib/constants';
+import * as formulas from '@/core/formulas';
 
 const { qualifiers, materials, themes, naming_patterns, affixes: affixModifiers } = nameModifiersData;
 
@@ -39,19 +41,6 @@ const affixRefToModifierKey: Record<string, string> = {
     'AttMax': 'strength',
 };
 
-// Maps affix 'ref' from the game to a theme key
-const affixToTheme: Record<string, string> = {
-    'ResElems.fire': 'fire',
-    'ResElems.ice': 'ice',
-    'Esprit': 'holy',
-    'Dexterite': 'shadow',
-};
-
-
-const scaleAffixValue = (baseValue: number, level: number): number => {
-    return Math.round(baseValue + (baseValue * level * 0.1) + (level * 0.5));
-};
-
 export const generateProceduralItem = (
     baseItem: Omit<Item, 'id' | 'niveauMin' | 'rarity'> & { material_type?: string },
     itemLevel: number,
@@ -83,7 +72,7 @@ export const generateProceduralItem = (
         newItem.affixes = selectedAffixes.map(affix => {
             const [min, max] = affix.portée;
             const baseValue = Math.floor(Math.random() * (max - min + 1)) + min;
-            const scaledValue = scaleAffixValue(baseValue, itemLevel);
+            const scaledValue = formulas.scaleAffixValue(baseValue, itemLevel);
             return { ref: affix.ref, val: scaledValue };
         });
     }
@@ -107,7 +96,7 @@ export const generateProceduralItem = (
         // 1. Try to find a theme from the item's affixes
         if (newItem.affixes) {
             for (const affix of newItem.affixes) {
-                const themeName = (affixToTheme as Record<string, string>)[affix.ref];
+                const themeName = AFFIX_TO_THEME[affix.ref];
                 if (themeName) {
                     chosenThemeName = themeName;
                     break;
