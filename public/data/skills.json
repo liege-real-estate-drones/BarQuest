@@ -150,8 +150,8 @@
                     "duration": 10,
                     "buffType": "stat_modifier",
                     "statMods": [
-                        { "stat": "Force", "modifier": "multiplicative", "value": 1.30 },
-                        { "stat": "Armure", "modifier": "multiplicative", "value": 0.85 }
+                        { "stat": "DamageMultiplier", "modifier": "multiplicative", "value": 1.30 },
+                        { "stat": "DamageReductionMultiplier", "modifier": "multiplicative", "value": 1.15 }
                     ]
                 },
                 { "type": "resource_cost", "amount": 0 }
@@ -234,6 +234,19 @@
                 "Réduit tous les dégâts subis de 40% pendant 12 secondes.",
                 "Coûte 10 Rage."
             ],
+            "effects": [
+                {
+                    "type": "buff",
+                    "id": "shield_wall",
+                    "name": "Mur de bouclier",
+                    "duration": 12,
+                    "buffType": "stat_modifier",
+                    "statMods": [
+                        { "stat": "DamageReductionMultiplier", "modifier": "multiplicative", "value": 0.60 }
+                    ]
+                },
+                { "type": "resource_cost", "amount": 10 }
+            ],
             "cooldown": 120
         },
         {
@@ -286,6 +299,25 @@
             "effets": [
                 "Inflige 12/18/24/30/36 dégâts de Givre et ralentit la vitesse d'attaque de la cible de 20%.",
                 "Coûte 8 Mana."
+            ],
+            "effects": [
+                {
+                    "type": "damage",
+                    "damageType": "frost",
+                    "source": "spell",
+                    "baseValue": 12
+                },
+                {
+                    "type": "debuff",
+                    "debuffType": "stat_modifier",
+                    "id": "frostbolt_slow",
+                    "name": "Ralentissement",
+                    "duration": 5,
+                    "statMods": [
+                        { "stat": "Vitesse", "modifier": "multiplicative", "value": 1.20 }
+                    ]
+                },
+                { "type": "resource_cost", "amount": 8 }
             ]
         },
         {
@@ -379,6 +411,22 @@
                 "Invoque une tempête de glace qui inflige 15 dégâts de Givre à tous les ennemis chaque seconde pendant 8 secondes.",
                 "Coûte 75 Mana."
             ],
+            "effects": [
+                {
+                    "type": "debuff",
+                    "debuffType": "dot",
+                    "target": "all_enemies",
+                    "id": "blizzard_dot",
+                    "name": "Blizzard",
+                    "duration": 8,
+                    "damageType": "frost",
+                    "totalDamage": {
+                        "source": "base_value",
+                        "multiplier": 120
+                    }
+                },
+                { "type": "resource_cost", "amount": 75 }
+            ],
             "cooldown": 20
         },
         {
@@ -391,6 +439,20 @@
             "effets": [
                 "Vous enferme dans un bloc de glace, vous rendant invulnérable pendant 10s, mais vous ne pouvez pas agir.",
                 "Coûte 10 Mana."
+            ],
+            "effects": [
+                {
+                    "type": "invulnerability",
+                    "duration": 10
+                },
+                {
+                    "type": "buff",
+                    "id": "ice_block_stun",
+                    "name": "Bloqué dans la glace",
+                    "duration": 10,
+                    "buffType": "special"
+                },
+                { "type": "resource_cost", "amount": 10 }
             ],
             "cooldown": 300
         },
@@ -430,6 +492,16 @@
             "effets": [
                 "Invoque une pluie de météores qui inflige 40 dégâts de Feu à tous les ennemis.",
                 "Coûte 60 Mana."
+            ],
+            "effects": [
+                {
+                    "type": "damage",
+                    "damageType": "fire",
+                    "source": "spell",
+                    "baseValue": 40,
+                    "target": "all_enemies"
+                },
+                { "type": "resource_cost", "amount": 60 }
             ]
         },
         {
@@ -480,6 +552,19 @@
             "effets": [
                 "Augmente vos chances d'esquive de 50% pendant 10s.",
                 "Coûte 20 Énergie."
+            ],
+            "effects": [
+                {
+                    "type": "buff",
+                    "id": "evasion",
+                    "name": "Évasion",
+                    "duration": 10,
+                    "buffType": "stat_modifier",
+                    "statMods": [
+                        { "stat": "Esquive", "modifier": "additive", "value": 50 }
+                    ]
+                },
+                { "type": "resource_cost", "amount": 20 }
             ]
         },
         {
@@ -598,6 +683,29 @@
             "effets": [
                 "Lance une bombe qui inflige 20 dégâts de Nature à tous les ennemis et les empoisonne pour 60 dégâts sur 12s.",
                 "Coûte 50 Énergie."
+            ],
+            "effects": [
+                {
+                    "type": "damage",
+                    "damageType": "nature",
+                    "source": "spell",
+                    "baseValue": 20,
+                    "target": "all_enemies"
+                },
+                {
+                    "type": "debuff",
+                    "debuffType": "dot",
+                    "target": "all_enemies",
+                    "id": "poison_bomb_dot",
+                    "name": "Poison",
+                    "duration": 12,
+                    "damageType": "nature",
+                    "totalDamage": {
+                        "source": "base_value",
+                        "multiplier": 60
+                    }
+                },
+                { "type": "resource_cost", "amount": 50 }
             ]
         },
         {
@@ -610,6 +718,19 @@
             "effets": [
                 "Enduit vos armes d'un poison qui a 50% de chances de réduire la vitesse d'attaque de la cible de 25% pendant 12s.",
                 "Coûte 10 Énergie."
+            ],
+            "effects": [
+                {
+                    "type": "debuff",
+                    "debuffType": "stat_modifier",
+                    "id": "crippling_poison_slow",
+                    "name": "Poison affaiblissant",
+                    "duration": 12,
+                    "statMods": [
+                        { "stat": "Vitesse", "modifier": "multiplicative", "value": 1.25 }
+                    ]
+                },
+                { "type": "resource_cost", "amount": 10 }
             ]
         },
         {
@@ -617,6 +738,7 @@
             "nom": "Soins rapides",
             "classeId": "cleric",
             "type": "actif",
+            "school": "holy",
             "rangMax": 5,
             "niveauRequis": 1,
             "effets": [
@@ -629,6 +751,7 @@
             "nom": "Châtiment",
             "classeId": "cleric",
             "type": "actif",
+            "school": "holy",
             "rangMax": 5,
             "niveauRequis": 1,
             "effets": [
@@ -641,6 +764,7 @@
             "nom": "Mot de pouvoir : Bouclier",
             "classeId": "cleric",
             "type": "actif",
+            "school": "holy",
             "rangMax": 1,
             "niveauRequis": 1,
             "cooldown": 8,
@@ -661,6 +785,7 @@
             "nom": "Rénovation",
             "classeId": "cleric",
             "type": "actif",
+            "school": "holy",
             "rangMax": 1,
             "niveauRequis": 1,
             "effets": [
@@ -689,6 +814,7 @@
             "nom": "Prière de guérison",
             "classeId": "cleric",
             "type": "actif",
+            "school": "holy",
             "rangMax": 1,
             "niveauRequis": 20,
             "effets": [
@@ -702,11 +828,20 @@
             "nom": "Esprit gardien",
             "classeId": "cleric",
             "type": "actif",
+            "school": "holy",
             "rangMax": 1,
             "niveauRequis": 40,
             "effets": [
                 "Un esprit vous protège pendant 10s. Si vous subissez des dégâts mortels, l'esprit est consommé et vous rend 50% de vos PV max.",
                 "Coûte 30 Mana."
+            ],
+            "effects": [
+                {
+                    "type": "death_ward",
+                    "duration": 10,
+                    "heal_percent": 50
+                },
+                { "type": "resource_cost", "amount": 30 }
             ],
             "cooldown": 180
         },
@@ -715,6 +850,7 @@
             "nom": "Pénitence",
             "classeId": "cleric",
             "type": "actif",
+            "school": "holy",
             "rangMax": 1,
             "niveauRequis": 15,
             "effets": [
@@ -734,6 +870,19 @@
                 "Réduit les dégâts que vous subissez de 40% pendant 8s.",
                 "Coûte 15 Mana."
             ],
+            "effects": [
+                {
+                    "type": "buff",
+                    "id": "pain_suppression",
+                    "name": "Suppression de la douleur",
+                    "duration": 8,
+                    "buffType": "stat_modifier",
+                    "statMods": [
+                        { "stat": "DamageReductionMultiplier", "modifier": "multiplicative", "value": 0.60 }
+                    ]
+                },
+                { "type": "resource_cost", "amount": 15 }
+            ],
             "cooldown": 120
         },
         {
@@ -741,6 +890,7 @@
             "nom": "Explosion mentale",
             "classeId": "cleric",
             "type": "actif",
+            "school": "shadow",
             "rangMax": 1,
             "niveauRequis": 10,
             "effets": [
@@ -762,6 +912,13 @@
             "effets": [
                 "Adopte une forme d'ombre, augmentant les dégâts d'Ombre de 15% et réduisant les dégâts physiques subis de 15%. Vous ne pouvez plus lancer de sorts Sacrés.",
                 "Coûte 10 Mana."
+            ],
+            "effects": [
+                {
+                    "type": "transformation",
+                    "form": "shadow"
+                },
+                { "type": "resource_cost", "amount": 10 }
             ]
         }
     ]

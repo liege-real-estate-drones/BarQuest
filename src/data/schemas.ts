@@ -24,6 +24,10 @@ export const StatsSchema = z.object({
   Precision: z.number(),
   Esquive: z.number(),
   HealingReceivedMultiplier: z.number().optional(),
+  DamageMultiplier: z.number().optional(),
+  DamageReductionMultiplier: z.number().optional(),
+  HPRegenPercent: z.number().optional(),
+    ShadowDamageMultiplier: z.number().optional(),
 });
 
 export const AffixSchema = z.object({
@@ -100,7 +104,7 @@ const DamageEffectSchema = z.object({
 
 const StatModSchema = z.object({
     stat: z.string(),
-    value: z.number(),
+    value: z.union([z.number(), z.array(z.number())]),
     modifier: z.enum(['additive', 'multiplicative']),
 });
 
@@ -137,7 +141,7 @@ const DebuffEffectSchema = z.object({
     duration: z.number(),
     damageType: z.enum(['physical', 'fire', 'frost', 'arcane', 'holy', 'shadow', 'nature']).optional(),
     totalDamage: z.object({
-        source: z.enum(['weapon', 'spell_power', 'attack_power']),
+        source: z.enum(['weapon', 'spell_power', 'attack_power', 'base_value']),
         multiplier: z.number()
     }).optional(),
     ccType: z.enum(['stun', 'freeze']).optional(),
@@ -149,12 +153,31 @@ const ResourceCostSchema = z.object({
     amount: z.number(),
 });
 
+const InvulnerabilityEffectSchema = z.object({
+    type: z.literal('invulnerability'),
+    duration: z.number(),
+});
+
+const DeathWardEffectSchema = z.object({
+    type: z.literal('death_ward'),
+    duration: z.number(),
+    heal_percent: z.number(),
+});
+
+const TransformationEffectSchema = z.object({
+    type: z.literal('transformation'),
+    form: z.string(),
+});
+
 const SkillEffectSchema = z.union([
     DamageEffectSchema,
     BuffEffectSchema,
     DebuffEffectSchema,
     ResourceCostSchema,
-    ShieldEffectSchema
+    ShieldEffectSchema,
+    InvulnerabilityEffectSchema,
+    DeathWardEffectSchema,
+    TransformationEffectSchema
 ]);
 
 const BaseSkillTalentSchema = z.object({
@@ -171,11 +194,22 @@ const BaseSkillTalentSchema = z.object({
 
 export const SkillSchema = BaseSkillTalentSchema.extend({
   type: z.literal("actif"),
+  school: z.enum(['holy', 'shadow', 'fire', 'frost', 'arcane', 'physical']).optional(),
   cooldown: z.number().default(0), // in seconds
+});
+
+const TalentEffectTriggerSchema = z.enum(['on_dodge']); // Start with on_dodge
+
+const TalentEffectSchema = z.object({
+    trigger: TalentEffectTriggerSchema,
+    chance: z.number().optional().default(1),
+    effects: z.array(SkillEffectSchema), // A talent can apply any of the existing skill effects
+    cooldown: z.number().optional(),
 });
 
 export const TalentSchema = BaseSkillTalentSchema.extend({
   type: z.literal("passif"),
+  triggeredEffects: z.array(TalentEffectSchema).optional(),
 });
 
 
