@@ -71,7 +71,7 @@ function BuyTab() {
     };
 
     const handleBuy = (item: Item) => {
-        const success = buyItem(item);
+        const success = buyItem(item.id); // On passe maintenant juste l'ID
         if (success) {
             toast({
                 title: "Achat réussi !",
@@ -80,7 +80,7 @@ function BuyTab() {
         } else {
             toast({
                 title: "Échec de l'achat",
-                description: "Vous n&apos;avez pas assez d'or.",
+                description: "Vous n'avez pas assez d'or.",
                 variant: 'destructive'
             });
         }
