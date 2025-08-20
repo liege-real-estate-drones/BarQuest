@@ -79,11 +79,14 @@ export default function EntityDisplay({ entity, isPlayer = false, isTarget = fal
     >
       <CardHeader className={cn("flex-shrink-0 space-y-1", isCompact ? "p-2" : "p-3")}>
         <CardTitle className={cn("font-headline flex justify-between items-center", isCompact ? "text-sm" : "text-base")}>
-          <div className="flex items-center gap-2">
-            <span className="truncate">{name} {isTarget && <span className="text-xs text-primary">(Cible)</span>}</span>
-            <Progress value={((attackProgressProp !== undefined ? attackProgressProp : entity.attackProgress) || 0) * 100} className={cn("h-1 bg-background/50", isCompact ? "w-10" : "w-16")} indicatorClassName="bg-yellow-500" />
-          </div>
-          <span className={cn("text-muted-foreground", isCompact ? "text-xs" : "text-sm")}>Lvl {level}</span>
+            <div className="flex-grow min-w-0 mr-2">
+                <div className="flex items-center gap-2">
+                    <span className="truncate font-bold">{name}</span>
+                    {isTarget && <span className="text-xs text-primary font-normal">(Cible)</span>}
+                </div>
+                <Progress value={((attackProgressProp !== undefined ? attackProgressProp : entity.attackProgress) || 0) * 100} className={cn("h-1 bg-background/50 mt-1", isCompact ? "w-12" : "w-20")} indicatorClassName="bg-yellow-500" />
+            </div>
+            <span className={cn("text-muted-foreground flex-shrink-0", isCompact ? "text-xs" : "text-sm")}>Lvl {level}</span>
         </CardTitle>
         <CardDescription className="capitalize text-xs">
           {isPlayer ? (entity as PlayerState).classeId : (entity as Monstre).famille}

@@ -120,8 +120,8 @@ export function ActionStrip({ onRetreat, onCycleTarget, skills }: ActionStripPro
                                         <Zap size={20} className="md:w-6 md:h-6" />
                                         <span className="truncate">{skill.nom}</span>
                                         {isCoolingDown && (
-                                            <div className="absolute inset-0 bg-black/70 flex items-center justify-center text-lg font-bold">
-                                                {Math.ceil(cooldown / 1000)}
+                                            <div className="absolute inset-0 bg-black/70 flex items-center justify-center text-lg font-bold text-white">
+                                                {Math.ceil(cooldown / 1000)}s
                                             </div>
                                         )}
                                         {isCoolingDown && (
