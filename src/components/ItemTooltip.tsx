@@ -5,6 +5,7 @@ import { Popover, PopoverTrigger, PopoverContent } from "./ui/popover";
 import { Item, Rareté, Stats } from "@/lib/types";
 import { Separator } from "./ui/separator";
 import { cn } from "@/lib/utils";
+import { STAT_DISPLAY_NAMES } from "@/lib/constants";
 
 const rarityColorMap: Record<Rareté, string> = {
     Commun: 'text-gray-400',
@@ -139,7 +140,7 @@ export function ItemTooltipContent({ item, equippedItem }: { item: Item, equippe
                 {allSortedAffixes.map((affix) => (
                     <ItemStat 
                         key={affix.ref}
-                        label={affix.ref}
+                        label={STAT_DISPLAY_NAMES[affix.ref] || affix.ref}
                         value={`${affix.val > 0 ? '+' : ''}${affix.val}`}
                         comparison={comparisonStats[affix.ref as StatKey]}
                     />
