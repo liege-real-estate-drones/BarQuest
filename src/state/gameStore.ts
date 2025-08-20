@@ -1,7 +1,7 @@
 import create from 'zustand';
 import { persist, createJSONStorage, StateStorage } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import type { Dungeon, Monstre, Item, Talent, Skill, Stats, PlayerState, InventoryState, CombatLogEntry, CombatState, GameData, Quete, PlayerClassId, ResourceType, Rareté, CombatEnemy, ItemSet, PotionType, Recipe } from '@/lib/types';
+import type { Dungeon, Monstre, Item, Talent, Skill, Stats, PlayerState, InventoryState, CombatLogEntry, CombatState, GameData, Quete, PlayerClassId, ResourceType, Rareté, CombatEnemy, ItemSet, PotionType, Recipe, Theme } from '@/lib/types';
 import { DungeonCompletionSummary } from '@/data/schemas';
 import * as formulas from '@/core/formulas';
 import { generateProceduralItem } from '@/core/itemGenerator';
@@ -138,7 +138,8 @@ interface GameState {
 let gameLoop: NodeJS.Timeout | null = null;
 
 const rarityDropChances: Record<Rareté, number> = {
-  Commun: 0.7,
+  Commun: 0.55,
+  Magique: 0.15,
   Rare: 0.25,
   Épique: 0.04,
   Légendaire: 0.01,
@@ -228,7 +229,18 @@ const resolveLoot = (monster: Monstre, gameData: GameData, playerClassId: Player
   return newItem;
 };
 
-const generateEquipmentLoot = (monster: Monstre, gameData: GameData, playerClassId: PlayerClassId | null, worldTier: number): Item | null => {
+const biomeToTheme = (biome: Dungeon['biome'] | undefined): Theme | undefined => {
+  if (!biome) return undefined;
+  const mapping: Record<Dungeon['biome'], Theme> = {
+    frost: 'ice',
+    fire: 'fire',
+    nature: 'nature',
+    occult: 'shadow',
+  };
+  return mapping[biome];
+};
+
+const generateEquipmentLoot = (monster: Monstre, gameData: GameData, playerClassId: PlayerClassId | null, worldTier: number, dungeonTheme?: Theme, monsterFamily?: string): Item | null => {
   const dropRoll = Math.random();
   let cumulativeChance = 0;
   let chosenRarity: Rareté | null = null;
@@ -271,7 +283,7 @@ const generateEquipmentLoot = (monster: Monstre, gameData: GameData, playerClass
   const baseItemTemplate = possibleItemTemplates[Math.floor(Math.random() * possibleItemTemplates.length)];
   const { id, niveauMin, rarity, affixes, ...baseItemProps } = baseItemTemplate;
   const itemLevel = monster.level + (worldTier - 1) * 5;
-  const newItem = generateProceduralItem(baseItemProps, itemLevel, chosenRarity, gameData.affixes);
+  const newItem = generateProceduralItem(baseItemProps, itemLevel, chosenRarity, gameData.affixes, dungeonTheme, monsterFamily);
 
   return newItem;
 };
@@ -289,6 +301,7 @@ export const getItemSellPrice = (item: Item): number => {
     }
     const rarityMultiplier: Record<Rareté, number> = {
         Commun: 1,
+        Magique: 1.5,
         Rare: 2.5,
         Épique: 5,
         Légendaire: 10,
@@ -304,6 +317,7 @@ export const getItemBuyPrice = (item: Item): number => {
     // Re-using the logic from getItemSellPrice to calculate the base sell price
     const rarityMultiplier: Record<Rareté, number> = {
         Commun: 1,
+        Magique: 1.5,
         Rare: 2.5,
         Épique: 5,
         Légendaire: 10,
@@ -497,7 +511,7 @@ export const useGameStore = create<GameState>()(
           const baseItemTemplate = possibleTemplates[Math.floor(Math.random() * possibleTemplates.length)];
           const itemLevel = state.player.level;
           const { id, niveauMin, affixes, ...baseItemProps } = baseItemTemplate;
-          const newItem = generateProceduralItem(baseItemProps, itemLevel, rarity, state.gameData.affixes);
+          const newItem = generateProceduralItem(baseItemProps, itemLevel, rarity, state.gameData.affixes, undefined);
 
           set((currentState: GameState) => {
               currentState.inventory.gold -= cost;
@@ -516,7 +530,7 @@ export const useGameStore = create<GameState>()(
             state.inventory.items.splice(itemIndex, 1);
 
             // Simple dismantling logic: 1-3 generic materials based on rarity
-            const rarityMultiplier = { "Commun": 1, "Rare": 2, "Épique": 3, "Légendaire": 5, "Unique": 5 };
+            const rarityMultiplier: Record<Rareté, number> = { "Commun": 1, "Magique": 1.5, "Rare": 2, "Épique": 3, "Légendaire": 5, "Unique": 5 };
             const amount = Math.ceil(Math.random() * rarityMultiplier[itemToDismantle.rarity]);
 
             const materialId = "scrap_metal"; // Generic material for now
@@ -987,7 +1001,7 @@ export const useGameStore = create<GameState>()(
                         else bonusRarity = "Commun";
                     }
 
-                    const chestItem = generateProceduralItem(baseItemProps, itemLevel, bonusRarity, gameData.affixes);
+                    const chestItem = generateProceduralItem(baseItemProps, itemLevel, bonusRarity, gameData.affixes, biomeToTheme(state.currentDungeon?.biome));
                     if (chestItem) { // Vérification supplémentaire pour s'assurer que l'objet a été créé
                         chestItems.push(chestItem);
                     }
@@ -1610,7 +1624,7 @@ export const useGameStore = create<GameState>()(
             if (state.dungeonState && state.dungeonState.equipmentDropsPending > 0 && state.dungeonState.monstersRemainingInDungeon > 0) {
                 const dropChance = state.dungeonState.equipmentDropsPending / state.dungeonState.monstersRemainingInDungeon;
                 if (Math.random() < dropChance) {
-                    const equipmentDrop = generateEquipmentLoot(enemy, gameData, state.player.classeId, worldTier);
+                    const equipmentDrop = generateEquipmentLoot(enemy, gameData, state.player.classeId, worldTier, biomeToTheme(state.currentDungeon?.biome), enemy.famille);
                     if (equipmentDrop) {
                         state.combat.dungeonRunItems.push(equipmentDrop);
                         state.combat.log.push({ message: ``, type: 'loot', timestamp: Date.now(), item: equipmentDrop });

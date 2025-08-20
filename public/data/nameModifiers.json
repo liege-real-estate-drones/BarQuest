@@ -1,64 +1,63 @@
 {
-  "affixes": {
-    "Force": {
-      "prefix": "Guerrier",
-      "suffix": "du Titan"
+  "qualifiers": {
+    "damaged": { "multiplier": 0.8, "names": ["Fendu", "Abîmé", "Usé", "Ébréché"] },
+    "common": { "multiplier": 1.0, "names": ["Solide", "Fiable", "Robuste", "Commun"] },
+    "superior": { "multiplier": 1.2, "names": ["Renforcé", "Artisanal", "Supérieur", "Ouvragé"] },
+    "epic": { "multiplier": 1.4, "names": ["Royal", "Magnifique", "Épique", "Chef-d'œuvre"] },
+    "legendary": { "multiplier": 1.6, "names": ["Divin", "Légendaire", "Mythique", "Unique"] }
+  },
+  "materials": {
+    "metal": ["de Fer", "d'Acier", "de Mithril", "d'Adamantite"],
+    "leather": ["de Cuir", "de Peau", "d'Écailles de Bête"],
+    "cloth": ["de Tissu", "de Soie", "de Lin Enchanté"],
+    "wood": ["de Bois", "de Chêne", "d'If Sacré"]
+  },
+  "themes": {
+    "fire": {
+      "prefixes": ["Incandescent", "Volcanique", "Cendré", "Infernal"],
+      "suffixes": ["du Brasier", "de la Fournaise", "des Flammes Éternelles"]
     },
-    "Intelligence": {
-      "prefix": "Savant",
-      "suffix": "de l'Archimage"
+    "ice": {
+      "prefixes": ["Glacial", "Givré", "Boréal", "Polaire"],
+      "suffixes": ["du Fjord", "de la Toundra", "du Givre Mortel"]
     },
-    "Dexterite": {
-      "prefix": "Vif",
-      "suffix": "de l'Ombre"
+    "nature": {
+      "prefixes": ["Sylvestre", "Vivant", "Sauvage", "Tellurique"],
+      "suffixes": ["de la Forêt", "du Bosquet Ancien", "des Ronces"]
     },
-    "Esprit": {
-      "prefix": "Spirituel",
-      "suffix": "du Prophète"
+    "shadow": {
+      "prefixes": ["Ténébreux", "Obscur", "Funeste", "Nocturne"],
+      "suffixes": ["des Ombres", "du Crépuscule", "du Vide"]
     },
-    "PV": {
-      "prefix": "Robuste",
-      "suffix": "de Jouvence"
+    "beast": {
+      "prefixes": ["Sauvage", "Primal", "Férale"],
+      "suffixes": ["de la Griffe", "du Croc", "de la Chasse"]
     },
-    "CritPct": {
-      "prefix": "Mortel",
-      "suffix": "de la Frappe Précise"
+    "undead": {
+      "prefixes": ["Spectral", "Sépulcral", "Funeste"],
+      "suffixes": ["de la Tombe", "du Tourment", "de l'Âme en Peine"]
     },
-    "CritDmg": {
-      "prefix": "Destructeur",
-      "suffix": "de la Ruine"
-    },
-    "Vitesse": {
-      "prefix": "Rapide",
-      "suffix": "du Zéphyr"
-    },
-    "Armure": {
-      "prefix": "Blindé",
-      "suffix": "d'Indestructibilité"
+    "goblin": {
+      "prefixes": ["Bricolé", "Roublard", "Pillard"],
+      "suffixes": ["de la Combine", "du Larcin", "de la Piqure"]
     }
   },
-  "qualifiers": {
-    "Fragile": 0.7,
-    "Fendu": 0.8,
-    "Usé": 0.9,
-    "Solide": 1.0,
-    "Fiable": 1.05,
-    "Renforcé": 1.1,
-    "Artisanal": 1.15,
-    "Chef-d'œuvre": 1.25,
-    "Royal": 1.35,
-    "Divin": 1.5
+  "naming_patterns": {
+    "Commun": ["{baseName} {material}"],
+    "Magique": ["{baseName} {suffix_stat}", "{prefix_stat} {baseName}"],
+    "Rare": ["{qualifier} {baseName} {suffix_stat}"],
+    "Épique": ["{prefix_theme} {baseName} {suffix_theme}"],
+    "Légendaire": ["{qualifier} {prefix_theme} {baseName} {suffix_theme}"]
   },
-  "materials": [
-    { "level": 0, "name": "de Bois" },
-    { "level": 5, "name": "de Bronze" },
-    { "level": 10, "name": "de Cuir" },
-    { "level": 15, "name": "de Fer" },
-    { "level": 25, "name": "d'Argent" },
-    { "level": 30, "name": "d'Acier" },
-    { "level": 40, "name": "d'Or" },
-    { "level": 50, "name": "de Mithril" },
-    { "level": 60, "name": "d'Adamantite" },
-    { "level": 75, "name": "Éthéré" }
-  ]
+  "affixes": {
+    "Force": { "prefix": "Guerrier", "suffix": "du Titan" },
+    "Intelligence": { "prefix": "Savant", "suffix": "de l'Archimage" },
+    "Dexterite": { "prefix": "Vif", "suffix": "de l'Ombre" },
+    "Esprit": { "prefix": "Spirituel", "suffix": "du Prophète" },
+    "PV": { "prefix": "Robuste", "suffix": "de Jouvence" },
+    "CritPct": { "prefix": "Mortel", "suffix": "de la Frappe Précise" },
+    "CritDmg": { "prefix": "Destructeur", "suffix": "de la Ruine" },
+    "Vitesse": { "prefix": "Rapide", "suffix": "du Zéphyr" },
+    "Armure": { "prefix": "Blindé", "suffix": "d'Indestructibilité" }
+  }
 }
