@@ -165,7 +165,7 @@ const resolveLoot = (monster: Monstre, gameData: GameData, playerClassId: Player
   }
 
   // --- 2. Determine Rarity ---
-  if (Math.random() > 0.5) { // 50% chance of no loot at all
+  if (Math.random() > 0.8) { // 20% chance of no loot at all
     return null;
   }
 
@@ -884,46 +884,48 @@ export const useGameStore = create<GameState>()(
         set((state: GameState) => {
           const { combat, player, inventory, gameData, currentDungeon, worldTier } = state;
 
-          // --- Surprise Feature: Bonus Loot Roll ---
-          let bonusItem: Item | null = null;
-          if (Math.random() < 0.2) { // 20% chance for a bonus item
-            const possibleItemTemplates = gameData.items.filter(item =>
-              item.rarity !== "Légendaire" && item.rarity !== "Unique" && !item.set && item.slot !== 'potion' &&
-              (item.tagsClasse?.includes('common') || (player.classeId && item.tagsClasse?.includes(player.classeId)))
-            );
-            if (possibleItemTemplates.length > 0) {
-              const baseItemTemplate = possibleItemTemplates[Math.floor(Math.random() * possibleItemTemplates.length)];
-              const { id, niveauMin, rarity, affixes, ...baseItemProps } = baseItemTemplate;
-              const itemLevel = currentDungeon?.palier ?? player.level;
-              // Give a higher chance for a good rarity on the bonus item
-              const roll = Math.random();
-              let bonusRarity: Rareté = "Rare";
-              if (roll < 0.1) bonusRarity = "Légendaire";
-              else if (roll < 0.3) bonusRarity = "Épique";
-
-              bonusItem = generateProceduralItem(baseItemProps, itemLevel, bonusRarity, gameData.affixes);
-            }
+          // --- Dungeon Chest Rewards ---
+          const chestGold = (currentDungeon?.palier ?? 1) * 50 * worldTier;
+          let chestItem: Item | null = null;
+          const possibleItemTemplates = gameData.items.filter(item =>
+            item.rarity !== "Légendaire" && item.rarity !== "Unique" && !item.set && item.slot !== 'potion' &&
+            (item.tagsClasse?.includes('common') || (player.classeId && item.tagsClasse?.includes(player.classeId)))
+          );
+          if (possibleItemTemplates.length > 0) {
+            const baseItemTemplate = possibleItemTemplates[Math.floor(Math.random() * possibleItemTemplates.length)];
+            const { id, niveauMin, rarity, affixes, ...baseItemProps } = baseItemTemplate;
+            const itemLevel = currentDungeon?.palier ?? player.level;
+            const roll = Math.random();
+            let bonusRarity: Rareté = "Rare";
+            if (roll < 0.05) bonusRarity = "Légendaire"; // 5% chance for Legendary
+            else if (roll < 0.2) bonusRarity = "Épique"; // 15% chance for Epic
+            chestItem = generateProceduralItem(baseItemProps, itemLevel, bonusRarity, gameData.affixes);
           }
+
+          const chestRewards = {
+            gold: chestGold,
+            items: chestItem ? [chestItem] : [],
+          };
 
           // Finalize rewards
-          const allItemsGained = [...combat.dungeonRunItems];
-          if (bonusItem) {
-            allItemsGained.push(bonusItem);
-          }
-
           const summary: DungeonCompletionSummary = {
             killCount: combat.killCount,
             goldGained: combat.goldGained,
             xpGained: combat.xpGained,
-            itemsGained: allItemsGained,
+            itemsGained: [...combat.dungeonRunItems],
+            chestRewards: chestRewards
           };
 
           state.dungeonCompletionSummary = summary;
 
-          // Add rewards to player inventory
-          inventory.gold += summary.goldGained;
+          // Add all rewards to player inventory
+          inventory.gold += summary.goldGained + (summary.chestRewards?.gold ?? 0);
           player.xp += summary.xpGained;
           inventory.items.push(...summary.itemsGained);
+          if (summary.chestRewards) {
+            inventory.items.push(...summary.chestRewards.items);
+          }
+
 
           // Handle quests and other end-of-dungeon logic
           if (currentDungeon) {
