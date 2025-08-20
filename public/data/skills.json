@@ -11,6 +11,26 @@
             "effets": [
                 "Charge un ennemi, infligeant 50% des dégâts de l'arme et l'étourdissant pendant 1.5 secondes.",
                 "Coûte 10 Rage."
+            ],
+            "effects": [
+                {
+                    "type": "damage",
+                    "damageType": "physical",
+                    "source": "weapon",
+                    "multiplier": 0.5
+                },
+                {
+                    "type": "debuff",
+                    "debuffType": "cc",
+                    "id": "charge_stun",
+                    "name": "Étourdissement",
+                    "duration": 1.5,
+                    "ccType": "stun"
+                },
+                {
+                    "type": "resource_cost",
+                    "amount": 10
+                }
             ]
         },
         {
@@ -24,6 +44,24 @@
             "effets": [
                 "Fait saigner la cible, infligeant 120% des dégâts de l'arme sur 8 secondes.",
                 "Coûte 20 Rage."
+            ],
+            "effects": [
+                {
+                    "type": "debuff",
+                    "debuffType": "dot",
+                    "id": "rend_bleed",
+                    "name": "Saignement",
+                    "duration": 8,
+                    "damageType": "physical",
+                    "totalDamage": {
+                        "source": "weapon",
+                        "multiplier": 1.2
+                    }
+                },
+                {
+                    "type": "resource_cost",
+                    "amount": 20
+                }
             ]
         },
         {
@@ -165,6 +203,18 @@
             "effets": [
                 "Inflige 15/20/25/30/35 dégâts de Feu.",
                 "Coûte 10 Mana."
+            ],
+            "effects": [
+                {
+                    "type": "damage",
+                    "damageType": "fire",
+                    "source": "spell",
+                    "baseValue": 15
+                },
+                {
+                    "type": "resource_cost",
+                    "amount": 10
+                }
             ]
         },
         {
@@ -522,6 +572,22 @@
             "effets": [
                 "Vous soigne de 30 PV en 12 secondes.",
                 "Coûte 10 Mana."
+            ],
+            "effects": [
+                {
+                    "type": "buff",
+                    "id": "renew_hot",
+                    "name": "Rénovation",
+                    "duration": 12,
+                    "totalHealing": {
+                        "source": "base_value",
+                        "multiplier": 30
+                    }
+                },
+                {
+                    "type": "resource_cost",
+                    "amount": 10
+                }
             ]
         },
         {

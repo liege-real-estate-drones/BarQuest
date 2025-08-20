@@ -1283,6 +1283,7 @@ export const useGameStore = create<GameState>()(
               initialHp: randomMonsterTemplate.stats.PV,
               attackProgress: Math.random(),
               activeDebuffs: [],
+              stunDuration: 0,
             };
 
             // Apply world tier scaling
@@ -1376,11 +1377,15 @@ export const useGameStore = create<GameState>()(
 
               state.combat.enemies.forEach(enemy => {
                   if(enemy.stats.PV > 0) {
-                    const attackInterval = enemy.stats.Vitesse * 1000;
-                    if (enemy.attackProgress < 1) {
-                        enemy.attackProgress += delta / attackInterval;
+                    if (enemy.stunDuration > 0) {
+                        enemy.stunDuration -= delta;
                     } else {
-                        enemy.attackProgress = 1;
+                        const attackInterval = enemy.stats.Vitesse * 1000;
+                        if (enemy.attackProgress < 1) {
+                            enemy.attackProgress += delta / attackInterval;
+                        } else {
+                            enemy.attackProgress = 1;
+                        }
                     }
 
                     enemy.activeDebuffs = enemy.activeDebuffs?.filter(debuff => {
@@ -1390,7 +1395,7 @@ export const useGameStore = create<GameState>()(
                         debuff.nextTickIn -= delta;
                         if (debuff.nextTickIn <= 0) {
                             enemy.stats.PV -= debuff.damagePerTick;
-                            state.combat.log.push({ message: `${enemy.nom} subit ${debuff.damagePerTick} dégâts de poison.`, type: 'enemy_attack', timestamp: Date.now() });
+                            state.combat.log.push({ message: `${enemy.nom} subit ${debuff.damagePerTick} dégâts de ${debuff.name}.`, type: 'enemy_attack', timestamp: Date.now() });
                             debuff.nextTickIn = debuff.tickInterval;
                             if (enemy.stats.PV <= 0) {
                                 deadEnemyIdsFromActions.push(enemy.id);
@@ -1537,6 +1542,94 @@ export const useGameStore = create<GameState>()(
             const skill = gameData.skills.find(t => t.id === skillId);
             if (!skill || !rank) return;
 
+            // NEW DATA-DRIVEN LOGIC
+            if (skill.effects) {
+                const costEffect = skill.effects.find(e => (e as any).type === 'resource_cost') as any;
+                const resourceCost = costEffect ? costEffect.amount : 0;
+
+                if (player.resources.current < resourceCost) {
+                    combat.log.push({ message: "Pas assez de ressource!", type: 'info', timestamp: Date.now() });
+                    return;
+                }
+
+                let effectApplied = false;
+                const primaryTarget = combat.enemies[combat.targetIndex];
+
+                skill.effects.forEach(effect => {
+                    const anyEffect = effect as any; // Using 'any' to simplify access to properties
+                    if (anyEffect.type === 'damage' && primaryTarget && primaryTarget.stats.PV > 0) {
+                        let damage = 0;
+                        if (anyEffect.source === 'weapon') {
+                            const baseDmg = formulas.calculateMeleeDamage(player.stats.AttMin, player.stats.AttMax, formulas.calculateAttackPower(player.stats));
+                            damage = baseDmg * (anyEffect.multiplier || 1);
+                        } else if (anyEffect.source === 'spell') {
+                            // TODO: Handle rank-based scaling
+                            const baseDmg = anyEffect.baseValue || 0;
+                            damage = formulas.calculateSpellDamage(baseDmg, formulas.calculateSpellPower(player.stats));
+                        }
+
+                        const isCrit = formulas.isCriticalHit(player.stats.CritPct, player.stats.Precision, primaryTarget.stats.Esquive);
+                        let finalDamage = isCrit ? damage * (player.stats.CritDmg / 100) : damage;
+                        const dr = formulas.calculateArmorDR(primaryTarget.stats.Armure, player.level);
+                        const mitigatedDamage = Math.round(finalDamage * (1 - dr));
+
+                        primaryTarget.stats.PV -= mitigatedDamage;
+                        const msg = `Vous utilisez ${skill.nom} sur ${primaryTarget.nom} pour ${mitigatedDamage} points de dégâts.`;
+                        const critMsg = `CRITIQUE ! Votre ${skill.nom} inflige ${mitigatedDamage} points de dégâts à ${primaryTarget.nom}.`;
+                        combat.log.push({ message: isCrit ? critMsg : msg, type: isCrit ? 'crit' : 'player_attack', timestamp: Date.now() });
+                        effectApplied = true;
+                        if (primaryTarget.stats.PV <= 0) deadEnemyIds.push(primaryTarget.id);
+                    }
+
+                    if (anyEffect.type === 'debuff' && primaryTarget && primaryTarget.stats.PV > 0) {
+                        if (anyEffect.debuffType === 'dot') {
+                            const baseDmg = formulas.calculateMeleeDamage(player.stats.AttMin, player.stats.AttMax, formulas.calculateAttackPower(player.stats));
+                            const totalDamage = baseDmg * (anyEffect.totalDamage.multiplier || 1);
+                            const damagePerTick = Math.round(totalDamage / anyEffect.duration);
+
+                            primaryTarget.activeDebuffs = primaryTarget.activeDebuffs || [];
+                            primaryTarget.activeDebuffs.push({
+                                id: anyEffect.id,
+                                name: anyEffect.name,
+                                duration: anyEffect.duration * 1000,
+                                damagePerTick: damagePerTick,
+                                tickInterval: 1000,
+                                nextTickIn: 1000,
+                            });
+                            combat.log.push({ message: `Vous utilisez ${skill.nom} sur ${primaryTarget.nom}, qui commence à souffrir de ${anyEffect.name}.`, type: 'player_attack', timestamp: Date.now() });
+                        } else if (anyEffect.debuffType === 'cc' && anyEffect.ccType === 'stun') {
+                            primaryTarget.stunDuration = anyEffect.duration * 1000;
+                            combat.log.push({ message: `${primaryTarget.nom} est étourdi pour ${anyEffect.duration} secondes!`, type: 'info', timestamp: Date.now() });
+                        }
+                        effectApplied = true;
+                    }
+
+                    if (anyEffect.type === 'buff') {
+                        if (anyEffect.totalHealing) {
+                            const totalHealing = anyEffect.totalHealing.multiplier;
+                            const healingPerTick = totalHealing / anyEffect.duration;
+                            player.activeBuffs.push({
+                                id: anyEffect.id,
+                                duration: anyEffect.duration * 1000,
+                                healingPerTick: healingPerTick,
+                                tickInterval: 1000,
+                                nextTickIn: 1000,
+                            });
+                            combat.log.push({ message: `Vous appliquez ${anyEffect.name}, vous soignant sur la durée.`, type: 'heal', timestamp: Date.now() });
+                            effectApplied = true;
+                        }
+                    }
+                });
+
+                if (effectApplied) {
+                    player.resources.current -= resourceCost;
+                    combat.skillCooldowns[skillId] = (skill.cooldown || 0) * 1000;
+                    state.combat.playerAttackProgress = 0;
+                }
+                return; // End of new logic
+            }
+
+            // OLD LOGIC STARTS HERE
             const resourceCostMatch = skill.effets.join(' ').match(/Coûte (\d+) (Rage|Mana|Énergie)/);
             const resourceCost = resourceCostMatch ? parseInt(resourceCostMatch[1], 10) : 0;
 
@@ -1651,10 +1744,42 @@ export const useGameStore = create<GameState>()(
                             currentTarget.stats.PV -= mitigatedDamage;
                             combat.log.push({ message: isCrit ? critMsg : msg, type: isCrit ? 'crit' : 'player_attack', timestamp: Date.now() });
 
+                            // Embrasement (Combustion) Talent Proc
+                            const isFireSpell = skill.id.includes('_fire_');
+                            const combustionRank = player.learnedTalents['mage_feu_embrasement'];
+
+                            if (isFireSpell && combustionRank > 0) {
+                                const procChance = (10 * combustionRank) / 100;
+                                if (Math.random() < procChance) {
+                                    const spellPower = formulas.calculateSpellPower(player.stats);
+                                    const totalBurnDamage = spellPower * 0.5;
+                                    const durationInSeconds = 4;
+                                    const damagePerTick = Math.round(totalBurnDamage / durationInSeconds);
+
+                                    const existingDebuffIndex = currentTarget.activeDebuffs.findIndex(d => d.id === 'combustion_burn');
+                                    if (existingDebuffIndex !== -1) {
+                                        currentTarget.activeDebuffs[existingDebuffIndex].duration = durationInSeconds * 1000;
+                                        currentTarget.activeDebuffs[existingDebuffIndex].damagePerTick = damagePerTick;
+                                        currentTarget.activeDebuffs[existingDebuffIndex].nextTickIn = 1000;
+                                    } else {
+                                        currentTarget.activeDebuffs.push({
+                                            id: 'combustion_burn',
+                                            name: 'Brûlure',
+                                            duration: durationInSeconds * 1000,
+                                            damagePerTick: damagePerTick,
+                                            tickInterval: 1000,
+                                            nextTickIn: 1000,
+                                        });
+                                    }
+                                    combat.log.push({ message: `Le talent Embrasement s'active sur ${currentTarget.nom}, qui commence à brûler.`, type: 'player_attack', timestamp: Date.now() });
+                                }
+                            }
+
                             if (skill.id === 'rogue_assassination_poison_bomb') {
                                 currentTarget.activeDebuffs = currentTarget.activeDebuffs || [];
                                 currentTarget.activeDebuffs.push({
                                     id: 'poison_bomb_dot',
+                                    name: 'Poison',
                                     duration: 12000,
                                     damagePerTick: 5, // 60 damage / 12s = 5 dps. Tick every second.
                                     tickInterval: 1000,
@@ -1963,9 +2088,11 @@ export const useGameStore = create<GameState>()(
                             const bossInstance: CombatEnemy = {
                                 ...JSON.parse(JSON.stringify(bossTemplate)),
                                 id: uuidv4(),
-                                templateId: bossTemplate.id, // <-- Ligne ajoutée
+                                templateId: bossTemplate.id,
                                 initialHp: bossTemplate.stats.PV,
                                 attackProgress: 0,
+                                activeDebuffs: [],
+                                stunDuration: 0,
                                 isBoss: true
                             };
                             
@@ -2034,6 +2161,7 @@ export const useGameStore = create<GameState>()(
                                 target.activeDebuffs = target.activeDebuffs || [];
                                 target.activeDebuffs.push({
                                     id: 'bleed',
+                                    name: 'Saignement (Objet)',
                                     duration: effect.details.duration,
                                     damagePerTick: effect.details.damagePerTick,
                                     tickInterval: 1000,

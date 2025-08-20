@@ -75,6 +75,7 @@ export interface Buff {
 
 export interface Debuff {
     id:string;
+    name: string;
     duration: number;
     damagePerTick: number;
     tickInterval: number;
@@ -141,6 +142,7 @@ export type CombatEnemy = Monstre & {
     attackProgress: number;
     templateId: string;
     activeDebuffs: Debuff[];
+    stunDuration: number;
 };
 
 export interface CombatLogEntry {

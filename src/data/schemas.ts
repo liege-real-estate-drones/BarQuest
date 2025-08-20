@@ -82,6 +82,51 @@ export const ClasseSchema = z.object({
   statsBase: StatsSchema,
 });
 
+const DamageEffectSchema = z.object({
+    type: z.literal('damage'),
+    damageType: z.enum(['physical', 'fire', 'frost', 'arcane', 'holy', 'shadow', 'nature']),
+    source: z.enum(['weapon', 'spell']),
+    multiplier: z.number().optional(),
+    baseValue: z.number().optional(),
+});
+
+const BuffEffectSchema = z.object({
+    type: z.literal('buff'),
+    id: z.string(),
+    name: z.string(),
+    duration: z.number(),
+    totalHealing: z.object({
+        source: z.enum(['spell_power', 'attack_power', 'base_value']),
+        multiplier: z.number()
+    }).optional(),
+});
+
+const DebuffEffectSchema = z.object({
+    type: z.literal('debuff'),
+    debuffType: z.enum(['dot', 'cc']),
+    id: z.string(),
+    name: z.string(),
+    duration: z.number(),
+    damageType: z.enum(['physical', 'fire', 'frost', 'arcane', 'holy', 'shadow', 'nature']).optional(),
+    totalDamage: z.object({
+        source: z.enum(['weapon', 'spell_power', 'attack_power']),
+        multiplier: z.number()
+    }).optional(),
+    ccType: z.enum(['stun', 'freeze']).optional()
+});
+
+const ResourceCostSchema = z.object({
+    type: z.literal('resource_cost'),
+    amount: z.number(),
+});
+
+const SkillEffectSchema = z.union([
+    DamageEffectSchema,
+    BuffEffectSchema,
+    DebuffEffectSchema,
+    ResourceCostSchema
+]);
+
 const BaseSkillTalentSchema = z.object({
   id: z.string(),
   nom: z.string(),
@@ -90,6 +135,7 @@ const BaseSkillTalentSchema = z.object({
   niveauRequis: z.number().int().optional(),
   rangMax: z.number().int(),
   effets: z.array(z.string()),
+  effects: z.array(SkillEffectSchema).optional(),
   exigences: z.array(z.string()).default([]),
 });
 
