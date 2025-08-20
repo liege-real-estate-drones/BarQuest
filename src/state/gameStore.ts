@@ -98,6 +98,7 @@ interface GameState {
   setWorldTier: (tier: number) => void;
   setBossEncounter: (monster: Monstre | null) => void; // NOUVEAU: Action pour gérer l'alerte
   setProposedQuests: (quests: Quete[] | null) => void;
+  checkAndApplyLevelUp: () => void;
   initializeGameData: (data: Partial<GameData>) => void;
   setPlayerClass: (classId: PlayerClassId) => void;
   recalculateStats: () => void;
@@ -463,6 +464,31 @@ export const useGameStore = create<GameState>()(
 
       setProposedQuests: (quests) => {
         set({ proposedQuests: quests });
+      },
+
+      checkAndApplyLevelUp: () => {
+        const { player } = get();
+        let xpToNext = get().getXpToNextLevel();
+        let leveledUp = false;
+
+        while (player.xp >= xpToNext) {
+          set((state) => {
+            state.player.level++;
+            state.player.talentPoints += 2;
+            state.player.xp -= xpToNext;
+            state.combat.log.push({
+              message: `Congratulations! You have reached level ${state.player.level}!`,
+              type: 'levelup',
+              timestamp: Date.now(),
+            });
+          });
+          leveledUp = true;
+          xpToNext = get().getXpToNextLevel(); // Recalculate for next level
+        }
+
+        if (leveledUp) {
+          get().recalculateStats();
+        }
       },
 
       getXpToNextLevel: () => {
@@ -1260,11 +1286,34 @@ export const useGameStore = create<GameState>()(
             }
 
             if (currentDungeon) {
-                player.completedDungeons[currentDungeon.id] = (player.completedDungeons[currentDungeon.id] || 0) + 1;
+                const dungeonId = currentDungeon.id;
+                const newClearCount = (player.completedDungeons[dungeonId] || 0) + 1;
+                player.completedDungeons[dungeonId] = newClearCount;
+
                 if (currentDungeon.factionId) {
                     const repData = player.reputation[currentDungeon.factionId] || { value: 0, claimedRewards: [] };
                     repData.value += 250;
                     player.reputation[currentDungeon.factionId] = repData;
+                }
+
+                // Check for 'nettoyage' quest completion
+                const completedQuestsThisDungeon: string[] = [];
+                state.activeQuests.forEach(activeQuest => {
+                    const { quete } = activeQuest;
+                    if (quete.type === 'nettoyage' && quete.requirements.dungeonId === dungeonId) {
+                        if (newClearCount >= quete.requirements.clearCount) {
+                            player.xp += quete.rewards.xp;
+                            inventory.gold += quete.rewards.gold;
+                            player.completedQuests.push(quete.id);
+                            completedQuestsThisDungeon.push(quete.id);
+                            // Optionally add to log
+                            combat.log.push({ message: `Quest Completed: ${quete.name}`, type: 'quest', timestamp: Date.now() });
+                        }
+                    }
+                });
+
+                if (completedQuestsThisDungeon.length > 0) {
+                    state.activeQuests = state.activeQuests.filter(aq => !completedQuestsThisDungeon.includes(aq.quete.id));
                 }
             }
 
@@ -1275,6 +1324,7 @@ export const useGameStore = create<GameState>()(
             state.view = 'DUNGEON_COMPLETED';
             if (gameLoop) clearInterval(gameLoop);
         });
+        get().checkAndApplyLevelUp();
       },
 
       enterDungeon: (dungeonId: string) => {
@@ -1548,6 +1598,13 @@ export const useGameStore = create<GameState>()(
             const mitigatedDamage = Math.round(finalDamage * (isCleave ? 0.5 : 1) * (1 - dr));
 
             target.stats.PV -= mitigatedDamage;
+
+            // Deadly Poison proc
+            if (player.activeBuffs.some(b => b.id === 'deadly_poison_buff') && Math.random() < 0.3) {
+                const poisonDamage = 5; // As per skill description
+                target.stats.PV -= poisonDamage;
+                combat.log.push({ message: `Your Deadly Poison deals an additional ${poisonDamage} damage to ${target.nom}.`, type: 'player_attack', timestamp: Date.now() });
+            }
 
             const attackMsg = `You hit ${target.nom} for ${mitigatedDamage} damage.`;
             const critMsg = `CRITICAL! You hit ${target.nom} for ${mitigatedDamage} damage.`;
@@ -2005,6 +2062,7 @@ export const useGameStore = create<GameState>()(
             if (player.stats.PV <= 0) return;
 
             const buffedPlayerStats = getModifiedStats(player.stats, player.activeBuffs, player.form);
+            // NOTE: Dodge mechanic is implemented here.
             const didDodge = Math.random() * 100 < buffedPlayerStats.Esquive;
 
             if (didDodge) {
@@ -2256,20 +2314,7 @@ export const useGameStore = create<GameState>()(
               }
           });
 
-            let leveledUp = false;
-            let xpToNext = get().getXpToNextLevel();
-            while(state.player.xp >= xpToNext) {
-                state.player.level += 1;
-                state.player.talentPoints += 2;
-                leveledUp = true;
-                 state.player.xp -= xpToNext;
-                state.combat.log.push({ message: `Congratulations! You have reached level ${state.player.level}!`, type: 'levelup', timestamp: Date.now() });
-                xpToNext = get().getXpToNextLevel();
-            }
-
-            if (leveledUp) {
-                get().recalculateStats();
-            }
+          get().checkAndApplyLevelUp();
         });
 
         const allEnemiesDead = get().combat.enemies.every(e => e.stats.PV <= 0);
