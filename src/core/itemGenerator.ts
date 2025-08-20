@@ -1,6 +1,7 @@
 // src/core/itemGenerator.ts
 import type { Item, Rareté, Affixe } from '@/lib/types';
 import { v4 as uuidv4 } from 'uuid';
+import nameModifiers from '../../public/data/nameModifiers.json';
 
 const rarityAffixCount: Record<Rareté, [number, number]> = {
     "Commun": [0, 1],
@@ -42,6 +43,26 @@ export const generateProceduralItem = (
             const scaledValue = scaleAffixValue(baseValue, itemLevel);
             return { ref: affix.ref, val: scaledValue };
         });
+    }
+
+    // --- Dynamic Name Generation ---
+    if (newItem.affixes && newItem.affixes.length > 0 && (rarity === "Rare" || rarity === "Épique")) {
+        const primaryAffix = newItem.affixes[0]; // Use the first affix as the primary one for naming
+        const modifier = (nameModifiers as Record<string, { prefix: string, suffix: string }>)[primaryAffix.ref];
+
+        if (modifier) {
+            if (rarity === "Rare" && Math.random() > 0.5) {
+                // 50% chance to have a prefix or a suffix for Rare items
+                if (Math.random() > 0.5) {
+                    newItem.name = `${modifier.prefix} ${newItem.name}`;
+                } else {
+                    newItem.name = `${newItem.name} ${modifier.suffix}`;
+                }
+            } else if (rarity === "Épique") {
+                // Epic items always get both
+                newItem.name = `${modifier.prefix} ${newItem.name} ${modifier.suffix}`;
+            }
+        }
     }
 
     return newItem;
