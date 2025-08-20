@@ -1,52 +1,115 @@
 [
   {
     "id": "enchant_force_1",
-    "name": "Enchantement de Force",
+    "name": "Enchantement de Force (Rang 1)",
     "description": "Augmente la Force.",
     "affixRef": "Force",
-    "cost": [ { "id": "poussiere_arcanique", "amount": 10 } ]
+    "cost": [ { "id": "poussiere_arcanique", "amount": 5 } ]
+  },
+  {
+    "id": "enchant_force_2",
+    "name": "Enchantement de Force (Rang 2)",
+    "description": "Augmente grandement la Force.",
+    "affixRef": "Force",
+    "cost": [ { "id": "essence_cosmique", "amount": 3 } ]
   },
   {
     "id": "enchant_dexterity_1",
-    "name": "Enchantement de Dextérité",
+    "name": "Enchantement de Dextérité (Rang 1)",
     "description": "Augmente la Dextérité.",
     "affixRef": "Dexterite",
-    "cost": [ { "id": "poussiere_arcanique", "amount": 10 } ]
+    "cost": [ { "id": "poussiere_arcanique", "amount": 5 } ]
+  },
+  {
+    "id": "enchant_dexterity_2",
+    "name": "Enchantement de Dextérité (Rang 2)",
+    "description": "Augmente grandement la Dextérité.",
+    "affixRef": "Dexterite",
+    "cost": [ { "id": "essence_cosmique", "amount": 3 } ]
   },
   {
     "id": "enchant_intellect_1",
-    "name": "Enchantement d'Intellect",
+    "name": "Enchantement d'Intellect (Rang 1)",
     "description": "Augmente l'Intelligence.",
     "affixRef": "Intelligence",
-    "cost": [ { "id": "poussiere_arcanique", "amount": 10 } ]
+    "cost": [ { "id": "poussiere_arcanique", "amount": 5 } ]
+  },
+  {
+    "id": "enchant_intellect_2",
+    "name": "Enchantement d'Intellect (Rang 2)",
+    "description": "Augmente grandement l'Intelligence.",
+    "affixRef": "Intelligence",
+    "cost": [ { "id": "essence_cosmique", "amount": 3 } ]
   },
   {
     "id": "enchant_spirit_1",
-    "name": "Enchantement d'Esprit",
+    "name": "Enchantement d'Esprit (Rang 1)",
     "description": "Augmente l'Esprit.",
     "affixRef": "Esprit",
-    "cost": [ { "id": "poussiere_arcanique", "amount": 10 } ]
+    "cost": [ { "id": "poussiere_arcanique", "amount": 5 } ]
+  },
+  {
+    "id": "enchant_spirit_2",
+    "name": "Enchantement d'Esprit (Rang 2)",
+    "description": "Augmente grandement l'Esprit.",
+    "affixRef": "Esprit",
+    "cost": [ { "id": "essence_cosmique", "amount": 3 } ]
   },
   {
     "id": "enchant_vitality_1",
-    "name": "Enchantement de Vitalité",
+    "name": "Enchantement de Vitalité (Rang 1)",
     "description": "Augmente les Points de Vie.",
     "affixRef": "PV",
-    "cost": [ { "id": "poussiere_arcanique", "amount": 12 } ]
+    "cost": [ { "id": "poussiere_arcanique", "amount": 8 } ]
+  },
+  {
+    "id": "enchant_vitality_2",
+    "name": "Enchantement de Vitalité (Rang 2)",
+    "description": "Augmente grandement les Points de Vie.",
+    "affixRef": "PV",
+    "cost": [ { "id": "essence_cosmique", "amount": 5 } ]
   },
   {
     "id": "enchant_armor_1",
-    "name": "Enchantement d'Armure",
+    "name": "Enchantement d'Armure (Rang 1)",
     "description": "Augmente l'Armure.",
     "affixRef": "Armure",
-    "cost": [ { "id": "essence_cosmique", "amount": 2 } ]
+    "cost": [ { "id": "poussiere_arcanique", "amount": 8 } ]
+  },
+  {
+    "id": "enchant_armor_2",
+    "name": "Enchantement d'Armure (Rang 2)",
+    "description": "Augmente grandement l'Armure.",
+    "affixRef": "Armure",
+    "cost": [ { "id": "essence_cosmique", "amount": 5 } ]
   },
   {
     "id": "enchant_crit_1",
-    "name": "Enchantement de Précision Mortelle",
+    "name": "Enchantement de Précision Mortelle (Rang 1)",
     "description": "Augmente les chances de coup critique.",
     "affixRef": "CritPct",
-    "cost": [ { "id": "cristal_du_vide", "amount": 1 } ]
+    "cost": [ { "id": "essence_cosmique", "amount": 4 } ]
+  },
+  {
+    "id": "enchant_crit_2",
+    "name": "Enchantement de Précision Mortelle (Rang 2)",
+    "description": "Augmente grandement les chances de coup critique.",
+    "affixRef": "CritPct",
+    "cost": [ { "id": "cristal_du_vide", "amount": 2 } ]
+  },
+  {
+    "id": "enchant_haste_1",
+    "name": "Enchantement de Hâte (Rang 1)",
+    "description": "Augmente la Vitesse d'Attaque.",
+    "affixRef": "Vitesse",
+    "cost": [ { "id": "essence_cosmique", "amount": 4 } ]
+  },
+  {
+    "id": "enchant_haste_2",
+    "name": "Enchantement de Hâte (Rang 2)",
+    "description": "Augmente grandement la Vitesse d'Attaque.",
+    "affixRef": "Vitesse",
+    "cost": [ { "id": "cristal_du_vide", "amount": 2 } ]
   },
   {
     "id": "enchant_fire_ward_1",

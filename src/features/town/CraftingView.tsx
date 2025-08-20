@@ -19,6 +19,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ForgeView } from './ForgeView';
 import { EnchanterView } from './EnchanterView';
+import { MATERIAL_DISPLAY_NAMES } from '@/lib/constants';
 
 const getRarityMultiplier = (rarity: Rareté): number => {
     const rarityMultiplier: Record<Rareté, number> = { "Commun": 1, "Magique": 1.5, "Rare": 2, "Épique": 3, "Légendaire": 5, "Unique": 5 };
@@ -150,7 +151,7 @@ export const CraftingView: React.FC = () => {
                 <CardContent>
                     <ul>
                         {Object.entries(useGameStore.getState().inventory.craftingMaterials).map(([materialId, count]) => (
-                            <li key={materialId}>{materialId}: {count}</li>
+                            <li key={materialId}>{MATERIAL_DISPLAY_NAMES[materialId] || materialId}: {count}</li>
                         ))}
                     </ul>
                 </CardContent>
