@@ -37,6 +37,7 @@ function BuyTab() {
 
     const vendorItems = React.useMemo(() =>
         gameItems.filter(item =>
+            item.slot &&
             item.vendorPrice && item.vendorPrice > 0 && item.niveauMin <= playerLevel + 5
         ).sort((a,b) => a.niveauMin - b.niveauMin),
     [gameItems, playerLevel]);

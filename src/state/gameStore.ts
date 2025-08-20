@@ -141,26 +141,13 @@ const rarityDropChances: Record<Rareté, number> = {
   Unique: 0.0,
 };
 
-const resolveLoot = (monster: Monstre, gameData: GameData, playerClassId: PlayerClassId | null, activeQuests: ActiveQuete[], worldTier: number): Item | null => {
+const resolveLoot = (monster: Monstre, gameData: GameData, playerClassId: PlayerClassId | null, worldTier: number): Item | null => {
   // --- 1. Boss Specific Loot ---
   if (monster.isBoss && monster.specificLootTable && Math.random() < 0.1) { // 10% chance for a specific drop
     const specificLootId = monster.specificLootTable[Math.floor(Math.random() * monster.specificLootTable.length)];
     const specificItem = gameData.items.find(item => item.id === specificLootId);
     if (specificItem) {
       return { ...specificItem, id: uuidv4() };
-    }
-  }
-
-  // --- 2. Quest Item Check ---
-  for (const activeQuest of activeQuests) {
-    const { quete } = activeQuest;
-    if (quete.type === 'collecte' && quete.requirements.itemId && monster.questItemId === quete.requirements.itemId) {
-      if ((activeQuest.progress || 0) < (quete.requirements.itemCount || 0)) {
-        const questItem = gameData.items.find(item => item.id === quete.requirements.itemId);
-        if (questItem && Math.random() < 0.3) { // 30% drop chance for quest items
-          return { ...questItem, id: uuidv4() };
-        }
-      }
     }
   }
 
@@ -206,10 +193,11 @@ const resolveLoot = (monster: Monstre, gameData: GameData, playerClassId: Player
   // --- 4. Select a Base Item Template for Procedural Generation ---
   const possibleItemTemplates = gameData.items.filter(item =>
       // We are looking for non-legendary, non-unique, non-set items to serve as templates
+      item.slot &&
+      item.slot !== 'potion' &&
       item.rarity !== "Légendaire" &&
       item.rarity !== "Unique" &&
       !item.set &&
-      item.slot !== 'potion' &&
       (item.tagsClasse?.includes('common') || (playerClassId && item.tagsClasse?.includes(playerClassId)))
   );
 
@@ -1506,7 +1494,7 @@ export const useGameStore = create<GameState>()(
             if (isHeroicMode) {
               goldDrop *= 5;
             }
-            const itemDrop = resolveLoot(enemy, gameData, state.player.classeId, activeQuests, worldTier);
+            const itemDrop = resolveLoot(enemy, gameData, state.player.classeId, worldTier);
             const xpGained = Math.round((enemy.level * 10) * (1 + (currentDungeon ? currentDungeon.palier * 0.05 : 0)));
 
             state.combat.log.push({ message: `You defeated ${enemy.nom}!`, type: 'info', timestamp: Date.now() });
@@ -1515,6 +1503,21 @@ export const useGameStore = create<GameState>()(
 
             state.combat.xpGained += xpGained;
             state.combat.log.push({ message: `You gain ${xpGained} experience.`, type: 'info', timestamp: Date.now() });
+
+            // --- Quest Item Drop Logic ---
+            activeQuests.forEach((activeQuest) => {
+              const { quete } = activeQuest;
+              if (quete.type === 'collecte' && quete.requirements.itemId && enemy.questItemId === quete.requirements.itemId) {
+                  if ((activeQuest.progress || 0) < (quete.requirements.itemCount || 0)) {
+                      const questItem = gameData.items.find(item => item.id === quete.requirements.itemId);
+                      if (questItem && Math.random() < 0.3) { // 30% drop chance for quest items
+                          const newQuestItem = { ...questItem, id: uuidv4() };
+                          state.combat.dungeonRunItems.push(newQuestItem);
+                          state.combat.log.push({ message: ``, type: 'loot', timestamp: Date.now(), item: newQuestItem });
+                      }
+                  }
+              }
+            });
 
              if (itemDrop) {
                 state.combat.dungeonRunItems.push(itemDrop);
