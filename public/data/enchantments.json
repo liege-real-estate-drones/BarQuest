@@ -1,154 +1,103 @@
 [
   {
-    "id": "enchant_force_1",
-    "name": "Enchantement de Force (Rang 1)",
-    "description": "Augmente la Force.",
-    "affixRef": "Force",
-    "cost": [ { "id": "poussiere_arcanique", "amount": 5 } ]
+    "id": "enchant_minor_strength",
+    "name": "Enchantement Mineur de Force (+1 Force)",
+    "tier": 1,
+    "level": 1,
+    "description": "Augmente la Force de 1.",
+    "affixRef": "force_1",
+    "cost": [ { "id": "strange_dust", "amount": 2 } ],
+    "source": ["trainer"]
   },
   {
-    "id": "enchant_force_2",
-    "name": "Enchantement de Force (Rang 2)",
-    "description": "Augmente grandement la Force.",
-    "affixRef": "Force",
-    "cost": [ { "id": "essence_cosmique", "amount": 3 } ]
+    "id": "enchant_minor_armor",
+    "name": "Enchantement Mineur d'Armure (+5 Armure)",
+    "tier": 1,
+    "level": 1,
+    "description": "Augmente l'Armure de 5.",
+    "affixRef": "armor_5",
+    "cost": [ { "id": "strange_dust", "amount": 1 }, { "id": "lesser_magic_essence", "amount": 1 } ],
+    "source": ["trainer"]
   },
   {
-    "id": "enchant_dexterity_1",
-    "name": "Enchantement de Dextérité (Rang 1)",
-    "description": "Augmente la Dextérité.",
-    "affixRef": "Dexterite",
-    "cost": [ { "id": "poussiere_arcanique", "amount": 5 } ]
+    "id": "enchant_lesser_intellect",
+    "name": "Enchantement Inférieur d'Intellect (+3 Intellect)",
+    "tier": 2,
+    "level": 15,
+    "description": "Augmente l'Intellect de 3.",
+    "affixRef": "intellect_3",
+    "cost": [ { "id": "soul_dust", "amount": 3 } ],
+    "source": ["vendor"]
   },
   {
-    "id": "enchant_dexterity_2",
-    "name": "Enchantement de Dextérité (Rang 2)",
-    "description": "Augmente grandement la Dextérité.",
-    "affixRef": "Dexterite",
-    "cost": [ { "id": "essence_cosmique", "amount": 3 } ]
+    "id": "enchant_lesser_stamina",
+    "name": "Enchantement Inférieur d'Endurance (+8 Endurance)",
+    "tier": 2,
+    "level": 15,
+    "description": "Augmente l'Endurance de 8.",
+    "affixRef": "stamina_8",
+    "cost": [ { "id": "soul_dust", "amount": 2 }, { "id": "greater_magic_essence", "amount": 1 } ],
+    "source": ["vendor", "drop"],
+    "reputationRequirement": { "factionId": "silver_guardians", "rankName": "Amical", "threshold": 1000 }
   },
   {
-    "id": "enchant_intellect_1",
-    "name": "Enchantement d'Intellect (Rang 1)",
-    "description": "Augmente l'Intelligence.",
-    "affixRef": "Intelligence",
-    "cost": [ { "id": "poussiere_arcanique", "amount": 5 } ]
+    "id": "enchant_superior_haste",
+    "name": "Enchantement Supérieur de Hâte (+2% Hâte)",
+    "tier": 3,
+    "level": 30,
+    "description": "Augmente la Hâte de 2%.",
+    "affixRef": "haste_2pct",
+    "cost": [ { "id": "vision_dust", "amount": 5 }, { "id": "lesser_astral_essence", "amount": 2 } ],
+    "source": ["drop"]
   },
   {
-    "id": "enchant_intellect_2",
-    "name": "Enchantement d'Intellect (Rang 2)",
-    "description": "Augmente grandement l'Intelligence.",
-    "affixRef": "Intelligence",
-    "cost": [ { "id": "essence_cosmique", "amount": 3 } ]
+    "id": "enchant_superior_fire_resistance",
+    "name": "Enchantement Supérieur de Résistance au Feu (+15 Rés. Feu)",
+    "tier": 3,
+    "level": 30,
+    "description": "Augmente la Résistance au Feu de 15.",
+    "affixRef": "fire_resist_15",
+    "cost": [ { "id": "vision_dust", "amount": 3 }, { "id": "eternal_fire", "amount": 1 } ],
+    "source": ["drop"]
   },
   {
-    "id": "enchant_spirit_1",
-    "name": "Enchantement d'Esprit (Rang 1)",
-    "description": "Augmente l'Esprit.",
-    "affixRef": "Esprit",
-    "cost": [ { "id": "poussiere_arcanique", "amount": 5 } ]
+    "id": "enchant_major_crit",
+    "name": "Enchantement Majeur de Critique (+3% Critique)",
+    "tier": 4,
+    "level": 50,
+    "description": "Augmente les chances de coup critique de 3%.",
+    "affixRef": "crit_3pct",
+    "cost": [ { "id": "eternity_dust", "amount": 8 }, { "id": "greater_astral_essence", "amount": 3 } ],
+    "source": ["rare_drop"]
   },
   {
-    "id": "enchant_spirit_2",
-    "name": "Enchantement d'Esprit (Rang 2)",
-    "description": "Augmente grandement l'Esprit.",
-    "affixRef": "Esprit",
-    "cost": [ { "id": "essence_cosmique", "amount": 3 } ]
+    "id": "enchant_major_spell_power",
+    "name": "Enchantement Majeur de Puissance des sorts (+20 Pui. sorts)",
+    "tier": 4,
+    "level": 50,
+    "description": "Augmente la Puissance des sorts de 20.",
+    "affixRef": "spell_power_20",
+    "cost": [ { "id": "eternity_dust", "amount": 10 }, { "id": "greater_astral_essence", "amount": 2 } ],
+    "source": ["rare_drop"]
   },
   {
-    "id": "enchant_vitality_1",
-    "name": "Enchantement de Vitalité (Rang 1)",
-    "description": "Augmente les Points de Vie.",
-    "affixRef": "PV",
-    "cost": [ { "id": "poussiere_arcanique", "amount": 8 } ]
+    "id": "enchant_legendary_frost_ward",
+    "name": "Garde de Givre Légendaire",
+    "tier": 5,
+    "level": 60,
+    "description": "Absorbe une grande quantité de dégâts de Givre et augmente la résistance.",
+    "affixRef": "legendary_frost_ward",
+    "cost": [ { "id": "nexus_crystal", "amount": 1 }, { "id": "prismatic_shard", "amount": 2 }, { "id": "frozen_heart", "amount": 1 } ],
+    "source": ["boss_drop_yeti_chieftain"]
   },
   {
-    "id": "enchant_vitality_2",
-    "name": "Enchantement de Vitalité (Rang 2)",
-    "description": "Augmente grandement les Points de Vie.",
-    "affixRef": "PV",
-    "cost": [ { "id": "essence_cosmique", "amount": 5 } ]
-  },
-  {
-    "id": "enchant_armor_1",
-    "name": "Enchantement d'Armure (Rang 1)",
-    "description": "Augmente l'Armure.",
-    "affixRef": "Armure",
-    "cost": [ { "id": "poussiere_arcanique", "amount": 8 } ]
-  },
-  {
-    "id": "enchant_armor_2",
-    "name": "Enchantement d'Armure (Rang 2)",
-    "description": "Augmente grandement l'Armure.",
-    "affixRef": "Armure",
-    "cost": [ { "id": "essence_cosmique", "amount": 5 } ]
-  },
-  {
-    "id": "enchant_crit_1",
-    "name": "Enchantement de Précision Mortelle (Rang 1)",
-    "description": "Augmente les chances de coup critique.",
-    "affixRef": "CritPct",
-    "cost": [ { "id": "essence_cosmique", "amount": 4 } ]
-  },
-  {
-    "id": "enchant_crit_2",
-    "name": "Enchantement de Précision Mortelle (Rang 2)",
-    "description": "Augmente grandement les chances de coup critique.",
-    "affixRef": "CritPct",
-    "cost": [ { "id": "cristal_du_vide", "amount": 2 } ]
-  },
-  {
-    "id": "enchant_haste_1",
-    "name": "Enchantement de Hâte (Rang 1)",
-    "description": "Augmente la Vitesse d'Attaque.",
-    "affixRef": "Vitesse",
-    "cost": [ { "id": "essence_cosmique", "amount": 4 } ]
-  },
-  {
-    "id": "enchant_haste_2",
-    "name": "Enchantement de Hâte (Rang 2)",
-    "description": "Augmente grandement la Vitesse d'Attaque.",
-    "affixRef": "Vitesse",
-    "cost": [ { "id": "cristal_du_vide", "amount": 2 } ]
-  },
-  {
-    "id": "enchant_fire_ward_1",
-    "name": "Garde de Feu",
-    "description": "Augmente la résistance au Feu.",
-    "affixRef": "ResElems.fire",
-    "cost": [
-      { "id": "eclat_elementaire_feu", "amount": 5 },
-      { "id": "poussiere_arcanique", "amount": 5 }
-    ]
-  },
-  {
-    "id": "enchant_frost_ward_1",
-    "name": "Garde de Givre",
-    "description": "Augmente la résistance au Givre.",
-    "affixRef": "ResElems.ice",
-    "cost": [
-      { "id": "eclat_elementaire_givre", "amount": 5 },
-      { "id": "poussiere_arcanique", "amount": 5 }
-    ]
-  },
-  {
-    "id": "enchant_shadow_ward_1",
-    "name": "Garde des Ombres",
-    "description": "Augmente la résistance à l'Ombre.",
-    "affixRef": "ResElems.shadow",
-    "cost": [
-      { "id": "eclat_elementaire_ombre", "amount": 5 },
-      { "id": "poussiere_arcanique", "amount": 5 }
-    ]
-  },
-  {
-    "id": "enchant_nature_ward_1",
-    "name": "Garde de la Nature",
-    "description": "Augmente la résistance à la Nature.",
-    "affixRef": "ResElems.nature",
-    "cost": [
-      { "id": "eclat_elementaire_nature", "amount": 5 },
-      { "id": "poussiere_arcanique", "amount": 5 }
-    ]
+    "id": "enchant_legendary_shadow_bolt",
+    "name": "Éclair d'Ombre Légendaire",
+    "tier": 5,
+    "level": 60,
+    "description": "Vos sorts d'ombre ont une chance de lancer un Éclair d'Ombre sur la cible.",
+    "affixRef": "legendary_shadow_bolt_proc",
+    "cost": [ { "id": "nexus_crystal", "amount": 1 }, { "id": "prismatic_shard", "amount": 2 }, { "id": "frozen_shadow", "amount": 5 } ],
+    "source": ["boss_drop_forgotten_crypts"]
   }
 ]

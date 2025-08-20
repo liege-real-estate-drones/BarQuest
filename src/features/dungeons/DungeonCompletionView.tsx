@@ -4,8 +4,9 @@ import { useGameStore } from '@/state/gameStore';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ItemTooltip } from '@/components/ItemTooltip';
-import { Coins, Star, Swords } from 'lucide-react';
+import { Coins, Star, Swords, Scroll } from 'lucide-react';
 import { Item } from '@/data/schemas';
+import type { Enchantment } from '@/lib/types';
 
 export function DungeonCompletionView() {
     const { summary, closeSummary } = useGameStore(state => ({
@@ -87,6 +88,23 @@ export function DungeonCompletionView() {
                                         ))}
                                     </div>
                                 )}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Recipes Learned */}
+                    {summary.recipesGained && summary.recipesGained.length > 0 && (
+                        <div>
+                            <h3 className="text-lg font-semibold mb-2 flex items-center">
+                                <Scroll className="h-5 w-5 mr-2 text-yellow-400" />
+                                Nouvelles Recettes Apprises
+                            </h3>
+                            <div className="p-4 border bg-purple-900/10 rounded-lg space-y-2">
+                                {summary.recipesGained.map((recipe: Enchantment, index: number) => (
+                                    <div key={index} className="text-center text-purple-300 font-medium">
+                                        Vous avez appris: {recipe.name}
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     )}

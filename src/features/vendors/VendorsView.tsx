@@ -5,9 +5,9 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useToast } from '@/hooks/use-toast';
-import type { Item } from '@/lib/types';
-import { useGameStore, getItemSellPrice, getItemBuyPrice, calculateItemScore } from '@/state/gameStore'; // Importez calculateItemScore
-import { Coins, ShoppingCart, Tags, Trash2, Plus, Minus, Equal } from 'lucide-react'; // Importez les icônes
+import type { Item, Enchantment } from '@/lib/types';
+import { useGameStore, getItemSellPrice, getItemBuyPrice, calculateItemScore, getRecipePrice } from '@/state/gameStore'; // Importez calculateItemScore
+import { Coins, ShoppingCart, Tags, Trash2, Plus, Minus, Equal, BookUp } from 'lucide-react'; // Importez les icônes
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -36,6 +36,98 @@ const ComparisonIndicator = ({ comparison }: { comparison: 'better' | 'worse' | 
     return <span className="text-gray-500 flex items-center text-xs">[<Equal className="h-3 w-3" />]</span>;
 };
 
+
+function BuyRecipesTab() {
+    const { gold, enchantments, learnedRecipes, buyRecipe, playerLevel, playerReputation, factions } = useGameStore(state => ({
+        gold: state.inventory.gold,
+        enchantments: state.gameData.enchantments,
+        learnedRecipes: state.player.learnedRecipes,
+        buyRecipe: state.buyRecipe,
+        playerLevel: state.player.level,
+        playerReputation: state.player.reputation,
+        factions: state.gameData.factions,
+    }));
+    const { toast } = useToast();
+
+    const vendorRecipes = React.useMemo(() =>
+        enchantments
+        .filter(e => (e.source.includes('trainer') || e.source.includes('vendor')) && e.level <= playerLevel)
+        .map(e => {
+            const repReq = e.reputationRequirement;
+            let hasRep = true;
+            if (repReq) {
+                const currentRep = playerReputation[repReq.factionId]?.value || 0;
+                hasRep = currentRep >= repReq.threshold;
+            }
+            return {
+                ...e,
+                price: getRecipePrice(e),
+                isLearned: learnedRecipes.includes(e.id),
+                hasRep: hasRep,
+            }
+        })
+        .sort((a,b) => a.level - b.level),
+    [enchantments, playerLevel, learnedRecipes, playerReputation]);
+
+    const handleBuyRecipe = (recipe: Enchantment & { price: number }) => {
+        const success = buyRecipe(recipe.id);
+        if (success) {
+            toast({
+                title: "Recette apprise !",
+                description: `Vous avez appris [${recipe.name}].`,
+            });
+        } else {
+            toast({
+                title: "Échec de l'achat",
+                description: "Vous n'avez pas assez d'or, de réputation, ou connaissez déjà cette recette.",
+                variant: 'destructive'
+            });
+        }
+    };
+
+    if (vendorRecipes.length === 0) {
+        return <p className="text-center text-muted-foreground p-8">L'enchanteur n'a aucune recette à vous apprendre pour le moment.</p>
+    }
+
+    return (
+        <Table>
+            <TableHeader>
+                <TableRow>
+                    <TableHead>Recette</TableHead>
+                    <TableHead className="text-right">Prix</TableHead>
+                    <TableHead className="w-[120px]"></TableHead>
+                </TableRow>
+            </TableHeader>
+            <TableBody>
+                {vendorRecipes.map(recipe => {
+                    const repReq = recipe.reputationRequirement;
+                    const factionName = repReq ? factions.find(f => f.id === repReq.factionId)?.name : '';
+                    const isBuyable = gold >= recipe.price && !recipe.isLearned && recipe.hasRep;
+
+                    return (
+                        <TableRow key={recipe.id} className={recipe.isLearned || !recipe.hasRep ? 'text-muted-foreground' : ''}>
+                            <TableCell>
+                                <p className="font-medium">{recipe.name}</p>
+                                <p className="text-xs">{recipe.description}</p>
+                                {repReq && (
+                                    <p className={`text-xs mt-1 ${recipe.hasRep ? 'text-green-400' : 'text-red-400'}`}>
+                                        Nécessite: {factionName} - {repReq.rankName}
+                                    </p>
+                                )}
+                            </TableCell>
+                            <TableCell className="text-right font-mono text-primary">{recipe.price}</TableCell>
+                            <TableCell className="text-right">
+                                <Button size="sm" variant="outline" onClick={() => handleBuyRecipe(recipe)} disabled={!isBuyable}>
+                                    <BookUp className="mr-2 h-4 w-4" /> Apprendre
+                                </Button>
+                            </TableCell>
+                        </TableRow>
+                    )
+                })}
+            </TableBody>
+        </Table>
+    );
+}
 
 function BuyTab() {
     const { gold, gameItems, player, buyItem, equipment } = useGameStore(state => ({
@@ -244,9 +336,10 @@ export function VendorsView() {
             {/* CardContent prend la hauteur restante, et son enfant direct aussi */}
             <CardContent className="flex-grow flex flex-col p-0 min-h-0">
                 <Tabs defaultValue="buy" className="w-full flex-grow flex flex-col">
-                    <TabsList className="grid w-full grid-cols-3 px-6">
+                    <TabsList className="grid w-full grid-cols-4 px-6">
                         <TabsTrigger value="buy">Acheter</TabsTrigger>
                         <TabsTrigger value="sell">Vendre</TabsTrigger>
+                        <TabsTrigger value="recipes">Recettes</TabsTrigger>
                         <TabsTrigger value="gamble">Parier</TabsTrigger>
                     </TabsList>
                     {/* Ce conteneur a maintenant une hauteur définie (le reste de l'espace) */}
@@ -258,6 +351,9 @@ export function VendorsView() {
                                 </TabsContent>
                                 <TabsContent value="sell" className="m-0">
                                     <SellTab />
+                                </TabsContent>
+                                <TabsContent value="recipes" className="m-0">
+                                    <BuyRecipesTab />
                                 </TabsContent>
                                 <TabsContent value="gamble" className="m-0">
                                     <GamblerView />

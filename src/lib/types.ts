@@ -37,6 +37,12 @@ export type ItemSet = z.infer<typeof ItemSetSchema>;
 export type Recipe = z.infer<typeof RecipeSchema>;
 export type Enchantment = z.infer<typeof EnchantmentSchema>;
 
+export interface EnchantingComponent {
+  id: string;
+  name: string;
+  tier: number | string;
+}
+
 export type PlayerClassId = 'berserker' | 'mage' | 'rogue' | 'cleric';
 
 export type ResourceType = 'Mana' | 'Rage' | 'Énergie';
@@ -55,6 +61,7 @@ export interface GameData {
   sets: ItemSet[];
   recipes: Recipe[];
   enchantments: Enchantment[];
+  enchanting_components: EnchantingComponent[];
 }
 
 export interface Buff {
@@ -84,6 +91,7 @@ export interface PlayerState {
   talentPoints: number;
   learnedSkills: { [skillId: string]: number }; // e.g. { 'berserker_heroic_strike': 1 }
   learnedTalents: { [talentId: string]: number }; // e.g. { 'berserker_toughness': 2 }
+  learnedRecipes: string[]; // IDs of learned enchanting recipes
   equippedSkills: (string | null)[]; // Array of 4 slots for equipped skills
   resources: {
     current: number;

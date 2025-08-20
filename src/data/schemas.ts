@@ -193,6 +193,7 @@ export interface DungeonCompletionSummary {
     goldGained: number;
     xpGained: number;
     itemsGained: Item[];
+    recipesGained?: any[]; // Using any to avoid circular dependency issues with Enchantment type
     chestRewards?: {
         gold: number;
         items: Item[];
