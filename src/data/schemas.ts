@@ -23,6 +23,7 @@ export const StatsSchema = z.object({
   Vitesse: z.number(),
   Precision: z.number(),
   Esquive: z.number(),
+  HealingReceivedMultiplier: z.number().optional(),
 });
 
 export const AffixSchema = z.object({
@@ -82,12 +83,25 @@ export const ClasseSchema = z.object({
   statsBase: StatsSchema,
 });
 
+const ConditionSchema = z.object({
+    targetHpLessThan: z.number().optional(),
+    targetHpGreaterThan: z.number().optional(),
+});
+
 const DamageEffectSchema = z.object({
     type: z.literal('damage'),
     damageType: z.enum(['physical', 'fire', 'frost', 'arcane', 'holy', 'shadow', 'nature']),
     source: z.enum(['weapon', 'spell']),
+    target: z.enum(['primary', 'all_enemies']).optional(),
     multiplier: z.number().optional(),
     baseValue: z.number().optional(),
+    conditions: ConditionSchema.optional(),
+});
+
+const StatModSchema = z.object({
+    stat: z.string(),
+    value: z.number(),
+    modifier: z.enum(['additive', 'multiplicative']),
 });
 
 const BuffEffectSchema = z.object({
@@ -95,15 +109,29 @@ const BuffEffectSchema = z.object({
     id: z.string(),
     name: z.string(),
     duration: z.number(),
+    buffType: z.enum(['hot', 'stat_modifier', 'special']),
     totalHealing: z.object({
         source: z.enum(['spell_power', 'attack_power', 'base_value']),
         multiplier: z.number()
     }).optional(),
+    statMods: z.array(StatModSchema).optional(),
+    value: z.any().optional(),
+});
+
+const ShieldEffectSchema = z.object({
+    type: z.literal('shield'),
+    amount: z.object({
+        source: z.enum(['spell_power', 'base_value']),
+        multiplier: z.number(),
+    }),
+    duration: z.number().optional(),
 });
 
 const DebuffEffectSchema = z.object({
     type: z.literal('debuff'),
-    debuffType: z.enum(['dot', 'cc']),
+    debuffType: z.enum(['dot', 'cc', 'stat_modifier']),
+    target: z.enum(['primary', 'all_enemies']).optional(),
+    conditions: ConditionSchema.optional(),
     id: z.string(),
     name: z.string(),
     duration: z.number(),
@@ -112,7 +140,8 @@ const DebuffEffectSchema = z.object({
         source: z.enum(['weapon', 'spell_power', 'attack_power']),
         multiplier: z.number()
     }).optional(),
-    ccType: z.enum(['stun', 'freeze']).optional()
+    ccType: z.enum(['stun', 'freeze']).optional(),
+    statMods: z.array(StatModSchema).optional(),
 });
 
 const ResourceCostSchema = z.object({
@@ -124,7 +153,8 @@ const SkillEffectSchema = z.union([
     DamageEffectSchema,
     BuffEffectSchema,
     DebuffEffectSchema,
-    ResourceCostSchema
+    ResourceCostSchema,
+    ShieldEffectSchema
 ]);
 
 const BaseSkillTalentSchema = z.object({

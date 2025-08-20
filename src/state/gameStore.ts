@@ -1,7 +1,7 @@
 import create from 'zustand';
 import { persist, createJSONStorage, StateStorage } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import type { Dungeon, Monstre, Item, Talent, Skill, Stats, PlayerState, InventoryState, CombatLogEntry, CombatState, GameData, Quete, PlayerClassId, ResourceType, Rareté, CombatEnemy, ItemSet, PotionType, Recipe, Theme, Affixe, Enchantment } from '@/lib/types';
+import type { Dungeon, Monstre, Item, Talent, Skill, Stats, PlayerState, InventoryState, CombatLogEntry, CombatState, GameData, Quete, PlayerClassId, ResourceType, Rareté, CombatEnemy, ItemSet, PotionType, Recipe, Theme, Affixe, Enchantment, Buff, Debuff } from '@/lib/types';
 import { DungeonCompletionSummary } from '@/data/schemas';
 import * as formulas from '@/core/formulas';
 import { generateProceduralItem } from '@/core/itemGenerator';
@@ -389,6 +389,27 @@ const dummyStorage: StateStorage = {
 const storage = typeof window !== 'undefined'
   ? createJSONStorage(() => localStorage)
   : createJSONStorage(() => dummyStorage);
+
+const getModifiedStats = (baseStats: Stats, buffs: (Buff | Debuff)[]): Stats => {
+    const modifiedStats = { ...baseStats };
+    const allMods = buffs.flatMap(b => b.statMods || []);
+
+    allMods.filter(mod => mod.modifier === 'multiplicative').forEach(mod => {
+        const statKey = mod.stat as keyof Stats;
+        if (typeof modifiedStats[statKey] === 'number') {
+            (modifiedStats[statKey] as number) *= mod.value;
+        }
+    });
+
+    allMods.filter(mod => mod.modifier === 'additive').forEach(mod => {
+        const statKey = mod.stat as keyof Stats;
+        if (typeof modifiedStats[statKey] === 'number') {
+            (modifiedStats[statKey] as number) += mod.value;
+        }
+    });
+
+    return modifiedStats;
+}
 
 export const useGameStore = create<GameState>()(
   persist(
@@ -1083,7 +1104,12 @@ export const useGameStore = create<GameState>()(
               if (potionType === 'health') {
                  if (state.inventory.potions.health > 0) {
                     const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
-                    const healAmount = Math.round(maxHp * 0.15);
+                    let healAmount = Math.round(maxHp * 0.15);
+
+                    const buffedStats = getModifiedStats(state.player.stats, state.player.activeBuffs);
+                    healAmount *= (buffedStats.HealingReceivedMultiplier || 1);
+                    healAmount = Math.round(healAmount);
+
                     state.player.stats.PV = Math.min(maxHp, state.player.stats.PV + healAmount);
                     state.inventory.potions.health--;
                     state.combat.log.push({ message: `You use a potion and heal for ${healAmount} HP.`, type: 'heal', timestamp: Date.now() });
@@ -1357,14 +1383,16 @@ export const useGameStore = create<GameState>()(
                   if (buff.healingPerTick && buff.nextTickIn !== undefined && buff.tickInterval !== undefined) {
                       buff.nextTickIn -= delta;
                       if (buff.nextTickIn <= 0) {
-                          const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
-                          const oldHp = state.player.stats.PV;
-                          state.player.stats.PV = Math.min(maxHp, state.player.stats.PV + buff.healingPerTick);
-                          const actualHeal = Math.round(state.player.stats.PV - oldHp);
-                          if (actualHeal > 0) {
-                              state.combat.log.push({ message: `Votre soin sur la durée vous rend ${actualHeal} PV.`, type: 'heal', timestamp: Date.now() });
-                          }
-                          buff.nextTickIn = buff.tickInterval;
+                        const buffedStats = getModifiedStats(state.player.stats, state.player.activeBuffs);
+                        const healAmount = buff.healingPerTick * (buffedStats.HealingReceivedMultiplier || 1);
+                        const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
+                        const oldHp = state.player.stats.PV;
+                        state.player.stats.PV = Math.min(maxHp, state.player.stats.PV + healAmount);
+                        const actualHeal = Math.round(state.player.stats.PV - oldHp);
+                        if (actualHeal > 0) {
+                            state.combat.log.push({ message: `Votre ${buff.name} vous rend ${actualHeal} PV.`, type: 'heal', timestamp: Date.now() });
+                        }
+                        buff.nextTickIn = buff.tickInterval;
                       }
                   }
                   return true;
@@ -1392,13 +1420,15 @@ export const useGameStore = create<GameState>()(
                         debuff.duration -= delta;
                         if (debuff.duration <= 0) return false;
 
-                        debuff.nextTickIn -= delta;
-                        if (debuff.nextTickIn <= 0) {
-                            enemy.stats.PV -= debuff.damagePerTick;
-                            state.combat.log.push({ message: `${enemy.nom} subit ${debuff.damagePerTick} dégâts de ${debuff.name}.`, type: 'enemy_attack', timestamp: Date.now() });
-                            debuff.nextTickIn = debuff.tickInterval;
-                            if (enemy.stats.PV <= 0) {
-                                deadEnemyIdsFromActions.push(enemy.id);
+                        if (debuff.damagePerTick && debuff.nextTickIn !== undefined && debuff.tickInterval !== undefined) {
+                            debuff.nextTickIn -= delta;
+                            if (debuff.nextTickIn <= 0) {
+                                enemy.stats.PV -= debuff.damagePerTick;
+                                state.combat.log.push({ message: `${enemy.nom} subit ${debuff.damagePerTick} dégâts de ${debuff.name}.`, type: 'enemy_attack', timestamp: Date.now() });
+                                debuff.nextTickIn = debuff.tickInterval;
+                                if (enemy.stats.PV <= 0) {
+                                    deadEnemyIdsFromActions.push(enemy.id);
+                                }
                             }
                         }
                         return true;
@@ -1470,9 +1500,12 @@ export const useGameStore = create<GameState>()(
             const target = combat.enemies.find(e => e.id === targetId);
             if (!target || target.stats.PV <= 0) return;
 
-            const damage = formulas.calculateMeleeDamage(player.stats.AttMin, player.stats.AttMax, formulas.calculateAttackPower(player.stats));
-            const isCrit = formulas.isCriticalHit(player.stats.CritPct, player.stats.Precision, target.stats.Esquive);
-            let finalDamage = isCrit ? damage * (player.stats.CritDmg / 100) : damage;
+            const buffedPlayerStats = getModifiedStats(player.stats, player.activeBuffs);
+            const debuffedTargetStats = getModifiedStats(target.stats, target.activeDebuffs);
+
+            const damage = formulas.calculateMeleeDamage(buffedPlayerStats.AttMin, buffedPlayerStats.AttMax, formulas.calculateAttackPower(buffedPlayerStats));
+            const isCrit = formulas.isCriticalHit(buffedPlayerStats.CritPct, buffedPlayerStats.Precision, debuffedTargetStats.Esquive);
+            let finalDamage = isCrit ? damage * (buffedPlayerStats.CritDmg / 100) : damage;
 
             if (isCrit) {
                 get().applySpecialEffect('ON_CRITICAL_HIT', { targetId, isCrit });
@@ -1486,7 +1519,7 @@ export const useGameStore = create<GameState>()(
                 finalDamage *= damageMultiplier;
             }
 
-            const dr = formulas.calculateArmorDR(target.stats.Armure, player.level);
+            const dr = formulas.calculateArmorDR(debuffedTargetStats.Armure, player.level);
             const mitigatedDamage = Math.round(finalDamage * (isCleave ? 0.5 : 1) * (1 - dr));
 
             target.stats.PV -= mitigatedDamage;
@@ -1553,71 +1586,131 @@ export const useGameStore = create<GameState>()(
                 }
 
                 let effectApplied = false;
-                const primaryTarget = combat.enemies[combat.targetIndex];
 
                 skill.effects.forEach(effect => {
                     const anyEffect = effect as any; // Using 'any' to simplify access to properties
-                    if (anyEffect.type === 'damage' && primaryTarget && primaryTarget.stats.PV > 0) {
-                        let damage = 0;
-                        if (anyEffect.source === 'weapon') {
-                            const baseDmg = formulas.calculateMeleeDamage(player.stats.AttMin, player.stats.AttMax, formulas.calculateAttackPower(player.stats));
+
+                    // Determine targets for this effect
+                    let targets: CombatEnemy[] = [];
+                    const primaryTarget = combat.enemies[combat.targetIndex];
+
+                    if (anyEffect.target === 'all_enemies') {
+                        targets = state.combat.enemies.filter(e => e.stats.PV > 0);
+                    } else { // 'primary' or undefined
+                        if (primaryTarget && primaryTarget.stats.PV > 0) {
+                            targets.push(primaryTarget);
+                        }
+                    }
+
+                    targets.forEach(target => {
+                        const buffedPlayerStats = getModifiedStats(player.stats, player.activeBuffs);
+                        const debuffedTargetStats = getModifiedStats(target.stats, target.activeDebuffs);
+
+                        let conditionsMet = true;
+                        if (anyEffect.conditions) {
+                            if (anyEffect.conditions.targetHpLessThan) {
+                                const hpPercent = (target.stats.PV / target.initialHp) * 100;
+                                if (hpPercent >= anyEffect.conditions.targetHpLessThan) {
+                                    conditionsMet = false;
+                                }
+                            }
+                        }
+
+                        if (conditionsMet) {
+                            if (anyEffect.type === 'damage') {
+                                let damage = 0;
+                            if (anyEffect.source === 'weapon') {
+                            const baseDmg = formulas.calculateMeleeDamage(buffedPlayerStats.AttMin, buffedPlayerStats.AttMax, formulas.calculateAttackPower(buffedPlayerStats));
                             damage = baseDmg * (anyEffect.multiplier || 1);
                         } else if (anyEffect.source === 'spell') {
                             // TODO: Handle rank-based scaling
                             const baseDmg = anyEffect.baseValue || 0;
-                            damage = formulas.calculateSpellDamage(baseDmg, formulas.calculateSpellPower(player.stats));
+                            damage = formulas.calculateSpellDamage(baseDmg, formulas.calculateSpellPower(buffedPlayerStats));
                         }
 
-                        const isCrit = formulas.isCriticalHit(player.stats.CritPct, player.stats.Precision, primaryTarget.stats.Esquive);
-                        let finalDamage = isCrit ? damage * (player.stats.CritDmg / 100) : damage;
-                        const dr = formulas.calculateArmorDR(primaryTarget.stats.Armure, player.level);
+                        const isCrit = formulas.isCriticalHit(buffedPlayerStats.CritPct, buffedPlayerStats.Precision, debuffedTargetStats.Esquive);
+                        let finalDamage = isCrit ? damage * (buffedPlayerStats.CritDmg / 100) : damage;
+                        const dr = formulas.calculateArmorDR(debuffedTargetStats.Armure, player.level);
                         const mitigatedDamage = Math.round(finalDamage * (1 - dr));
 
-                        primaryTarget.stats.PV -= mitigatedDamage;
-                        const msg = `Vous utilisez ${skill.nom} sur ${primaryTarget.nom} pour ${mitigatedDamage} points de dégâts.`;
-                        const critMsg = `CRITIQUE ! Votre ${skill.nom} inflige ${mitigatedDamage} points de dégâts à ${primaryTarget.nom}.`;
+                        target.stats.PV -= mitigatedDamage;
+                        const msg = `Vous utilisez ${skill.nom} sur ${target.nom} pour ${mitigatedDamage} points de dégâts.`;
+                        const critMsg = `CRITIQUE ! Votre ${skill.nom} inflige ${mitigatedDamage} points de dégâts à ${target.nom}.`;
                         combat.log.push({ message: isCrit ? critMsg : msg, type: isCrit ? 'crit' : 'player_attack', timestamp: Date.now() });
                         effectApplied = true;
-                        if (primaryTarget.stats.PV <= 0) deadEnemyIds.push(primaryTarget.id);
-                    }
+                        if (target.stats.PV <= 0) deadEnemyIds.push(target.id);
+                            }
 
-                    if (anyEffect.type === 'debuff' && primaryTarget && primaryTarget.stats.PV > 0) {
-                        if (anyEffect.debuffType === 'dot') {
-                            const baseDmg = formulas.calculateMeleeDamage(player.stats.AttMin, player.stats.AttMax, formulas.calculateAttackPower(player.stats));
-                            const totalDamage = baseDmg * (anyEffect.totalDamage.multiplier || 1);
-                            const damagePerTick = Math.round(totalDamage / anyEffect.duration);
+                            if (anyEffect.type === 'debuff') {
+                                if (anyEffect.debuffType === 'dot') {
+                                    const buffedPlayerStats = getModifiedStats(player.stats, player.activeBuffs);
+                                const baseDmg = formulas.calculateMeleeDamage(buffedPlayerStats.AttMin, buffedPlayerStats.AttMax, formulas.calculateAttackPower(buffedPlayerStats));
+                                const totalDamage = baseDmg * (anyEffect.totalDamage.multiplier || 1);
+                                const damagePerTick = Math.round(totalDamage / anyEffect.duration);
 
-                            primaryTarget.activeDebuffs = primaryTarget.activeDebuffs || [];
-                            primaryTarget.activeDebuffs.push({
+                                target.activeDebuffs.push({
+                                    id: anyEffect.id, name: anyEffect.name, duration: anyEffect.duration * 1000,
+                                    damagePerTick: damagePerTick, tickInterval: 1000, nextTickIn: 1000,
+                                });
+                                combat.log.push({ message: `Vous utilisez ${skill.nom} sur ${target.nom}, qui commence à souffrir de ${anyEffect.name}.`, type: 'player_attack', timestamp: Date.now() });
+                            } else if (anyEffect.debuffType === 'cc' && anyEffect.ccType === 'stun') {
+                                target.stunDuration = anyEffect.duration * 1000;
+                                combat.log.push({ message: `${target.nom} est étourdi pour ${anyEffect.duration} secondes!`, type: 'info', timestamp: Date.now() });
+                            } else if (anyEffect.debuffType === 'stat_modifier') {
+                                target.activeDebuffs.push({
+                                    id: anyEffect.id, name: anyEffect.name, duration: anyEffect.duration * 1000,
+                                    statMods: anyEffect.statMods,
+                                });
+                                    combat.log.push({ message: `${target.nom} est affecté par ${anyEffect.name}.`, type: 'enemy_attack', timestamp: Date.now() });
+                                }
+                                effectApplied = true;
+                            }
+                        }
+                    });
+
+                    if (anyEffect.type === 'buff') {
+                        if (anyEffect.buffType === 'hot') {
+                            if (anyEffect.totalHealing) {
+                                const totalHealing = anyEffect.totalHealing.multiplier;
+                                const healingPerTick = totalHealing / anyEffect.duration;
+                                player.activeBuffs.push({
+                                    id: anyEffect.id, name: anyEffect.name, duration: anyEffect.duration * 1000,
+                                    healingPerTick: healingPerTick, tickInterval: 1000, nextTickIn: 1000,
+                                });
+                                combat.log.push({ message: `Vous appliquez ${anyEffect.name}, vous soignant sur la durée.`, type: 'heal', timestamp: Date.now() });
+                            }
+                        } else if (anyEffect.buffType === 'stat_modifier') {
+                            player.activeBuffs.push({
                                 id: anyEffect.id,
                                 name: anyEffect.name,
                                 duration: anyEffect.duration * 1000,
-                                damagePerTick: damagePerTick,
-                                tickInterval: 1000,
-                                nextTickIn: 1000,
+                                statMods: anyEffect.statMods,
                             });
-                            combat.log.push({ message: `Vous utilisez ${skill.nom} sur ${primaryTarget.nom}, qui commence à souffrir de ${anyEffect.name}.`, type: 'player_attack', timestamp: Date.now() });
-                        } else if (anyEffect.debuffType === 'cc' && anyEffect.ccType === 'stun') {
-                            primaryTarget.stunDuration = anyEffect.duration * 1000;
-                            combat.log.push({ message: `${primaryTarget.nom} est étourdi pour ${anyEffect.duration} secondes!`, type: 'info', timestamp: Date.now() });
+                            combat.log.push({ message: `Vous gagnez l'effet ${anyEffect.name}.`, type: 'info', timestamp: Date.now() });
+                        } else if (anyEffect.buffType === 'special') {
+                            player.activeBuffs.push({
+                                id: anyEffect.id,
+                                name: anyEffect.name,
+                                duration: anyEffect.duration * 1000,
+                                value: anyEffect.value,
+                            });
+                            combat.log.push({ message: `Vous gagnez l'effet ${anyEffect.name}.`, type: 'info', timestamp: Date.now() });
                         }
                         effectApplied = true;
                     }
 
-                    if (anyEffect.type === 'buff') {
-                        if (anyEffect.totalHealing) {
-                            const totalHealing = anyEffect.totalHealing.multiplier;
-                            const healingPerTick = totalHealing / anyEffect.duration;
-                            player.activeBuffs.push({
-                                id: anyEffect.id,
-                                duration: anyEffect.duration * 1000,
-                                healingPerTick: healingPerTick,
-                                tickInterval: 1000,
-                                nextTickIn: 1000,
-                            });
-                            combat.log.push({ message: `Vous appliquez ${anyEffect.name}, vous soignant sur la durée.`, type: 'heal', timestamp: Date.now() });
-                            effectApplied = true;
+                    if (anyEffect.type === 'shield') {
+                        let shieldAmount = 0;
+                        if (anyEffect.amount.source === 'base_value') {
+                            shieldAmount = anyEffect.amount.multiplier;
+                        } else if (anyEffect.amount.source === 'spell_power') {
+                            const buffedPlayerStats = getModifiedStats(player.stats, player.activeBuffs);
+                            const spellPower = formulas.calculateSpellPower(buffedPlayerStats);
+                            shieldAmount = spellPower * anyEffect.amount.multiplier;
                         }
+                        player.shield += shieldAmount;
+                        combat.log.push({ message: `Vous gagnez un bouclier absorbant ${Math.round(shieldAmount)} dégâts.`, type: 'shield', timestamp: Date.now() });
+                        effectApplied = true;
                     }
                 });
 
@@ -1644,6 +1737,7 @@ export const useGameStore = create<GameState>()(
             if (skill.id === 'cleric_holy_prayer_of_healing') {
                 player.activeBuffs.push({
                     id: 'prayer_of_healing_hot',
+                    name: 'Prière de guérison',
                     duration: 12000, // 12 seconds
                     healingPerTick: 10, // 120 total heal
                     tickInterval: 1000, // 1s tick
@@ -1673,7 +1767,7 @@ export const useGameStore = create<GameState>()(
                 player.shield += shieldValue;
                 combat.log.push({ message: `Vous utilisez ${skill.nom} et gagnez un bouclier de ${shieldValue} points.`, type: 'shield', timestamp: Date.now() });
                 if (skill.id === 'mage_arcane_shield') {
-                    player.activeBuffs.push({ id: 'mana_shield', duration: 20000, value: 0.5 }); // 50% damage to mana
+                    player.activeBuffs.push({ id: 'mana_shield', name: 'Bouclier de Mana', duration: 20000, value: 0.5 }); // 50% damage to mana
                 }
                 effectApplied = true;
             }
@@ -1797,7 +1891,7 @@ export const useGameStore = create<GameState>()(
 
             if (skill.id === 'rogue_subtlety_stealth') {
                 combat.isStealthed = true;
-                player.activeBuffs.push({ id: 'stealth', duration: 10000 });
+                player.activeBuffs.push({ id: 'stealth', name: 'Camouflage', duration: 10000 });
                 combat.log.push({ message: "Vous vous camouflez dans l'ombre.", type: 'info', timestamp: Date.now() });
                 if (state.combat.autoAttack) {
                     state.combat.autoAttack = false;
