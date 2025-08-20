@@ -51,7 +51,7 @@ function BuyRecipesTab() {
 
     const vendorRecipes = React.useMemo(() =>
         enchantments
-        .filter(e => (e.source.includes('trainer') || e.source.includes('vendor')) && e.level <= playerLevel)
+        .filter(e => ((e.source || []).includes('trainer') || (e.source || []).includes('vendor')) && (e.level || 0) <= playerLevel)
         .map(e => {
             const repReq = e.reputationRequirement;
             let hasRep = true;
@@ -66,7 +66,7 @@ function BuyRecipesTab() {
                 hasRep: hasRep,
             }
         })
-        .sort((a,b) => a.level - b.level),
+        .sort((a,b) => (a.level || 0) - (b.level || 0)),
     [enchantments, playerLevel, learnedRecipes, playerReputation]);
 
     const handleBuyRecipe = (recipe: Enchantment & { price: number }) => {
@@ -104,6 +104,18 @@ function BuyRecipesTab() {
                     const factionName = repReq ? factions.find(f => f.id === repReq.factionId)?.name : '';
                     const isBuyable = gold >= recipe.price && !recipe.isLearned && recipe.hasRep;
 
+                    let rankName = '';
+                    if (repReq && factionName) {
+                        const faction = factions.find(f => f.id === repReq.factionId);
+                        if (faction) {
+                            const sortedRanks = [...faction.ranks].sort((a, b) => a.threshold - b.threshold);
+                            const currentRank = sortedRanks.find(r => repReq.threshold === r.threshold);
+                            if (currentRank) {
+                                rankName = currentRank.name;
+                            }
+                        }
+                    }
+
                     return (
                         <TableRow key={recipe.id} className={recipe.isLearned || !recipe.hasRep ? 'text-muted-foreground' : ''}>
                             <TableCell>
@@ -111,7 +123,7 @@ function BuyRecipesTab() {
                                 <p className="text-xs">{recipe.description}</p>
                                 {repReq && (
                                     <p className={`text-xs mt-1 ${recipe.hasRep ? 'text-green-400' : 'text-red-400'}`}>
-                                        Nécessite: {factionName} - {repReq.rankName}
+                                        Nécessite: {factionName} - {rankName}
                                     </p>
                                 )}
                             </TableCell>
