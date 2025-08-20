@@ -47,6 +47,23 @@ export interface GameData {
   sets: ItemSet[];
 }
 
+export interface Buff {
+    id: string;
+    duration: number;
+    value?: any;
+    healingPerTick?: number;
+    tickInterval?: number;
+    nextTickIn?: number;
+}
+
+export interface Debuff {
+    id:string;
+    duration: number;
+    damagePerTick: number;
+    tickInterval: number;
+    nextTickIn: number;
+}
+
 export interface PlayerState {
   name: string;
   classeId: PlayerClassId | null;
@@ -70,6 +87,7 @@ export interface PlayerState {
     };
   };
   activeEffects: string[];
+  activeBuffs: Buff[];
   activeSetBonuses: string[];
   completedDungeons: Record<string, number>; // { [dungeonId]: count }
   completedQuests: string[];
@@ -99,7 +117,12 @@ export interface InventoryState {
   };
 }
 
-export type CombatEnemy = Monstre & { initialHp: number; attackProgress: number; templateId: string; };
+export type CombatEnemy = Monstre & {
+    initialHp: number;
+    attackProgress: number;
+    templateId: string;
+    activeDebuffs: Debuff[];
+};
 
 export interface CombatLogEntry {
     message: string;
@@ -118,4 +141,6 @@ export interface CombatState {
   autoAttack: boolean;
   dungeonRunItems: Item[];
   targetIndex: number;
+  isStealthed: boolean;
+  pendingActions: any[];
 }

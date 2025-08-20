@@ -200,7 +200,7 @@
             "niveauRequis": 1,
             "cooldown": 30,
             "effets": [
-                "Absorbe 50 points de dégâts. Dure 20 secondes.",
+                "Absorbe 50 points de dégâts. 50% des dégâts absorbés sont déduits de votre mana. Dure 20 secondes.",
                 "Coûte 15 Mana."
             ]
         },
@@ -296,6 +296,32 @@
             "cooldown": 180
         },
         {
+            "id": "mage_fire_meteor_shower",
+            "nom": "Pluie de Météores",
+            "classeId": "mage",
+            "type": "actif",
+            "rangMax": 1,
+            "niveauRequis": 20,
+            "cooldown": 30,
+            "effets": [
+                "Invoque une pluie de météores qui inflige 40 dégâts de Feu à tous les ennemis.",
+                "Coûte 60 Mana."
+            ]
+        },
+        {
+            "id": "mage_arcane_explosion",
+            "nom": "Explosion des Arcanes",
+            "classeId": "mage",
+            "type": "actif",
+            "rangMax": 1,
+            "niveauRequis": 20,
+            "cooldown": 15,
+            "effets": [
+                "Provoque une explosion d'énergie qui inflige 30 dégâts des Arcanes à tous les ennemis proches.",
+                "Coûte 45 Mana."
+            ]
+        },
+        {
             "id": "rogue_sinister_strike",
             "nom": "Attaque sournoise",
             "classeId": "rogue",
@@ -341,8 +367,34 @@
             "niveauRequis": 1,
             "cooldown": 10,
             "effets": [
-                "Projette des couteaux sur tous les ennemis proches, infligeant 60% des dégâts de l'arme.",
+                "Projette des couteaux sur tous les ennemis proches, infligeant 90% des dégâts de l'arme.",
                 "Coûte 35 Énergie."
+            ]
+        },
+        {
+            "id": "rogue_subtlety_stealth",
+            "nom": "Camouflage",
+            "classeId": "rogue",
+            "type": "actif",
+            "rangMax": 1,
+            "niveauRequis": 5,
+            "cooldown": 30,
+            "effets": [
+                "Vous vous fondez dans l'ombre, empêchant les ennemis de vous attaquer. Dure 10 secondes ou jusqu'à ce que vous attaquiez.",
+                "Coûte 20 Énergie."
+            ]
+        },
+        {
+            "id": "rogue_subtlety_surprise_attack",
+            "nom": "Attaque surprise",
+            "classeId": "rogue",
+            "type": "actif",
+            "rangMax": 1,
+            "niveauRequis": 8,
+            "cooldown": 8,
+            "effets": [
+                "Attaque la cible pour 150% des dégâts de l'arme. Si utilisé en étant camouflé, les dégâts sont augmentés de 100%.",
+                "Coûte 40 Énergie."
             ]
         },
         {
@@ -396,6 +448,19 @@
             "effets": [
                 "Consomme les charges de Poison mortel sur la cible pour infliger 20 dégâts de Nature par charge.",
                 "Coûte 35 Énergie."
+            ]
+        },
+        {
+            "id": "rogue_assassination_poison_bomb",
+            "nom": "Bombe de poison",
+            "classeId": "rogue",
+            "type": "actif",
+            "rangMax": 1,
+            "niveauRequis": 25,
+            "cooldown": 25,
+            "effets": [
+                "Lance une bombe qui inflige 20 dégâts de Nature à tous les ennemis et les empoisonne pour 60 dégâts sur 12s.",
+                "Coûte 50 Énergie."
             ]
         },
         {
@@ -467,7 +532,7 @@
             "rangMax": 1,
             "niveauRequis": 20,
             "effets": [
-                "Vous soigne, ainsi que tous vos alliés (non fonctionnel), pour 50 PV.",
+                "Vous entoure d'une lumière sacrée, vous soignant pour 120 PV en 12 secondes.",
                 "Coûte 40 Mana."
             ],
             "cooldown": 10

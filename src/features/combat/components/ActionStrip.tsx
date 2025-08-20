@@ -40,6 +40,7 @@ interface ActionStripProps {
     onRetreat: () => void;
     onCycleTarget: () => void;
     skills: Skill[];
+    skillCooldowns: { [skillId: string]: number };
 }
 
 const resourceColorMap = {
@@ -48,12 +49,11 @@ const resourceColorMap = {
     'Énergie': 'text-yellow-400',
 }
 
-export function ActionStrip({ onRetreat, onCycleTarget, skills }: ActionStripProps) {
-    const { usePotion, inventory, useSkill, skillCooldowns, playerResources } = useGameStore(state => ({
+export function ActionStrip({ onRetreat, onCycleTarget, skills, skillCooldowns }: ActionStripProps) {
+    const { usePotion, inventory, useSkill, playerResources } = useGameStore(state => ({
         usePotion: state.usePotion,
         inventory: state.inventory,
         useSkill: state.useSkill,
-        skillCooldowns: state.combat.skillCooldowns,
         playerResources: state.player.resources,
     }));
     

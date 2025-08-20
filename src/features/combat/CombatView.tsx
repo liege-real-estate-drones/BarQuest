@@ -35,6 +35,7 @@ export function CombatView() {
     bossEncounter, // NOUVEAU: Récupération de l'état du boss
     setBossEncounter, // NOUVEAU: Récupération de l'action pour le boss
     playerAttackProgress,
+    skillCooldowns,
   } = useGameStore((state) => ({
     player: state.player,
     enemies: state.combat.enemies,
@@ -49,6 +50,7 @@ export function CombatView() {
     bossEncounter: state.bossEncounter, // NOUVEAU
     setBossEncounter: state.setBossEncounter, // NOUVEAU
     playerAttackProgress: state.combat.playerAttackProgress,
+    skillCooldowns: state.combat.skillCooldowns,
   }));
 
   const equippedSkills = useMemo(() => {
@@ -136,6 +138,7 @@ export function CombatView() {
           onRetreat={flee}
           skills={equippedSkills}
           onCycleTarget={handleCycleTarget}
+          skillCooldowns={skillCooldowns}
         />
       </footer>
 
