@@ -523,6 +523,35 @@
         "vendorPrice": 5,
         "niveauMin": 51,
         "affixes": []
+      },
+      {
+        "id": "crafted_copper_sword",
+        "name": "Épée en cuivre fabriquée",
+        "slot": "weapon",
+        "material_type": "metal",
+        "niveauMin": 5,
+        "rarity": "Magique",
+        "affixes": [
+          { "ref": "AttMin", "val": 8 },
+          { "ref": "AttMax", "val": 12 },
+          { "ref": "Force", "val": 2 }
+        ],
+        "tagsClasse": ["berserker", "rogue"],
+        "vendorPrice": 25
+      },
+      {
+        "id": "crafted_leather_helmet",
+        "name": "Casque en cuir fabriqué",
+        "slot": "head",
+        "material_type": "leather",
+        "niveauMin": 5,
+        "rarity": "Magique",
+        "affixes": [
+          { "ref": "Armure", "val": 15 },
+          { "ref": "PV", "val": 10 }
+        ],
+        "tagsClasse": ["common"],
+        "vendorPrice": 20
       }
   ]
 }

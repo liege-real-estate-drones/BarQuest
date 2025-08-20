@@ -1,11 +1,25 @@
 // src/features/town/ForgeView.tsx
 import React, { useState } from 'react';
 import { useGameStore } from '@/state/gameStore';
-import type { Recipe } from '@/lib/types';
+import type { Recipe, Item, Rareté, Stats } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { ItemTooltip } from '@/components/ItemTooltip';
+import { ItemStat, STAT_ORDER } from '@/components/ItemTooltip';
+import { Separator } from '@/components/ui/separator';
+import { cn } from '@/lib/utils';
+import { STAT_DISPLAY_NAMES } from '@/lib/constants';
+
+const rarityColorMap: Record<Rareté, string> = {
+    Commun: 'text-gray-400',
+    Magique: 'text-blue-300',
+    Rare: 'text-blue-500',
+    Épique: 'text-purple-500',
+    Légendaire: 'text-yellow-500',
+    Unique: 'text-orange-500',
+};
+
+type StatKey = keyof Omit<Stats, 'PV' | 'RessourceMax'>;
 
 export const ForgeView: React.FC = () => {
     const { recipes, items: allItems } = useGameStore(state => state.gameData);
@@ -14,7 +28,7 @@ export const ForgeView: React.FC = () => {
 
     const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
 
-    const getResultingItem = (recipe: Recipe | null) => {
+    const getResultingItem = (recipe: Recipe | null): Item | null => {
         if (!recipe) return null;
         return allItems.find(item => item.id === recipe.result) || null;
     };
@@ -32,6 +46,20 @@ export const ForgeView: React.FC = () => {
     };
 
     const resultingItem = getResultingItem(selectedRecipe);
+
+    const itemAffixes = resultingItem ? [...(resultingItem.affixes || [])] : [];
+    if (resultingItem?.stats) {
+        Object.entries(resultingItem.stats).forEach(([key, val]) => {
+             if (typeof val === 'number' && val && !itemAffixes.some(a => a.ref === key)) {
+                 itemAffixes.push({ ref: key, val: val });
+            }
+        });
+    }
+
+    const allSortedAffixes = [...itemAffixes]
+        .filter((affix, index, self) => index === self.findIndex(t => t.ref === affix.ref))
+        .sort((a, b) => STAT_ORDER.indexOf(a.ref as StatKey) - STAT_ORDER.indexOf(b.ref as StatKey));
+
 
     return (
         <div className="p-4 grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -66,7 +94,29 @@ export const ForgeView: React.FC = () => {
                     <CardContent>
                         {selectedRecipe && resultingItem ? (
                             <div className="space-y-4">
-                                <ItemTooltip item={resultingItem} />
+                                <div>
+                                    <h4 className={cn("font-bold", rarityColorMap[resultingItem.rarity])}>{resultingItem.name}</h4>
+                                    <div className="flex justify-between text-muted-foreground text-xs">
+                                        <span className="capitalize">{resultingItem.slot}</span>
+                                        <span>Niveau {resultingItem.niveauMin}</span>
+                                    </div>
+                                    <Separator className="my-2" />
+                                    <div className="space-y-1 text-xs">
+                                        {allSortedAffixes.map((affix) => (
+                                            <ItemStat
+                                                key={affix.ref}
+                                                label={STAT_DISPLAY_NAMES[affix.ref] || affix.ref}
+                                                value={`${affix.val > 0 ? '+' : ''}${affix.val}`}
+                                            />
+                                        ))}
+                                    </div>
+                                    {resultingItem.set && (
+                                        <>
+                                            <Separator className="my-2" />
+                                            <p className="text-yellow-300 text-xs">{resultingItem.set.name}</p>
+                                        </>
+                                    )}
+                                </div>
                                 <div className="space-y-2">
                                     <div>
                                         <h3 className="font-semibold">Matériaux Requis</h3>
@@ -93,7 +143,7 @@ export const ForgeView: React.FC = () => {
                                         disabled={!canCraft(selectedRecipe)}
                                         className="mt-2 w-full"
                                     >
-                                        Forger l'objet
+                                        Forger l&apos;objet
                                     </Button>
                                 </div>
                             </div>

@@ -16,7 +16,10 @@
             "famille": "Beast",
             "isBoss": false,
             "palier": 1,
-            "stats": { "PV": 25, "AttMin": 4, "AttMax": 7, "CritPct": 3, "CritDmg": 150, "Armure": 5, "Vitesse": 2.2, "Precision": 45, "Esquive": 8 }
+            "stats": { "PV": 25, "AttMin": 4, "AttMax": 7, "CritPct": 3, "CritDmg": 150, "Armure": 5, "Vitesse": 2.2, "Precision": 45, "Esquive": 8 },
+            "componentLoot": [
+                { "id": "light_leather", "chance": 0.3, "quantity": 1 }
+            ]
         },
         {
             "id": "kobold_miner_supervisor",
@@ -34,7 +37,10 @@
             "famille": "Humanoid",
             "isBoss": false,
             "palier": 1,
-            "stats": { "PV": 40, "AttMin": 6, "AttMax": 9, "CritPct": 5, "CritDmg": 150, "Armure": 20, "Vitesse": 2.8, "Precision": 55, "Esquive": 3 }
+            "stats": { "PV": 40, "AttMin": 6, "AttMax": 9, "CritPct": 5, "CritDmg": 150, "Armure": 20, "Vitesse": 2.8, "Precision": 55, "Esquive": 3 },
+            "componentLoot": [
+                { "id": "copper_ingot", "chance": 0.4, "quantity": 1 }
+            ]
         },
         {
             "id": "cave_bat",
@@ -44,7 +50,10 @@
             "isBoss": false,
             "palier": 1,
             "stats": { "PV": 35, "AttMin": 7, "AttMax": 10, "CritPct": 8, "CritDmg": 150, "Armure": 10, "Vitesse": 1.8, "Precision": 60, "Esquive": 15 },
-            "questItemId": "bat_fang"
+            "questItemId": "bat_fang",
+            "componentLoot": [
+                { "id": "light_leather", "chance": 0.35, "quantity": 1 }
+            ]
         },
         {
             "id": "frost_wolf",
