@@ -1,7 +1,9 @@
 // src/core/itemGenerator.ts
 import type { Item, Rareté, Affixe } from '@/lib/types';
 import { v4 as uuidv4 } from 'uuid';
-import nameModifiers from '../../public/data/nameModifiers.json';
+import nameModifiersData from '../../public/data/nameModifiers.json';
+
+const { affixes: nameModifiers, qualifiers, materials } = nameModifiersData;
 
 const rarityAffixCount: Record<Rareté, [number, number]> = {
     "Commun": [0, 1],
@@ -22,12 +24,19 @@ export const generateProceduralItem = (
     rarity: Rareté,
     availableAffixes: Affixe[]
 ): Item => {
+    // --- Qualifier Selection and Stat Application ---
+    const qualifierNames = Object.keys(qualifiers);
+    const randomQualifierName = qualifierNames[Math.floor(Math.random() * qualifierNames.length)];
+    const qualifierMod = (qualifiers as Record<string, number>)[randomQualifierName];
+
     const newItem: Item = {
         ...baseItem,
         id: uuidv4(),
         niveauMin: itemLevel,
         rarity: rarity,
         affixes: [],
+        // Apply qualifier modifier to base value
+        valeur: Math.round(baseItem.valeur * qualifierMod),
     };
 
     const [minAffixes, maxAffixes] = rarityAffixCount[rarity];
@@ -46,24 +55,30 @@ export const generateProceduralItem = (
     }
 
     // --- Dynamic Name Generation ---
+    let finalName = `${randomQualifierName} ${newItem.name}`;
+
+    // --- Material Selection ---
+    const suitableMaterial = [...materials]
+        .sort((a, b) => a.level - b.level)
+        .filter(m => m.level <= itemLevel)
+        .pop();
+
+    if (suitableMaterial) {
+        finalName = `${finalName} ${suitableMaterial.name}`;
+    }
+
+    // --- Affix Suffix ---
     if (newItem.affixes && newItem.affixes.length > 0 && (rarity === "Rare" || rarity === "Épique")) {
-        const primaryAffix = newItem.affixes[0]; // Use the first affix as the primary one for naming
+        const primaryAffix = newItem.affixes[0];
         const modifier = (nameModifiers as Record<string, { prefix: string, suffix: string }>)[primaryAffix.ref];
 
         if (modifier) {
-            if (rarity === "Rare" && Math.random() > 0.5) {
-                // 50% chance to have a prefix or a suffix for Rare items
-                if (Math.random() > 0.5) {
-                    newItem.name = `${modifier.prefix} ${newItem.name}`;
-                } else {
-                    newItem.name = `${newItem.name} ${modifier.suffix}`;
-                }
-            } else if (rarity === "Épique") {
-                // Epic items always get both
-                newItem.name = `${modifier.prefix} ${newItem.name} ${modifier.suffix}`;
-            }
+            // Always add suffix for Rare and Epic
+            finalName = `${finalName} ${modifier.suffix}`;
         }
     }
+
+    newItem.name = finalName;
 
     return newItem;
 };

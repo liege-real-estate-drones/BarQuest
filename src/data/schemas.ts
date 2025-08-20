@@ -156,3 +156,11 @@ export const FactionSchema = z.object({
     name: z.string(),
     ranks: z.array(FactionRankSchema),
 });
+
+export const RecipeSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  result: z.string(),
+  materials: z.record(z.string(), z.number()),
+  cost: z.number().int(),
+});

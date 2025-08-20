@@ -1,0 +1,66 @@
+[
+  {
+    "id": "recipe_silver_guard_helm",
+    "name": "Heaume de la Garde d'Argent",
+    "result": "set_silver_guard_helm",
+    "materials": {
+      "iron_ingot": 10,
+      "silver_nugget": 5
+    },
+    "cost": 1000
+  },
+  {
+    "id": "recipe_silver_guard_chest",
+    "name": "Cuirasse de la Garde d'Argent",
+    "result": "set_silver_guard_chest",
+    "materials": {
+      "iron_ingot": 15,
+      "silver_nugget": 8,
+      "yeti_fur": 2
+    },
+    "cost": 1500
+  },
+  {
+    "id": "recipe_arcanist_cowl",
+    "name": "Capuche de l'Arcaniste",
+    "result": "set_arcanist_cowl",
+    "materials": {
+      "silk_bolt": 12,
+      "elemental_fire": 5
+    },
+    "cost": 1200
+  },
+  {
+    "id": "recipe_arcanist_robe",
+    "name": "Robe de l'Arcaniste",
+    "result": "set_arcanist_robe",
+    "materials": {
+      "silk_bolt": 20,
+      "elemental_fire": 10,
+      "arcane_crystal": 1
+    },
+    "cost": 1800
+  },
+  {
+    "id": "recipe_vanguard_greataxe",
+    "name": "Grande Hache de l'Avant-garde",
+    "result": "rep_silver_vanguard_greataxe",
+    "materials": {
+      "steel_ingot": 25,
+      "demonic_essence": 5,
+      "primal_might": 1
+    },
+    "cost": 10000
+  },
+  {
+    "id": "recipe_magma_caller_staff",
+    "name": "Bâton de l'Invocateur de Magma",
+    "result": "rep_magma_callers_staff",
+    "materials": {
+      "enchanted_wood": 15,
+      "heart_of_magma": 3,
+      "primal_fire": 10
+    },
+    "cost": 10000
+  }
+]
