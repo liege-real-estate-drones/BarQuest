@@ -132,7 +132,7 @@ interface GameState {
       applySpecialEffect: (trigger: string, context: { targetId: string, isCrit: boolean }) => void;
   dismantleItem: (itemId: string) => void;
   enchantItem: (itemId: string) => void;
-  gambleForItem: (itemSlot: string) => void;
+  gambleForItem: (itemSlot: string) => Item | null;
 }
 
 let gameLoop: NodeJS.Timeout | null = null;
@@ -469,37 +469,42 @@ export const useGameStore = create<GameState>()(
         });
       },
 
-      gambleForItem: (itemSlot) => {
-        set((state: GameState) => {
-            const cost = 100 * state.worldTier;
-            if (state.inventory.gold < cost) {
-                console.log("Not enough gold to gamble");
-                return;
-            }
+      gambleForItem: (itemSlot: string) => {
+          const state = get();
+          const cost = 100 * state.worldTier;
+          if (state.inventory.gold < cost) {
+              console.log("Not enough gold to gamble");
+              // TODO: Add user feedback
+              return null;
+          }
 
-            const possibleTemplates = state.gameData.items.filter(item => item.slot === itemSlot && item.rarity !== "Légendaire" && item.rarity !== "Unique");
-            if (possibleTemplates.length === 0) {
-                console.log("No items found for that slot");
-                return;
-            }
+          const possibleTemplates = state.gameData.items.filter(item => item.slot === itemSlot && item.rarity !== "Légendaire" && item.rarity !== "Unique" && !item.set);
+          if (possibleTemplates.length === 0) {
+              console.log("No items found for that slot");
+              // TODO: Add user feedback
+              return null;
+          }
 
-            state.inventory.gold -= cost;
 
-            const baseItemTemplate = possibleTemplates[Math.floor(Math.random() * possibleTemplates.length)];
+          // Determine rarity - low chance for high rarity
+          const roll = Math.random();
+          let rarity: Rareté = "Commun";
+          if (roll < 0.02) rarity = "Légendaire"; // 2% chance for Legendary
+          else if (roll < 0.10) rarity = "Épique";   // 8% chance for Epic
+          else if (roll < 0.35) rarity = "Rare";     // 25% chance for Rare
+                                                      // 65% chance for Common
 
-            // Determine rarity - low chance for high rarity
-            const roll = Math.random();
-            let rarity: Rareté = "Commun";
-            if (roll < 0.01) rarity = "Légendaire";
-            else if (roll < 0.05) rarity = "Épique";
-            else if (roll < 0.25) rarity = "Rare";
+          const baseItemTemplate = possibleTemplates[Math.floor(Math.random() * possibleTemplates.length)];
+          const itemLevel = state.player.level;
+          const { id, niveauMin, affixes, ...baseItemProps } = baseItemTemplate;
+          const newItem = generateProceduralItem(baseItemProps, itemLevel, rarity, state.gameData.affixes);
 
-            const itemLevel = state.player.level;
-            const { id, niveauMin, affixes, ...baseItemProps } = baseItemTemplate;
-            const newItem = generateProceduralItem(baseItemProps, itemLevel, rarity, state.gameData.affixes);
+          set((currentState: GameState) => {
+              currentState.inventory.gold -= cost;
+              currentState.inventory.items.push(newItem);
+          });
 
-            state.inventory.items.push(newItem);
-        });
+          return newItem;
       },
 
       dismantleItem: (itemId) => {
