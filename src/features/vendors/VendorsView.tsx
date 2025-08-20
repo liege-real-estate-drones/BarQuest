@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useToast } from '@/hooks/use-toast';
 import type { Item } from '@/lib/types';
-import { useGameStore, getItemSellPrice } from '@/state/gameStore';
+import { useGameStore, getItemSellPrice, getItemBuyPrice } from '@/state/gameStore';
 import { Coins, ShoppingCart, Tags, Trash2 } from 'lucide-react';
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -36,10 +36,13 @@ function BuyTab() {
     const { toast } = useToast();
 
     const vendorItems = React.useMemo(() =>
-        gameItems.filter(item =>
-            item.slot &&
-            item.vendorPrice && item.vendorPrice > 0 && item.niveauMin <= playerLevel + 5
-        ).sort((a,b) => a.niveauMin - b.niveauMin),
+        gameItems
+        .filter(item => item.slot && item.niveauMin <= playerLevel + 5 && !['potion', 'quest'].includes(item.slot))
+        .map(item => ({
+            ...item,
+            vendorPrice: getItemBuyPrice(item),
+        }))
+        .sort((a,b) => a.niveauMin - b.niveauMin),
     [gameItems, playerLevel]);
 
     const handleBuy = (item: Item) => {
@@ -52,14 +55,14 @@ function BuyTab() {
         } else {
             toast({
                 title: "Échec de l'achat",
-                description: "Vous n'avez pas assez d'or.",
+                description: "Vous n&apos;avez pas assez d'or.",
                 variant: 'destructive'
             });
         }
     };
 
     if (vendorItems.length === 0) {
-        return <p className="text-center text-muted-foreground p-8">Le forgeron n'a rien à vendre pour le moment.</p>
+        return <p className="text-center text-muted-foreground p-8">Le forgeron n&apos;a rien à vendre pour le moment.</p>
     }
 
     return (

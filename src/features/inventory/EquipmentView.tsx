@@ -32,6 +32,7 @@ function EquipmentSlot({ slotName, item }: { slotName: string; item: Item | null
 
 
 import { ActiveSetBonusesView } from './ActiveSetBonusesView';
+import { EQUIPMENT_SLOTS } from '@/lib/constants';
 
 export function EquipmentView() {
     const { equipment } = useGameStore(state => state.inventory);
@@ -44,8 +45,8 @@ export function EquipmentView() {
                 </CardHeader>
                 <CardContent>
                     <div className="space-y-2">
-                    {Object.entries(equipment).map(([slot, item]) => (
-                        <EquipmentSlot key={slot} slotName={slot} item={item}/>
+                    {EQUIPMENT_SLOTS.map(slot => (
+                        <EquipmentSlot key={slot} slotName={slot} item={equipment[slot as keyof typeof equipment]}/>
                     ))}
                     </div>
                 </CardContent>

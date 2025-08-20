@@ -72,6 +72,10 @@ interface GameState {
   townView: 'TOWN' | 'CRAFTING';
   worldTier: number;
   currentDungeon: Dungeon | null;
+  dungeonState: {
+    equipmentDropsPending: number;
+    monstersRemainingInDungeon: number;
+  } | null;
   dungeonStartTime: number | null;
   dungeonCompletionSummary: DungeonCompletionSummary | null;
   gameData: GameData;
@@ -223,6 +227,54 @@ const resolveLoot = (monster: Monstre, gameData: GameData, playerClassId: Player
   return newItem;
 };
 
+const generateEquipmentLoot = (monster: Monstre, gameData: GameData, playerClassId: PlayerClassId | null, worldTier: number): Item | null => {
+  const dropRoll = Math.random();
+  let cumulativeChance = 0;
+  let chosenRarity: Rareté | null = null;
+
+  for (const [rarity, chance] of Object.entries(rarityDropChances)) {
+    cumulativeChance += chance;
+    if (dropRoll < cumulativeChance) {
+      chosenRarity = rarity as Rareté;
+      break;
+    }
+  }
+
+  if (!chosenRarity) {
+    return null;
+  }
+
+  if (chosenRarity === "Légendaire" || chosenRarity === "Unique") {
+    const possibleItems = gameData.items.filter(item =>
+        item.rarity === chosenRarity &&
+        (item.tagsClasse?.includes('common') || (playerClassId && item.tagsClasse?.includes(playerClassId)))
+    );
+
+    if (possibleItems.length > 0) {
+        const droppedItem = { ...possibleItems[Math.floor(Math.random() * possibleItems.length)] };
+        droppedItem.id = uuidv4();
+        return droppedItem;
+    }
+    chosenRarity = "Épique";
+  }
+
+  const possibleItemTemplates = gameData.items.filter(item =>
+      item.slot && item.slot !== 'potion' && item.rarity !== "Légendaire" && item.rarity !== "Unique" && !item.set &&
+      (item.tagsClasse?.includes('common') || (playerClassId && item.tagsClasse?.includes(playerClassId)))
+  );
+
+  if (possibleItemTemplates.length === 0) {
+    return null;
+  }
+
+  const baseItemTemplate = possibleItemTemplates[Math.floor(Math.random() * possibleItemTemplates.length)];
+  const { id, niveauMin, rarity, affixes, ...baseItemProps } = baseItemTemplate;
+  const itemLevel = monster.level + (worldTier - 1) * 5;
+  const newItem = generateProceduralItem(baseItemProps, itemLevel, chosenRarity, gameData.affixes);
+
+  return newItem;
+};
+
 const getTalentEffectValue = (effect: string, rank: number): number => {
     const matches = effect.match(/([\d./]+)/);
     if (!matches) return 0;
@@ -242,6 +294,23 @@ export const getItemSellPrice = (item: Item): number => {
         Unique: 20,
     };
     return Math.ceil(item.niveauMin * rarityMultiplier[item.rarity]);
+};
+
+export const getItemBuyPrice = (item: Item): number => {
+    if (item.vendorPrice) {
+        return item.vendorPrice;
+    }
+    // Re-using the logic from getItemSellPrice to calculate the base sell price
+    const rarityMultiplier: Record<Rareté, number> = {
+        Commun: 1,
+        Rare: 2.5,
+        Épique: 5,
+        Légendaire: 10,
+        Unique: 20,
+    };
+    // The sell price is item.niveauMin * rarityMultiplier. Buy price is 4x that.
+    const calculatedSellPrice = Math.ceil(item.niveauMin * rarityMultiplier[item.rarity]);
+    return calculatedSellPrice * 4;
 };
 
 const STAT_WEIGHTS: Record<PlayerClassId, Partial<Record<keyof Stats, number>>> = {
@@ -296,6 +365,7 @@ export const useGameStore = create<GameState>()(
       townView: 'TOWN',
       worldTier: 1,
       currentDungeon: null,
+      dungeonState: null,
       dungeonStartTime: null,
       dungeonCompletionSummary: null,
       gameData: { dungeons: [], monsters: [], items: [], talents: [], skills: [], affixes: [], classes: [], quests: [], factions: [], sets: [], recipes: [] },
@@ -875,20 +945,24 @@ export const useGameStore = create<GameState>()(
           // --- Dungeon Chest Rewards ---
           const chestGold = (currentDungeon?.palier ?? 1) * 50 * worldTier;
           let chestItem: Item | null = null;
-          const possibleItemTemplates = gameData.items.filter(item =>
-            item.rarity !== "Légendaire" && item.rarity !== "Unique" && !item.set && item.slot !== 'potion' &&
-            (item.tagsClasse?.includes('common') || (player.classeId && item.tagsClasse?.includes(player.classeId)))
-          );
-          if (possibleItemTemplates.length > 0) {
-            const baseItemTemplate = possibleItemTemplates[Math.floor(Math.random() * possibleItemTemplates.length)];
-            const { id, niveauMin, rarity, affixes, ...baseItemProps } = baseItemTemplate;
-            const itemLevel = currentDungeon?.palier ?? player.level;
-            const roll = Math.random();
-            let bonusRarity: Rareté = "Rare";
-            if (roll < 0.05) bonusRarity = "Légendaire"; // 5% chance for Legendary
-            else if (roll < 0.2) bonusRarity = "Épique"; // 15% chance for Epic
-            chestItem = generateProceduralItem(baseItemProps, itemLevel, bonusRarity, gameData.affixes);
-          }
+
+          do {
+            const possibleItemTemplates = gameData.items.filter(item =>
+              item.rarity !== "Légendaire" && item.rarity !== "Unique" && !item.set && item.slot !== 'potion' &&
+              (item.tagsClasse?.includes('common') || (player.classeId && item.tagsClasse?.includes(player.classeId)))
+            );
+
+            if (possibleItemTemplates.length > 0) {
+              const baseItemTemplate = possibleItemTemplates[Math.floor(Math.random() * possibleItemTemplates.length)];
+              const { id, niveauMin, rarity, affixes, ...baseItemProps } = baseItemTemplate;
+              const itemLevel = currentDungeon?.palier ?? player.level;
+              const roll = Math.random();
+              let bonusRarity: Rareté = "Rare";
+              if (roll < 0.05) bonusRarity = "Légendaire"; // 5% chance for Legendary
+              else if (roll < 0.2) bonusRarity = "Épique"; // 15% chance for Epic
+              chestItem = generateProceduralItem(baseItemProps, itemLevel, bonusRarity, gameData.affixes);
+            }
+          } while (chestItem && chestItem.rarity === 'Commun');
 
           const chestRewards = {
             gold: chestGold,
@@ -944,6 +1018,10 @@ export const useGameStore = create<GameState>()(
           set((state: GameState) => {
             state.view = 'COMBAT';
             state.currentDungeon = dungeon;
+            state.dungeonState = {
+                equipmentDropsPending: Math.floor(Math.random() * 2) + 2, // 2 or 3
+                monstersRemainingInDungeon: dungeon.killTarget,
+            };
             state.dungeonStartTime = Date.now();
             state.combat = { ...initialCombatState, goldGained: 0, xpGained: 0, pendingActions: [], log: [{ message: `Entered ${dungeon.name}.`, type: 'info', timestamp: Date.now() }]};
             if (state.player.resources.type === 'Rage') {
@@ -1494,7 +1572,6 @@ export const useGameStore = create<GameState>()(
             if (isHeroicMode) {
               goldDrop *= 5;
             }
-            const itemDrop = resolveLoot(enemy, gameData, state.player.classeId, worldTier);
             const xpGained = Math.round((enemy.level * 10) * (1 + (currentDungeon ? currentDungeon.palier * 0.05 : 0)));
 
             state.combat.log.push({ message: `You defeated ${enemy.nom}!`, type: 'info', timestamp: Date.now() });
@@ -1503,6 +1580,21 @@ export const useGameStore = create<GameState>()(
 
             state.combat.xpGained += xpGained;
             state.combat.log.push({ message: `You gain ${xpGained} experience.`, type: 'info', timestamp: Date.now() });
+
+            if (state.dungeonState && state.dungeonState.equipmentDropsPending > 0 && state.dungeonState.monstersRemainingInDungeon > 0) {
+                const dropChance = state.dungeonState.equipmentDropsPending / state.dungeonState.monstersRemainingInDungeon;
+                if (Math.random() < dropChance) {
+                    const equipmentDrop = generateEquipmentLoot(enemy, gameData, state.player.classeId, worldTier);
+                    if (equipmentDrop) {
+                        state.combat.dungeonRunItems.push(equipmentDrop);
+                        state.combat.log.push({ message: ``, type: 'loot', timestamp: Date.now(), item: equipmentDrop });
+                        if(state.dungeonState) state.dungeonState.equipmentDropsPending--;
+                    }
+                }
+            }
+            if(state.dungeonState) {
+                state.dungeonState.monstersRemainingInDungeon--;
+            }
 
             // --- Quest Item Drop Logic ---
             activeQuests.forEach((activeQuest) => {
@@ -1518,16 +1610,6 @@ export const useGameStore = create<GameState>()(
                   }
               }
             });
-
-             if (itemDrop) {
-                state.combat.dungeonRunItems.push(itemDrop);
-                state.combat.log.push({
-                    message: ``,
-                    type: 'loot',
-                    timestamp: Date.now(),
-                    item: itemDrop
-                });
-            }
 
             if (!enemy.isBoss) {
               state.combat.killCount += 1;
