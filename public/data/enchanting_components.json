@@ -1,6 +1,8 @@
 [
   { "id": "strange_dust", "name": "Poussière étrange", "tier": 1 },
   { "id": "lesser_magic_essence", "name": "Essence de magie inférieure", "tier": 1 },
+  { "id": "copper_ingot", "name": "Lingot de cuivre", "tier": 1 },
+  { "id": "light_leather", "name": "Peau légère", "tier": 1 },
   { "id": "soul_dust", "name": "Poussière d'âme", "tier": 2 },
   { "id": "greater_magic_essence", "name": "Essence de magie supérieure", "tier": 2 },
   { "id": "vision_dust", "name": "Poussière de vision", "tier": 3 },

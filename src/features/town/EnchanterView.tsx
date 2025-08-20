@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useGameStore } from '@/state/gameStore';
 import type { Item, Enchantment, Rareté } from '@/lib/types';
 import { Button } from '@/components/ui/button';
@@ -16,6 +16,7 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { EnchantmentComparison } from './components/EnchantmentComparison';
 
 // Component for the main "Enchant" tab
 const EnchantTab: React.FC = () => {
@@ -25,8 +26,20 @@ const EnchantTab: React.FC = () => {
         enchantItem: state.enchantItem,
     }));
 
+    type SimpleAffix = { ref: string; val: number; isEnchantment?: boolean };
+
     const [selectedItem, setSelectedItem] = useState<Item | null>(null);
     const [selectedEnchantment, setSelectedEnchantment] = useState<Enchantment | null>(null);
+    const [currentEnchantmentAffix, setCurrentEnchantmentAffix] = useState<SimpleAffix | null>(null);
+
+    useEffect(() => {
+        if (selectedItem) {
+            const existingEnchantment = selectedItem.affixes?.find(a => a.isEnchantment);
+            setCurrentEnchantmentAffix(existingEnchantment || null);
+        } else {
+            setCurrentEnchantmentAffix(null);
+        }
+    }, [selectedItem]);
 
     const handleEnchant = () => {
         if (selectedItem && selectedEnchantment) {
@@ -76,6 +89,12 @@ const EnchantTab: React.FC = () => {
                     <CardHeader><CardTitle>Objet à Enchanter</CardTitle></CardHeader>
                     <CardContent>
                         {selectedItem ? <ItemTooltip item={selectedItem} /> : <p>Sélectionnez un objet (non légendaire) de votre inventaire.</p>}
+                        {currentEnchantmentAffix && selectedEnchantment && (
+                            <EnchantmentComparison
+                                currentAffix={currentEnchantmentAffix}
+                                newEnchantment={selectedEnchantment}
+                            />
+                        )}
                     </CardContent>
                 </Card>
                 <Card>
@@ -101,7 +120,7 @@ const EnchantTab: React.FC = () => {
                             ) : <p>Sélectionnez un objet pour voir les enchantements.</p>}
                         </ScrollArea>
                         <Button onClick={handleEnchant} disabled={!selectedItem || !selectedEnchantment || !canAfford(selectedEnchantment!)} className="mt-4 w-full">
-                            Enchanter l'objet
+                            Enchanter l&apos;objet
                         </Button>
                     </CardContent>
                 </Card>
@@ -212,7 +231,7 @@ const GrimoireTab: React.FC = () => {
     }));
 
     const sortedEnchantments = useMemo(() => {
-        return [...allEnchantments].sort((a, b) => a.tier - b.tier || a.level - b.level);
+        return [...allEnchantments].sort((a, b) => (a.tier || 0) - (b.tier || 0) || (a.level || 0) - (b.level || 0));
     }, [allEnchantments]);
 
     return (

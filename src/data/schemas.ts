@@ -114,6 +114,11 @@ export const MonsterSchema = z.object({
   lootTableId: z.string().optional(),
   questItemId: z.string().optional(),
   specificLootTable: z.array(z.string()).optional(),
+  componentLoot: z.array(z.object({
+    id: z.string(),
+    chance: z.number(),
+    quantity: z.number(),
+  })).optional(),
 });
 
 export const DungeonSchema = z.object({
@@ -186,6 +191,13 @@ export const EnchantmentSchema = z.object({
     description: z.string(),
     affixRef: z.string(),
     cost: z.array(z.object({ id: z.string(), amount: z.number() })),
+    tier: z.number().optional(),
+    level: z.number().optional(),
+    source: z.array(z.string()).optional(),
+    reputationRequirement: z.object({
+        factionId: z.string(),
+        threshold: z.number(),
+    }).optional(),
 });
 
 export interface DungeonCompletionSummary {

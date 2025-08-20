@@ -19,7 +19,7 @@ const rarityColorMap: Record<Rareté, string> = {
 type StatKey = keyof Omit<Stats, 'PV' | 'RessourceMax'>;
 
 
-const STAT_ORDER: StatKey[] = [
+export const STAT_ORDER: StatKey[] = [
     'Force', 'Intelligence', 'Dexterite', 'Esprit',
     'AttMin', 'AttMax', 'CritPct', 'CritDmg',
     'Armure', 'Vitesse', 'Precision', 'Esquive'
@@ -27,7 +27,7 @@ const STAT_ORDER: StatKey[] = [
 
 type ComparisonResult = { diff: number; type: 'better' | 'worse' | 'equal' | 'new' | 'lost' };
 
-function ItemStat({ label, value, comparison }: { label: string, value: string | number, comparison?: ComparisonResult }) {
+export function ItemStat({ label, value, comparison }: { label: string, value: string | number, comparison?: ComparisonResult }) {
     let valueColor = 'text-gray-400';
     let diffElement = null;
     let valueClass = '';

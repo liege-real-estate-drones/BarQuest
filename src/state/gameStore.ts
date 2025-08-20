@@ -1,7 +1,7 @@
 import create from 'zustand';
 import { persist, createJSONStorage, StateStorage } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import type { Dungeon, Monstre, Item, Talent, Skill, Stats, PlayerState, InventoryState, CombatLogEntry, CombatState, GameData, Quete, PlayerClassId, ResourceType, Rareté, CombatEnemy, ItemSet, PotionType, Recipe, Theme, Affixe } from '@/lib/types';
+import type { Dungeon, Monstre, Item, Talent, Skill, Stats, PlayerState, InventoryState, CombatLogEntry, CombatState, GameData, Quete, PlayerClassId, ResourceType, Rareté, CombatEnemy, ItemSet, PotionType, Recipe, Theme, Affixe, Enchantment } from '@/lib/types';
 import { DungeonCompletionSummary } from '@/data/schemas';
 import * as formulas from '@/core/formulas';
 import { generateProceduralItem } from '@/core/itemGenerator';
@@ -342,8 +342,10 @@ export const getItemBuyPrice = (item: Item): number => {
     return calculatedSellPrice * 4;
 };
 
-export const getRecipePrice = (enchantment: any): number => {
-    return (enchantment.tier * 25) * (enchantment.level / 2.5);
+export const getRecipePrice = (enchantment: Enchantment): number => {
+    const tier = enchantment.tier || 1;
+    const level = enchantment.level || 1;
+    return (tier * 25) * (level / 2.5);
 };
 
 const STAT_WEIGHTS: Record<PlayerClassId, Partial<Record<keyof Stats, number>>> = {
@@ -401,7 +403,7 @@ export const useGameStore = create<GameState>()(
       dungeonState: null,
       dungeonStartTime: null,
       dungeonCompletionSummary: null,
-      gameData: { dungeons: [], monsters: [], items: [], talents: [], skills: [], affixes: [], classes: [], quests: [], factions: [], sets: [], recipes: [], enchantments: [] },
+      gameData: { dungeons: [], monsters: [], items: [], talents: [], skills: [], affixes: [], classes: [], quests: [], factions: [], sets: [], recipes: [], enchantments: [], enchanting_components: [] },
       player: getInitialPlayerState(),
       inventory: initialInventoryState,
       combat: initialCombatState,
@@ -554,7 +556,7 @@ export const useGameStore = create<GameState>()(
 
             // --- Nouvelle logique basée sur les paliers ---
 
-            // Palier I (Niv 1-15) - Communs et Magiques
+            // Palier I (Niv 1-15)
             if (niveauMin >= 1 && niveauMin < 15) {
                 if (rarity === 'Commun' || rarity === 'Magique') {
                     materialsGained.push({ id: 'strange_dust', amount: Math.floor(Math.random() * 2) + 1 }); // 1-2
@@ -564,29 +566,35 @@ export const useGameStore = create<GameState>()(
                 }
             }
 
-            // Palier II (Niv 15-30) - Magiques et Rares
+            // Palier II (Niv 15-30)
             if (niveauMin >= 15 && niveauMin < 30) {
-                 if (rarity === 'Magique' || rarity === 'Rare') {
-                    materialsGained.push({ id: 'soul_dust', amount: Math.floor(Math.random() * 3) + 1 }); // 1-3
+                 if (rarity === 'Commun') {
+                    materialsGained.push({ id: 'soul_dust', amount: 1 });
+                 } else if (rarity === 'Magique' || rarity === 'Rare') {
+                    materialsGained.push({ id: 'soul_dust', amount: Math.floor(Math.random() * 2) + 1 }); // 1-2
                     if (rarity === 'Rare' && Math.random() < 0.35) { // 35% chance for essence
                         materialsGained.push({ id: 'greater_magic_essence', amount: 1 });
                     }
                 }
             }
 
-            // Palier III (Niv 30-50) - Rares et Épiques
+            // Palier III (Niv 30-50)
             if (niveauMin >= 30 && niveauMin < 50) {
-                if (rarity === 'Rare' || rarity === 'Épique') {
-                    materialsGained.push({ id: 'vision_dust', amount: Math.floor(Math.random() * 3) + 1 }); // 1-3
+                if (rarity === 'Commun' || rarity === 'Magique') {
+                    materialsGained.push({ id: 'vision_dust', amount: 1 });
+                } else if (rarity === 'Rare' || rarity === 'Épique') {
+                    materialsGained.push({ id: 'vision_dust', amount: Math.floor(Math.random() * 2) + 1 }); // 1-2
                     if (rarity === 'Épique' && Math.random() < 0.35) { // 35% chance for essence
                         materialsGained.push({ id: 'lesser_astral_essence', amount: 1 });
                     }
                 }
             }
 
-            // Palier IV (Niv 50+) - Épiques
+            // Palier IV (Niv 50+)
             if (niveauMin >= 50) {
-                if (rarity === 'Épique') {
+                 if (rarity === 'Commun' || rarity === 'Magique' || rarity === 'Rare') {
+                    materialsGained.push({ id: 'eternity_dust', amount: 1 });
+                } else if (rarity === 'Épique') {
                     materialsGained.push({ id: 'eternity_dust', amount: Math.floor(Math.random() * 3) + 1 }); // 1-3
                      if (Math.random() < 0.35) { // 35% chance for essence
                         materialsGained.push({ id: 'greater_astral_essence', amount: 1 });
@@ -1194,8 +1202,8 @@ export const useGameStore = create<GameState>()(
             const dungeonTier = currentDungeon?.palier ?? 1;
             if (Math.random() < 0.2) { // 20% chance for a bonus recipe
                 const possibleRecipes = gameData.enchantments.filter(e =>
-                    e.tier <= dungeonTier &&
-                    (e.source.includes('drop') || e.source.includes('rare_drop')) &&
+                    e.tier && e.tier <= dungeonTier &&
+                    e.source && (e.source.includes('drop') || e.source.includes('rare_drop')) &&
                     !player.learnedRecipes.includes(e.id)
                 );
                 if (possibleRecipes.length > 0) {
@@ -1852,6 +1860,19 @@ export const useGameStore = create<GameState>()(
                   }
               }
             });
+
+            // --- Component Loot Drop Logic ---
+            if (enemy.componentLoot) {
+              enemy.componentLoot.forEach(loot => {
+                if (Math.random() < loot.chance) {
+                  const materialId = loot.id;
+                  const amount = loot.quantity;
+                  state.inventory.craftingMaterials[materialId] = (state.inventory.craftingMaterials[materialId] || 0) + amount;
+                  const material = state.gameData.enchanting_components.find(c => c.id === materialId);
+                  state.combat.log.push({ message: `You find ${amount} x ${material ? material.name : materialId}.`, type: 'loot', timestamp: Date.now() });
+                }
+              });
+            }
 
             if (!enemy.isBoss) {
               state.combat.killCount += 1;

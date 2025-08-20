@@ -62,5 +62,25 @@
       "primal_fire": 10
     },
     "cost": 10000
+  },
+  {
+    "id": "recipe_copper_sword",
+    "name": "Épée en cuivre fabriquée",
+    "result": "crafted_copper_sword",
+    "materials": {
+      "copper_ingot": 8,
+      "strange_dust": 2
+    },
+    "cost": 50
+  },
+  {
+    "id": "recipe_leather_helmet",
+    "name": "Casque en cuir fabriqué",
+    "result": "crafted_leather_helmet",
+    "materials": {
+      "light_leather": 5,
+      "strange_dust": 1
+    },
+    "cost": 30
   }
 ]
