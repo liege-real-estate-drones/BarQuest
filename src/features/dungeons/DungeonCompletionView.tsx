@@ -4,7 +4,7 @@ import { useGameStore } from '@/state/gameStore';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ItemTooltip } from '@/components/ItemTooltip';
-import { Gold, Star, Swords, Sparkles } from 'lucide-react';
+import { Coins, Star, Swords, Sparkles } from 'lucide-react';
 
 export function DungeonCompletionView() {
     const { summary, closeSummary } = useGameStore(state => ({
@@ -45,7 +45,7 @@ export function DungeonCompletionView() {
                             <p className="text-sm text-muted-foreground">Expérience gagnée</p>
                         </div>
                         <div className="p-4 bg-primary/10 rounded-lg">
-                            <Gold className="mx-auto h-8 w-8 text-yellow-500 mb-2" />
+                            <Coins className="mx-auto h-8 w-8 text-yellow-500 mb-2" />
                             <p className="text-xl font-bold">{summary.gold.toLocaleString()}</p>
                             <p className="text-sm text-muted-foreground">Or trouvé</p>
                         </div>
