@@ -73,10 +73,10 @@ function ItemTooltipContent({ item, equippedItem }: { item: Item, equippedItem?:
     const allStatKeys = new Set<StatKey>();
 
     // Collect all stats from both items
-    item.affixes.forEach(a => allStatKeys.add(a.ref as StatKey));
+    (item.affixes || []).forEach(a => allStatKeys.add(a.ref as StatKey));
     if (item.stats) Object.keys(item.stats).forEach(k => allStatKeys.add(k as StatKey));
     if (equippedItem) {
-        equippedItem.affixes.forEach(a => allStatKeys.add(a.ref as StatKey));
+        (equippedItem.affixes || []).forEach(a => allStatKeys.add(a.ref as StatKey));
         if (equippedItem.stats) Object.keys(equippedItem.stats).forEach(k => allStatKeys.add(k as StatKey));
     }
     
@@ -85,8 +85,8 @@ function ItemTooltipContent({ item, equippedItem }: { item: Item, equippedItem?:
 
     if (equippedItem) {
         allStatKeys.forEach(key => {
-            const itemStatValue = item.affixes.find(a => a.ref === key)?.val || (item.stats?.[key] as number) || 0;
-            const equippedStatValue = equippedItem.affixes.find(a => a.ref === key)?.val || (equippedItem.stats?.[key] as number) || 0;
+            const itemStatValue = (item.affixes || []).find(a => a.ref === key)?.val || (item.stats?.[key] as number) || 0;
+            const equippedStatValue = (equippedItem.affixes || []).find(a => a.ref === key)?.val || (equippedItem.stats?.[key] as number) || 0;
 
             if (itemStatValue === 0 && equippedStatValue === 0) return;
 
@@ -106,7 +106,7 @@ function ItemTooltipContent({ item, equippedItem }: { item: Item, equippedItem?:
         });
     }
 
-    const itemAffixes = [...item.affixes];
+    const itemAffixes = [...(item.affixes || [])];
     if (item.stats) {
         Object.entries(item.stats).forEach(([key, val]) => {
              if (typeof val === 'number' && val && !itemAffixes.some(a => a.ref === key)) {
@@ -118,7 +118,7 @@ function ItemTooltipContent({ item, equippedItem }: { item: Item, equippedItem?:
     const lostStats = equippedItem ? Object.keys(comparisonStats)
         .filter(key => comparisonStats[key as StatKey]?.type === 'lost')
         .map(key => {
-             const equippedStatValue = equippedItem.affixes.find(a => a.ref === key)?.val || (equippedItem.stats?.[key as StatKey] as number) || 0;
+             const equippedStatValue = (equippedItem.affixes || []).find(a => a.ref === key)?.val || (equippedItem.stats?.[key as StatKey] as number) || 0;
             return { ref: key, val: equippedStatValue };
         }) : [];
 

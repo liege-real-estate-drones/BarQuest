@@ -47,11 +47,20 @@ export const ItemSchema = z.object({
   niveauMin: z.number().int(),
   rarity: RaretéEnum,
   stats: StatsSchema.optional(),
-  affixes: z.array(z.object({ ref: z.string(), val: z.number() })).default([]),
+  affixes: z.array(z.object({ ref: z.string(), val: z.number() })).optional(),
   tagsClasse: z.array(z.string()).default([]),
   effect: z.string().optional(),
   set: z.object({ id: z.string(), name: z.string() }).optional(),
   vendorPrice: z.number().optional(),
+  sockets: z.number().optional(),
+  enchantment: AffixSchema.optional(),
+  isCrafted: z.boolean().optional(),
+  specialEffect: z.object({
+    trigger: z.string(),
+    effect: z.string(),
+    skillId: z.string().optional(),
+    details: z.record(z.any()).optional(),
+  }).optional(),
 });
 
 export const ClasseSchema = z.object({
@@ -93,6 +102,7 @@ export const MonsterSchema = z.object({
   stats: StatsSchema,
   lootTableId: z.string().optional(),
   questItemId: z.string().optional(),
+  specificLootTable: z.array(z.string()).optional(),
 });
 
 export const DungeonSchema = z.object({

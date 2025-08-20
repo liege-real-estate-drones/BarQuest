@@ -3,6 +3,7 @@ import { persist, createJSONStorage, StateStorage } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 import type { Dungeon, Monstre, Item, Talent, Skill, Stats, PlayerState, InventoryState, CombatLogEntry, CombatState, GameData, Quete, PlayerClassId, ResourceType, Rareté, CombatEnemy, ItemSet, PotionType } from '@/lib/types';
 import * as formulas from '@/core/formulas';
+import { generateProceduralItem } from '@/core/itemGenerator';
 import { v4 as uuidv4 } from 'uuid';
 
 export interface ActiveQuete {
@@ -41,6 +42,7 @@ const getInitialPlayerState = (): PlayerState => {
 const initialInventoryState: InventoryState = {
   gold: 100,
   items: [],
+  craftingMaterials: {},
   potions: { health: 3, resource: 1 },
   equipment: { weapon: null, head: null, chest: null, legs: null, hands: null, feet: null, belt: null, amulet: null, ring: null, ring2: null, trinket: null, offhand: null },
 };
@@ -63,7 +65,9 @@ interface GameState {
   isInitialized: boolean;
   rehydrateComplete: boolean;
   lastPlayed: number | null;
-  view: 'TOWN' | 'COMBAT';
+  view: 'MAIN' | 'COMBAT';
+  townView: 'TOWN' | 'CRAFTING';
+  worldTier: number;
   currentDungeon: Dungeon | null;
   dungeonStartTime: number | null;
   gameData: GameData;
@@ -76,6 +80,8 @@ interface GameState {
   isHeroicMode: boolean;
 
   setHeroicMode: (isHeroic: boolean) => void;
+  setTownView: (view: 'TOWN' | 'CRAFTING') => void;
+  setWorldTier: (tier: number) => void;
   setBossEncounter: (monster: Monstre | null) => void; // NOUVEAU: Action pour gérer l'alerte
   setProposedQuests: (quests: Quete[] | null) => void;
   initializeGameData: (data: Partial<GameData>) => void;
@@ -112,6 +118,10 @@ interface GameState {
   flee: () => void;
   toggleAutoAttack: () => void;
   getXpToNextLevel: () => number;
+      applySpecialEffect: (trigger: string, context: { targetId: string, isCrit: boolean }) => void;
+  dismantleItem: (itemId: string) => void;
+  enchantItem: (itemId: string) => void;
+  gambleForItem: (itemSlot: string) => void;
 }
 
 let gameLoop: NodeJS.Timeout | null = null;
@@ -124,51 +134,31 @@ const rarityDropChances: Record<Rareté, number> = {
   Unique: 0.0,
 };
 
-const scaleAffixValue = (baseValue: number, level: number): number => {
-    return Math.round(baseValue + (baseValue * level * 0.15));
-};
+const resolveLoot = (monster: Monstre, gameData: GameData, playerClassId: PlayerClassId | null, activeQuests: ActiveQuete[], worldTier: number): Item | null => {
+  // --- 1. Boss Specific Loot ---
+  if (monster.isBoss && monster.specificLootTable && Math.random() < 0.1) { // 10% chance for a specific drop
+    const specificLootId = monster.specificLootTable[Math.floor(Math.random() * monster.specificLootTable.length)];
+    const specificItem = gameData.items.find(item => item.id === specificLootId);
+    if (specificItem) {
+      return { ...specificItem, id: uuidv4() };
+    }
+  }
 
-const resolveLoot = (monster: Monstre, gameData: GameData, playerClassId: PlayerClassId | null, activeQuests: ActiveQuete[]): Item | null => {
+  // --- 2. Quest Item Check ---
   for (const activeQuest of activeQuests) {
     const { quete } = activeQuest;
     if (quete.type === 'collecte' && quete.requirements.itemId && monster.questItemId === quete.requirements.itemId) {
       if ((activeQuest.progress || 0) < (quete.requirements.itemCount || 0)) {
         const questItem = gameData.items.find(item => item.id === quete.requirements.itemId);
-        if (questItem) {
-          if (Math.random() < 0.3) {
-            return { ...questItem, id: uuidv4() };
-          }
+        if (questItem && Math.random() < 0.3) { // 30% drop chance for quest items
+          return { ...questItem, id: uuidv4() };
         }
       }
     }
   }
 
-  if (Math.random() < 0.02) {
-    const possibleSetItems = gameData.items.filter(item =>
-      item.set &&
-      (item.tagsClasse?.includes('common') || (playerClassId && item.tagsClasse?.includes(playerClassId)))
-    );
-    if (possibleSetItems.length > 0) {
-      const droppedItemTemplate = possibleSetItems[Math.floor(Math.random() * possibleSetItems.length)];
-      const newItem: Item = JSON.parse(JSON.stringify(droppedItemTemplate));
-      newItem.id = uuidv4();
-      newItem.niveauMin = monster.level;
-
-      const newAffixes = (newItem.affixes || []).map(affix => {
-          const affixTemplate = gameData.affixes.find(a => a.id === affix.ref);
-          const baseValue = affixTemplate?.portée[0] ?? 1;
-          return {
-              ...affix,
-              val: scaleAffixValue(baseValue, monster.level)
-          }
-      });
-      newItem.affixes = newAffixes;
-
-      return newItem;
-    }
-  }
-
-  if (Math.random() > 0.5) {
+  // --- 2. Determine Rarity ---
+  if (Math.random() > 0.5) { // 50% chance of no loot at all
     return null;
   }
 
@@ -188,31 +178,52 @@ const resolveLoot = (monster: Monstre, gameData: GameData, playerClassId: Player
     return null;
   }
 
+  // --- 3. Handle Legendary and Unique Items ---
+  if (chosenRarity === "Légendaire" || chosenRarity === "Unique") {
+    const possibleItems = gameData.items.filter(item =>
+        item.rarity === chosenRarity &&
+        (item.tagsClasse?.includes('common') || (playerClassId && item.tagsClasse?.includes(playerClassId)))
+    );
+
+    if (possibleItems.length > 0) {
+        const droppedItem = { ...possibleItems[Math.floor(Math.random() * possibleItems.length)] };
+        droppedItem.id = uuidv4();
+        // Maybe scale legendary stats in the future? For now, return as is.
+        return droppedItem;
+    }
+    // If no legendaries are found, fallback to generating an epic
+    chosenRarity = "Épique";
+  }
+
+
+  // --- 4. Select a Base Item Template for Procedural Generation ---
   const possibleItemTemplates = gameData.items.filter(item =>
-      item.rarity === chosenRarity &&
+      // We are looking for non-legendary, non-unique, non-set items to serve as templates
+      item.rarity !== "Légendaire" &&
+      item.rarity !== "Unique" &&
       !item.set &&
       item.slot !== 'potion' &&
       (item.tagsClasse?.includes('common') || (playerClassId && item.tagsClasse?.includes(playerClassId)))
   );
 
   if (possibleItemTemplates.length === 0) {
-    return null;
+    return null; // No suitable base items found
   }
 
-  const droppedItemTemplate = possibleItemTemplates[Math.floor(Math.random() * possibleItemTemplates.length)];
-  const newItem: Item = JSON.parse(JSON.stringify(droppedItemTemplate));
-  newItem.id = uuidv4();
-  newItem.niveauMin = monster.level;
+  const baseItemTemplate = possibleItemTemplates[Math.floor(Math.random() * possibleItemTemplates.length)];
 
-  const newAffixes = (newItem.affixes || []).map(affix => {
-      const affixTemplate = gameData.affixes.find(a => a.id === affix.ref);
-      const baseValue = affixTemplate?.portée[0] ?? 1;
-      return {
-          ...affix,
-          val: scaleAffixValue(baseValue, monster.level)
-      }
-  });
-  newItem.affixes = newAffixes;
+  // --- 5. Generate the Procedural Item ---
+  // We pass a clean version of the template, without ID, level, rarity, or existing affixes
+  const { id, niveauMin, rarity, affixes, ...baseItemProps } = baseItemTemplate;
+
+  const itemLevel = monster.level + (worldTier - 1) * 5;
+
+  const newItem = generateProceduralItem(
+    baseItemProps,
+    itemLevel,
+    chosenRarity,
+    gameData.affixes
+  );
 
   return newItem;
 };
@@ -286,7 +297,9 @@ export const useGameStore = create<GameState>()(
       isInitialized: false,
       rehydrateComplete: false,
       lastPlayed: null,
-      view: 'TOWN',
+      view: 'MAIN',
+      townView: 'TOWN',
+      worldTier: 1,
       currentDungeon: null,
       dungeonStartTime: null,
       gameData: { dungeons: [], monsters: [], items: [], talents: [], skills: [], affixes: [], classes: [], quests: [], factions: [], sets: [] },
@@ -300,6 +313,14 @@ export const useGameStore = create<GameState>()(
 
       setHeroicMode: (isHeroic: boolean) => {
         set({ isHeroicMode: isHeroic });
+      },
+
+      setTownView: (view) => {
+        set({ townView: view });
+      },
+
+      setWorldTier: (tier) => {
+        set({ worldTier: tier });
       },
 
       // NOUVEAU: Implémentation de l'action pour le boss
@@ -330,6 +351,86 @@ export const useGameStore = create<GameState>()(
             state.gameData.factions = Array.isArray(data.factions) ? data.factions : [];
             state.gameData.sets = Array.isArray(data.sets) ? data.sets : [];
             state.isInitialized = true;
+        });
+      },
+
+      gambleForItem: (itemSlot) => {
+        set((state: GameState) => {
+            const cost = 100 * state.worldTier;
+            if (state.inventory.gold < cost) {
+                console.log("Not enough gold to gamble");
+                return;
+            }
+
+            const possibleTemplates = state.gameData.items.filter(item => item.slot === itemSlot && item.rarity !== "Légendaire" && item.rarity !== "Unique");
+            if (possibleTemplates.length === 0) {
+                console.log("No items found for that slot");
+                return;
+            }
+
+            state.inventory.gold -= cost;
+
+            const baseItemTemplate = possibleTemplates[Math.floor(Math.random() * possibleTemplates.length)];
+
+            // Determine rarity - low chance for high rarity
+            const roll = Math.random();
+            let rarity: Rareté = "Commun";
+            if (roll < 0.01) rarity = "Légendaire";
+            else if (roll < 0.05) rarity = "Épique";
+            else if (roll < 0.25) rarity = "Rare";
+
+            const itemLevel = state.player.level;
+            const { id, niveauMin, affixes, ...baseItemProps } = baseItemTemplate;
+            const newItem = generateProceduralItem(baseItemProps, itemLevel, rarity, state.gameData.affixes);
+
+            state.inventory.items.push(newItem);
+        });
+      },
+
+      dismantleItem: (itemId) => {
+        set((state: GameState) => {
+            const itemIndex = state.inventory.items.findIndex(i => i.id === itemId);
+            if (itemIndex === -1) return;
+
+            const itemToDismantle = state.inventory.items[itemIndex];
+            state.inventory.items.splice(itemIndex, 1);
+
+            // Simple dismantling logic: 1-3 generic materials based on rarity
+            const rarityMultiplier = { "Commun": 1, "Rare": 2, "Épique": 3, "Légendaire": 5, "Unique": 5 };
+            const amount = Math.ceil(Math.random() * rarityMultiplier[itemToDismantle.rarity]);
+
+            const materialId = "scrap_metal"; // Generic material for now
+            state.inventory.craftingMaterials[materialId] = (state.inventory.craftingMaterials[materialId] || 0) + amount;
+        });
+      },
+
+      enchantItem: (itemId) => {
+        set((state: GameState) => {
+            const item = state.inventory.items.find(i => i.id === itemId);
+            if (!item || !item.affixes || item.affixes.length === 0) return;
+
+            // Cost to enchant: 5 scrap_metal
+            const cost = 5;
+            const materialId = "scrap_metal";
+            if ((state.inventory.craftingMaterials[materialId] || 0) < cost) {
+                console.log("Not enough materials to enchant");
+                return;
+            }
+
+            state.inventory.craftingMaterials[materialId] -= cost;
+
+            // Reroll one random affix
+            const affixToRerollIndex = Math.floor(Math.random() * item.affixes.length);
+            const affixToReroll = item.affixes[affixToRerollIndex];
+
+            const affixTemplate = state.gameData.affixes.find(a => a.ref === affixToReroll.ref);
+            if (!affixTemplate) return;
+
+            const [min, max] = affixTemplate.portée;
+            const baseValue = Math.floor(Math.random() * (max - min + 1)) + min;
+            const scaledValue = Math.round(baseValue + (baseValue * item.niveauMin * 0.1) + (item.niveauMin * 0.5));
+
+            item.affixes[affixToRerollIndex].val = scaledValue;
         });
       },
 
@@ -387,12 +488,14 @@ export const useGameStore = create<GameState>()(
 
           Object.values(inventory.equipment).forEach(item => {
             if (item) {
-              item.affixes.forEach(affix => {
-                const statKey = affix.ref as keyof Stats;
-                if (statKey in newStats && typeof newStats[statKey] !== 'object') {
-                    (newStats[statKey] as number) = (newStats[statKey] || 0) + (affix.val || 0);
-                }
-              });
+              if (item.affixes) {
+                item.affixes.forEach(affix => {
+                  const statKey = affix.ref as keyof Stats;
+                  if (statKey in newStats && typeof newStats[statKey] !== 'object') {
+                      (newStats[statKey] as number) = (newStats[statKey] || 0) + (affix.val || 0);
+                  }
+                });
+              }
               if (item.effect) {
                 player.activeEffects.push(item.effect);
               }
@@ -736,7 +839,7 @@ export const useGameStore = create<GameState>()(
       },
 
       startCombat: () => {
-        const { currentDungeon, gameData } = get();
+        const { currentDungeon, gameData, worldTier } = get();
         if (!currentDungeon) return;
 
         const possibleMonsters = gameData.monsters.filter(m => currentDungeon.monsters.includes(m.id) && !m.isBoss);
@@ -749,11 +852,22 @@ export const useGameStore = create<GameState>()(
             const monsterInstance: CombatEnemy = {
               ...JSON.parse(JSON.stringify(randomMonsterTemplate)),
               id: uuidv4(),
-              templateId: randomMonsterTemplate.id, // <-- Ligne ajoutée
+              templateId: randomMonsterTemplate.id,
               initialHp: randomMonsterTemplate.stats.PV,
               attackProgress: Math.random(),
               activeDebuffs: [],
             };
+
+            // Apply world tier scaling
+            const scalingFactor = 1 + (worldTier - 1) * 0.25; // +25% stats per tier
+            Object.keys(monsterInstance.stats).forEach(key => {
+                const statKey = key as keyof Stats;
+                if (typeof monsterInstance.stats[statKey] === 'number') {
+                    (monsterInstance.stats[statKey] as number) *= scalingFactor;
+                }
+            });
+            monsterInstance.initialHp = monsterInstance.stats.PV;
+
             newEnemies.push(monsterInstance);
           }
         }
@@ -928,6 +1042,11 @@ export const useGameStore = create<GameState>()(
             const isCrit = formulas.isCriticalHit(player.stats.CritPct, player.stats.Precision, target.stats.Esquive);
             let finalDamage = isCrit ? damage * (player.stats.CritDmg / 100) : damage;
 
+            if (isCrit) {
+                get().applySpecialEffect('ON_CRITICAL_HIT', { targetId, isCrit });
+            }
+            get().applySpecialEffect('ON_HIT', { targetId, isCrit });
+
             if (player.activeEffects && player.activeEffects.includes('dernier_cri')) {
                 const maxHp = formulas.calculateMaxHP(player.level, player.stats);
                 const hpPercent = (player.stats.PV / maxHp) * 100;
@@ -1091,6 +1210,10 @@ export const useGameStore = create<GameState>()(
                             }
 
                             const isCrit = formulas.isCriticalHit(player.stats.CritPct, player.stats.Precision, currentTarget.stats.Esquive);
+                            if (isCrit) {
+                                get().applySpecialEffect('ON_CRITICAL_HIT', { targetId: currentTarget.id, isCrit });
+                            }
+                            get().applySpecialEffect('ON_HIT', { targetId: currentTarget.id, isCrit });
                             let finalDamage = isCrit ? damage * (player.stats.CritDmg / 100) : damage;
                             const dr = formulas.calculateArmorDR(currentTarget.stats.Armure, player.level);
                             const mitigatedDamage = Math.round(finalDamage * (1 - dr));
@@ -1283,7 +1406,7 @@ export const useGameStore = create<GameState>()(
                     state.player.resources.current = 0;
                 }
 
-                state.view = 'TOWN';
+                state.view = 'MAIN';
                 if (gameLoop) clearInterval(gameLoop);
             });
         }
@@ -1303,14 +1426,14 @@ export const useGameStore = create<GameState>()(
         });
 
         set((state: GameState) => {
-            const { gameData, currentDungeon, activeQuests, isHeroicMode } = state;
+            const { gameData, currentDungeon, activeQuests, isHeroicMode, worldTier } = state;
 
             const palierMultiplier = currentDungeon ? Math.floor(currentDungeon.palier / 2) + 1 : 1;
             let goldDrop = (5 + palierMultiplier * 2);
             if (isHeroicMode) {
               goldDrop *= 5;
             }
-            const itemDrop = resolveLoot(enemy, gameData, state.player.classeId, activeQuests);
+            const itemDrop = resolveLoot(enemy, gameData, state.player.classeId, activeQuests, worldTier);
             const xpGained = Math.round((enemy.level * 10) * (1 + (currentDungeon ? currentDungeon.palier * 0.05 : 0)));
 
             state.combat.log.push({ message: `You defeated ${enemy.nom}!`, type: 'info', timestamp: Date.now() });
@@ -1445,7 +1568,7 @@ export const useGameStore = create<GameState>()(
                             state.inventory.items.push(...state.combat.dungeonRunItems);
                             state.combat.dungeonRunItems = [];
                             state.combat.log.push({ message: `Dungeon complete! Returning to town.`, type: 'info', timestamp: Date.now() });
-                            state.view = 'TOWN';
+                            state.view = 'MAIN';
                             state.dungeonStartTime = null;
 
                             const faction = state.gameData.factions.find(f => f.id === currentDungeon.factionId);
@@ -1511,7 +1634,7 @@ export const useGameStore = create<GameState>()(
 
       flee: () => {
         set((state: GameState) => {
-            state.view = 'TOWN';
+            state.view = 'MAIN';
             state.dungeonStartTime = null;
             state.combat.enemies = [];
             state.inventory.items.push(...state.combat.dungeonRunItems);
@@ -1527,6 +1650,39 @@ export const useGameStore = create<GameState>()(
         });
       },
 
+      applySpecialEffect: (trigger, context) => {
+        set((state: GameState) => {
+            Object.values(state.inventory.equipment).forEach(item => {
+                if (item?.specialEffect?.trigger === trigger) {
+                    const effect = item.specialEffect;
+                    console.log(`Applying special effect: ${effect.effect} from item ${item.name}`);
+
+                    switch (effect.effect) {
+                        case 'APPLY_BLEED':
+                            const target = state.combat.enemies.find(e => e.id === context.targetId);
+                            if (target && effect.details) {
+                                target.activeDebuffs = target.activeDebuffs || [];
+                                target.activeDebuffs.push({
+                                    id: 'bleed',
+                                    duration: effect.details.duration,
+                                    damagePerTick: effect.details.damagePerTick,
+                                    tickInterval: 1000,
+                                    nextTickIn: 1000,
+                                });
+                                state.combat.log.push({ message: `${target.nom} is bleeding!`, type: 'enemy_attack', timestamp: Date.now() });
+                            }
+                            break;
+                        case 'RESET_SKILL_COOLDOWN':
+                            if (context.isCrit && effect.skillId && state.combat.skillCooldowns[effect.skillId]) {
+                                delete state.combat.skillCooldowns[effect.skillId];
+                                state.combat.log.push({ message: `Your critical hit reset the cooldown of ${effect.skillId}!`, type: 'info', timestamp: Date.now() });
+                            }
+                            break;
+                    }
+                }
+            });
+        });
+      },
     })),
     {
       name: 'barquest-save',
@@ -1534,7 +1690,7 @@ export const useGameStore = create<GameState>()(
       onRehydrateStorage: () => (state: GameState | undefined) => {
         if (state) {
             state.rehydrateComplete = true;
-            state.view = 'TOWN';
+            state.view = 'MAIN';
             state.combat = initialCombatState;
             state.player.learnedTalents = state.player.learnedTalents || {};
             state.player.activeBuffs = state.player.activeBuffs || [];
