@@ -149,6 +149,18 @@
       "niveauRequis": 10,
       "rangMax": 3,
       "effets": ["Vous régénérez 0.5/1/1.5% de votre vie maximale chaque seconde en combat."],
+      "effects": [
+          {
+              "type": "buff",
+              "id": "second_wind_regen",
+              "name": "Second Souffle",
+              "duration": -1,
+              "buffType": "stat_modifier",
+              "statMods": [
+                  { "stat": "HPRegenPercent", "modifier": "additive", "value": [0.5, 1, 1.5] }
+              ]
+          }
+      ],
       "exigences": ["berserker_titan_peau_de_fer:1"]
     },
     {
@@ -439,6 +451,23 @@
       "niveauRequis": 10,
       "rangMax": 3,
       "effets": ["Après avoir esquivé une attaque, votre prochaine attaque est 20/35/50% plus rapide."],
+      "triggeredEffects": [
+        {
+            "trigger": "on_dodge",
+            "effects": [
+                {
+                    "type": "buff",
+                    "id": "riposte_eclair_haste",
+                    "name": "Riposte Éclair",
+                    "duration": 3,
+                    "buffType": "stat_modifier",
+                    "statMods": [
+                        { "stat": "Vitesse", "modifier": "multiplicative", "value": [0.8, 0.65, 0.5] }
+                    ]
+                }
+            ]
+        }
+      ],
       "exigences": ["rogue_subtilite_focalisation_mortelle:1"]
     },
     {

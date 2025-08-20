@@ -79,6 +79,8 @@ export interface Buff {
     tickInterval?: number;
     nextTickIn?: number;
     statMods?: StatMod[];
+    isDeathWard?: boolean;
+    deathWardHealPercent?: number;
 }
 
 export interface Debuff {
@@ -120,6 +122,9 @@ export interface PlayerState {
   completedDungeons: Record<string, number>; // { [dungeonId]: count }
   completedQuests: string[];
   shield: number;
+  invulnerabilityDuration: number;
+  stunDuration: number;
+  form: string | null;
 }
 
 export interface InventoryState {

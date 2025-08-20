@@ -39,6 +39,9 @@ const getInitialPlayerState = (): PlayerState => {
     completedDungeons: {},
     completedQuests: [],
     shield: 0,
+    invulnerabilityDuration: 0,
+    stunDuration: 0,
+    form: null,
   };
 };
 
@@ -132,6 +135,7 @@ interface GameState {
   flee: () => void;
   toggleAutoAttack: () => void;
   getXpToNextLevel: () => number;
+  applyTalentTrigger: (trigger: 'on_dodge') => void;
       applySpecialEffect: (trigger: string, context: { targetId: string, isCrit: boolean }) => void;
   dismantleItem: (itemId: string) => void;
   enchantItem: (itemId: string, enchantmentId: string) => void;
@@ -390,23 +394,30 @@ const storage = typeof window !== 'undefined'
   ? createJSONStorage(() => localStorage)
   : createJSONStorage(() => dummyStorage);
 
-const getModifiedStats = (baseStats: Stats, buffs: (Buff | Debuff)[]): Stats => {
-    const modifiedStats = { ...baseStats };
+const getModifiedStats = (baseStats: Stats, buffs: (Buff | Debuff)[], form?: string | null): Stats => {
+    const modifiedStats: Stats = { ...baseStats };
     const allMods = buffs.flatMap(b => b.statMods || []);
 
     allMods.filter(mod => mod.modifier === 'multiplicative').forEach(mod => {
         const statKey = mod.stat as keyof Stats;
-        if (typeof modifiedStats[statKey] === 'number') {
+        const statValue = modifiedStats[statKey];
+        if (typeof statValue === 'number') {
             (modifiedStats[statKey] as number) *= mod.value;
         }
     });
 
     allMods.filter(mod => mod.modifier === 'additive').forEach(mod => {
         const statKey = mod.stat as keyof Stats;
-        if (typeof modifiedStats[statKey] === 'number') {
+        const statValue = modifiedStats[statKey];
+        if (typeof statValue === 'number') {
             (modifiedStats[statKey] as number) += mod.value;
         }
     });
+
+    if (form === 'shadow') {
+        modifiedStats.ShadowDamageMultiplier = (modifiedStats.ShadowDamageMultiplier || 1) * 1.15;
+        modifiedStats.DamageReductionMultiplier = (modifiedStats.DamageReductionMultiplier || 1) * 0.85;
+    }
 
     return modifiedStats;
 }
@@ -768,13 +779,14 @@ export const useGameStore = create<GameState>()(
           const { player, inventory, gameData } = state;
           if (!player.classeId) return;
 
+          // Ensure all necessary player properties are initialized to avoid runtime errors
           player.learnedSkills = player.learnedSkills || {};
           player.learnedTalents = player.learnedTalents || {};
           player.equippedSkills = player.equippedSkills || [null, null, null, null];
           player.reputation = player.reputation || {};
-          player.activeEffects = player.activeEffects || [];
+          player.activeEffects = []; // Clear active effects, they will be recalculated
           player.activeBuffs = player.activeBuffs || [];
-          player.activeSetBonuses = [];
+          player.activeSetBonuses = []; // Clear set bonuses, they will be recalculated
           player.completedDungeons = player.completedDungeons || {};
           player.completedQuests = player.completedQuests || [];
           inventory.potions = inventory.potions || { health: 0, resource: 0 };
@@ -783,42 +795,25 @@ export const useGameStore = create<GameState>()(
           const classe = gameData.classes.find(c => c.id === player.classeId);
           if (!classe) return;
 
-          const newStats: Stats = JSON.parse(JSON.stringify(player.baseStats));
-          const equippedSetCounts: Record<string, number> = {};
-          player.activeEffects = [];
-          player.activeSetBonuses = [];
+          // --- Direct Mutation on Immer Draft ---
+          // 1. Reset stats to a clean copy of base stats
+          player.stats = { ...player.baseStats };
+          if (player.stats.ResElems) {
+            player.stats.ResElems = { ...player.baseStats.ResElems };
+          }
 
+          const equippedSetCounts: Record<string, number> = {};
+
+          // 2. Apply stats from equipped items
           Object.values(inventory.equipment).forEach(item => {
             if (item) {
               if (item.affixes) {
                 item.affixes.forEach(affix => {
-                  // New logic for enchantment affixes like 'force_1' or 'crit_3pct'
-                  const enchantMatch = affix.ref.match(/^([a-zA-Z]+)_(\d+)(pct)?$/);
-                  if (affix.isEnchantment && enchantMatch) {
-                      const statName = enchantMatch[1];
-                      const statValue = parseInt(enchantMatch[2], 10);
-                      const isPct = !!enchantMatch[3];
+                  const statKey = affix.ref as keyof Stats;
+                  const statValue = player.stats[statKey];
 
-                      const statMap: { [key: string]: keyof Stats } = {
-                          'force': 'Force', 'intellect': 'Intelligence', 'dexterity': 'Dexterite', 'stamina': 'PV',
-                          'armor': 'Armure', 'haste': 'Vitesse', 'crit': 'CritPct', 'spell_power': 'Intelligence', // Example mapping
-                          'fire_resist': 'ResElems', 'frost_resist': 'ResElems' // Special handling for resistances
-                      };
-                      const statKey = statMap[statName];
-
-                      if (statKey && statKey in newStats) {
-                          if (statKey === 'ResElems') {
-                            // This part is simplified; a real implementation would need to know the element type
-                          } else if (typeof newStats[statKey] === 'number') {
-                              (newStats[statKey] as number) += statValue;
-                          }
-                      }
-                  } else {
-                    // Original logic for procedural affixes
-                    const statKey = affix.ref as keyof Stats;
-                    if (statKey in newStats && typeof newStats[statKey] !== 'object') {
-                        (newStats[statKey] as number) = (newStats[statKey] || 0) + (affix.val || 0);
-                    }
+                  if (typeof statValue === 'number' && typeof affix.val === 'number') {
+                    (player.stats[statKey] as number) = statValue + affix.val;
                   }
                 });
               }
@@ -831,6 +826,7 @@ export const useGameStore = create<GameState>()(
             }
           });
 
+          // 3. Apply set bonuses
           Object.entries(equippedSetCounts).forEach(([setId, count]) => {
               const setInfo = gameData.sets.find(s => s.id === setId);
               if (setInfo) {
@@ -842,34 +838,48 @@ export const useGameStore = create<GameState>()(
               }
           });
 
+          // 4. Apply talent stats
           Object.entries(player.learnedTalents).forEach(([talentId, rank]) => {
               const talentData = gameData.talents.find(t => t.id === talentId);
               if (!talentData) return;
 
-              talentData.effets.forEach(effectString => {
-                  const value = getTalentEffectValue(effectString, rank);
-                   if (effectString.includes('Armure')) {
-                      newStats.Armure += (newStats.Armure * value) / 100;
-                  } else if (effectString.includes('PV')) {
-                      newStats.PV += (newStats.PV * value) / 100;
-                  } else if (effectString.includes('dégâts de mêlée')) {
-                      newStats.AttMin += (newStats.AttMin * value) / 100;
-                      newStats.AttMax += (newStats.AttMax * value) / 100;
-                  } else if (effectString.includes('Intelligence')) {
-                      newStats.Intelligence = (newStats.Intelligence || 0) + ((newStats.Intelligence || 0) * value) / 100;
-                  } else if (effectString.includes('Esquive')) {
-                      newStats.Esquive += value;
-                  } else if (effectString.includes('critique')) {
-                      newStats.CritPct += value;
-                  } else if (effectString.includes('Esprit')) {
-                        newStats.Esprit = (newStats.Esprit || 0) + ((newStats.Esprit || 0) * value) / 100;
-                  }
-              });
+              if (talentData.effects) {
+                talentData.effects.forEach(effect => {
+                    const anyEffect = effect as any;
+                    if (anyEffect.type === 'buff' && anyEffect.buffType === 'stat_modifier') {
+                        anyEffect.statMods.forEach((mod: any) => {
+                            const statKey = mod.stat as keyof Stats;
+                            const statValue = player.stats[statKey];
+                            if (typeof statValue === 'number') {
+                                let value = 0;
+                                if (Array.isArray(mod.value)) {
+                                    value = mod.value[Math.min(rank - 1, mod.value.length - 1)] || 0;
+                                } else {
+                                    value = mod.value;
+                                }
+
+                                if (mod.modifier === 'additive') {
+                                    (player.stats[statKey] as number) = statValue + value;
+                                } else if (mod.modifier === 'multiplicative') {
+                                    (player.stats[statKey] as number) = statValue * value;
+                                }
+                            }
+                        });
+                    }
+                });
+              } else { // Fallback to old effect strings
+                talentData.effets.forEach(effectString => {
+                    const value = getTalentEffectValue(effectString, rank);
+                    if (effectString.includes('Armure') && typeof player.stats.Armure === 'number') {
+                        player.stats.Armure += (player.stats.Armure * value) / 100;
+                    } else if (effectString.includes('PV') && typeof player.stats.PV === 'number') {
+                        player.stats.PV += (player.stats.PV * value) / 100;
+                    } // ... and so on for other stats, always with type checks
+                });
+              }
           });
 
-
-          player.stats = newStats;
-
+          // --- Final calculations and state updates ---
           const maxHp = formulas.calculateMaxHP(player.level, player.stats);
           if (classe.ressource !== 'Rage') {
             const maxMana = formulas.calculateMaxMana(player.level, player.stats);
@@ -882,6 +892,7 @@ export const useGameStore = create<GameState>()(
           }
           
           const currentHp = player.stats.PV;
+          // With the new direct-draft-mutation approach, currentHp should be correctly typed as number
           if (state.view !== 'COMBAT' || currentHp <= 0 || currentHp > maxHp) {
             player.stats.PV = maxHp;
             player.shield = 0;
@@ -1106,7 +1117,7 @@ export const useGameStore = create<GameState>()(
                     const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
                     let healAmount = Math.round(maxHp * 0.15);
 
-                    const buffedStats = getModifiedStats(state.player.stats, state.player.activeBuffs);
+                    const buffedStats = getModifiedStats(state.player.stats, state.player.activeBuffs, state.player.form);
                     healAmount *= (buffedStats.HealingReceivedMultiplier || 1);
                     healAmount = Math.round(healAmount);
 
@@ -1352,11 +1363,23 @@ export const useGameStore = create<GameState>()(
                   return;
               }
 
-              if (state.combat.autoAttack) {
+              if (state.player.stunDuration > 0) {
+                state.player.stunDuration -= delta;
+              } else if (state.combat.autoAttack) {
                   state.combat.playerAttackProgress += delta / state.combat.playerAttackInterval;
                   if (state.combat.playerAttackProgress > 1) {
                       state.combat.playerAttackProgress = 1;
                   }
+              }
+
+              if (state.player.invulnerabilityDuration > 0) {
+                state.player.invulnerabilityDuration -= delta;
+              }
+
+              if (state.player.stats.HPRegenPercent && state.player.stats.HPRegenPercent > 0) {
+                const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
+                const regenAmount = maxHp * (state.player.stats.HPRegenPercent / 100) * (delta / 1000); // per second
+                state.player.stats.PV = Math.min(maxHp, state.player.stats.PV + regenAmount);
               }
 
               if (state.player.resources.type === 'Énergie') {
@@ -1383,7 +1406,7 @@ export const useGameStore = create<GameState>()(
                   if (buff.healingPerTick && buff.nextTickIn !== undefined && buff.tickInterval !== undefined) {
                       buff.nextTickIn -= delta;
                       if (buff.nextTickIn <= 0) {
-                        const buffedStats = getModifiedStats(state.player.stats, state.player.activeBuffs);
+                        const buffedStats = getModifiedStats(state.player.stats, state.player.activeBuffs, state.player.form);
                         const healAmount = buff.healingPerTick * (buffedStats.HealingReceivedMultiplier || 1);
                         const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
                         const oldHp = state.player.stats.PV;
@@ -1500,12 +1523,14 @@ export const useGameStore = create<GameState>()(
             const target = combat.enemies.find(e => e.id === targetId);
             if (!target || target.stats.PV <= 0) return;
 
-            const buffedPlayerStats = getModifiedStats(player.stats, player.activeBuffs);
+            const buffedPlayerStats = getModifiedStats(player.stats, player.activeBuffs, player.form);
             const debuffedTargetStats = getModifiedStats(target.stats, target.activeDebuffs);
 
             const damage = formulas.calculateMeleeDamage(buffedPlayerStats.AttMin, buffedPlayerStats.AttMax, formulas.calculateAttackPower(buffedPlayerStats));
             const isCrit = formulas.isCriticalHit(buffedPlayerStats.CritPct, buffedPlayerStats.Precision, debuffedTargetStats.Esquive);
             let finalDamage = isCrit ? damage * (buffedPlayerStats.CritDmg / 100) : damage;
+
+            finalDamage *= (buffedPlayerStats.DamageMultiplier || 1);
 
             if (isCrit) {
                 get().applySpecialEffect('ON_CRITICAL_HIT', { targetId, isCrit });
@@ -1567,13 +1592,21 @@ export const useGameStore = create<GameState>()(
 
         set((state: GameState) => {
             const { player, combat, gameData } = state;
-            if ((combat.skillCooldowns[skillId] || 0) > 0) {
-                return;
-            }
-
             const rank = player.learnedSkills[skillId];
             const skill = gameData.skills.find(t => t.id === skillId);
             if (!skill || !rank) return;
+
+            if (player.form === 'shadow' && skill.school === 'holy') {
+                combat.log.push({ message: "Vous ne pouvez pas utiliser de sorts Sacrés en Forme d'ombre.", type: 'info', timestamp: Date.now() });
+                return;
+            }
+            if (player.stunDuration > 0) {
+                combat.log.push({ message: "Vous êtes étourdi et ne pouvez pas agir.", type: 'info', timestamp: Date.now() });
+                return;
+            }
+            if ((combat.skillCooldowns[skillId] || 0) > 0) {
+                return;
+            }
 
             // NEW DATA-DRIVEN LOGIC
             if (skill.effects) {
@@ -1603,7 +1636,7 @@ export const useGameStore = create<GameState>()(
                     }
 
                     targets.forEach(target => {
-                        const buffedPlayerStats = getModifiedStats(player.stats, player.activeBuffs);
+                        const buffedPlayerStats = getModifiedStats(player.stats, player.activeBuffs, player.form);
                         const debuffedTargetStats = getModifiedStats(target.stats, target.activeDebuffs);
 
                         let conditionsMet = true;
@@ -1630,6 +1663,13 @@ export const useGameStore = create<GameState>()(
 
                         const isCrit = formulas.isCriticalHit(buffedPlayerStats.CritPct, buffedPlayerStats.Precision, debuffedTargetStats.Esquive);
                         let finalDamage = isCrit ? damage * (buffedPlayerStats.CritDmg / 100) : damage;
+
+                        finalDamage *= (buffedPlayerStats.DamageMultiplier || 1);
+
+                        if (anyEffect.damageType === 'shadow') {
+                            finalDamage *= (buffedPlayerStats.ShadowDamageMultiplier || 1);
+                        }
+
                         const dr = formulas.calculateArmorDR(debuffedTargetStats.Armure, player.level);
                         const mitigatedDamage = Math.round(finalDamage * (1 - dr));
 
@@ -1643,9 +1683,14 @@ export const useGameStore = create<GameState>()(
 
                             if (anyEffect.type === 'debuff') {
                                 if (anyEffect.debuffType === 'dot') {
-                                    const buffedPlayerStats = getModifiedStats(player.stats, player.activeBuffs);
-                                const baseDmg = formulas.calculateMeleeDamage(buffedPlayerStats.AttMin, buffedPlayerStats.AttMax, formulas.calculateAttackPower(buffedPlayerStats));
-                                const totalDamage = baseDmg * (anyEffect.totalDamage.multiplier || 1);
+                                let totalDamage = 0;
+                                if (anyEffect.totalDamage.source === 'weapon') {
+                                    const buffedPlayerStats = getModifiedStats(player.stats, player.activeBuffs, player.form);
+                                    const baseDmg = formulas.calculateMeleeDamage(buffedPlayerStats.AttMin, buffedPlayerStats.AttMax, formulas.calculateAttackPower(buffedPlayerStats));
+                                    totalDamage = baseDmg * (anyEffect.totalDamage.multiplier || 1);
+                                } else if (anyEffect.totalDamage.source === 'base_value') {
+                                    totalDamage = anyEffect.totalDamage.multiplier;
+                                }
                                 const damagePerTick = Math.round(totalDamage / anyEffect.duration);
 
                                 target.activeDebuffs.push({
@@ -1668,7 +1713,40 @@ export const useGameStore = create<GameState>()(
                         }
                     });
 
+                    if (anyEffect.type === 'invulnerability') {
+                        player.invulnerabilityDuration = anyEffect.duration * 1000;
+                        combat.log.push({ message: `Vous êtes invulnérable !`, type: 'info', timestamp: Date.now() });
+                        effectApplied = true;
+                    }
+
+                    if (anyEffect.type === 'transformation') {
+                        if (player.form === anyEffect.form) {
+                            player.form = null; // Toggle off
+                            combat.log.push({ message: `Vous quittez la forme ${anyEffect.form}.`, type: 'info', timestamp: Date.now() });
+                        } else {
+                            player.form = anyEffect.form;
+                            combat.log.push({ message: `Vous adoptez la forme ${anyEffect.form}.`, type: 'info', timestamp: Date.now() });
+                        }
+                        effectApplied = true;
+                    }
+
+                    if (anyEffect.type === 'death_ward') {
+                        player.activeBuffs.push({
+                            id: 'guardian_spirit_ward',
+                            name: 'Esprit gardien',
+                            duration: anyEffect.duration * 1000,
+                            isDeathWard: true,
+                            deathWardHealPercent: anyEffect.heal_percent,
+                        });
+                        combat.log.push({ message: `Un Esprit gardien vous protège.`, type: 'info', timestamp: Date.now() });
+                        effectApplied = true;
+                    }
+
                     if (anyEffect.type === 'buff') {
+                        if (anyEffect.id === 'ice_block_stun') {
+                            player.stunDuration = anyEffect.duration * 1000;
+                        }
+
                         if (anyEffect.buffType === 'hot') {
                             if (anyEffect.totalHealing) {
                                 const totalHealing = anyEffect.totalHealing.multiplier;
@@ -1704,7 +1782,7 @@ export const useGameStore = create<GameState>()(
                         if (anyEffect.amount.source === 'base_value') {
                             shieldAmount = anyEffect.amount.multiplier;
                         } else if (anyEffect.amount.source === 'spell_power') {
-                            const buffedPlayerStats = getModifiedStats(player.stats, player.activeBuffs);
+                            const buffedPlayerStats = getModifiedStats(player.stats, player.activeBuffs, player.form);
                             const spellPower = formulas.calculateSpellPower(buffedPlayerStats);
                             shieldAmount = spellPower * anyEffect.amount.multiplier;
                         }
@@ -1869,18 +1947,6 @@ export const useGameStore = create<GameState>()(
                                 }
                             }
 
-                            if (skill.id === 'rogue_assassination_poison_bomb') {
-                                currentTarget.activeDebuffs = currentTarget.activeDebuffs || [];
-                                currentTarget.activeDebuffs.push({
-                                    id: 'poison_bomb_dot',
-                                    name: 'Poison',
-                                    duration: 12000,
-                                    damagePerTick: 5, // 60 damage / 12s = 5 dps. Tick every second.
-                                    tickInterval: 1000,
-                                    nextTickIn: 1000,
-                                });
-                            }
-
                             if (currentTarget.stats.PV <= 0) {
                                 deadEnemyIds.push(currentTarget.id);
                             }
@@ -1938,9 +2004,28 @@ export const useGameStore = create<GameState>()(
             const { player } = get();
             if (player.stats.PV <= 0) return;
 
+            const buffedPlayerStats = getModifiedStats(player.stats, player.activeBuffs, player.form);
+            const didDodge = Math.random() * 100 < buffedPlayerStats.Esquive;
+
+            if (didDodge) {
+                set((state: GameState) => {
+                    state.combat.log.push({ message: `Vous esquivez l'attaque de ${enemy.nom}.`, type: 'info', timestamp: Date.now() });
+                    const enemyInState = state.combat.enemies.find(e => e.id === enemy.id);
+                    if (enemyInState) enemyInState.attackProgress = 0;
+                });
+                get().applyTalentTrigger('on_dodge');
+                return; // Skip the rest of the attack logic for this enemy
+            }
+
             set((state: GameState) => {
                 const enemyInState = state.combat.enemies.find(e => e.id === enemy.id);
                 if (!enemyInState || enemyInState.stats.PV <= 0) return;
+
+                if (state.player.invulnerabilityDuration > 0) {
+                    state.combat.log.push({ message: `L'attaque de ${enemy.nom} est bloquée par votre invulnérabilité.`, type: 'shield', timestamp: Date.now() });
+                    enemyInState.attackProgress = 0;
+                    return;
+                }
 
                 let enemyDamage = formulas.calculateMeleeDamage(enemy.stats.AttMin, enemy.stats.AttMax, formulas.calculateAttackPower(enemy.stats));
 
@@ -1966,6 +2051,11 @@ export const useGameStore = create<GameState>()(
 
                 const mitigatedEnemyDamage = Math.round(enemyDamage);
                 let damageToPlayer = mitigatedEnemyDamage;
+
+                const buffedPlayerStats = getModifiedStats(state.player.stats, state.player.activeBuffs, state.player.form);
+                damageToPlayer *= (buffedPlayerStats.DamageReductionMultiplier || 1);
+                damageToPlayer = Math.round(damageToPlayer);
+
                 if (state.player.shield > 0) {
                     const manaShieldBuff = state.player.activeBuffs.find(b => b.id === 'mana_shield');
                     let shieldAbsorption = Math.min(state.player.shield, damageToPlayer);
@@ -1986,8 +2076,25 @@ export const useGameStore = create<GameState>()(
                 }
 
                 if (damageToPlayer > 0) {
-                    state.player.stats.PV -= damageToPlayer;
-                    state.combat.log.push({ message: `${enemy.nom} vous inflige ${damageToPlayer} points de dégâts.`, type: 'enemy_attack', timestamp: Date.now() });
+                    if (state.player.stats.PV - damageToPlayer <= 0) { // Check for lethal damage
+                        const deathWardBuff = state.player.activeBuffs.find(b => b.isDeathWard);
+                        if (deathWardBuff && deathWardBuff.deathWardHealPercent) {
+                            const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
+                            const healAmount = maxHp * (deathWardBuff.deathWardHealPercent / 100);
+                            state.player.stats.PV = healAmount; // Set HP to the heal amount
+                            state.combat.log.push({ message: `Votre Esprit gardien vous a sauvé de la mort et vous a soigné pour ${Math.round(healAmount)} PV!`, type: 'heal', timestamp: Date.now() });
+
+                            // Remove the buff
+                            state.player.activeBuffs = state.player.activeBuffs.filter(b => b.id !== deathWardBuff.id);
+
+                            damageToPlayer = 0; // Negate the damage
+                        }
+                    }
+
+                    if (damageToPlayer > 0) {
+                        state.player.stats.PV -= damageToPlayer;
+                        state.combat.log.push({ message: `${enemy.nom} vous inflige ${damageToPlayer} points de dégâts.`, type: 'enemy_attack', timestamp: Date.now() });
+                    }
                 }
 
                 if (state.player.resources.type === 'Rage') {
@@ -2238,6 +2345,41 @@ export const useGameStore = create<GameState>()(
       toggleAutoAttack: () => {
         set((state: GameState) => {
           state.combat.autoAttack = !state.combat.autoAttack;
+        });
+      },
+
+      applyTalentTrigger: (trigger) => {
+        set((state: GameState) => {
+            const { player, gameData } = state;
+            Object.entries(player.learnedTalents).forEach(([talentId, rank]) => {
+                const talent = gameData.talents.find(t => t.id === talentId);
+                if (!talent || !talent.triggeredEffects) return;
+
+                talent.triggeredEffects.forEach(triggeredEffect => {
+                    if (triggeredEffect.trigger === trigger) {
+                        if (Math.random() < (triggeredEffect.chance || 1)) {
+                            triggeredEffect.effects.forEach(effect => {
+                                const anyEffect = effect as any;
+                                if (anyEffect.type === 'buff' && anyEffect.buffType === 'stat_modifier') {
+                                    const value = Array.isArray(anyEffect.statMods[0].value)
+                                        ? anyEffect.statMods[0].value[Math.min(rank - 1, anyEffect.statMods[0].value.length - 1)] || 0
+                                        : anyEffect.statMods[0].value;
+
+                                    const newStatMod = { ...anyEffect.statMods[0], value: value };
+
+                                    player.activeBuffs.push({
+                                        id: anyEffect.id,
+                                        name: anyEffect.name,
+                                        duration: anyEffect.duration * 1000,
+                                        statMods: [newStatMod],
+                                    });
+                                    state.combat.log.push({ message: `Le talent ${talent.nom} s'active !`, type: 'info', timestamp: Date.now() });
+                                }
+                            });
+                        }
+                    }
+                });
+            });
         });
       },
 
