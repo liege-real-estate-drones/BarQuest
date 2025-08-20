@@ -1,6 +1,140 @@
 {
     "items": [
       {
+        "id": "worn_leather_cap",
+        "name": "Coiffe en cuir usé",
+        "slot": "head",
+        "niveauMin": 1,
+        "rarity": "Commun",
+        "affixes": [
+          { "ref": "Armure", "val": 5 }
+        ],
+        "tagsClasse": ["common"],
+        "vendorPrice": 5
+      },
+      {
+        "id": "patched_leather_tunic",
+        "name": "Tunique en cuir rapiécé",
+        "slot": "chest",
+        "niveauMin": 1,
+        "rarity": "Commun",
+        "affixes": [
+          { "ref": "Armure", "val": 10 },
+          { "ref": "PV", "val": 5 }
+        ],
+        "tagsClasse": ["common"],
+        "vendorPrice": 10
+      },
+      {
+        "id": "chipped_shortsword",
+        "name": "Épée courte ébréchée",
+        "slot": "weapon",
+        "niveauMin": 1,
+        "rarity": "Commun",
+        "affixes": [
+            { "ref": "AttMin", "val": 2 },
+            { "ref": "AttMax", "val": 5 }
+        ],
+        "tagsClasse": ["berserker", "rogue"],
+        "vendorPrice": 12
+      },
+      {
+        "id": "gnarled_staff",
+        "name": "Bâton noueux",
+        "slot": "weapon",
+        "niveauMin": 1,
+        "rarity": "Commun",
+        "affixes": [
+            { "ref": "AttMin", "val": 1 },
+            { "ref": "AttMax", "val": 4 },
+            { "ref": "Intelligence", "val": 1 }
+        ],
+        "tagsClasse": ["mage", "cleric"],
+        "vendorPrice": 12
+      },
+      {
+        "id": "sturdy_iron_greaves",
+        "name": "Jambières en fer robuste",
+        "slot": "legs",
+        "niveauMin": 3,
+        "rarity": "Commun",
+        "affixes": [
+            { "ref": "Armure", "val": 12 },
+            { "ref": "Force", "val": 1 }
+        ],
+        "tagsClasse": ["berserker", "cleric"],
+        "vendorPrice": 20
+      },
+      {
+        "id": "apprentice_gloves",
+        "name": "Gants d'apprenti",
+        "slot": "hands",
+        "niveauMin": 2,
+        "rarity": "Commun",
+        "affixes": [
+            { "ref": "Armure", "val": 4 },
+            { "ref": "Intelligence", "val": 1 }
+        ],
+        "tagsClasse": ["mage", "cleric"],
+        "vendorPrice": 8
+      },
+      {
+        "id": "warriors_greathelm",
+        "name": "Grand heaume de guerrier",
+        "slot": "head",
+        "niveauMin": 5,
+        "rarity": "Rare",
+        "affixes": [
+            { "ref": "Armure", "val": 25 },
+            { "ref": "Force", "val": 3 },
+            { "ref": "PV", "val": 10 }
+        ],
+        "tagsClasse": ["berserker"],
+        "vendorPrice": 50
+      },
+      {
+        "id": "mages_circlet",
+        "name": "Cercle de mage",
+        "slot": "head",
+        "niveauMin": 5,
+        "rarity": "Rare",
+        "affixes": [
+            { "ref": "Armure", "val": 15 },
+            { "ref": "Intelligence", "val": 3 },
+            { "ref": "RessourceMax", "val": 20 }
+        ],
+        "tagsClasse": ["mage"],
+        "vendorPrice": 50
+      },
+      {
+        "id": "rogues_cowl",
+        "name": "Capuche de voleur",
+        "slot": "head",
+        "niveauMin": 5,
+        "rarity": "Rare",
+        "affixes": [
+            { "ref": "Armure", "val": 20 },
+            { "ref": "Dexterite", "val": 3 },
+            { "ref": "CritPct", "val": 1 }
+        ],
+        "tagsClasse": ["rogue"],
+        "vendorPrice": 50
+      },
+      {
+        "id": "clerics_diadem",
+        "name": "Diadème de clerc",
+        "slot": "head",
+        "niveauMin": 5,
+        "rarity": "Rare",
+        "affixes": [
+            { "ref": "Armure", "val": 18 },
+            { "ref": "Esprit", "val": 3 },
+            { "ref": "PV", "val": 10 }
+        ],
+        "tagsClasse": ["cleric"],
+        "vendorPrice": 50
+      },
+      {
         "id": "axe_of_the_deathbringer",
         "name": "Hache du Semeur de Mort",
         "slot": "weapon",

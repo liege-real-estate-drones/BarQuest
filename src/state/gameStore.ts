@@ -98,7 +98,7 @@ interface GameState {
   recalculateStats: () => void;
   equipItem: (itemId: string) => void;
   unequipItem: (slot: keyof InventoryState['equipment']) => void;
-  buyItem: (item: Item) => boolean;
+  buyItem: (itemId: string) => boolean; // Modifié pour accepter un string
   sellItem: (itemId: string) => void;
   sellAllUnusedItems: () => { soldCount: number; goldGained: number };
   learnSkill: (skillId: string) => void;
@@ -717,16 +717,23 @@ export const useGameStore = create<GameState>()(
         get().recalculateStats();
       },
 
-      buyItem: (item: Item) => {
-          const { inventory } = get();
-          const price = item.vendorPrice || 0;
+      buyItem: (itemId: string) => {
+          const { inventory, gameData } = get();
+          const itemToBuy = gameData.items.find(i => i.id === itemId);
+
+          if (!itemToBuy) {
+              console.error("Objet à acheter non trouvé dans gameData:", itemId);
+              return false;
+          }
+
+          const price = getItemBuyPrice(itemToBuy); // Le prix est calculé ici
           if (price <= 0 || inventory.gold < price) {
               return false;
           }
 
-          const newItem: Item = JSON.parse(JSON.stringify(item));
+          const newItem: Item = JSON.parse(JSON.stringify(itemToBuy));
           newItem.id = uuidv4();
-          delete newItem.vendorPrice;
+          // Pas besoin de supprimer vendorPrice car il ne fait pas partie de l'objet de base
 
           set((state: GameState) => {
               state.inventory.gold -= price;
@@ -946,74 +953,85 @@ export const useGameStore = create<GameState>()(
 
       endDungeon: () => {
         set((state: GameState) => {
-          const { combat, player, inventory, gameData, currentDungeon, worldTier } = state;
+            const { combat, player, inventory, gameData, currentDungeon, worldTier } = state;
 
-          // --- Dungeon Chest Rewards ---
-          const chestGold = (currentDungeon?.palier ?? 1) * 150 * worldTier; // Augmentation de l'or
-          const chestItems: Item[] = [];
+            // --- Amélioration des récompenses du coffre de donjon ---
+            const chestGold = (currentDungeon?.palier ?? 1) * 150 * worldTier; // Augmentation de l'or
+            const chestItems: Item[] = [];
 
-          // Ajout de plusieurs objets dans le coffre
-          for (let i = 0; i < 3; i++) {
-            const possibleItemTemplates = gameData.items.filter(item =>
-              item.rarity !== "Légendaire" && item.rarity !== "Unique" && !item.set && item.slot !== 'potion' &&
-              (item.tagsClasse?.includes('common') || (player.classeId && item.tagsClasse?.includes(player.classeId)))
-            );
+            // Garantit 3 objets dans le coffre, avec des chances de rareté améliorées
+            for (let i = 0; i < 3; i++) {
+                const possibleItemTemplates = gameData.items.filter(item =>
+                    item.rarity !== "Légendaire" && item.rarity !== "Unique" && !item.set && item.slot !== 'potion' &&
+                    (item.tagsClasse?.includes('common') || (player.classeId && item.tagsClasse?.includes(player.classeId)))
+                );
 
-            if (possibleItemTemplates.length > 0) {
-              const baseItemTemplate = possibleItemTemplates[Math.floor(Math.random() * possibleItemTemplates.length)];
-              const { id, niveauMin, rarity, affixes, ...baseItemProps } = baseItemTemplate;
-              const itemLevel = currentDungeon?.palier ?? player.level;
-              const roll = Math.random();
-              let bonusRarity: Rareté = "Rare";
-              if (roll < 0.1) bonusRarity = "Légendaire"; // 10% de chance pour un légendaire
-              else if (roll < 0.3) bonusRarity = "Épique"; // 20% de chance pour un épique
-              const chestItem = generateProceduralItem(baseItemProps, itemLevel, bonusRarity, gameData.affixes);
-              chestItems.push(chestItem);
+                if (possibleItemTemplates.length > 0) {
+                    const baseItemTemplate = possibleItemTemplates[Math.floor(Math.random() * possibleItemTemplates.length)];
+                    const { id, niveauMin, rarity, affixes, ...baseItemProps } = baseItemTemplate;
+                    const itemLevel = currentDungeon?.palier ?? player.level;
+
+
+                    // Le premier objet est garanti "Rare" ou mieux
+                    let bonusRarity: Rareté = "Rare";
+                    if (i === 0) {
+                        const roll = Math.random();
+                        if (roll < 0.1) bonusRarity = "Légendaire"; // 10% de chance pour un Légendaire
+                        else if (roll < 0.3) bonusRarity = "Épique"; // 20% de chance pour un Épique
+                    } else {
+                        // Les objets suivants ont une chance normale
+                        const roll = Math.random();
+                        if (roll < 0.02) bonusRarity = "Légendaire";
+                        else if (roll < 0.1) bonusRarity = "Épique";
+                        else if (roll < 0.4) bonusRarity = "Rare";
+                        else bonusRarity = "Commun";
+                    }
+
+                    const chestItem = generateProceduralItem(baseItemProps, itemLevel, bonusRarity, gameData.affixes);
+                    if (chestItem) { // Vérification supplémentaire pour s'assurer que l'objet a été créé
+                        chestItems.push(chestItem);
+                    }
+                }
             }
-          }
 
-          const chestRewards = {
-            gold: chestGold,
-            items: chestItems,
-          };
+            const chestRewards = {
+                gold: chestGold,
+                items: chestItems,
+            };
 
-          // Finalize rewards
-          const summary: DungeonCompletionSummary = {
-            killCount: combat.killCount,
-            goldGained: combat.goldGained,
-            xpGained: combat.xpGained,
-            itemsGained: [...combat.dungeonRunItems],
-            chestRewards: chestRewards
-          };
+            // Le reste de la fonction reste identique...
+            const summary: DungeonCompletionSummary = {
+                killCount: combat.killCount,
+                goldGained: combat.goldGained,
+                xpGained: combat.xpGained,
+                itemsGained: [...combat.dungeonRunItems],
+                chestRewards: chestRewards
+            };
 
-          state.dungeonCompletionSummary = summary;
+            state.dungeonCompletionSummary = summary;
 
-          // Add all rewards to player inventory
-          inventory.gold += summary.goldGained + (summary.chestRewards?.gold ?? 0);
-          player.xp += summary.xpGained;
-          inventory.items.push(...summary.itemsGained);
-          if (summary.chestRewards) {
-            inventory.items.push(...summary.chestRewards.items);
-          }
-
-
-          // Handle quests and other end-of-dungeon logic
-          if (currentDungeon) {
-            player.completedDungeons[currentDungeon.id] = (player.completedDungeons[currentDungeon.id] || 0) + 1;
-            if (currentDungeon.factionId) {
-                const repData = player.reputation[currentDungeon.factionId] || { value: 0, claimedRewards: [] };
-                repData.value += 250;
-                player.reputation[currentDungeon.factionId] = repData;
+            inventory.gold += summary.goldGained + (summary.chestRewards?.gold ?? 0);
+            player.xp += summary.xpGained;
+            inventory.items.push(...summary.itemsGained);
+            if (summary.chestRewards) {
+                inventory.items.push(...summary.chestRewards.items);
             }
-          }
 
-          // Reset combat state and switch view
-          state.combat.dungeonRunItems = [];
-          state.combat.goldGained = 0;
-          state.combat.xpGained = 0;
-          state.dungeonStartTime = null;
-          state.view = 'DUNGEON_COMPLETED';
-          if (gameLoop) clearInterval(gameLoop);
+            if (currentDungeon) {
+                player.completedDungeons[currentDungeon.id] = (player.completedDungeons[currentDungeon.id] || 0) + 1;
+                if (currentDungeon.factionId) {
+                    const repData = player.reputation[currentDungeon.factionId] || { value: 0, claimedRewards: [] };
+                    repData.value += 250;
+                    player.reputation[currentDungeon.factionId] = repData;
+                }
+            }
+
+            state.combat.dungeonRunItems = [];
+            state.combat.goldGained = 0;
+            state.combat.xpGained = 0;
+            state.dungeonStartTime = null;
+            state.view = 'DUNGEON_COMPLETED';
+            if (gameLoop) clearInterval(gameLoop);
         });
       },
 
