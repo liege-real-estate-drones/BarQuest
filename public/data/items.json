@@ -2,7 +2,7 @@
     "items": [
       {
         "id": "worn_leather_cap",
-        "name": "Coiffe en cuir usé",
+        "name": "Coiffe usée",
         "slot": "head",
         "material_type": "leather",
         "niveauMin": 1,
@@ -15,7 +15,7 @@
       },
       {
         "id": "patched_leather_tunic",
-        "name": "Tunique en cuir rapiécé",
+        "name": "Tunique rapiécée",
         "slot": "chest",
         "material_type": "leather",
         "niveauMin": 1,
@@ -58,7 +58,7 @@
       },
       {
         "id": "sturdy_iron_greaves",
-        "name": "Jambières en fer robuste",
+        "name": "Jambières robustes",
         "slot": "legs",
         "material_type": "metal",
         "niveauMin": 3,
@@ -214,6 +214,37 @@
         ],
         "tagsClasse": ["cleric"],
         "effect": "Les attaques ont une chance de déclencher une explosion de lumière sacrée qui soigne les alliés proches."
+      },
+      {
+        "id": "garaks_icy_maw",
+        "name": "Gueule glaciale de Garak",
+        "slot": "head",
+        "material_type": "metal",
+        "niveauMin": 22,
+        "rarity": "Légendaire",
+        "affixes": [
+          { "ref": "Armure", "val": 80 },
+          { "ref": "ResElems.ice", "val": 25 },
+          { "ref": "PV", "val": 50 }
+        ],
+        "tagsClasse": ["common"],
+        "effect": "Les attaques ont une chance de geler l'ennemi."
+      },
+      {
+        "id": "frostfang_bite",
+        "name": "Morsure de Givre-croc",
+        "slot": "weapon",
+        "material_type": "metal",
+        "niveauMin": 22,
+        "rarity": "Légendaire",
+        "affixes": [
+          { "ref": "AttMin", "val": 30 },
+          { "ref": "AttMax", "val": 45 },
+          { "ref": "CritDmg", "val": 25 },
+          { "ref": "ResElems.ice", "val": 15 }
+        ],
+        "tagsClasse": ["rogue", "berserker"],
+        "effect": "Les coups critiques infligent des dégâts de glace supplémentaires."
       },
       {
         "id": "set_silver_guard_helm",
@@ -431,7 +462,7 @@
       },
       {
         "id": "dragonscale_cuirass",
-        "name": "Cuirasse en Écailles de Dragon",
+        "name": "Cuirasse Draconique",
         "slot": "chest",
         "material_type": "leather",
         "niveauMin": 25,

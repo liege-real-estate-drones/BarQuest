@@ -1,43 +1,68 @@
 // src/core/itemGenerator.ts
-import type { Item, Rareté, Affixe, MaterialType, Theme } from '@/lib/types';
+import type { Item, Rareté, Affixe } from '@/lib/types';
 import { v4 as uuidv4 } from 'uuid';
 import nameModifiersData from '../../public/data/nameModifiers.json';
 
-const { qualifiers, materials, themes, naming_patterns, affixes: statNameModifiers } = nameModifiersData;
-
-// Helper function to get a random element from an array
-const getRandom = <T>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
+const { qualifiers, materials, themes, naming_patterns, affixes: affixModifiers } = nameModifiersData;
 
 const rarityAffixCount: Record<Rareté, [number, number]> = {
     "Commun": [0, 1],
-    "Magique": [1, 2],
-    "Rare": [2, 3],
-    "Épique": [3, 4],
+    "Magique": [0, 1], // Added Magique
+    "Rare": [1, 2],
+    "Épique": [2, 3],
     "Légendaire": [0, 0], // Legendary items are predefined
     "Unique": [0, 0], // Unique items are predefined
 };
 
-const rarityToQualifierMap: Record<string, keyof typeof qualifiers | null> = {
+// Maps game rarities to the keys in nameModifiers.qualifiers
+const rarityToQualifierKey: Record<string, string> = {
     "Commun": "common",
     "Rare": "superior",
     "Épique": "epic",
     "Légendaire": "legendary",
-    "Magique": null, // Magique rarity does not use a qualifier in its pattern
 };
 
+// Maps affix 'ref' from the game to keys in nameModifiers.affixes
+const affixRefToModifierKey: Record<string, string> = {
+    'Force': 'strength',
+    'Dexterite': 'dexterity',
+    'Intelligence': 'intelligence',
+    'Esprit': 'intelligence',
+    'PV': 'vitality',
+    'Armure': 'defense',
+    'Vitesse': 'attack_speed',
+    'CritPct': 'critical_chance',
+    'CritDmg': 'critical_chance',
+    'RessourceMax': 'intelligence',
+    'Esquive': 'dexterity',
+    'AttMin': 'strength',
+    'AttMax': 'strength',
+};
+
+// Maps affix 'ref' from the game to a theme key
+const affixToTheme: Record<string, string> = {
+    'ResElems.fire': 'fire',
+    'ResElems.ice': 'ice',
+    'Esprit': 'holy',
+    'Dexterite': 'shadow',
+};
+
+
 const scaleAffixValue = (baseValue: number, level: number): number => {
-    // A simple scaling formula, can be improved
     return Math.round(baseValue + (baseValue * level * 0.1) + (level * 0.5));
 };
 
 export const generateProceduralItem = (
-    baseItem: Omit<Item, 'id' | 'niveauMin' | 'rarity'>,
+    baseItem: Omit<Item, 'id' | 'niveauMin' | 'rarity'> & { material_type?: string },
     itemLevel: number,
     rarity: Rareté,
     availableAffixes: Affixe[],
-    dungeonTheme?: Theme,
-    monsterFamily?: string
+    dungeonTheme?: string, // Optional: to link the name to the dungeon
+    monsterTheme?: string // Optional: to link the name to the monster family
 ): Item => {
+    const qualifierCategoryKey = rarityToQualifierKey[rarity] || 'common';
+    const qualifierCategory = (qualifiers as any)[qualifierCategoryKey];
+    const qualifierMultiplier = qualifierCategory ? qualifierCategory.multiplier : 1.0;
 
     const newItem: Item = {
         ...baseItem,
@@ -45,16 +70,17 @@ export const generateProceduralItem = (
         niveauMin: itemLevel,
         rarity: rarity,
         affixes: [],
-        vendorPrice: baseItem.vendorPrice || 1,
+        vendorPrice: Math.round((baseItem.vendorPrice || 1) * qualifierMultiplier),
     };
 
-    // --- Affix Generation (from original logic) ---
     const [minAffixes, maxAffixes] = rarityAffixCount[rarity] || [0, 0];
     const numAffixes = Math.floor(Math.random() * (maxAffixes - minAffixes + 1)) + minAffixes;
 
-    if (numAffixes > 0) {
+    if (numAffixes > 0 && availableAffixes) {
         const shuffledAffixes = [...availableAffixes].sort(() => 0.5 - Math.random());
-        newItem.affixes = shuffledAffixes.slice(0, numAffixes).map(affix => {
+        const selectedAffixes = shuffledAffixes.slice(0, numAffixes);
+
+        newItem.affixes = selectedAffixes.map(affix => {
             const [min, max] = affix.portée;
             const baseValue = Math.floor(Math.random() * (max - min + 1)) + min;
             const scaledValue = scaleAffixValue(baseValue, itemLevel);
@@ -62,89 +88,88 @@ export const generateProceduralItem = (
         });
     }
 
-    // --- New Intelligent Name Generation ---
+    let finalName = baseItem.name;
+    const patterns = (naming_patterns as Record<string, string[]>)[rarity];
 
-    // 1. Choose a naming pattern based on rarity
-    const patterns = naming_patterns[rarity as keyof typeof naming_patterns] || ["{baseName}"];
-    let finalName = getRandom(patterns);
+    if (patterns) {
+        let pattern = patterns[Math.floor(Math.random() * patterns.length)];
 
-    // 2. Replace placeholders
-    finalName = finalName.replace('{baseName}', baseItem.name);
-
-    // 2a. Replace {material}
-    if (finalName.includes('{material}')) {
-        const materialType = baseItem.material_type as keyof typeof materials;
-        if (materialType && materials[materialType]) {
-            // The new data structure doesn't have levels, so we pick a random one from the category.
-            // A future improvement could be to have sub-levels within material categories.
-            const chosenMaterial = getRandom(materials[materialType]);
-            finalName = finalName.replace('{material}', chosenMaterial);
-        } else {
-            // Fallback if material is missing
-            finalName = finalName.replace('{material}', '');
+        if (pattern.includes('{qualifier}')) {
+            const qualifierNames = qualifierCategory.names;
+            const randomQualifier = qualifierNames[Math.floor(Math.random() * qualifierNames.length)];
+            pattern = pattern.replace('{qualifier}', randomQualifier);
         }
-    }
 
-    // 2b. Replace {qualifier}
-    if (finalName.includes('{qualifier}')) {
-        const qualifierCategory = rarityToQualifierMap[rarity];
-        if (qualifierCategory && qualifiers[qualifierCategory]) {
-            const chosenQualifier = getRandom(qualifiers[qualifierCategory].names);
-            finalName = finalName.replace('{qualifier}', chosenQualifier);
+        pattern = pattern.replace('{baseName}', baseItem.name);
 
-            // Also adjust vendor price based on qualifier multiplier
-            const qualifierMod = qualifiers[qualifierCategory].multiplier;
-            newItem.vendorPrice = Math.round(newItem.vendorPrice! * qualifierMod);
-        } else {
-            finalName = finalName.replace('{qualifier}', '');
+        // --- Theme Selection (Priority: Affix > Monster > Dungeon) ---
+        let chosenThemeName: string | undefined;
+        // 1. Try to find a theme from the item's affixes
+        if (newItem.affixes) {
+            for (const affix of newItem.affixes) {
+                const themeName = (affixToTheme as Record<string, string>)[affix.ref];
+                if (themeName) {
+                    chosenThemeName = themeName;
+                    break;
+                }
+            }
         }
-    }
+        // 2. Fallback to monster theme if no affix theme is found
+        if (!chosenThemeName) {
+            chosenThemeName = monsterTheme;
+        }
+        // 3. Fallback to dungeon theme if no monster theme is found
+        if (!chosenThemeName) {
+            chosenThemeName = dungeonTheme;
+        }
 
-    // 2c. Replace thematic affixes
-    let themeName: Theme | undefined = undefined;
+        const theme = chosenThemeName && (themes as any)[chosenThemeName] ? (themes as any)[chosenThemeName] : null;
 
-    // Priority 1: Affix-based theme
-    const affixWithTheme = (newItem.affixes || [])
-        .map(affix => availableAffixes.find(a => a.ref === affix.ref))
-        .find(affixDef => affixDef?.theme);
+        if (pattern.includes('{prefix}')) {
+            let prefix = '';
+            if (theme && theme.prefixes) {
+                prefix = theme.prefixes[Math.floor(Math.random() * theme.prefixes.length)];
+            } else if (newItem.affixes && newItem.affixes.length > 0) {
+                const mainAffixRef = newItem.affixes[0].ref;
+                const modifierKey = affixRefToModifierKey[mainAffixRef];
+                const modifier = modifierKey ? (affixModifiers as any)[modifierKey] : null;
+                if (modifier && modifier.prefix) {
+                    prefix = modifier.prefix;
+                }
+            }
+            pattern = pattern.replace('{prefix}', prefix);
+        }
 
-    if (affixWithTheme) {
-        themeName = affixWithTheme.theme;
+        if (pattern.includes('{suffix}')) {
+            let suffix = '';
+            if (theme && theme.suffixes) {
+                suffix = theme.suffixes[Math.floor(Math.random() * theme.suffixes.length)];
+            } else if (newItem.affixes && newItem.affixes.length > 0) {
+                const mainAffixRef = newItem.affixes[0].ref;
+                const modifierKey = affixRefToModifierKey[mainAffixRef];
+                const modifier = modifierKey ? (affixModifiers as any)[modifierKey] : null;
+                if (modifier && modifier.suffix) {
+                    suffix = modifier.suffix;
+                }
+            }
+            pattern = pattern.replace('{suffix}', suffix);
+        }
+
+        finalName = pattern.trim().replace(/\s+/g, ' ');
+
     } else {
-        // Priority 2: Monster family theme
-        themeName = monsterFamily && themes[monsterFamily as keyof typeof themes]
-            ? monsterFamily as Theme
-            : dungeonTheme; // Priority 3: Dungeon theme
+      // Fallback for rarities without a defined pattern (e.g., Commun)
+      if (baseItem.material_type && (materials as any)[baseItem.material_type]) {
+        const materialList = (materials as any)[baseItem.material_type];
+        // Select material based on item level, capping at the highest available tier
+        const materialIndex = Math.min(Math.floor(itemLevel / 10), materialList.length - 1);
+        const suitableMaterial = materialList[materialIndex];
+        if (suitableMaterial) {
+            finalName = `${baseItem.name} ${suitableMaterial}`;
+        }
+      }
     }
 
-    if (themeName && themes[themeName as keyof typeof themes]) {
-        const theme = themes[themeName as keyof typeof themes];
-        if (finalName.includes('{prefix_theme}')) {
-            finalName = finalName.replace('{prefix_theme}', getRandom(theme.prefixes));
-        }
-        if (finalName.includes('{suffix_theme}')) {
-            finalName = finalName.replace('{suffix_theme}', getRandom(theme.suffixes));
-        }
-    }
-
-    // 2d. Replace stat affixes
-    if (newItem.affixes && newItem.affixes.length > 0) {
-        const primaryAffixRef = newItem.affixes[0].ref as keyof typeof statNameModifiers;
-        const nameModifier = statNameModifiers[primaryAffixRef];
-
-        if (nameModifier) {
-            if (finalName.includes('{prefix_stat}')) {
-                finalName = finalName.replace('{prefix_stat}', nameModifier.prefix);
-            }
-            if (finalName.includes('{suffix_stat}')) {
-                finalName = finalName.replace('{suffix_stat}', nameModifier.suffix);
-            }
-        }
-    }
-
-    // 3. Clean up any unreplaced placeholders and extra spaces
-    finalName = finalName.replace(/{\w+}/g, '').replace(/\s+/g, ' ').trim();
     newItem.name = finalName;
-
     return newItem;
 };

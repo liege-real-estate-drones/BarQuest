@@ -241,6 +241,16 @@ const biomeToTheme = (biome: Dungeon['biome'] | undefined): Theme | undefined =>
 };
 
 const generateEquipmentLoot = (monster: Monstre, gameData: GameData, playerClassId: PlayerClassId | null, worldTier: number, dungeonTheme?: Theme, monsterFamily?: string): Item | null => {
+  // --- 1. Boss Specific Loot ---
+  if (monster.isBoss && monster.specificLootTable && Math.random() < 0.25) { // 25% chance for a specific drop
+    const specificLootId = monster.specificLootTable[Math.floor(Math.random() * monster.specificLootTable.length)];
+    const specificItem = gameData.items.find(item => item.id === specificLootId);
+    if (specificItem) {
+      // Return a copy of the unique item
+      return { ...specificItem, id: uuidv4() };
+    }
+  }
+
   const dropRoll = Math.random();
   let cumulativeChance = 0;
   let chosenRarity: Rareté | null = null;

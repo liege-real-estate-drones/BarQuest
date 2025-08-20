@@ -1,63 +1,85 @@
 {
   "qualifiers": {
-    "damaged": { "multiplier": 0.8, "names": ["Fendu", "Abîmé", "Usé", "Ébréché"] },
-    "common": { "multiplier": 1.0, "names": ["Solide", "Fiable", "Robuste", "Commun"] },
-    "superior": { "multiplier": 1.2, "names": ["Renforcé", "Artisanal", "Supérieur", "Ouvragé"] },
-    "epic": { "multiplier": 1.4, "names": ["Royal", "Magnifique", "Épique", "Chef-d'œuvre"] },
-    "legendary": { "multiplier": 1.6, "names": ["Divin", "Légendaire", "Mythique", "Unique"] }
+    "damaged": { "multiplier": 0.8, "names": ["Fendu", "Abîmé", "Usé"] },
+    "common": { "multiplier": 1.0, "names": ["Solide", "Fiable", "Robuste"] },
+    "superior": { "multiplier": 1.2, "names": ["Renforcé", "Artisanal", "Supérieur"] },
+    "epic": { "multiplier": 1.4, "names": ["Royal", "Chef-d'œuvre", "Magnifique"] },
+    "legendary": { "multiplier": 1.6, "names": ["Divin", "Légendaire", "Mythique"] }
   },
   "materials": {
     "metal": ["de Fer", "d'Acier", "de Mithril", "d'Adamantite"],
-    "leather": ["de Cuir", "de Peau", "d'Écailles de Bête"],
-    "cloth": ["de Tissu", "de Soie", "de Lin Enchanté"],
-    "wood": ["de Bois", "de Chêne", "d'If Sacré"]
+    "leather": ["de Cuir", "de Peau", "d'Écailles"],
+    "cloth": ["de Tissu", "de Soie", "Éthéré"],
+    "wood": ["de Bois", "de Chêne", "d'If"]
   },
   "themes": {
     "fire": {
-      "prefixes": ["Incandescent", "Volcanique", "Cendré", "Infernal"],
-      "suffixes": ["du Brasier", "de la Fournaise", "des Flammes Éternelles"]
+      "prefixes": ["Incandescent", "Volcanique", "Cendré"],
+      "suffixes": ["du Brasier", "de la Fournaise", "des Cendres"]
     },
     "ice": {
-      "prefixes": ["Glacial", "Givré", "Boréal", "Polaire"],
-      "suffixes": ["du Fjord", "de la Toundra", "du Givre Mortel"]
+      "prefixes": ["Glacial", "Givré", "Boréal"],
+      "suffixes": ["du Fjord", "de la Toundra", "du Givre"]
     },
     "nature": {
-      "prefixes": ["Sylvestre", "Vivant", "Sauvage", "Tellurique"],
-      "suffixes": ["de la Forêt", "du Bosquet Ancien", "des Ronces"]
-    },
-    "shadow": {
-      "prefixes": ["Ténébreux", "Obscur", "Funeste", "Nocturne"],
-      "suffixes": ["des Ombres", "du Crépuscule", "du Vide"]
+      "prefixes": ["Sylvestre", "Vivant", "Sauvage"],
+      "suffixes": ["de la Forêt", "du Bosquet", "des Ronces"]
     },
     "beast": {
-      "prefixes": ["Sauvage", "Primal", "Férale"],
-      "suffixes": ["de la Griffe", "du Croc", "de la Chasse"]
+      "prefixes": ["Bestial", "Sauvage", "Primal"],
+      "suffixes": ["de la Griffe", "du Croc", "de la Bête"]
     },
-    "undead": {
-      "prefixes": ["Spectral", "Sépulcral", "Funeste"],
-      "suffixes": ["de la Tombe", "du Tourment", "de l'Âme en Peine"]
+    "shadow": {
+      "prefixes": ["Ténébreux", "Nécrotique", "Sombre"],
+      "suffixes": ["des Ombres", "du Crépuscule", "du Vide"]
     },
-    "goblin": {
-      "prefixes": ["Bricolé", "Roublard", "Pillard"],
-      "suffixes": ["de la Combine", "du Larcin", "de la Piqure"]
+    "holy": {
+      "prefixes": ["Sacré", "Divin", "Béni"],
+      "suffixes": ["de la Lumière", "de l'Aube", "du Zénith"]
     }
   },
   "naming_patterns": {
-    "Commun": ["{baseName} {material}"],
-    "Magique": ["{baseName} {suffix_stat}", "{prefix_stat} {baseName}"],
-    "Rare": ["{qualifier} {baseName} {suffix_stat}"],
-    "Épique": ["{prefix_theme} {baseName} {suffix_theme}"],
-    "Légendaire": ["{qualifier} {prefix_theme} {baseName} {suffix_theme}"]
+    "Rare": [
+      "{baseName} {suffix}",
+      "{prefix} {baseName}"
+    ],
+    "Épique": [
+      "{prefix} {baseName} {suffix}",
+      "{qualifier} {baseName} {suffix}"
+    ],
+    "Légendaire": [
+        "{prefix} {baseName} {suffix}",
+        "{qualifier} {prefix} {baseName}",
+        "{qualifier} {baseName} {suffix}"
+    ]
   },
   "affixes": {
-    "Force": { "prefix": "Guerrier", "suffix": "du Titan" },
-    "Intelligence": { "prefix": "Savant", "suffix": "de l'Archimage" },
-    "Dexterite": { "prefix": "Vif", "suffix": "de l'Ombre" },
-    "Esprit": { "prefix": "Spirituel", "suffix": "du Prophète" },
-    "PV": { "prefix": "Robuste", "suffix": "de Jouvence" },
-    "CritPct": { "prefix": "Mortel", "suffix": "de la Frappe Précise" },
-    "CritDmg": { "prefix": "Destructeur", "suffix": "de la Ruine" },
-    "Vitesse": { "prefix": "Rapide", "suffix": "du Zéphyr" },
-    "Armure": { "prefix": "Blindé", "suffix": "d'Indestructibilité" }
+    "strength": {
+      "prefix": "Puissant",
+      "suffix": "du Titan"
+    },
+    "dexterity": {
+      "prefix": "Agile",
+      "suffix": "de l'Ombre"
+    },
+    "intelligence": {
+      "prefix": "Savant",
+      "suffix": "de l'Archimage"
+    },
+    "vitality": {
+      "prefix": "Vigoureux",
+      "suffix": "de la Vie"
+    },
+    "defense": {
+        "prefix": "Protecteur",
+        "suffix": "du Gardien"
+    },
+    "attack_speed": {
+        "prefix": "Rapide",
+        "suffix": "de la Hâte"
+    },
+    "critical_chance": {
+        "prefix": "Mortel"
+    }
   }
 }

@@ -864,6 +864,16 @@
             "stats": { "PV": 12000, "AttMin": 378, "AttMax": 432, "CritPct": 8, "CritDmg": 150, "Armure": 3500, "Vitesse": 4.5, "Precision": 130, "Esquive": 6 }
         },
         {
+            "id": "garak_frostfang",
+            "nom": "Garak, the Frostfang",
+            "level": 22,
+            "famille": "Dragonkin",
+            "isBoss": true,
+            "palier": 7,
+            "stats": { "PV": 3500, "AttMin": 120, "AttMax": 150, "CritPct": 15, "CritDmg": 160, "Armure": 800, "Vitesse": 3.0, "Precision": 100, "Esquive": 12 },
+            "specificLootTable": ["garaks_icy_maw", "frostfang_bite"]
+        },
+        {
             "id": "goblin_scout_heroic",
             "nom": "Gobelin Éclaireur Héroïque",
             "level": 51,
