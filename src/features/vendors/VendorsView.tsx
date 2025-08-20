@@ -6,8 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useToast } from '@/hooks/use-toast';
 import type { Item } from '@/lib/types';
-import { useGameStore, getItemSellPrice, getItemBuyPrice } from '@/state/gameStore';
-import { Coins, ShoppingCart, Tags, Trash2 } from 'lucide-react';
+import { useGameStore, getItemSellPrice, getItemBuyPrice, calculateItemScore } from '@/state/gameStore'; // Importez calculateItemScore
+import { Coins, ShoppingCart, Tags, Trash2, Plus, Minus, Equal } from 'lucide-react'; // Importez les icônes
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -25,11 +25,23 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
+// Ajoutez ce composant
+const ComparisonIndicator = ({ comparison }: { comparison: 'better' | 'worse' | 'equal' }) => {
+    if (comparison === 'better') {
+        return <span className="text-green-500 flex items-center text-xs">[<Plus className="h-3 w-3" />]</span>;
+    }
+    if (comparison === 'worse') {
+        return <span className="text-red-500 flex items-center text-xs">[<Minus className="h-3 w-3" />]</span>;
+    }
+    return <span className="text-gray-500 flex items-center text-xs">[<Equal className="h-3 w-3" />]</span>;
+};
+
+
 function BuyTab() {
-    const { gold, gameItems, playerLevel, buyItem, equipment } = useGameStore(state => ({
+    const { gold, gameItems, player, buyItem, equipment } = useGameStore(state => ({
         gold: state.inventory.gold,
         gameItems: state.gameData.items,
-        playerLevel: state.player.level,
+        player: state.player, // Récupérez l'objet player
         buyItem: state.buyItem,
         equipment: state.inventory.equipment,
     }));
@@ -37,13 +49,26 @@ function BuyTab() {
 
     const vendorItems = React.useMemo(() =>
         gameItems
-        .filter(item => item.slot && item.niveauMin <= playerLevel + 5 && !['potion', 'quest'].includes(item.slot))
+        .filter(item => item.slot && item.niveauMin <= player.level + 5 && !['potion', 'quest'].includes(item.slot))
         .map(item => ({
             ...item,
             vendorPrice: getItemBuyPrice(item),
         }))
         .sort((a,b) => a.niveauMin - b.niveauMin),
-    [gameItems, playerLevel]);
+    [gameItems, player.level]);
+
+    // Ajoutez cette fonction
+    const getComparison = (item: Item) => {
+        if (!player.classeId) return 'equal';
+
+        const equippedItem = equipment[item.slot as keyof typeof equipment];
+        const itemScore = calculateItemScore(item, player.classeId);
+        const equippedScore = equippedItem ? calculateItemScore(equippedItem, player.classeId) : 0;
+
+        if (itemScore > equippedScore) return 'better';
+        if (itemScore < equippedScore) return 'worse';
+        return 'equal';
+    };
 
     const handleBuy = (item: Item) => {
         const success = buyItem(item);
@@ -78,9 +103,12 @@ function BuyTab() {
                 {vendorItems.map(item => (
                     <TableRow key={item.id}>
                         <TableCell>
-                            <ItemTooltip item={item} equippedItem={equipment[item.slot as keyof typeof equipment]}>
-                                <span className="text-xs text-muted-foreground ml-2">(iLvl {item.niveauMin})</span>
-                            </ItemTooltip>
+                            <div className="flex items-center gap-2">
+                                <ComparisonIndicator comparison={getComparison(item)} />
+                                <ItemTooltip item={item} equippedItem={equipment[item.slot as keyof typeof equipment]}>
+                                    <span className="text-xs text-muted-foreground ml-2">(iLvl {item.niveauMin})</span>
+                                </ItemTooltip>
+                            </div>
                         </TableCell>
                         <TableCell className="text-right font-mono text-primary">{item.vendorPrice}</TableCell>
                         <TableCell className="text-right">

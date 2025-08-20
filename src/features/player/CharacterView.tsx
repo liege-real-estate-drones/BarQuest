@@ -2,6 +2,7 @@
 'use client';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { InventoryView } from '../inventory/InventoryView';
+import { EquipmentView } from '../inventory/EquipmentView'; // Importez EquipmentView
 import { SkillsView } from '../skills/SkillsView';
 import { TalentsView } from '../talents/TalentsView';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -21,7 +22,10 @@ export function CharacterView() {
         {/* 'h-full' est crucial ici pour que le contenu prenne la hauteur restante. */}
         <TabsContent value="inventory" className="m-0 flex-grow relative">
             <ScrollArea className="absolute inset-0 pr-4">
-                <InventoryView />
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    <InventoryView />
+                    <EquipmentView />
+                </div>
             </ScrollArea>
         </TabsContent>
         <TabsContent value="talents" className="m-0 flex-grow relative">
