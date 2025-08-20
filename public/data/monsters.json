@@ -98,7 +98,10 @@
             "famille": "Elemental",
             "isBoss": false,
             "palier": 3,
-            "stats": { "PV": 150, "AttMin": 25, "AttMax": 30, "CritPct": 5, "CritDmg": 150, "Armure": 40, "Vitesse": 2.5, "Precision": 75, "Esquive": 10 }
+            "stats": { "PV": 150, "AttMin": 25, "AttMax": 30, "CritPct": 5, "CritDmg": 150, "Armure": 40, "Vitesse": 2.5, "Precision": 75, "Esquive": 10 },
+            "componentLoot": [
+                { "id": "eternal_fire", "chance": 0.15, "quantity": 1 }
+            ]
         },
         {
             "id": "cursed_sapling",
@@ -143,7 +146,10 @@
             "famille": "Aberration",
             "isBoss": false,
             "palier": 5,
-            "stats": { "PV": 300, "AttMin": 50, "AttMax": 60, "CritPct": 12, "CritDmg": 170, "Armure": 100, "Vitesse": 1.9, "Precision": 85, "Esquive": 20 }
+            "stats": { "PV": 300, "AttMin": 50, "AttMax": 60, "CritPct": 12, "CritDmg": 170, "Armure": 100, "Vitesse": 1.9, "Precision": 85, "Esquive": 20 },
+            "componentLoot": [
+                { "id": "frozen_shadow", "chance": 0.1, "quantity": 1 }
+            ]
         },
         {
             "id": "acolyte_of_the_void",
@@ -179,7 +185,10 @@
             "famille": "Elemental",
             "isBoss": false,
             "palier": 6,
-            "stats": { "PV": 450, "AttMin": 65, "AttMax": 80, "CritPct": 5, "CritDmg": 150, "Armure": 180, "Vitesse": 2.7, "Precision": 85, "Esquive": 15 }
+            "stats": { "PV": 450, "AttMin": 65, "AttMax": 80, "CritPct": 5, "CritDmg": 150, "Armure": 180, "Vitesse": 2.7, "Precision": 85, "Esquive": 15 },
+            "componentLoot": [
+                { "id": "crystalline_water", "chance": 0.15, "quantity": 1 }
+            ]
         },
         {
             "id": "ice_wraith",
@@ -278,7 +287,10 @@
             "famille": "Undead",
             "isBoss": false,
             "palier": 9,
-            "stats": { "PV": 800, "AttMin": 114, "AttMax": 133, "CritPct": 15, "CritDmg": 180, "Armure": 300, "Vitesse": 2, "Precision": 95, "Esquive": 25 }
+            "stats": { "PV": 800, "AttMin": 114, "AttMax": 133, "CritPct": 15, "CritDmg": 180, "Armure": 300, "Vitesse": 2, "Precision": 95, "Esquive": 25 },
+            "componentLoot": [
+                { "id": "frozen_shadow", "chance": 0.1, "quantity": 1 }
+            ]
         },
         {
             "id": "mind_flayer_spawn",
@@ -449,7 +461,10 @@
             "famille": "Construct",
             "isBoss": false,
             "palier": 12,
-            "stats": { "PV": 3700, "AttMin": 211, "AttMax": 239, "CritPct": 5, "CritDmg": 150, "Armure": 1500, "Vitesse": 4, "Precision": 100, "Esquive": 5 }
+            "stats": { "PV": 3700, "AttMin": 211, "AttMax": 239, "CritPct": 5, "CritDmg": 150, "Armure": 1500, "Vitesse": 4, "Precision": 100, "Esquive": 5 },
+            "componentLoot": [
+                { "id": "primordial_earth", "chance": 0.15, "quantity": 1 }
+            ]
         },
         {
             "id": "dread_lich",
@@ -747,7 +762,10 @@
             "isBoss": true,
             "palier": 2,
             "stats": { "PV": 600, "AttMin": 25, "AttMax": 35, "CritPct": 8, "CritDmg": 150, "Armure": 150, "Vitesse": 3.2, "Precision": 75, "Esquive": 10 },
-            "specificLootTable": ["axe_of_the_deathbringer", "set_silver_guard_helm", "set_silver_guard_chest"]
+            "specificLootTable": ["axe_of_the_deathbringer", "set_silver_guard_helm", "set_silver_guard_chest"],
+            "componentLoot": [
+                { "id": "frozen_heart", "chance": 0.25, "quantity": 1 }
+            ]
         },
         {
             "id": "inferno_elemental_lord",
@@ -757,7 +775,10 @@
             "isBoss": true,
             "palier": 3,
             "stats": { "PV": 800, "AttMin": 45, "AttMax": 55, "CritPct": 10, "CritDmg": 150, "Armure": 180, "Vitesse": 2.7, "Precision": 80, "Esquive": 12 },
-            "specificLootTable": ["set_arcanist_cowl", "set_arcanist_robe"]
+            "specificLootTable": ["set_arcanist_cowl", "set_arcanist_robe"],
+            "recipeLoot": [
+                { "id": "enchant_superior_fire_resistance", "chance": 0.1, "quantity": 1 }
+            ]
         },
         {
             "id": "ancient_dryad_matriarch",

@@ -25,6 +25,7 @@ const getInitialPlayerState = (): PlayerState => {
     talentPoints: 0,
     learnedSkills: {},
     learnedTalents: {},
+    learnedRecipes: ['enchant_minor_strength', 'enchant_minor_armor'],
     equippedSkills: [null, null, null, null],
     resources: {
       current: 0,
@@ -104,6 +105,7 @@ interface GameState {
   sellAllUnusedItems: () => { soldCount: number; goldGained: number };
   learnSkill: (skillId: string) => void;
   learnTalent: (talentId: string) => void;
+  learnRecipe: (recipeId: string) => void;
   equipSkill: (skillId: string, slot: number) => void;
   unequipSkill: (slot: number) => void;
   resetGame: () => void;
@@ -133,6 +135,7 @@ interface GameState {
       applySpecialEffect: (trigger: string, context: { targetId: string, isCrit: boolean }) => void;
   dismantleItem: (itemId: string) => void;
   enchantItem: (itemId: string, enchantmentId: string) => void;
+  buyRecipe: (enchantmentId: string) => boolean;
   gambleForItem: (itemSlot: string) => Item | null;
 }
 
@@ -339,6 +342,10 @@ export const getItemBuyPrice = (item: Item): number => {
     return calculatedSellPrice * 4;
 };
 
+export const getRecipePrice = (enchantment: any): number => {
+    return (enchantment.tier * 25) * (enchantment.level / 2.5);
+};
+
 const STAT_WEIGHTS: Record<PlayerClassId, Partial<Record<keyof Stats, number>>> = {
     berserker: { Force: 2, AttMin: 1, AttMax: 1, CritDmg: 0.8, Armure: 0.7, PV: 0.5, CritPct: 0.5 },
     mage: { Intelligence: 2, Esprit: 1.2, CritPct: 1, CritDmg: 0.8, PV: 0.5, Vitesse: 0.7 },
@@ -444,6 +451,7 @@ export const useGameStore = create<GameState>()(
             state.gameData.sets = Array.isArray(data.sets) ? data.sets : [];
             state.gameData.recipes = Array.isArray(data.recipes) ? data.recipes : [];
             state.gameData.enchantments = Array.isArray(data.enchantments) ? data.enchantments : [];
+            state.gameData.enchanting_components = Array.isArray(data.enchanting_components) ? data.enchanting_components : [];
             state.isInitialized = true;
         });
       },
@@ -541,23 +549,75 @@ export const useGameStore = create<GameState>()(
             const itemToDismantle = state.inventory.items[itemIndex];
             state.inventory.items.splice(itemIndex, 1);
 
-            // New dismantling logic for enchanting components
-            const rarity = itemToDismantle.rarity;
+            const { rarity, niveauMin } = itemToDismantle;
             let materialsGained: { id: string, amount: number }[] = [];
 
-            if (rarity === 'Magique') {
-                materialsGained.push({ id: 'poussiere_arcanique', amount: Math.ceil(Math.random() * 2) });
-            } else if (rarity === 'Rare') {
-                materialsGained.push({ id: 'essence_cosmique', amount: 1 });
-            } else if (rarity === 'Épique') {
-                materialsGained.push({ id: 'cristal_du_vide', amount: 1 });
+            // --- Nouvelle logique basée sur les paliers ---
+
+            // Palier I (Niv 1-15) - Communs et Magiques
+            if (niveauMin >= 1 && niveauMin < 15) {
+                if (rarity === 'Commun' || rarity === 'Magique') {
+                    materialsGained.push({ id: 'strange_dust', amount: Math.floor(Math.random() * 2) + 1 }); // 1-2
+                    if (rarity === 'Magique' && Math.random() < 0.35) { // 35% chance for essence
+                        materialsGained.push({ id: 'lesser_magic_essence', amount: 1 });
+                    }
+                }
             }
 
-            // Check for elemental affixes to grant elemental shards
+            // Palier II (Niv 15-30) - Magiques et Rares
+            if (niveauMin >= 15 && niveauMin < 30) {
+                 if (rarity === 'Magique' || rarity === 'Rare') {
+                    materialsGained.push({ id: 'soul_dust', amount: Math.floor(Math.random() * 3) + 1 }); // 1-3
+                    if (rarity === 'Rare' && Math.random() < 0.35) { // 35% chance for essence
+                        materialsGained.push({ id: 'greater_magic_essence', amount: 1 });
+                    }
+                }
+            }
+
+            // Palier III (Niv 30-50) - Rares et Épiques
+            if (niveauMin >= 30 && niveauMin < 50) {
+                if (rarity === 'Rare' || rarity === 'Épique') {
+                    materialsGained.push({ id: 'vision_dust', amount: Math.floor(Math.random() * 3) + 1 }); // 1-3
+                    if (rarity === 'Épique' && Math.random() < 0.35) { // 35% chance for essence
+                        materialsGained.push({ id: 'lesser_astral_essence', amount: 1 });
+                    }
+                }
+            }
+
+            // Palier IV (Niv 50+) - Épiques
+            if (niveauMin >= 50) {
+                if (rarity === 'Épique') {
+                    materialsGained.push({ id: 'eternity_dust', amount: Math.floor(Math.random() * 3) + 1 }); // 1-3
+                     if (Math.random() < 0.35) { // 35% chance for essence
+                        materialsGained.push({ id: 'greater_astral_essence', amount: 1 });
+                    }
+                }
+            }
+
+            // Palier V (Endgame) - Légendaires (indépendant du niveau)
+            if (rarity === 'Légendaire') {
+                materialsGained.push({ id: 'eternity_dust', amount: Math.floor(Math.random() * 4) + 2 }); // 2-5 T4 dust
+                materialsGained.push({ id: 'nexus_crystal', amount: 1 });
+                if (Math.random() < 0.5) { // 50% chance for shard
+                    materialsGained.push({ id: 'prismatic_shard', amount: 1 });
+                }
+            }
+
+            // --- Fin de la nouvelle logique ---
+
+            // Chance to get elemental components from items with elemental affixes (preserved)
             itemToDismantle.affixes?.forEach(affix => {
                 const theme = AFFIX_TO_THEME[affix.ref];
-                if (theme && ['fire', 'ice', 'nature', 'shadow'].includes(theme)) {
-                    materialsGained.push({ id: `eclat_elementaire_${theme}`, amount: 1 });
+                if (theme) {
+                    const elementalMaterials: Record<string, string> = {
+                        fire: 'eternal_fire',
+                        ice: 'crystalline_water',
+                        nature: 'primordial_earth',
+                        shadow: 'frozen_shadow'
+                    };
+                    if (elementalMaterials[theme] && Math.random() < 0.15) { // 15% chance
+                         materialsGained.push({ id: elementalMaterials[theme], amount: 1 });
+                    }
                 }
             });
 
@@ -577,45 +637,26 @@ export const useGameStore = create<GameState>()(
                 return;
             }
 
-            // Check for existing enchantment
-            if (item.enchantment) {
-                console.log("Item is already enchanted. Overwriting.");
-                // Optional: refund materials from old enchantment? For now, just overwrite.
-            }
-
-            // Check cost
+            // 1. Check cost
             for (const costItem of enchantment.cost) {
                 if ((state.inventory.craftingMaterials[costItem.id] || 0) < costItem.amount) {
-                    console.log(`Not enough ${costItem.id}`);
                     // TODO: Add user feedback
                     return;
                 }
             }
 
-            // Subtract cost
+            // 2. Subtract cost
             enchantment.cost.forEach(costItem => {
                 state.inventory.craftingMaterials[costItem.id] -= costItem.amount;
             });
 
-            // Apply new enchantment
-            const affixTemplate = state.gameData.affixes.find(a => a.ref === enchantment.affixRef);
-            if (!affixTemplate) {
-                console.error(`Could not find base affix for enchantment: ${enchantment.affixRef}`);
-                // TODO: Refund materials
-                return;
-            }
-
-            const [min, max] = affixTemplate.portée;
-            const baseValue = Math.floor(Math.random() * (max - min + 1)) + min;
-            const scaledValue = formulas.scaleAffixValue(baseValue, item.niveauMin);
-
+            // 3. Apply new enchantment
             const newEnchantmentAffix = {
                 ref: enchantment.affixRef,
-                val: scaledValue,
+                val: 1, // The value is now part of the affixRef, but we'll parse it in recalculateStats
                 isEnchantment: true
             };
 
-            // Add to the main affixes array for stat calculation
             if (!item.affixes) {
                 item.affixes = [];
             }
@@ -623,8 +664,47 @@ export const useGameStore = create<GameState>()(
             item.affixes = item.affixes.filter(a => !a.isEnchantment);
             item.affixes.push(newEnchantmentAffix);
 
+            // The logic to parse affixRef like 'force_1' will be handled in recalculateStats
+            // to ensure it's always correctly calculated.
             get().recalculateStats();
         });
+      },
+
+      buyRecipe: (enchantmentId: string) => {
+        let success = false;
+        set((state: GameState) => {
+            const enchantment = state.gameData.enchantments.find(e => e.id === enchantmentId);
+            if (!enchantment) {
+                console.error("Enchantment not found");
+                return;
+            }
+
+            // Check reputation requirement
+            const repReq = enchantment.reputationRequirement;
+            if (repReq) {
+                const currentRep = state.player.reputation[repReq.factionId]?.value || 0;
+                if (currentRep < repReq.threshold) {
+                    console.log("Not enough reputation");
+                    return;
+                }
+            }
+
+            const price = getRecipePrice(enchantment);
+            if (state.inventory.gold < price) {
+                console.log("Not enough gold for recipe");
+                return;
+            }
+
+            if (state.player.learnedRecipes.includes(enchantmentId)) {
+                console.log("Recipe already learned");
+                return;
+            }
+
+            state.inventory.gold -= price;
+            state.player.learnedRecipes.push(enchantmentId);
+            success = true;
+        });
+        return success;
       },
 
       setPlayerClass: (classId: PlayerClassId) => {
@@ -683,9 +763,33 @@ export const useGameStore = create<GameState>()(
             if (item) {
               if (item.affixes) {
                 item.affixes.forEach(affix => {
-                  const statKey = affix.ref as keyof Stats;
-                  if (statKey in newStats && typeof newStats[statKey] !== 'object') {
-                      (newStats[statKey] as number) = (newStats[statKey] || 0) + (affix.val || 0);
+                  // New logic for enchantment affixes like 'force_1' or 'crit_3pct'
+                  const enchantMatch = affix.ref.match(/^([a-zA-Z]+)_(\d+)(pct)?$/);
+                  if (affix.isEnchantment && enchantMatch) {
+                      const statName = enchantMatch[1];
+                      const statValue = parseInt(enchantMatch[2], 10);
+                      const isPct = !!enchantMatch[3];
+
+                      const statMap: { [key: string]: keyof Stats } = {
+                          'force': 'Force', 'intellect': 'Intelligence', 'dexterity': 'Dexterite', 'stamina': 'PV',
+                          'armor': 'Armure', 'haste': 'Vitesse', 'crit': 'CritPct', 'spell_power': 'Intelligence', // Example mapping
+                          'fire_resist': 'ResElems', 'frost_resist': 'ResElems' // Special handling for resistances
+                      };
+                      const statKey = statMap[statName];
+
+                      if (statKey && statKey in newStats) {
+                          if (statKey === 'ResElems') {
+                            // This part is simplified; a real implementation would need to know the element type
+                          } else if (typeof newStats[statKey] === 'number') {
+                              (newStats[statKey] as number) += statValue;
+                          }
+                      }
+                  } else {
+                    // Original logic for procedural affixes
+                    const statKey = affix.ref as keyof Stats;
+                    if (statKey in newStats && typeof newStats[statKey] !== 'object') {
+                        (newStats[statKey] as number) = (newStats[statKey] || 0) + (affix.val || 0);
+                    }
                   }
                 });
               }
@@ -899,6 +1003,14 @@ export const useGameStore = create<GameState>()(
         get().recalculateStats();
       },
 
+      learnRecipe: (recipeId: string) => {
+        set((state: GameState) => {
+            if (!state.player.learnedRecipes.includes(recipeId)) {
+                state.player.learnedRecipes.push(recipeId);
+            }
+        });
+      },
+
       equipSkill: (skillId: string, slot: number) => {
         set((state: GameState) => {
             if (slot < 0 || slot >= state.player.equippedSkills.length) return;
@@ -1029,14 +1141,14 @@ export const useGameStore = create<GameState>()(
             const { combat, player, inventory, gameData, currentDungeon, worldTier } = state;
 
             // --- Amélioration des récompenses du coffre de donjon ---
-            const chestGold = (currentDungeon?.palier ?? 1) * 150 * worldTier; // Augmentation de l'or
+            const chestGold = (currentDungeon?.palier ?? 1) * 150 * worldTier;
             const chestItems: Item[] = [];
 
-            // Garantit 3 objets dans le coffre, avec des chances de rareté améliorées
+            // Garantit 3 objets dans le coffre
             for (let i = 0; i < 3; i++) {
                 const possibleItemTemplates = gameData.items.filter(item =>
                     item.rarity !== "Légendaire" && item.rarity !== "Unique" && !item.set && item.slot !== 'potion' &&
-                    (item.tagsClasse?.includes('common') || (player.classeId && item.tagsClasse?.includes(player.classeId)))
+                    (item.tagsClasse?.includes('common') || (player.classeId && player.classeId))
                 );
 
                 if (possibleItemTemplates.length > 0) {
@@ -1044,15 +1156,12 @@ export const useGameStore = create<GameState>()(
                     const { id, niveauMin, rarity, affixes, ...baseItemProps } = baseItemTemplate;
                     const itemLevel = currentDungeon?.palier ?? player.level;
 
-
-                    // Le premier objet est garanti "Rare" ou mieux
                     let bonusRarity: Rareté = "Rare";
-                    if (i === 0) {
+                    if (i === 0) { // First item is guaranteed Rare or better
                         const roll = Math.random();
-                        if (roll < 0.1) bonusRarity = "Légendaire"; // 10% de chance pour un Légendaire
-                        else if (roll < 0.3) bonusRarity = "Épique"; // 20% de chance pour un Épique
+                        if (roll < 0.1) bonusRarity = "Légendaire";
+                        else if (roll < 0.3) bonusRarity = "Épique";
                     } else {
-                        // Les objets suivants ont une chance normale
                         const roll = Math.random();
                         if (roll < 0.02) bonusRarity = "Légendaire";
                         else if (roll < 0.1) bonusRarity = "Épique";
@@ -1061,7 +1170,7 @@ export const useGameStore = create<GameState>()(
                     }
 
                     const chestItem = generateProceduralItem(baseItemProps, itemLevel, bonusRarity, gameData.affixes, biomeToTheme(state.currentDungeon?.biome));
-                    if (chestItem) { // Vérification supplémentaire pour s'assurer que l'objet a été créé
+                    if (chestItem) {
                         chestItems.push(chestItem);
                     }
                 }
@@ -1072,14 +1181,29 @@ export const useGameStore = create<GameState>()(
                 items: chestItems,
             };
 
-            // Le reste de la fonction reste identique...
             const summary: DungeonCompletionSummary = {
                 killCount: combat.killCount,
                 goldGained: combat.goldGained,
                 xpGained: combat.xpGained,
                 itemsGained: [...combat.dungeonRunItems],
-                chestRewards: chestRewards
+                chestRewards: chestRewards,
+                recipesGained: [],
             };
+
+            // --- Bonus Recipe Drop from Chest ---
+            const dungeonTier = currentDungeon?.palier ?? 1;
+            if (Math.random() < 0.2) { // 20% chance for a bonus recipe
+                const possibleRecipes = gameData.enchantments.filter(e =>
+                    e.tier <= dungeonTier &&
+                    (e.source.includes('drop') || e.source.includes('rare_drop')) &&
+                    !player.learnedRecipes.includes(e.id)
+                );
+                if (possibleRecipes.length > 0) {
+                    const recipeToLearn = possibleRecipes[Math.floor(Math.random() * possibleRecipes.length)];
+                    player.learnedRecipes.push(recipeToLearn.id);
+                    summary.recipesGained?.push(recipeToLearn);
+                }
+            }
 
             state.dungeonCompletionSummary = summary;
 
