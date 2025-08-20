@@ -2,6 +2,7 @@ import create from 'zustand';
 import { persist, createJSONStorage, StateStorage } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 import type { Dungeon, Monstre, Item, Talent, Skill, Stats, PlayerState, InventoryState, CombatLogEntry, CombatState, GameData, Quete, PlayerClassId, ResourceType, Rareté, CombatEnemy, ItemSet, PotionType, Recipe } from '@/lib/types';
+import { DungeonCompletionSummary } from '@/data/schemas';
 import * as formulas from '@/core/formulas';
 import { generateProceduralItem } from '@/core/itemGenerator';
 import { v4 as uuidv4 } from 'uuid';
@@ -48,17 +49,19 @@ const initialInventoryState: InventoryState = {
 };
 
 const initialCombatState: CombatState = {
-  enemies: [],
-  playerAttackInterval: 2000,
-  playerAttackProgress: 0,
-  skillCooldowns: {},
-  killCount: 0,
-  log: [],
-  autoAttack: true,
-  dungeonRunItems: [],
-  targetIndex: 0,
-  pendingActions: [],
-  isStealthed: false,
+    enemies: [],
+    playerAttackInterval: 2000,
+    playerAttackProgress: 0,
+    skillCooldowns: {},
+    killCount: 0,
+    log: [],
+    autoAttack: true,
+    dungeonRunItems: [],
+    targetIndex: 0,
+    pendingActions: [],
+    isStealthed: false,
+    goldGained: 0,
+    xpGained: 0,
 };
 
 interface GameState {
@@ -903,22 +906,24 @@ export const useGameStore = create<GameState>()(
           }
 
           // Finalize rewards
+          const allItemsGained = [...combat.dungeonRunItems];
+          if (bonusItem) {
+            allItemsGained.push(bonusItem);
+          }
+
           const summary: DungeonCompletionSummary = {
-            gold: combat.goldGained,
-            experience: combat.xpGained,
-            items: combat.dungeonRunItems,
-            bonusItem: bonusItem,
+            killCount: combat.killCount,
+            goldGained: combat.goldGained,
+            xpGained: combat.xpGained,
+            itemsGained: allItemsGained,
           };
 
           state.dungeonCompletionSummary = summary;
 
           // Add rewards to player inventory
-          inventory.gold += summary.gold;
-          player.xp += summary.experience;
-          inventory.items.push(...summary.items);
-          if (summary.bonusItem) {
-            inventory.items.push(summary.bonusItem);
-          }
+          inventory.gold += summary.goldGained;
+          player.xp += summary.xpGained;
+          inventory.items.push(...summary.itemsGained);
 
           // Handle quests and other end-of-dungeon logic
           if (currentDungeon) {
@@ -1376,64 +1381,6 @@ export const useGameStore = create<GameState>()(
                 effectApplied = true;
             }
 
-            const damageMatch3 = skillEffects.match(/Inflige/) || skillEffects.match(/dégâts de l'arme/);
-            if (damageMatch3 && skill.id !== 'mage_arcane_missiles') {
-                if (!combat.enemies || combat.enemies.length === 0) {
-                    if (!effectApplied) return;
-                } else {
-                    const isAoE = skillEffects.includes("tous les ennemis") || skillEffects.includes("ennemis proches");
-                    const primaryTarget = combat.enemies[combat.targetIndex];
-                    const targets = isAoE ? [...combat.enemies.filter((e: CombatEnemy) => e.stats.PV > 0)] : (primaryTarget && primaryTarget.stats.PV > 0 ? [primaryTarget] : []);
-
-                    if (targets.length > 0) {
-                        effectApplied = true;
-                        targets.forEach((target: CombatEnemy) => {
-                            const currentTarget = combat.enemies.find((e: CombatEnemy) => e.id === target.id);
-                            if (!currentTarget) return;
-
-                            let damage = 0;
-                            if (skill.classeId === 'berserker' || skill.classeId === 'rogue') {
-                                const dmgMultiplierMatch = skillEffects.match(/(\d+)% des dégâts de l'arme/);
-                                let dmgMultiplier = dmgMultiplierMatch ? parseInt(dmgMultiplierMatch[1], 10) / 100 : 1;
-
-                                if (skill.id === 'rogue_subtlety_surprise_attack' && combat.isStealthed) {
-                                    dmgMultiplier *= 2; // 100% damage increase
-                                    combat.isStealthed = false;
-                                    combat.log.push({ message: "Attaque depuis les ombres !", type: 'info', timestamp: Date.now() });
-                                }
-
-                                const baseDmg = formulas.calculateMeleeDamage(player.stats.AttMin, player.stats.AttMax, formulas.calculateAttackPower(player.stats));
-                                damage = baseDmg * dmgMultiplier;
-                            } else if (skill.classeId === 'mage' || skill.classeId === 'cleric') {
-                                const baseDmg = getTalentEffectValue(skill.effets[0], rank);
-                                damage = formulas.calculateSpellDamage(baseDmg, formulas.calculateSpellPower(player.stats));
-                            }
-
-                            if (skill.id === 'berserker_execute') {
-                                const hpPercent = (currentTarget.stats.PV / currentTarget.initialHp) * 100;
-                                if (hpPercent < 20) {
-                                    damage *= 3;
-                                }
-                            }
-
-                            const isCrit = formulas.isCriticalHit(player.stats.CritPct, player.stats.Precision, currentTarget.stats.Esquive);
-                            let finalDamage = isCrit ? damage * (player.stats.CritDmg / 100) : damage;
-                            const dr = formulas.calculateArmorDR(currentTarget.stats.Armure, player.level);
-                            const mitigatedDamage = Math.round(finalDamage * (1 - dr));
-
-                            const msg = `Vous utilisez ${skill.nom} sur ${currentTarget.nom} pour ${mitigatedDamage} points de dégâts.`;
-                            const critMsg = `CRITIQUE ! Votre ${skill.nom} inflige ${mitigatedDamage} points de dégâts à ${currentTarget.nom}.`;
-
-                            currentTarget.stats.PV -= mitigatedDamage;
-                            combat.log.push({ message: isCrit ? critMsg : msg, type: isCrit ? 'crit' : 'player_attack', timestamp: Date.now() });
-
-                            if (currentTarget.stats.PV <= 0) {
-                                deadEnemyIds.push(currentTarget.id);
-                            }
-                        });
-                    }
-                }
-            }
 
             if (effectApplied) {
                 if (combat.isStealthed && skill.id !== 'rogue_subtlety_stealth') {
@@ -1441,6 +1388,7 @@ export const useGameStore = create<GameState>()(
                 }
                 player.resources.current -= resourceCost;
                 combat.skillCooldowns[skillId] = (skill.cooldown || 0) * 1000;
+
                 state.combat.playerAttackProgress = 0;
             }
         });

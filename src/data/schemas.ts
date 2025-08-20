@@ -63,6 +63,8 @@ export const ItemSchema = z.object({
   }).optional(),
 });
 
+export type Item = z.infer<typeof ItemSchema>;
+
 export const ClasseSchema = z.object({
   id: z.string(),
   nom: z.string(),
@@ -164,3 +166,10 @@ export const RecipeSchema = z.object({
   materials: z.record(z.string(), z.number()),
   cost: z.number().int(),
 });
+
+export interface DungeonCompletionSummary {
+    killCount: number;
+    goldGained: number;
+    xpGained: number;
+    itemsGained: Item[];
+}
