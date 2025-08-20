@@ -32,3 +32,14 @@ export const AFFIX_TO_THEME: Record<string, string> = {
     'Esprit': 'holy',
     'Dexterite': 'shadow',
 };
+
+export const MATERIAL_DISPLAY_NAMES: Record<string, string> = {
+    'poussiere_arcanique': 'Poussière Arcanique',
+    'essence_cosmique': 'Essence Cosmique',
+    'cristal_du_vide': 'Cristal du Vide',
+    'eclat_elementaire_feu': 'Éclat Élémentaire de Feu',
+    'eclat_elementaire_givre': 'Éclat Élémentaire de Givre',
+    'eclat_elementaire_ombre': 'Éclat Élémentaire d\'Ombre',
+    'eclat_elementaire_nature': 'Éclat Élémentaire de Nature',
+    'scrap_metal': 'Pièces de récupération',
+};
