@@ -215,7 +215,7 @@
             "famille": "Beast",
             "isBoss": false,
             "palier": 7,
-            "stats": { "PV": 650, "AttMin": 80, "AttMax": 95, "CritPct": 15, "CritDmg": 170, "Armure": 280, "Vitesse": 2.3, "Precision": 90, "Esquive": 18 }
+            "stats": { "PV": 550, "AttMin": 76, "AttMax": 90, "CritPct": 15, "CritDmg": 170, "Armure": 280, "Vitesse": 2.3, "Precision": 90, "Esquive": 18 }
         },
         {
             "id": "obsidian_gargoyle",
@@ -224,7 +224,7 @@
             "famille": "Construct",
             "isBoss": false,
             "palier": 7,
-            "stats": { "PV": 700, "AttMin": 78, "AttMax": 92, "CritPct": 8, "CritDmg": 150, "Armure": 350, "Vitesse": 2.8, "Precision": 88, "Esquive": 12 }
+            "stats": { "PV": 600, "AttMin": 74, "AttMax": 87, "CritPct": 8, "CritDmg": 150, "Armure": 350, "Vitesse": 2.8, "Precision": 88, "Esquive": 12 }
         },
         {
             "id": "fire_giant_scout",
@@ -233,7 +233,7 @@
             "famille": "Giant",
             "isBoss": false,
             "palier": 7,
-            "stats": { "PV": 900, "AttMin": 85, "AttMax": 100, "CritPct": 7, "CritDmg": 150, "Armure": 380, "Vitesse": 3.2, "Precision": 85, "Esquive": 7 }
+            "stats": { "PV": 765, "AttMin": 80, "AttMax": 95, "CritPct": 7, "CritDmg": 150, "Armure": 380, "Vitesse": 3.2, "Precision": 85, "Esquive": 7 }
         },
         {
             "id": "razorvine_creeper",
@@ -242,7 +242,7 @@
             "famille": "Plant",
             "isBoss": false,
             "palier": 8,
-            "stats": { "PV": 850, "AttMin": 90, "AttMax": 110, "CritPct": 10, "CritDmg": 160, "Armure": 300, "Vitesse": 2.5, "Precision": 90, "Esquive": 15 }
+            "stats": { "PV": 720, "AttMin": 85, "AttMax": 104, "CritPct": 10, "CritDmg": 160, "Armure": 300, "Vitesse": 2.5, "Precision": 90, "Esquive": 15 }
         },
         {
             "id": "ancient_treant",
@@ -251,7 +251,7 @@
             "famille": "Plant",
             "isBoss": false,
             "palier": 8,
-            "stats": { "PV": 1200, "AttMin": 100, "AttMax": 120, "CritPct": 5, "CritDmg": 150, "Armure": 500, "Vitesse": 4, "Precision": 90, "Esquive": 5 }
+            "stats": { "PV": 1020, "AttMin": 95, "AttMax": 114, "CritPct": 5, "CritDmg": 150, "Armure": 500, "Vitesse": 4, "Precision": 90, "Esquive": 5 }
         },
         {
             "id": "grove_sentinel",
@@ -260,7 +260,7 @@
             "famille": "Construct",
             "isBoss": false,
             "palier": 8,
-            "stats": { "PV": 1000, "AttMin": 95, "AttMax": 115, "CritPct": 7, "CritDmg": 150, "Armure": 450, "Vitesse": 3.3, "Precision": 88, "Esquive": 8 }
+            "stats": { "PV": 850, "AttMin": 90, "AttMax": 109, "CritPct": 7, "CritDmg": 150, "Armure": 450, "Vitesse": 3.3, "Precision": 88, "Esquive": 8 }
         },
         {
             "id": "sylvan_protector",
@@ -269,7 +269,7 @@
             "famille": "Fey",
             "isBoss": false,
             "palier": 8,
-            "stats": { "PV": 900, "AttMin": 105, "AttMax": 125, "CritPct": 12, "CritDmg": 160, "Armure": 350, "Vitesse": 2.4, "Precision": 92, "Esquive": 18 }
+            "stats": { "PV": 765, "AttMin": 99, "AttMax": 118, "CritPct": 12, "CritDmg": 160, "Armure": 350, "Vitesse": 2.4, "Precision": 92, "Esquive": 18 }
         },
         {
             "id": "wraith",
@@ -278,7 +278,7 @@
             "famille": "Undead",
             "isBoss": false,
             "palier": 9,
-            "stats": { "PV": 950, "AttMin": 120, "AttMax": 140, "CritPct": 15, "CritDmg": 180, "Armure": 300, "Vitesse": 2, "Precision": 95, "Esquive": 25 }
+            "stats": { "PV": 800, "AttMin": 114, "AttMax": 133, "CritPct": 15, "CritDmg": 180, "Armure": 300, "Vitesse": 2, "Precision": 95, "Esquive": 25 }
         },
         {
             "id": "mind_flayer_spawn",
@@ -287,7 +287,7 @@
             "famille": "Aberration",
             "isBoss": false,
             "palier": 9,
-            "stats": { "PV": 1100, "AttMin": 110, "AttMax": 130, "CritPct": 10, "CritDmg": 160, "Armure": 350, "Vitesse": 2.6, "Precision": 95, "Esquive": 15 }
+            "stats": { "PV": 935, "AttMin": 104, "AttMax": 123, "CritPct": 10, "CritDmg": 160, "Armure": 350, "Vitesse": 2.6, "Precision": 95, "Esquive": 15 }
         },
         {
             "id": "void_terror",
@@ -296,7 +296,7 @@
             "famille": "Aberration",
             "isBoss": false,
             "palier": 9,
-            "stats": { "PV": 1500, "AttMin": 125, "AttMax": 150, "CritPct": 8, "CritDmg": 150, "Armure": 500, "Vitesse": 3.1, "Precision": 92, "Esquive": 10 }
+            "stats": { "PV": 1275, "AttMin": 118, "AttMax": 142, "CritPct": 8, "CritDmg": 150, "Armure": 500, "Vitesse": 3.1, "Precision": 92, "Esquive": 10 }
         },
         {
             "id": "shambling_horror",
@@ -305,7 +305,7 @@
             "famille": "Aberration",
             "isBoss": false,
             "palier": 9,
-            "stats": { "PV": 1600, "AttMin": 120, "AttMax": 145, "CritPct": 5, "CritDmg": 150, "Armure": 550, "Vitesse": 3.8, "Precision": 90, "Esquive": 5 }
+            "stats": { "PV": 1360, "AttMin": 114, "AttMax": 137, "CritPct": 5, "CritDmg": 150, "Armure": 550, "Vitesse": 3.8, "Precision": 90, "Esquive": 5 }
         },
         {
             "id": "specter",
@@ -314,7 +314,7 @@
             "famille": "Undead",
             "isBoss": false,
             "palier": 9,
-            "stats": { "PV": 900, "AttMin": 130, "AttMax": 155, "CritPct": 18, "CritDmg": 180, "Armure": 280, "Vitesse": 1.8, "Precision": 98, "Esquive": 30 }
+            "stats": { "PV": 765, "AttMin": 123, "AttMax": 147, "CritPct": 18, "CritDmg": 180, "Armure": 280, "Vitesse": 1.8, "Precision": 98, "Esquive": 30 }
         },
         {
             "id": "frost_giant",
@@ -323,7 +323,7 @@
             "famille": "Giant",
             "isBoss": false,
             "palier": 10,
-            "stats": { "PV": 2000, "AttMin": 150, "AttMax": 180, "CritPct": 8, "CritDmg": 150, "Armure": 700, "Vitesse": 3.5, "Precision": 95, "Esquive": 8 }
+            "stats": { "PV": 1700, "AttMin": 142, "AttMax": 171, "CritPct": 8, "CritDmg": 150, "Armure": 700, "Vitesse": 3.5, "Precision": 95, "Esquive": 8 }
         },
         {
             "id": "rime-scaled_drake",
@@ -332,7 +332,7 @@
             "famille": "Dragonkin",
             "isBoss": false,
             "palier": 10,
-            "stats": { "PV": 1800, "AttMin": 160, "AttMax": 190, "CritPct": 12, "CritDmg": 160, "Armure": 600, "Vitesse": 2.8, "Precision": 98, "Esquive": 15 }
+            "stats": { "PV": 1530, "AttMin": 152, "AttMax": 180, "CritPct": 12, "CritDmg": 160, "Armure": 600, "Vitesse": 2.8, "Precision": 98, "Esquive": 15 }
         },
         {
             "id": "mammoth_calf",
@@ -341,7 +341,7 @@
             "famille": "Beast",
             "isBoss": false,
             "palier": 10,
-            "stats": { "PV": 2500, "AttMin": 140, "AttMax": 170, "CritPct": 5, "CritDmg": 150, "Armure": 800, "Vitesse": 4, "Precision": 90, "Esquive": 5 }
+            "stats": { "PV": 2050, "AttMin": 128, "AttMax": 156, "CritPct": 5, "CritDmg": 150, "Armure": 800, "Vitesse": 4, "Precision": 90, "Esquive": 5 }
         },
         {
             "id": "wendigo_spawn",
@@ -350,7 +350,7 @@
             "famille": "Aberration",
             "isBoss": false,
             "palier": 10,
-            "stats": { "PV": 1700, "AttMin": 170, "AttMax": 200, "CritPct": 18, "CritDmg": 170, "Armure": 550, "Vitesse": 2.5, "Precision": 100, "Esquive": 20 }
+            "stats": { "PV": 1400, "AttMin": 156, "AttMax": 184, "CritPct": 18, "CritDmg": 170, "Armure": 550, "Vitesse": 2.5, "Precision": 100, "Esquive": 20 }
         },
         {
             "id": "boreal_knight",
@@ -359,7 +359,7 @@
             "famille": "Humanoid",
             "isBoss": false,
             "palier": 10,
-            "stats": { "PV": 2200, "AttMin": 155, "AttMax": 185, "CritPct": 10, "CritDmg": 150, "Armure": 750, "Vitesse": 3, "Precision": 95, "Esquive": 12 }
+            "stats": { "PV": 1800, "AttMin": 142, "AttMax": 170, "CritPct": 10, "CritDmg": 150, "Armure": 750, "Vitesse": 3, "Precision": 95, "Esquive": 12 }
         },
         {
             "id": "infernal_juggernaut",
@@ -368,7 +368,7 @@
             "famille": "Demon",
             "isBoss": false,
             "palier": 11,
-            "stats": { "PV": 3000, "AttMin": 180, "AttMax": 210, "CritPct": 7, "CritDmg": 150, "Armure": 1000, "Vitesse": 3.8, "Precision": 98, "Esquive": 7 }
+            "stats": { "PV": 2460, "AttMin": 165, "AttMax": 193, "CritPct": 7, "CritDmg": 150, "Armure": 1000, "Vitesse": 3.8, "Precision": 98, "Esquive": 7 }
         },
         {
             "id": "magma_dragon_whelp",
@@ -377,7 +377,7 @@
             "famille": "Dragonkin",
             "isBoss": false,
             "palier": 11,
-            "stats": { "PV": 2500, "AttMin": 190, "AttMax": 220, "CritPct": 12, "CritDmg": 160, "Armure": 850, "Vitesse": 2.9, "Precision": 100, "Esquive": 15 }
+            "stats": { "PV": 2050, "AttMin": 174, "AttMax": 202, "CritPct": 12, "CritDmg": 160, "Armure": 850, "Vitesse": 2.9, "Precision": 100, "Esquive": 15 }
         },
         {
             "id": "flame_hydra",
@@ -386,7 +386,7 @@
             "famille": "Beast",
             "isBoss": false,
             "palier": 11,
-            "stats": { "PV": 2800, "AttMin": 200, "AttMax": 230, "CritPct": 10, "CritDmg": 150, "Armure": 900, "Vitesse": 2.7, "Precision": 100, "Esquive": 12 }
+            "stats": { "PV": 2300, "AttMin": 184, "AttMax": 211, "CritPct": 10, "CritDmg": 150, "Armure": 900, "Vitesse": 2.7, "Precision": 100, "Esquive": 12 }
         },
         {
             "id": "brimstone_devil",
@@ -395,7 +395,7 @@
             "famille": "Demon",
             "isBoss": false,
             "palier": 11,
-            "stats": { "PV": 2300, "AttMin": 210, "AttMax": 240, "CritPct": 18, "CritDmg": 170, "Armure": 750, "Vitesse": 2.2, "Precision": 105, "Esquive": 22 }
+            "stats": { "PV": 1900, "AttMin": 193, "AttMax": 220, "CritPct": 18, "CritDmg": 170, "Armure": 750, "Vitesse": 2.2, "Precision": 105, "Esquive": 22 }
         },
         {
             "id": "ash_harpy",
@@ -404,7 +404,7 @@
             "famille": "Beast",
             "isBoss": false,
             "palier": 11,
-            "stats": { "PV": 2200, "AttMin": 205, "AttMax": 235, "CritPct": 20, "CritDmg": 180, "Armure": 700, "Vitesse": 2, "Precision": 110, "Esquive": 28 }
+            "stats": { "PV": 1800, "AttMin": 188, "AttMax": 216, "CritPct": 20, "CritDmg": 180, "Armure": 700, "Vitesse": 2, "Precision": 110, "Esquive": 28 }
         },
         {
             "id": "colossal_carnivorous_plant",
@@ -413,7 +413,7 @@
             "famille": "Plant",
             "isBoss": false,
             "palier": 12,
-            "stats": { "PV": 4000, "AttMin": 220, "AttMax": 250, "CritPct": 8, "CritDmg": 150, "Armure": 1200, "Vitesse": 3.6, "Precision": 100, "Esquive": 8 }
+            "stats": { "PV": 3280, "AttMin": 202, "AttMax": 230, "CritPct": 8, "CritDmg": 150, "Armure": 1200, "Vitesse": 3.6, "Precision": 100, "Esquive": 8 }
         },
         {
             "id": "verdant_wyrm",
@@ -422,7 +422,7 @@
             "famille": "Dragonkin",
             "isBoss": false,
             "palier": 12,
-            "stats": { "PV": 3500, "AttMin": 230, "AttMax": 260, "CritPct": 12, "CritDmg": 160, "Armure": 1000, "Vitesse": 2.9, "Precision": 105, "Esquive": 15 }
+            "stats": { "PV": 2870, "AttMin": 211, "AttMax": 239, "CritPct": 12, "CritDmg": 160, "Armure": 1000, "Vitesse": 2.9, "Precision": 105, "Esquive": 15 }
         },
         {
             "id": "elf_ranger",
@@ -431,7 +431,7 @@
             "famille": "Humanoid",
             "isBoss": false,
             "palier": 12,
-            "stats": { "PV": 2800, "AttMin": 250, "AttMax": 280, "CritPct": 25, "CritDmg": 180, "Armure": 800, "Vitesse": 2, "Precision": 120, "Esquive": 30 }
+            "stats": { "PV": 2300, "AttMin": 230, "AttMax": 257, "CritPct": 25, "CritDmg": 180, "Armure": 800, "Vitesse": 2, "Precision": 120, "Esquive": 30 }
         },
         {
             "id": "satyr_trickster",
@@ -440,7 +440,7 @@
             "famille": "Fey",
             "isBoss": false,
             "palier": 12,
-            "stats": { "PV": 2700, "AttMin": 240, "AttMax": 270, "CritPct": 22, "CritDmg": 175, "Armure": 750, "Vitesse": 1.8, "Precision": 115, "Esquive": 35 }
+            "stats": { "PV": 2200, "AttMin": 220, "AttMax": 248, "CritPct": 22, "CritDmg": 175, "Armure": 750, "Vitesse": 1.8, "Precision": 115, "Esquive": 35 }
         },
         {
             "id": "emerald_golem",
@@ -449,7 +449,7 @@
             "famille": "Construct",
             "isBoss": false,
             "palier": 12,
-            "stats": { "PV": 4500, "AttMin": 230, "AttMax": 260, "CritPct": 5, "CritDmg": 150, "Armure": 1500, "Vitesse": 4, "Precision": 100, "Esquive": 5 }
+            "stats": { "PV": 3700, "AttMin": 211, "AttMax": 239, "CritPct": 5, "CritDmg": 150, "Armure": 1500, "Vitesse": 4, "Precision": 100, "Esquive": 5 }
         },
         {
             "id": "dread_lich",
@@ -458,7 +458,7 @@
             "famille": "Undead",
             "isBoss": false,
             "palier": 13,
-            "stats": { "PV": 3800, "AttMin": 300, "AttMax": 340, "CritPct": 15, "CritDmg": 180, "Armure": 1100, "Vitesse": 2.5, "Precision": 110, "Esquive": 20 }
+            "stats": { "PV": 3100, "AttMin": 276, "AttMax": 312, "CritPct": 15, "CritDmg": 180, "Armure": 1100, "Vitesse": 2.5, "Precision": 110, "Esquive": 20 }
         },
         {
             "id": "elder_thing",
@@ -467,7 +467,7 @@
             "famille": "Aberration",
             "isBoss": false,
             "palier": 13,
-            "stats": { "PV": 5000, "AttMin": 280, "AttMax": 320, "CritPct": 10, "CritDmg": 160, "Armure": 1300, "Vitesse": 3.3, "Precision": 105, "Esquive": 10 }
+            "stats": { "PV": 4100, "AttMin": 257, "AttMax": 294, "CritPct": 10, "CritDmg": 160, "Armure": 1300, "Vitesse": 3.3, "Precision": 105, "Esquive": 10 }
         },
         {
             "id": "void_reaver",
@@ -476,7 +476,7 @@
             "famille": "Demon",
             "isBoss": false,
             "palier": 13,
-            "stats": { "PV": 4500, "AttMin": 320, "AttMax": 360, "CritPct": 12, "CritDmg": 170, "Armure": 1200, "Vitesse": 2.8, "Precision": 115, "Esquive": 18 }
+            "stats": { "PV": 3700, "AttMin": 294, "AttMax": 331, "CritPct": 12, "CritDmg": 170, "Armure": 1200, "Vitesse": 2.8, "Precision": 115, "Esquive": 18 }
         },
         {
             "id": "bone_collector",
@@ -485,7 +485,7 @@
             "famille": "Construct",
             "isBoss": false,
             "palier": 13,
-            "stats": { "PV": 5500, "AttMin": 290, "AttMax": 330, "CritPct": 8, "CritDmg": 150, "Armure": 1600, "Vitesse": 3.7, "Precision": 100, "Esquive": 8 }
+            "stats": { "PV": 4500, "AttMin": 266, "AttMax": 303, "CritPct": 8, "CritDmg": 150, "Armure": 1600, "Vitesse": 3.7, "Precision": 100, "Esquive": 8 }
         },
         {
             "id": "soul_eater",
@@ -494,7 +494,7 @@
             "famille": "Aberration",
             "isBoss": false,
             "palier": 13,
-            "stats": { "PV": 4200, "AttMin": 330, "AttMax": 370, "CritPct": 18, "CritDmg": 190, "Armure": 1000, "Vitesse": 2.3, "Precision": 120, "Esquive": 25 }
+            "stats": { "PV": 3450, "AttMin": 303, "AttMax": 340, "CritPct": 18, "CritDmg": 190, "Armure": 1000, "Vitesse": 2.3, "Precision": 120, "Esquive": 25 }
         },
         {
             "id": "tomb_guardian",
@@ -503,7 +503,7 @@
             "famille": "Construct",
             "isBoss": false,
             "palier": 13,
-            "stats": { "PV": 6000, "AttMin": 300, "AttMax": 350, "CritPct": 5, "CritDmg": 150, "Armure": 2000, "Vitesse": 4.2, "Precision": 100, "Esquive": 5 }
+            "stats": { "PV": 5000, "AttMin": 276, "AttMax": 322, "CritPct": 5, "CritDmg": 150, "Armure": 2000, "Vitesse": 4.2, "Precision": 100, "Esquive": 5 }
         },
         {
             "id": "ancient_frost_wyrm",
@@ -512,7 +512,7 @@
             "famille": "Dragonkin",
             "isBoss": true,
             "palier": 14,
-            "stats": { "PV": 15000, "AttMin": 400, "AttMax": 450, "CritPct": 15, "CritDmg": 180, "Armure": 2500, "Vitesse": 3, "Precision": 120, "Esquive": 15 }
+            "stats": { "PV": 12000, "AttMin": 360, "AttMax": 405, "CritPct": 15, "CritDmg": 180, "Armure": 2500, "Vitesse": 3, "Precision": 120, "Esquive": 15 }
         },
         {
             "id": "ice_titan",
@@ -521,7 +521,7 @@
             "famille": "Giant",
             "isBoss": false,
             "palier": 14,
-            "stats": { "PV": 8000, "AttMin": 350, "AttMax": 400, "CritPct": 10, "CritDmg": 150, "Armure": 2200, "Vitesse": 3.8, "Precision": 110, "Esquive": 10 }
+            "stats": { "PV": 6400, "AttMin": 315, "AttMax": 360, "CritPct": 10, "CritDmg": 150, "Armure": 2200, "Vitesse": 3.8, "Precision": 110, "Esquive": 10 }
         },
         {
             "id": "avalanche_spirit",
@@ -530,7 +530,7 @@
             "famille": "Elemental",
             "isBoss": false,
             "palier": 14,
-            "stats": { "PV": 6500, "AttMin": 380, "AttMax": 430, "CritPct": 12, "CritDmg": 160, "Armure": 1800, "Vitesse": 2.7, "Precision": 115, "Esquive": 20 }
+            "stats": { "PV": 5200, "AttMin": 342, "AttMax": 387, "CritPct": 12, "CritDmg": 160, "Armure": 1800, "Vitesse": 2.7, "Precision": 115, "Esquive": 20 }
         },
         {
             "id": "yeti_patriarch",
@@ -539,7 +539,7 @@
             "famille": "Giant",
             "isBoss": false,
             "palier": 14,
-            "stats": { "PV": 9000, "AttMin": 360, "AttMax": 410, "CritPct": 8, "CritDmg": 150, "Armure": 2400, "Vitesse": 4, "Precision": 105, "Esquive": 8 }
+            "stats": { "PV": 7200, "AttMin": 324, "AttMax": 369, "CritPct": 8, "CritDmg": 150, "Armure": 2400, "Vitesse": 4, "Precision": 105, "Esquive": 8 }
         },
         {
             "id": "frost-forged_sentinel",
@@ -548,7 +548,7 @@
             "famille": "Construct",
             "isBoss": false,
             "palier": 14,
-            "stats": { "PV": 10000, "AttMin": 340, "AttMax": 390, "CritPct": 5, "CritDmg": 150, "Armure": 3000, "Vitesse": 4.5, "Precision": 100, "Esquive": 5 }
+            "stats": { "PV": 8000, "AttMin": 306, "AttMax": 351, "CritPct": 5, "CritDmg": 150, "Armure": 3000, "Vitesse": 4.5, "Precision": 100, "Esquive": 5 }
         },
         {
             "id": "seraphim_of_ice",
@@ -557,7 +557,7 @@
             "famille": "Celestial",
             "isBoss": false,
             "palier": 14,
-            "stats": { "PV": 7000, "AttMin": 400, "AttMax": 450, "CritPct": 20, "CritDmg": 190, "Armure": 1600, "Vitesse": 2.4, "Precision": 125, "Esquive": 28 }
+            "stats": { "PV": 5600, "AttMin": 360, "AttMax": 405, "CritPct": 20, "CritDmg": 190, "Armure": 1600, "Vitesse": 2.4, "Precision": 125, "Esquive": 28 }
         },
         {
             "id": "primeval_magma_dragon",
@@ -566,7 +566,7 @@
             "famille": "Dragonkin",
             "isBoss": true,
             "palier": 15,
-            "stats": { "PV": 18000, "AttMin": 450, "AttMax": 500, "CritPct": 15, "CritDmg": 180, "Armure": 2800, "Vitesse": 3, "Precision": 125, "Esquive": 15 }
+            "stats": { "PV": 14400, "AttMin": 405, "AttMax": 450, "CritPct": 15, "CritDmg": 180, "Armure": 2800, "Vitesse": 3, "Precision": 125, "Esquive": 15 }
         },
         {
             "id": "balrog",
@@ -575,7 +575,7 @@
             "famille": "Demon",
             "isBoss": false,
             "palier": 15,
-            "stats": { "PV": 12000, "AttMin": 500, "AttMax": 550, "CritPct": 20, "CritDmg": 200, "Armure": 2500, "Vitesse": 2.6, "Precision": 130, "Esquive": 20 }
+            "stats": { "PV": 9600, "AttMin": 450, "AttMax": 495, "CritPct": 20, "CritDmg": 200, "Armure": 2500, "Vitesse": 2.6, "Precision": 130, "Esquive": 20 }
         },
         {
             "id": "phoenix",
@@ -584,7 +584,7 @@
             "famille": "Celestial",
             "isBoss": false,
             "palier": 15,
-            "stats": { "PV": 10000, "AttMin": 480, "AttMax": 530, "CritPct": 18, "CritDmg": 190, "Armure": 2200, "Vitesse": 2.2, "Precision": 135, "Esquive": 30 }
+            "stats": { "PV": 8000, "AttMin": 432, "AttMax": 477, "CritPct": 18, "CritDmg": 190, "Armure": 2200, "Vitesse": 2.2, "Precision": 135, "Esquive": 30 }
         },
         {
             "id": "efreeti_sultan",
@@ -593,7 +593,7 @@
             "famille": "Elemental",
             "isBoss": false,
             "palier": 15,
-            "stats": { "PV": 13000, "AttMin": 460, "AttMax": 510, "CritPct": 12, "CritDmg": 160, "Armure": 3000, "Vitesse": 3.2, "Precision": 120, "Esquive": 12 }
+            "stats": { "PV": 10400, "AttMin": 414, "AttMax": 459, "CritPct": 12, "CritDmg": 160, "Armure": 3000, "Vitesse": 3.2, "Precision": 120, "Esquive": 12 }
         },
         {
             "id": "volcanic_titan",
@@ -602,7 +602,7 @@
             "famille": "Giant",
             "isBoss": false,
             "palier": 15,
-            "stats": { "PV": 15000, "AttMin": 440, "AttMax": 490, "CritPct": 10, "CritDmg": 150, "Armure": 3500, "Vitesse": 4.2, "Precision": 115, "Esquive": 8 }
+            "stats": { "PV": 12000, "AttMin": 396, "AttMax": 441, "CritPct": 10, "CritDmg": 150, "Armure": 3500, "Vitesse": 4.2, "Precision": 115, "Esquive": 8 }
         },
         {
             "id": "charred_legionnaire",
@@ -611,7 +611,7 @@
             "famille": "Undead",
             "isBoss": false,
             "palier": 15,
-            "stats": { "PV": 11000, "AttMin": 470, "AttMax": 520, "CritPct": 15, "CritDmg": 170, "Armure": 2600, "Vitesse": 2.9, "Precision": 125, "Esquive": 18 }
+            "stats": { "PV": 8800, "AttMin": 423, "AttMax": 468, "CritPct": 15, "CritDmg": 170, "Armure": 2600, "Vitesse": 2.9, "Precision": 125, "Esquive": 18 }
         },
         {
             "id": "world_ash_treant",
@@ -620,7 +620,7 @@
             "famille": "Plant",
             "isBoss": true,
             "palier": 16,
-            "stats": { "PV": 25000, "AttMin": 550, "AttMax": 600, "CritPct": 10, "CritDmg": 160, "Armure": 4000, "Vitesse": 4.5, "Precision": 130, "Esquive": 10 }
+            "stats": { "PV": 20000, "AttMin": 495, "AttMax": 540, "CritPct": 10, "CritDmg": 160, "Armure": 4000, "Vitesse": 4.5, "Precision": 130, "Esquive": 10 }
         },
         {
             "id": "gaia_avatar",
@@ -629,7 +629,7 @@
             "famille": "Elemental",
             "isBoss": false,
             "palier": 16,
-            "stats": { "PV": 20000, "AttMin": 600, "AttMax": 650, "CritPct": 15, "CritDmg": 180, "Armure": 3500, "Vitesse": 3.2, "Precision": 140, "Esquive": 20 }
+            "stats": { "PV": 16000, "AttMin": 540, "AttMax": 585, "CritPct": 15, "CritDmg": 180, "Armure": 3500, "Vitesse": 3.2, "Precision": 140, "Esquive": 20 }
         },
         {
             "id": "archdruid_of_the_fang",
@@ -638,7 +638,7 @@
             "famille": "Humanoid",
             "isBoss": false,
             "palier": 16,
-            "stats": { "PV": 18000, "AttMin": 650, "AttMax": 700, "CritPct": 25, "CritDmg": 200, "Armure": 3000, "Vitesse": 2.5, "Precision": 150, "Esquive": 30 }
+            "stats": { "PV": 14400, "AttMin": 585, "AttMax": 630, "CritPct": 25, "CritDmg": 200, "Armure": 3000, "Vitesse": 2.5, "Precision": 150, "Esquive": 30 }
         },
         {
             "id": "fenrir's_chosen",
@@ -647,7 +647,7 @@
             "famille": "Beast",
             "isBoss": false,
             "palier": 16,
-            "stats": { "PV": 19000, "AttMin": 680, "AttMax": 730, "CritPct": 30, "CritDmg": 220, "Armure": 2800, "Vitesse": 2, "Precision": 160, "Esquive": 35 }
+            "stats": { "PV": 15200, "AttMin": 612, "AttMax": 657, "CritPct": 30, "CritDmg": 220, "Armure": 2800, "Vitesse": 2, "Precision": 160, "Esquive": 35 }
         },
         {
             "id": "fae_king",
@@ -656,7 +656,7 @@
             "famille": "Fey",
             "isBoss": false,
             "palier": 16,
-            "stats": { "PV": 17000, "AttMin": 700, "AttMax": 750, "CritPct": 28, "CritDmg": 210, "Armure": 2600, "Vitesse": 1.8, "Precision": 170, "Esquive": 40 }
+            "stats": { "PV": 13600, "AttMin": 630, "AttMax": 675, "CritPct": 28, "CritDmg": 210, "Armure": 2600, "Vitesse": 1.8, "Precision": 170, "Esquive": 40 }
         },
         {
             "id": "living_world-tree",
@@ -665,7 +665,7 @@
             "famille": "Construct",
             "isBoss": false,
             "palier": 16,
-            "stats": { "PV": 30000, "AttMin": 580, "AttMax": 630, "CritPct": 8, "CritDmg": 150, "Armure": 5000, "Vitesse": 5, "Precision": 120, "Esquive": 5 }
+            "stats": { "PV": 24000, "AttMin": 522, "AttMax": 567, "CritPct": 8, "CritDmg": 150, "Armure": 5000, "Vitesse": 5, "Precision": 120, "Esquive": 5 }
         },
         {
             "id": "herald_of_cthulhu",
@@ -674,7 +674,7 @@
             "famille": "Aberration",
             "isBoss": true,
             "palier": 17,
-            "stats": { "PV": 40000, "AttMin": 800, "AttMax": 900, "CritPct": 20, "CritDmg": 200, "Armure": 4500, "Vitesse": 2.8, "Precision": 160, "Esquive": 25 }
+            "stats": { "PV": 32000, "AttMin": 720, "AttMax": 810, "CritPct": 20, "CritDmg": 200, "Armure": 4500, "Vitesse": 2.8, "Precision": 160, "Esquive": 25 }
         },
         {
             "id": "archlich_of_nar'thalas",
@@ -683,7 +683,7 @@
             "famille": "Undead",
             "isBoss": false,
             "palier": 17,
-            "stats": { "PV": 35000, "AttMin": 900, "AttMax": 1000, "CritPct": 25, "CritDmg": 220, "Armure": 4000, "Vitesse": 2.4, "Precision": 170, "Esquive": 30 }
+            "stats": { "PV": 28000, "AttMin": 810, "AttMax": 900, "CritPct": 25, "CritDmg": 220, "Armure": 4000, "Vitesse": 2.4, "Precision": 170, "Esquive": 30 }
         },
         {
             "id": "gibbering_mouther",
@@ -692,7 +692,7 @@
             "famille": "Aberration",
             "isBoss": false,
             "palier": 17,
-            "stats": { "PV": 38000, "AttMin": 850, "AttMax": 950, "CritPct": 18, "CritDmg": 190, "Armure": 4200, "Vitesse": 3, "Precision": 150, "Esquive": 20 }
+            "stats": { "PV": 30400, "AttMin": 765, "AttMax": 855, "CritPct": 18, "CritDmg": 190, "Armure": 4200, "Vitesse": 3, "Precision": 150, "Esquive": 20 }
         },
         {
             "id": "void_leviathan",
@@ -701,7 +701,7 @@
             "famille": "Aberration",
             "isBoss": false,
             "palier": 17,
-            "stats": { "PV": 50000, "AttMin": 820, "AttMax": 920, "CritPct": 12, "CritDmg": 170, "Armure": 6000, "Vitesse": 4, "Precision": 140, "Esquive": 10 }
+            "stats": { "PV": 40000, "AttMin": 738, "AttMax": 828, "CritPct": 12, "CritDmg": 170, "Armure": 6000, "Vitesse": 4, "Precision": 140, "Esquive": 10 }
         },
         {
             "id": "ethereal_devourer",
@@ -710,7 +710,7 @@
             "famille": "Aberration",
             "isBoss": false,
             "palier": 17,
-            "stats": { "PV": 36000, "AttMin": 950, "AttMax": 1050, "CritPct": 28, "CritDmg": 230, "Armure": 3800, "Vitesse": 2.2, "Precision": 180, "Esquive": 35 }
+            "stats": { "PV": 28800, "AttMin": 855, "AttMax": 945, "CritPct": 28, "CritDmg": 230, "Armure": 3800, "Vitesse": 2.2, "Precision": 180, "Esquive": 35 }
         },
         {
             "id": "shadow_titan",
@@ -719,7 +719,7 @@
             "famille": "Giant",
             "isBoss": false,
             "palier": 17,
-            "stats": { "PV": 60000, "AttMin": 880, "AttMax": 980, "CritPct": 15, "CritDmg": 180, "Armure": 7000, "Vitesse": 4.5, "Precision": 150, "Esquive": 12 }
+            "stats": { "PV": 48000, "AttMin": 792, "AttMax": 882, "CritPct": 15, "CritDmg": 180, "Armure": 7000, "Vitesse": 4.5, "Precision": 150, "Esquive": 12 }
         },
         {
             "id": "death_knight_champion",
@@ -728,7 +728,7 @@
             "famille": "Undead",
             "isBoss": false,
             "palier": 17,
-            "stats": { "PV": 45000, "AttMin": 920, "AttMax": 1020, "CritPct": 22, "CritDmg": 210, "Armure": 5500, "Vitesse": 2.9, "Precision": 160, "Esquive": 22 }
+            "stats": { "PV": 36000, "AttMin": 828, "AttMax": 918, "CritPct": 22, "CritDmg": 210, "Armure": 5500, "Vitesse": 2.9, "Precision": 160, "Esquive": 22 }
         },
         {
             "id": "bat_matriarch",
@@ -791,7 +791,7 @@
             "famille": "Humanoid",
             "isBoss": true,
             "palier": 6,
-            "stats": { "PV": 2500, "AttMin": 95, "AttMax": 115, "CritPct": 15, "CritDmg": 150, "Armure": 500, "Vitesse": 3.2, "Precision": 95, "Esquive": 10 }
+            "stats": { "PV": 2125, "AttMin": 90, "AttMax": 109, "CritPct": 15, "CritDmg": 150, "Armure": 500, "Vitesse": 3.2, "Precision": 95, "Esquive": 10 }
         },
         {
             "id": "fire_giant_champion",
@@ -800,7 +800,7 @@
             "famille": "Giant",
             "isBoss": true,
             "palier": 7,
-            "stats": { "PV": 3500, "AttMin": 120, "AttMax": 140, "CritPct": 10, "CritDmg": 150, "Armure": 700, "Vitesse": 3.4, "Precision": 100, "Esquive": 9 }
+            "stats": { "PV": 2975, "AttMin": 114, "AttMax": 133, "CritPct": 10, "CritDmg": 150, "Armure": 700, "Vitesse": 3.4, "Precision": 100, "Esquive": 9 }
         },
         {
             "id": "guardian_of_the_grove",
@@ -809,7 +809,7 @@
             "famille": "Fey",
             "isBoss": true,
             "palier": 8,
-            "stats": { "PV": 4500, "AttMin": 150, "AttMax": 180, "CritPct": 18, "CritDmg": 160, "Armure": 800, "Vitesse": 2.6, "Precision": 105, "Esquive": 20 }
+            "stats": { "PV": 3825, "AttMin": 142, "AttMax": 171, "CritPct": 18, "CritDmg": 160, "Armure": 800, "Vitesse": 2.6, "Precision": 105, "Esquive": 20 }
         },
         {
             "id": "spectral_overlord",
@@ -818,7 +818,7 @@
             "famille": "Undead",
             "isBoss": true,
             "palier": 9,
-            "stats": { "PV": 5500, "AttMin": 190, "AttMax": 220, "CritPct": 22, "CritDmg": 180, "Armure": 900, "Vitesse": 2.0, "Precision": 110, "Esquive": 32 }
+            "stats": { "PV": 4675, "AttMin": 180, "AttMax": 209, "CritPct": 22, "CritDmg": 180, "Armure": 900, "Vitesse": 2.0, "Precision": 110, "Esquive": 32 }
         },
         {
             "id": "boreal_crusader",
@@ -827,7 +827,7 @@
             "famille": "Humanoid",
             "isBoss": true,
             "palier": 10,
-            "stats": { "PV": 7000, "AttMin": 230, "AttMax": 270, "CritPct": 15, "CritDmg": 150, "Armure": 1500, "Vitesse": 3.2, "Precision": 115, "Esquive": 14 }
+            "stats": { "PV": 5740, "AttMin": 211, "AttMax": 248, "CritPct": 15, "CritDmg": 150, "Armure": 1500, "Vitesse": 3.2, "Precision": 115, "Esquive": 14 }
         },
         {
             "id": "ashwing_matriarch",
@@ -836,7 +836,7 @@
             "famille": "Beast",
             "isBoss": true,
             "palier": 11,
-            "stats": { "PV": 8000, "AttMin": 280, "AttMax": 320, "CritPct": 25, "CritDmg": 180, "Armure": 1600, "Vitesse": 2.2, "Precision": 120, "Esquive": 30 }
+            "stats": { "PV": 6560, "AttMin": 257, "AttMax": 294, "CritPct": 25, "CritDmg": 180, "Armure": 1600, "Vitesse": 2.2, "Precision": 120, "Esquive": 30 }
         },
         {
             "id": "colossus_of_the_grove",
@@ -845,7 +845,7 @@
             "famille": "Construct",
             "isBoss": true,
             "palier": 12,
-            "stats": { "PV": 12000, "AttMin": 350, "AttMax": 400, "CritPct": 10, "CritDmg": 150, "Armure": 2500, "Vitesse": 4.2, "Precision": 125, "Esquive": 7 }
+            "stats": { "PV": 9840, "AttMin": 322, "AttMax": 368, "CritPct": 10, "CritDmg": 150, "Armure": 2500, "Vitesse": 4.2, "Precision": 125, "Esquive": 7 }
         },
         {
             "id": "ancient_tomb_protector",
@@ -854,7 +854,7 @@
             "famille": "Construct",
             "isBoss": true,
             "palier": 13,
-            "stats": { "PV": 15000, "AttMin": 420, "AttMax": 480, "CritPct": 8, "CritDmg": 150, "Armure": 3500, "Vitesse": 4.5, "Precision": 130, "Esquive": 6 }
+            "stats": { "PV": 12000, "AttMin": 378, "AttMax": 432, "CritPct": 8, "CritDmg": 150, "Armure": 3500, "Vitesse": 4.5, "Precision": 130, "Esquive": 6 }
         },
         {
             "id": "goblin_scout_heroic",

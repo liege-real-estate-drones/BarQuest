@@ -30,6 +30,7 @@ const getInitialPlayerState = (): PlayerState => {
     },
     reputation: {},
     activeEffects: [],
+    activeBuffs: [],
     activeSetBonuses: [],
     completedDungeons: {},
     completedQuests: [],
@@ -54,6 +55,8 @@ const initialCombatState: CombatState = {
   autoAttack: true,
   dungeonRunItems: [],
   targetIndex: 0,
+  pendingActions: [],
+  isStealthed: false,
 };
 
 interface GameState {
@@ -367,6 +370,7 @@ export const useGameStore = create<GameState>()(
           player.equippedSkills = player.equippedSkills || [null, null, null, null];
           player.reputation = player.reputation || {};
           player.activeEffects = player.activeEffects || [];
+          player.activeBuffs = player.activeBuffs || [];
           player.activeSetBonuses = [];
           player.completedDungeons = player.completedDungeons || {};
           player.completedQuests = player.completedQuests || [];
@@ -720,7 +724,7 @@ export const useGameStore = create<GameState>()(
             state.view = 'COMBAT';
             state.currentDungeon = dungeon;
             state.dungeonStartTime = Date.now();
-            state.combat = { ...initialCombatState, log: [{ message: `Entered ${dungeon.name}.`, type: 'info', timestamp: Date.now() }]};
+            state.combat = { ...initialCombatState, pendingActions: [], log: [{ message: `Entered ${dungeon.name}.`, type: 'info', timestamp: Date.now() }]};
             if (state.player.resources.type === 'Rage') {
               state.player.resources.current = 0;
             }
@@ -747,7 +751,8 @@ export const useGameStore = create<GameState>()(
               id: uuidv4(),
               templateId: randomMonsterTemplate.id, // <-- Ligne ajoutée
               initialHp: randomMonsterTemplate.stats.PV,
-              attackProgress: Math.random()
+              attackProgress: Math.random(),
+              activeDebuffs: [],
             };
             newEnemies.push(monsterInstance);
           }
@@ -801,6 +806,33 @@ export const useGameStore = create<GameState>()(
                   }
               }
 
+              const stealthExpired = state.player.activeBuffs.some(b => b.id === 'stealth' && b.duration <= delta);
+
+              state.player.activeBuffs = state.player.activeBuffs.filter(buff => {
+                  buff.duration -= delta;
+                  if (buff.duration <= 0) return false;
+
+                  if (buff.healingPerTick && buff.nextTickIn !== undefined && buff.tickInterval !== undefined) {
+                      buff.nextTickIn -= delta;
+                      if (buff.nextTickIn <= 0) {
+                          const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
+                          const oldHp = state.player.stats.PV;
+                          state.player.stats.PV = Math.min(maxHp, state.player.stats.PV + buff.healingPerTick);
+                          const actualHeal = Math.round(state.player.stats.PV - oldHp);
+                          if (actualHeal > 0) {
+                              state.combat.log.push({ message: `Votre soin sur la durée vous rend ${actualHeal} PV.`, type: 'heal', timestamp: Date.now() });
+                          }
+                          buff.nextTickIn = buff.tickInterval;
+                      }
+                  }
+                  return true;
+              });
+
+              if (stealthExpired && state.combat.isStealthed) {
+                state.combat.isStealthed = false;
+                state.combat.log.push({ message: "Votre camouflage s'est estompé.", type: 'info', timestamp: Date.now() });
+              }
+
               state.combat.enemies.forEach(enemy => {
                   if(enemy.stats.PV > 0) {
                     const attackInterval = enemy.stats.Vitesse * 1000;
@@ -809,6 +841,22 @@ export const useGameStore = create<GameState>()(
                     } else {
                         enemy.attackProgress = 1;
                     }
+
+                    enemy.activeDebuffs = enemy.activeDebuffs?.filter(debuff => {
+                        debuff.duration -= delta;
+                        if (debuff.duration <= 0) return false;
+
+                        debuff.nextTickIn -= delta;
+                        if (debuff.nextTickIn <= 0) {
+                            enemy.stats.PV -= debuff.damagePerTick;
+                            state.combat.log.push({ message: `${enemy.nom} subit ${debuff.damagePerTick} dégâts de poison.`, type: 'enemy_attack', timestamp: Date.now() });
+                            debuff.nextTickIn = debuff.tickInterval;
+                            if (enemy.stats.PV <= 0) {
+                                deadEnemyIdsFromActions.push(enemy.id);
+                            }
+                        }
+                        return true;
+                    }) || [];
                   }
               });
           });
@@ -826,11 +874,53 @@ export const useGameStore = create<GameState>()(
           if (updatedState.combat.enemies.some(e => e.attackProgress >= 1)) {
               get().enemyAttacks();
           }
+
+          const deadEnemyIdsFromActions: string[] = [];
+          set((state: GameState) => {
+            state.combat.pendingActions = state.combat.pendingActions?.filter(action => {
+                if (action.type === 'damage_wave') {
+                    action.nextWaveIn -= delta;
+                    if (action.nextWaveIn <= 0) {
+                        const target = state.combat.enemies.find(e => e.id === action.targetId);
+                        if (target && target.stats.PV > 0) {
+                            const skill = state.gameData.skills.find(s => s.id === action.skillId);
+                            const damage = formulas.calculateSpellDamage(action.damagePerWave, formulas.calculateSpellPower(state.player.stats));
+                            const isCrit = formulas.isCriticalHit(state.player.stats.CritPct, state.player.stats.Precision, target.stats.Esquive);
+                            const finalDamage = isCrit ? damage * (state.player.stats.CritDmg / 100) : damage;
+                            const dr = formulas.calculateArmorDR(target.stats.Armure, state.player.level);
+                            const mitigatedDamage = Math.round(finalDamage * (1 - dr));
+
+                            target.stats.PV -= mitigatedDamage;
+                            const waveNum = getTalentEffectValue(skill!.effets[0], state.player.learnedSkills[skill!.id]) - action.wavesLeft + 1;
+                            const msg = `Votre ${skill!.nom} (Vague ${waveNum}) inflige ${mitigatedDamage} points de dégâts à ${target.nom}.`;
+                            const critMsg = `CRITIQUE ! Votre ${skill!.nom} (Vague ${waveNum}) inflige ${mitigatedDamage} points de dégâts à ${target.nom}.`;
+                            state.combat.log.push({ message: isCrit ? critMsg : msg, type: isCrit ? 'crit' : 'player_attack', timestamp: Date.now() });
+
+                            if (target.stats.PV <= 0) {
+                                deadEnemyIdsFromActions.push(target.id);
+                            }
+                        }
+                        action.wavesLeft--;
+                        action.nextWaveIn = action.interval;
+                    }
+                }
+                return action.wavesLeft > 0;
+            }) || [];
+          });
+
+          deadEnemyIdsFromActions.forEach(id => {
+            const enemy = get().combat.enemies.find(e => e.id === id);
+            if(enemy) get().handleEnemyDeath(enemy);
+          });
       },
 
       playerAttack: (targetId: string, isCleave = false, skillId?: string) => {
         set((state: GameState) => {
             const { player, combat } = state;
+            if (combat.isStealthed) {
+                combat.isStealthed = false;
+                combat.log.push({ message: "Vous sortez de l'ombre.", type: 'info', timestamp: Date.now() });
+            }
             const target = combat.enemies.find(e => e.id === targetId);
             if (!target || target.stats.PV <= 0) return;
 
@@ -912,17 +1002,29 @@ export const useGameStore = create<GameState>()(
             let effectApplied = false;
             const skillEffects = skill.effets.join(' ');
 
-            const healMatch = skillEffects.match(/rend ([\d/]+) PV/) || skillEffects.match(/soigne de ([\d/]+) PV/);
-            if (healMatch) {
-                const healValueString = `rend ${healMatch[1]} PV`;
-                const healAmount = getTalentEffectValue(healValueString, rank);
-                const maxHp = formulas.calculateMaxHP(player.level, player.stats);
-                const oldHp = player.stats.PV;
-                player.stats.PV = Math.min(maxHp, player.stats.PV + healAmount);
-                const actualHeal = Math.round(player.stats.PV - oldHp);
-                if (actualHeal > 0) {
-                    combat.log.push({ message: `Vous utilisez ${skill.nom} et récupérez ${actualHeal} PV.`, type: 'heal', timestamp: Date.now() });
-                    effectApplied = true;
+            if (skill.id === 'cleric_holy_prayer_of_healing') {
+                player.activeBuffs.push({
+                    id: 'prayer_of_healing_hot',
+                    duration: 12000, // 12 seconds
+                    healingPerTick: 10, // 120 total heal
+                    tickInterval: 1000, // 1s tick
+                    nextTickIn: 1000,
+                });
+                combat.log.push({ message: `Vous êtes enveloppé par une Prière de guérison.`, type: 'heal', timestamp: Date.now() });
+                effectApplied = true;
+            } else {
+                const healMatch = skillEffects.match(/rend ([\d/]+) PV/) || skillEffects.match(/soigne de ([\d/]+) PV/);
+                if (healMatch) {
+                    const healValueString = `rend ${healMatch[1]} PV`;
+                    const healAmount = getTalentEffectValue(healValueString, rank);
+                    const maxHp = formulas.calculateMaxHP(player.level, player.stats);
+                    const oldHp = player.stats.PV;
+                    player.stats.PV = Math.min(maxHp, player.stats.PV + healAmount);
+                    const actualHeal = Math.round(player.stats.PV - oldHp);
+                    if (actualHeal > 0) {
+                        combat.log.push({ message: `Vous utilisez ${skill.nom} et récupérez ${actualHeal} PV.`, type: 'heal', timestamp: Date.now() });
+                        effectApplied = true;
+                    }
                 }
             }
 
@@ -931,11 +1033,32 @@ export const useGameStore = create<GameState>()(
                 const shieldValue = parseInt(shieldMatch[1], 10);
                 player.shield += shieldValue;
                 combat.log.push({ message: `Vous utilisez ${skill.nom} et gagnez un bouclier de ${shieldValue} points.`, type: 'shield', timestamp: Date.now() });
+                if (skill.id === 'mage_arcane_shield') {
+                    player.activeBuffs.push({ id: 'mana_shield', duration: 20000, value: 0.5 }); // 50% damage to mana
+                }
                 effectApplied = true;
             }
 
-            const damageMatch = skillEffects.match(/Inflige/) || skillEffects.match(/dégâts de l'arme/);
-            if (damageMatch) {
+            if (skill.id === 'mage_arcane_missiles') {
+                const target = combat.enemies[combat.targetIndex];
+                if (target && target.stats.PV > 0) {
+                    const waves = getTalentEffectValue(skill.effets[0], rank);
+                    const damagePerWave = 5; // As per description
+                    combat.pendingActions.push({
+                        type: 'damage_wave',
+                        skillId: skill.id,
+                        wavesLeft: waves,
+                        damagePerWave,
+                        targetId: target.id,
+                        interval: 500, // 0.5s between waves
+                        nextWaveIn: 0,
+                    });
+                    effectApplied = true;
+                }
+            }
+
+            const damageMatch2 = skillEffects.match(/Inflige/) || skillEffects.match(/dégâts de l'arme/);
+            if (damageMatch2 && skill.id !== 'mage_arcane_missiles') {
                 if (!combat.enemies || combat.enemies.length === 0) {
                     if (!effectApplied) return;
                 } else {
@@ -978,6 +1101,86 @@ export const useGameStore = create<GameState>()(
                             currentTarget.stats.PV -= mitigatedDamage;
                             combat.log.push({ message: isCrit ? critMsg : msg, type: isCrit ? 'crit' : 'player_attack', timestamp: Date.now() });
 
+                            if (skill.id === 'rogue_assassination_poison_bomb') {
+                                currentTarget.activeDebuffs = currentTarget.activeDebuffs || [];
+                                currentTarget.activeDebuffs.push({
+                                    id: 'poison_bomb_dot',
+                                    duration: 12000,
+                                    damagePerTick: 5, // 60 damage / 12s = 5 dps. Tick every second.
+                                    tickInterval: 1000,
+                                    nextTickIn: 1000,
+                                });
+                            }
+
+                            if (currentTarget.stats.PV <= 0) {
+                                deadEnemyIds.push(currentTarget.id);
+                            }
+                        });
+                    }
+                }
+            }
+
+            if (skill.id === 'rogue_subtlety_stealth') {
+                combat.isStealthed = true;
+                player.activeBuffs.push({ id: 'stealth', duration: 10000 });
+                combat.log.push({ message: "Vous vous camouflez dans l'ombre.", type: 'info', timestamp: Date.now() });
+                if (state.combat.autoAttack) {
+                    state.combat.autoAttack = false;
+                }
+                effectApplied = true;
+            }
+
+            const damageMatch3 = skillEffects.match(/Inflige/) || skillEffects.match(/dégâts de l'arme/);
+            if (damageMatch3 && skill.id !== 'mage_arcane_missiles') {
+                if (!combat.enemies || combat.enemies.length === 0) {
+                    if (!effectApplied) return;
+                } else {
+                    const isAoE = skillEffects.includes("tous les ennemis") || skillEffects.includes("ennemis proches");
+                    const primaryTarget = combat.enemies[combat.targetIndex];
+                    const targets = isAoE ? [...combat.enemies.filter((e: CombatEnemy) => e.stats.PV > 0)] : (primaryTarget && primaryTarget.stats.PV > 0 ? [primaryTarget] : []);
+
+                    if (targets.length > 0) {
+                        effectApplied = true;
+                        targets.forEach((target: CombatEnemy) => {
+                            const currentTarget = combat.enemies.find((e: CombatEnemy) => e.id === target.id);
+                            if (!currentTarget) return;
+
+                            let damage = 0;
+                            if (skill.classeId === 'berserker' || skill.classeId === 'rogue') {
+                                const dmgMultiplierMatch = skillEffects.match(/(\d+)% des dégâts de l'arme/);
+                                let dmgMultiplier = dmgMultiplierMatch ? parseInt(dmgMultiplierMatch[1], 10) / 100 : 1;
+
+                                if (skill.id === 'rogue_subtlety_surprise_attack' && combat.isStealthed) {
+                                    dmgMultiplier *= 2; // 100% damage increase
+                                    combat.isStealthed = false;
+                                    combat.log.push({ message: "Attaque depuis les ombres !", type: 'info', timestamp: Date.now() });
+                                }
+
+                                const baseDmg = formulas.calculateMeleeDamage(player.stats.AttMin, player.stats.AttMax, formulas.calculateAttackPower(player.stats));
+                                damage = baseDmg * dmgMultiplier;
+                            } else if (skill.classeId === 'mage' || skill.classeId === 'cleric') {
+                                const baseDmg = getTalentEffectValue(skill.effets[0], rank);
+                                damage = formulas.calculateSpellDamage(baseDmg, formulas.calculateSpellPower(player.stats));
+                            }
+
+                            if (skill.id === 'berserker_execute') {
+                                const hpPercent = (currentTarget.stats.PV / currentTarget.initialHp) * 100;
+                                if (hpPercent < 20) {
+                                    damage *= 3;
+                                }
+                            }
+
+                            const isCrit = formulas.isCriticalHit(player.stats.CritPct, player.stats.Precision, currentTarget.stats.Esquive);
+                            let finalDamage = isCrit ? damage * (player.stats.CritDmg / 100) : damage;
+                            const dr = formulas.calculateArmorDR(currentTarget.stats.Armure, player.level);
+                            const mitigatedDamage = Math.round(finalDamage * (1 - dr));
+
+                            const msg = `Vous utilisez ${skill.nom} sur ${currentTarget.nom} pour ${mitigatedDamage} points de dégâts.`;
+                            const critMsg = `CRITIQUE ! Votre ${skill.nom} inflige ${mitigatedDamage} points de dégâts à ${currentTarget.nom}.`;
+
+                            currentTarget.stats.PV -= mitigatedDamage;
+                            combat.log.push({ message: isCrit ? critMsg : msg, type: isCrit ? 'crit' : 'player_attack', timestamp: Date.now() });
+
                             if (currentTarget.stats.PV <= 0) {
                                 deadEnemyIds.push(currentTarget.id);
                             }
@@ -987,6 +1190,9 @@ export const useGameStore = create<GameState>()(
             }
 
             if (effectApplied) {
+                if (combat.isStealthed && skill.id !== 'rogue_subtlety_stealth') {
+                    combat.isStealthed = false;
+                }
                 player.resources.current -= resourceCost;
                 combat.skillCooldowns[skillId] = (skill.cooldown || 0) * 1000;
                 state.combat.playerAttackProgress = 0;
@@ -1002,6 +1208,18 @@ export const useGameStore = create<GameState>()(
       },
 
       enemyAttacks: () => {
+        const { combat } = get();
+        if (combat.isStealthed) {
+            set((state: GameState) => {
+                state.combat.enemies.forEach(enemy => {
+                    if (enemy.attackProgress >= 1) {
+                        enemy.attackProgress = 0; // Reset attack progress if player is stealthed
+                    }
+                });
+            });
+            return;
+        }
+
         const attackingEnemies = get().combat.enemies.filter(e => e.attackProgress >= 1 && e.stats.PV > 0);
 
         attackingEnemies.forEach(enemy => {
@@ -1018,7 +1236,19 @@ export const useGameStore = create<GameState>()(
 
                 let damageToPlayer = mitigatedEnemyDamage;
                 if (state.player.shield > 0) {
-                    const shieldAbsorption = Math.min(state.player.shield, damageToPlayer);
+                    const manaShieldBuff = state.player.activeBuffs.find(b => b.id === 'mana_shield');
+                    let shieldAbsorption = Math.min(state.player.shield, damageToPlayer);
+
+                    if (manaShieldBuff && state.player.resources.type === 'Mana') {
+                        const manaDrain = Math.floor(shieldAbsorption * manaShieldBuff.value);
+                        const actualManaDrained = Math.min(manaDrain, state.player.resources.current);
+
+                        state.player.resources.current -= actualManaDrained;
+                        shieldAbsorption -= (manaDrain - actualManaDrained);
+
+                        state.combat.log.push({ message: `Votre bouclier convertit ${actualManaDrained} dégâts en perte de mana.`, type: 'shield', timestamp: Date.now() });
+                    }
+
                     state.player.shield -= shieldAbsorption;
                     damageToPlayer -= shieldAbsorption;
                     state.combat.log.push({ message: `L'attaque de ${enemy.nom} est absorbée par votre bouclier pour ${shieldAbsorption} points.`, type: 'shield', timestamp: Date.now() });
@@ -1075,12 +1305,13 @@ export const useGameStore = create<GameState>()(
         set((state: GameState) => {
             const { gameData, currentDungeon, activeQuests, isHeroicMode } = state;
 
-            let goldDrop = 5;
+            const palierMultiplier = currentDungeon ? Math.floor(currentDungeon.palier / 2) + 1 : 1;
+            let goldDrop = (5 + palierMultiplier * 2);
             if (isHeroicMode) {
               goldDrop *= 5;
             }
             const itemDrop = resolveLoot(enemy, gameData, state.player.classeId, activeQuests);
-            const xpGained = enemy.level * 10;
+            const xpGained = Math.round((enemy.level * 10) * (1 + (currentDungeon ? currentDungeon.palier * 0.05 : 0)));
 
             state.combat.log.push({ message: `You defeated ${enemy.nom}!`, type: 'info', timestamp: Date.now() });
             state.combat.log.push({ message: `You find ${goldDrop} gold.`, type: 'loot', timestamp: Date.now() });
@@ -1306,6 +1537,7 @@ export const useGameStore = create<GameState>()(
             state.view = 'TOWN';
             state.combat = initialCombatState;
             state.player.learnedTalents = state.player.learnedTalents || {};
+            state.player.activeBuffs = state.player.activeBuffs || [];
             state.player.reputation = state.player.reputation || {};
             state.player.completedQuests = Array.isArray(state.player.completedQuests) ? state.player.completedQuests : [];
             state.activeQuests = Array.isArray(state.activeQuests) ? state.activeQuests : [];

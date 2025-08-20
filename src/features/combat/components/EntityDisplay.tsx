@@ -84,7 +84,7 @@ export default function EntityDisplay({ entity, isPlayer = false, isTarget = fal
                     <span className="truncate font-bold">{name}</span>
                     {isTarget && <span className="text-xs text-primary font-normal">(Cible)</span>}
                 </div>
-                <Progress value={((attackProgressProp !== undefined ? attackProgressProp : entity.attackProgress) || 0) * 100} className={cn("h-1 bg-background/50 mt-1", isCompact ? "w-12" : "w-20")} indicatorClassName="bg-yellow-500" />
+                <Progress value={((isPlayer ? attackProgressProp : (entity as CombatEnemy).attackProgress) || 0) * 100} className={cn("h-1 bg-background/50 mt-1", isCompact ? "w-12" : "w-20")} indicatorClassName="bg-yellow-500" />
             </div>
             <span className={cn("text-muted-foreground flex-shrink-0", isCompact ? "text-xs" : "text-sm")}>Lvl {level}</span>
         </CardTitle>
