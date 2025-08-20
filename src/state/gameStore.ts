@@ -156,7 +156,8 @@ const resolveLoot = (monster: Monstre, gameData: GameData, playerClassId: Player
   }
 
   // --- 2. Determine Rarity ---
-  if (Math.random() > 0.8) { // 20% chance of no loot at all
+  // Auparavant, il y avait 80% de chance de ne rien obtenir. Je réduis ce taux.
+  if (Math.random() > 0.95) { // 5% chance of no loot at all
     return null;
   }
 
@@ -943,10 +944,11 @@ export const useGameStore = create<GameState>()(
           const { combat, player, inventory, gameData, currentDungeon, worldTier } = state;
 
           // --- Dungeon Chest Rewards ---
-          const chestGold = (currentDungeon?.palier ?? 1) * 50 * worldTier;
-          let chestItem: Item | null = null;
+          const chestGold = (currentDungeon?.palier ?? 1) * 150 * worldTier; // Augmentation de l'or
+          const chestItems: Item[] = [];
 
-          do {
+          // Ajout de plusieurs objets dans le coffre
+          for (let i = 0; i < 3; i++) {
             const possibleItemTemplates = gameData.items.filter(item =>
               item.rarity !== "Légendaire" && item.rarity !== "Unique" && !item.set && item.slot !== 'potion' &&
               (item.tagsClasse?.includes('common') || (player.classeId && item.tagsClasse?.includes(player.classeId)))
@@ -958,15 +960,16 @@ export const useGameStore = create<GameState>()(
               const itemLevel = currentDungeon?.palier ?? player.level;
               const roll = Math.random();
               let bonusRarity: Rareté = "Rare";
-              if (roll < 0.05) bonusRarity = "Légendaire"; // 5% chance for Legendary
-              else if (roll < 0.2) bonusRarity = "Épique"; // 15% chance for Epic
-              chestItem = generateProceduralItem(baseItemProps, itemLevel, bonusRarity, gameData.affixes);
+              if (roll < 0.1) bonusRarity = "Légendaire"; // 10% de chance pour un légendaire
+              else if (roll < 0.3) bonusRarity = "Épique"; // 20% de chance pour un épique
+              const chestItem = generateProceduralItem(baseItemProps, itemLevel, bonusRarity, gameData.affixes);
+              chestItems.push(chestItem);
             }
-          } while (chestItem && chestItem.rarity === 'Commun');
+          }
 
           const chestRewards = {
             gold: chestGold,
-            items: chestItem ? [chestItem] : [],
+            items: chestItems,
           };
 
           // Finalize rewards
