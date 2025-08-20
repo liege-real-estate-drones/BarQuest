@@ -64,22 +64,31 @@ export interface GameData {
   enchanting_components: EnchantingComponent[];
 }
 
+export type StatMod = {
+    stat: keyof Stats;
+    value: number;
+    modifier: 'additive' | 'multiplicative';
+};
+
 export interface Buff {
     id: string;
+    name: string;
     duration: number;
     value?: any;
     healingPerTick?: number;
     tickInterval?: number;
     nextTickIn?: number;
+    statMods?: StatMod[];
 }
 
 export interface Debuff {
     id:string;
     name: string;
     duration: number;
-    damagePerTick: number;
-    tickInterval: number;
-    nextTickIn: number;
+    damagePerTick?: number;
+    tickInterval?: number;
+    nextTickIn?: number;
+    statMods?: StatMod[];
 }
 
 export interface PlayerState {

@@ -88,6 +88,19 @@
                 "Attaque tous les ennemis proches pour 80/90/100/110/120% des dégâts de l'arme.",
                 "Coûte 25 Rage."
             ],
+            "effects": [
+                {
+                    "type": "damage",
+                    "damageType": "physical",
+                    "source": "weapon",
+                    "multiplier": 0.8,
+                    "target": "all_enemies"
+                },
+                {
+                    "type": "resource_cost",
+                    "amount": 25
+                }
+            ],
             "cooldown": 8
         },
         {
@@ -100,6 +113,18 @@
             "effets": [
                 "Tente d'achever une cible, infligeant 300% des dégâts de l'arme. Uniquement sur les cibles ayant moins de 20% de PV.",
                 "Coûte 30 Rage."
+            ],
+            "effects": [
+                {
+                    "type": "damage",
+                    "damageType": "physical",
+                    "source": "weapon",
+                    "multiplier": 3.0,
+                    "conditions": {
+                        "targetHpLessThan": 20
+                    }
+                },
+                { "type": "resource_cost", "amount": 30 }
             ],
             "cooldown": 5
         },
@@ -116,6 +141,20 @@
             "effets": [
                 "Pendant 10s, vos dégâts sont augmentés de 30%, mais les dégâts subis aussi de 15%.",
                 "Coûte 0 Rage."
+            ],
+            "effects": [
+                {
+                    "type": "buff",
+                    "id": "bloodrage",
+                    "name": "Rage Sanguinaire",
+                    "duration": 10,
+                    "buffType": "stat_modifier",
+                    "statMods": [
+                        { "stat": "Force", "modifier": "multiplicative", "value": 1.30 },
+                        { "stat": "Armure", "modifier": "multiplicative", "value": 0.85 }
+                    ]
+                },
+                { "type": "resource_cost", "amount": 0 }
             ],
             "cooldown": 45
         },
@@ -145,6 +184,26 @@
             "effets": [
                 "Une attaque vicieuse qui inflige 200% des dégâts de l'arme et réduit les soins reçus par la cible de 50% pendant 10s.",
                 "Coûte 30 Rage."
+            ],
+            "effects": [
+                {
+                    "type": "damage",
+                    "damageType": "physical",
+                    "source": "weapon",
+                    "multiplier": 2.0
+                },
+                {
+                    "type": "debuff",
+                    "debuffType": "stat_modifier",
+                    "id": "mortal_strike",
+                    "name": "Frappe Mortelle",
+                    "duration": 10,
+                    "target": "primary",
+                    "statMods": [
+                        { "stat": "HealingReceivedMultiplier", "modifier": "multiplicative", "value": 0.5 }
+                    ]
+                },
+                { "type": "resource_cost", "amount": 30 }
             ],
             "cooldown": 10
         },
@@ -252,6 +311,21 @@
             "effets": [
                 "Absorbe 50 points de dégâts. 50% des dégâts absorbés sont déduits de votre mana. Dure 20 secondes.",
                 "Coûte 15 Mana."
+            ],
+            "effects": [
+                {
+                    "type": "shield",
+                    "amount": { "source": "base_value", "multiplier": 50 }
+                },
+                {
+                    "type": "buff",
+                    "id": "mana_shield",
+                    "name": "Bouclier de Mana",
+                    "duration": 20,
+                    "buffType": "special",
+                    "value": 0.5
+                },
+                { "type": "resource_cost", "amount": 15 }
             ]
         },
         {
@@ -419,6 +493,19 @@
             "effets": [
                 "Projette des couteaux sur tous les ennemis proches, infligeant 90% des dégâts de l'arme.",
                 "Coûte 35 Énergie."
+            ],
+            "effects": [
+                {
+                    "type": "damage",
+                    "damageType": "physical",
+                    "source": "weapon",
+                    "multiplier": 0.9,
+                    "target": "all_enemies"
+                },
+                {
+                    "type": "resource_cost",
+                    "amount": 35
+                }
             ]
         },
         {
@@ -560,6 +647,13 @@
             "effets": [
                 "Crée un bouclier qui absorbe 40 dégâts. Dure 15s.",
                 "Coûte 20 Mana."
+            ],
+            "effects": [
+                {
+                    "type": "shield",
+                    "amount": { "source": "base_value", "multiplier": 40 }
+                },
+                { "type": "resource_cost", "amount": 20 }
             ]
         },
         {
