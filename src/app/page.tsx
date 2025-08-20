@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useGameStore } from '@/state/gameStore';
 import { TownView } from '@/features/town/TownView';
 import { CombatView } from '@/features/combat/CombatView';
+import { DungeonCompletionView } from '@/features/dungeons/DungeonCompletionView';
 import { useHydrated } from '@/hooks/useHydrated';
 import { LoaderCircle } from 'lucide-react';
 import { ChooseClassView } from '@/features/player/ChooseClassView';
@@ -113,6 +114,7 @@ export default function Home() {
     <main className="min-h-screen bg-background text-foreground">
       {view === 'MAIN' && <TownView />}
       {view === 'COMBAT' && <CombatView />}
+      {view === 'DUNGEON_COMPLETED' && <DungeonCompletionView />}
     </main>
   );
 }
