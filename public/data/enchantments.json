@@ -1,0 +1,91 @@
+[
+  {
+    "id": "enchant_force_1",
+    "name": "Enchantement de Force",
+    "description": "Augmente la Force.",
+    "affixRef": "Force",
+    "cost": [ { "id": "poussiere_arcanique", "amount": 10 } ]
+  },
+  {
+    "id": "enchant_dexterity_1",
+    "name": "Enchantement de Dextérité",
+    "description": "Augmente la Dextérité.",
+    "affixRef": "Dexterite",
+    "cost": [ { "id": "poussiere_arcanique", "amount": 10 } ]
+  },
+  {
+    "id": "enchant_intellect_1",
+    "name": "Enchantement d'Intellect",
+    "description": "Augmente l'Intelligence.",
+    "affixRef": "Intelligence",
+    "cost": [ { "id": "poussiere_arcanique", "amount": 10 } ]
+  },
+  {
+    "id": "enchant_spirit_1",
+    "name": "Enchantement d'Esprit",
+    "description": "Augmente l'Esprit.",
+    "affixRef": "Esprit",
+    "cost": [ { "id": "poussiere_arcanique", "amount": 10 } ]
+  },
+  {
+    "id": "enchant_vitality_1",
+    "name": "Enchantement de Vitalité",
+    "description": "Augmente les Points de Vie.",
+    "affixRef": "PV",
+    "cost": [ { "id": "poussiere_arcanique", "amount": 12 } ]
+  },
+  {
+    "id": "enchant_armor_1",
+    "name": "Enchantement d'Armure",
+    "description": "Augmente l'Armure.",
+    "affixRef": "Armure",
+    "cost": [ { "id": "essence_cosmique", "amount": 2 } ]
+  },
+  {
+    "id": "enchant_crit_1",
+    "name": "Enchantement de Précision Mortelle",
+    "description": "Augmente les chances de coup critique.",
+    "affixRef": "CritPct",
+    "cost": [ { "id": "cristal_du_vide", "amount": 1 } ]
+  },
+  {
+    "id": "enchant_fire_ward_1",
+    "name": "Garde de Feu",
+    "description": "Augmente la résistance au Feu.",
+    "affixRef": "ResElems.fire",
+    "cost": [
+      { "id": "eclat_elementaire_feu", "amount": 5 },
+      { "id": "poussiere_arcanique", "amount": 5 }
+    ]
+  },
+  {
+    "id": "enchant_frost_ward_1",
+    "name": "Garde de Givre",
+    "description": "Augmente la résistance au Givre.",
+    "affixRef": "ResElems.ice",
+    "cost": [
+      { "id": "eclat_elementaire_givre", "amount": 5 },
+      { "id": "poussiere_arcanique", "amount": 5 }
+    ]
+  },
+  {
+    "id": "enchant_shadow_ward_1",
+    "name": "Garde des Ombres",
+    "description": "Augmente la résistance à l'Ombre.",
+    "affixRef": "ResElems.shadow",
+    "cost": [
+      { "id": "eclat_elementaire_ombre", "amount": 5 },
+      { "id": "poussiere_arcanique", "amount": 5 }
+    ]
+  },
+  {
+    "id": "enchant_nature_ward_1",
+    "name": "Garde de la Nature",
+    "description": "Augmente la résistance à la Nature.",
+    "affixRef": "ResElems.nature",
+    "cost": [
+      { "id": "eclat_elementaire_nature", "amount": 5 },
+      { "id": "poussiere_arcanique", "amount": 5 }
+    ]
+  }
+]

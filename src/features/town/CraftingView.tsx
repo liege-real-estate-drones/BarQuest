@@ -18,17 +18,17 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ForgeView } from './ForgeView';
+import { EnchanterView } from './EnchanterView';
 
 const getRarityMultiplier = (rarity: Rareté): number => {
     const rarityMultiplier: Record<Rareté, number> = { "Commun": 1, "Magique": 1.5, "Rare": 2, "Épique": 3, "Légendaire": 5, "Unique": 5 };
     return rarityMultiplier[rarity] || 1;
 };
 
-const DismantleEnchantView: React.FC = () => {
-    const { inventory, dismantleItem, enchantItem } = useGameStore(state => ({
+const DismantleView: React.FC = () => {
+    const { inventory, dismantleItem } = useGameStore(state => ({
         inventory: state.inventory,
         dismantleItem: state.dismantleItem,
-        enchantItem: state.enchantItem,
     }));
 
     const [selectedItem, setSelectedItem] = useState<Item | null>(null);
@@ -53,13 +53,6 @@ const DismantleEnchantView: React.FC = () => {
             setSelectedItem(null);
         }
         setIsAlertOpen(false);
-    };
-
-    const handleEnchant = () => {
-        if (selectedItem) {
-            enchantItem(selectedItem.id);
-            // The item state will update automatically via Zustand
-        }
     };
 
     return (
@@ -100,13 +93,8 @@ const DismantleEnchantView: React.FC = () => {
                                     <div className="space-y-2">
                                         <div>
                                             <h3 className="font-semibold">Démanteler</h3>
-                                            <p className="text-sm text-gray-500">Gain: 1-{getRarityMultiplier(selectedItem.rarity)} scrap_metal | Possédés: {inventory.craftingMaterials['scrap_metal'] || 0}</p>
+                                            <p className="text-sm text-gray-500">Démanteler cet objet pour récupérer des composants d'artisanat.</p>
                                             <Button onClick={handleDismantleClick} variant="destructive" className="mt-1">Démanteler</Button>
-                                        </div>
-                                        <div>
-                                            <h3 className="font-semibold">Enchanter</h3>
-                                            <p className="text-sm text-gray-500">Requis: 5 scrap_metal | Possédés: {inventory.craftingMaterials['scrap_metal'] || 0}</p>
-                                            <Button onClick={handleEnchant} className="mt-1 bg-purple-500 hover:bg-purple-600">Enchanter</Button>
                                         </div>
                                     </div>
                                 </div>
@@ -149,10 +137,10 @@ export const CraftingView: React.FC = () => {
                     <ForgeView />
                 </TabsContent>
                 <TabsContent value="dismantle">
-                    <DismantleEnchantView />
+                    <DismantleView />
                 </TabsContent>
                 <TabsContent value="enchant">
-                    <DismantleEnchantView />
+                    <EnchanterView />
                 </TabsContent>
             </Tabs>
              <Card className="mt-4">

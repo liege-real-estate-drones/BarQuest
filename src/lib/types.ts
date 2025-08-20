@@ -17,6 +17,7 @@ import type {
   RecipeSchema,
   MaterialTypeSchema,
   ThemeSchema,
+  EnchantmentSchema,
 } from '@/data/schemas';
 
 export type Rareté = z.infer<typeof RaretéEnum>;
@@ -34,6 +35,7 @@ export type Dungeon = z.infer<typeof DungeonSchema>;
 export type Classe = z.infer<typeof ClasseSchema>;
 export type ItemSet = z.infer<typeof ItemSetSchema>;
 export type Recipe = z.infer<typeof RecipeSchema>;
+export type Enchantment = z.infer<typeof EnchantmentSchema>;
 
 export type PlayerClassId = 'berserker' | 'mage' | 'rogue' | 'cleric';
 
@@ -52,6 +54,7 @@ export interface GameData {
   factions: Faction[];
   sets: ItemSet[];
   recipes: Recipe[];
+  enchantments: Enchantment[];
 }
 
 export interface Buff {

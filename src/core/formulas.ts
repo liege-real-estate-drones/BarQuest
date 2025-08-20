@@ -59,4 +59,8 @@ export const isCriticalHit = (critChance: number, precision: number, targetDodge
     return Math.random() * 100 < finalCritChance;
 }
 
+export const scaleAffixValue = (baseValue: number, level: number): number => {
+    return Math.round(baseValue + (baseValue * level * 0.1) + (level * 0.5));
+};
+
 export const CRIT_MULTIPLIER = 1.5;

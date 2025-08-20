@@ -32,6 +32,7 @@ export const AffixSchema = z.object({
   portée: z.tuple([z.number(), z.number()]),
   échelonnage: z.enum(["lin", "exp", "palier"]),
   theme: ThemeSchema.optional(),
+  isEnchantment: z.boolean().optional(),
 });
 
 export const ItemSetSchema = z.object({
@@ -55,7 +56,7 @@ export const ItemSchema = z.object({
   niveauMin: z.number().int(),
   rarity: RaretéEnum,
   stats: StatsSchema.optional(),
-  affixes: z.array(z.object({ ref: z.string(), val: z.number() })).optional(),
+  affixes: z.array(z.object({ ref: z.string(), val: z.number(), isEnchantment: z.boolean().optional() })).optional(),
   tagsClasse: z.array(z.string()).default([]),
   effect: z.string().optional(),
   set: z.object({ id: z.string(), name: z.string() }).optional(),
@@ -120,6 +121,10 @@ export const DungeonSchema = z.object({
   palier: z.number().int(),
   name: z.string(),
   biome: z.enum(["frost","fire","nature","occult"]),
+  damagePenetration: z.object({
+      type: ThemeSchema,
+      value: z.number() // Par exemple, 25 pour 25% de pénétration
+  }).optional(),
   monsters: z.array(z.string()),
   modifiers: z.array(z.string()).default([]),
   killTarget: z.number().int().default(25),
@@ -173,6 +178,14 @@ export const RecipeSchema = z.object({
   result: z.string(),
   materials: z.record(z.string(), z.number()),
   cost: z.number().int(),
+});
+
+export const EnchantmentSchema = z.object({
+    id: z.string(),
+    name: z.string(),
+    description: z.string(),
+    affixRef: z.string(),
+    cost: z.array(z.object({ id: z.string(), amount: z.number() })),
 });
 
 export interface DungeonCompletionSummary {
