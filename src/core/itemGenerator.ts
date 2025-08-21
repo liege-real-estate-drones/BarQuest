@@ -155,13 +155,7 @@ export const generateProceduralItem = (
     monsterTheme?: string
 ): Item => {
     if (baseItem.type === 'quest' || !baseItem.gender) {
-        return {
-            ...baseItem,
-            id: uuidv4(),
-            niveauMin: itemLevel,
-            rarity: rarity,
-            gender: baseItem.gender || 'm',
-        };
+        return { ...baseItem, id: uuidv4(), niveauMin: itemLevel, rarity: rarity, gender: baseItem.gender || 'm' };
     }
 
     const newItem: Item = {
@@ -174,11 +168,52 @@ export const generateProceduralItem = (
     };
 
     const [minAffixes, maxAffixes] = rarityAffixCount[rarity] || [0, 0];
-    const numAffixes = Math.floor(Math.random() * (maxAffixes - minAffixes + 1)) + minAffixes;
+    let numAffixes = Math.floor(Math.random() * (maxAffixes - minAffixes + 1)) + minAffixes;
 
-    if (numAffixes > 0 && availableAffixes) {
-        const shuffledAffixes = [...availableAffixes].sort(() => 0.5 - Math.random());
-        const selectedAffixes = shuffledAffixes.slice(0, numAffixes);
+    const contextTags = [rarity.toLowerCase()];
+    let primaryTheme: string | undefined = undefined;
+
+    if (numAffixes > 0 && availableAffixes.length > 0) {
+        // Theme-first approach
+        const allPossibleThemes = [...new Set(Object.values(AFFIX_TO_THEME))];
+
+        // Prioritize dungeon theme
+        if (dungeonTheme && allPossibleThemes.includes(dungeonTheme) && Math.random() < 0.75) {
+            primaryTheme = dungeonTheme;
+        } else {
+            primaryTheme = selectRandom(allPossibleThemes);
+        }
+
+        if (primaryTheme) {
+            contextTags.push(primaryTheme);
+        }
+        if (monsterTheme) contextTags.push(monsterTheme);
+
+        const thematicAffixes = availableAffixes.filter(a => AFFIX_TO_THEME[a.ref] === primaryTheme);
+        const neutralAffixes = availableAffixes.filter(a => AFFIX_TO_THEME[a.ref] !== primaryTheme);
+
+        const selectedAffixes: Affixe[] = [];
+
+        // Ensure at least one thematic affix is chosen if possible
+        if (thematicAffixes.length > 0) {
+            const thematicAffix = selectRandom(thematicAffixes);
+            if (thematicAffix) {
+                selectedAffixes.push(thematicAffix);
+            }
+        } else {
+            // If no thematic affixes are available for the chosen theme, decrement numAffixes
+            // or select a random one to ensure the item is not empty if it should have stats.
+            const randomAffix = selectRandom(neutralAffixes);
+            if(randomAffix) selectedAffixes.push(randomAffix);
+        }
+
+        // Fill remaining slots with a mix of thematic and neutral affixes for variety
+        const remainingSlots = numAffixes - selectedAffixes.length;
+        if (remainingSlots > 0) {
+            const remainingPool = [...thematicAffixes.filter(a => !selectedAffixes.includes(a)), ...neutralAffixes];
+            const shuffledPool = remainingPool.sort(() => 0.5 - Math.random());
+            selectedAffixes.push(...shuffledPool.slice(0, remainingSlots));
+        }
 
         newItem.affixes = selectedAffixes.map(affix => {
             const [min, max] = affix.portée;
@@ -188,18 +223,7 @@ export const generateProceduralItem = (
         });
     }
 
-    // --- NEW Name Generation ---
-    const contextTags = [rarity.toLowerCase()];
-    if (dungeonTheme) contextTags.push(dungeonTheme);
-    if (monsterTheme) contextTags.push(monsterTheme);
-    // Add tags from the generated affixes to make the name more relevant
-    if (newItem.affixes) {
-        const affixTheme = newItem.affixes.map(a => AFFIX_TO_THEME[a.ref]).find(t => t !== undefined);
-        if (affixTheme) contextTags.push(affixTheme);
-    }
-
     newItem.name = generateLootItemName(newItem, { rarity: rarity, tags: contextTags });
-    // --- END NEW Name Generation ---
 
     return newItem;
 };
