@@ -1,0 +1,34 @@
+[
+  { "id": "strange_dust", "name": "Poussière étrange", "tier": 1, "type": "enchanting" },
+  { "id": "lesser_magic_essence", "name": "Essence de magie inférieure", "tier": 1, "type": "enchanting" },
+  { "id": "soul_dust", "name": "Poussière d'âme", "tier": 2, "type": "enchanting" },
+  { "id": "greater_magic_essence", "name": "Essence de magie supérieure", "tier": 2, "type": "enchanting" },
+  { "id": "vision_dust", "name": "Poussière de vision", "tier": 3, "type": "enchanting" },
+  { "id": "lesser_astral_essence", "name": "Essence astrale inférieure", "tier": 3, "type": "enchanting" },
+  { "id": "eternity_dust", "name": "Poussière d'éternité", "tier": 4, "type": "enchanting" },
+  { "id": "greater_astral_essence", "name": "Essence astrale supérieure", "tier": 4, "type": "enchanting" },
+  { "id": "nexus_crystal", "name": "Cristal du Nexus", "tier": 5, "type": "enchanting" },
+  { "id": "prismatic_shard", "name": "Éclat prismatique", "tier": 5, "type": "enchanting" },
+  { "id": "arcane_crystal", "name": "Cristal arcanique", "tier": 3, "type": "enchanting" },
+  { "id": "demonic_essence", "name": "Essence démoniaque", "tier": 4, "type": "enchanting" },
+  { "id": "primal_might", "name": "Puissance primordiale", "tier": 5, "type": "enchanting" },
+
+  { "id": "eternal_fire", "name": "Feu éternel", "tier": "elemental", "type": "elemental" },
+  { "id": "primal_fire", "name": "Feu primordial", "tier": "elemental", "type": "elemental" },
+  { "id": "crystalline_water", "name": "Eau cristalline", "tier": "elemental", "type": "elemental" },
+  { "id": "primordial_earth", "name": "Terre primordiale", "tier": "elemental", "type": "elemental" },
+  { "id": "frozen_shadow", "name": "Ombre figée", "tier": "elemental", "type": "elemental" },
+
+  { "id": "frozen_heart", "name": "Cœur gelé", "tier": "boss", "type": "boss" },
+  { "id": "heart_of_magma", "name": "Cœur de magma", "tier": 4, "type": "boss" },
+
+  { "id": "copper_ingot", "name": "Lingot de cuivre", "tier": 1, "type": "crafting" },
+  { "id": "light_leather", "name": "Cuir léger", "tier": 1, "type": "crafting" },
+  { "id": "iron_ingot", "name": "Lingot de fer", "tier": 2, "type": "crafting" },
+  { "id": "silver_nugget", "name": "Pépite d'argent", "tier": 2, "type": "crafting" },
+  { "id": "yeti_fur", "name": "Fourrure de yéti", "tier": 2, "type": "crafting" },
+  { "id": "silk_bolt", "name": "Rouleau de soie", "tier": 3, "type": "crafting" },
+  { "id": "steel_ingot", "name": "Lingot d'acier", "tier": 4, "type": "crafting" },
+  { "id": "enchanted_wood", "name": "Bois enchanté", "tier": 4, "type": "crafting" },
+  { "id": "mithril_ingot", "name": "Lingot de mithril", "tier": 5, "type": "crafting" }
+]

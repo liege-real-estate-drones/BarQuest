@@ -1,103 +1,150 @@
 [
   {
     "id": "enchant_minor_strength",
-    "name": "Enchantement Mineur de Force (+1 Force)",
-    "tier": 1,
-    "level": 1,
-    "description": "Augmente la Force de 1.",
-    "affixRef": "force_1",
-    "cost": [ { "id": "strange_dust", "amount": 2 } ],
-    "source": ["trainer"]
+    "name": "Ench. Mineur (Force)",
+    "tier": 1, "level": 5, "description": "+2 Force.", "affixRef": "Force_2",
+    "cost": [ { "id": "strange_dust", "amount": 1 } ], "source": ["trainer"]
+  },
+  {
+    "id": "enchant_minor_intellect",
+    "name": "Ench. Mineur (Intelligence)",
+    "tier": 1, "level": 5, "description": "+2 Intelligence.", "affixRef": "Intelligence_2",
+    "cost": [ { "id": "strange_dust", "amount": 1 } ], "source": ["trainer"]
+  },
+  {
+    "id": "enchant_minor_stamina",
+    "name": "Ench. Mineur (Endurance)",
+    "tier": 1, "level": 5, "description": "+5 PV.", "affixRef": "PV_5",
+    "cost": [ { "id": "strange_dust", "amount": 1 } ], "source": ["trainer"]
   },
   {
     "id": "enchant_minor_armor",
-    "name": "Enchantement Mineur d'Armure (+5 Armure)",
-    "tier": 1,
-    "level": 1,
-    "description": "Augmente l'Armure de 5.",
-    "affixRef": "armor_5",
-    "cost": [ { "id": "strange_dust", "amount": 1 }, { "id": "lesser_magic_essence", "amount": 1 } ],
-    "source": ["trainer"]
+    "name": "Ench. Mineur (Armure)",
+    "tier": 1, "level": 8, "description": "+10 Armure.", "affixRef": "Armure_10",
+    "cost": [ { "id": "strange_dust", "amount": 2 }, { "id": "lesser_magic_essence", "amount": 1 } ], "source": ["trainer"]
+  },
+
+  {
+    "id": "enchant_lesser_strength",
+    "name": "Ench. Inférieur (Force)",
+    "tier": 2, "level": 15, "description": "+4 Force.", "affixRef": "Force_4",
+    "cost": [ { "id": "soul_dust", "amount": 2 } ], "source": ["vendor", "drop"]
   },
   {
     "id": "enchant_lesser_intellect",
-    "name": "Enchantement Inférieur d'Intellect (+3 Intellect)",
-    "tier": 2,
-    "level": 15,
-    "description": "Augmente l'Intellect de 3.",
-    "affixRef": "intellect_3",
-    "cost": [ { "id": "soul_dust", "amount": 3 } ],
-    "source": ["vendor"]
+    "name": "Ench. Inférieur (Intelligence)",
+    "tier": 2, "level": 15, "description": "+4 Intelligence.", "affixRef": "Intelligence_4",
+    "cost": [ { "id": "soul_dust", "amount": 2 } ], "source": ["vendor", "drop"]
   },
   {
     "id": "enchant_lesser_stamina",
-    "name": "Enchantement Inférieur d'Endurance (+8 Endurance)",
-    "tier": 2,
-    "level": 15,
-    "description": "Augmente l'Endurance de 8.",
-    "affixRef": "stamina_8",
-    "cost": [ { "id": "soul_dust", "amount": 2 }, { "id": "greater_magic_essence", "amount": 1 } ],
+    "name": "Ench. Inférieur (Endurance)",
+    "tier": 2, "level": 18, "description": "+15 PV.", "affixRef": "PV_15",
+    "cost": [ { "id": "soul_dust", "amount": 3 }, { "id": "greater_magic_essence", "amount": 1 } ], "source": ["vendor", "drop"]
+  },
+  {
+    "id": "enchant_lesser_crit",
+    "name": "Ench. Inférieur (Critique)",
+    "tier": 2, "level": 20, "description": "+1% Critique.", "affixRef": "CritPct_1",
+    "cost": [ { "id": "soul_dust", "amount": 5 } ], "source": ["drop"]
+  },
+  {
+    "id": "enchant_lesser_fire_resistance",
+    "name": "Ench. Inférieur (Rés. Feu)",
+    "tier": 2, "level": 22, "description": "+8 Résistance au Feu.", "affixRef": "ResElems.fire_8",
+    "cost": [ { "id": "soul_dust", "amount": 3 }, { "id": "elemental_fire", "amount": 1 } ],
     "source": ["vendor", "drop"],
-    "reputationRequirement": { "factionId": "silver_guardians", "rankName": "Amical", "threshold": 1000 }
+    "reputationRequirement": { "factionId": "magma_watchers", "rankName": "Amical", "threshold": 1000 }
+  },
+
+  {
+    "id": "enchant_medium_strength",
+    "name": "Ench. Moyen (Force)",
+    "tier": 3, "level": 25, "description": "+7 Force.", "affixRef": "Force_7",
+    "cost": [ { "id": "vision_dust", "amount": 3 } ], "source": ["vendor", "drop"]
   },
   {
-    "id": "enchant_superior_haste",
-    "name": "Enchantement Supérieur de Hâte (+2% Hâte)",
-    "tier": 3,
-    "level": 30,
-    "description": "Augmente la Hâte de 2%.",
-    "affixRef": "haste_2pct",
-    "cost": [ { "id": "vision_dust", "amount": 5 }, { "id": "lesser_astral_essence", "amount": 2 } ],
-    "source": ["drop"]
+    "id": "enchant_medium_intellect",
+    "name": "Ench. Moyen (Intelligence)",
+    "tier": 3, "level": 25, "description": "+7 Intelligence.", "affixRef": "Intelligence_7",
+    "cost": [ { "id": "vision_dust", "amount": 3 } ], "source": ["vendor", "drop"]
   },
   {
-    "id": "enchant_superior_fire_resistance",
-    "name": "Enchantement Supérieur de Résistance au Feu (+15 Rés. Feu)",
-    "tier": 3,
-    "level": 30,
-    "description": "Augmente la Résistance au Feu de 15.",
-    "affixRef": "fire_resist_15",
-    "cost": [ { "id": "vision_dust", "amount": 3 }, { "id": "eternal_fire", "amount": 1 } ],
-    "source": ["drop"]
+    "id": "enchant_medium_stamina",
+    "name": "Ench. Moyen (Endurance)",
+    "tier": 3, "level": 28, "description": "+25 PV.", "affixRef": "PV_25",
+    "cost": [ { "id": "vision_dust", "amount": 4 }, { "id": "lesser_astral_essence", "amount": 1 } ], "source": ["drop"]
   },
   {
-    "id": "enchant_major_crit",
-    "name": "Enchantement Majeur de Critique (+3% Critique)",
-    "tier": 4,
-    "level": 50,
-    "description": "Augmente les chances de coup critique de 3%.",
-    "affixRef": "crit_3pct",
-    "cost": [ { "id": "eternity_dust", "amount": 8 }, { "id": "greater_astral_essence", "amount": 3 } ],
-    "source": ["rare_drop"]
+    "id": "enchant_medium_haste",
+    "name": "Ench. Moyen (Hâte)",
+    "tier": 3, "level": 30, "description": "+2% Hâte.", "affixRef": "Vitesse_2",
+    "cost": [ { "id": "vision_dust", "amount": 6 } ], "source": ["rare_drop"]
   },
   {
-    "id": "enchant_major_spell_power",
-    "name": "Enchantement Majeur de Puissance des sorts (+20 Pui. sorts)",
-    "tier": 4,
-    "level": 50,
-    "description": "Augmente la Puissance des sorts de 20.",
-    "affixRef": "spell_power_20",
-    "cost": [ { "id": "eternity_dust", "amount": 10 }, { "id": "greater_astral_essence", "amount": 2 } ],
-    "source": ["rare_drop"]
+    "id": "enchant_medium_ice_resistance",
+    "name": "Ench. Moyen (Rés. Glace)",
+    "tier": 3, "level": 32, "description": "+15 Résistance à la Glace.", "affixRef": "ResElems.ice_15",
+    "cost": [ { "id": "vision_dust", "amount": 4 }, { "id": "crystalline_water", "amount": 2 } ],
+    "source": ["vendor", "drop"],
+    "reputationRequirement": { "factionId": "silver_guardians", "rankName": "Honoré", "threshold": 3000 }
+  },
+
+  {
+    "id": "enchant_greater_strength",
+    "name": "Ench. Supérieur (Force)",
+    "tier": 4, "level": 35, "description": "+12 Force.", "affixRef": "Force_12",
+    "cost": [ { "id": "eternity_dust", "amount": 4 } ], "source": ["rare_drop"]
   },
   {
-    "id": "enchant_legendary_frost_ward",
-    "name": "Garde de Givre Légendaire",
-    "tier": 5,
-    "level": 60,
-    "description": "Absorbe une grande quantité de dégâts de Givre et augmente la résistance.",
-    "affixRef": "legendary_frost_ward",
-    "cost": [ { "id": "nexus_crystal", "amount": 1 }, { "id": "prismatic_shard", "amount": 2 }, { "id": "frozen_heart", "amount": 1 } ],
-    "source": ["boss_drop_yeti_chieftain"]
+    "id": "enchant_greater_intellect",
+    "name": "Ench. Supérieur (Intelligence)",
+    "tier": 4, "level": 35, "description": "+12 Intelligence.", "affixRef": "Intelligence_12",
+    "cost": [ { "id": "eternity_dust", "amount": 4 } ], "source": ["rare_drop"]
   },
   {
-    "id": "enchant_legendary_shadow_bolt",
-    "name": "Éclair d'Ombre Légendaire",
-    "tier": 5,
-    "level": 60,
-    "description": "Vos sorts d'ombre ont une chance de lancer un Éclair d'Ombre sur la cible.",
-    "affixRef": "legendary_shadow_bolt_proc",
-    "cost": [ { "id": "nexus_crystal", "amount": 1 }, { "id": "prismatic_shard", "amount": 2 }, { "id": "frozen_shadow", "amount": 5 } ],
-    "source": ["boss_drop_forgotten_crypts"]
+    "id": "enchant_greater_stamina",
+    "name": "Ench. Supérieur (Endurance)",
+    "tier": 4, "level": 38, "description": "+40 PV.", "affixRef": "PV_40",
+    "cost": [ { "id": "eternity_dust", "amount": 5 }, { "id": "greater_astral_essence", "amount": 1 } ], "source": ["rare_drop"]
+  },
+  {
+    "id": "enchant_greater_crit",
+    "name": "Ench. Supérieur (Critique)",
+    "tier": 4, "level": 40, "description": "+3% Critique.", "affixRef": "CritPct_3",
+    "cost": [ { "id": "eternity_dust", "amount": 8 } ], "source": ["rare_drop"]
+  },
+  {
+    "id": "enchant_greater_shadow_resistance",
+    "name": "Ench. Supérieur (Rés. Ombre)",
+    "tier": 4, "level": 42, "description": "+25 Résistance à l'Ombre.", "affixRef": "ResElems.shadow_25",
+    "cost": [ { "id": "eternity_dust", "amount": 6 }, { "id": "frozen_shadow", "amount": 2 } ],
+    "source": ["vendor", "drop"],
+    "reputationRequirement": { "factionId": "void_scholars", "rankName": "Révéré", "threshold": 6000 }
+  },
+
+  {
+    "id": "enchant_major_all_stats",
+    "name": "Ench. Majeur (Toutes stats)",
+    "tier": 5, "level": 50, "description": "+8 à toutes les statistiques de base.", "affixRef": "all_stats_8",
+    "cost": [ { "id": "prismatic_shard", "amount": 1 }, { "id": "nexus_crystal", "amount": 1 } ], "source": ["epic_drop"]
+  },
+  {
+    "id": "enchant_major_power",
+    "name": "Ench. Majeur (Puissance)",
+    "tier": 5, "level": 50, "description": "+15 Force et Intelligence.", "affixRef": "Force_15,Intelligence_15",
+    "cost": [ { "id": "prismatic_shard", "amount": 2 } ], "source": ["epic_drop"]
+  },
+  {
+    "id": "enchant_major_crit_damage",
+    "name": "Ench. Majeur (Dégâts critiques)",
+    "tier": 5, "level": 55, "description": "+15% Dégâts critiques.", "affixRef": "CritDmg_15",
+    "cost": [ { "id": "prismatic_shard", "amount": 1 }, { "id": "demonic_essence", "amount": 2 } ], "source": ["epic_drop"]
+  },
+  {
+    "id": "enchant_major_all_resistance",
+    "name": "Ench. Majeur (Toutes rés.)",
+    "tier": 5, "level": 60, "description": "+15 à toutes les résistances.", "affixRef": "all_resist_15",
+    "cost": [ { "id": "prismatic_shard", "amount": 2 }, { "id": "primal_might", "amount": 1 } ], "source": ["legendary_drop"]
   }
 ]

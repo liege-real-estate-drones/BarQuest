@@ -296,6 +296,7 @@
             "type": "actif",
             "rangMax": 5,
             "niveauRequis": 1,
+            "school": "ice",
             "effets": [
                 "Inflige 12/18/24/30/36 dégâts de Givre et ralentit la vitesse d'attaque de la cible de 20%.",
                 "Coûte 8 Mana."
@@ -303,7 +304,7 @@
             "effects": [
                 {
                     "type": "damage",
-                    "damageType": "frost",
+                    "damageType": "ice",
                     "source": "spell",
                     "baseValue": 12
                 },
@@ -407,6 +408,7 @@
             "type": "actif",
             "rangMax": 1,
             "niveauRequis": 20,
+            "school": "ice",
             "effets": [
                 "Invoque une tempête de glace qui inflige 15 dégâts de Givre à tous les ennemis chaque seconde pendant 8 secondes.",
                 "Coûte 75 Mana."
@@ -419,7 +421,7 @@
                     "id": "blizzard_dot",
                     "name": "Blizzard",
                     "duration": 8,
-                    "damageType": "frost",
+                    "damageType": "ice",
                     "totalDamage": {
                         "source": "base_value",
                         "multiplier": 120

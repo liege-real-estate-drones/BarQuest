@@ -7,9 +7,9 @@ import { Waves, Flame, Sprout, Skull } from 'lucide-react';
 
 const biomeIcons: Record<Dungeon['biome'], React.ReactNode> = {
     fire: <Flame className="h-4 w-4 text-red-500" />,
-    frost: <Waves className="h-4 w-4 text-blue-400" />,
+    ice: <Waves className="h-4 w-4 text-blue-400" />,
     nature: <Sprout className="h-4 w-4 text-green-500" />,
-    occult: <Skull className="h-4 w-4 text-purple-500" />,
+    shadow: <Skull className="h-4 w-4 text-purple-500" />,
 };
 
 export function DungeonInfo({ dungeon }: { dungeon: Dungeon }) {
