@@ -1259,6 +1259,7 @@ export const useGameStore = create<GameState>()(
                 itemsGained: [...combat.dungeonRunItems],
                 chestRewards: chestRewards,
                 recipesGained: [],
+                combatLog: combat.log,
             };
 
             // --- Bonus Recipe Drop from Chest ---
@@ -1279,7 +1280,6 @@ export const useGameStore = create<GameState>()(
             state.dungeonCompletionSummary = summary;
 
             inventory.gold += summary.goldGained + (summary.chestRewards?.gold ?? 0);
-            player.xp += summary.xpGained;
             inventory.items.push(...summary.itemsGained);
             if (summary.chestRewards) {
                 inventory.items.push(...summary.chestRewards.items);
@@ -1603,7 +1603,7 @@ export const useGameStore = create<GameState>()(
             if (player.activeBuffs.some(b => b.id === 'deadly_poison_buff') && Math.random() < 0.3) {
                 const poisonDamage = 5; // As per skill description
                 target.stats.PV -= poisonDamage;
-                combat.log.push({ message: `Your Deadly Poison deals an additional ${poisonDamage} damage to ${target.nom}.`, type: 'player_attack', timestamp: Date.now() });
+                combat.log.push({ message: `Your Deadly Poison deals an additional ${poisonDamage} damage to ${target.nom}.`, type: 'poison_proc', timestamp: Date.now() });
             }
 
             const attackMsg = `You hit ${target.nom} for ${mitigatedDamage} damage.`;
@@ -2212,7 +2212,7 @@ export const useGameStore = create<GameState>()(
             state.combat.log.push({ message: `You find ${goldDrop} gold.`, type: 'loot', timestamp: Date.now() });
             state.combat.goldGained += goldDrop;
 
-            state.combat.xpGained += xpGained;
+            state.player.xp += xpGained;
             state.combat.log.push({ message: `You gain ${xpGained} experience.`, type: 'info', timestamp: Date.now() });
 
             if (state.dungeonState && state.dungeonState.equipmentDropsPending > 0 && state.dungeonState.monstersRemainingInDungeon > 0) {
