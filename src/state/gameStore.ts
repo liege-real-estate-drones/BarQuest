@@ -1,4 +1,4 @@
-import create from 'zustand';
+import { create } from 'zustand';
 import { persist, createJSONStorage, StateStorage } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 import type { Dungeon, Monstre, Item, Talent, Skill, Stats, PlayerState, InventoryState, CombatLogEntry, CombatState, GameData, Quete, PlayerClassId, ResourceType, Rareté, CombatEnemy, ItemSet, PotionType, Recipe, Theme, Affixe, Enchantment, Buff, Debuff } from '@/lib/types';
@@ -138,7 +138,8 @@ interface GameState {
   getXpToNextLevel: () => number;
   applyTalentTrigger: (trigger: 'on_dodge') => void;
       applySpecialEffect: (trigger: string, context: { targetId: string, isCrit: boolean }) => void;
-  dismantleItem: (itemId: string) => void;
+  dismantleItem: (itemId: string) => { id: string, amount: number }[] | undefined;
+  dismantleAllUnusedItems: (maxRarity: Rareté) => { dismantledCount: number; materialsGained: Record<string, number> };
   enchantItem: (itemId: string, enchantmentId: string) => void;
   buyRecipe: (enchantmentId: string) => boolean;
   gambleForItem: (itemSlot: string) => Item | null;
@@ -240,7 +241,7 @@ const resolveLoot = (monster: Monstre, gameData: GameData, playerClassId: Player
 
 const biomeToTheme = (biome: Dungeon['biome'] | undefined): Theme | undefined => {
   if (!biome) return undefined;
-  const mapping: Record<Dungeon['biome'], Theme> = {
+  const mapping: Record<string, Theme> = {
     frost: 'ice',
     fire: 'fire',
     nature: 'nature',
@@ -436,7 +437,7 @@ export const useGameStore = create<GameState>()(
       dungeonState: null,
       dungeonStartTime: null,
       dungeonCompletionSummary: null,
-      gameData: { dungeons: [], monsters: [], items: [], talents: [], skills: [], affixes: [], classes: [], quests: [], factions: [], sets: [], recipes: [], enchantments: [], enchanting_components: [] },
+      gameData: { dungeons: [], monsters: [], items: [], talents: [], skills: [], affixes: [], classes: [], quests: [], factions: [], sets: [], recipes: [], enchantments: [], components: [] },
       player: getInitialPlayerState(),
       inventory: initialInventoryState,
       combat: initialCombatState,
@@ -511,7 +512,7 @@ export const useGameStore = create<GameState>()(
             state.gameData.sets = Array.isArray(data.sets) ? data.sets : [];
             state.gameData.recipes = Array.isArray(data.recipes) ? data.recipes : [];
             state.gameData.enchantments = Array.isArray(data.enchantments) ? data.enchantments : [];
-            state.gameData.enchanting_components = Array.isArray(data.enchanting_components) ? data.enchanting_components : [];
+            state.gameData.components = Array.isArray(data.components) ? data.components : [];
             state.isInitialized = true;
         });
       },
@@ -601,101 +602,205 @@ export const useGameStore = create<GameState>()(
           return newItem;
       },
 
+      dismantleAllUnusedItems: (maxRarity) => {
+        const rarityOrder: Record<Rareté, number> = {
+            'Commun': 0, 'Magique': 1, 'Rare': 2, 'Épique': 3, 'Légendaire': 4, 'Unique': 5
+        };
+        const maxRarityValue = rarityOrder[maxRarity];
+        let dismantledCount = 0;
+        const totalMaterialsGained: Record<string, number> = {};
+
+        set((state: GameState) => {
+            const itemsToKeep: Item[] = [];
+            const itemsToDismantle: Item[] = [];
+
+            state.inventory.items.forEach(item => {
+                const itemRarityValue = rarityOrder[item.rarity];
+                if (item.type !== 'quest' && itemRarityValue < maxRarityValue) {
+                    itemsToDismantle.push(item);
+                } else {
+                    itemsToKeep.push(item);
+                }
+            });
+
+            dismantledCount = itemsToDismantle.length;
+            if (dismantledCount === 0) {
+                return;
+            }
+
+            itemsToDismantle.forEach(itemToDismantle => {
+                // Re-using the single-item dismantle logic to calculate materials
+                const { rarity, niveauMin } = itemToDismantle;
+                let materialsGained: { id: string, amount: number }[] = [];
+                if (niveauMin >= 1 && niveauMin < 15) {
+                    if (rarity === 'Commun' || rarity === 'Magique') {
+                        materialsGained.push({ id: 'strange_dust', amount: Math.floor(Math.random() * 2) + 1 });
+                        if (rarity === 'Magique' && Math.random() < 0.35) {
+                            materialsGained.push({ id: 'lesser_magic_essence', amount: 1 });
+                        }
+                    }
+                }
+                if (niveauMin >= 15 && niveauMin < 30) {
+                     if (rarity === 'Commun') {
+                        materialsGained.push({ id: 'soul_dust', amount: 1 });
+                     } else if (rarity === 'Magique' || rarity === 'Rare') {
+                        materialsGained.push({ id: 'soul_dust', amount: Math.floor(Math.random() * 2) + 1 });
+                        if (rarity === 'Rare' && Math.random() < 0.35) {
+                            materialsGained.push({ id: 'greater_magic_essence', amount: 1 });
+                        }
+                    }
+                }
+                if (niveauMin >= 30 && niveauMin < 50) {
+                    if (rarity === 'Commun' || rarity === 'Magique') {
+                        materialsGained.push({ id: 'vision_dust', amount: 1 });
+                    } else if (rarity === 'Rare' || rarity === 'Épique') {
+                        materialsGained.push({ id: 'vision_dust', amount: Math.floor(Math.random() * 2) + 1 });
+                        if (rarity === 'Épique' && Math.random() < 0.35) {
+                            materialsGained.push({ id: 'lesser_astral_essence', amount: 1 });
+                        }
+                    }
+                }
+                if (niveauMin >= 50) {
+                     if (rarity === 'Commun' || rarity === 'Magique' || rarity === 'Rare') {
+                        materialsGained.push({ id: 'eternity_dust', amount: 1 });
+                    } else if (rarity === 'Épique') {
+                        materialsGained.push({ id: 'eternity_dust', amount: Math.floor(Math.random() * 3) + 1 });
+                         if (Math.random() < 0.35) {
+                            materialsGained.push({ id: 'greater_astral_essence', amount: 1 });
+                        }
+                    }
+                }
+                if (rarity === 'Légendaire') {
+                    materialsGained.push({ id: 'eternity_dust', amount: Math.floor(Math.random() * 4) + 2 });
+                    materialsGained.push({ id: 'nexus_crystal', amount: 1 });
+                    if (Math.random() < 0.5) {
+                        materialsGained.push({ id: 'prismatic_shard', amount: 1 });
+                    }
+                }
+                itemToDismantle.affixes?.forEach(affix => {
+                    const theme = AFFIX_TO_THEME[affix.ref];
+                    if (theme) {
+                        const elementalMaterials: Record<string, string> = {
+                            fire: 'eternal_fire',
+                            ice: 'crystalline_water',
+                            nature: 'primordial_earth',
+                            shadow: 'frozen_shadow'
+                        };
+                        if (elementalMaterials[theme] && Math.random() < 0.15) {
+                             materialsGained.push({ id: elementalMaterials[theme], amount: 1 });
+                        }
+                    }
+                });
+
+                materialsGained.forEach(mat => {
+                    totalMaterialsGained[mat.id] = (totalMaterialsGained[mat.id] || 0) + mat.amount;
+                    state.inventory.craftingMaterials[mat.id] = (state.inventory.craftingMaterials[mat.id] || 0) + mat.amount;
+                });
+            });
+
+            state.inventory.items = itemsToKeep;
+        });
+
+        return { dismantledCount, materialsGained: totalMaterialsGained };
+      },
+
       dismantleItem: (itemId) => {
+        let materialsGained: { id: string, amount: number }[] | undefined = undefined;
+
         set((state: GameState) => {
             const itemIndex = state.inventory.items.findIndex(i => i.id === itemId);
-            if (itemIndex === -1) return;
+            if (itemIndex === -1) {
+                materialsGained = undefined;
+                return;
+            }
 
             const itemToDismantle = state.inventory.items[itemIndex];
             state.inventory.items.splice(itemIndex, 1);
 
             const { rarity, niveauMin } = itemToDismantle;
-            let materialsGained: { id: string, amount: number }[] = [];
+            const calculatedMaterials: { id: string, amount: number }[] = [];
 
             // --- Nouvelle logique basée sur les paliers ---
-
-            // Palier I (Niv 1-15)
             if (niveauMin >= 1 && niveauMin < 15) {
                 if (rarity === 'Commun' || rarity === 'Magique') {
-                    materialsGained.push({ id: 'strange_dust', amount: Math.floor(Math.random() * 2) + 1 }); // 1-2
-                    if (rarity === 'Magique' && Math.random() < 0.35) { // 35% chance for essence
-                        materialsGained.push({ id: 'lesser_magic_essence', amount: 1 });
+                    calculatedMaterials.push({ id: 'strange_dust', amount: Math.floor(Math.random() * 2) + 1 });
+                    if (rarity === 'Magique' && Math.random() < 0.35) {
+                        calculatedMaterials.push({ id: 'lesser_magic_essence', amount: 1 });
                     }
                 }
             }
-
-            // Palier II (Niv 15-30)
             if (niveauMin >= 15 && niveauMin < 30) {
                  if (rarity === 'Commun') {
-                    materialsGained.push({ id: 'soul_dust', amount: 1 });
+                    calculatedMaterials.push({ id: 'soul_dust', amount: 1 });
                  } else if (rarity === 'Magique' || rarity === 'Rare') {
-                    materialsGained.push({ id: 'soul_dust', amount: Math.floor(Math.random() * 2) + 1 }); // 1-2
-                    if (rarity === 'Rare' && Math.random() < 0.35) { // 35% chance for essence
-                        materialsGained.push({ id: 'greater_magic_essence', amount: 1 });
+                    calculatedMaterials.push({ id: 'soul_dust', amount: Math.floor(Math.random() * 2) + 1 });
+                    if (rarity === 'Rare' && Math.random() < 0.35) {
+                        calculatedMaterials.push({ id: 'greater_magic_essence', amount: 1 });
                     }
                 }
             }
-
-            // Palier III (Niv 30-50)
             if (niveauMin >= 30 && niveauMin < 50) {
                 if (rarity === 'Commun' || rarity === 'Magique') {
-                    materialsGained.push({ id: 'vision_dust', amount: 1 });
+                    calculatedMaterials.push({ id: 'vision_dust', amount: 1 });
                 } else if (rarity === 'Rare' || rarity === 'Épique') {
-                    materialsGained.push({ id: 'vision_dust', amount: Math.floor(Math.random() * 2) + 1 }); // 1-2
-                    if (rarity === 'Épique' && Math.random() < 0.35) { // 35% chance for essence
-                        materialsGained.push({ id: 'lesser_astral_essence', amount: 1 });
+                    calculatedMaterials.push({ id: 'vision_dust', amount: Math.floor(Math.random() * 2) + 1 });
+                    if (rarity === 'Épique' && Math.random() < 0.35) {
+                        calculatedMaterials.push({ id: 'lesser_astral_essence', amount: 1 });
                     }
                 }
             }
-
-            // Palier IV (Niv 50+)
             if (niveauMin >= 50) {
                  if (rarity === 'Commun' || rarity === 'Magique' || rarity === 'Rare') {
-                    materialsGained.push({ id: 'eternity_dust', amount: 1 });
+                    calculatedMaterials.push({ id: 'eternity_dust', amount: 1 });
                 } else if (rarity === 'Épique') {
-                    materialsGained.push({ id: 'eternity_dust', amount: Math.floor(Math.random() * 3) + 1 }); // 1-3
-                     if (Math.random() < 0.35) { // 35% chance for essence
-                        materialsGained.push({ id: 'greater_astral_essence', amount: 1 });
+                    calculatedMaterials.push({ id: 'eternity_dust', amount: Math.floor(Math.random() * 3) + 1 });
+                     if (Math.random() < 0.35) {
+                        calculatedMaterials.push({ id: 'greater_astral_essence', amount: 1 });
                     }
                 }
             }
-
-            // Palier V (Endgame) - Légendaires (indépendant du niveau)
             if (rarity === 'Légendaire') {
-                materialsGained.push({ id: 'eternity_dust', amount: Math.floor(Math.random() * 4) + 2 }); // 2-5 T4 dust
-                materialsGained.push({ id: 'nexus_crystal', amount: 1 });
-                if (Math.random() < 0.5) { // 50% chance for shard
-                    materialsGained.push({ id: 'prismatic_shard', amount: 1 });
+                calculatedMaterials.push({ id: 'eternity_dust', amount: Math.floor(Math.random() * 4) + 2 });
+                calculatedMaterials.push({ id: 'nexus_crystal', amount: 1 });
+                if (Math.random() < 0.5) {
+                    calculatedMaterials.push({ id: 'prismatic_shard', amount: 1 });
                 }
             }
 
-            // --- Fin de la nouvelle logique ---
-
-            // Chance to get elemental components from items with elemental affixes (preserved)
             itemToDismantle.affixes?.forEach(affix => {
                 const theme = AFFIX_TO_THEME[affix.ref];
                 if (theme) {
                     const elementalMaterials: Record<string, string> = {
-                        fire: 'eternal_fire',
-                        ice: 'crystalline_water',
-                        nature: 'primordial_earth',
-                        shadow: 'frozen_shadow'
+                        fire: 'eternal_fire', ice: 'crystalline_water',
+                        nature: 'primordial_earth', shadow: 'frozen_shadow'
                     };
-                    if (elementalMaterials[theme] && Math.random() < 0.15) { // 15% chance
-                         materialsGained.push({ id: elementalMaterials[theme], amount: 1 });
+                    if (elementalMaterials[theme] && Math.random() < 0.15) {
+                         calculatedMaterials.push({ id: elementalMaterials[theme], amount: 1 });
                     }
                 }
             });
 
-            materialsGained.forEach(mat => {
+            calculatedMaterials.forEach(mat => {
                 state.inventory.craftingMaterials[mat.id] = (state.inventory.craftingMaterials[mat.id] || 0) + mat.amount;
             });
+            materialsGained = calculatedMaterials;
         });
+        return materialsGained;
       },
 
       enchantItem: (itemId, enchantmentId) => {
         set((state: GameState) => {
-            const item = state.inventory.items.find(i => i.id === itemId);
+            let item: Item | null = state.inventory.items.find(i => i.id === itemId) || null;
+
+            if (!item) {
+                for (const slot in state.inventory.equipment) {
+                    const equippedItem = state.inventory.equipment[slot as keyof typeof state.inventory.equipment];
+                    if (equippedItem && equippedItem.id === itemId) {
+                        item = equippedItem;
+                        break;
+                    }
+                }
+            }
             const enchantment = state.gameData.enchantments.find(e => e.id === enchantmentId);
 
             if (!item || !enchantment) {
@@ -1382,6 +1487,29 @@ export const useGameStore = create<GameState>()(
                 }
             });
             monsterInstance.initialHp = monsterInstance.stats.PV;
+
+            // Dynamically add elemental damage based on monster family and dungeon tier
+            const familyToElement: Record<string, Theme> = {
+                'Elemental': currentDungeon.biome,
+                'Dragonkin': currentDungeon.biome,
+                'Demon': 'fire',
+            };
+
+            const elementType = familyToElement[monsterInstance.famille];
+            if (elementType) {
+                const heroicMultiplier = get().isHeroicMode ? 1.5 : 1;
+                const bossMultiplier = monsterInstance.isBoss ? 1.5 : 1;
+                const baseDamage = (currentDungeon.palier * 2);
+
+                const min = Math.round(baseDamage * 0.8 * heroicMultiplier * bossMultiplier);
+                const max = Math.round(baseDamage * 1.2 * heroicMultiplier * bossMultiplier);
+
+                monsterInstance.elementalDamage = {
+                    type: elementType,
+                    min: min,
+                    max: max,
+                };
+            }
 
             newEnemies.push(monsterInstance);
           }
@@ -2086,38 +2214,31 @@ export const useGameStore = create<GameState>()(
                     return;
                 }
 
-                let enemyDamage = formulas.calculateMeleeDamage(enemy.stats.AttMin, enemy.stats.AttMax, formulas.calculateAttackPower(enemy.stats));
+                let physicalDamage = formulas.calculateMeleeDamage(enemy.stats.AttMin, enemy.stats.AttMax, formulas.calculateAttackPower(enemy.stats));
+                const playerDr = formulas.calculateArmorDR(state.player.stats.Armure, enemy.level);
+                let mitigatedPhysicalDamage = Math.round(physicalDamage * (1 - playerDr));
 
-                const { currentDungeon } = state;
-                if (currentDungeon?.damagePenetration) {
-                    const pen = currentDungeon.damagePenetration;
-                    const playerRes = state.player.stats.ResElems?.[pen.type] || 0;
-                    const effectiveRes = Math.max(0, playerRes - pen.value);
-                    const elementalDR = formulas.calculateResistanceDR(effectiveRes, enemy.level);
+                let mitigatedElementalDamage = 0;
+                let elementalDamageType: string | undefined = undefined;
 
-                    const physicalDamage = enemyDamage * 0.5;
-                    const elementalDamage = enemyDamage * 0.5;
-
-                    const physicalDr = formulas.calculateArmorDR(state.player.stats.Armure, enemy.level);
-                    const mitigatedPhysical = physicalDamage * (1 - physicalDr);
-                    const mitigatedElemental = elementalDamage * (1 - elementalDR);
-
-                    enemyDamage = mitigatedPhysical + mitigatedElemental;
-                } else {
-                    const playerDr = formulas.calculateArmorDR(state.player.stats.Armure, enemy.level);
-                    enemyDamage = enemyDamage * (1 - playerDr);
+                // Check for monster's inherent elemental damage
+                if (enemyInState.elementalDamage) {
+                    const elementalRoll = Math.random() * (enemyInState.elementalDamage.max - enemyInState.elementalDamage.min) + enemyInState.elementalDamage.min;
+                    const playerRes = state.player.stats.ResElems?.[enemyInState.elementalDamage.type] ?? 0;
+                    const elementalDR = formulas.calculateResistanceDR(playerRes, enemyInState.level);
+                    mitigatedElementalDamage = Math.round(elementalRoll * (1 - elementalDR));
+                    elementalDamageType = enemyInState.elementalDamage.type;
                 }
 
-                const mitigatedEnemyDamage = Math.round(enemyDamage);
-                let damageToPlayer = mitigatedEnemyDamage;
+                let totalDamage = mitigatedPhysicalDamage + mitigatedElementalDamage;
 
                 const buffedPlayerStats = getModifiedStats(state.player.stats, state.player.activeBuffs, state.player.form);
-                damageToPlayer *= (buffedPlayerStats.DamageReductionMultiplier || 1);
-                damageToPlayer = Math.round(damageToPlayer);
+                totalDamage *= (buffedPlayerStats.DamageReductionMultiplier || 1);
+                totalDamage = Math.round(totalDamage);
 
                 if (state.player.shield > 0) {
                     const manaShieldBuff = state.player.activeBuffs.find(b => b.id === 'mana_shield');
-                    let shieldAbsorption = Math.min(state.player.shield, damageToPlayer);
+                    let shieldAbsorption = Math.min(state.player.shield, totalDamage);
 
                     if (manaShieldBuff && state.player.resources.type === 'Mana') {
                         const manaDrain = Math.floor(shieldAbsorption * manaShieldBuff.value);
@@ -2130,12 +2251,12 @@ export const useGameStore = create<GameState>()(
                     }
 
                     state.player.shield -= shieldAbsorption;
-                    damageToPlayer -= shieldAbsorption;
+                    totalDamage -= shieldAbsorption;
                     state.combat.log.push({ message: `L'attaque de ${enemy.nom} est absorbée par votre bouclier pour ${shieldAbsorption} points.`, type: 'shield', timestamp: Date.now() });
                 }
 
-                if (damageToPlayer > 0) {
-                    if (state.player.stats.PV - damageToPlayer <= 0) { // Check for lethal damage
+                if (totalDamage > 0) {
+                    if (state.player.stats.PV - totalDamage <= 0) { // Check for lethal damage
                         const deathWardBuff = state.player.activeBuffs.find(b => b.isDeathWard);
                         if (deathWardBuff && deathWardBuff.deathWardHealPercent) {
                             const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
@@ -2146,13 +2267,26 @@ export const useGameStore = create<GameState>()(
                             // Remove the buff
                             state.player.activeBuffs = state.player.activeBuffs.filter(b => b.id !== deathWardBuff.id);
 
-                            damageToPlayer = 0; // Negate the damage
+                            totalDamage = 0; // Negate the damage
                         }
                     }
 
-                    if (damageToPlayer > 0) {
-                        state.player.stats.PV -= damageToPlayer;
-                        state.combat.log.push({ message: `${enemy.nom} vous inflige ${damageToPlayer} points de dégâts.`, type: 'enemy_attack', timestamp: Date.now() });
+                    if (totalDamage > 0) {
+                        state.player.stats.PV -= totalDamage;
+                        const elementalTypeToFrench: Record<string, string> = {
+                            fire: 'feu',
+                            ice: 'glace',
+                            nature: 'nature',
+                            shadow: 'ombre',
+                        };
+                        const translatedType = elementalDamageType ? elementalTypeToFrench[elementalDamageType] || elementalDamageType : '';
+
+                        let damageMessage = `${enemy.nom} vous inflige ${totalDamage} points de dégâts`;
+                        if (mitigatedElementalDamage > 0 && translatedType) {
+                            damageMessage += ` (${mitigatedPhysicalDamage} physiques, ${mitigatedElementalDamage} de ${translatedType})`;
+                        }
+                        damageMessage += '.';
+                        state.combat.log.push({ message: damageMessage, type: 'enemy_attack', timestamp: Date.now() });
                     }
                 }
 
@@ -2214,6 +2348,7 @@ export const useGameStore = create<GameState>()(
             state.combat.goldGained += goldDrop;
 
             state.player.xp += xpGained;
+            state.combat.xpGained += xpGained;
             state.combat.log.push({ message: `You gain ${xpGained} experience.`, type: 'info', timestamp: Date.now() });
 
             if (state.dungeonState && state.dungeonState.equipmentDropsPending > 0 && state.dungeonState.monstersRemainingInDungeon > 0) {
@@ -2253,7 +2388,7 @@ export const useGameStore = create<GameState>()(
                   const materialId = loot.id;
                   const amount = loot.quantity;
                   state.inventory.craftingMaterials[materialId] = (state.inventory.craftingMaterials[materialId] || 0) + amount;
-                  const material = state.gameData.enchanting_components.find(c => c.id === materialId);
+                  const material = state.gameData.components.find(c => c.id === materialId);
                   state.combat.log.push({ message: `You find ${amount} x ${material ? material.name : materialId}.`, type: 'loot', timestamp: Date.now() });
                 }
               });

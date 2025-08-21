@@ -82,5 +82,19 @@
       "strange_dust": 1
     },
     "cost": 30
-  }
+  },
+  { "id": "recipe_iron_sword", "name": "Épée en fer", "result": "craft_iron_sword", "materials": { "iron_ingot": 8, "strange_dust": 5 }, "cost": 100 },
+  { "id": "recipe_iron_axe", "name": "Hache en fer", "result": "craft_iron_axe", "materials": { "iron_ingot": 10, "light_leather": 2 }, "cost": 100 },
+  { "id": "recipe_iron_helm", "name": "Heaume en fer", "result": "craft_iron_helm", "materials": { "iron_ingot": 12 }, "cost": 120 },
+  { "id": "recipe_iron_chest", "name": "Cuirasse en fer", "result": "craft_iron_chest", "materials": { "iron_ingot": 20 }, "cost": 200 },
+
+  { "id": "recipe_steel_sword", "name": "Épée en acier", "result": "craft_steel_sword", "materials": { "steel_ingot": 8, "soul_dust": 5 }, "cost": 300 },
+  { "id": "recipe_steel_axe", "name": "Hache en acier", "result": "craft_steel_axe", "materials": { "steel_ingot": 10, "yeti_fur": 2 }, "cost": 300 },
+  { "id": "recipe_steel_helm", "name": "Heaume en acier", "result": "craft_steel_helm", "materials": { "steel_ingot": 12 }, "cost": 360 },
+  { "id": "recipe_steel_chest", "name": "Cuirasse en acier", "result": "craft_steel_chest", "materials": { "steel_ingot": 20 }, "cost": 600 },
+
+  { "id": "recipe_mithril_sword", "name": "Épée en mithril", "result": "craft_mithril_sword", "materials": { "mithril_ingot": 8, "vision_dust": 5 }, "cost": 900 },
+  { "id": "recipe_mithril_axe", "name": "Hache en mithril", "result": "craft_mithril_axe", "materials": { "mithril_ingot": 10, "enchanted_wood": 2 }, "cost": 900 },
+  { "id": "recipe_mithril_helm", "name": "Heaume en mithril", "result": "craft_mithril_helm", "materials": { "mithril_ingot": 12 }, "cost": 1080 },
+  { "id": "recipe_mithril_chest", "name": "Cuirasse en mithril", "result": "craft_mithril_chest", "materials": { "mithril_ingot": 20 }, "cost": 1800 }
 ]

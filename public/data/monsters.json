@@ -71,7 +71,7 @@
             "famille": "Elemental",
             "isBoss": false,
             "palier": 2,
-            "stats": { "PV": 60, "AttMin": 15, "AttMax": 20, "CritPct": 5, "CritDmg": 150, "Armure": 25, "Vitesse": 2, "Precision": 70, "Esquive": 18 }
+            "stats": { "PV": 60, "AttMin": 15, "AttMax": 20, "CritPct": 5, "CritDmg": 150, "Armure": 25, "Vitesse": 2, "Precision": 70, "Esquive": 18, "ResElems": { "ice": 25, "fire": -10 } }
         },
         {
             "id": "yeti_toddler",
@@ -107,7 +107,7 @@
             "famille": "Elemental",
             "isBoss": false,
             "palier": 3,
-            "stats": { "PV": 150, "AttMin": 25, "AttMax": 30, "CritPct": 5, "CritDmg": 150, "Armure": 40, "Vitesse": 2.5, "Precision": 75, "Esquive": 10 },
+            "stats": { "PV": 150, "AttMin": 25, "AttMax": 30, "CritPct": 5, "CritDmg": 150, "Armure": 40, "Vitesse": 2.5, "Precision": 75, "Esquive": 10, "ResElems": { "fire": 25, "ice": -10 } },
             "componentLoot": [
                 { "id": "eternal_fire", "chance": 0.15, "quantity": 1 }
             ]
@@ -155,7 +155,7 @@
             "famille": "Aberration",
             "isBoss": false,
             "palier": 5,
-            "stats": { "PV": 300, "AttMin": 50, "AttMax": 60, "CritPct": 12, "CritDmg": 170, "Armure": 100, "Vitesse": 1.9, "Precision": 85, "Esquive": 20 },
+            "stats": { "PV": 300, "AttMin": 50, "AttMax": 60, "CritPct": 12, "CritDmg": 170, "Armure": 100, "Vitesse": 1.9, "Precision": 85, "Esquive": 20, "ResElems": { "shadow": 25 } },
             "componentLoot": [
                 { "id": "frozen_shadow", "chance": 0.1, "quantity": 1 }
             ]
@@ -194,7 +194,7 @@
             "famille": "Elemental",
             "isBoss": false,
             "palier": 6,
-            "stats": { "PV": 450, "AttMin": 65, "AttMax": 80, "CritPct": 5, "CritDmg": 150, "Armure": 180, "Vitesse": 2.7, "Precision": 85, "Esquive": 15 },
+            "stats": { "PV": 450, "AttMin": 65, "AttMax": 80, "CritPct": 5, "CritDmg": 150, "Armure": 180, "Vitesse": 2.7, "Precision": 85, "Esquive": 15, "ResElems": { "ice": 30, "fire": -15 } },
             "componentLoot": [
                 { "id": "crystalline_water", "chance": 0.15, "quantity": 1 }
             ]
@@ -783,7 +783,7 @@
             "famille": "Elemental",
             "isBoss": true,
             "palier": 3,
-            "stats": { "PV": 800, "AttMin": 45, "AttMax": 55, "CritPct": 10, "CritDmg": 150, "Armure": 180, "Vitesse": 2.7, "Precision": 80, "Esquive": 12 },
+            "stats": { "PV": 800, "AttMin": 45, "AttMax": 55, "CritPct": 10, "CritDmg": 150, "Armure": 180, "Vitesse": 2.7, "Precision": 80, "Esquive": 12, "ResElems": { "fire": 40, "ice": -20 } },
             "specificLootTable": ["set_arcanist_cowl", "set_arcanist_robe"],
             "recipeLoot": [
                 { "id": "enchant_superior_fire_resistance", "chance": 0.1, "quantity": 1 }
@@ -900,7 +900,7 @@
             "famille": "Dragonkin",
             "isBoss": true,
             "palier": 7,
-            "stats": { "PV": 3500, "AttMin": 120, "AttMax": 150, "CritPct": 15, "CritDmg": 160, "Armure": 800, "Vitesse": 3.0, "Precision": 100, "Esquive": 12 },
+            "stats": { "PV": 3500, "AttMin": 120, "AttMax": 150, "CritPct": 15, "CritDmg": 160, "Armure": 800, "Vitesse": 3.0, "Precision": 100, "Esquive": 12, "ResElems": { "ice": 50, "fire": -25 } },
             "specificLootTable": ["garaks_icy_maw", "frostfang_bite"]
         },
         {

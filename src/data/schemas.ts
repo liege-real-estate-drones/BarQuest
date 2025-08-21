@@ -98,7 +98,7 @@ const ConditionSchema = z.object({
 
 const DamageEffectSchema = z.object({
     type: z.literal('damage'),
-    damageType: z.enum(['physical', 'fire', 'frost', 'arcane', 'holy', 'shadow', 'nature']),
+    damageType: z.enum(['physical', 'fire', 'ice', 'arcane', 'holy', 'shadow', 'nature']),
     source: z.enum(['weapon', 'spell']),
     target: z.enum(['primary', 'all_enemies']).optional(),
     multiplier: z.number().optional(),
@@ -143,7 +143,7 @@ const DebuffEffectSchema = z.object({
     id: z.string(),
     name: z.string(),
     duration: z.number(),
-    damageType: z.enum(['physical', 'fire', 'frost', 'arcane', 'holy', 'shadow', 'nature']).optional(),
+    damageType: z.enum(['physical', 'fire', 'ice', 'arcane', 'holy', 'shadow', 'nature']).optional(),
     totalDamage: z.object({
         source: z.enum(['weapon', 'spell_power', 'attack_power', 'base_value']),
         multiplier: z.number()
@@ -198,7 +198,7 @@ const BaseSkillTalentSchema = z.object({
 
 export const SkillSchema = BaseSkillTalentSchema.extend({
   type: z.literal("actif"),
-  school: z.enum(['holy', 'shadow', 'fire', 'frost', 'arcane', 'physical']).optional(),
+  school: z.enum(['holy', 'shadow', 'fire', 'ice', 'arcane', 'physical']).optional(),
   cooldown: z.number().default(0), // in seconds
 });
 
@@ -225,6 +225,11 @@ export const MonsterSchema = z.object({
   isBoss: z.boolean().default(false),
   palier: z.number().int(),
   stats: StatsSchema,
+  elementalDamage: z.object({
+    type: ThemeSchema,
+    min: z.number(),
+    max: z.number()
+  }).optional(),
   lootTableId: z.string().optional(),
   questItemId: z.string().optional(),
   specificLootTable: z.array(z.string()).optional(),
@@ -239,7 +244,7 @@ export const DungeonSchema = z.object({
   id: z.string(),
   palier: z.number().int(),
   name: z.string(),
-  biome: z.enum(["frost","fire","nature","occult"]),
+  biome: z.enum(["ice","fire","nature","shadow"]),
   damagePenetration: z.object({
       type: ThemeSchema,
       value: z.number() // Par exemple, 25 pour 25% de pénétration

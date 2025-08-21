@@ -104,15 +104,21 @@ function BuyRecipesTab() {
                     const factionName = repReq ? factions.find(f => f.id === repReq.factionId)?.name : '';
                     const isBuyable = gold >= recipe.price && !recipe.isLearned && recipe.hasRep;
 
-                    let rankName = '';
+                    const repInfo = { rankName: '', currentRankName: '', currentRepValue: 0, nextRankThreshold: 'Max' };
                     if (repReq && factionName) {
                         const faction = factions.find(f => f.id === repReq.factionId);
                         if (faction) {
                             const sortedRanks = [...faction.ranks].sort((a, b) => a.threshold - b.threshold);
-                            const currentRank = sortedRanks.find(r => repReq.threshold === r.threshold);
-                            if (currentRank) {
-                                rankName = currentRank.name;
-                            }
+
+                            const requiredRank = sortedRanks.find(r => repReq.threshold === r.threshold);
+                            if (requiredRank) repInfo.rankName = requiredRank.name;
+
+                            repInfo.currentRepValue = playerReputation[repReq.factionId]?.value || 0;
+                            const currentRank = sortedRanks.slice().reverse().find(r => repInfo.currentRepValue >= r.threshold);
+                            repInfo.currentRankName = currentRank ? currentRank.name : 'Inconnu';
+
+                            const nextRank = sortedRanks.find(r => repInfo.currentRepValue < r.threshold);
+                            repInfo.nextRankThreshold = nextRank ? String(nextRank.threshold) : 'Max';
                         }
                     }
 
@@ -122,9 +128,14 @@ function BuyRecipesTab() {
                                 <p className="font-medium">{recipe.name}</p>
                                 <p className="text-xs">{recipe.description}</p>
                                 {repReq && (
-                                    <p className={`text-xs mt-1 ${recipe.hasRep ? 'text-green-400' : 'text-red-400'}`}>
-                                        Nécessite: {factionName} - {rankName}
-                                    </p>
+                                    <div className="text-xs mt-1 space-y-0.5">
+                                        <p className={`${recipe.hasRep ? 'text-green-400' : 'text-red-400'}`}>
+                                            Nécessite: {factionName} - {repInfo.rankName} ({repReq.threshold})
+                                        </p>
+                                        <p className="text-gray-400">
+                                            Votre réputation: {repInfo.currentRankName} ({repInfo.currentRepValue} / {repInfo.nextRankThreshold})
+                                        </p>
+                                    </div>
                                 )}
                             </TableCell>
                             <TableCell className="text-right font-mono text-primary">{recipe.price}</TableCell>

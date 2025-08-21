@@ -6,6 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { ItemTooltip } from '@/components/ItemTooltip';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useToast } from '@/hooks/use-toast';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -62,20 +64,32 @@ const EnchantTab: React.FC = () => {
         return gameData.enchantments.filter(e => useGameStore.getState().player.learnedRecipes.includes(e.id));
     }, [gameData.enchantments]);
 
+    const enchantableItems = useMemo(() => {
+        const equippedItems = Object.values(inventory.equipment).filter((item): item is Item => item !== null);
+        const allItems = [...inventory.items, ...equippedItems];
+        return allItems.filter(i => i.slot && i.rarity !== 'Légendaire' && i.type !== 'quest');
+    }, [inventory.items, inventory.equipment]);
+
+    const isEquipped = (itemId: string) => {
+        return Object.values(inventory.equipment).some(equippedItem => equippedItem?.id === itemId);
+    };
+
     return (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
+            {/* Colonne d'inventaire */}
             <div className="md:col-span-1">
                 <Card>
-                    <CardHeader><CardTitle>Inventaire</CardTitle></CardHeader>
+                    <CardHeader><CardTitle>Objets Enchantables</CardTitle></CardHeader>
                     <CardContent>
                         <ScrollArea className="h-[400px]">
                             <div className="space-y-2">
-                                {inventory.items.filter(i => i.slot && i.rarity !== 'Légendaire').map(item => (
+                                {enchantableItems.map(item => (
                                     <div
                                         key={item.id}
-                                        className={`p-2 border rounded cursor-pointer ${selectedItem?.id === item.id ? 'bg-blue-900/50' : ''}`}
+                                        className={`p-2 border rounded cursor-pointer relative ${selectedItem?.id === item.id ? 'bg-blue-900/50' : ''}`}
                                         onClick={() => { setSelectedItem(item); setSelectedEnchantment(null); }}
                                     >
+                                        {isEquipped(item.id) && <span className="absolute top-1 right-1 text-xs bg-green-600 text-white px-1 rounded">Équipé</span>}
                                         <ItemTooltip item={item} />
                                     </div>
                                 ))}
@@ -84,23 +98,47 @@ const EnchantTab: React.FC = () => {
                     </CardContent>
                 </Card>
             </div>
-            <div className="md:col-span-2 grid grid-rows-2 gap-4">
+
+            {/* Colonne centrale "Workbench" */}
+            <div className="md:col-span-2">
                 <Card>
-                    <CardHeader><CardTitle>Objet à Enchanter</CardTitle></CardHeader>
-                    <CardContent>
-                        {selectedItem ? <ItemTooltip item={selectedItem} /> : <p>Sélectionnez un objet (non légendaire) de votre inventaire.</p>}
+                    <CardHeader><CardTitle>Atelier d'Enchantement</CardTitle></CardHeader>
+                    <CardContent className="space-y-4">
+                        <div>
+                            <h3 className="text-lg font-semibold mb-2">Objet à Enchanter</h3>
+                            {selectedItem ? <ItemTooltip item={selectedItem} /> : <p className="text-sm text-muted-foreground">Sélectionnez un objet (non légendaire) de votre inventaire.</p>}
+                        </div>
+                        <hr className="border-gray-700"/>
+                        <div>
+                            <h3 className="text-lg font-semibold mb-2">Enchantement Sélectionné</h3>
+                            {selectedEnchantment ? (
+                                <div>
+                                    <p className="font-semibold">{selectedEnchantment.name}</p>
+                                    <p className="text-sm text-gray-400">{selectedEnchantment.description}</p>
+                                </div>
+                            ) : <p className="text-sm text-muted-foreground">Sélectionnez un enchantement dans la liste de droite.</p>}
+                        </div>
+
                         {currentEnchantmentAffix && selectedEnchantment && (
                             <EnchantmentComparison
                                 currentAffix={currentEnchantmentAffix}
                                 newEnchantment={selectedEnchantment}
                             />
                         )}
+
+                        <Button onClick={handleEnchant} disabled={!selectedItem || !selectedEnchantment || !canAfford(selectedEnchantment!)} className="mt-4 w-full">
+                            Enchanter l&apos;objet
+                        </Button>
                     </CardContent>
                 </Card>
-                <Card>
+            </div>
+
+            {/* Colonne des enchantements */}
+            <div className="md:col-span-1">
+                 <Card>
                     <CardHeader><CardTitle>Enchantements Connus</CardTitle></CardHeader>
                     <CardContent>
-                        <ScrollArea className="h-[200px]">
+                        <ScrollArea className="h-[400px]">
                             {selectedItem ? (
                                 <div className="space-y-2">
                                     {learnedEnchantments.map(enchant => (
@@ -112,16 +150,13 @@ const EnchantTab: React.FC = () => {
                                             <p className="font-semibold">{enchant.name}</p>
                                             <p className="text-sm text-gray-400">{enchant.description}</p>
                                             <p className={`text-xs ${canAfford(enchant) ? 'text-green-400' : 'text-red-400'}`}>
-                                                Coût: {enchant.cost.map(c => `${c.amount} ${gameData.enchanting_components?.find(m => m.id === c.id)?.name || c.id}`).join(', ')}
+                                                Coût: {enchant.cost.map(c => `${c.amount} ${gameData.components?.find(m => m.id === c.id)?.name || c.id}`).join(', ')}
                                             </p>
                                         </div>
                                     ))}
                                 </div>
-                            ) : <p>Sélectionnez un objet pour voir les enchantements.</p>}
+                            ) : <p className="text-sm text-muted-foreground p-4 text-center">Sélectionnez un objet pour voir les enchantements disponibles.</p>}
                         </ScrollArea>
-                        <Button onClick={handleEnchant} disabled={!selectedItem || !selectedEnchantment || !canAfford(selectedEnchantment!)} className="mt-4 w-full">
-                            Enchanter l&apos;objet
-                        </Button>
                     </CardContent>
                 </Card>
             </div>
@@ -131,13 +166,18 @@ const EnchantTab: React.FC = () => {
 
 // Component for the "Dismantle" tab (moved from CraftingView)
 const DismantleTab: React.FC = () => {
-    const { inventory, dismantleItem } = useGameStore(state => ({
+    const { inventory, dismantleItem, gameData, dismantleAllUnusedItems } = useGameStore(state => ({
         inventory: state.inventory,
         dismantleItem: state.dismantleItem,
+        dismantleAllUnusedItems: state.dismantleAllUnusedItems,
+        gameData: state.gameData,
     }));
+    const { toast } = useToast();
 
     const [selectedItem, setSelectedItem] = useState<Item | null>(null);
     const [isAlertOpen, setIsAlertOpen] = useState(false);
+    const [rarityToDismantle, setRarityToDismantle] = useState<Rareté | null>(null);
+    const [isMassDismantleAlertOpen, setIsMassDismantleAlertOpen] = useState(false);
 
     const isEquipped = (itemId: string) => {
         return Object.values(inventory.equipment).some(equippedItem => equippedItem?.id === itemId);
@@ -154,10 +194,51 @@ const DismantleTab: React.FC = () => {
 
     const handleDismantleConfirm = () => {
         if (selectedItem) {
-            dismantleItem(selectedItem.id);
+            const materialsGained = dismantleItem(selectedItem.id);
+            if (materialsGained && materialsGained.length > 0) {
+                materialsGained.forEach(mat => {
+                    const materialName = gameData.components?.find(c => c.id === mat.id)?.name || mat.id;
+                    toast({
+                        title: "Matériau obtenu",
+                        description: `+ ${mat.amount} x ${materialName}`,
+                    });
+                });
+            } else {
+                 toast({
+                    title: "Désenchantement",
+                    description: "Aucun matériau n'a été obtenu.",
+                    variant: "destructive"
+                });
+            }
             setSelectedItem(null);
         }
         setIsAlertOpen(false);
+    };
+
+    const handleMassDismantle = () => {
+        if (!rarityToDismantle) return;
+        const { dismantledCount, materialsGained } = dismantleAllUnusedItems(rarityToDismantle);
+
+        if (dismantledCount > 0) {
+            const materialSummary = Object.entries(materialsGained)
+                .map(([id, amount]) => {
+                    const name = gameData.components?.find(c => c.id === id)?.name || id;
+                    return `${amount}x ${name}`;
+                })
+                .join(', ');
+
+            toast({
+                title: `${dismantledCount} objets démantelés`,
+                description: `Matériaux obtenus: ${materialSummary || 'Aucun'}`,
+            });
+        } else {
+            toast({
+                title: "Rien à démanteler",
+                description: "Aucun objet ne correspondait à vos critères.",
+            });
+        }
+        setRarityToDismantle(null);
+        setIsMassDismantleAlertOpen(false);
     };
 
     return (
@@ -169,7 +250,7 @@ const DismantleTab: React.FC = () => {
                             <CardTitle>Inventaire</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <ScrollArea className="h-[400px]">
+                            <ScrollArea className="h-[500px]">
                                 <div className="space-y-2">
                                     {inventory.items.map(item => (
                                         <div
@@ -186,10 +267,10 @@ const DismantleTab: React.FC = () => {
                     </Card>
                 </div>
 
-                <div className="md:col-span-2">
+                <div className="md:col-span-2 space-y-4">
                     <Card>
                         <CardHeader>
-                            <CardTitle>Objet à Démanteler</CardTitle>
+                            <CardTitle>Démanteler un objet</CardTitle>
                         </CardHeader>
                         <CardContent>
                             {selectedItem ? (
@@ -200,6 +281,29 @@ const DismantleTab: React.FC = () => {
                             ) : (
                                 <p>Sélectionnez un objet de votre inventaire à démanteler.</p>
                             )}
+                        </CardContent>
+                    </Card>
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Démantèlement de masse</CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            <p className="text-sm text-muted-foreground">
+                                Démantèle tous les objets non-équipés d'une rareté **inférieure** à celle sélectionnée.
+                            </p>
+                            <Select onValueChange={(value) => setRarityToDismantle(value as Rareté)} value={rarityToDismantle || ''}>
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Sélectionner une rareté max..." />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="Magique">Magique</SelectItem>
+                                    <SelectItem value="Rare">Rare</SelectItem>
+                                    <SelectItem value="Épique">Épique</SelectItem>
+                                </SelectContent>
+                            </Select>
+                            <Button variant="destructive" disabled={!rarityToDismantle} className="w-full" onClick={() => setIsMassDismantleAlertOpen(true)}>
+                                Tout démanteler
+                            </Button>
                         </CardContent>
                     </Card>
                 </div>
@@ -215,6 +319,20 @@ const DismantleTab: React.FC = () => {
                     <AlertDialogFooter>
                         <AlertDialogCancel>Annuler</AlertDialogCancel>
                         <AlertDialogAction onClick={handleDismantleConfirm}>Confirmer</AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+            <AlertDialog open={isMassDismantleAlertOpen} onOpenChange={setIsMassDismantleAlertOpen}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Êtes-vous sûr?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            Vous êtes sur le point de démanteler tous les objets non-équipés d'une rareté inférieure à "{rarityToDismantle}". Cette action est irréversible.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Annuler</AlertDialogCancel>
+                        <AlertDialogAction onClick={handleMassDismantle}>Confirmer</AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
@@ -261,7 +379,7 @@ const GrimoireTab: React.FC = () => {
                                         <ul className="list-disc list-inside text-xs text-gray-400">
                                             {enchant.cost.map(c => (
                                                 <li key={c.id}>
-                                                    {c.amount} x {useGameStore.getState().gameData.enchanting_components?.find(m => m.id === c.id)?.name || c.id}
+                                                    {c.amount} x {useGameStore.getState().gameData.components?.find(m => m.id === c.id)?.name || c.id}
                                                     <span className="text-gray-500"> (Vous avez {materials[c.id] || 0})</span>
                                                 </li>
                                             ))}

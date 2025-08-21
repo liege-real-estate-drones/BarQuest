@@ -913,6 +913,38 @@
         ],
         "tagsClasse": ["common"],
         "vendorPrice": 20
-      }
+      },
+      { "id": "craft_iron_sword", "name": "Épée en fer", "slot": "weapon", "tags": ["weapon", "sword", "metal", "crafted"], "niveauMin": 15, "rarity": "Commun", "tagsClasse": ["berserker", "rogue"], "vendorPrice": 50, "affixes": [] },
+      { "id": "craft_iron_axe", "name": "Hache en fer", "slot": "weapon", "tags": ["weapon", "axe", "metal", "crafted"], "niveauMin": 15, "rarity": "Commun", "tagsClasse": ["berserker"], "vendorPrice": 50, "affixes": [] },
+      { "id": "craft_iron_mace", "name": "Masse en fer", "slot": "weapon", "tags": ["weapon", "mace", "metal", "crafted"], "niveauMin": 15, "rarity": "Commun", "tagsClasse": ["cleric"], "vendorPrice": 50, "affixes": [] },
+      { "id": "craft_iron_dagger", "name": "Dague en fer", "slot": "weapon", "tags": ["weapon", "dagger", "metal", "crafted"], "niveauMin": 15, "rarity": "Commun", "tagsClasse": ["rogue"], "vendorPrice": 40, "affixes": [] },
+      { "id": "craft_oak_staff", "name": "Bâton en chêne", "slot": "weapon", "tags": ["weapon", "staff", "wood", "crafted"], "niveauMin": 15, "rarity": "Commun", "tagsClasse": ["mage", "cleric"], "vendorPrice": 50, "affixes": [] },
+      { "id": "craft_iron_helm", "name": "Heaume en fer", "slot": "head", "tags": ["armor", "head", "metal", "crafted"], "niveauMin": 15, "rarity": "Commun", "tagsClasse": ["berserker", "cleric"], "vendorPrice": 40, "affixes": [] },
+      { "id": "craft_iron_chest", "name": "Cuirasse en fer", "slot": "chest", "tags": ["armor", "chest", "metal", "crafted"], "niveauMin": 16, "rarity": "Commun", "tagsClasse": ["berserker", "cleric"], "vendorPrice": 60, "affixes": [] },
+      { "id": "craft_iron_legs", "name": "Jambières en fer", "slot": "legs", "tags": ["armor", "legs", "metal", "crafted"], "niveauMin": 16, "rarity": "Commun", "tagsClasse": ["berserker", "cleric"], "vendorPrice": 55, "affixes": [] },
+      { "id": "craft_iron_boots", "name": "Bottes en fer", "slot": "feet", "tags": ["armor", "feet", "metal", "crafted"], "niveauMin": 14, "rarity": "Commun", "tagsClasse": ["berserker", "cleric"], "vendorPrice": 35, "affixes": [] },
+      { "id": "craft_iron_gloves", "name": "Gants de fer", "slot": "hands", "tags": ["armor", "hands", "metal", "crafted"], "niveauMin": 14, "rarity": "Commun", "tagsClasse": ["berserker", "cleric"], "vendorPrice": 35, "affixes": [] },
+
+      { "id": "craft_steel_sword", "name": "Épée en acier", "slot": "weapon", "tags": ["weapon", "sword", "metal", "crafted"], "niveauMin": 30, "rarity": "Commun", "tagsClasse": ["berserker", "rogue"], "vendorPrice": 150, "affixes": [] },
+      { "id": "craft_steel_axe", "name": "Hache en acier", "slot": "weapon", "tags": ["weapon", "axe", "metal", "crafted"], "niveauMin": 30, "rarity": "Commun", "tagsClasse": ["berserker"], "vendorPrice": 150, "affixes": [] },
+      { "id": "craft_steel_mace", "name": "Masse en acier", "slot": "weapon", "tags": ["weapon", "mace", "metal", "crafted"], "niveauMin": 30, "rarity": "Commun", "tagsClasse": ["cleric"], "vendorPrice": 150, "affixes": [] },
+      { "id": "craft_steel_dagger", "name": "Dague en acier", "slot": "weapon", "tags": ["weapon", "dagger", "metal", "crafted"], "niveauMin": 30, "rarity": "Commun", "tagsClasse": ["rogue"], "vendorPrice": 120, "affixes": [] },
+      { "id": "craft_yew_staff", "name": "Bâton en if", "slot": "weapon", "tags": ["weapon", "staff", "wood", "crafted"], "niveauMin": 30, "rarity": "Commun", "tagsClasse": ["mage", "cleric"], "vendorPrice": 150, "affixes": [] },
+      { "id": "craft_steel_helm", "name": "Heaume en acier", "slot": "head", "tags": ["armor", "head", "metal", "crafted"], "niveauMin": 30, "rarity": "Commun", "tagsClasse": ["berserker", "cleric"], "vendorPrice": 120, "affixes": [] },
+      { "id": "craft_steel_chest", "name": "Cuirasse en acier", "slot": "chest", "tags": ["armor", "chest", "metal", "crafted"], "niveauMin": 32, "rarity": "Commun", "tagsClasse": ["berserker", "cleric"], "vendorPrice": 180, "affixes": [] },
+      { "id": "craft_steel_legs", "name": "Jambières en acier", "slot": "legs", "tags": ["armor", "legs", "metal", "crafted"], "niveauMin": 32, "rarity": "Commun", "tagsClasse": ["berserker", "cleric"], "vendorPrice": 165, "affixes": [] },
+      { "id": "craft_steel_boots", "name": "Bottes en acier", "slot": "feet", "tags": ["armor", "feet", "metal", "crafted"], "niveauMin": 29, "rarity": "Commun", "tagsClasse": ["berserker", "cleric"], "vendorPrice": 105, "affixes": [] },
+      { "id": "craft_steel_gloves", "name": "Gants de acier", "slot": "hands", "tags": ["armor", "hands", "metal", "crafted"], "niveauMin": 29, "rarity": "Commun", "tagsClasse": ["berserker", "cleric"], "vendorPrice": 105, "affixes": [] },
+
+      { "id": "craft_mithril_sword", "name": "Épée en mithril", "slot": "weapon", "tags": ["weapon", "sword", "metal", "crafted"], "niveauMin": 45, "rarity": "Commun", "tagsClasse": ["berserker", "rogue"], "vendorPrice": 450, "affixes": [] },
+      { "id": "craft_mithril_axe", "name": "Hache en mithril", "slot": "weapon", "tags": ["weapon", "axe", "metal", "crafted"], "niveauMin": 45, "rarity": "Commun", "tagsClasse": ["berserker"], "vendorPrice": 450, "affixes": [] },
+      { "id": "craft_mithril_mace", "name": "Masse en mithril", "slot": "weapon", "tags": ["weapon", "mace", "metal", "crafted"], "niveauMin": 45, "rarity": "Commun", "tagsClasse": ["cleric"], "vendorPrice": 450, "affixes": [] },
+      { "id": "craft_mithril_dagger", "name": "Dague en mithril", "slot": "weapon", "tags": ["weapon", "dagger", "metal", "crafted"], "niveauMin": 45, "rarity": "Commun", "tagsClasse": ["rogue"], "vendorPrice": 360, "affixes": [] },
+      { "id": "craft_ebony_staff", "name": "Bâton en ébène", "slot": "weapon", "tags": ["weapon", "staff", "wood", "crafted"], "niveauMin": 45, "rarity": "Commun", "tagsClasse": ["mage", "cleric"], "vendorPrice": 450, "affixes": [] },
+      { "id": "craft_mithril_helm", "name": "Heaume en mithril", "slot": "head", "tags": ["armor", "head", "metal", "crafted"], "niveauMin": 45, "rarity": "Commun", "tagsClasse": ["berserker", "cleric"], "vendorPrice": 360, "affixes": [] },
+      { "id": "craft_mithril_chest", "name": "Cuirasse en mithril", "slot": "chest", "tags": ["armor", "chest", "metal", "crafted"], "niveauMin": 46, "rarity": "Commun", "tagsClasse": ["berserker", "cleric"], "vendorPrice": 540, "affixes": [] },
+      { "id": "craft_mithril_legs", "name": "Jambières en mithril", "slot": "legs", "tags": ["armor", "legs", "metal", "crafted"], "niveauMin": 46, "rarity": "Commun", "tagsClasse": ["berserker", "cleric"], "vendorPrice": 495, "affixes": [] },
+      { "id": "craft_mithril_boots", "name": "Bottes en mithril", "slot": "feet", "tags": ["armor", "feet", "metal", "crafted"], "niveauMin": 44, "rarity": "Commun", "tagsClasse": ["berserker", "cleric"], "vendorPrice": 315, "affixes": [] },
+      { "id": "craft_mithril_gloves", "name": "Gants de mithril", "slot": "hands", "tags": ["armor", "hands", "metal", "crafted"], "niveauMin": 44, "rarity": "Commun", "tagsClasse": ["berserker", "cleric"], "vendorPrice": 315, "affixes": [] }
   ]
 }

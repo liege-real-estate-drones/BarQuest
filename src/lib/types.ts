@@ -61,7 +61,7 @@ export interface GameData {
   sets: ItemSet[];
   recipes: Recipe[];
   enchantments: Enchantment[];
-  enchanting_components: EnchantingComponent[];
+  components: EnchantingComponent[];
 }
 
 export type StatMod = {
@@ -157,6 +157,11 @@ export type CombatEnemy = Monstre & {
     templateId: string;
     activeDebuffs: Debuff[];
     stunDuration: number;
+    elementalDamage?: {
+        type: Theme;
+        min: number;
+        max: number;
+    };
 };
 
 export interface CombatLogEntry {
