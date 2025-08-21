@@ -71,6 +71,7 @@ export const ItemSchema = z.object({
   sockets: z.number().optional(),
   enchantment: AffixSchema.optional(),
   isCrafted: z.boolean().optional(),
+  isPlural: z.boolean().optional(),
   specialEffect: z.object({
     trigger: z.string(),
     effect: z.string(),
@@ -326,8 +327,10 @@ export interface DungeonCompletionSummary {
 }
 
 export const NameAffixSchema = z.object({
-    m: z.string(),
-    f: z.string(),
+    ms: z.string(),
+    fs: z.string(),
+    mp: z.string(),
+    fp: z.string(),
     tags: z.array(z.string()),
 });
 
