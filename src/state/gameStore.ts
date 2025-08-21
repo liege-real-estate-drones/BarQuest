@@ -1300,7 +1300,7 @@ export const useGameStore = create<GameState>()(
                 const completedQuestsThisDungeon: string[] = [];
                 state.activeQuests.forEach(activeQuest => {
                     const { quete } = activeQuest;
-                    if (quete.type === 'nettoyage' && quete.requirements.dungeonId === dungeonId) {
+                    if (quete.type === 'nettoyage' && quete.requirements.dungeonId === dungeonId && quete.requirements.clearCount) {
                         if (newClearCount >= quete.requirements.clearCount) {
                             player.xp += quete.rewards.xp;
                             inventory.gold += quete.rewards.gold;
