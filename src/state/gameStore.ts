@@ -1406,6 +1406,8 @@ export const useGameStore = create<GameState>()(
             return;
           }
 
+          const deadEnemyIdsFromActions: string[] = [];
+
           set((state: GameState) => {
               const livingEnemies = state.combat.enemies.filter(e => e.stats.PV > 0);
               if (livingEnemies.length === 0) {
@@ -1524,7 +1526,6 @@ export const useGameStore = create<GameState>()(
               get().enemyAttacks();
           }
 
-          const deadEnemyIdsFromActions: string[] = [];
           set((state: GameState) => {
             state.combat.pendingActions = state.combat.pendingActions?.filter(action => {
                 if (action.type === 'damage_wave') {
