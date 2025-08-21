@@ -1,4 +1,13 @@
-import type { Stats } from '@/lib/types';
+import type { Stats, Rareté } from '@/lib/types';
+
+export const rarityMultiplier: Record<Rareté, number> = {
+    "Commun": 1,
+    "Magique": 1.5,
+    "Rare": 2.5,
+    "Épique": 5,
+    "Légendaire": 10,
+    "Unique": 20,
+};
 
 // Player formulas
 export const calculateMaxHP = (level: number, stats: Stats): number => {

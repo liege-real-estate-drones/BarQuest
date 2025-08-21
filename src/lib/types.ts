@@ -161,7 +161,7 @@ export type CombatEnemy = Monstre & {
 
 export interface CombatLogEntry {
     message: string;
-    type: 'player_attack' | 'enemy_attack' | 'crit' | 'loot' | 'info' | 'flee' | 'levelup' | 'heal' | 'quest' | 'shield';
+    type: 'player_attack' | 'enemy_attack' | 'crit' | 'loot' | 'info' | 'flee' | 'levelup' | 'heal' | 'quest' | 'shield' | 'poison_proc';
     timestamp: number;
     item?: Item;
 }
@@ -180,4 +180,9 @@ export interface CombatState {
   pendingActions: any[];
   goldGained: number;
   xpGained: number;
+}
+
+export interface ItemGenerationContext {
+  rarity: Rareté;
+  tags: string[];
 }

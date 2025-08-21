@@ -3,6 +3,7 @@
       {
         "id": "worn_leather_cap",
         "name": "Coiffe usée",
+        "gender": "f",
         "slot": "head",
         "material_type": "leather",
         "niveauMin": 1,
@@ -16,6 +17,7 @@
       {
         "id": "patched_leather_tunic",
         "name": "Tunique rapiécée",
+        "gender": "f",
         "slot": "chest",
         "material_type": "leather",
         "niveauMin": 1,
@@ -30,6 +32,7 @@
       {
         "id": "chipped_shortsword",
         "name": "Épée courte ébréchée",
+        "gender": "f",
         "slot": "weapon",
         "material_type": "metal",
         "niveauMin": 1,
@@ -44,6 +47,7 @@
       {
         "id": "gnarled_staff",
         "name": "Bâton noueux",
+        "gender": "m",
         "slot": "weapon",
         "material_type": "wood",
         "niveauMin": 1,
@@ -59,6 +63,7 @@
       {
         "id": "sturdy_iron_greaves",
         "name": "Jambières robustes",
+        "gender": "f",
         "slot": "legs",
         "material_type": "metal",
         "niveauMin": 3,
@@ -73,6 +78,7 @@
       {
         "id": "apprentice_gloves",
         "name": "Gants d'apprenti",
+        "gender": "m",
         "slot": "hands",
         "material_type": "cloth",
         "niveauMin": 2,
@@ -87,6 +93,7 @@
       {
         "id": "warriors_greathelm",
         "name": "Grand heaume de guerrier",
+        "gender": "m",
         "slot": "head",
         "material_type": "metal",
         "niveauMin": 5,
@@ -102,6 +109,7 @@
       {
         "id": "mages_circlet",
         "name": "Cercle de mage",
+        "gender": "m",
         "slot": "head",
         "material_type": "metal",
         "niveauMin": 5,
@@ -117,6 +125,7 @@
       {
         "id": "rogues_cowl",
         "name": "Capuche de voleur",
+        "gender": "f",
         "slot": "head",
         "material_type": "leather",
         "niveauMin": 5,
@@ -132,6 +141,7 @@
       {
         "id": "clerics_diadem",
         "name": "Diadème de clerc",
+        "gender": "m",
         "slot": "head",
         "material_type": "metal",
         "niveauMin": 5,
@@ -147,6 +157,7 @@
       {
         "id": "axe_of_the_deathbringer",
         "name": "Hache du Semeur de Mort",
+        "gender": "f",
         "slot": "weapon",
         "material_type": "metal",
         "niveauMin": 20,
@@ -170,6 +181,7 @@
       {
         "id": "staff_of_the_comet_caller",
         "name": "Bâton de l'Invocateur de Comètes",
+        "gender": "m",
         "slot": "weapon",
         "material_type": "wood",
         "niveauMin": 20,
@@ -186,6 +198,7 @@
       {
         "id": "kingslayers_fangs",
         "name": "Crocs du Régicide",
+        "gender": "m",
         "slot": "weapon",
         "material_type": "metal",
         "niveauMin": 20,
@@ -202,6 +215,7 @@
       {
         "id": "hammer_of_divine_light",
         "name": "Marteau de Lumière Divine",
+        "gender": "m",
         "slot": "weapon",
         "material_type": "metal",
         "niveauMin": 20,
@@ -218,6 +232,7 @@
       {
         "id": "garaks_icy_maw",
         "name": "Gueule glaciale de Garak",
+        "gender": "f",
         "slot": "head",
         "material_type": "metal",
         "niveauMin": 22,
@@ -233,6 +248,7 @@
       {
         "id": "frostfang_bite",
         "name": "Morsure de Givre-croc",
+        "gender": "f",
         "slot": "weapon",
         "material_type": "metal",
         "niveauMin": 22,
@@ -249,6 +265,7 @@
       {
         "id": "set_silver_guard_helm",
         "name": "Heaume de la Garde d'Argent",
+        "gender": "m",
         "slot": "head",
         "material_type": "metal",
         "niveauMin": 10,
@@ -264,6 +281,7 @@
       {
         "id": "set_silver_guard_chest",
         "name": "Cuirasse de la Garde d'Argent",
+        "gender": "f",
         "slot": "chest",
         "material_type": "metal",
         "niveauMin": 12,
@@ -279,6 +297,7 @@
       {
         "id": "set_arcanist_cowl",
         "name": "Capuche de l'Arcaniste",
+        "gender": "f",
         "slot": "head",
         "material_type": "cloth",
         "niveauMin": 10,
@@ -294,6 +313,7 @@
       {
         "id": "set_arcanist_robe",
         "name": "Robe de l'Arcaniste",
+        "gender": "f",
         "slot": "chest",
         "material_type": "cloth",
         "niveauMin": 12,
@@ -309,6 +329,7 @@
       {
         "id": "set_shadow_shroud_mask",
         "name": "Masque du Linceul de l'Ombre",
+        "gender": "m",
         "slot": "head",
         "material_type": "leather",
         "niveauMin": 10,
@@ -324,6 +345,7 @@
       {
         "id": "set_shadow_shroud_tunic",
         "name": "Tunique du Linceul de l'Ombre",
+        "gender": "f",
         "slot": "chest",
         "material_type": "leather",
         "niveauMin": 12,
@@ -339,6 +361,7 @@
       {
         "id": "rep_silver_vanguard_helm",
         "name": "Heaume de l'Avant-garde d'Argent",
+        "gender": "m",
         "slot": "head",
         "material_type": "metal",
         "niveauMin": 25,
@@ -354,6 +377,7 @@
       {
         "id": "rep_silver_vanguard_greataxe",
         "name": "Grande Hache de l'Avant-garde d'Argent",
+        "gender": "f",
         "slot": "weapon",
         "material_type": "metal",
         "niveauMin": 30,
@@ -370,6 +394,7 @@
       {
         "id": "rep_magma_callers_cowl",
         "name": "Capuche de l'Invocateur de Magma",
+        "gender": "f",
         "slot": "head",
         "material_type": "cloth",
         "niveauMin": 25,
@@ -385,6 +410,7 @@
       {
         "id": "rep_magma_callers_staff",
         "name": "Bâton de l'Invocateur de Magma",
+        "gender": "m",
         "slot": "weapon",
         "material_type": "wood",
         "niveauMin": 30,
@@ -401,6 +427,7 @@
       {
         "id": "rep_silent_path_mask",
         "name": "Masque du Sentier Silencieux",
+        "gender": "m",
         "slot": "head",
         "material_type": "leather",
         "niveauMin": 25,
@@ -416,6 +443,7 @@
       {
         "id": "rep_silent_path_daggers",
         "name": "Dagues du Sentier Silencieux",
+        "gender": "f",
         "slot": "weapon",
         "material_type": "metal",
         "niveauMin": 30,
@@ -432,6 +460,7 @@
       {
         "id": "rep_faithsworn_diadem",
         "name": "Diadème du Gardien du Serment",
+        "gender": "m",
         "slot": "head",
         "material_type": "metal",
         "niveauMin": 25,
@@ -447,6 +476,7 @@
       {
         "id": "rep_faithsworn_mace",
         "name": "Masse du Gardien du Serment",
+        "gender": "f",
         "slot": "weapon",
         "material_type": "metal",
         "niveauMin": 30,
@@ -463,6 +493,7 @@
       {
         "id": "dragonscale_cuirass",
         "name": "Cuirasse Draconique",
+        "gender": "f",
         "slot": "chest",
         "material_type": "leather",
         "niveauMin": 25,
@@ -474,6 +505,7 @@
       {
         "id": "robes_of_the_void",
         "name": "Robes du Vide",
+        "gender": "f",
         "slot": "chest",
         "material_type": "cloth",
         "niveauMin": 25,
@@ -485,6 +517,7 @@
       {
         "id": "wraithstalker_jerkin",
         "name": "Pourpoint de Traque-spectre",
+        "gender": "m",
         "slot": "chest",
         "material_type": "leather",
         "niveauMin": 25,
@@ -496,6 +529,7 @@
       {
         "id": "vestments_of_the_redeemer",
         "name": "Vêtements du Rédempteur",
+        "gender": "m",
         "slot": "chest",
         "material_type": "cloth",
         "niveauMin": 25,
@@ -507,6 +541,7 @@
       {
         "id": "bat_fang",
         "name": "Croc de chauve-souris",
+        "gender": "m",
         "type": "quest",
         "rarity": "Commun",
         "desc": "Un croc pointu prélevé sur une chauve-souris. Utile pour certaines quêtes.",
@@ -517,6 +552,7 @@
       {
         "id": "bat_fang_heroic",
         "name": "Croc de chauve-souris Héroïque",
+        "gender": "m",
         "type": "quest",
         "rarity": "Commun",
         "desc": "[Héroïque] Un croc pointu prélevé sur une chauve-souris héroïque.",
@@ -527,6 +563,7 @@
       {
         "id": "crafted_copper_sword",
         "name": "Épée en cuivre fabriquée",
+        "gender": "f",
         "slot": "weapon",
         "material_type": "metal",
         "niveauMin": 5,
@@ -542,6 +579,7 @@
       {
         "id": "crafted_leather_helmet",
         "name": "Casque en cuir fabriqué",
+        "gender": "m",
         "slot": "head",
         "material_type": "leather",
         "niveauMin": 5,

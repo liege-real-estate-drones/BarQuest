@@ -53,6 +53,7 @@ export type MaterialType = z.infer<typeof MaterialTypeSchema>;
 export const ItemSchema = z.object({
   id: z.string(),
   name: z.string(),
+  gender: z.enum(["m", "f"]).optional(),
   material_type: MaterialTypeSchema.optional(),
   slot: z.enum([
     "weapon","head","chest","legs","hands","feet",
@@ -323,3 +324,26 @@ export interface DungeonCompletionSummary {
     };
     combatLog: CombatLogEntry[];
 }
+
+export const NameAffixSchema = z.object({
+    m: z.string(),
+    f: z.string(),
+    tags: z.array(z.string()),
+});
+
+export const NameQualifierSchema = z.object({
+    text: z.string(),
+    tags: z.array(z.string()),
+});
+
+export const MaterialNameSchema = z.object({
+    text: z.string(),
+    tags: z.array(z.string()),
+});
+
+export const NameAffixesSchema = z.object({
+    prefixes: z.array(NameAffixSchema),
+    suffixes_adjectives: z.array(NameAffixSchema),
+    suffixes_qualifiers: z.array(NameQualifierSchema),
+    materials: z.array(MaterialNameSchema),
+});

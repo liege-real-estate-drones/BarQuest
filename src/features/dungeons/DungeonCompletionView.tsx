@@ -5,8 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/componen
 import { Button } from '@/components/ui/button';
 import { ItemTooltip } from '@/components/ItemTooltip';
 import { Coins, Star, Swords, Scroll } from 'lucide-react';
-import { Item, Rareté } from '@/data/schemas';
-import type { Enchantment, CombatLogEntry } from '@/lib/types';
+import type { Item, Rareté, Enchantment, CombatLogEntry } from '@/lib/types';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
