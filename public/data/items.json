@@ -6,6 +6,7 @@
         "gender": "f",
         "slot": "head",
         "material_type": "leather",
+        "tags": ["armor", "head", "leather"],
         "niveauMin": 1,
         "rarity": "Commun",
         "affixes": [
@@ -20,6 +21,7 @@
         "gender": "f",
         "slot": "chest",
         "material_type": "leather",
+        "tags": ["armor", "chest", "leather"],
         "niveauMin": 1,
         "rarity": "Commun",
         "affixes": [
@@ -35,6 +37,7 @@
         "gender": "f",
         "slot": "weapon",
         "material_type": "metal",
+        "tags": ["weapon", "sword", "metal", "melee", "physical"],
         "niveauMin": 1,
         "rarity": "Commun",
         "affixes": [
@@ -50,6 +53,7 @@
         "gender": "m",
         "slot": "weapon",
         "material_type": "wood",
+        "tags": ["weapon", "staff", "wood", "magic", "nature"],
         "niveauMin": 1,
         "rarity": "Commun",
         "affixes": [
@@ -67,6 +71,7 @@
         "isPlural": true,
         "slot": "legs",
         "material_type": "metal",
+        "tags": ["armor", "legs", "metal", "heavy"],
         "niveauMin": 3,
         "rarity": "Commun",
         "affixes": [
@@ -83,6 +88,7 @@
         "isPlural": true,
         "slot": "hands",
         "material_type": "cloth",
+        "tags": ["armor", "hands", "cloth", "magic"],
         "niveauMin": 2,
         "rarity": "Commun",
         "affixes": [
@@ -99,6 +105,7 @@
         "isPlural": true,
         "slot": "feet",
         "material_type": "leather",
+        "tags": ["armor", "feet", "leather", "agility"],
         "niveauMin": 1,
         "rarity": "Commun",
         "affixes": [
@@ -114,6 +121,7 @@
         "isPlural": true,
         "slot": "feet",
         "material_type": "metal",
+        "tags": ["armor", "feet", "metal", "heavy"],
         "niveauMin": 4,
         "rarity": "Commun",
         "affixes": [
@@ -130,6 +138,7 @@
         "isPlural": true,
         "slot": "feet",
         "material_type": "cloth",
+        "tags": ["armor", "feet", "cloth", "magic"],
         "niveauMin": 1,
         "rarity": "Commun",
         "affixes": [
@@ -144,6 +153,7 @@
         "gender": "m",
         "slot": "offhand",
         "material_type": "wood",
+        "tags": ["shield", "offhand", "wood", "defense"],
         "niveauMin": 3,
         "rarity": "Commun",
         "affixes": [
@@ -158,6 +168,7 @@
         "gender": "f",
         "slot": "offhand",
         "material_type": "metal",
+        "tags": ["shield", "offhand", "metal", "defense"],
         "niveauMin": 6,
         "rarity": "Commun",
         "affixes": [
@@ -172,6 +183,7 @@
         "gender": "m",
         "slot": "offhand",
         "material_type": "magic",
+        "tags": ["offhand", "magic", "arcane"],
         "niveauMin": 8,
         "rarity": "Magique",
         "affixes": [
@@ -187,6 +199,7 @@
         "gender": "f",
         "slot": "amulet",
         "material_type": "metal",
+        "tags": ["jewelry", "amulet", "metal"],
         "niveauMin": 5,
         "rarity": "Commun",
         "affixes": [
@@ -201,6 +214,7 @@
         "gender": "m",
         "slot": "amulet",
         "material_type": "gem",
+        "tags": ["jewelry", "amulet", "gem", "fire"],
         "niveauMin": 10,
         "rarity": "Magique",
         "affixes": [
@@ -215,6 +229,7 @@
         "gender": "f",
         "slot": "amulet",
         "material_type": "gem",
+        "tags": ["jewelry", "amulet", "gem", "shadow", "occult"],
         "niveauMin": 15,
         "rarity": "Rare",
         "affixes": [
@@ -230,6 +245,7 @@
         "gender": "m",
         "slot": "ring",
         "material_type": "metal",
+        "tags": ["jewelry", "ring", "metal"],
         "niveauMin": 5,
         "rarity": "Commun",
         "affixes": [],
@@ -242,6 +258,7 @@
         "gender": "m",
         "slot": "ring",
         "material_type": "gem",
+        "tags": ["jewelry", "ring", "gem", "ice"],
         "niveauMin": 10,
         "rarity": "Magique",
         "affixes": [
@@ -256,6 +273,7 @@
         "gender": "m",
         "slot": "ring",
         "material_type": "metal",
+        "tags": ["jewelry", "ring", "metal", "strength", "physical"],
         "niveauMin": 15,
         "rarity": "Rare",
         "affixes": [
@@ -271,6 +289,7 @@
         "gender": "f",
         "slot": "belt",
         "material_type": "leather",
+        "tags": ["armor", "belt", "leather"],
         "niveauMin": 2,
         "rarity": "Commun",
         "affixes": [
@@ -285,6 +304,7 @@
         "gender": "f",
         "slot": "belt",
         "material_type": "metal",
+        "tags": ["armor", "belt", "metal", "heavy"],
         "niveauMin": 7,
         "rarity": "Commun",
         "affixes": [
@@ -300,6 +320,7 @@
         "gender": "f",
         "slot": "belt",
         "material_type": "cloth",
+        "tags": ["armor", "belt", "cloth", "magic"],
         "niveauMin": 7,
         "rarity": "Magique",
         "affixes": [
@@ -315,6 +336,7 @@
         "gender": "m",
         "slot": "trinket",
         "material_type": "misc",
+        "tags": ["trinket", "luck"],
         "niveauMin": 10,
         "rarity": "Magique",
         "affixes": [
@@ -329,6 +351,7 @@
         "gender": "f",
         "slot": "trinket",
         "material_type": "magic",
+        "tags": ["trinket", "magic", "shadow", "occult"],
         "niveauMin": 18,
         "rarity": "Rare",
         "affixes": [
@@ -344,6 +367,7 @@
         "gender": "f",
         "slot": "trinket",
         "material_type": "metal",
+        "tags": ["trinket", "metal", "strength", "physical"],
         "niveauMin": 18,
         "rarity": "Rare",
         "affixes": [
@@ -359,6 +383,7 @@
         "gender": "m",
         "slot": "head",
         "material_type": "metal",
+        "tags": ["armor", "head", "metal", "heavy", "warrior"],
         "niveauMin": 5,
         "rarity": "Rare",
         "affixes": [
@@ -375,6 +400,7 @@
         "gender": "m",
         "slot": "head",
         "material_type": "metal",
+        "tags": ["armor", "head", "metal", "magic", "arcane", "ice"],
         "niveauMin": 5,
         "rarity": "Rare",
         "affixes": [
@@ -391,6 +417,7 @@
         "gender": "f",
         "slot": "head",
         "material_type": "leather",
+        "tags": ["armor", "head", "leather", "agility", "rogue"],
         "niveauMin": 5,
         "rarity": "Rare",
         "affixes": [
@@ -407,6 +434,7 @@
         "gender": "m",
         "slot": "head",
         "material_type": "metal",
+        "tags": ["armor", "head", "metal", "holy", "cleric"],
         "niveauMin": 5,
         "rarity": "Rare",
         "affixes": [
@@ -423,6 +451,7 @@
         "gender": "f",
         "slot": "weapon",
         "material_type": "metal",
+        "tags": ["weapon", "axe", "metal", "legendary", "death", "bleed"],
         "niveauMin": 20,
         "rarity": "Légendaire",
         "affixes": [
@@ -447,6 +476,7 @@
         "gender": "m",
         "slot": "weapon",
         "material_type": "wood",
+        "tags": ["weapon", "staff", "wood", "legendary", "magic", "fire", "arcane"],
         "niveauMin": 20,
         "rarity": "Légendaire",
         "affixes": [
@@ -465,6 +495,7 @@
         "isPlural": true,
         "slot": "weapon",
         "material_type": "metal",
+        "tags": ["weapon", "dagger", "metal", "legendary", "poison", "assassin"],
         "niveauMin": 20,
         "rarity": "Légendaire",
         "affixes": [
@@ -482,6 +513,7 @@
         "gender": "m",
         "slot": "weapon",
         "material_type": "metal",
+        "tags": ["weapon", "hammer", "metal", "legendary", "holy", "divine", "cleric"],
         "niveauMin": 20,
         "rarity": "Légendaire",
         "affixes": [
@@ -499,6 +531,7 @@
         "gender": "f",
         "slot": "head",
         "material_type": "metal",
+        "tags": ["armor", "head", "metal", "legendary", "ice", "beast"],
         "niveauMin": 22,
         "rarity": "Légendaire",
         "affixes": [
@@ -515,6 +548,7 @@
         "gender": "f",
         "slot": "weapon",
         "material_type": "metal",
+        "tags": ["weapon", "sword", "metal", "legendary", "ice", "crit"],
         "niveauMin": 22,
         "rarity": "Légendaire",
         "affixes": [
@@ -532,6 +566,7 @@
         "gender": "m",
         "slot": "head",
         "material_type": "metal",
+        "tags": ["armor", "head", "metal", "set", "silver", "guard"],
         "niveauMin": 10,
         "rarity": "Rare",
         "affixes": [
@@ -548,6 +583,7 @@
         "gender": "f",
         "slot": "chest",
         "material_type": "metal",
+        "tags": ["armor", "chest", "metal", "set", "silver", "guard"],
         "niveauMin": 12,
         "rarity": "Rare",
         "affixes": [
@@ -564,6 +600,7 @@
         "gender": "f",
         "slot": "head",
         "material_type": "cloth",
+        "tags": ["armor", "head", "cloth", "set", "magic", "arcane"],
         "niveauMin": 10,
         "rarity": "Rare",
         "affixes": [
@@ -580,6 +617,7 @@
         "gender": "f",
         "slot": "chest",
         "material_type": "cloth",
+        "tags": ["armor", "chest", "cloth", "set", "magic", "arcane"],
         "niveauMin": 12,
         "rarity": "Rare",
         "affixes": [
@@ -596,6 +634,7 @@
         "gender": "m",
         "slot": "head",
         "material_type": "leather",
+        "tags": ["armor", "head", "leather", "set", "shadow", "rogue"],
         "niveauMin": 10,
         "rarity": "Rare",
         "affixes": [
@@ -612,6 +651,7 @@
         "gender": "f",
         "slot": "chest",
         "material_type": "leather",
+        "tags": ["armor", "chest", "leather", "set", "shadow", "rogue"],
         "niveauMin": 12,
         "rarity": "Rare",
         "affixes": [
@@ -628,6 +668,7 @@
         "gender": "m",
         "slot": "head",
         "material_type": "metal",
+        "tags": ["armor", "head", "metal", "set", "silver", "guard", "epic"],
         "niveauMin": 25,
         "rarity": "Épique",
         "affixes": [
@@ -644,6 +685,7 @@
         "gender": "f",
         "slot": "weapon",
         "material_type": "metal",
+        "tags": ["weapon", "axe", "metal", "set", "silver", "guard", "epic"],
         "niveauMin": 30,
         "rarity": "Légendaire",
         "affixes": [
@@ -661,6 +703,7 @@
         "gender": "f",
         "slot": "head",
         "material_type": "cloth",
+        "tags": ["armor", "head", "cloth", "set", "fire", "magic", "epic"],
         "niveauMin": 25,
         "rarity": "Épique",
         "affixes": [
@@ -677,6 +720,7 @@
         "gender": "m",
         "slot": "weapon",
         "material_type": "wood",
+        "tags": ["weapon", "staff", "wood", "set", "fire", "magic", "epic"],
         "niveauMin": 30,
         "rarity": "Légendaire",
         "affixes": [
@@ -694,6 +738,7 @@
         "gender": "m",
         "slot": "head",
         "material_type": "leather",
+        "tags": ["armor", "head", "leather", "set", "shadow", "rogue", "epic"],
         "niveauMin": 25,
         "rarity": "Épique",
         "affixes": [
@@ -711,6 +756,7 @@
         "isPlural": true,
         "slot": "weapon",
         "material_type": "metal",
+        "tags": ["weapon", "dagger", "metal", "set", "shadow", "rogue", "epic"],
         "niveauMin": 30,
         "rarity": "Légendaire",
         "affixes": [
@@ -728,6 +774,7 @@
         "gender": "m",
         "slot": "head",
         "material_type": "metal",
+        "tags": ["armor", "head", "metal", "set", "holy", "cleric", "epic"],
         "niveauMin": 25,
         "rarity": "Épique",
         "affixes": [
@@ -744,6 +791,7 @@
         "gender": "f",
         "slot": "weapon",
         "material_type": "metal",
+        "tags": ["weapon", "mace", "metal", "set", "holy", "cleric", "epic"],
         "niveauMin": 30,
         "rarity": "Légendaire",
         "affixes": [
@@ -761,6 +809,7 @@
         "gender": "f",
         "slot": "chest",
         "material_type": "leather",
+        "tags": ["armor", "chest", "leather", "legendary", "dragon", "fire"],
         "niveauMin": 25,
         "rarity": "Légendaire",
         "affixes": [{ "ref": "Armure", "val": 120 }, { "ref": "Force", "val": 12 }, { "ref": "PV", "val": 70 }, {"ref": "ResElems.fire", "val": 15}],
@@ -774,6 +823,7 @@
         "isPlural": true,
         "slot": "chest",
         "material_type": "cloth",
+        "tags": ["armor", "chest", "cloth", "legendary", "magic", "void", "arcane"],
         "niveauMin": 25,
         "rarity": "Légendaire",
         "affixes": [{ "ref": "Armure", "val": 80 }, { "ref": "Intelligence", "val": 18 }, { "ref": "RessourceMax", "val": 100 }],
@@ -786,6 +836,7 @@
         "gender": "m",
         "slot": "chest",
         "material_type": "leather",
+        "tags": ["armor", "chest", "leather", "legendary", "shadow", "rogue", "stealth"],
         "niveauMin": 25,
         "rarity": "Légendaire",
         "affixes": [{ "ref": "Armure", "val": 100 }, { "ref": "Dexterite", "val": 18 }, { "ref": "CritPct", "val": 5 }],
@@ -799,6 +850,7 @@
         "isPlural": true,
         "slot": "chest",
         "material_type": "cloth",
+        "tags": ["armor", "chest", "cloth", "legendary", "holy", "cleric", "healing"],
         "niveauMin": 25,
         "rarity": "Légendaire",
         "affixes": [{ "ref": "Armure", "val": 90 }, { "ref": "Esprit", "val": 18 }, { "ref": "PV", "val": 80 }],
@@ -810,6 +862,7 @@
         "name": "Croc de chauve-souris",
         "gender": "m",
         "type": "quest",
+        "tags": [],
         "rarity": "Commun",
         "desc": "Un croc pointu prélevé sur une chauve-souris. Utile pour certaines quêtes.",
         "vendorPrice": 1,
@@ -821,6 +874,7 @@
         "name": "Croc de chauve-souris",
         "gender": "m",
         "type": "quest",
+        "tags": [],
         "rarity": "Commun",
         "desc": "[Héroïque] Un croc pointu prélevé sur une chauve-souris héroïque.",
         "vendorPrice": 5,
@@ -833,6 +887,7 @@
         "gender": "f",
         "slot": "weapon",
         "material_type": "metal",
+        "tags": ["weapon", "sword", "metal", "melee", "physical", "crafted"],
         "niveauMin": 5,
         "rarity": "Magique",
         "affixes": [
@@ -849,6 +904,7 @@
         "gender": "m",
         "slot": "head",
         "material_type": "leather",
+        "tags": ["armor", "head", "leather", "crafted"],
         "niveauMin": 5,
         "rarity": "Magique",
         "affixes": [

@@ -37,7 +37,7 @@ export const AffixSchema = z.object({
   type: z.enum(["prefix","suffix"]),
   portée: z.tuple([z.number(), z.number()]),
   échelonnage: z.enum(["lin", "exp", "palier"]),
-  theme: ThemeSchema.optional(),
+  tags: z.array(z.string()).optional(),
   isEnchantment: z.boolean().optional(),
 });
 
@@ -47,7 +47,7 @@ export const ItemSetSchema = z.object({
   bonuses: z.record(z.number(), z.string())
 });
 
-export const MaterialTypeSchema = z.enum(["metal", "leather", "cloth", "wood"]);
+export const MaterialTypeSchema = z.enum(["metal", "leather", "cloth", "wood", "gem", "magic", "misc"]);
 export type MaterialType = z.infer<typeof MaterialTypeSchema>;
 
 export const ItemSchema = z.object({
@@ -64,6 +64,7 @@ export const ItemSchema = z.object({
   rarity: RaretéEnum,
   stats: StatsSchema.optional(),
   affixes: z.array(z.object({ ref: z.string(), val: z.number(), isEnchantment: z.boolean().optional() })).optional(),
+  tags: z.array(z.string()).optional(),
   tagsClasse: z.array(z.string()).default([]),
   effect: z.string().optional(),
   set: z.object({ id: z.string(), name: z.string() }).optional(),

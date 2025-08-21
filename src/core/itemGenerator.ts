@@ -1,9 +1,8 @@
 // src/core/itemGenerator.ts
-import type { Item, Rareté, Affixe, ItemGenerationContext } from '@/lib/types';
+import type { Item, Rareté, Affixe, ItemGenerationContext, Dungeon } from '@/lib/types';
 import { v4 as uuidv4 } from 'uuid';
 import nameAffixesData from '../../public/data/nameAffixes.json';
 import { NameAffixesSchema } from '@/data/schemas';
-import { AFFIX_TO_THEME } from '@/lib/constants';
 import * as formulas from '@/core/formulas';
 
 // --- NEW: Data-driven name generation ---
@@ -107,21 +106,26 @@ export const generateLootItemName = (
     let baseNamePart = finalName;
     let materialPart = "";
 
-    if (match) {
+    if (match && match.index) {
         baseNamePart = finalName.substring(0, match.index).trim();
         materialPart = finalName.substring(match.index).trim();
     }
 
-    let nameParts = [baseNamePart];
-
-    if (prefix) {
-        nameParts.unshift(prefix[formKey]);
+    // Correction de l'assemblage pour une meilleure grammaire
+    if (prefix && !suffixAdj) {
+        // ex: "Coiffe" + "Fulgurante" -> "Coiffe Fulgurante"
+        finalName = `${baseNamePart} ${prefix[formKey]}`;
+    } else if (!prefix && suffixAdj) {
+        // ex: "Bottes" + "Vampiriques" -> "Bottes Vampiriques"
+        finalName = `${baseNamePart} ${suffixAdj[formKey]}`;
+    } else if (prefix && suffixAdj) {
+        // ex: "Incassable" + "Heaume" + "du Titan" -> "Heaume Incassable du Titan"
+        // Ici, la logique peut devenir complexe. Une approche simple :
+        finalName = `${prefix[formKey]} ${baseNamePart} ${suffixAdj[formKey]}`;
+    } else {
+        finalName = baseNamePart;
     }
-    if (suffixAdj) {
-        nameParts.push(suffixAdj[formKey]);
-    }
 
-    finalName = nameParts.join(' ');
 
     if (materialPart) {
         finalName += ` ${materialPart}`;
@@ -131,31 +135,22 @@ export const generateLootItemName = (
         finalName += ` ${suffixQual.text}`;
     }
 
-    return finalName;
+    return finalName.replace(/\s+/g, ' ').trim(); // Nettoyer les espaces multiples
 };
 
 // --- END NEW ---
 
-
-const rarityAffixCount: Record<Rareté, [number, number]> = {
-    "Commun": [0, 1],
-    "Magique": [1, 1],
-    "Rare": [1, 2],
-    "Épique": [2, 3],
-    "Légendaire": [0, 0], // Legendary items are predefined
-    "Unique": [0, 0], // Unique items are predefined
-};
 
 export const generateProceduralItem = (
     baseItem: Omit<Item, 'id' | 'niveauMin' | 'rarity'>,
     itemLevel: number,
     rarity: Rareté,
     availableAffixes: Affixe[],
-    dungeonTheme?: string,
-    monsterTheme?: string
+    dungeon?: Dungeon, // Passez l'objet donjon entier pour plus de contexte
 ): Item => {
-    if (baseItem.type === 'quest' || !baseItem.gender) {
-        return { ...baseItem, id: uuidv4(), niveauMin: itemLevel, rarity: rarity, gender: baseItem.gender || 'm' };
+    // Si l'objet n'est pas un équipement standard, retournez-le tel quel.
+    if (baseItem.type === 'quest' || !baseItem.slot) {
+        return { ...baseItem, id: uuidv4(), niveauMin: itemLevel, rarity: rarity };
     }
 
     const newItem: Item = {
@@ -164,57 +159,66 @@ export const generateProceduralItem = (
         niveauMin: itemLevel,
         rarity: rarity,
         affixes: [],
-        vendorPrice: baseItem.vendorPrice ? Math.round(baseItem.vendorPrice * (formulas.rarityMultiplier[rarity] || 1)) : itemLevel * 2,
+        vendorPrice: baseItem.vendorPrice
+            ? Math.round(baseItem.vendorPrice * (formulas.rarityMultiplier[rarity] || 1))
+            : itemLevel * 2,
+    };
+
+    const rarityAffixCount: Record<Rareté, [number, number]> = {
+        "Commun": [0, 1],
+        "Magique": [1, 2],
+        "Rare": [2, 3],
+        "Épique": [3, 4],
+        "Légendaire": [0, 0],
+        "Unique": [0, 0],
     };
 
     const [minAffixes, maxAffixes] = rarityAffixCount[rarity] || [0, 0];
-    let numAffixes = Math.floor(Math.random() * (maxAffixes - minAffixes + 1)) + minAffixes;
-
-    const contextTags = [rarity.toLowerCase()];
-    let primaryTheme: string | undefined = undefined;
+    const numAffixes = Math.floor(Math.random() * (maxAffixes - minAffixes + 1)) + minAffixes;
 
     if (numAffixes > 0 && availableAffixes.length > 0) {
-        // Theme-first approach
-        const allPossibleThemes = [...new Set(Object.values(AFFIX_TO_THEME))];
+        // --- NOUVELLE LOGIQUE DE SCORE ---
 
-        // Prioritize dungeon theme
-        if (dungeonTheme && allPossibleThemes.includes(dungeonTheme) && Math.random() < 0.75) {
-            primaryTheme = dungeonTheme;
-        } else {
-            primaryTheme = selectRandom(allPossibleThemes);
-        }
+        // 1. Poids du biome (influence de la zone)
+        const biomeTagWeights: Record<string, number> = { [dungeon?.biome || '']: 20 };
 
-        if (primaryTheme) {
-            contextTags.push(primaryTheme);
-        }
-        if (monsterTheme) contextTags.push(monsterTheme);
+        const scoredAffixes = availableAffixes.map(affix => {
+            let score = 1; // Score de base
 
-        const thematicAffixes = availableAffixes.filter(a => AFFIX_TO_THEME[a.ref] === primaryTheme);
-        const neutralAffixes = availableAffixes.filter(a => AFFIX_TO_THEME[a.ref] !== primaryTheme);
+            // 2. Calculer le score thématique de l'affixe basé sur le biome
+            affix.tags?.forEach(tag => {
+                score += biomeTagWeights[tag] || 0;
+            });
 
-        const selectedAffixes: Affixe[] = [];
-
-        // Ensure at least one thematic affix is chosen if possible
-        if (thematicAffixes.length > 0) {
-            const thematicAffix = selectRandom(thematicAffixes);
-            if (thematicAffix) {
-                selectedAffixes.push(thematicAffix);
+            // 3. BONUS DE COHÉRENCE (la partie la plus importante)
+            // Si un tag de l'affixe correspond à un tag de l'objet de base, on booste le score.
+            const coherenceBonus = 50; // Augmentez cette valeur pour des objets encore plus cohérents
+            if (affix.tags?.some(tag => baseItem.tags?.includes(tag))) {
+                score *= coherenceBonus;
             }
-        } else {
-            // If no thematic affixes are available for the chosen theme, decrement numAffixes
-            // or select a random one to ensure the item is not empty if it should have stats.
-            const randomAffix = selectRandom(neutralAffixes);
-            if(randomAffix) selectedAffixes.push(randomAffix);
+
+            return { affix, score };
+        });
+
+        // 4. Sélectionner les affixes en utilisant les scores comme poids
+        const selectedAffixes: Affixe[] = [];
+        const affixPool = [...scoredAffixes];
+
+        for (let i = 0; i < numAffixes && affixPool.length > 0; i++) {
+            const totalScore = affixPool.reduce((sum, current) => sum + current.score, 0);
+            let randomPick = Math.random() * totalScore;
+
+            for (let j = 0; j < affixPool.length; j++) {
+                randomPick -= affixPool[j].score;
+                if (randomPick <= 0) {
+                    selectedAffixes.push(affixPool[j].affix);
+                    affixPool.splice(j, 1); // Empêche de tirer le même affixe plusieurs fois
+                    break;
+                }
+            }
         }
 
-        // Fill remaining slots with a mix of thematic and neutral affixes for variety
-        const remainingSlots = numAffixes - selectedAffixes.length;
-        if (remainingSlots > 0) {
-            const remainingPool = [...thematicAffixes.filter(a => !selectedAffixes.includes(a)), ...neutralAffixes];
-            const shuffledPool = remainingPool.sort(() => 0.5 - Math.random());
-            selectedAffixes.push(...shuffledPool.slice(0, remainingSlots));
-        }
-
+        // 5. Appliquer les affixes choisis à l'objet
         newItem.affixes = selectedAffixes.map(affix => {
             const [min, max] = affix.portée;
             const baseValue = Math.floor(Math.random() * (max - min + 1)) + min;
@@ -222,6 +226,10 @@ export const generateProceduralItem = (
             return { ref: affix.ref, val: scaledValue };
         });
     }
+
+    // Générer un nom cohérent après avoir choisi les affixes
+    const finalAffixTags = newItem.affixes?.flatMap(a => availableAffixes.find(af => af.ref === a.ref)?.tags || []) || [];
+    const contextTags = [...new Set([...(baseItem.tags || []), ...finalAffixTags])];
 
     newItem.name = generateLootItemName(newItem, { rarity: rarity, tags: contextTags });
 
