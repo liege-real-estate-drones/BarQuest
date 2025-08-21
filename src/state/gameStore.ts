@@ -249,7 +249,7 @@ const biomeToTheme = (biome: Dungeon['biome'] | undefined): Theme | undefined =>
   return mapping[biome];
 };
 
-const generateEquipmentLoot = (monster: Monstre, gameData: GameData, playerClassId: PlayerClassId | null, worldTier: number, dungeonTheme?: Theme, monsterFamily?: string): Item | null => {
+const generateEquipmentLoot = (monster: Monstre, gameData: GameData, playerClassId: PlayerClassId | null, worldTier: number, dungeon?: Dungeon, monsterFamily?: string): Item | null => {
   // --- 1. Boss Specific Loot ---
   if (monster.isBoss && monster.specificLootTable && Math.random() < 0.25) { // 25% chance for a specific drop
     const specificLootId = monster.specificLootTable[Math.floor(Math.random() * monster.specificLootTable.length)];
@@ -302,7 +302,7 @@ const generateEquipmentLoot = (monster: Monstre, gameData: GameData, playerClass
   const baseItemTemplate = possibleItemTemplates[Math.floor(Math.random() * possibleItemTemplates.length)];
   const { id, niveauMin, rarity, affixes, ...baseItemProps } = baseItemTemplate;
   const itemLevel = monster.level + (worldTier - 1) * 5;
-  const newItem = generateProceduralItem(baseItemProps, itemLevel, chosenRarity, gameData.affixes, dungeonTheme, monsterFamily);
+  const newItem = generateProceduralItem(baseItemProps, itemLevel, chosenRarity, gameData.affixes, dungeon);
 
   return newItem;
 };
@@ -1240,7 +1240,7 @@ export const useGameStore = create<GameState>()(
                         else bonusRarity = "Commun";
                     }
 
-                    const chestItem = generateProceduralItem(baseItemProps, itemLevel, bonusRarity, gameData.affixes, biomeToTheme(state.currentDungeon?.biome));
+                    const chestItem = generateProceduralItem(baseItemProps, itemLevel, bonusRarity, gameData.affixes, state.currentDungeon || undefined);
                     if (chestItem) {
                         chestItems.push(chestItem);
                     }
@@ -2219,7 +2219,7 @@ export const useGameStore = create<GameState>()(
             if (state.dungeonState && state.dungeonState.equipmentDropsPending > 0 && state.dungeonState.monstersRemainingInDungeon > 0) {
                 const dropChance = state.dungeonState.equipmentDropsPending / state.dungeonState.monstersRemainingInDungeon;
                 if (Math.random() < dropChance) {
-                    const equipmentDrop = generateEquipmentLoot(enemy, gameData, state.player.classeId, worldTier, biomeToTheme(state.currentDungeon?.biome), enemy.famille);
+                    const equipmentDrop = generateEquipmentLoot(enemy, gameData, state.player.classeId, worldTier, state.currentDungeon || undefined, enemy.famille);
                     if (equipmentDrop) {
                         state.combat.dungeonRunItems.push(equipmentDrop);
                         state.combat.log.push({ message: ``, type: 'loot', timestamp: Date.now(), item: equipmentDrop });
