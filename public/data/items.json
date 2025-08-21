@@ -91,6 +91,264 @@
         "vendorPrice": 8
       },
       {
+        "id": "leather_boots",
+        "name": "Bottes en cuir",
+        "gender": "f",
+        "slot": "feet",
+        "material_type": "leather",
+        "niveauMin": 1,
+        "rarity": "Commun",
+        "affixes": [
+          { "ref": "Armure", "val": 6 }
+        ],
+        "tagsClasse": ["common"],
+        "vendorPrice": 6
+      },
+      {
+        "id": "iron_greaves",
+        "name": "Bottes en fer",
+        "gender": "f",
+        "slot": "feet",
+        "material_type": "metal",
+        "niveauMin": 4,
+        "rarity": "Commun",
+        "affixes": [
+          { "ref": "Armure", "val": 10 },
+          { "ref": "Force", "val": 1 }
+        ],
+        "tagsClasse": ["berserker", "cleric"],
+        "vendorPrice": 15
+      },
+      {
+        "id": "cloth_sandals",
+        "name": "Sandales en tissu",
+        "gender": "f",
+        "slot": "feet",
+        "material_type": "cloth",
+        "niveauMin": 1,
+        "rarity": "Commun",
+        "affixes": [
+          { "ref": "Armure", "val": 3 }
+        ],
+        "tagsClasse": ["mage", "cleric"],
+        "vendorPrice": 4
+      },
+      {
+        "id": "wooden_shield",
+        "name": "Bouclier en bois",
+        "gender": "m",
+        "slot": "offhand",
+        "material_type": "wood",
+        "niveauMin": 3,
+        "rarity": "Commun",
+        "affixes": [
+          { "ref": "Armure", "val": 15 }
+        ],
+        "tagsClasse": ["berserker", "cleric"],
+        "vendorPrice": 10
+      },
+      {
+        "id": "iron_buckler",
+        "name": "Targe en fer",
+        "gender": "f",
+        "slot": "offhand",
+        "material_type": "metal",
+        "niveauMin": 6,
+        "rarity": "Commun",
+        "affixes": [
+          { "ref": "Armure", "val": 25 }
+        ],
+        "tagsClasse": ["berserker", "rogue"],
+        "vendorPrice": 20
+      },
+      {
+        "id": "enchanted_orb",
+        "name": "Orbe enchanté",
+        "gender": "m",
+        "slot": "offhand",
+        "material_type": "magic",
+        "niveauMin": 8,
+        "rarity": "Magique",
+        "affixes": [
+          { "ref": "Intelligence", "val": 3 },
+          { "ref": "RessourceMax", "val": 15 }
+        ],
+        "tagsClasse": ["mage", "cleric"],
+        "vendorPrice": 40
+      },
+      {
+        "id": "silver_amulet",
+        "name": "Amulette en argent",
+        "gender": "f",
+        "slot": "amulet",
+        "material_type": "metal",
+        "niveauMin": 5,
+        "rarity": "Commun",
+        "affixes": [
+          { "ref": "PV", "val": 10 }
+        ],
+        "tagsClasse": ["common"],
+        "vendorPrice": 15
+      },
+      {
+        "id": "ruby_pendant",
+        "name": "Pendentif en rubis",
+        "gender": "m",
+        "slot": "amulet",
+        "material_type": "gem",
+        "niveauMin": 10,
+        "rarity": "Magique",
+        "affixes": [
+          { "ref": "ResElems.fire", "val": 10 }
+        ],
+        "tagsClasse": ["common"],
+        "vendorPrice": 50
+      },
+      {
+        "id": "shadow_gem_amulet",
+        "name": "Amulette de gemme d'ombre",
+        "gender": "f",
+        "slot": "amulet",
+        "material_type": "gem",
+        "niveauMin": 15,
+        "rarity": "Rare",
+        "affixes": [
+          { "ref": "BonusDmg.shadow", "val": 5 },
+          { "ref": "Intelligence", "val": 2 }
+        ],
+        "tagsClasse": ["mage", "rogue"],
+        "vendorPrice": 100
+      },
+      {
+        "id": "gold_ring",
+        "name": "Anneau en or",
+        "gender": "m",
+        "slot": "ring",
+        "material_type": "metal",
+        "niveauMin": 5,
+        "rarity": "Commun",
+        "affixes": [],
+        "tagsClasse": ["common"],
+        "vendorPrice": 20
+      },
+      {
+        "id": "sapphire_ring",
+        "name": "Anneau en saphir",
+        "gender": "m",
+        "slot": "ring",
+        "material_type": "gem",
+        "niveauMin": 10,
+        "rarity": "Magique",
+        "affixes": [
+          { "ref": "ResElems.ice", "val": 8 }
+        ],
+        "tagsClasse": ["common"],
+        "vendorPrice": 60
+      },
+      {
+        "id": "iron_ring_of_power",
+        "name": "Anneau de puissance en fer",
+        "gender": "m",
+        "slot": "ring",
+        "material_type": "metal",
+        "niveauMin": 15,
+        "rarity": "Rare",
+        "affixes": [
+          { "ref": "Force", "val": 3 },
+          { "ref": "CritDmg", "val": 5 }
+        ],
+        "tagsClasse": ["berserker"],
+        "vendorPrice": 120
+      },
+      {
+        "id": "leather_belt",
+        "name": "Ceinture en cuir",
+        "gender": "f",
+        "slot": "belt",
+        "material_type": "leather",
+        "niveauMin": 2,
+        "rarity": "Commun",
+        "affixes": [
+          { "ref": "Armure", "val": 4 }
+        ],
+        "tagsClasse": ["common"],
+        "vendorPrice": 8
+      },
+      {
+        "id": "chainmail_belt",
+        "name": "Ceinture en cotte de mailles",
+        "gender": "f",
+        "slot": "belt",
+        "material_type": "metal",
+        "niveauMin": 7,
+        "rarity": "Commun",
+        "affixes": [
+          { "ref": "Armure", "val": 12 },
+          { "ref": "Force", "val": 1 }
+        ],
+        "tagsClasse": ["berserker", "cleric"],
+        "vendorPrice": 25
+      },
+      {
+        "id": "sash_of_the_adept",
+        "name": "Ceinture de l'adepte",
+        "gender": "f",
+        "slot": "belt",
+        "material_type": "cloth",
+        "niveauMin": 7,
+        "rarity": "Magique",
+        "affixes": [
+          { "ref": "Armure", "val": 6 },
+          { "ref": "Intelligence", "val": 2 }
+        ],
+        "tagsClasse": ["mage", "cleric"],
+        "vendorPrice": 45
+      },
+      {
+        "id": "lucky_charm",
+        "name": "Porte-bonheur",
+        "gender": "m",
+        "slot": "trinket",
+        "material_type": "misc",
+        "niveauMin": 10,
+        "rarity": "Magique",
+        "affixes": [
+          { "ref": "CritPct", "val": 1 }
+        ],
+        "tagsClasse": ["common"],
+        "vendorPrice": 80
+      },
+      {
+        "id": "warlocks_figurine",
+        "name": "Figurine de sorcier",
+        "gender": "f",
+        "slot": "trinket",
+        "material_type": "magic",
+        "niveauMin": 18,
+        "rarity": "Rare",
+        "affixes": [
+          { "ref": "Intelligence", "val": 4 },
+          { "ref": "BonusDmg.shadow", "val": 3 }
+        ],
+        "tagsClasse": ["mage"],
+        "vendorPrice": 150
+      },
+      {
+        "id": "mark_of_the_soldier",
+        "name": "Marque du soldat",
+        "gender": "f",
+        "slot": "trinket",
+        "material_type": "metal",
+        "niveauMin": 18,
+        "rarity": "Rare",
+        "affixes": [
+          { "ref": "Force", "val": 4 },
+          { "ref": "PV", "val": 15 }
+        ],
+        "tagsClasse": ["berserker", "cleric"],
+        "vendorPrice": 150
+      },
+      {
         "id": "warriors_greathelm",
         "name": "Grand Heaume",
         "gender": "m",
