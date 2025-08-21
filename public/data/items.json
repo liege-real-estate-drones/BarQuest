@@ -2,7 +2,7 @@
     "items": [
       {
         "id": "worn_leather_cap",
-        "name": "Coiffe usée",
+        "name": "Coiffe",
         "gender": "f",
         "slot": "head",
         "material_type": "leather",
@@ -16,7 +16,7 @@
       },
       {
         "id": "patched_leather_tunic",
-        "name": "Tunique rapiécée",
+        "name": "Tunique",
         "gender": "f",
         "slot": "chest",
         "material_type": "leather",
@@ -31,7 +31,7 @@
       },
       {
         "id": "chipped_shortsword",
-        "name": "Épée courte ébréchée",
+        "name": "Épée courte",
         "gender": "f",
         "slot": "weapon",
         "material_type": "metal",
@@ -46,7 +46,7 @@
       },
       {
         "id": "gnarled_staff",
-        "name": "Bâton noueux",
+        "name": "Bâton",
         "gender": "m",
         "slot": "weapon",
         "material_type": "wood",
@@ -62,7 +62,7 @@
       },
       {
         "id": "sturdy_iron_greaves",
-        "name": "Jambières robustes",
+        "name": "Jambières",
         "gender": "f",
         "slot": "legs",
         "material_type": "metal",
@@ -77,7 +77,7 @@
       },
       {
         "id": "apprentice_gloves",
-        "name": "Gants d'apprenti",
+        "name": "Gants",
         "gender": "m",
         "slot": "hands",
         "material_type": "cloth",
@@ -92,7 +92,7 @@
       },
       {
         "id": "warriors_greathelm",
-        "name": "Grand heaume de guerrier",
+        "name": "Grand Heaume",
         "gender": "m",
         "slot": "head",
         "material_type": "metal",
@@ -108,7 +108,7 @@
       },
       {
         "id": "mages_circlet",
-        "name": "Cercle de mage",
+        "name": "Cercle",
         "gender": "m",
         "slot": "head",
         "material_type": "metal",
@@ -124,7 +124,7 @@
       },
       {
         "id": "rogues_cowl",
-        "name": "Capuche de voleur",
+        "name": "Capuche",
         "gender": "f",
         "slot": "head",
         "material_type": "leather",
@@ -140,7 +140,7 @@
       },
       {
         "id": "clerics_diadem",
-        "name": "Diadème de clerc",
+        "name": "Diadème",
         "gender": "m",
         "slot": "head",
         "material_type": "metal",
@@ -156,7 +156,7 @@
       },
       {
         "id": "axe_of_the_deathbringer",
-        "name": "Hache du Semeur de Mort",
+        "name": "Hache",
         "gender": "f",
         "slot": "weapon",
         "material_type": "metal",
@@ -180,7 +180,7 @@
       },
       {
         "id": "staff_of_the_comet_caller",
-        "name": "Bâton de l'Invocateur de Comètes",
+        "name": "Bâton",
         "gender": "m",
         "slot": "weapon",
         "material_type": "wood",
@@ -197,7 +197,7 @@
       },
       {
         "id": "kingslayers_fangs",
-        "name": "Crocs du Régicide",
+        "name": "Crocs",
         "gender": "m",
         "slot": "weapon",
         "material_type": "metal",
@@ -214,7 +214,7 @@
       },
       {
         "id": "hammer_of_divine_light",
-        "name": "Marteau de Lumière Divine",
+        "name": "Marteau",
         "gender": "m",
         "slot": "weapon",
         "material_type": "metal",
@@ -231,7 +231,7 @@
       },
       {
         "id": "garaks_icy_maw",
-        "name": "Gueule glaciale de Garak",
+        "name": "Gueule de Garak",
         "gender": "f",
         "slot": "head",
         "material_type": "metal",
@@ -247,7 +247,7 @@
       },
       {
         "id": "frostfang_bite",
-        "name": "Morsure de Givre-croc",
+        "name": "Morsure",
         "gender": "f",
         "slot": "weapon",
         "material_type": "metal",
@@ -264,7 +264,7 @@
       },
       {
         "id": "set_silver_guard_helm",
-        "name": "Heaume de la Garde d'Argent",
+        "name": "Heaume",
         "gender": "m",
         "slot": "head",
         "material_type": "metal",
@@ -280,7 +280,7 @@
       },
       {
         "id": "set_silver_guard_chest",
-        "name": "Cuirasse de la Garde d'Argent",
+        "name": "Cuirasse",
         "gender": "f",
         "slot": "chest",
         "material_type": "metal",
@@ -296,7 +296,7 @@
       },
       {
         "id": "set_arcanist_cowl",
-        "name": "Capuche de l'Arcaniste",
+        "name": "Capuche",
         "gender": "f",
         "slot": "head",
         "material_type": "cloth",
@@ -312,7 +312,7 @@
       },
       {
         "id": "set_arcanist_robe",
-        "name": "Robe de l'Arcaniste",
+        "name": "Robe",
         "gender": "f",
         "slot": "chest",
         "material_type": "cloth",
@@ -328,7 +328,7 @@
       },
       {
         "id": "set_shadow_shroud_mask",
-        "name": "Masque du Linceul de l'Ombre",
+        "name": "Masque",
         "gender": "m",
         "slot": "head",
         "material_type": "leather",
@@ -344,7 +344,7 @@
       },
       {
         "id": "set_shadow_shroud_tunic",
-        "name": "Tunique du Linceul de l'Ombre",
+        "name": "Tunique",
         "gender": "f",
         "slot": "chest",
         "material_type": "leather",
@@ -360,7 +360,7 @@
       },
       {
         "id": "rep_silver_vanguard_helm",
-        "name": "Heaume de l'Avant-garde d'Argent",
+        "name": "Heaume",
         "gender": "m",
         "slot": "head",
         "material_type": "metal",
@@ -376,7 +376,7 @@
       },
       {
         "id": "rep_silver_vanguard_greataxe",
-        "name": "Grande Hache de l'Avant-garde d'Argent",
+        "name": "Grande Hache",
         "gender": "f",
         "slot": "weapon",
         "material_type": "metal",
@@ -393,7 +393,7 @@
       },
       {
         "id": "rep_magma_callers_cowl",
-        "name": "Capuche de l'Invocateur de Magma",
+        "name": "Capuche",
         "gender": "f",
         "slot": "head",
         "material_type": "cloth",
@@ -409,7 +409,7 @@
       },
       {
         "id": "rep_magma_callers_staff",
-        "name": "Bâton de l'Invocateur de Magma",
+        "name": "Bâton",
         "gender": "m",
         "slot": "weapon",
         "material_type": "wood",
@@ -426,7 +426,7 @@
       },
       {
         "id": "rep_silent_path_mask",
-        "name": "Masque du Sentier Silencieux",
+        "name": "Masque",
         "gender": "m",
         "slot": "head",
         "material_type": "leather",
@@ -442,7 +442,7 @@
       },
       {
         "id": "rep_silent_path_daggers",
-        "name": "Dagues du Sentier Silencieux",
+        "name": "Dagues",
         "gender": "f",
         "slot": "weapon",
         "material_type": "metal",
@@ -459,7 +459,7 @@
       },
       {
         "id": "rep_faithsworn_diadem",
-        "name": "Diadème du Gardien du Serment",
+        "name": "Diadème",
         "gender": "m",
         "slot": "head",
         "material_type": "metal",
@@ -475,7 +475,7 @@
       },
       {
         "id": "rep_faithsworn_mace",
-        "name": "Masse du Gardien du Serment",
+        "name": "Masse",
         "gender": "f",
         "slot": "weapon",
         "material_type": "metal",
@@ -492,7 +492,7 @@
       },
       {
         "id": "dragonscale_cuirass",
-        "name": "Cuirasse Draconique",
+        "name": "Cuirasse",
         "gender": "f",
         "slot": "chest",
         "material_type": "leather",
@@ -504,7 +504,7 @@
       },
       {
         "id": "robes_of_the_void",
-        "name": "Robes du Vide",
+        "name": "Robes",
         "gender": "f",
         "slot": "chest",
         "material_type": "cloth",
@@ -516,7 +516,7 @@
       },
       {
         "id": "wraithstalker_jerkin",
-        "name": "Pourpoint de Traque-spectre",
+        "name": "Pourpoint",
         "gender": "m",
         "slot": "chest",
         "material_type": "leather",
@@ -528,7 +528,7 @@
       },
       {
         "id": "vestments_of_the_redeemer",
-        "name": "Vêtements du Rédempteur",
+        "name": "Vêtements",
         "gender": "m",
         "slot": "chest",
         "material_type": "cloth",
@@ -551,7 +551,7 @@
       },
       {
         "id": "bat_fang_heroic",
-        "name": "Croc de chauve-souris Héroïque",
+        "name": "Croc de chauve-souris",
         "gender": "m",
         "type": "quest",
         "rarity": "Commun",
@@ -562,7 +562,7 @@
       },
       {
         "id": "crafted_copper_sword",
-        "name": "Épée en cuivre fabriquée",
+        "name": "Épée en cuivre",
         "gender": "f",
         "slot": "weapon",
         "material_type": "metal",
@@ -578,7 +578,7 @@
       },
       {
         "id": "crafted_leather_helmet",
-        "name": "Casque en cuir fabriqué",
+        "name": "Casque en cuir",
         "gender": "m",
         "slot": "head",
         "material_type": "leather",

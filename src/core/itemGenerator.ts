@@ -30,70 +30,83 @@ export const generateLootItemName = (
     context: ItemGenerationContext
 ): string => {
     const { rarity, tags } = context;
-    const gender = baseItem.gender || 'm'; // Default to masculine if gender is not provided
+    const gender = baseItem.gender || 'm';
 
-    const availablePrefixes = nameAffixes.prefixes.filter(p => p.tags.some(t => tags.includes(t)));
-    const availableSuffixesAdj = nameAffixes.suffixes_adjectives.filter(s => s.tags.some(t => tags.includes(t)));
-    const availableSuffixesQual = nameAffixes.suffixes_qualifiers.filter(s => s.tags.some(t => tags.includes(t)));
+    let availablePrefixes = nameAffixes.prefixes.filter(p => p.tags.some(t => tags.includes(t)));
+    let availableSuffixesAdj = nameAffixes.suffixes_adjectives.filter(s => s.tags.some(t => tags.includes(t)));
+    let availableSuffixesQual = nameAffixes.suffixes_qualifiers.filter(s => s.tags.some(t => tags.includes(t)));
 
     let prefix: { m: string; f: string; tags: string[] } | undefined;
     let suffixAdj: { m: string; f: string; tags: string[] } | undefined;
     let suffixQual: { text: string; tags: string[] } | undefined;
 
-    // Determine the number of affixes based on rarity
     const affixCountRoll = Math.random();
     let affixCount = 0;
     if (rarity === 'Magique') {
         affixCount = 1;
     } else if (rarity === 'Rare') {
-        if (affixCountRoll < 0.7) affixCount = 1; // 70% chance for 1 affix
-        else affixCount = 2; // 30% chance for 2 affixes
+        if (affixCountRoll < 0.7) affixCount = 1;
+        else affixCount = 2;
     } else if (rarity === 'Épique' || rarity === 'Légendaire') {
-        if (affixCountRoll < 0.2) affixCount = 1; // 20% chance for 1 affix
-        else affixCount = 2; // 80% chance for 2 affixes
+        if (affixCountRoll < 0.2) affixCount = 1;
+        else affixCount = 2;
     }
 
     const usedTags: Set<string> = new Set();
+    let detectedQuality: 'positive' | 'negative' | null = null;
+
+    const findQuality = (tags: string[]) => {
+        if (tags.includes('quality:positive')) return 'positive';
+        if (tags.includes('quality:negative')) return 'negative';
+        return null;
+    };
 
     if (affixCount > 0) {
         const affixChoiceRoll = Math.random();
-        // Decide what kind of affixes to add
         if (affixCount === 1) {
-            if (affixChoiceRoll < 0.5) { // 50% chance of a prefix
+            if (affixChoiceRoll < 0.5) {
                 prefix = selectRandom(availablePrefixes);
-                if (prefix) usedTags.add(prefix.tags.find(t => tags.includes(t))!);
-            } else if (affixChoiceRoll < 0.8) { // 30% chance of a suffix adjective
+            } else if (affixChoiceRoll < 0.8) {
                 suffixAdj = selectRandom(availableSuffixesAdj);
-                 if (suffixAdj) usedTags.add(suffixAdj.tags.find(t => tags.includes(t))!);
-            } else { // 20% chance of a suffix qualifier
+            } else {
                 suffixQual = selectRandom(availableSuffixesQual);
             }
         } else if (affixCount === 2) {
-            // Always try to add a prefix first for 2 affixes
             prefix = selectRandom(availablePrefixes);
             if (prefix) {
-                 const usedTag = prefix.tags.find(t => tags.includes(t));
-                 if(usedTag) usedTags.add(usedTag);
+                const usedTag = prefix.tags.find(t => tags.includes(t));
+                if (usedTag) usedTags.add(usedTag);
+                detectedQuality = findQuality(prefix.tags);
             }
 
-            // Then add a suffix, avoiding tag conflicts
+            if (detectedQuality) {
+                const oppositeQuality = `quality:${detectedQuality === 'positive' ? 'negative' : 'positive'}`;
+                availablePrefixes = availablePrefixes.filter(p => !p.tags.includes(oppositeQuality));
+                availableSuffixesAdj = availableSuffixesAdj.filter(s => !s.tags.includes(oppositeQuality));
+                availableSuffixesQual = availableSuffixesQual.filter(s => !s.tags.includes(oppositeQuality));
+            }
+
             const suffixChoiceRoll = Math.random();
-            if (suffixChoiceRoll < 0.5) { // 50% chance of a suffix adjective
-                 suffixAdj = selectRandom(availableSuffixesAdj.filter(s => !s.tags.some(t => usedTags.has(t))));
-            } else { // 50% chance of a suffix qualifier
-                 suffixQual = selectRandom(availableSuffixesQual.filter(s => !s.tags.some(t => usedTags.has(t))));
+            if (suffixChoiceRoll < 0.5) {
+                suffixAdj = selectRandom(availableSuffixesAdj.filter(s => !s.tags.some(t => usedTags.has(t))));
+            } else {
+                suffixQual = selectRandom(availableSuffixesQual.filter(s => !s.tags.some(t => usedTags.has(t))));
             }
         }
     }
 
-    const nameParts = [
-        prefix?.[gender],
-        baseItem.name,
-        suffixAdj?.[gender],
-        suffixQual?.text
-    ];
+    const nameParts = [baseItem.name];
+    if (prefix) {
+        nameParts.unshift(prefix[gender]);
+    }
+    if (suffixAdj) {
+        nameParts.push(suffixAdj[gender]);
+    }
+    if (suffixQual) {
+        nameParts.push(suffixQual.text);
+    }
 
-    return nameParts.filter(Boolean).join(' ');
+    return nameParts.join(' ');
 };
 
 // --- END NEW ---
