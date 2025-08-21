@@ -1,6 +1,7 @@
 // src/data/schemas.ts
 
 import { z } from "zod";
+import { CombatLogEntry } from "@/lib/types";
 
 export const RaretéEnum = z.enum(["Commun", "Magique", "Rare", "Épique", "Légendaire", "Unique"]);
 
@@ -320,4 +321,5 @@ export interface DungeonCompletionSummary {
         gold: number;
         items: Item[];
     };
+    combatLog: CombatLogEntry[];
 }

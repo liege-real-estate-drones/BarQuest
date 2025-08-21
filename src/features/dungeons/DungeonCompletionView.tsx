@@ -5,8 +5,71 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/componen
 import { Button } from '@/components/ui/button';
 import { ItemTooltip } from '@/components/ItemTooltip';
 import { Coins, Star, Swords, Scroll } from 'lucide-react';
-import { Item } from '@/data/schemas';
-import type { Enchantment } from '@/lib/types';
+import { Item, Rareté } from '@/data/schemas';
+import type { Enchantment, CombatLogEntry } from '@/lib/types';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { cn } from '@/lib/utils';
+
+const getLogEntryColor = (type: CombatLogEntry['type']) => {
+  switch (type) {
+    case 'player_attack':
+      return 'text-green-400';
+    case 'enemy_attack':
+      return 'text-red-400';
+    case 'crit':
+      return 'text-yellow-400 font-bold';
+    case 'levelup':
+        return 'text-yellow-300 font-bold text-lg animate-pulse';
+    case 'loot':
+      return 'text-primary';
+    case 'info':
+      return 'text-blue-400';
+    case 'flee':
+      return 'text-gray-400 italic';
+    case 'heal':
+      return 'text-emerald-400';
+    case 'shield':
+      return 'text-cyan-400';
+    case 'poison_proc':
+      return 'text-lime-400';
+    default:
+      return 'text-foreground';
+  }
+};
+
+const LogMessage = ({ entry }: { entry: CombatLogEntry }) => {
+    const color = getLogEntryColor(entry.type);
+
+    if (entry.type === 'loot' && entry.item) {
+        const rarityColorMap: Record<Rareté, string> = {
+            Commun: 'text-gray-400',
+            Magique: 'text-blue-300',
+            Rare: 'text-yellow-400', // Adjusted for better visibility on dark backgrounds
+            Épique: 'text-purple-400',
+            Légendaire: 'text-orange-400',
+            Unique: 'text-red-500 font-bold',
+        };
+        const itemColor = rarityColorMap[entry.item.rarity] || 'text-white';
+
+        return (
+            <div className={cn('whitespace-pre-wrap text-sm', color)}>
+                <span className="text-muted-foreground/50 mr-2">[{new Date(entry.timestamp).toLocaleTimeString()}]</span>
+                 Vous avez trouvé :{' '}
+                <span className={cn('font-bold', itemColor)}>{`[${entry.item.name}]`}</span>
+                .
+            </div>
+        );
+    }
+
+    return (
+        <p className={cn('whitespace-pre-wrap text-sm', color)}>
+            <span className="text-muted-foreground/50 mr-2">[{new Date(entry.timestamp).toLocaleTimeString()}]</span>
+            {entry.message}
+        </p>
+    );
+};
+
 
 export function DungeonCompletionView() {
     const { summary, closeSummary } = useGameStore(state => ({
@@ -109,8 +172,25 @@ export function DungeonCompletionView() {
                         </div>
                     )}
                 </CardContent>
-                <CardFooter>
-                    <Button onClick={closeSummary} className="w-full text-lg py-6">
+                <CardFooter className="flex flex-col sm:flex-row gap-2">
+                    <Dialog>
+                        <DialogTrigger asChild>
+                            <Button variant="outline" className="w-full">Voir le journal de combat</Button>
+                        </DialogTrigger>
+                        <DialogContent className="max-w-4xl h-[80vh] flex flex-col">
+                            <DialogHeader>
+                                <DialogTitle>Journal de Combat Complet</DialogTitle>
+                            </DialogHeader>
+                            <ScrollArea className="flex-grow">
+                                <div className="flex flex-col gap-1 font-code text-xs p-4">
+                                    {summary.combatLog && summary.combatLog.map((entry, index) => (
+                                        <LogMessage key={`${entry.timestamp}-${index}`} entry={entry} />
+                                    ))}
+                                </div>
+                            </ScrollArea>
+                        </DialogContent>
+                    </Dialog>
+                    <Button onClick={closeSummary} className="w-full text-lg py-6 sm:py-2">
                         Retourner en ville
                     </Button>
                 </CardFooter>
