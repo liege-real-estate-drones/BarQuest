@@ -1,8 +1,10 @@
 {
   "prefixes": [
     {
-      "m": "Incandescent",
-      "f": "Incandescente",
+      "ms": "Incandescent",
+      "fs": "Incandescente",
+      "mp": "Incandescents",
+      "fp": "Incandescentes",
       "tags": [
         "fire",
         "magic"
@@ -10,8 +12,10 @@
       "quality": "positive"
     },
     {
-      "m": "Frigorifiant",
-      "f": "Frigorifiante",
+      "ms": "Frigorifiant",
+      "fs": "Frigorifiante",
+      "mp": "Frigorifiants",
+      "fp": "Frigorifiantes",
       "tags": [
         "ice",
         "magic"
@@ -19,8 +23,10 @@
       "quality": "positive"
     },
     {
-      "m": "Foudroyant",
-      "f": "Foudroyante",
+      "ms": "Foudroyant",
+      "fs": "Foudroyante",
+      "mp": "Foudroyants",
+      "fp": "Foudroyantes",
       "tags": [
         "lightning",
         "magic"
@@ -28,8 +34,10 @@
       "quality": "positive"
     },
     {
-      "m": "Pestilentiel",
-      "f": "Pestilentielle",
+      "ms": "Pestilentiel",
+      "fs": "Pestilentielle",
+      "mp": "Pestilentiels",
+      "fp": "Pestilentielles",
       "tags": [
         "poison",
         "magic"
@@ -39,8 +47,10 @@
   ],
   "suffixes_adjectives": [
     {
-      "m": "Fendu",
-      "f": "Fendue",
+      "ms": "Fendu",
+      "fs": "Fendue",
+      "mp": "Fendus",
+      "fp": "Fendues",
       "tags": [
         "common",
         "damaged",
@@ -48,8 +58,10 @@
       ]
     },
     {
-      "m": "Abîmé",
-      "f": "Abîmée",
+      "ms": "Abîmé",
+      "fs": "Abîmée",
+      "mp": "Abîmés",
+      "fp": "Abîmées",
       "tags": [
         "common",
         "damaged",
@@ -57,8 +69,10 @@
       ]
     },
     {
-      "m": "Usé",
-      "f": "Usée",
+      "ms": "Usé",
+      "fs": "Usée",
+      "mp": "Usés",
+      "fp": "Usées",
       "tags": [
         "common",
         "damaged",
@@ -66,8 +80,10 @@
       ]
     },
     {
-      "m": "Moisi",
-      "f": "Moisie",
+      "ms": "Moisi",
+      "fs": "Moisie",
+      "mp": "Moisis",
+      "fp": "Moisies",
       "tags": [
         "common",
         "damaged",
@@ -75,25 +91,20 @@
       ]
     },
     {
-      "m": "Ridicule",
-      "f": "Ridicule",
+      "ms": "Ridicule",
+      "fs": "Ridicule",
+      "mp": "Ridicules",
+      "fp": "Ridicules",
       "tags": [
         "common",
         "quality:negative"
       ]
     },
     {
-      "m": "Craquelé",
-      "f": "Craquelée",
-      "tags": [
-        "common",
-        "damaged",
-        "quality:negative"
-      ]
-    },
-    {
-      "m": "Rouillé",
-      "f": "Rouillée",
+      "ms": "Craquelé",
+      "fs": "Craquelée",
+      "mp": "Craquelés",
+      "fp": "Craquelées",
       "tags": [
         "common",
         "damaged",
@@ -101,80 +112,111 @@
       ]
     },
     {
-      "m": "Démodé",
-      "f": "Démodée",
+      "ms": "Rouillé",
+      "fs": "Rouillée",
+      "mp": "Rouillés",
+      "fp": "Rouillées",
+      "tags": [
+        "common",
+        "damaged",
+        "quality:negative"
+      ]
+    },
+    {
+      "ms": "Démodé",
+      "fs": "Démodée",
+      "mp": "Démodés",
+      "fp": "Démodées",
       "tags": [
         "common",
         "quality:negative"
       ]
     },
     {
-      "m": "Banal",
-      "f": "Banale",
+      "ms": "Banal",
+      "fs": "Banale",
+      "mp": "Banals",
+      "fp": "Banales",
       "tags": [
         "common",
         "quality:negative"
       ]
     },
     {
-      "m": "Douteux",
-      "f": "Douteuse",
+      "ms": "Douteux",
+      "fs": "Douteuse",
+      "mp": "Douteux",
+      "fp": "Douteuses",
       "tags": [
         "common",
         "quality:negative"
       ]
     },
     {
-      "m": "Malodorant",
-      "f": "Malodorante",
+      "ms": "Malodorant",
+      "fs": "Malodorante",
+      "mp": "Malodorants",
+      "fp": "Malodorantes",
       "tags": [
         "common",
         "quality:negative"
       ]
     },
     {
-      "m": "Bruyant",
-      "f": "Bruyante",
+      "ms": "Bruyant",
+      "fs": "Bruyante",
+      "mp": "Bruyants",
+      "fp": "Bruyantes",
       "tags": [
         "common",
         "quality:negative"
       ]
     },
     {
-      "m": "Chancelant",
-      "f": "Chancelante",
+      "ms": "Chancelant",
+      "fs": "Chancelante",
+      "mp": "Chancelants",
+      "fp": "Chancelantes",
       "tags": [
         "common",
         "quality:negative"
       ]
     },
     {
-      "m": "Solide",
-      "f": "Solide",
+      "ms": "Solide",
+      "fs": "Solide",
+      "mp": "Solides",
+      "fp": "Solides",
       "tags": [
         "common",
         "quality:positive"
       ]
     },
     {
-      "m": "Fiable",
-      "f": "Fiable",
+      "ms": "Fiable",
+      "fs": "Fiable",
+      "mp": "Fiables",
+      "fp": "Fiables",
       "tags": [
         "common",
         "quality:positive"
       ]
     },
     {
-      "m": "Robuste",
-      "f": "Robuste",
+      "ms": "Robuste",
+      "fs": "Robuste",
+      "mp": "Robustes",
+      "fp": "Robustes",
       "tags": [
         "common",
         "quality:positive"
       ]
     },
     {
-      "m": "Léger",
-      "f": "Légère",
+      "ms": "Léger",
+      "fs": "Légère",
+      "mp": "Légers",
+      "fp": "Légères",
       "tags": [
         "dexterity",
         "common",
@@ -182,8 +224,10 @@
       ]
     },
     {
-      "m": "Lourd",
-      "f": "Lourde",
+      "ms": "Lourd",
+      "fs": "Lourde",
+      "mp": "Lourds",
+      "fp": "Lourdes",
       "tags": [
         "strength",
         "common",
@@ -191,32 +235,40 @@
       ]
     },
     {
-      "m": "Renforcé",
-      "f": "Renforcée",
+      "ms": "Renforcé",
+      "fs": "Renforcée",
+      "mp": "Renforcés",
+      "fp": "Renforcées",
       "tags": [
         "rare",
         "quality:positive"
       ]
     },
     {
-      "m": "Artisanal",
-      "f": "Artisanale",
+      "ms": "Artisanal",
+      "fs": "Artisanale",
+      "mp": "Artisanaux",
+      "fp": "Artisanales",
       "tags": [
         "rare",
         "quality:positive"
       ]
     },
     {
-      "m": "Supérieur",
-      "f": "Supérieure",
+      "ms": "Supérieur",
+      "fs": "Supérieure",
+      "mp": "Supérieurs",
+      "fp": "Supérieures",
       "tags": [
         "rare",
         "quality:positive"
       ]
     },
     {
-      "m": "Runique",
-      "f": "Runique",
+      "ms": "Runique",
+      "fs": "Runique",
+      "mp": "Runiques",
+      "fp": "Runiques",
       "tags": [
         "magic",
         "rare",
@@ -224,8 +276,10 @@
       ]
     },
     {
-      "m": "Fulgurant",
-      "f": "Fulgurante",
+      "ms": "Fulgurant",
+      "fs": "Fulgurante",
+      "mp": "Fulgurants",
+      "fp": "Fulgurantes",
       "tags": [
         "storm",
         "rare",
@@ -233,8 +287,10 @@
       ]
     },
     {
-      "m": "Fantômatique",
-      "f": "Fantômatique",
+      "ms": "Fantômatique",
+      "fs": "Fantômatique",
+      "mp": "Fantômatiques",
+      "fp": "Fantômatiques",
       "tags": [
         "shadow",
         "undead",
@@ -242,24 +298,30 @@
       ]
     },
     {
-      "m": "Royal",
-      "f": "Royale",
+      "ms": "Royal",
+      "fs": "Royale",
+      "mp": "Royaux",
+      "fp": "Royales",
       "tags": [
         "epic",
         "quality:positive"
       ]
     },
     {
-      "m": "Magnifique",
-      "f": "Magnifique",
+      "ms": "Magnifique",
+      "fs": "Magnifique",
+      "mp": "Magnifiques",
+      "fp": "Magnifiques",
       "tags": [
         "epic",
         "quality:positive"
       ]
     },
     {
-      "m": "Adamantin",
-      "f": "Adamantine",
+      "ms": "Adamantin",
+      "fs": "Adamantine",
+      "mp": "Adamantins",
+      "fp": "Adamantines",
       "tags": [
         "defense",
         "epic",
@@ -267,8 +329,10 @@
       ]
     },
     {
-      "m": "Sanguinaire",
-      "f": "Sanguinaire",
+      "ms": "Sanguinaire",
+      "fs": "Sanguinaire",
+      "mp": "Sanguinaires",
+      "fp": "Sanguinaires",
       "tags": [
         "beast",
         "strength",
@@ -277,8 +341,10 @@
       ]
     },
     {
-      "m": "Astromantique",
-      "f": "Astromantique",
+      "ms": "Astromantique",
+      "fs": "Astromantique",
+      "mp": "Astromantiques",
+      "fp": "Astromantiques",
       "tags": [
         "magic",
         "epic",
@@ -286,8 +352,10 @@
       ]
     },
     {
-      "m": "Flamboyant",
-      "f": "Flamboyante",
+      "ms": "Flamboyant",
+      "fs": "Flamboyante",
+      "mp": "Flamboyants",
+      "fp": "Flamboyantes",
       "tags": [
         "fire",
         "epic",
@@ -295,16 +363,20 @@
       ]
     },
     {
-      "m": "Impérial",
-      "f": "Impériale",
+      "ms": "Impérial",
+      "fs": "Impériale",
+      "mp": "Impériaux",
+      "fp": "Impériales",
       "tags": [
         "epic",
         "quality:positive"
       ]
     },
     {
-      "m": "Colossal",
-      "f": "Colossale",
+      "ms": "Colossal",
+      "fs": "Colossale",
+      "mp": "Colossaux",
+      "fp": "Colossales",
       "tags": [
         "strength",
         "epic",
@@ -312,8 +384,10 @@
       ]
     },
     {
-      "m": "Éclatant",
-      "f": "Éclatante",
+      "ms": "Éclatant",
+      "fs": "Éclatante",
+      "mp": "Éclatants",
+      "fp": "Éclatantes",
       "tags": [
         "holy",
         "epic",
@@ -321,8 +395,10 @@
       ]
     },
     {
-      "m": "Lumineux",
-      "f": "Lumineuse",
+      "ms": "Lumineux",
+      "fs": "Lumineuse",
+      "mp": "Lumineux",
+      "fp": "Lumineuses",
       "tags": [
         "holy",
         "rare",
@@ -330,8 +406,10 @@
       ]
     },
     {
-      "m": "Inflexible",
-      "f": "Inflexible",
+      "ms": "Inflexible",
+      "fs": "Inflexible",
+      "mp": "Inflexibles",
+      "fp": "Inflexibles",
       "tags": [
         "defense",
         "epic",
@@ -339,8 +417,10 @@
       ]
     },
     {
-      "m": "Vampirique",
-      "f": "Vampirique",
+      "ms": "Vampirique",
+      "fs": "Vampirique",
+      "mp": "Vampiriques",
+      "fp": "Vampiriques",
       "tags": [
         "undead",
         "shadow",
@@ -348,32 +428,40 @@
       ]
     },
     {
-      "m": "Divin",
-      "f": "Divine",
+      "ms": "Divin",
+      "fs": "Divine",
+      "mp": "Divins",
+      "fp": "Divines",
       "tags": [
         "legendary",
         "quality:positive"
       ]
     },
     {
-      "m": "Légendaire",
-      "f": "Légendaire",
+      "ms": "Légendaire",
+      "fs": "Légendaire",
+      "mp": "Légendaires",
+      "fp": "Légendaires",
       "tags": [
         "legendary",
         "quality:positive"
       ]
     },
     {
-      "m": "Mythique",
-      "f": "Mythique",
+      "ms": "Mythique",
+      "fs": "Mythique",
+      "mp": "Mythiques",
+      "fp": "Mythiques",
       "tags": [
         "legendary",
         "quality:positive"
       ]
     },
     {
-      "m": "Éternel",
-      "f": "Éternelle",
+      "ms": "Éternel",
+      "fs": "Éternelle",
+      "mp": "Éternels",
+      "fp": "Éternelles",
       "tags": [
         "legendary",
         "holy",
@@ -382,8 +470,10 @@
       ]
     },
     {
-      "m": "Sanctifié",
-      "f": "Sanctifiée",
+      "ms": "Sanctifié",
+      "fs": "Sanctifiée",
+      "mp": "Sanctifiés",
+      "fp": "Sanctifiées",
       "tags": [
         "holy",
         "legendary",
@@ -391,8 +481,10 @@
       ]
     },
     {
-      "m": "Titanesque",
-      "f": "Titanesque",
+      "ms": "Titanesque",
+      "fs": "Titanesque",
+      "mp": "Titanesques",
+      "fp": "Titanesques",
       "tags": [
         "strength",
         "legendary",
@@ -400,8 +492,10 @@
       ]
     },
     {
-      "m": "Indomptable",
-      "f": "Indomptable",
+      "ms": "Indomptable",
+      "fs": "Indomptable",
+      "mp": "Indomptables",
+      "fp": "Indomptables",
       "tags": [
         "defense",
         "legendary",
@@ -409,8 +503,10 @@
       ]
     },
     {
-      "m": "Élu",
-      "f": "Élue",
+      "ms": "Élu",
+      "fs": "Élue",
+      "mp": "Élus",
+      "fp": "Élues",
       "tags": [
         "holy",
         "legendary",
@@ -418,8 +514,10 @@
       ]
     },
     {
-      "m": "Céleste",
-      "f": "Céleste",
+      "ms": "Céleste",
+      "fs": "Céleste",
+      "mp": "Célestes",
+      "fp": "Célestes",
       "tags": [
         "holy",
         "magic",
@@ -427,8 +525,10 @@
       ]
     },
     {
-      "m": "Tellurique",
-      "f": "Tellurique",
+      "ms": "Tellurique",
+      "fs": "Tellurique",
+      "mp": "Telluriques",
+      "fp": "Telluriques",
       "tags": [
         "nature",
         "defense",
@@ -436,8 +536,10 @@
       ]
     },
     {
-      "m": "Chtonien",
-      "f": "Chtonienne",
+      "ms": "Chtonien",
+      "fs": "Chtonienne",
+      "mp": "Chtoniens",
+      "fp": "Chtoniennes",
       "tags": [
         "shadow",
         "boss",
@@ -445,8 +547,10 @@
       ]
     },
     {
-      "m": "Abyssal",
-      "f": "Abyssale",
+      "ms": "Abyssal",
+      "fs": "Abyssale",
+      "mp": "Abyssaux",
+      "fp": "Abyssales",
       "tags": [
         "shadow",
         "boss",
@@ -454,135 +558,171 @@
       ]
     },
     {
-      "m": "Incandescent",
-      "f": "Incandescente",
+      "ms": "Incandescent",
+      "fs": "Incandescente",
+      "mp": "Incandescents",
+      "fp": "Incandescentes",
       "tags": [
         "fire"
       ]
     },
     {
-      "m": "Volcanique",
-      "f": "Volcanique",
+      "ms": "Volcanique",
+      "fs": "Volcanique",
+      "mp": "Volcaniques",
+      "fp": "Volcaniques",
       "tags": [
         "fire"
       ]
     },
     {
-      "m": "Cendré",
-      "f": "Cendrée",
+      "ms": "Cendré",
+      "fs": "Cendrée",
+      "mp": "Cendrés",
+      "fp": "Cendrées",
       "tags": [
         "fire"
       ]
     },
     {
-      "m": "Glacial",
-      "f": "Glaciale",
+      "ms": "Glacial",
+      "fs": "Glaciale",
+      "mp": "Glaciaux",
+      "fp": "Glaciales",
       "tags": [
         "ice",
         "tundra"
       ]
     },
     {
-      "m": "Givré",
-      "f": "Givrée",
+      "ms": "Givré",
+      "fs": "Givrée",
+      "mp": "Givrés",
+      "fp": "Givrées",
       "tags": [
         "ice",
         "tundra"
       ]
     },
     {
-      "m": "Boréal",
-      "f": "Boréale",
+      "ms": "Boréal",
+      "fs": "Boréale",
+      "mp": "Boréaux",
+      "fp": "Boréales",
       "tags": [
         "ice",
         "tundra"
       ]
     },
     {
-      "m": "Tempétueux",
-      "f": "Tempétueuse",
+      "ms": "Tempétueux",
+      "fs": "Tempétueuse",
+      "mp": "Tempétueux",
+      "fp": "Tempétueuses",
       "tags": [
         "storm",
         "nature"
       ]
     },
     {
-      "m": "Sylvestre",
-      "f": "Sylvestre",
+      "ms": "Sylvestre",
+      "fs": "Sylvestre",
+      "mp": "Sylvestres",
+      "fp": "Sylvestres",
       "tags": [
         "nature"
       ]
     },
     {
-      "m": "Vivant",
-      "f": "Vivante",
+      "ms": "Vivant",
+      "fs": "Vivante",
+      "mp": "Vivants",
+      "fp": "Vivantes",
       "tags": [
         "nature"
       ]
     },
     {
-      "m": "Sauvage",
-      "f": "Sauvage",
+      "ms": "Sauvage",
+      "fs": "Sauvage",
+      "mp": "Sauvages",
+      "fp": "Sauvages",
       "tags": [
         "nature",
         "beast"
       ]
     },
     {
-      "m": "Bestial",
-      "f": "Bestiale",
+      "ms": "Bestial",
+      "fs": "Bestiale",
+      "mp": "Bestiaux",
+      "fp": "Bestiales",
       "tags": [
         "beast"
       ]
     },
     {
-      "m": "Primal",
-      "f": "Primale",
+      "ms": "Primal",
+      "fs": "Primale",
+      "mp": "Primals",
+      "fp": "Primales",
       "tags": [
         "beast"
       ]
     },
     {
-      "m": "Hurlant",
-      "f": "Hurlante",
+      "ms": "Hurlant",
+      "fs": "Hurlante",
+      "mp": "Hurlants",
+      "fp": "Hurlantes",
       "tags": [
         "beast",
         "epic"
       ]
     },
     {
-      "m": "Ténébreux",
-      "f": "Ténébreuse",
+      "ms": "Ténébreux",
+      "fs": "Ténébreuse",
+      "mp": "Ténébreux",
+      "fp": "Ténébreuses",
       "tags": [
         "shadow"
       ]
     },
     {
-      "m": "Nécrotique",
-      "f": "Nécrotique",
+      "ms": "Nécrotique",
+      "fs": "Nécrotique",
+      "mp": "Nécrotiques",
+      "fp": "Nécrotiques",
       "tags": [
         "shadow",
         "undead"
       ]
     },
     {
-      "m": "Sombre",
-      "f": "Sombre",
+      "ms": "Sombre",
+      "fs": "Sombre",
+      "mp": "Sombres",
+      "fp": "Sombres",
       "tags": [
         "shadow"
       ]
     },
     {
-      "m": "Corrompu",
-      "f": "Corrompue",
+      "ms": "Corrompu",
+      "fs": "Corrompue",
+      "mp": "Corrompus",
+      "fp": "Corrompues",
       "tags": [
         "shadow",
         "boss"
       ]
     },
     {
-      "m": "Grimaçant",
-      "f": "Grimaçante",
+      "ms": "Grimaçant",
+      "fs": "Grimaçante",
+      "mp": "Grimaçants",
+      "fp": "Grimaçantes",
       "tags": [
         "shadow",
         "undead",
@@ -590,24 +730,30 @@
       ]
     },
     {
-      "m": "Sacré",
-      "f": "Sacrée",
+      "ms": "Sacré",
+      "fs": "Sacrée",
+      "mp": "Sacrés",
+      "fp": "Sacrées",
       "tags": [
         "holy",
         "quality:positive"
       ]
     },
     {
-      "m": "Béni",
-      "f": "Bénie",
+      "ms": "Béni",
+      "fs": "Bénie",
+      "mp": "Bénis",
+      "fp": "Bénies",
       "tags": [
         "holy",
         "quality:positive"
       ]
     },
     {
-      "m": "Puissant",
-      "f": "Puissante",
+      "ms": "Puissant",
+      "fs": "Puissante",
+      "mp": "Puissants",
+      "fp": "Puissantes",
       "tags": [
         "strength",
         "rare",
@@ -616,8 +762,10 @@
       ]
     },
     {
-      "m": "Agile",
-      "f": "Agile",
+      "ms": "Agile",
+      "fs": "Agile",
+      "mp": "Agiles",
+      "fp": "Agiles",
       "tags": [
         "dexterity",
         "rare",
@@ -626,8 +774,10 @@
       ]
     },
     {
-      "m": "Savant",
-      "f": "Savante",
+      "ms": "Savant",
+      "fs": "Savante",
+      "mp": "Savants",
+      "fp": "Savantes",
       "tags": [
         "intelligence",
         "rare",
@@ -636,8 +786,10 @@
       ]
     },
     {
-      "m": "Vigoureux",
-      "f": "Vigoureuse",
+      "ms": "Vigoureux",
+      "fs": "Vigoureuse",
+      "mp": "Vigoureux",
+      "fp": "Vigoureuses",
       "tags": [
         "vitality",
         "rare",
@@ -646,8 +798,10 @@
       ]
     },
     {
-      "m": "Protecteur",
-      "f": "Protectrice",
+      "ms": "Protecteur",
+      "fs": "Protectrice",
+      "mp": "Protecteurs",
+      "fp": "Protectrices",
       "tags": [
         "defense",
         "rare",
@@ -656,8 +810,10 @@
       ]
     },
     {
-      "m": "Rapide",
-      "f": "Rapide",
+      "ms": "Rapide",
+      "fs": "Rapide",
+      "mp": "Rapides",
+      "fp": "Rapides",
       "tags": [
         "attack_speed",
         "rare",
@@ -666,8 +822,10 @@
       ]
     },
     {
-      "m": "Mortel",
-      "f": "Mortelle",
+      "ms": "Mortel",
+      "fs": "Mortelle",
+      "mp": "Mortels",
+      "fp": "Mortelles",
       "tags": [
         "critical_chance",
         "rare",
@@ -676,8 +834,10 @@
       ]
     },
     {
-      "m": "Héroïque",
-      "f": "Héroïque",
+      "ms": "Héroïque",
+      "fs": "Héroïque",
+      "mp": "Héroïques",
+      "fp": "Héroïques",
       "tags": [
         "rare",
         "epic",
@@ -685,8 +845,10 @@
       ]
     },
     {
-      "m": "Barbare",
-      "f": "Barbare",
+      "ms": "Barbare",
+      "fs": "Barbare",
+      "mp": "Barbares",
+      "fp": "Barbares",
       "tags": [
         "berserker",
         "strength",
@@ -694,8 +856,10 @@
       ]
     },
     {
-      "m": "Silencieux",
-      "f": "Silencieuse",
+      "ms": "Silencieux",
+      "fs": "Silencieuse",
+      "mp": "Silencieux",
+      "fp": "Silencieuses",
       "tags": [
         "rogue",
         "dexterity",
@@ -703,8 +867,10 @@
       ]
     },
     {
-      "m": "Spirituel",
-      "f": "Spirituelle",
+      "ms": "Spirituel",
+      "fs": "Spirituelle",
+      "mp": "Spirituels",
+      "fp": "Spirituelles",
       "tags": [
         "cleric",
         "intelligence",
@@ -712,8 +878,10 @@
       ]
     },
     {
-      "m": "Vengeur",
-      "f": "Vengeresse",
+      "ms": "Vengeur",
+      "fs": "Vengeresse",
+      "mp": "Vengeurs",
+      "fp": "Vengeresses",
       "tags": [
         "holy",
         "strength",
@@ -722,32 +890,40 @@
       ]
     },
     {
-      "m": "Ancestral",
-      "f": "Ancestrale",
+      "ms": "Ancestral",
+      "fs": "Ancestrale",
+      "mp": "Ancestraux",
+      "fp": "Ancestrales",
       "tags": [
         "legendary",
         "quality:positive"
       ]
     },
     {
-      "m": "Immortel",
-      "f": "Immortelle",
+      "ms": "Immortel",
+      "fs": "Immortelle",
+      "mp": "Immortels",
+      "fp": "Immortelles",
       "tags": [
         "legendary",
         "quality:positive"
       ]
     },
     {
-      "m": "Implacable",
-      "f": "Implacable",
+      "ms": "Implacable",
+      "fs": "Implacable",
+      "mp": "Implacables",
+      "fp": "Implacables",
       "tags": [
         "epic",
         "quality:positive"
       ]
     },
     {
-      "m": "Incassable",
-      "f": "Incassable",
+      "ms": "Incassable",
+      "fs": "Incassable",
+      "mp": "Incassables",
+      "fp": "Incassables",
       "tags": [
         "defense",
         "epic",
@@ -755,8 +931,10 @@
       ]
     },
     {
-      "m": "Stellaire",
-      "f": "Stellaire",
+      "ms": "Stellaire",
+      "fs": "Stellaire",
+      "mp": "Stellaires",
+      "fp": "Stellaires",
       "tags": [
         "magic",
         "holy",
@@ -764,8 +942,10 @@
       ]
     },
     {
-      "m": "Démoniaque",
-      "f": "Démoniaque",
+      "ms": "Démoniaque",
+      "fs": "Démoniaque",
+      "mp": "Démoniaques",
+      "fp": "Démoniaques",
       "tags": [
         "shadow",
         "boss",
@@ -773,8 +953,10 @@
       ]
     },
     {
-      "m": "Solaire",
-      "f": "Solaire",
+      "ms": "Solaire",
+      "fs": "Solaire",
+      "mp": "Solaires",
+      "fp": "Solaires",
       "tags": [
         "holy",
         "fire",
@@ -782,8 +964,10 @@
       ]
     },
     {
-      "m": "Lunaire",
-      "f": "Lunaire",
+      "ms": "Lunaire",
+      "fs": "Lunaire",
+      "mp": "Lunaires",
+      "fp": "Lunaires",
       "tags": [
         "magic",
         "ice",
@@ -791,8 +975,10 @@
       ]
     },
     {
-      "m": "Infernal",
-      "f": "Infernale",
+      "ms": "Infernal",
+      "fs": "Infernale",
+      "mp": "Infernaux",
+      "fp": "Infernales",
       "tags": [
         "fire",
         "shadow",
@@ -800,88 +986,110 @@
       ]
     },
     {
-      "m": "Arcanique",
-      "f": "Arcanique",
+      "ms": "Arcanique",
+      "fs": "Arcanique",
+      "mp": "Arcaniques",
+      "fp": "Arcaniques",
       "tags": [
         "magic",
         "epic"
       ]
     },
     {
-      "m": "Fragile",
-      "f": "Fragile",
+      "ms": "Fragile",
+      "fs": "Fragile",
+      "mp": "Fragiles",
+      "fp": "Fragiles",
       "tags": [
         "common",
         "quality:negative"
       ]
     },
     {
-      "m": "Encombrant",
-      "f": "Encombrante",
+      "ms": "Encombrant",
+      "fs": "Encombrante",
+      "mp": "Encombrants",
+      "fp": "Encombrantes",
       "tags": [
         "common",
         "quality:negative"
       ]
     },
     {
-      "m": "Gluant",
-      "f": "Gluante",
+      "ms": "Gluant",
+      "fs": "Gluante",
+      "mp": "Gluants",
+      "fp": "Gluantes",
       "tags": [
         "common",
         "quality:negative"
       ]
     },
     {
-      "m": "Grinçant",
-      "f": "Grinçante",
+      "ms": "Grinçant",
+      "fs": "Grinçante",
+      "mp": "Grinçants",
+      "fp": "Grinçantes",
       "tags": [
         "common",
         "quality:negative"
       ]
     },
     {
-      "m": "Bancal",
-      "f": "Bancale",
+      "ms": "Bancal",
+      "fs": "Bancale",
+      "mp": "Bancals",
+      "fp": "Bancales",
       "tags": [
         "common",
         "quality:negative"
       ]
     },
     {
-      "m": "Brûlant",
-      "f": "Brûlante",
+      "ms": "Brûlant",
+      "fs": "Brûlante",
+      "mp": "Brûlants",
+      "fp": "Brûlantes",
       "tags": [
         "fire",
         "quality:positive"
       ]
     },
     {
-      "m": "Congelé",
-      "f": "Congelée",
+      "ms": "Congelé",
+      "fs": "Congelée",
+      "mp": "Congelés",
+      "fp": "Congelées",
       "tags": [
         "ice",
         "quality:positive"
       ]
     },
     {
-      "m": "Intelligent",
-      "f": "Intelligente",
+      "ms": "Intelligent",
+      "fs": "Intelligente",
+      "mp": "Intelligents",
+      "fp": "Intelligentes",
       "tags": [
         "intelligence",
         "quality:positive"
       ]
     },
     {
-      "m": "Précis",
-      "f": "Précise",
+      "ms": "Précis",
+      "fs": "Précise",
+      "mp": "Précis",
+      "fp": "Précises",
       "tags": [
         "critical_chance",
         "quality:positive"
       ]
     },
     {
-      "m": "Chirurgical",
-      "f": "Chirurgicale",
+      "ms": "Chirurgical",
+      "fs": "Chirurgicale",
+      "mp": "Chirurgicaux",
+      "fp": "Chirurgicales",
       "tags": [
         "critical_chance",
         "quality:positive"

@@ -21,23 +21,27 @@ const selectRandom = <T>(arr: T[]): T | undefined => {
 
 /**
  * Generates a grammatically correct and thematically coherent name for a loot item.
- * @param baseItem The base item object, must include name and gender.
+ * @param baseItem The base item object, must include name, gender, and plural status.
  * @param context The context for generation, including rarity, biome, and monster type.
  * @returns A generated name string.
  */
 export const generateLootItemName = (
-    baseItem: Pick<Item, 'name' | 'gender'>,
+    baseItem: Pick<Item, 'name' | 'gender' | 'isPlural'>,
     context: ItemGenerationContext
 ): string => {
     const { rarity, tags } = context;
     const gender = baseItem.gender || 'm';
+    const isPlural = baseItem.isPlural || false;
+
+    // Determine the correct grammatical form key (ms, fs, mp, fp)
+    const formKey = `${gender}${isPlural ? 'p' : 's'}` as 'ms' | 'fs' | 'mp' | 'fp';
 
     let availablePrefixes = nameAffixes.prefixes.filter(p => p.tags.some(t => tags.includes(t)));
     let availableSuffixesAdj = nameAffixes.suffixes_adjectives.filter(s => s.tags.some(t => tags.includes(t)));
     let availableSuffixesQual = nameAffixes.suffixes_qualifiers.filter(s => s.tags.some(t => tags.includes(t)));
 
-    let prefix: { m: string; f: string; tags: string[] } | undefined;
-    let suffixAdj: { m: string; f: string; tags: string[] } | undefined;
+    let prefix: { ms: string; fs: string; mp: string; fp: string; tags: string[] } | undefined;
+    let suffixAdj: { ms: string; fs: string; mp: string; fp: string; tags: string[] } | undefined;
     let suffixQual: { text: string; tags: string[] } | undefined;
 
     const affixCountRoll = Math.random();
@@ -95,18 +99,39 @@ export const generateLootItemName = (
         }
     }
 
-    const nameParts = [baseItem.name];
-    if (prefix) {
-        nameParts.unshift(prefix[gender]);
-    }
-    if (suffixAdj) {
-        nameParts.push(suffixAdj[gender]);
-    }
-    if (suffixQual) {
-        nameParts.push(suffixQual.text);
+    // Intelligent Name Assembly
+    let finalName = baseItem.name;
+    const materialRegex = /( en | de | d'| de la )(.+)$/i;
+    const match = finalName.match(materialRegex);
+
+    let baseNamePart = finalName;
+    let materialPart = "";
+
+    if (match) {
+        baseNamePart = finalName.substring(0, match.index).trim();
+        materialPart = finalName.substring(match.index).trim();
     }
 
-    return nameParts.join(' ');
+    let nameParts = [baseNamePart];
+
+    if (prefix) {
+        nameParts.unshift(prefix[formKey]);
+    }
+    if (suffixAdj) {
+        nameParts.push(suffixAdj[formKey]);
+    }
+
+    finalName = nameParts.join(' ');
+
+    if (materialPart) {
+        finalName += ` ${materialPart}`;
+    }
+
+    if (suffixQual) {
+        finalName += ` ${suffixQual.text}`;
+    }
+
+    return finalName;
 };
 
 // --- END NEW ---
@@ -173,7 +198,7 @@ export const generateProceduralItem = (
         if (affixTheme) contextTags.push(affixTheme);
     }
 
-    newItem.name = generateLootItemName(baseItem, { rarity: rarity, tags: contextTags });
+    newItem.name = generateLootItemName(newItem, { rarity: rarity, tags: contextTags });
     // --- END NEW Name Generation ---
 
     return newItem;
