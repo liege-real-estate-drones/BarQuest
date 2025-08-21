@@ -1,182 +1,1515 @@
 {
-  "prefixes": [],
+  "prefixes": [
+    {
+      "m": "Incandescent",
+      "f": "Incandescente",
+      "tags": [
+        "fire",
+        "magic"
+      ],
+      "quality": "positive"
+    },
+    {
+      "m": "Frigorifiant",
+      "f": "Frigorifiante",
+      "tags": [
+        "ice",
+        "magic"
+      ],
+      "quality": "positive"
+    },
+    {
+      "m": "Foudroyant",
+      "f": "Foudroyante",
+      "tags": [
+        "lightning",
+        "magic"
+      ],
+      "quality": "positive"
+    },
+    {
+      "m": "Pestilentiel",
+      "f": "Pestilentielle",
+      "tags": [
+        "poison",
+        "magic"
+      ],
+      "quality": "positive"
+    }
+  ],
   "suffixes_adjectives": [
-    { "m": "Fendu", "f": "Fendue", "tags": ["common", "damaged", "quality:negative"] },
-    { "m": "Abîmé", "f": "Abîmée", "tags": ["common", "damaged", "quality:negative"] },
-    { "m": "Usé", "f": "Usée", "tags": ["common", "damaged", "quality:negative"] },
-    { "m": "Moisi", "f": "Moisie", "tags": ["common", "damaged", "quality:negative"] },
-    { "m": "Ridicule", "f": "Ridicule", "tags": ["common", "quality:negative"] },
-    { "m": "Craquelé", "f": "Craquelée", "tags": ["common", "damaged", "quality:negative"] },
-    { "m": "Rouillé", "f": "Rouillée", "tags": ["common", "damaged", "quality:negative"] },
-    { "m": "Démodé", "f": "Démodée", "tags": ["common", "quality:negative"] },
-    { "m": "Banal", "f": "Banale", "tags": ["common", "quality:negative"] },
-    { "m": "Douteux", "f": "Douteuse", "tags": ["common", "quality:negative"] },
-    { "m": "Malodorant", "f": "Malodorante", "tags": ["common", "quality:negative"] },
-    { "m": "Bruyant", "f": "Bruyante", "tags": ["common", "quality:negative"] },
-    { "m": "Chancelant", "f": "Chancelante", "tags": ["common", "quality:negative"] },
-    { "m": "Solide", "f": "Solide", "tags": ["common", "quality:positive"] },
-    { "m": "Fiable", "f": "Fiable", "tags": ["common", "quality:positive"] },
-    { "m": "Robuste", "f": "Robuste", "tags": ["common", "quality:positive"] },
-    { "m": "Léger", "f": "Légère", "tags": ["dexterity", "common", "quality:positive"] },
-    { "m": "Lourd", "f": "Lourde", "tags": ["strength", "common", "quality:positive"] },
-    { "m": "Renforcé", "f": "Renforcée", "tags": ["rare", "quality:positive"] },
-    { "m": "Artisanal", "f": "Artisanale", "tags": ["rare", "quality:positive"] },
-    { "m": "Supérieur", "f": "Supérieure", "tags": ["rare", "quality:positive"] },
-    { "m": "Runique", "f": "Runique", "tags": ["magic", "rare", "quality:positive"] },
-    { "m": "Fulgurant", "f": "Fulgurante", "tags": ["storm", "rare", "quality:positive"] },
-    { "m": "Fantômatique", "f": "Fantômatique", "tags": ["shadow", "undead", "rare"] },
-    { "m": "Royal", "f": "Royale", "tags": ["epic", "quality:positive"] },
-    { "m": "Magnifique", "f": "Magnifique", "tags": ["epic", "quality:positive"] },
-    { "m": "Adamantin", "f": "Adamantine", "tags": ["defense", "epic", "quality:positive"] },
-    { "m": "Sanguinaire", "f": "Sanguinaire", "tags": ["beast", "strength", "epic", "quality:positive"] },
-    { "m": "Astromantique", "f": "Astromantique", "tags": ["magic", "epic", "quality:positive"] },
-    { "m": "Flamboyant", "f": "Flamboyante", "tags": ["fire", "epic", "quality:positive"] },
-    { "m": "Impérial", "f": "Impériale", "tags": ["epic", "quality:positive"] },
-    { "m": "Colossal", "f": "Colossale", "tags": ["strength", "epic", "quality:positive"] },
-    { "m": "Éclatant", "f": "Éclatante", "tags": ["holy", "epic", "quality:positive"] },
-    { "m": "Lumineux", "f": "Lumineuse", "tags": ["holy", "rare", "quality:positive"] },
-    { "m": "Inflexible", "f": "Inflexible", "tags": ["defense", "epic", "quality:positive"] },
-    { "m": "Vampirique", "f": "Vampirique", "tags": ["undead", "shadow", "epic"] },
-    { "m": "Divin", "f": "Divine", "tags": ["legendary", "quality:positive"] },
-    { "m": "Légendaire", "f": "Légendaire", "tags": ["legendary", "quality:positive"] },
-    { "m": "Mythique", "f": "Mythique", "tags": ["legendary", "quality:positive"] },
-    { "m": "Éternel", "f": "Éternelle", "tags": ["legendary", "holy", "magic", "quality:positive"] },
-    { "m": "Sanctifié", "f": "Sanctifiée", "tags": ["holy", "legendary", "quality:positive"] },
-    { "m": "Titanesque", "f": "Titanesque", "tags": ["strength", "legendary", "quality:positive"] },
-    { "m": "Indomptable", "f": "Indomptable", "tags": ["defense", "legendary", "quality:positive"] },
-    { "m": "Élu", "f": "Élue", "tags": ["holy", "legendary", "quality:positive"] },
-    { "m": "Céleste", "f": "Céleste", "tags": ["holy", "magic", "legendary"] },
-    { "m": "Tellurique", "f": "Tellurique", "tags": ["nature", "defense", "epic"] },
-    { "m": "Chtonien", "f": "Chtonienne", "tags": ["shadow", "boss", "legendary"] },
-    { "m": "Abyssal", "f": "Abyssale", "tags": ["shadow", "boss", "legendary"] },
-    { "m": "Incandescent", "f": "Incandescente", "tags": ["fire"] },
-    { "m": "Volcanique", "f": "Volcanique", "tags": ["fire"] },
-    { "m": "Cendré", "f": "Cendrée", "tags": ["fire"] },
-    { "m": "Glacial", "f": "Glaciale", "tags": ["ice", "tundra"] },
-    { "m": "Givré", "f": "Givrée", "tags": ["ice", "tundra"] },
-    { "m": "Boréal", "f": "Boréale", "tags": ["ice", "tundra"] },
-    { "m": "Tempétueux", "f": "Tempétueuse", "tags": ["storm", "nature"] },
-    { "m": "Sylvestre", "f": "Sylvestre", "tags": ["nature"] },
-    { "m": "Vivant", "f": "Vivante", "tags": ["nature"] },
-    { "m": "Sauvage", "f": "Sauvage", "tags": ["nature", "beast"] },
-    { "m": "Bestial", "f": "Bestiale", "tags": ["beast"] },
-    { "m": "Primal", "f": "Primale", "tags": ["beast"] },
-    { "m": "Hurlant", "f": "Hurlante", "tags": ["beast", "epic"] },
-    { "m": "Ténébreux", "f": "Ténébreuse", "tags": ["shadow"] },
-    { "m": "Nécrotique", "f": "Nécrotique", "tags": ["shadow", "undead"] },
-    { "m": "Sombre", "f": "Sombre", "tags": ["shadow"] },
-    { "m": "Corrompu", "f": "Corrompue", "tags": ["shadow", "boss"] },
-    { "m": "Grimaçant", "f": "Grimaçante", "tags": ["shadow", "undead", "boss"] },
-    { "m": "Sacré", "f": "Sacrée", "tags": ["holy", "quality:positive"] },
-    { "m": "Béni", "f": "Bénie", "tags": ["holy", "quality:positive"] },
-    { "m": "Puissant", "f": "Puissante", "tags": ["strength", "rare", "epic", "quality:positive"] },
-    { "m": "Agile", "f": "Agile", "tags": ["dexterity", "rare", "epic", "quality:positive"] },
-    { "m": "Savant", "f": "Savante", "tags": ["intelligence", "rare", "epic", "quality:positive"] },
-    { "m": "Vigoureux", "f": "Vigoureuse", "tags": ["vitality", "rare", "epic", "quality:positive"] },
-    { "m": "Protecteur", "f": "Protectrice", "tags": ["defense", "rare", "epic", "quality:positive"] },
-    { "m": "Rapide", "f": "Rapide", "tags": ["attack_speed", "rare", "epic", "quality:positive"] },
-    { "m": "Mortel", "f": "Mortelle", "tags": ["critical_chance", "rare", "epic", "quality:positive"] },
-    { "m": "Héroïque", "f": "Héroïque", "tags": ["rare", "epic", "quality:positive"] },
-    { "m": "Barbare", "f": "Barbare", "tags": ["berserker", "strength", "quality:positive"] },
-    { "m": "Silencieux", "f": "Silencieuse", "tags": ["rogue", "dexterity", "quality:positive"] },
-    { "m": "Spirituel", "f": "Spirituelle", "tags": ["cleric", "intelligence", "quality:positive"] },
-    { "m": "Vengeur", "f": "Vengeresse", "tags": ["holy", "strength", "epic", "quality:positive"] },
-    { "m": "Ancestral", "f": "Ancestrale", "tags": ["legendary", "quality:positive"] },
-    { "m": "Immortel", "f": "Immortelle", "tags": ["legendary", "quality:positive"] },
-    { "m": "Implacable", "f": "Implacable", "tags": ["epic", "quality:positive"] },
-    { "m": "Incassable", "f": "Incassable", "tags": ["defense", "epic", "quality:positive"] },
-    { "m": "Stellaire", "f": "Stellaire", "tags": ["magic", "holy", "epic"] },
-    { "m": "Démoniaque", "f": "Démoniaque", "tags": ["shadow", "boss", "fire"] },
-    { "m": "Solaire", "f": "Solaire", "tags": ["holy", "fire", "epic"] },
-    { "m": "Lunaire", "f": "Lunaire", "tags": ["magic", "ice", "epic"] },
-    { "m": "Infernal", "f": "Infernale", "tags": ["fire", "shadow", "boss"] },
-    { "m": "Arcanique", "f": "Arcanique", "tags": ["magic", "epic"] },
-    { "m": "Fragile", "f": "Fragile", "tags": ["common", "quality:negative"] },
-    { "m": "Encombrant", "f": "Encombrante", "tags": ["common", "quality:negative"] },
-    { "m": "Gluant", "f": "Gluante", "tags": ["common", "quality:negative"] },
-    { "m": "Grinçant", "f": "Grinçante", "tags": ["common", "quality:negative"] },
-    { "m": "Bancal", "f": "Bancale", "tags": ["common", "quality:negative"] }
+    {
+      "m": "Fendu",
+      "f": "Fendue",
+      "tags": [
+        "common",
+        "damaged",
+        "quality:negative"
+      ]
+    },
+    {
+      "m": "Abîmé",
+      "f": "Abîmée",
+      "tags": [
+        "common",
+        "damaged",
+        "quality:negative"
+      ]
+    },
+    {
+      "m": "Usé",
+      "f": "Usée",
+      "tags": [
+        "common",
+        "damaged",
+        "quality:negative"
+      ]
+    },
+    {
+      "m": "Moisi",
+      "f": "Moisie",
+      "tags": [
+        "common",
+        "damaged",
+        "quality:negative"
+      ]
+    },
+    {
+      "m": "Ridicule",
+      "f": "Ridicule",
+      "tags": [
+        "common",
+        "quality:negative"
+      ]
+    },
+    {
+      "m": "Craquelé",
+      "f": "Craquelée",
+      "tags": [
+        "common",
+        "damaged",
+        "quality:negative"
+      ]
+    },
+    {
+      "m": "Rouillé",
+      "f": "Rouillée",
+      "tags": [
+        "common",
+        "damaged",
+        "quality:negative"
+      ]
+    },
+    {
+      "m": "Démodé",
+      "f": "Démodée",
+      "tags": [
+        "common",
+        "quality:negative"
+      ]
+    },
+    {
+      "m": "Banal",
+      "f": "Banale",
+      "tags": [
+        "common",
+        "quality:negative"
+      ]
+    },
+    {
+      "m": "Douteux",
+      "f": "Douteuse",
+      "tags": [
+        "common",
+        "quality:negative"
+      ]
+    },
+    {
+      "m": "Malodorant",
+      "f": "Malodorante",
+      "tags": [
+        "common",
+        "quality:negative"
+      ]
+    },
+    {
+      "m": "Bruyant",
+      "f": "Bruyante",
+      "tags": [
+        "common",
+        "quality:negative"
+      ]
+    },
+    {
+      "m": "Chancelant",
+      "f": "Chancelante",
+      "tags": [
+        "common",
+        "quality:negative"
+      ]
+    },
+    {
+      "m": "Solide",
+      "f": "Solide",
+      "tags": [
+        "common",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Fiable",
+      "f": "Fiable",
+      "tags": [
+        "common",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Robuste",
+      "f": "Robuste",
+      "tags": [
+        "common",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Léger",
+      "f": "Légère",
+      "tags": [
+        "dexterity",
+        "common",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Lourd",
+      "f": "Lourde",
+      "tags": [
+        "strength",
+        "common",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Renforcé",
+      "f": "Renforcée",
+      "tags": [
+        "rare",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Artisanal",
+      "f": "Artisanale",
+      "tags": [
+        "rare",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Supérieur",
+      "f": "Supérieure",
+      "tags": [
+        "rare",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Runique",
+      "f": "Runique",
+      "tags": [
+        "magic",
+        "rare",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Fulgurant",
+      "f": "Fulgurante",
+      "tags": [
+        "storm",
+        "rare",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Fantômatique",
+      "f": "Fantômatique",
+      "tags": [
+        "shadow",
+        "undead",
+        "rare"
+      ]
+    },
+    {
+      "m": "Royal",
+      "f": "Royale",
+      "tags": [
+        "epic",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Magnifique",
+      "f": "Magnifique",
+      "tags": [
+        "epic",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Adamantin",
+      "f": "Adamantine",
+      "tags": [
+        "defense",
+        "epic",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Sanguinaire",
+      "f": "Sanguinaire",
+      "tags": [
+        "beast",
+        "strength",
+        "epic",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Astromantique",
+      "f": "Astromantique",
+      "tags": [
+        "magic",
+        "epic",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Flamboyant",
+      "f": "Flamboyante",
+      "tags": [
+        "fire",
+        "epic",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Impérial",
+      "f": "Impériale",
+      "tags": [
+        "epic",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Colossal",
+      "f": "Colossale",
+      "tags": [
+        "strength",
+        "epic",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Éclatant",
+      "f": "Éclatante",
+      "tags": [
+        "holy",
+        "epic",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Lumineux",
+      "f": "Lumineuse",
+      "tags": [
+        "holy",
+        "rare",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Inflexible",
+      "f": "Inflexible",
+      "tags": [
+        "defense",
+        "epic",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Vampirique",
+      "f": "Vampirique",
+      "tags": [
+        "undead",
+        "shadow",
+        "epic"
+      ]
+    },
+    {
+      "m": "Divin",
+      "f": "Divine",
+      "tags": [
+        "legendary",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Légendaire",
+      "f": "Légendaire",
+      "tags": [
+        "legendary",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Mythique",
+      "f": "Mythique",
+      "tags": [
+        "legendary",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Éternel",
+      "f": "Éternelle",
+      "tags": [
+        "legendary",
+        "holy",
+        "magic",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Sanctifié",
+      "f": "Sanctifiée",
+      "tags": [
+        "holy",
+        "legendary",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Titanesque",
+      "f": "Titanesque",
+      "tags": [
+        "strength",
+        "legendary",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Indomptable",
+      "f": "Indomptable",
+      "tags": [
+        "defense",
+        "legendary",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Élu",
+      "f": "Élue",
+      "tags": [
+        "holy",
+        "legendary",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Céleste",
+      "f": "Céleste",
+      "tags": [
+        "holy",
+        "magic",
+        "legendary"
+      ]
+    },
+    {
+      "m": "Tellurique",
+      "f": "Tellurique",
+      "tags": [
+        "nature",
+        "defense",
+        "epic"
+      ]
+    },
+    {
+      "m": "Chtonien",
+      "f": "Chtonienne",
+      "tags": [
+        "shadow",
+        "boss",
+        "legendary"
+      ]
+    },
+    {
+      "m": "Abyssal",
+      "f": "Abyssale",
+      "tags": [
+        "shadow",
+        "boss",
+        "legendary"
+      ]
+    },
+    {
+      "m": "Incandescent",
+      "f": "Incandescente",
+      "tags": [
+        "fire"
+      ]
+    },
+    {
+      "m": "Volcanique",
+      "f": "Volcanique",
+      "tags": [
+        "fire"
+      ]
+    },
+    {
+      "m": "Cendré",
+      "f": "Cendrée",
+      "tags": [
+        "fire"
+      ]
+    },
+    {
+      "m": "Glacial",
+      "f": "Glaciale",
+      "tags": [
+        "ice",
+        "tundra"
+      ]
+    },
+    {
+      "m": "Givré",
+      "f": "Givrée",
+      "tags": [
+        "ice",
+        "tundra"
+      ]
+    },
+    {
+      "m": "Boréal",
+      "f": "Boréale",
+      "tags": [
+        "ice",
+        "tundra"
+      ]
+    },
+    {
+      "m": "Tempétueux",
+      "f": "Tempétueuse",
+      "tags": [
+        "storm",
+        "nature"
+      ]
+    },
+    {
+      "m": "Sylvestre",
+      "f": "Sylvestre",
+      "tags": [
+        "nature"
+      ]
+    },
+    {
+      "m": "Vivant",
+      "f": "Vivante",
+      "tags": [
+        "nature"
+      ]
+    },
+    {
+      "m": "Sauvage",
+      "f": "Sauvage",
+      "tags": [
+        "nature",
+        "beast"
+      ]
+    },
+    {
+      "m": "Bestial",
+      "f": "Bestiale",
+      "tags": [
+        "beast"
+      ]
+    },
+    {
+      "m": "Primal",
+      "f": "Primale",
+      "tags": [
+        "beast"
+      ]
+    },
+    {
+      "m": "Hurlant",
+      "f": "Hurlante",
+      "tags": [
+        "beast",
+        "epic"
+      ]
+    },
+    {
+      "m": "Ténébreux",
+      "f": "Ténébreuse",
+      "tags": [
+        "shadow"
+      ]
+    },
+    {
+      "m": "Nécrotique",
+      "f": "Nécrotique",
+      "tags": [
+        "shadow",
+        "undead"
+      ]
+    },
+    {
+      "m": "Sombre",
+      "f": "Sombre",
+      "tags": [
+        "shadow"
+      ]
+    },
+    {
+      "m": "Corrompu",
+      "f": "Corrompue",
+      "tags": [
+        "shadow",
+        "boss"
+      ]
+    },
+    {
+      "m": "Grimaçant",
+      "f": "Grimaçante",
+      "tags": [
+        "shadow",
+        "undead",
+        "boss"
+      ]
+    },
+    {
+      "m": "Sacré",
+      "f": "Sacrée",
+      "tags": [
+        "holy",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Béni",
+      "f": "Bénie",
+      "tags": [
+        "holy",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Puissant",
+      "f": "Puissante",
+      "tags": [
+        "strength",
+        "rare",
+        "epic",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Agile",
+      "f": "Agile",
+      "tags": [
+        "dexterity",
+        "rare",
+        "epic",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Savant",
+      "f": "Savante",
+      "tags": [
+        "intelligence",
+        "rare",
+        "epic",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Vigoureux",
+      "f": "Vigoureuse",
+      "tags": [
+        "vitality",
+        "rare",
+        "epic",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Protecteur",
+      "f": "Protectrice",
+      "tags": [
+        "defense",
+        "rare",
+        "epic",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Rapide",
+      "f": "Rapide",
+      "tags": [
+        "attack_speed",
+        "rare",
+        "epic",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Mortel",
+      "f": "Mortelle",
+      "tags": [
+        "critical_chance",
+        "rare",
+        "epic",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Héroïque",
+      "f": "Héroïque",
+      "tags": [
+        "rare",
+        "epic",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Barbare",
+      "f": "Barbare",
+      "tags": [
+        "berserker",
+        "strength",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Silencieux",
+      "f": "Silencieuse",
+      "tags": [
+        "rogue",
+        "dexterity",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Spirituel",
+      "f": "Spirituelle",
+      "tags": [
+        "cleric",
+        "intelligence",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Vengeur",
+      "f": "Vengeresse",
+      "tags": [
+        "holy",
+        "strength",
+        "epic",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Ancestral",
+      "f": "Ancestrale",
+      "tags": [
+        "legendary",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Immortel",
+      "f": "Immortelle",
+      "tags": [
+        "legendary",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Implacable",
+      "f": "Implacable",
+      "tags": [
+        "epic",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Incassable",
+      "f": "Incassable",
+      "tags": [
+        "defense",
+        "epic",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Stellaire",
+      "f": "Stellaire",
+      "tags": [
+        "magic",
+        "holy",
+        "epic"
+      ]
+    },
+    {
+      "m": "Démoniaque",
+      "f": "Démoniaque",
+      "tags": [
+        "shadow",
+        "boss",
+        "fire"
+      ]
+    },
+    {
+      "m": "Solaire",
+      "f": "Solaire",
+      "tags": [
+        "holy",
+        "fire",
+        "epic"
+      ]
+    },
+    {
+      "m": "Lunaire",
+      "f": "Lunaire",
+      "tags": [
+        "magic",
+        "ice",
+        "epic"
+      ]
+    },
+    {
+      "m": "Infernal",
+      "f": "Infernale",
+      "tags": [
+        "fire",
+        "shadow",
+        "boss"
+      ]
+    },
+    {
+      "m": "Arcanique",
+      "f": "Arcanique",
+      "tags": [
+        "magic",
+        "epic"
+      ]
+    },
+    {
+      "m": "Fragile",
+      "f": "Fragile",
+      "tags": [
+        "common",
+        "quality:negative"
+      ]
+    },
+    {
+      "m": "Encombrant",
+      "f": "Encombrante",
+      "tags": [
+        "common",
+        "quality:negative"
+      ]
+    },
+    {
+      "m": "Gluant",
+      "f": "Gluante",
+      "tags": [
+        "common",
+        "quality:negative"
+      ]
+    },
+    {
+      "m": "Grinçant",
+      "f": "Grinçante",
+      "tags": [
+        "common",
+        "quality:negative"
+      ]
+    },
+    {
+      "m": "Bancal",
+      "f": "Bancale",
+      "tags": [
+        "common",
+        "quality:negative"
+      ]
+    },
+    {
+      "m": "Brûlant",
+      "f": "Brûlante",
+      "tags": [
+        "fire",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Congelé",
+      "f": "Congelée",
+      "tags": [
+        "ice",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Intelligent",
+      "f": "Intelligente",
+      "tags": [
+        "intelligence",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Précis",
+      "f": "Précise",
+      "tags": [
+        "critical_chance",
+        "quality:positive"
+      ]
+    },
+    {
+      "m": "Chirurgical",
+      "f": "Chirurgicale",
+      "tags": [
+        "critical_chance",
+        "quality:positive"
+      ]
+    }
   ],
   "suffixes_qualifiers": [
-    { "text": "du Brasier", "tags": ["fire"] },
-    { "text": "de la Fournaise", "tags": ["fire", "boss"] },
-    { "text": "des Cendres", "tags": ["fire"] },
-    { "text": "du Fjord", "tags": ["ice", "tundra"] },
-    { "text": "de la Toundra", "tags": ["ice", "tundra"] },
-    { "text": "du Givre", "tags": ["ice", "tundra"] },
-    { "text": "de la Forêt", "tags": ["nature"] },
-    { "text": "du Bosquet", "tags": ["nature"] },
-    { "text": "des Ronces", "tags": ["nature"] },
-    { "text": "de la Tempête", "tags": ["storm", "nature", "epic"] },
-    { "text": "de la Griffe", "tags": ["beast"] },
-    { "text": "du Croc", "tags": ["beast"] },
-    { "text": "de la Bête", "tags": ["beast", "boss"] },
-    { "text": "du Sang Ancien", "tags": ["beast", "epic"] },
-    { "text": "du Griffon", "tags": ["beast", "epic"] },
-    { "text": "du Manticore", "tags": ["beast", "boss", "legendary"] },
-    { "text": "de la Wyverne", "tags": ["beast", "boss", "epic"] },
-    { "text": "du Basilic", "tags": ["beast", "boss"] },
-    { "text": "des Ombres", "tags": ["shadow"] },
-    { "text": "du Crépuscule", "tags": ["shadow"] },
-    { "text": "du Vide", "tags": ["shadow", "boss"] },
-    { "text": "de la Nuit Éternelle", "tags": ["shadow", "legendary"] },
-    { "text": "du Chaos", "tags": ["shadow", "boss", "legendary"] },
-    { "text": "de l'Oubli", "tags": ["shadow", "legendary"] },
-    { "text": "du Vide Astral", "tags": ["magic", "legendary"] },
-    { "text": "de la Comète", "tags": ["magic", "epic"] },
-    { "text": "de l'Étoile Noire", "tags": ["shadow", "legendary", "boss"] },
-    { "text": "du Néant Distordu", "tags": ["shadow", "magic", "legendary", "boss"] },
-    { "text": "de la Lumière", "tags": ["holy"] },
-    { "text": "de l'Aube", "tags": ["holy"] },
-    { "text": "du Zénith", "tags": ["holy", "boss"] },
-    { "text": "du Soleil Levant", "tags": ["holy", "epic"] },
-    { "text": "de la Main d'Argent", "tags": ["holy", "rare"] },
-    { "text": "du Verdict", "tags": ["holy", "epic"] },
-    { "text": "de la Pénitence", "tags": ["holy", "rare"] },
-    { "text": "du Titan", "tags": ["strength", "epic", "legendary", "boss", "quality:positive"] },
-    { "text": "du Tueur de Géants", "tags": ["strength", "epic", "quality:positive"] },
-    { "text": "du Gladiateur", "tags": ["strength", "rare", "quality:positive"] },
-    { "text": "de l'Arène", "tags": ["strength", "common", "quality:positive"] },
-    { "text": "du Conquérant", "tags": ["strength", "epic", "quality:positive"] },
-    { "text": "du Vainqueur", "tags": ["strength", "epic", "quality:positive"] },
-    { "text": "de l'Ombre", "tags": ["dexterity", "epic", "legendary", "boss"] },
-    { "text": "de l'Archimage", "tags": ["intelligence", "epic", "legendary", "boss", "quality:positive"] },
-    { "text": "de l'Illusion", "tags": ["magic", "rare"] },
-    { "text": "des Mille Vérités", "tags": ["magic", "legendary"] },
-    { "text": "de la Vie", "tags": ["vitality", "epic", "legendary", "quality:positive"] },
-    { "text": "du Gardien", "tags": ["defense", "epic", "legendary", "boss", "quality:positive"] },
-    { "text": "de la Sentinelle", "tags": ["defense", "rare", "quality:positive"] },
-    { "text": "du Mur de Fer", "tags": ["defense", "epic", "quality:positive"] },
-    { "text": "de la Hâte", "tags": ["attack_speed", "epic", "legendary", "quality:positive"] },
-    { "text": "du Fléau", "tags": ["undead", "boss", "legendary"] },
-    { "text": "du Roi Liche", "tags": ["boss", "legendary", "ice", "undead"] },
-    { "text": "du Crâne", "tags": ["undead", "common"] },
-    { "text": "de l'Âme en Peine", "tags": ["undead", "shadow", "rare"] },
-    { "text": "de la Tombe", "tags": ["undead", "common"] },
-    { "text": "de l'Horizon", "tags": ["epic"] },
-    { "text": "de la Montagne", "tags": ["defense", "common"] },
-    { "text": "de la Rivière", "tags": ["common"] },
-    { "text": "de la Fin des Temps", "tags": ["legendary", "boss"] },
-    { "text": "du Dernier Souffle", "tags": ["epic"] },
-    { "text": "de la Promesse Brisée", "tags": ["shadow", "epic"] },
-    { "text": "du Serment", "tags": ["holy", "rare"] },
-    { "text": "du Barde Rieur", "tags": ["common", "quality:positive"] },
-    { "text": "de la Chope Vide", "tags": ["common", "quality:negative"] },
-    { "text": "du Pari Perdu", "tags": ["common", "quality:negative"] }
+    {
+      "text": "du Brasier",
+      "tags": [
+        "fire"
+      ]
+    },
+    {
+      "text": "de la Fournaise",
+      "tags": [
+        "fire",
+        "boss"
+      ]
+    },
+    {
+      "text": "des Cendres",
+      "tags": [
+        "fire"
+      ]
+    },
+    {
+      "text": "du Fjord",
+      "tags": [
+        "ice",
+        "tundra"
+      ]
+    },
+    {
+      "text": "de la Toundra",
+      "tags": [
+        "ice",
+        "tundra"
+      ]
+    },
+    {
+      "text": "du Givre",
+      "tags": [
+        "ice",
+        "tundra"
+      ]
+    },
+    {
+      "text": "de la Forêt",
+      "tags": [
+        "nature"
+      ]
+    },
+    {
+      "text": "du Bosquet",
+      "tags": [
+        "nature"
+      ]
+    },
+    {
+      "text": "des Ronces",
+      "tags": [
+        "nature"
+      ]
+    },
+    {
+      "text": "de la Tempête",
+      "tags": [
+        "storm",
+        "nature",
+        "epic"
+      ]
+    },
+    {
+      "text": "de la Griffe",
+      "tags": [
+        "beast"
+      ]
+    },
+    {
+      "text": "du Croc",
+      "tags": [
+        "beast"
+      ]
+    },
+    {
+      "text": "de la Bête",
+      "tags": [
+        "beast",
+        "boss"
+      ]
+    },
+    {
+      "text": "du Sang Ancien",
+      "tags": [
+        "beast",
+        "epic"
+      ]
+    },
+    {
+      "text": "du Griffon",
+      "tags": [
+        "beast",
+        "epic"
+      ]
+    },
+    {
+      "text": "du Manticore",
+      "tags": [
+        "beast",
+        "boss",
+        "legendary"
+      ]
+    },
+    {
+      "text": "de la Wyverne",
+      "tags": [
+        "beast",
+        "boss",
+        "epic"
+      ]
+    },
+    {
+      "text": "du Basilic",
+      "tags": [
+        "beast",
+        "boss"
+      ]
+    },
+    {
+      "text": "des Ombres",
+      "tags": [
+        "shadow"
+      ]
+    },
+    {
+      "text": "du Crépuscule",
+      "tags": [
+        "shadow"
+      ]
+    },
+    {
+      "text": "du Vide",
+      "tags": [
+        "shadow",
+        "boss"
+      ]
+    },
+    {
+      "text": "de la Nuit Éternelle",
+      "tags": [
+        "shadow",
+        "legendary"
+      ]
+    },
+    {
+      "text": "du Chaos",
+      "tags": [
+        "shadow",
+        "boss",
+        "legendary"
+      ]
+    },
+    {
+      "text": "de l'Oubli",
+      "tags": [
+        "shadow",
+        "legendary"
+      ]
+    },
+    {
+      "text": "du Vide Astral",
+      "tags": [
+        "magic",
+        "legendary"
+      ]
+    },
+    {
+      "text": "de la Comète",
+      "tags": [
+        "magic",
+        "epic"
+      ]
+    },
+    {
+      "text": "de l'Étoile Noire",
+      "tags": [
+        "shadow",
+        "legendary",
+        "boss"
+      ]
+    },
+    {
+      "text": "du Néant Distordu",
+      "tags": [
+        "shadow",
+        "magic",
+        "legendary",
+        "boss"
+      ]
+    },
+    {
+      "text": "de la Lumière",
+      "tags": [
+        "holy"
+      ]
+    },
+    {
+      "text": "de l'Aube",
+      "tags": [
+        "holy"
+      ]
+    },
+    {
+      "text": "du Zénith",
+      "tags": [
+        "holy",
+        "boss"
+      ]
+    },
+    {
+      "text": "du Soleil Levant",
+      "tags": [
+        "holy",
+        "epic"
+      ]
+    },
+    {
+      "text": "de la Main d'Argent",
+      "tags": [
+        "holy",
+        "rare"
+      ]
+    },
+    {
+      "text": "du Verdict",
+      "tags": [
+        "holy",
+        "epic"
+      ]
+    },
+    {
+      "text": "de la Pénitence",
+      "tags": [
+        "holy",
+        "rare"
+      ]
+    },
+    {
+      "text": "du Titan",
+      "tags": [
+        "strength",
+        "epic",
+        "legendary",
+        "boss",
+        "quality:positive"
+      ]
+    },
+    {
+      "text": "du Tueur de Géants",
+      "tags": [
+        "strength",
+        "epic",
+        "quality:positive"
+      ]
+    },
+    {
+      "text": "du Gladiateur",
+      "tags": [
+        "strength",
+        "rare",
+        "quality:positive"
+      ]
+    },
+    {
+      "text": "de l'Arène",
+      "tags": [
+        "strength",
+        "common",
+        "quality:positive"
+      ]
+    },
+    {
+      "text": "du Conquérant",
+      "tags": [
+        "strength",
+        "epic",
+        "quality:positive"
+      ]
+    },
+    {
+      "text": "du Vainqueur",
+      "tags": [
+        "strength",
+        "epic",
+        "quality:positive"
+      ]
+    },
+    {
+      "text": "de l'Ombre",
+      "tags": [
+        "dexterity",
+        "epic",
+        "legendary",
+        "boss"
+      ]
+    },
+    {
+      "text": "de l'Archimage",
+      "tags": [
+        "intelligence",
+        "epic",
+        "legendary",
+        "boss",
+        "quality:positive"
+      ]
+    },
+    {
+      "text": "de l'Illusion",
+      "tags": [
+        "magic",
+        "rare"
+      ]
+    },
+    {
+      "text": "des Mille Vérités",
+      "tags": [
+        "magic",
+        "legendary"
+      ]
+    },
+    {
+      "text": "de la Vie",
+      "tags": [
+        "vitality",
+        "epic",
+        "legendary",
+        "quality:positive"
+      ]
+    },
+    {
+      "text": "du Gardien",
+      "tags": [
+        "defense",
+        "epic",
+        "legendary",
+        "boss",
+        "quality:positive"
+      ]
+    },
+    {
+      "text": "de la Sentinelle",
+      "tags": [
+        "defense",
+        "rare",
+        "quality:positive"
+      ]
+    },
+    {
+      "text": "du Mur de Fer",
+      "tags": [
+        "defense",
+        "epic",
+        "quality:positive"
+      ]
+    },
+    {
+      "text": "de la Hâte",
+      "tags": [
+        "attack_speed",
+        "epic",
+        "legendary",
+        "quality:positive"
+      ]
+    },
+    {
+      "text": "du Fléau",
+      "tags": [
+        "undead",
+        "boss",
+        "legendary"
+      ]
+    },
+    {
+      "text": "du Roi Liche",
+      "tags": [
+        "boss",
+        "legendary",
+        "ice",
+        "undead"
+      ]
+    },
+    {
+      "text": "du Crâne",
+      "tags": [
+        "undead",
+        "common"
+      ]
+    },
+    {
+      "text": "de l'Âme en Peine",
+      "tags": [
+        "undead",
+        "shadow",
+        "rare"
+      ]
+    },
+    {
+      "text": "de la Tombe",
+      "tags": [
+        "undead",
+        "common"
+      ]
+    },
+    {
+      "text": "de l'Horizon",
+      "tags": [
+        "epic"
+      ]
+    },
+    {
+      "text": "de la Montagne",
+      "tags": [
+        "defense",
+        "common"
+      ]
+    },
+    {
+      "text": "de la Rivière",
+      "tags": [
+        "common"
+      ]
+    },
+    {
+      "text": "de la Fin des Temps",
+      "tags": [
+        "legendary",
+        "boss"
+      ]
+    },
+    {
+      "text": "du Dernier Souffle",
+      "tags": [
+        "epic"
+      ]
+    },
+    {
+      "text": "de la Promesse Brisée",
+      "tags": [
+        "shadow",
+        "epic"
+      ]
+    },
+    {
+      "text": "du Serment",
+      "tags": [
+        "holy",
+        "rare"
+      ]
+    },
+    {
+      "text": "du Barde Rieur",
+      "tags": [
+        "common",
+        "quality:positive"
+      ]
+    },
+    {
+      "text": "de la Chope Vide",
+      "tags": [
+        "common",
+        "quality:negative"
+      ]
+    },
+    {
+      "text": "du Pari Perdu",
+      "tags": [
+        "common",
+        "quality:negative"
+      ]
+    },
+    {
+      "text": "du Colosse",
+      "tags": [
+        "strength",
+        "quality:positive"
+      ]
+    },
+    {
+      "text": "de l'Ogre",
+      "tags": [
+        "strength",
+        "quality:positive"
+      ]
+    },
+    {
+      "text": "de l'Oracle",
+      "tags": [
+        "intelligence",
+        "quality:positive"
+      ]
+    },
+    {
+      "text": "du Sage",
+      "tags": [
+        "intelligence",
+        "quality:positive"
+      ]
+    },
+    {
+      "text": "de la Frappe Précise",
+      "tags": [
+        "critical_chance",
+        "quality:positive"
+      ]
+    },
+    {
+      "text": "de la Lame Aiguisée",
+      "tags": [
+        "critical_chance",
+        "quality:positive"
+      ]
+    }
   ],
   "materials": [
-    { "text": "de Fer", "tags": ["common", "smithing", "metal"] },
-    { "text": "d'Acier", "tags": ["common", "smithing", "metal"] },
-    { "text": "de Mithril", "tags": ["rare", "smithing", "metal"] },
-    { "text": "d'Adamantite", "tags": ["epic", "smithing", "metal"] },
-    { "text": "de Cuir", "tags": ["common", "leatherworking", "leather"] },
-    { "text": "de Peau", "tags": ["common", "leatherworking", "leather"] },
-    { "text": "d'Écailles", "tags": ["rare", "leatherworking", "leather"] },
-    { "text": "de Tissu", "tags": ["common", "tailoring", "cloth"] },
-    { "text": "de Soie", "tags": ["common", "tailoring", "cloth"] },
-    { "text": "Éthéré", "tags": ["rare", "tailoring", "cloth"] },
-    { "text": "de Bois", "tags": ["common", "woodworking", "wood"] },
-    { "text": "de Chêne", "tags": ["common", "woodworking", "wood"] },
-    { "text": "d'If", "tags": ["rare", "woodworking", "wood"] }
+    {
+      "text": "de Fer",
+      "tags": [
+        "common",
+        "smithing",
+        "metal"
+      ]
+    },
+    {
+      "text": "d'Acier",
+      "tags": [
+        "common",
+        "smithing",
+        "metal"
+      ]
+    },
+    {
+      "text": "de Mithril",
+      "tags": [
+        "rare",
+        "smithing",
+        "metal"
+      ]
+    },
+    {
+      "text": "d'Adamantite",
+      "tags": [
+        "epic",
+        "smithing",
+        "metal"
+      ]
+    },
+    {
+      "text": "de Cuir",
+      "tags": [
+        "common",
+        "leatherworking",
+        "leather"
+      ]
+    },
+    {
+      "text": "de Peau",
+      "tags": [
+        "common",
+        "leatherworking",
+        "leather"
+      ]
+    },
+    {
+      "text": "d'Écailles",
+      "tags": [
+        "rare",
+        "leatherworking",
+        "leather"
+      ]
+    },
+    {
+      "text": "de Tissu",
+      "tags": [
+        "common",
+        "tailoring",
+        "cloth"
+      ]
+    },
+    {
+      "text": "de Soie",
+      "tags": [
+        "common",
+        "tailoring",
+        "cloth"
+      ]
+    },
+    {
+      "text": "Éthéré",
+      "tags": [
+        "rare",
+        "tailoring",
+        "cloth"
+      ]
+    },
+    {
+      "text": "de Bois",
+      "tags": [
+        "common",
+        "woodworking",
+        "wood"
+      ]
+    },
+    {
+      "text": "de Chêne",
+      "tags": [
+        "common",
+        "woodworking",
+        "wood"
+      ]
+    },
+    {
+      "text": "d'If",
+      "tags": [
+        "rare",
+        "woodworking",
+        "wood"
+      ]
+    }
   ]
 }

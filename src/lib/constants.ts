@@ -30,7 +30,11 @@ export const AFFIX_TO_THEME: Record<string, string> = {
     'ResElems.fire': 'fire',
     'ResElems.ice': 'ice',
     'Esprit': 'holy',
-    'Dexterite': 'shadow',
+    'Dexterite': 'dexterity',
+    'Force': 'strength',
+    'Intelligence': 'intelligence',
+    'CritPct': 'critical_chance',
+    'BonusDmg.shadow': 'shadow',
 };
 
 export const MATERIAL_DISPLAY_NAMES: Record<string, string> = {
