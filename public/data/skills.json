@@ -75,6 +75,18 @@
                 "Inflige 120/130/140/150/160% des dégâts de l'arme.",
                 "Coûte 15 Rage."
             ],
+            "effects": [
+                {
+                    "type": "damage",
+                    "damageType": "physical",
+                    "source": "weapon",
+                    "multiplier": [1.2, 1.3, 1.4, 1.5, 1.6]
+                },
+                {
+                    "type": "resource_cost",
+                    "amount": 15
+                }
+            ],
             "cooldown": 2
         },
         {
@@ -281,7 +293,7 @@
                     "type": "damage",
                     "damageType": "fire",
                     "source": "spell",
-                    "baseValue": 15
+                    "baseValue": [15, 20, 25, 30, 35]
                 },
                 {
                     "type": "resource_cost",

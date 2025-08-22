@@ -7,6 +7,7 @@ import * as formulas from '@/core/formulas';
 import { generateProceduralItem } from '@/core/itemGenerator';
 import { v4 as uuidv4 } from 'uuid';
 import { AFFIX_TO_THEME } from '@/lib/constants';
+import { processSkill } from '@/core/skillProcessor';
 
 export interface ActiveQuete {
   quete: Quete;
@@ -408,33 +409,6 @@ const storage = typeof window !== 'undefined'
   ? createJSONStorage(() => localStorage)
   : createJSONStorage(() => dummyStorage);
 
-const getModifiedStats = (baseStats: Stats, buffs: (Buff | Debuff)[], form?: string | null): Stats => {
-    const modifiedStats: Stats = { ...baseStats };
-    const allMods = buffs.flatMap(b => b.statMods || []);
-
-    allMods.filter(mod => mod.modifier === 'multiplicative').forEach(mod => {
-        const statKey = mod.stat as keyof Stats;
-        const statValue = modifiedStats[statKey];
-        if (typeof statValue === 'number') {
-            (modifiedStats[statKey] as number) *= mod.value;
-        }
-    });
-
-    allMods.filter(mod => mod.modifier === 'additive').forEach(mod => {
-        const statKey = mod.stat as keyof Stats;
-        const statValue = modifiedStats[statKey];
-        if (typeof statValue === 'number') {
-            (modifiedStats[statKey] as number) += mod.value;
-        }
-    });
-
-    if (form === 'shadow') {
-        modifiedStats.ShadowDamageMultiplier = (modifiedStats.ShadowDamageMultiplier || 1) * 1.15;
-        modifiedStats.DamageReductionMultiplier = (modifiedStats.DamageReductionMultiplier || 1) * 0.85;
-    }
-
-    return modifiedStats;
-}
 
 export const useGameStore = create<GameState>()(
   persist(
@@ -1519,6 +1493,15 @@ export const useGameStore = create<GameState>()(
         }
       },
 
+      // ====================================================================================
+      // NOTE: Monster abilities are not yet implemented. Currently, monsters only
+      // perform basic auto-attacks. A future system could involve:
+      // - Adding an `abilities` array to monster definitions in `monsters.json`.
+      // - Creating a monster AI loop within `gameTick` that decides when a monster
+      //   should use an ability instead of a basic attack.
+      // - Expanding the `enemyAttacks` function to process these abilities, likely
+      //   re-using parts of the `skillProcessor` logic for effects.
+      // ====================================================================================
       startCombat: () => {
         const { currentDungeon, gameData, worldTier } = get();
         if (!currentDungeon) return;
@@ -1756,7 +1739,7 @@ export const useGameStore = create<GameState>()(
 
       playerAttack: (targetId: string, isCleave = false, skillId?: string) => {
         set((state: GameState) => {
-            const { player, combat } = state;
+            const { player, combat, gameData } = state;
             if (combat.isStealthed) {
                 combat.isStealthed = false;
                 combat.log.push({ message: "Vous sortez de l'ombre.", type: 'info', timestamp: Date.now() });
@@ -1765,7 +1748,7 @@ export const useGameStore = create<GameState>()(
             if (!target || target.stats.PV <= 0) return;
 
             const buffedPlayerStats = getModifiedStats(player.stats, player.activeBuffs, player.form);
-            const debuffedTargetStats = getModifiedStats(target.stats, target.activeDebuffs);
+            let debuffedTargetStats = getModifiedStats(target.stats, target.activeDebuffs);
 
             const damage = formulas.calculateMeleeDamage(buffedPlayerStats.AttMin, buffedPlayerStats.AttMax, formulas.calculateAttackPower(buffedPlayerStats));
             const isCrit = formulas.isCriticalHit(buffedPlayerStats.CritPct, buffedPlayerStats.Precision, debuffedTargetStats.Esquive);
@@ -1775,6 +1758,7 @@ export const useGameStore = create<GameState>()(
 
             if (isCrit) {
                 get().applySpecialEffect('ON_CRITICAL_HIT', { targetId, isCrit });
+                get().applyTalentTrigger('on_critical_hit', { targetId });
             }
             get().applySpecialEffect('ON_HIT', { targetId, isCrit });
 
@@ -1783,6 +1767,19 @@ export const useGameStore = create<GameState>()(
                 const hpPercent = (player.stats.PV / maxHp) * 100;
                 const damageMultiplier = 1 + (100 - hpPercent) / 100;
                 finalDamage *= damageMultiplier;
+            }
+
+            // --- Talent: Fracas d'Armure ---
+            const fracasRank = player.learnedTalents['berserker_armes_fracas_armure'];
+            if (fracasRank && fracasRank > 0) {
+                const talentData = gameData.talents.find(t => t.id === 'berserker_armes_fracas_armure');
+                const onHitEffect = talentData?.effects?.find(e => (e as any).effect === 'ignore_armor') as any;
+                if (onHitEffect && Math.random() < onHitEffect.chance) {
+                    const armorIgnorePercent = getRankValue(onHitEffect.value, fracasRank);
+                    const modifiedArmor = debuffedTargetStats.Armure * (1 - armorIgnorePercent);
+                    debuffedTargetStats = { ...debuffedTargetStats, Armure: modifiedArmor };
+                    combat.log.push({ message: `Fracas d'Armure ignore ${Math.round(armorIgnorePercent * 100)}% de l'armure !`, type: 'talent_proc', timestamp: Date.now() });
+                }
             }
 
             const dr = formulas.calculateArmorDR(debuffedTargetStats.Armure, player.level);
@@ -1849,413 +1846,15 @@ export const useGameStore = create<GameState>()(
       },
 
       useSkill: (skillId: string) => {
-        const deadEnemyIds: string[] = [];
-
         set((state: GameState) => {
-            const { player, combat, gameData } = state;
-            const rank = player.learnedSkills[skillId];
-            const skill = gameData.skills.find(t => t.id === skillId);
-            if (!skill || !rank) return;
-
-            if (player.form === 'shadow' && skill.school === 'holy') {
-                combat.log.push({ message: "Vous ne pouvez pas utiliser de sorts Sacrés en Forme d'ombre.", type: 'info', timestamp: Date.now() });
-                return;
-            }
-            if (player.stunDuration > 0) {
-                combat.log.push({ message: "Vous êtes étourdi et ne pouvez pas agir.", type: 'info', timestamp: Date.now() });
-                return;
-            }
-            if ((combat.skillCooldowns[skillId] || 0) > 0) {
-                return;
-            }
-
-            // NEW DATA-DRIVEN LOGIC
-            if (skill.effects) {
-                const costEffect = skill.effects.find(e => (e as any).type === 'resource_cost') as any;
-                const resourceCost = costEffect ? costEffect.amount : 0;
-
-                if (player.resources.current < resourceCost) {
-                    combat.log.push({ message: "Pas assez de ressource!", type: 'info', timestamp: Date.now() });
-                    return;
-                }
-
-                let effectApplied = false;
-
-                skill.effects.forEach(effect => {
-                    const anyEffect = effect as any; // Using 'any' to simplify access to properties
-
-                    // Determine targets for this effect
-                    let targets: CombatEnemy[] = [];
-                    const primaryTarget = combat.enemies[combat.targetIndex];
-
-                    if (anyEffect.target === 'all_enemies') {
-                        targets = state.combat.enemies.filter(e => e.stats.PV > 0);
-                    } else { // 'primary' or undefined
-                        if (primaryTarget && primaryTarget.stats.PV > 0) {
-                            targets.push(primaryTarget);
-                        }
-                    }
-
-                    targets.forEach(target => {
-                        const buffedPlayerStats = getModifiedStats(player.stats, player.activeBuffs, player.form);
-                        const debuffedTargetStats = getModifiedStats(target.stats, target.activeDebuffs);
-
-                        let conditionsMet = true;
-                        if (anyEffect.conditions) {
-                            if (anyEffect.conditions.targetHpLessThan) {
-                                const hpPercent = (target.stats.PV / target.initialHp) * 100;
-                                if (hpPercent >= anyEffect.conditions.targetHpLessThan) {
-                                    conditionsMet = false;
-                                }
-                            }
-                        }
-
-                        if (conditionsMet) {
-                            if (anyEffect.type === 'damage') {
-                                let damage = 0;
-                            if (anyEffect.source === 'weapon') {
-                            const baseDmg = formulas.calculateMeleeDamage(buffedPlayerStats.AttMin, buffedPlayerStats.AttMax, formulas.calculateAttackPower(buffedPlayerStats));
-                            damage = baseDmg * (anyEffect.multiplier || 1);
-                        } else if (anyEffect.source === 'spell') {
-                            // TODO: Handle rank-based scaling
-                            const baseDmg = anyEffect.baseValue || 0;
-                            damage = formulas.calculateSpellDamage(baseDmg, formulas.calculateSpellPower(buffedPlayerStats));
-                        }
-
-                        const isCrit = formulas.isCriticalHit(buffedPlayerStats.CritPct, buffedPlayerStats.Precision, debuffedTargetStats.Esquive);
-                        let finalDamage = isCrit ? damage * (buffedPlayerStats.CritDmg / 100) : damage;
-
-                        finalDamage *= (buffedPlayerStats.DamageMultiplier || 1);
-
-                        if (anyEffect.damageType === 'shadow') {
-                            finalDamage *= (buffedPlayerStats.ShadowDamageMultiplier || 1);
-                        }
-
-                        const dr = formulas.calculateArmorDR(debuffedTargetStats.Armure, player.level);
-                        const mitigatedDamage = Math.round(finalDamage * (1 - dr));
-
-                        target.stats.PV -= mitigatedDamage;
-
-                        // Elemental Damage from stats
-                        if (buffedPlayerStats.BonusDmg) {
-                            Object.entries(buffedPlayerStats.BonusDmg).forEach(([elem, dmg]) => {
-                                if (dmg > 0) {
-                                    const res = debuffedTargetStats.ResElems?.[elem as keyof typeof debuffedTargetStats.ResElems] || 0;
-                                    const elemDR = formulas.calculateResistanceDR(res, player.level);
-                                    const mitigatedElemDmg = Math.round(dmg * (1 - elemDR));
-                                    target.stats.PV -= mitigatedElemDmg;
-                                    combat.log.push({ message: `Votre compétence inflige ${mitigatedElemDmg} points de dégâts de ${elem}.`, type: 'player_attack', timestamp: Date.now() });
-                                }
-                            });
-                        }
-
-                        const msg = `Vous utilisez ${skill.nom} sur ${target.nom} pour ${mitigatedDamage} points de dégâts.`;
-                        const critMsg = `CRITIQUE ! Votre ${skill.nom} inflige ${mitigatedDamage} points de dégâts à ${target.nom}.`;
-                        combat.log.push({ message: isCrit ? critMsg : msg, type: isCrit ? 'crit' : 'player_attack', timestamp: Date.now() });
-                        effectApplied = true;
-                        if (target.stats.PV <= 0) deadEnemyIds.push(target.id);
-                            }
-
-                            if (anyEffect.type === 'debuff') {
-                                if (anyEffect.debuffType === 'dot') {
-                                let totalDamage = 0;
-                                if (anyEffect.totalDamage.source === 'weapon') {
-                                    const buffedPlayerStats = getModifiedStats(player.stats, player.activeBuffs, player.form);
-                                    const baseDmg = formulas.calculateMeleeDamage(buffedPlayerStats.AttMin, buffedPlayerStats.AttMax, formulas.calculateAttackPower(buffedPlayerStats));
-                                    totalDamage = baseDmg * (anyEffect.totalDamage.multiplier || 1);
-                                } else if (anyEffect.totalDamage.source === 'base_value') {
-                                    totalDamage = anyEffect.totalDamage.multiplier;
-                                }
-                                const damagePerTick = Math.round(totalDamage / anyEffect.duration);
-
-                                target.activeDebuffs.push({
-                                    id: anyEffect.id, name: anyEffect.name, duration: anyEffect.duration * 1000,
-                                    damagePerTick: damagePerTick, tickInterval: 1000, nextTickIn: 1000,
-                                });
-                                combat.log.push({ message: `Vous utilisez ${skill.nom} sur ${target.nom}, qui commence à souffrir de ${anyEffect.name}.`, type: 'player_attack', timestamp: Date.now() });
-                            } else if (anyEffect.debuffType === 'cc' && anyEffect.ccType === 'stun') {
-                                target.stunDuration = anyEffect.duration * 1000;
-                                combat.log.push({ message: `${target.nom} est étourdi pour ${anyEffect.duration} secondes!`, type: 'info', timestamp: Date.now() });
-                            } else if (anyEffect.debuffType === 'stat_modifier') {
-                                target.activeDebuffs.push({
-                                    id: anyEffect.id, name: anyEffect.name, duration: anyEffect.duration * 1000,
-                                    statMods: anyEffect.statMods,
-                                });
-                                    combat.log.push({ message: `${target.nom} est affecté par ${anyEffect.name}.`, type: 'enemy_attack', timestamp: Date.now() });
-                                }
-                                effectApplied = true;
-                            }
-                        }
-                    });
-
-                    if (anyEffect.type === 'invulnerability') {
-                        player.invulnerabilityDuration = anyEffect.duration * 1000;
-                        combat.log.push({ message: `Vous êtes invulnérable !`, type: 'info', timestamp: Date.now() });
-                        effectApplied = true;
-                    }
-
-                    if (anyEffect.type === 'transformation') {
-                        if (player.form === anyEffect.form) {
-                            player.form = null; // Toggle off
-                            combat.log.push({ message: `Vous quittez la forme ${anyEffect.form}.`, type: 'info', timestamp: Date.now() });
-                        } else {
-                            player.form = anyEffect.form;
-                            combat.log.push({ message: `Vous adoptez la forme ${anyEffect.form}.`, type: 'info', timestamp: Date.now() });
-                        }
-                        effectApplied = true;
-                    }
-
-                    if (anyEffect.type === 'death_ward') {
-                        player.activeBuffs.push({
-                            id: 'guardian_spirit_ward',
-                            name: 'Esprit gardien',
-                            duration: anyEffect.duration * 1000,
-                            isDeathWard: true,
-                            deathWardHealPercent: anyEffect.heal_percent,
-                        });
-                        combat.log.push({ message: `Un Esprit gardien vous protège.`, type: 'info', timestamp: Date.now() });
-                        effectApplied = true;
-                    }
-
-                    if (anyEffect.type === 'buff') {
-                        if (anyEffect.id === 'ice_block_stun') {
-                            player.stunDuration = anyEffect.duration * 1000;
-                        }
-
-                        if (anyEffect.buffType === 'hot') {
-                            if (anyEffect.totalHealing) {
-                                const totalHealing = anyEffect.totalHealing.multiplier;
-                                const healingPerTick = totalHealing / anyEffect.duration;
-                                player.activeBuffs.push({
-                                    id: anyEffect.id, name: anyEffect.name, duration: anyEffect.duration * 1000,
-                                    healingPerTick: healingPerTick, tickInterval: 1000, nextTickIn: 1000,
-                                });
-                                combat.log.push({ message: `Vous appliquez ${anyEffect.name}, vous soignant sur la durée.`, type: 'heal', timestamp: Date.now() });
-                            }
-                        } else if (anyEffect.buffType === 'stat_modifier') {
-                            player.activeBuffs.push({
-                                id: anyEffect.id,
-                                name: anyEffect.name,
-                                duration: anyEffect.duration * 1000,
-                                statMods: anyEffect.statMods,
-                            });
-                            combat.log.push({ message: `Vous gagnez l'effet ${anyEffect.name}.`, type: 'info', timestamp: Date.now() });
-                        } else if (anyEffect.buffType === 'special') {
-                            player.activeBuffs.push({
-                                id: anyEffect.id,
-                                name: anyEffect.name,
-                                duration: anyEffect.duration * 1000,
-                                value: anyEffect.value,
-                            });
-                            combat.log.push({ message: `Vous gagnez l'effet ${anyEffect.name}.`, type: 'info', timestamp: Date.now() });
-                        }
-                        effectApplied = true;
-                    }
-
-                    if (anyEffect.type === 'shield') {
-                        let shieldAmount = 0;
-                        if (anyEffect.amount.source === 'base_value') {
-                            shieldAmount = anyEffect.amount.multiplier;
-                        } else if (anyEffect.amount.source === 'spell_power') {
-                            const buffedPlayerStats = getModifiedStats(player.stats, player.activeBuffs, player.form);
-                            const spellPower = formulas.calculateSpellPower(buffedPlayerStats);
-                            shieldAmount = spellPower * anyEffect.amount.multiplier;
-                        }
-                        player.shield += shieldAmount;
-                        combat.log.push({ message: `Vous gagnez un bouclier absorbant ${Math.round(shieldAmount)} dégâts.`, type: 'shield', timestamp: Date.now() });
-                        effectApplied = true;
+            const { deadEnemyIds } = processSkill(state, skillId, get, get().applySpecialEffect);
+            if (deadEnemyIds.length > 0) {
+                deadEnemyIds.forEach(enemyId => {
+                    const enemy = get().combat.enemies.find(e => e.id === enemyId);
+                    if (enemy) {
+                        get().handleEnemyDeath(enemy, skillId);
                     }
                 });
-
-                if (effectApplied) {
-                    player.resources.current -= resourceCost;
-                    combat.skillCooldowns[skillId] = (skill.cooldown || 0) * 1000;
-                    state.combat.playerAttackProgress = 0;
-                }
-                return; // End of new logic
-            }
-
-            // OLD LOGIC STARTS HERE
-            const resourceCostMatch = skill.effets.join(' ').match(/Coûte (\d+) (Rage|Mana|Énergie)/);
-            const resourceCost = resourceCostMatch ? parseInt(resourceCostMatch[1], 10) : 0;
-
-            if (player.resources.current < resourceCost) {
-                combat.log.push({ message: "Pas assez de ressource!", type: 'info', timestamp: Date.now() });
-                return;
-            }
-
-            let effectApplied = false;
-            const skillEffects = skill.effets.join(' ');
-
-            if (skill.id === 'cleric_holy_prayer_of_healing') {
-                player.activeBuffs.push({
-                    id: 'prayer_of_healing_hot',
-                    name: 'Prière de guérison',
-                    duration: 12000, // 12 seconds
-                    healingPerTick: 10, // 120 total heal
-                    tickInterval: 1000, // 1s tick
-                    nextTickIn: 1000,
-                });
-                combat.log.push({ message: `Vous êtes enveloppé par une Prière de guérison.`, type: 'heal', timestamp: Date.now() });
-                effectApplied = true;
-            } else {
-                const healMatch = skillEffects.match(/rend ([\d/]+) PV/) || skillEffects.match(/soigne de ([\d/]+) PV/);
-                if (healMatch) {
-                    const healValueString = `rend ${healMatch[1]} PV`;
-                    const healAmount = getTalentEffectValue(healValueString, rank);
-                    const maxHp = formulas.calculateMaxHP(player.level, player.stats);
-                    const oldHp = player.stats.PV;
-                    player.stats.PV = Math.min(maxHp, player.stats.PV + healAmount);
-                    const actualHeal = Math.round(player.stats.PV - oldHp);
-                    if (actualHeal > 0) {
-                        combat.log.push({ message: `Vous utilisez ${skill.nom} et récupérez ${actualHeal} PV.`, type: 'heal', timestamp: Date.now() });
-                        effectApplied = true;
-                    }
-                }
-            }
-
-            const shieldMatch = skillEffects.match(/Absorbe (\d+) points de dégâts/) || skillEffects.match(/absorbe (\d+) dégâts/);
-            if (shieldMatch) {
-                const shieldValue = parseInt(shieldMatch[1], 10);
-                player.shield += shieldValue;
-                combat.log.push({ message: `Vous utilisez ${skill.nom} et gagnez un bouclier de ${shieldValue} points.`, type: 'shield', timestamp: Date.now() });
-                if (skill.id === 'mage_arcane_shield') {
-                    player.activeBuffs.push({ id: 'mana_shield', name: 'Bouclier de Mana', duration: 20000, value: 0.5 }); // 50% damage to mana
-                }
-                effectApplied = true;
-            }
-
-            if (skill.id === 'mage_arcane_missiles') {
-                const target = combat.enemies[combat.targetIndex];
-                if (target && target.stats.PV > 0) {
-                    const waves = getTalentEffectValue(skill.effets[0], rank);
-                    const damagePerWave = 5; // As per description
-                    combat.pendingActions.push({
-                        type: 'damage_wave',
-                        skillId: skill.id,
-                        wavesLeft: waves,
-                        damagePerWave,
-                        targetId: target.id,
-                        interval: 500, // 0.5s between waves
-                        nextWaveIn: 0,
-                    });
-                    effectApplied = true;
-                }
-            }
-
-            const damageMatch2 = skillEffects.match(/Inflige/) || skillEffects.match(/dégâts de l'arme/);
-            if (damageMatch2 && skill.id !== 'mage_arcane_missiles') {
-                if (!combat.enemies || combat.enemies.length === 0) {
-                    if (!effectApplied) return;
-                } else {
-                    const isAoE = skillEffects.includes("tous les ennemis") || skillEffects.includes("ennemis proches");
-                    const primaryTarget = combat.enemies[combat.targetIndex];
-                    const targets = isAoE ? [...combat.enemies.filter(e => e.stats.PV > 0)] : (primaryTarget && primaryTarget.stats.PV > 0 ? [primaryTarget] : []);
-
-                    if (targets.length > 0) {
-                        effectApplied = true;
-                        targets.forEach(target => {
-                            const currentTarget = combat.enemies.find(e => e.id === target.id);
-                            if (!currentTarget) return;
-
-                            let damage = 0;
-                            if (skill.classeId === 'berserker' || skill.classeId === 'rogue') {
-                                const dmgMultiplierMatch = skillEffects.match(/(\d+)% des dégâts de l'arme/);
-                                const dmgMultiplier = dmgMultiplierMatch ? parseInt(dmgMultiplierMatch[1], 10) / 100 : 1;
-                                const baseDmg = formulas.calculateMeleeDamage(player.stats.AttMin, player.stats.AttMax, formulas.calculateAttackPower(player.stats));
-                                damage = baseDmg * dmgMultiplier;
-                            } else if (skill.classeId === 'mage' || skill.classeId === 'cleric') {
-                                const baseDmg = getTalentEffectValue(skill.effets[0], rank);
-                                damage = formulas.calculateSpellDamage(baseDmg, formulas.calculateSpellPower(player.stats));
-                            }
-
-                            if (skill.id === 'berserker_execute') {
-                                const hpPercent = (currentTarget.stats.PV / currentTarget.initialHp) * 100;
-                                if (hpPercent < 20) {
-                                    damage *= 3;
-                                }
-                            }
-
-                            const isCrit = formulas.isCriticalHit(player.stats.CritPct, player.stats.Precision, currentTarget.stats.Esquive);
-                            if (isCrit) {
-                                get().applySpecialEffect('ON_CRITICAL_HIT', { targetId: currentTarget.id, isCrit });
-                            }
-                            get().applySpecialEffect('ON_HIT', { targetId: currentTarget.id, isCrit });
-                            let finalDamage = isCrit ? damage * (player.stats.CritDmg / 100) : damage;
-                            const dr = formulas.calculateArmorDR(currentTarget.stats.Armure, player.level);
-                            const mitigatedDamage = Math.round(finalDamage * (1 - dr));
-
-                            const msg = `Vous utilisez ${skill.nom} sur ${currentTarget.nom} pour ${mitigatedDamage} points de dégâts.`;
-                            const critMsg = `CRITIQUE ! Votre ${skill.nom} inflige ${mitigatedDamage} points de dégâts à ${currentTarget.nom}.`;
-
-                            currentTarget.stats.PV -= mitigatedDamage;
-                            combat.log.push({ message: isCrit ? critMsg : msg, type: isCrit ? 'crit' : 'player_attack', timestamp: Date.now() });
-
-                            // Embrasement (Combustion) Talent Proc
-                            const isFireSpell = skill.id.includes('_fire_');
-                            const combustionRank = player.learnedTalents['mage_feu_embrasement'];
-
-                            if (isFireSpell && combustionRank > 0) {
-                                const procChance = (10 * combustionRank) / 100;
-                                if (Math.random() < procChance) {
-                                    const spellPower = formulas.calculateSpellPower(player.stats);
-                                    const totalBurnDamage = spellPower * 0.5;
-                                    const durationInSeconds = 4;
-                                    const damagePerTick = Math.round(totalBurnDamage / durationInSeconds);
-
-                                    const existingDebuffIndex = currentTarget.activeDebuffs.findIndex(d => d.id === 'combustion_burn');
-                                    if (existingDebuffIndex !== -1) {
-                                        currentTarget.activeDebuffs[existingDebuffIndex].duration = durationInSeconds * 1000;
-                                        currentTarget.activeDebuffs[existingDebuffIndex].damagePerTick = damagePerTick;
-                                        currentTarget.activeDebuffs[existingDebuffIndex].nextTickIn = 1000;
-                                    } else {
-                                        currentTarget.activeDebuffs.push({
-                                            id: 'combustion_burn',
-                                            name: 'Brûlure',
-                                            duration: durationInSeconds * 1000,
-                                            damagePerTick: damagePerTick,
-                                            tickInterval: 1000,
-                                            nextTickIn: 1000,
-                                        });
-                                    }
-                                    combat.log.push({ message: `Le talent Embrasement s'active sur ${currentTarget.nom}, qui commence à brûler.`, type: 'player_attack', timestamp: Date.now() });
-                                }
-                            }
-
-                            if (currentTarget.stats.PV <= 0) {
-                                deadEnemyIds.push(currentTarget.id);
-                            }
-                        });
-                    }
-                }
-            }
-
-            if (skill.id === 'rogue_subtlety_stealth') {
-                combat.isStealthed = true;
-                player.activeBuffs.push({ id: 'stealth', name: 'Camouflage', duration: 10000 });
-                combat.log.push({ message: "Vous vous camouflez dans l'ombre.", type: 'info', timestamp: Date.now() });
-                if (state.combat.autoAttack) {
-                    state.combat.autoAttack = false;
-                }
-                effectApplied = true;
-            }
-
-
-            if (effectApplied) {
-                if (combat.isStealthed && skill.id !== 'rogue_subtlety_stealth') {
-                    combat.isStealthed = false;
-                }
-                player.resources.current -= resourceCost;
-                combat.skillCooldowns[skillId] = (skill.cooldown || 0) * 1000;
-
-                state.combat.playerAttackProgress = 0;
-            }
-        });
-
-        deadEnemyIds.forEach(enemyId => {
-            const enemy = get().combat.enemies.find(e => e.id === enemyId);
-            if (enemy) {
-                get().handleEnemyDeath(enemy, skillId);
             }
         });
       },
@@ -2618,23 +2217,21 @@ export const useGameStore = create<GameState>()(
         });
       },
 
-      applyTalentTrigger: (trigger) => {
+      applyTalentTrigger: (trigger, context) => {
         set((state: GameState) => {
-            const { player, gameData } = state;
+            const { player, gameData, combat } = state;
             Object.entries(player.learnedTalents).forEach(([talentId, rank]) => {
                 const talent = gameData.talents.find(t => t.id === talentId);
                 if (!talent || !talent.triggeredEffects) return;
 
                 talent.triggeredEffects.forEach(triggeredEffect => {
                     if (triggeredEffect.trigger === trigger) {
-                        if (Math.random() < (triggeredEffect.chance || 1)) {
+                        const procChance = getRankValue(triggeredEffect.chance, rank)
+                        if (Math.random() < procChance) {
                             triggeredEffect.effects.forEach(effect => {
                                 const anyEffect = effect as any;
                                 if (anyEffect.type === 'buff' && anyEffect.buffType === 'stat_modifier') {
-                                    const value = Array.isArray(anyEffect.statMods[0].value)
-                                        ? anyEffect.statMods[0].value[Math.min(rank - 1, anyEffect.statMods[0].value.length - 1)] || 0
-                                        : anyEffect.statMods[0].value;
-
+                                    const value = getRankValue(anyEffect.statMods[0].value, rank);
                                     const newStatMod = { ...anyEffect.statMods[0], value: value };
 
                                     player.activeBuffs.push({
@@ -2643,7 +2240,28 @@ export const useGameStore = create<GameState>()(
                                         duration: anyEffect.duration * 1000,
                                         statMods: [newStatMod],
                                     });
-                                    state.combat.log.push({ message: `Le talent ${talent.nom} s'active !`, type: 'info', timestamp: Date.now() });
+                                    combat.log.push({ message: `Le talent ${talent.nom} s'active !`, type: 'talent_proc', timestamp: Date.now() });
+                                } else if (anyEffect.type === 'apply_debuff' && context?.targetId) {
+                                    const target = combat.enemies.find(e => e.id === context.targetId);
+                                    if (target) {
+                                        const debuffData = anyEffect.debuff;
+                                        if (debuffData.debuffType === 'dot') {
+                                            const buffedPlayerStats = getModifiedStats(player.stats, player.activeBuffs, player.form);
+                                            const baseDmg = formulas.calculateMeleeDamage(buffedPlayerStats.AttMin, buffedPlayerStats.AttMax, formulas.calculateAttackPower(buffedPlayerStats));
+                                            const totalDamage = baseDmg * getRankValue(debuffData.totalDamage.multiplier, rank);
+                                            const damagePerTick = Math.round(totalDamage / debuffData.duration);
+
+                                            target.activeDebuffs.push({
+                                                id: debuffData.id,
+                                                name: debuffData.name,
+                                                duration: debuffData.duration * 1000,
+                                                damagePerTick: damagePerTick,
+                                                tickInterval: 1000,
+                                                nextTickIn: 1000,
+                                            });
+                                            combat.log.push({ message: `Le talent ${talent.nom} s'active sur ${target.nom} !`, type: 'talent_proc', timestamp: Date.now() });
+                                        }
+                                    }
                                 }
                             });
                         }
