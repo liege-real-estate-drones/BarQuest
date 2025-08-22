@@ -37,15 +37,6 @@ export function TownView() {
   }));
   const [activeTab, setActiveTab] = useState<TownTab>('town');
 
-  if (townView === 'CRAFTING') {
-    return (
-        <div>
-            <Button onClick={() => setTownView('TOWN')}>Retour en ville</Button>
-            <CraftingView />
-        </div>
-    );
-  }
-
   const renderContent = () => {
     switch (activeTab) {
       case 'town':
@@ -66,7 +57,7 @@ export function TownView() {
                 <ReputationView />
               </div>
               <div className="md:col-span-2">
-                <Button onClick={() => setTownView('CRAFTING')}>Aller à la forge</Button>
+                <CraftingView />
               </div>
             </div>
           </ScrollArea>
