@@ -49,6 +49,28 @@
       "niveauRequis": 10,
       "rangMax": 3,
       "effets": ["Les coups critiques ont 33/66/100% de chances de provoquer une hémorragie."],
+      "triggeredEffects": [
+        {
+          "trigger": "on_critical_hit",
+          "chance": [0.33, 0.66, 1.0],
+          "effects": [
+            {
+              "type": "apply_debuff",
+              "debuff": {
+                "id": "sanguinaire_bleed",
+                "name": "Hémorragie (Sanguinaire)",
+                "duration": 6,
+                "debuffType": "dot",
+                "damageType": "physical",
+                "totalDamage": {
+                  "source": "weapon",
+                  "multiplier": 0.5
+                }
+              }
+            }
+          ]
+        }
+      ],
       "exigences": ["berserker_armes_force_brute:1"]
     },
     {
@@ -58,7 +80,15 @@
       "type": "passif",
       "niveauRequis": 20,
       "rangMax": 5,
-      "effets": ["Vos attaques ont une chance d'ignorer 10/20/30/40/50% de l'armure de la cible."],
+      "effets": ["Vos attaques ont une chance de 20% d'ignorer 10/20/30/40/50% de l'armure de la cible."],
+       "effects": [
+        {
+            "type": "on_hit_effect",
+            "effect": "ignore_armor",
+            "chance": 0.2,
+            "value": [0.1, 0.2, 0.3, 0.4, 0.5]
+        }
+      ],
       "exigences": ["berserker_armes_sanguinaire:1"]
     },
     {

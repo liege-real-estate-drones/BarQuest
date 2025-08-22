@@ -37,6 +37,8 @@ const getLogEntryColor = (type: CombatLogEntry['type']) => {
       return 'text-cyan-400';
     case 'poison_proc':
       return 'text-lime-400';
+    case 'talent_proc':
+      return 'text-fuchsia-400';
     default:
       return 'text-foreground';
   }
