@@ -729,6 +729,11 @@ export const useGameStore = create<GameState>()(
             }
 
             const itemToDismantle = state.inventory.items[itemIndex];
+            if (itemToDismantle.type === 'quest') {
+                console.log("Cannot dismantle quest items.");
+                materialsGained = undefined;
+                return;
+            }
             state.inventory.items.splice(itemIndex, 1);
 
             const { rarity, niveauMin, slot, type } = itemToDismantle;
@@ -1058,6 +1063,10 @@ export const useGameStore = create<GameState>()(
         if (itemIndex === -1) return;
 
         const itemToEquip = inventory.items[itemIndex];
+        if (itemToEquip.type === 'quest') {
+            console.log("Cannot equip quest items.");
+            return;
+        }
 
         set((state: GameState) => {
             state.inventory.items.splice(itemIndex, 1);

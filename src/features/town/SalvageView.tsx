@@ -43,7 +43,7 @@ export const SalvageView: React.FC = () => {
                 <ScrollArea className="h-[400px]">
                     {inventory.items.length > 0 ? (
                         <ul className="space-y-2 pr-4">
-                            {inventory.items.map((item: Item) => (
+                            {inventory.items.filter(item => item.type !== 'quest').map((item: Item) => (
                                 <li key={item.id} className="border p-2 rounded flex justify-between items-center bg-card-foreground/5 hover:bg-card-foreground/10">
                                     <ItemTooltip item={item}>
                                         <div className="flex-grow">
