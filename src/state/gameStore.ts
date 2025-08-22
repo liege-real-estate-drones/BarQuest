@@ -354,11 +354,13 @@ export const getRecipePrice = (enchantment: Enchantment): number => {
     return (tier * 25) * (level / 2.5);
 };
 
-const STAT_WEIGHTS: Record<PlayerClassId, Partial<Record<keyof Stats, number>>> = {
-    berserker: { Force: 2, AttMin: 1, AttMax: 1, CritDmg: 0.8, Armure: 0.7, PV: 0.5, CritPct: 0.5 },
-    mage: { Intelligence: 2, Esprit: 1.2, CritPct: 1, CritDmg: 0.8, PV: 0.5, Vitesse: 0.7 },
-    rogue: { Dexterite: 2, CritPct: 1.5, CritDmg: 1.2, Vitesse: 1, AttMin: 0.8, AttMax: 0.8 },
-    cleric: { Esprit: 2, Intelligence: 1.5, PV: 1, Armure: 0.8, Vitesse: 0.5 },
+type StatWeightKeys = 'PV' | 'RessourceMax' | 'Force' | 'Intelligence' | 'Dexterite' | 'Esprit' | 'AttMin' | 'AttMax' | 'CritPct' | 'CritDmg' | 'Armure' | 'Vitesse' | 'Precision' | 'Esquive';
+
+export const STAT_WEIGHTS: Record<PlayerClassId, Partial<Record<StatWeightKeys, number>> & { BonusDmg?: Partial<Record<Theme, number>> }> = {
+    berserker: { Force: 2, AttMin: 1.2, AttMax: 1.2, CritPct: 1, CritDmg: 0.8, Armure: 0.6, PV: 0.8, BonusDmg: { shadow: 1, fire: 1, ice: 1, nature: 1 } },
+    mage: { Intelligence: 2, CritPct: 1.2, CritDmg: 1, Vitesse: 1, Esprit: 0.7, PV: 0.5, BonusDmg: { shadow: 1.5, fire: 1.5, ice: 1.5, nature: 1.5 } },
+    rogue: { Dexterite: 2, Vitesse: 1.5, CritPct: 1.5, CritDmg: 1.2, AttMin: 1, AttMax: 1, BonusDmg: { shadow: 1, fire: 1, ice: 1, nature: 1 } },
+    cleric: { Esprit: 2, Intelligence: 1.5, PV: 1, Armure: 0.8, CritPct: 0.7, BonusDmg: { shadow: 1.2, fire: 1.2, ice: 1.2, nature: 1.2 } },
 };
 
 export const calculateItemScore = (item: Item, classId: PlayerClassId): number => {
@@ -368,19 +370,29 @@ export const calculateItemScore = (item: Item, classId: PlayerClassId): number =
     const weights = STAT_WEIGHTS[classId];
 
     (item.affixes || []).forEach(affix => {
-        const statKey = affix.ref as keyof Stats;
+        const statKey = affix.ref as StatWeightKeys;
         const weight = weights[statKey] || 0.1;
         score += affix.val * weight;
     });
 
     if (item.stats) {
         Object.entries(item.stats).forEach(([key, value]) => {
-            const statKey = key as keyof Stats;
+            if (key === 'BonusDmg' || key === 'ResElems') return;
+            const statKey = key as StatWeightKeys;
             const weight = weights[statKey] || 0.1;
             if (typeof value === 'number') {
                 score += value * weight;
             }
         });
+
+        if (item.stats.BonusDmg && weights.BonusDmg) {
+            Object.entries(item.stats.BonusDmg).forEach(([elem, dmg]) => {
+                const weight = weights.BonusDmg?.[elem as Theme] || 0;
+                if(typeof dmg === 'number') {
+                    score += dmg * weight;
+                }
+            });
+        }
     }
 
     return score;
@@ -717,56 +729,53 @@ export const useGameStore = create<GameState>()(
             const itemToDismantle = state.inventory.items[itemIndex];
             state.inventory.items.splice(itemIndex, 1);
 
-            const { rarity, niveauMin } = itemToDismantle;
+            const { rarity, niveauMin, slot, type } = itemToDismantle;
             const calculatedMaterials: { id: string, amount: number }[] = [];
 
-            // --- Nouvelle logique basée sur les paliers ---
-            if (niveauMin >= 1 && niveauMin < 15) {
-                if (rarity === 'Commun' || rarity === 'Magique') {
+            // 1. Base Materials from Item Type
+            if (slot === 'weapon' || slot === 'offhand' || slot === 'chest' || slot === 'legs' || slot === 'hands' || slot === 'feet' || slot === 'head' || slot === 'belt') {
+                calculatedMaterials.push({ id: 'scrap_metal', amount: 1 });
+                if (type === 'leather' || type === 'mail') {
+                    calculatedMaterials.push({ id: 'light_leather', amount: Math.floor(Math.random() * 2) + 1 });
+                }
+            } else if (slot === 'amulet' || slot === 'ring') {
+                 if (Math.random() < 0.2) {
+                    calculatedMaterials.push({ id: 'silver_nugget', amount: 1 });
+                 }
+            }
+
+            // 2. Bonus Materials from Magical Properties (Rarity)
+            if (rarity !== 'Commun') {
+                if (niveauMin >= 1 && niveauMin < 15) {
                     calculatedMaterials.push({ id: 'strange_dust', amount: Math.floor(Math.random() * 2) + 1 });
                     if (rarity === 'Magique' && Math.random() < 0.35) {
                         calculatedMaterials.push({ id: 'lesser_magic_essence', amount: 1 });
                     }
                 }
-            }
-            if (niveauMin >= 15 && niveauMin < 30) {
-                 if (rarity === 'Commun') {
-                    calculatedMaterials.push({ id: 'soul_dust', amount: 1 });
-                 } else if (rarity === 'Magique' || rarity === 'Rare') {
+                if (niveauMin >= 15 && niveauMin < 30) {
                     calculatedMaterials.push({ id: 'soul_dust', amount: Math.floor(Math.random() * 2) + 1 });
                     if (rarity === 'Rare' && Math.random() < 0.35) {
                         calculatedMaterials.push({ id: 'greater_magic_essence', amount: 1 });
                     }
                 }
-            }
-            if (niveauMin >= 30 && niveauMin < 50) {
-                if (rarity === 'Commun' || rarity === 'Magique') {
-                    calculatedMaterials.push({ id: 'vision_dust', amount: 1 });
-                } else if (rarity === 'Rare' || rarity === 'Épique') {
+                if (niveauMin >= 30 && niveauMin < 50) {
                     calculatedMaterials.push({ id: 'vision_dust', amount: Math.floor(Math.random() * 2) + 1 });
                     if (rarity === 'Épique' && Math.random() < 0.35) {
                         calculatedMaterials.push({ id: 'lesser_astral_essence', amount: 1 });
                     }
                 }
-            }
-            if (niveauMin >= 50) {
-                 if (rarity === 'Commun' || rarity === 'Magique' || rarity === 'Rare') {
-                    calculatedMaterials.push({ id: 'eternity_dust', amount: 1 });
-                } else if (rarity === 'Épique') {
+                if (niveauMin >= 50) {
                     calculatedMaterials.push({ id: 'eternity_dust', amount: Math.floor(Math.random() * 3) + 1 });
-                     if (Math.random() < 0.35) {
+                     if (rarity === 'Épique' && Math.random() < 0.35) {
                         calculatedMaterials.push({ id: 'greater_astral_essence', amount: 1 });
                     }
                 }
-            }
-            if (rarity === 'Légendaire') {
-                calculatedMaterials.push({ id: 'eternity_dust', amount: Math.floor(Math.random() * 4) + 2 });
-                calculatedMaterials.push({ id: 'nexus_crystal', amount: 1 });
-                if (Math.random() < 0.5) {
-                    calculatedMaterials.push({ id: 'prismatic_shard', amount: 1 });
+                if (rarity === 'Légendaire') {
+                    calculatedMaterials.push({ id: 'nexus_crystal', amount: 1 });
                 }
             }
 
+            // 3. Bonus Elemental Materials from Affixes
             itemToDismantle.affixes?.forEach(affix => {
                 const theme = AFFIX_TO_THEME[affix.ref];
                 if (theme) {
@@ -774,16 +783,23 @@ export const useGameStore = create<GameState>()(
                         fire: 'eternal_fire', ice: 'crystalline_water',
                         nature: 'primordial_earth', shadow: 'frozen_shadow'
                     };
-                    if (elementalMaterials[theme] && Math.random() < 0.15) {
+                    if (elementalMaterials[theme] && Math.random() < 0.25) {
                          calculatedMaterials.push({ id: elementalMaterials[theme], amount: 1 });
                     }
                 }
             });
 
+            // Add materials to inventory
+            const finalMaterials: Record<string, number> = {};
             calculatedMaterials.forEach(mat => {
-                state.inventory.craftingMaterials[mat.id] = (state.inventory.craftingMaterials[mat.id] || 0) + mat.amount;
+                finalMaterials[mat.id] = (finalMaterials[mat.id] || 0) + mat.amount;
             });
-            materialsGained = calculatedMaterials;
+
+            Object.entries(finalMaterials).forEach(([matId, amount]) => {
+                 state.inventory.craftingMaterials[matId] = (state.inventory.craftingMaterials[matId] || 0) + amount;
+            });
+
+            materialsGained = Object.entries(finalMaterials).map(([id, amount]) => ({ id, amount }));
         });
         return materialsGained;
       },
@@ -1412,8 +1428,10 @@ export const useGameStore = create<GameState>()(
                     player.reputation[currentDungeon.factionId] = repData;
                 }
 
-                // Check for 'nettoyage' quest completion
+                // Check for 'nettoyage' and 'defi' quest completion
                 const completedQuestsThisDungeon: string[] = [];
+                const dungeonTime = state.dungeonStartTime ? Date.now() - state.dungeonStartTime : Infinity;
+
                 state.activeQuests.forEach(activeQuest => {
                     const { quete } = activeQuest;
                     if (quete.type === 'nettoyage' && quete.requirements.dungeonId === dungeonId && quete.requirements.clearCount) {
@@ -1422,8 +1440,15 @@ export const useGameStore = create<GameState>()(
                             inventory.gold += quete.rewards.gold;
                             player.completedQuests.push(quete.id);
                             completedQuestsThisDungeon.push(quete.id);
-                            // Optionally add to log
-                            combat.log.push({ message: `Quest Completed: ${quete.name}`, type: 'quest', timestamp: Date.now() });
+                            combat.log.push({ message: `Quête terminée: ${quete.name}`, type: 'quest', timestamp: Date.now() });
+                        }
+                    } else if (quete.type === 'defi' && quete.requirements.dungeonId === dungeonId && quete.requirements.timeLimit) {
+                        if (dungeonTime <= quete.requirements.timeLimit * 1000) {
+                            player.xp += quete.rewards.xp;
+                            inventory.gold += quete.rewards.gold;
+                            player.completedQuests.push(quete.id);
+                            completedQuestsThisDungeon.push(quete.id);
+                            combat.log.push({ message: `Défi réussi: ${quete.name}`, type: 'quest', timestamp: Date.now() });
                         }
                     }
                 });
@@ -1739,6 +1764,19 @@ export const useGameStore = create<GameState>()(
 
             target.stats.PV -= mitigatedDamage;
 
+            // Elemental Damage
+            if (buffedPlayerStats.BonusDmg) {
+                Object.entries(buffedPlayerStats.BonusDmg).forEach(([elem, dmg]) => {
+                    if (dmg > 0) {
+                        const res = debuffedTargetStats.ResElems?.[elem as keyof typeof debuffedTargetStats.ResElems] || 0;
+                        const elemDR = formulas.calculateResistanceDR(res, player.level);
+                        const mitigatedElemDmg = Math.round(dmg * (1 - elemDR));
+                        target.stats.PV -= mitigatedElemDmg;
+                        combat.log.push({ message: `Votre attaque inflige ${mitigatedElemDmg} points de dégâts de ${elem}.`, type: 'player_attack', timestamp: Date.now() });
+                    }
+                });
+            }
+
             // Deadly Poison proc
             if (player.activeBuffs.some(b => b.id === 'deadly_poison_buff') && Math.random() < 0.3) {
                 const poisonDamage = 5; // As per skill description
@@ -1871,6 +1909,20 @@ export const useGameStore = create<GameState>()(
                         const mitigatedDamage = Math.round(finalDamage * (1 - dr));
 
                         target.stats.PV -= mitigatedDamage;
+
+                        // Elemental Damage from stats
+                        if (buffedPlayerStats.BonusDmg) {
+                            Object.entries(buffedPlayerStats.BonusDmg).forEach(([elem, dmg]) => {
+                                if (dmg > 0) {
+                                    const res = debuffedTargetStats.ResElems?.[elem as keyof typeof debuffedTargetStats.ResElems] || 0;
+                                    const elemDR = formulas.calculateResistanceDR(res, player.level);
+                                    const mitigatedElemDmg = Math.round(dmg * (1 - elemDR));
+                                    target.stats.PV -= mitigatedElemDmg;
+                                    combat.log.push({ message: `Votre compétence inflige ${mitigatedElemDmg} points de dégâts de ${elem}.`, type: 'player_attack', timestamp: Date.now() });
+                                }
+                            });
+                        }
+
                         const msg = `Vous utilisez ${skill.nom} sur ${target.nom} pour ${mitigatedDamage} points de dégâts.`;
                         const critMsg = `CRITIQUE ! Votre ${skill.nom} inflige ${mitigatedDamage} points de dégâts à ${target.nom}.`;
                         combat.log.push({ message: isCrit ? critMsg : msg, type: isCrit ? 'crit' : 'player_attack', timestamp: Date.now() });
