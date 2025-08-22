@@ -5,6 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArtisanatForgeView } from './ArtisanatForgeView';
 import { EnchanterView } from './EnchanterView';
+import { SalvageView } from './SalvageView';
+
 export const CraftingView: React.FC = () => {
     const { components } = useGameStore(state => state.gameData);
     const { craftingMaterials } = useGameStore(state => state.inventory);
@@ -17,15 +19,19 @@ export const CraftingView: React.FC = () => {
     return (
         <div className="p-4">
             <Tabs defaultValue="forge">
-                <TabsList className="grid w-full grid-cols-2">
+                <TabsList className="grid w-full grid-cols-3">
                     <TabsTrigger value="forge">Forgeron</TabsTrigger>
                     <TabsTrigger value="enchant">Enchanter</TabsTrigger>
+                    <TabsTrigger value="salvage">Récupération</TabsTrigger>
                 </TabsList>
                 <TabsContent value="forge">
                     <ArtisanatForgeView />
                 </TabsContent>
                 <TabsContent value="enchant">
                     <EnchanterView />
+                </TabsContent>
+                <TabsContent value="salvage">
+                    <SalvageView />
                 </TabsContent>
             </Tabs>
              <Card className="mt-4">

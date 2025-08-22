@@ -6,6 +6,7 @@ import { Item, Rareté, Stats } from "@/lib/types";
 import { Separator } from "./ui/separator";
 import { cn } from "@/lib/utils";
 import { STAT_DISPLAY_NAMES } from "@/lib/constants";
+import { useGameStore, STAT_WEIGHTS } from "@/state/gameStore";
 
 const rarityColorMap: Record<Rareté, string> = {
     Commun: 'text-gray-400',
@@ -27,7 +28,7 @@ export const STAT_ORDER: StatKey[] = [
 
 type ComparisonResult = { diff: number; type: 'better' | 'worse' | 'equal' | 'new' | 'lost' };
 
-export function ItemStat({ label, value, comparison }: { label: string, value: string | number, comparison?: ComparisonResult }) {
+export function ItemStat({ label, value, comparison, isImportant }: { label: string, value: string | number, comparison?: ComparisonResult, isImportant?: boolean }) {
     let valueColor = 'text-gray-400';
     let diffElement = null;
     let valueClass = '';
@@ -63,70 +64,48 @@ export function ItemStat({ label, value, comparison }: { label: string, value: s
 
     return (
         <p className={cn(valueColor, valueClass)}>
-            {value} {label} {diffElement}
+            {isImportant && '⭐'} {value} {label} {diffElement}
         </p>
     );
 }
 
 export function ItemTooltipContent({ item, equippedItem }: { item: Item, equippedItem?: Item | null }) {
+    const player = useGameStore(state => state.player);
     if (!item) return null;
 
-    const comparisonStats: Partial<Record<StatKey, ComparisonResult>> = {};
-    const allStatKeys = new Set<StatKey>();
+    const classWeights = player.classeId ? STAT_WEIGHTS[player.classeId] : {};
 
-    // Collect all stats from both items
-    (item.affixes || []).forEach(a => allStatKeys.add(a.ref as StatKey));
-    if (item.stats) Object.keys(item.stats).forEach(k => allStatKeys.add(k as StatKey));
-    if (equippedItem) {
-        (equippedItem.affixes || []).forEach(a => allStatKeys.add(a.ref as StatKey));
-        if (equippedItem.stats) Object.keys(equippedItem.stats).forEach(k => allStatKeys.add(k as StatKey));
-    }
-    
-    STAT_ORDER.forEach(stat => allStatKeys.add(stat));
+    const getFlatStats = (i: Item) => {
+        const stats: Record<string, number> = {};
+        (i.affixes || []).forEach(a => { stats[a.ref] = (stats[a.ref] || 0) + a.val; });
+        if (i.stats) {
+            Object.entries(i.stats).forEach(([key, value]) => {
+                if (key === 'BonusDmg' && typeof value === 'object' && value) {
+                    Object.entries(value).forEach(([elem, dmg]) => {
+                        if (typeof dmg === 'number') {
+                            stats[`BonusDmg.${elem}`] = (stats[`BonusDmg.${elem}`] || 0) + dmg;
+                        }
+                    });
+                } else if (typeof value === 'number') {
+                    stats[key] = (stats[key] || 0) + value;
+                }
+            });
+        }
+        return stats;
+    };
 
+    const itemStats = getFlatStats(item);
+    const equippedStats = equippedItem ? getFlatStats(equippedItem) : {};
 
-    if (equippedItem) {
-        allStatKeys.forEach(key => {
-            const itemStatValue = (item.affixes || []).find(a => a.ref === key)?.val || (item.stats?.[key] as number) || 0;
-            const equippedStatValue = (equippedItem.affixes || []).find(a => a.ref === key)?.val || (equippedItem.stats?.[key] as number) || 0;
-
-            if (itemStatValue === 0 && equippedStatValue === 0) return;
-
-            const diff = itemStatValue - equippedStatValue;
-
-            if (itemStatValue > 0 && equippedStatValue === 0) {
-                comparisonStats[key] = { diff, type: 'new' };
-            } else if (itemStatValue === 0 && equippedStatValue > 0) {
-                comparisonStats[key] = { diff: -equippedStatValue, type: 'lost' };
-            } else if (diff > 0) {
-                comparisonStats[key] = { diff, type: 'better' };
-            } else if (diff < 0) {
-                comparisonStats[key] = { diff, type: 'worse' };
-            } else if (itemStatValue !== 0) {
-                comparisonStats[key] = { diff: 0, type: 'equal' };
-            }
-        });
-    }
-
-    const itemAffixes = [...(item.affixes || [])];
-    if (item.stats) {
-        Object.entries(item.stats).forEach(([key, val]) => {
-             if (typeof val === 'number' && val && !itemAffixes.some(a => a.ref === key)) {
-                 itemAffixes.push({ ref: key, val: val });
-            }
-        });
-    }
-
-    const lostStats = equippedItem ? Object.keys(comparisonStats)
-        .filter(key => comparisonStats[key as StatKey]?.type === 'lost')
-        .map(key => {
-             const equippedStatValue = (equippedItem.affixes || []).find(a => a.ref === key)?.val || (equippedItem.stats?.[key as StatKey] as number) || 0;
-            return { ref: key, val: equippedStatValue };
-        }) : [];
-
-    const allSortedAffixes = [...itemAffixes, ...lostStats]
-        .filter((affix, index, self) => index === self.findIndex(t => t.ref === affix.ref))
-        .sort((a, b) => STAT_ORDER.indexOf(a.ref as StatKey) - STAT_ORDER.indexOf(b.ref as StatKey));
+    const allStatKeys = new Set([...Object.keys(itemStats), ...Object.keys(equippedStats)]);
+    const sortedKeys = Array.from(allStatKeys).sort((a, b) => {
+        const aIndex = STAT_ORDER.indexOf(a as StatKey);
+        const bIndex = STAT_ORDER.indexOf(b as StatKey);
+        if (aIndex === -1 && bIndex === -1) return a.localeCompare(b);
+        if (aIndex === -1) return 1;
+        if (bIndex === -1) return -1;
+        return aIndex - bIndex;
+    });
 
     return (
         <div className="p-2 text-xs w-64">
@@ -137,14 +116,38 @@ export function ItemTooltipContent({ item, equippedItem }: { item: Item, equippe
             </div>
             <Separator className="my-2" />
             <div className="space-y-1">
-                {allSortedAffixes.map((affix) => (
-                    <ItemStat 
-                        key={affix.ref}
-                        label={STAT_DISPLAY_NAMES[affix.ref] || affix.ref}
-                        value={`${affix.val > 0 ? '+' : ''}${affix.val}`}
-                        comparison={comparisonStats[affix.ref as StatKey]}
-                    />
-                ))}
+                {sortedKeys.map(key => {
+                    const itemValue = itemStats[key] || 0;
+                    const equippedValue = equippedStats[key] || 0;
+                    if (itemValue === 0 && equippedValue === 0) return null;
+
+                    const diff = itemValue - equippedValue;
+                    let comparison: ComparisonResult | undefined = undefined;
+                    if (equippedItem) {
+                        if (itemValue > 0 && equippedValue === 0) comparison = { diff, type: 'new' };
+                        else if (itemValue === 0 && equippedValue > 0) comparison = { diff: -equippedValue, type: 'lost' };
+                        else if (diff > 0) comparison = { diff, type: 'better' };
+                        else if (diff < 0) comparison = { diff, type: 'worse' };
+                        else if (itemValue !== 0) comparison = { diff: 0, type: 'equal' };
+                    }
+
+                    const valueToDisplay = comparison?.type === 'lost' ? equippedValue : itemValue;
+
+                    let isImportant = !!(classWeights as any)[key];
+                    if (!isImportant && key.startsWith('BonusDmg.')) {
+                        isImportant = !!classWeights.BonusDmg;
+                    }
+
+                    return (
+                        <ItemStat
+                            key={key}
+                            label={STAT_DISPLAY_NAMES[key] || key}
+                            value={`${valueToDisplay > 0 ? '+' : ''}${valueToDisplay}`}
+                            comparison={comparison}
+                            isImportant={isImportant}
+                        />
+                    );
+                })}
             </div>
              {item.set && (
                  <>

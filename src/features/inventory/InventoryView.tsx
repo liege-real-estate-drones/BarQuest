@@ -26,16 +26,48 @@ export function InventoryView() {
         player: state.player,
     }));
 
-    const getComparison = (item: Item) => {
+    const getComparison = (item: Item): 'better' | 'worse' | 'equal' => {
         if (!player.classeId) return 'equal';
 
-        const equippedItem = inventory.equipment[item.slot as keyof typeof inventory.equipment];
+        let equippedItem: Item | null = null;
+        if (item.slot === 'ring') {
+            const ring1 = inventory.equipment.ring;
+            const ring2 = inventory.equipment.ring2;
+            if (ring1 && ring2) {
+                const ring1Score = calculateItemScore(ring1, player.classeId);
+                const ring2Score = calculateItemScore(ring2, player.classeId);
+                equippedItem = ring1Score < ring2Score ? ring1 : ring2;
+            } else {
+                return 'better';
+            }
+        } else {
+            equippedItem = inventory.equipment[item.slot as keyof typeof inventory.equipment];
+        }
+
+        if (!equippedItem) {
+            return 'better';
+        }
+
         const itemScore = calculateItemScore(item, player.classeId);
-        const equippedScore = equippedItem ? calculateItemScore(equippedItem, player.classeId) : 0;
+        const equippedScore = calculateItemScore(equippedItem, player.classeId);
         
         if (itemScore > equippedScore) return 'better';
         if (itemScore < equippedScore) return 'worse';
         return 'equal';
+    };
+
+    const getEquippedForTooltip = (item: Item): Item | null => {
+        if (item.slot !== 'ring') {
+            return inventory.equipment[item.slot as keyof typeof inventory.equipment];
+        }
+        const { ring, ring2 } = inventory.equipment;
+        if (ring && ring2) {
+            if (!player.classeId) return ring;
+            const ring1Score = calculateItemScore(ring, player.classeId);
+            const ring2Score = calculateItemScore(ring2, player.classeId);
+            return ring1Score < ring2Score ? ring : ring2;
+        }
+        return null;
     };
 
     return (
@@ -58,7 +90,7 @@ export function InventoryView() {
                                     <li key={item.id} className="border p-2 rounded flex justify-between items-center bg-card-foreground/5 hover:bg-card-foreground/10">
                                        <div className="flex items-center gap-2">
                                             <ComparisonIndicator comparison={getComparison(item)} />
-                                            <ItemTooltip item={item} equippedItem={inventory.equipment[item.slot as keyof typeof inventory.equipment]}>
+                                            <ItemTooltip item={item} equippedItem={getEquippedForTooltip(item)}>
                                                 <div className="flex-grow">
                                                     <span className="text-xs text-muted-foreground ml-2">(iLvl {item.niveauMin})</span>
                                                 </div>

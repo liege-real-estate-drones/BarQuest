@@ -164,182 +164,6 @@ const EnchantTab: React.FC = () => {
     );
 };
 
-// Component for the "Dismantle" tab (moved from CraftingView)
-const DismantleTab: React.FC = () => {
-    const { inventory, dismantleItem, gameData, dismantleAllUnusedItems } = useGameStore(state => ({
-        inventory: state.inventory,
-        dismantleItem: state.dismantleItem,
-        dismantleAllUnusedItems: state.dismantleAllUnusedItems,
-        gameData: state.gameData,
-    }));
-    const { toast } = useToast();
-
-    const [selectedItem, setSelectedItem] = useState<Item | null>(null);
-    const [isAlertOpen, setIsAlertOpen] = useState(false);
-    const [rarityToDismantle, setRarityToDismantle] = useState<Rareté | null>(null);
-    const [isMassDismantleAlertOpen, setIsMassDismantleAlertOpen] = useState(false);
-
-    const isEquipped = (itemId: string) => {
-        return Object.values(inventory.equipment).some(equippedItem => equippedItem?.id === itemId);
-    };
-
-    const handleDismantleClick = () => {
-        if (!selectedItem) return;
-        if (isEquipped(selectedItem.id)) {
-            setIsAlertOpen(true);
-        } else {
-            handleDismantleConfirm();
-        }
-    };
-
-    const handleDismantleConfirm = () => {
-        if (selectedItem) {
-            const materialsGained = dismantleItem(selectedItem.id);
-            if (materialsGained && materialsGained.length > 0) {
-                materialsGained.forEach(mat => {
-                    const materialName = gameData.components?.find(c => c.id === mat.id)?.name || mat.id;
-                    toast({
-                        title: "Matériau obtenu",
-                        description: `+ ${mat.amount} x ${materialName}`,
-                    });
-                });
-            } else {
-                 toast({
-                    title: "Désenchantement",
-                    description: "Aucun matériau n'a été obtenu.",
-                    variant: "destructive"
-                });
-            }
-            setSelectedItem(null);
-        }
-        setIsAlertOpen(false);
-    };
-
-    const handleMassDismantle = () => {
-        if (!rarityToDismantle) return;
-        const { dismantledCount, materialsGained } = dismantleAllUnusedItems(rarityToDismantle);
-
-        if (dismantledCount > 0) {
-            const materialSummary = Object.entries(materialsGained)
-                .map(([id, amount]) => {
-                    const name = gameData.components?.find(c => c.id === id)?.name || id;
-                    return `${amount}x ${name}`;
-                })
-                .join(', ');
-
-            toast({
-                title: `${dismantledCount} objets démantelés`,
-                description: `Matériaux obtenus: ${materialSummary || 'Aucun'}`,
-            });
-        } else {
-            toast({
-                title: "Rien à démanteler",
-                description: "Aucun objet ne correspondait à vos critères.",
-            });
-        }
-        setRarityToDismantle(null);
-        setIsMassDismantleAlertOpen(false);
-    };
-
-    return (
-        <>
-            <div className="p-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="md:col-span-1">
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Inventaire</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <ScrollArea className="h-[500px]">
-                                <div className="space-y-2">
-                                    {inventory.items.map(item => (
-                                        <div
-                                            key={item.id}
-                                            className={`p-2 border rounded cursor-pointer ${selectedItem?.id === item.id ? 'bg-blue-900/50' : ''}`}
-                                            onClick={() => setSelectedItem(item)}
-                                        >
-                                           <ItemTooltip item={item} />
-                                        </div>
-                                    ))}
-                                </div>
-                            </ScrollArea>
-                        </CardContent>
-                    </Card>
-                </div>
-
-                <div className="md:col-span-2 space-y-4">
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Démanteler un objet</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            {selectedItem ? (
-                                <div className="space-y-4">
-                                    <ItemTooltip item={selectedItem} />
-                                    <Button onClick={handleDismantleClick} variant="destructive" className="mt-4 w-full">Démanteler</Button>
-                                </div>
-                            ) : (
-                                <p>Sélectionnez un objet de votre inventaire à démanteler.</p>
-                            )}
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Démantèlement de masse</CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                            <p className="text-sm text-muted-foreground">
-                                Démantèle tous les objets non-équipés d'une rareté **inférieure** à celle sélectionnée.
-                            </p>
-                            <Select onValueChange={(value) => setRarityToDismantle(value as Rareté)} value={rarityToDismantle || ''}>
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Sélectionner une rareté max..." />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="Magique">Magique</SelectItem>
-                                    <SelectItem value="Rare">Rare</SelectItem>
-                                    <SelectItem value="Épique">Épique</SelectItem>
-                                </SelectContent>
-                            </Select>
-                            <Button variant="destructive" disabled={!rarityToDismantle} className="w-full" onClick={() => setIsMassDismantleAlertOpen(true)}>
-                                Tout démanteler
-                            </Button>
-                        </CardContent>
-                    </Card>
-                </div>
-            </div>
-            <AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>
-                <AlertDialogContent>
-                    <AlertDialogHeader>
-                        <AlertDialogTitle>Êtes-vous sûr?</AlertDialogTitle>
-                        <AlertDialogDescription>
-                            Cet objet est actuellement équipé. Le démanteler le retirera de votre équipement de manière permanente.
-                        </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                        <AlertDialogCancel>Annuler</AlertDialogCancel>
-                        <AlertDialogAction onClick={handleDismantleConfirm}>Confirmer</AlertDialogAction>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
-            <AlertDialog open={isMassDismantleAlertOpen} onOpenChange={setIsMassDismantleAlertOpen}>
-                <AlertDialogContent>
-                    <AlertDialogHeader>
-                        <AlertDialogTitle>Êtes-vous sûr?</AlertDialogTitle>
-                        <AlertDialogDescription>
-                            Vous êtes sur le point de démanteler tous les objets non-équipés d'une rareté inférieure à "{rarityToDismantle}". Cette action est irréversible.
-                        </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                        <AlertDialogCancel>Annuler</AlertDialogCancel>
-                        <AlertDialogAction onClick={handleMassDismantle}>Confirmer</AlertDialogAction>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
-        </>
-    );
-};
-
 // Component for the "Grimoire" tab
 const GrimoireTab: React.FC = () => {
     const { allEnchantments, learnedRecipes, materials } = useGameStore(state => ({
@@ -399,19 +223,15 @@ const GrimoireTab: React.FC = () => {
 export const EnchanterView: React.FC = () => {
     return (
         <Tabs defaultValue="enchant" className="p-4">
-            <TabsList className="grid w-full grid-cols-3">
+            <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="enchant">Enchanter</TabsTrigger>
                 <TabsTrigger value="grimoire">Grimoire</TabsTrigger>
-                <TabsTrigger value="dismantle">Démanteler</TabsTrigger>
             </TabsList>
             <TabsContent value="enchant">
                 <EnchantTab />
             </TabsContent>
             <TabsContent value="grimoire">
                 <GrimoireTab />
-            </TabsContent>
-            <TabsContent value="dismantle">
-                <DismantleTab />
             </TabsContent>
         </Tabs>
     );
