@@ -80,7 +80,6 @@ export const generateLootItemName = (
         baseNamePart = finalName.substring(0, match.index).trim();
         materialPart = finalName.substring(match.index).trim();
     }
-
     finalName = baseNamePart;
     if (adjective1) {
         finalName += ` ${adjective1[formKey]}`;

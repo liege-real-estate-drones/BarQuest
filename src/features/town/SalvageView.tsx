@@ -47,6 +47,7 @@ export const SalvageView: React.FC = () => {
                                 <li key={item.id} className="border p-2 rounded flex justify-between items-center bg-card-foreground/5 hover:bg-card-foreground/10">
                                     <ItemTooltip item={item}>
                                         <div className="flex-grow">
+                                            <span>{item.name}</span>
                                             <span className="text-xs text-muted-foreground ml-2">(iLvl {item.niveauMin})</span>
                                         </div>
                                     </ItemTooltip>
