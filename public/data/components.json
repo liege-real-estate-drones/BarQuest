@@ -30,5 +30,6 @@
   { "id": "silk_bolt", "name": "Rouleau de soie", "tier": 3, "type": "crafting" },
   { "id": "steel_ingot", "name": "Lingot d'acier", "tier": 4, "type": "crafting" },
   { "id": "enchanted_wood", "name": "Bois enchanté", "tier": 4, "type": "crafting" },
-  { "id": "mithril_ingot", "name": "Lingot de mithril", "tier": 5, "type": "crafting" }
+  { "id": "mithril_ingot", "name": "Lingot de mithril", "tier": 5, "type": "crafting" },
+  { "id": "scrap_metal", "name": "Pièces de récupération", "tier": 1, "type": "crafting" }
 ]

@@ -155,11 +155,13 @@ export function QuestsView() {
       </CardHeader>
       <CardContent className="flex-grow p-0">
          <Tabs defaultValue="available" className="w-full flex-grow flex flex-col">
-            <TabsList className="grid w-full grid-cols-3 mx-6">
-                <TabsTrigger value="available">Disponibles ({availableQuests.length})</TabsTrigger>
-                <TabsTrigger value="active">Actives ({activeQuests.length})</TabsTrigger>
-                <TabsTrigger value="completed">Terminées ({completedQuests.length})</TabsTrigger>
-            </TabsList>
+            <div className="px-6">
+              <TabsList className="grid w-full grid-cols-3">
+                  <TabsTrigger value="available">Disponibles ({availableQuests.length})</TabsTrigger>
+                  <TabsTrigger value="active">Actives ({activeQuests.length})</TabsTrigger>
+                  <TabsTrigger value="completed">Terminées ({completedQuests.length})</TabsTrigger>
+              </TabsList>
+            </div>
              <div className="relative flex-grow mt-4">
                  <ScrollArea className="absolute inset-0">
                     <div className="px-6 space-y-4">

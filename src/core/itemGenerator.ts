@@ -35,12 +35,11 @@ export const generateLootItemName = (
     // Determine the correct grammatical form key (ms, fs, mp, fp)
     const formKey = `${gender}${isPlural ? 'p' : 's'}` as 'ms' | 'fs' | 'mp' | 'fp';
 
-    let availablePrefixes = nameAffixes.prefixes.filter(p => p.tags.some(t => tags.includes(t)));
-    let availableSuffixesAdj = nameAffixes.suffixes_adjectives.filter(s => s.tags.some(t => tags.includes(t)));
+    const allAdjectives = [...nameAffixes.prefixes, ...nameAffixes.suffixes_adjectives].filter(p => p.tags.some(t => tags.includes(t)));
     let availableSuffixesQual = nameAffixes.suffixes_qualifiers.filter(s => s.tags.some(t => tags.includes(t)));
 
-    let prefix: { ms: string; fs: string; mp: string; fp: string; tags: string[] } | undefined;
-    let suffixAdj: { ms: string; fs: string; mp: string; fp: string; tags: string[] } | undefined;
+    let adjective1: { ms: string; fs: string; mp: string; fp: string; tags: string[] } | undefined;
+    let adjective2: { ms: string; fs: string; mp: string; fp: string; tags: string[] } | undefined;
     let suffixQual: { text: string; tags: string[] } | undefined;
 
     const affixCountRoll = Math.random();
@@ -55,46 +54,17 @@ export const generateLootItemName = (
         else affixCount = 2;
     }
 
-    const usedTags: Set<string> = new Set();
-    let detectedQuality: 'positive' | 'negative' | null = null;
-
-    const findQuality = (tags: string[]) => {
-        if (tags.includes('quality:positive')) return 'positive';
-        if (tags.includes('quality:negative')) return 'negative';
-        return null;
-    };
-
     if (affixCount > 0) {
-        const affixChoiceRoll = Math.random();
-        if (affixCount === 1) {
-            if (affixChoiceRoll < 0.5) {
-                prefix = selectRandom(availablePrefixes);
-            } else if (affixChoiceRoll < 0.8) {
-                suffixAdj = selectRandom(availableSuffixesAdj);
-            } else {
-                suffixQual = selectRandom(availableSuffixesQual);
-            }
-        } else if (affixCount === 2) {
-            prefix = selectRandom(availablePrefixes);
-            if (prefix) {
-                const usedTag = prefix.tags.find(t => tags.includes(t));
-                if (usedTag) usedTags.add(usedTag);
-                detectedQuality = findQuality(prefix.tags);
-            }
+        adjective1 = selectRandom(allAdjectives);
+        if (adjective1 && affixCount === 2) {
+            const usedTags = new Set(adjective1.tags);
+            const remainingAdjectives = allAdjectives.filter(a => !a.tags.some(t => usedTags.has(t)));
+            adjective2 = selectRandom(remainingAdjectives);
+        }
 
-            if (detectedQuality) {
-                const oppositeQuality = `quality:${detectedQuality === 'positive' ? 'negative' : 'positive'}`;
-                availablePrefixes = availablePrefixes.filter(p => !p.tags.includes(oppositeQuality));
-                availableSuffixesAdj = availableSuffixesAdj.filter(s => !s.tags.includes(oppositeQuality));
-                availableSuffixesQual = availableSuffixesQual.filter(s => !s.tags.includes(oppositeQuality));
-            }
-
-            const suffixChoiceRoll = Math.random();
-            if (suffixChoiceRoll < 0.5) {
-                suffixAdj = selectRandom(availableSuffixesAdj.filter(s => !s.tags.some(t => usedTags.has(t))));
-            } else {
-                suffixQual = selectRandom(availableSuffixesQual.filter(s => !s.tags.some(t => usedTags.has(t))));
-            }
+        // Decide if we add a qualifier suffix
+        if (Math.random() < 0.3) { // 30% chance to add a qualifier
+             suffixQual = selectRandom(availableSuffixesQual);
         }
     }
 
@@ -111,21 +81,13 @@ export const generateLootItemName = (
         materialPart = finalName.substring(match.index).trim();
     }
 
-    // Correction de l'assemblage pour une meilleure grammaire
-    if (prefix && !suffixAdj) {
-        // ex: "Coiffe" + "Fulgurante" -> "Coiffe Fulgurante"
-        finalName = `${baseNamePart} ${prefix[formKey]}`;
-    } else if (!prefix && suffixAdj) {
-        // ex: "Bottes" + "Vampiriques" -> "Bottes Vampiriques"
-        finalName = `${baseNamePart} ${suffixAdj[formKey]}`;
-    } else if (prefix && suffixAdj) {
-        // ex: "Incassable" + "Heaume" + "du Titan" -> "Heaume Incassable du Titan"
-        // Ici, la logique peut devenir complexe. Une approche simple :
-        finalName = `${prefix[formKey]} ${baseNamePart} ${suffixAdj[formKey]}`;
-    } else {
-        finalName = baseNamePart;
+    finalName = baseNamePart;
+    if (adjective1) {
+        finalName += ` ${adjective1[formKey]}`;
     }
-
+    if (adjective2) {
+        finalName += ` ${adjective2[formKey]}`;
+    }
 
     if (materialPart) {
         finalName += ` ${materialPart}`;
