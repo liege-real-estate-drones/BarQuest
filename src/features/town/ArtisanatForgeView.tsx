@@ -21,12 +21,17 @@ const rarityColorMap: Record<Rareté, string> = {
 
 type StatKey = keyof Omit<Stats, 'PV' | 'RessourceMax'>;
 
-export const ForgeView: React.FC = () => {
-    const { recipes, items: allItems } = useGameStore(state => state.gameData);
+export const ArtisanatForgeView: React.FC = () => {
+    const { recipes, items: allItems, components } = useGameStore(state => state.gameData);
     const { gold, craftingMaterials } = useGameStore(state => state.inventory);
     const craftItem = useGameStore(state => state.craftItem);
 
     const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
+
+    const getMaterialName = (materialId: string) => {
+        const component = components.find(c => c.id === materialId);
+        return component ? component.name : materialId;
+    };
 
     const getResultingItem = (recipe: Recipe | null): Item | null => {
         if (!recipe) return null;
@@ -126,7 +131,7 @@ export const ForgeView: React.FC = () => {
                                                 const hasEnough = owned >= required;
                                                 return (
                                                     <li key={matId} className={hasEnough ? 'text-green-600' : 'text-red-600'}>
-                                                        {matId}: {required} ({owned} possédés)
+                                                        {getMaterialName(matId)}: {required} ({owned} possédés)
                                                     </li>
                                                 );
                                             })}
@@ -143,7 +148,7 @@ export const ForgeView: React.FC = () => {
                                         disabled={!canCraft(selectedRecipe)}
                                         className="mt-2 w-full"
                                     >
-                                        Forger l&apos;objet
+                                        Fabriquer l&apos;objet
                                     </Button>
                                 </div>
                             </div>

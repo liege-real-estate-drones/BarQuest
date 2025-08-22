@@ -1043,7 +1043,18 @@ export const useGameStore = create<GameState>()(
 
         set((state: GameState) => {
             state.inventory.items.splice(itemIndex, 1);
-            const slot = itemToEquip.slot as keyof InventoryState['equipment'];
+            let slot = itemToEquip.slot as keyof InventoryState['equipment'];
+
+            if (slot === 'ring') {
+                if (state.inventory.equipment.ring === null) {
+                    slot = 'ring';
+                } else if (state.inventory.equipment.ring2 === null) {
+                    slot = 'ring2';
+                } else {
+                    slot = 'ring';
+                }
+            }
+
             const currentItem = state.inventory.equipment[slot];
             if (currentItem) {
                 state.inventory.items.push(currentItem);
