@@ -101,7 +101,7 @@ interface GameState {
   checkAndApplyLevelUp: () => void;
   initializeGameData: (data: Partial<GameData>) => void;
   setPlayerClass: (classId: PlayerClassId) => void;
-  recalculateStats: () => void;
+  recalculateStats: (options?: { forceRestore?: boolean }) => void;
   equipItem: (itemId: string) => void;
   unequipItem: (slot: keyof InventoryState['equipment']) => void;
   buyItem: (itemId: string) => boolean; // Modifié pour accepter un string
@@ -481,17 +481,19 @@ export const useGameStore = create<GameState>()(
 
       checkAndApplyLevelUp: () => {
         const playerLevelBefore = get().player.level;
+        let didLevelUp = false;
 
         set((state) => {
             // Inlined getXpToNextLevel to avoid using get() inside set()
             let xpToNext = Math.floor(100 * Math.pow(state.player.level, 1.5));
 
             while (state.player.xp >= xpToNext) {
+                didLevelUp = true;
                 state.player.level++;
                 state.player.talentPoints += 2;
                 state.player.xp -= xpToNext;
                 state.combat.log.push({
-                    message: `Congratulations! You have reached level ${state.player.level}!`,
+                    message: `Félicitations ! Vous avez atteint le niveau ${state.player.level} !`,
                     type: 'levelup',
                     timestamp: Date.now(),
                 });
@@ -500,9 +502,15 @@ export const useGameStore = create<GameState>()(
             }
         });
 
-        const playerLevelAfter = get().player.level;
-        if (playerLevelAfter > playerLevelBefore) {
-          get().recalculateStats();
+        if (didLevelUp) {
+          get().recalculateStats({ forceRestore: true });
+          set((state) => {
+            state.combat.log.push({
+                message: `Vous vous sentez ragaillardi par votre montée en niveau ! PV et ressource restaurés.`,
+                type: 'heal',
+                timestamp: Date.now(),
+            });
+          });
         }
       },
 
@@ -928,7 +936,7 @@ export const useGameStore = create<GameState>()(
         get().recalculateStats();
       },
 
-      recalculateStats: () => {
+      recalculateStats: (options?: { forceRestore?: boolean }) => {
         set((state: GameState) => {
           const { player, inventory, gameData } = state;
           if (!player.classeId) return;
@@ -1047,7 +1055,7 @@ export const useGameStore = create<GameState>()(
           
           const currentHp = player.stats.PV;
           // With the new direct-draft-mutation approach, currentHp should be correctly typed as number
-          if (state.view !== 'COMBAT' || currentHp <= 0 || currentHp > maxHp) {
+          if (options?.forceRestore || state.view !== 'COMBAT' || currentHp <= 0 || currentHp > maxHp) {
             player.stats.PV = maxHp;
             player.shield = 0;
             if(state.player.resources.type !== 'Rage') {
@@ -1058,11 +1066,18 @@ export const useGameStore = create<GameState>()(
       },
 
       equipItem: (itemId: string) => {
-        const { inventory } = get();
+        const { inventory, player } = get();
         const itemIndex = inventory.items.findIndex(i => i.id === itemId);
         if (itemIndex === -1) return;
 
         const itemToEquip = inventory.items[itemIndex];
+
+        if (itemToEquip.niveauMin > player.level) {
+          console.log(`Niveau insuffisant pour équiper ${itemToEquip.name}. Requis: ${itemToEquip.niveauMin}, Actuel: ${player.level}`);
+          // TODO: Ajouter un feedback pour l'utilisateur (ex: toast)
+          return;
+        }
+
         if (itemToEquip.type === 'quest') {
             console.log("Cannot equip quest items.");
             return;
