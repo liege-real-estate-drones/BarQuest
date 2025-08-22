@@ -112,20 +112,18 @@ export const generateLootItemName = (
     }
 
     // Correction de l'assemblage pour une meilleure grammaire
-    if (prefix && !suffixAdj) {
-        // ex: "Coiffe" + "Fulgurante" -> "Coiffe Fulgurante"
-        finalName = `${baseNamePart} ${prefix[formKey]}`;
-    } else if (!prefix && suffixAdj) {
-        // ex: "Bottes" + "Vampiriques" -> "Bottes Vampiriques"
-        finalName = `${baseNamePart} ${suffixAdj[formKey]}`;
-    } else if (prefix && suffixAdj) {
-        // ex: "Incassable" + "Heaume" + "du Titan" -> "Heaume Incassable du Titan"
-        // Ici, la logique peut devenir complexe. Une approche simple :
-        finalName = `${prefix[formKey]} ${baseNamePart} ${suffixAdj[formKey]}`;
-    } else {
-        finalName = baseNamePart;
+    let adjectives: string[] = [];
+    if (prefix) {
+        adjectives.push(prefix[formKey]);
+    }
+    if (suffixAdj) {
+        adjectives.push(suffixAdj[formKey]);
     }
 
+    finalName = baseNamePart;
+    if (adjectives.length > 0) {
+        finalName += ` ${adjectives.join(' ')}`;
+    }
 
     if (materialPart) {
         finalName += ` ${materialPart}`;

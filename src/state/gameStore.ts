@@ -480,26 +480,28 @@ export const useGameStore = create<GameState>()(
       },
 
       checkAndApplyLevelUp: () => {
-        const { player } = get();
-        let xpToNext = get().getXpToNextLevel();
-        let leveledUp = false;
+        const playerLevelBefore = get().player.level;
 
-        while (player.xp >= xpToNext) {
-          set((state) => {
-            state.player.level++;
-            state.player.talentPoints += 2;
-            state.player.xp -= xpToNext;
-            state.combat.log.push({
-              message: `Congratulations! You have reached level ${state.player.level}!`,
-              type: 'levelup',
-              timestamp: Date.now(),
-            });
-          });
-          leveledUp = true;
-          xpToNext = get().getXpToNextLevel(); // Recalculate for next level
-        }
+        set((state) => {
+            // Inlined getXpToNextLevel to avoid using get() inside set()
+            let xpToNext = Math.floor(100 * Math.pow(state.player.level, 1.5));
 
-        if (leveledUp) {
+            while (state.player.xp >= xpToNext) {
+                state.player.level++;
+                state.player.talentPoints += 2;
+                state.player.xp -= xpToNext;
+                state.combat.log.push({
+                    message: `Congratulations! You have reached level ${state.player.level}!`,
+                    type: 'levelup',
+                    timestamp: Date.now(),
+                });
+                // Recalculate for the new level, still inside the atomic update
+                xpToNext = Math.floor(100 * Math.pow(state.player.level, 1.5));
+            }
+        });
+
+        const playerLevelAfter = get().player.level;
+        if (playerLevelAfter > playerLevelBefore) {
           get().recalculateStats();
         }
       },
