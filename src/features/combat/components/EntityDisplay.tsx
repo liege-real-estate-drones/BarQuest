@@ -8,6 +8,7 @@ import * as formulas from '@/core/formulas';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import React from 'react';
+import { BuffsDisplay } from './BuffsDisplay';
 
 interface EntityDisplayProps {
   entity: PlayerState | CombatEnemy;
@@ -67,6 +68,10 @@ export default function EntityDisplay({ entity, isPlayer = false, isTarget = fal
     }
   }
 
+  const buffs = (entity as PlayerState).activeBuffs || (entity as CombatEnemy).activeBuffs || [];
+  const debuffs = (entity as CombatEnemy).activeDebuffs || [];
+
+
   return (
     <Card 
         className={cn("flex flex-col bg-card/50 transition-all border-2 border-transparent",
@@ -119,6 +124,8 @@ export default function EntityDisplay({ entity, isPlayer = false, isTarget = fal
           </div>
         )}
         
+        <BuffsDisplay buffs={buffs} debuffs={debuffs} />
+
         {showStats && (
             <>
                 <Separator className="my-2" />

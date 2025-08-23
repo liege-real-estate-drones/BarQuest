@@ -1,10 +1,12 @@
 
 'use client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 import type { CombatLogEntry, Item, Rareté } from '@/lib/types';
 import { ItemTooltip } from '@/components/ItemTooltip';
 import { useGameStore } from '@/state/gameStore';
+import { useEffect, useRef } from 'react';
 
 const rarityColorMap: Record<Rareté, string> = {
     Commun: 'text-gray-400',
@@ -74,19 +76,28 @@ const LogMessage = ({ entry }: { entry: CombatLogEntry }) => {
 
 
 export function CombatLog({ log }: { log: CombatLogEntry[] }) {
-  const latestLog = log.slice(-5).reverse();
+  const latestLog = log.slice(-50).reverse();
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (scrollAreaRef.current) {
+      scrollAreaRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [log]);
 
   return (
     <Card className="flex flex-col h-full">
-      <CardHeader className="py-3">
-        <CardTitle className="font-headline text-lg">Combat Log</CardTitle>
+      <CardHeader className="py-3 flex-shrink-0">
+        <CardTitle className="font-headline text-lg">Journal de Combat</CardTitle>
       </CardHeader>
-      <CardContent className="flex-grow p-4">
-        <div className="flex flex-col gap-1 font-code text-xs">
-            {latestLog.map((entry, index) => (
-                <LogMessage key={`${entry.timestamp}-${index}`} entry={entry} />
-            ))}
-        </div>
+      <CardContent className="flex-grow p-4 min-h-0">
+        <ScrollArea className="h-full" ref={scrollAreaRef}>
+            <div className="flex flex-col gap-1 font-code text-xs pr-4">
+                {latestLog.map((entry, index) => (
+                    <LogMessage key={`${entry.timestamp}-${index}`} entry={entry} />
+                ))}
+            </div>
+        </ScrollArea>
       </CardContent>
     </Card>
   );
