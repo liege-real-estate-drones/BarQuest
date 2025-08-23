@@ -1074,6 +1074,7 @@
                     "id": "renew_hot",
                     "name": "Rénovation",
                     "duration": 12,
+                    "buffType": "hot",
                     "totalHealing": {
                         "source": "base_value",
                         "multiplier": 30
@@ -1102,7 +1103,7 @@
                     "type": "buff",
                     "id": "prayer_of_healing_hot",
                     "name": "Prière de guérison",
-                    "duration": 12000,
+                    "duration": 12,
                     "buffType": "hot",
                     "totalHealing": {
                         "source": "base_value",

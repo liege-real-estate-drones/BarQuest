@@ -1797,6 +1797,7 @@ export const useGameStore = create<GameState>()(
             const enemy = get().combat.enemies.find(e => e.id === id);
             if(enemy) get().handleEnemyDeath(enemy);
           });
+          get().checkAndApplyLevelUp();
       },
 
       playerAttack: (targetId: string, isCleave = false, skillId?: string) => {
