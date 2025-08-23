@@ -1,4 +1,3 @@
-
 'use client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useGameStore } from '@/state/gameStore';
@@ -88,7 +87,7 @@ export function SkillsView() {
                     <span>Compétences Actives</span>
                     <span className="text-sm font-medium text-primary">{player.talentPoints} points restants</span>
                 </CardTitle>
-                <CardDescription>Apprenez et équipez jusqu'à 4 compétences à utiliser en combat.</CardDescription>
+                <CardDescription>Apprenez et équipez jusqu&apos;à 4 compétences à utiliser en combat.</CardDescription>
             </CardHeader>
             <CardContent className="flex-grow flex flex-col gap-4 overflow-hidden">
                  <div>
