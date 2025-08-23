@@ -315,6 +315,10 @@ const generateEquipmentLoot = (monster: Monstre, gameData: GameData, playerClass
 };
 
 const getTalentEffectValue = (effect: string, rank: number): number => {
+    if (typeof effect !== 'string') {
+        console.error("Invalid talent effect format: expected a string, but got", typeof effect);
+        return 0;
+    }
     const matches = effect.match(/([\d./]+)/);
     if (!matches) return 0;
     const values = matches[1].split('/').map(Number);

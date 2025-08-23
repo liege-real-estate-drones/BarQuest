@@ -143,7 +143,7 @@
       "type": "passif",
       "niveauRequis": 50,
       "rangMax": 1,
-      "effets": [{
+      "effects": [{
         "type": "buff", "buffType": "stat_modifier",
         "statMods": [
             { "stat": "DamageMultiplier", "modifier": "additive", "value": 0.15, "condition": { "requires_weapon_type": "two_handed" } },
@@ -159,7 +159,7 @@
       "type": "passif",
       "niveauRequis": 100,
       "rangMax": 1,
-      "effets": [{
+      "effects": [{
           "type": "buff", "buffType": "stat_modifier",
           "statMods": [{ "stat": "DamageMultiplier", "modifier": "additive", "value": 0.5, "condition": { "target_hp_less_than": 20 } }]
       }],
