@@ -19,7 +19,9 @@ const TalentPopoverContent = ({ talent, player, gameData }: { talent: Talent; pl
             <p className="text-sm text-muted-foreground capitalize">Talent Passif (Rang {currentRank}/{talent.rangMax})</p>
             <Separator className="my-2" />
             <p className="text-sm mb-2">Effet :</p>
-            <p className="text-xs text-green-400">{talent.effets[0]}</p>
+            <p className="text-xs text-green-400">
+                {(talent.effets && talent.effets[0]) || "Voir les détails du rang pour l'effet exact."}
+            </p>
             
             {(talent.exigences?.length > 0 || talent.niveauRequis) && (
                 <>
