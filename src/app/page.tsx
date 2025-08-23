@@ -55,17 +55,20 @@ export default function Home() {
 
         const jsonData = await Promise.all(responses.map(res => res.json()));
         
-        const gameDataPayload = dataPaths.reduce((acc, path, index) => {
-          const data = jsonData[index];
-          // The data can be an array directly, or nested in an object like { "quests": [...] }.
-          // This logic handles both cases by checking for the nested property first.
-          if (data && data[path] && Array.isArray(data[path])) {
-            acc[path] = data[path];
-          } else {
-            acc[path] = Array.isArray(data) ? data : [];
-          }
-          return acc;
-        }, {} as GameData);
+        const gameDataPayload: Partial<GameData> = {};
+        dataPaths.forEach((path, index) => {
+            const data = jsonData[index];
+            if (data && data[path] && Array.isArray(data[path])) {
+                // Handles nested objects like { "quests": [...] }
+                gameDataPayload[path as keyof GameData] = data[path];
+            } else if (Array.isArray(data)) {
+                // Handles direct arrays like [...]
+                gameDataPayload[path as keyof GameData] = data;
+            } else {
+                // Fallback for any other unexpected format
+                gameDataPayload[path as keyof GameData] = [];
+            }
+        });
         
         initializeGameData(gameDataPayload);
         setIsLoading(false);
