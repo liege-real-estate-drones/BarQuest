@@ -1031,6 +1031,11 @@ export const useGameStore = create<GameState>()(
                 });
               } else { // Fallback to old effect strings
                 talentData.effets.forEach(effectString => {
+                    if (typeof effectString !== 'string') {
+                        // This talent is using the new object format but under the old 'effets' key.
+                        // The safeguard in getTalentEffectValue will log an error. Skip processing here.
+                        return;
+                    }
                     const value = getTalentEffectValue(effectString, rank);
                     if (effectString.includes('Armure') && typeof player.stats.Armure === 'number') {
                         player.stats.Armure += (player.stats.Armure * value) / 100;
