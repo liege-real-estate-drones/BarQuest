@@ -920,6 +920,11 @@ export const useGameStore = create<GameState>()(
           const { player, inventory, gameData } = state;
           if (!player.classeId) return;
 
+          // Preserve current HP percentage, as max HP is about to be recalculated.
+          const oldMaxHp = formulas.calculateMaxHP(player.level, player.stats);
+          const hpPercent = oldMaxHp > 0 ? player.stats.PV / oldMaxHp : 1;
+
+
           // Ensure all necessary player properties are initialized to avoid runtime errors
           player.learnedSkills = player.learnedSkills || {};
           player.learnedTalents = player.learnedTalents || {};
@@ -1026,7 +1031,7 @@ export const useGameStore = create<GameState>()(
                     if (effectString.includes('Armure') && typeof player.stats.Armure === 'number') {
                         player.stats.Armure += (player.stats.Armure * value) / 100;
                     } else if (effectString.includes('PV') && typeof player.stats.PV === 'number') {
-                        player.stats.PV += (player.stats.PV * value) / 100;
+                        player.stats.PV += (player.baseStats.PV * value) / 100;
                     } // ... and so on for other stats, always with type checks
                 });
               }
@@ -1046,7 +1051,7 @@ export const useGameStore = create<GameState>()(
                 }
             });
 
-          const maxHp = formulas.calculateMaxHP(player.level, player.stats);
+          const newMaxHp = formulas.calculateMaxHP(player.level, player.stats);
           if (classe.ressource !== 'Rage') {
             const maxMana = formulas.calculateMaxMana(player.level, player.stats);
             player.resources.max = maxMana;
@@ -1057,14 +1062,14 @@ export const useGameStore = create<GameState>()(
              player.resources.max = 100;
           }
           
-          const currentHp = player.stats.PV;
-          // With the new direct-draft-mutation approach, currentHp should be correctly typed as number
-          if (options?.forceRestore || state.view !== 'COMBAT' || currentHp <= 0 || currentHp > maxHp) {
-            player.stats.PV = maxHp;
+          if (options?.forceRestore || state.view !== 'COMBAT') {
+            player.stats.PV = newMaxHp;
             player.shield = 0;
             if(state.player.resources.type !== 'Rage') {
               player.resources.current = player.resources.max;
             }
+          } else {
+              player.stats.PV = Math.round(Math.min(newMaxHp, newMaxHp * hpPercent));
           }
         });
       },
