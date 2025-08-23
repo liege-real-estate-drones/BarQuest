@@ -168,6 +168,11 @@ export const processSkill = (
                         target.activeDebuffs = target.activeDebuffs || [];
                         target.activeDebuffs.push(newDebuff);
                         combat.log.push({ message: `${target.nom} est affecté par ${skill.nom}.`, type: 'info', timestamp: Date.now() });
+                    } else if (anyEffect.debuffType === 'cc') {
+                        if (anyEffect.ccType === 'stun') {
+                            target.stunDuration = (target.stunDuration || 0) + (anyEffect.duration * 1000);
+                            combat.log.push({ message: `${target.nom} est étourdi par ${skill.nom}.`, type: 'info', timestamp: Date.now() });
+                        }
                     }
                 });
                 effectApplied = true;
@@ -180,6 +185,21 @@ export const processSkill = (
                 }
                 player.shield += shieldAmount;
                 combat.log.push({ message: `Vous gagnez un bouclier de ${shieldAmount} points.`, type: 'shield', timestamp: Date.now() });
+                effectApplied = true;
+            } else if (anyEffect.type === 'invulnerability') {
+                player.invulnerabilityDuration = (player.invulnerabilityDuration || 0) + (anyEffect.duration * 1000);
+                combat.log.push({ message: `Vous devenez invulnérable pendant ${anyEffect.duration} secondes.`, type: 'info', timestamp: Date.now() });
+                effectApplied = true;
+            } else if (anyEffect.type === 'death_ward') {
+                const newBuff: Buff = {
+                    id: skill.id,
+                    name: skill.nom,
+                    duration: anyEffect.duration * 1000,
+                    isDeathWard: true,
+                    deathWardHealPercent: anyEffect.heal_percent,
+                };
+                player.activeBuffs.push(newBuff);
+                combat.log.push({ message: `${skill.nom} vous protège de la mort.`, type: 'info', timestamp: Date.now() });
                 effectApplied = true;
             } else if (anyEffect.type === 'buff') {
                 const newBuff: Buff = { id: anyEffect.id, name: anyEffect.name, duration: anyEffect.duration, stacks: 1 };
@@ -195,6 +215,9 @@ export const processSkill = (
                     newBuff.healingPerTick = Math.round(totalHealing / (anyEffect.duration / 1000));
                 }
                 player.activeBuffs.push(newBuff);
+                if (anyEffect.id === 'stealth') {
+                    state.combat.isStealthed = true;
+                }
                 if (anyEffect.id === 'last_stand_buff') {
                     const hpIncreasePercent = getRankValue((anyEffect.statMods[0] as any).value, rank);
                     const currentHp = player.stats.PV;

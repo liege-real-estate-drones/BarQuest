@@ -757,6 +757,16 @@
             "effets": [
                 "Vous vous fondez dans l'ombre, empêchant les ennemis de vous attaquer. Dure 10 secondes ou jusqu'à ce que vous attaquiez.",
                 "Coûte 20 Énergie."
+            ],
+            "effects": [
+                {
+                    "type": "buff",
+                    "id": "stealth",
+                    "name": "Camouflé",
+                    "duration": 10,
+                    "buffType": "special"
+                },
+                { "type": "resource_cost", "amount": 20 }
             ]
         },
         {
@@ -808,6 +818,16 @@
             "effets": [
                 "Attaque avec les deux armes, infligeant 100% des dégâts de l'arme + 10.",
                 "Coûte 40 Énergie."
+            ],
+            "effects": [
+                {
+                    "type": "damage",
+                    "damageType": "physical",
+                    "source": "weapon",
+                    "multiplier": 1.0,
+                    "bonus_flat_damage": 10
+                },
+                { "type": "resource_cost", "amount": 40 }
             ]
         },
         {
@@ -1120,6 +1140,11 @@
             "effets": [
                 "Inflige 40 dégâts d'Ombre et étourdit la cible pendant 3s.",
                 "Coûte 20 Mana."
+            ],
+            "effects": [
+                { "type": "damage", "damageType": "shadow", "source": "spell", "baseValue": 40 },
+                { "type": "debuff", "debuffType": "cc", "id": "mind_blast_stun", "name": "Étourdissement", "duration": 3, "ccType": "stun" },
+                { "type": "resource_cost", "amount": 20 }
             ],
             "cooldown": 15
         },
