@@ -171,6 +171,12 @@ export const processSkill = (
                     } else if (anyEffect.debuffType === 'cc') {
                         if (anyEffect.ccType === 'stun') {
                             target.stunDuration = (target.stunDuration || 0) + (anyEffect.duration * 1000);
+                            target.activeDebuffs.push({
+                                id: anyEffect.id || 'stun',
+                                name: anyEffect.name || 'Étourdi',
+                                duration: anyEffect.duration * 1000,
+                                isDebuff: true,
+                            });
                             combat.log.push({ message: `${target.nom} est étourdi par ${skill.nom}.`, type: 'info', timestamp: Date.now() });
                         }
                     }
@@ -202,7 +208,7 @@ export const processSkill = (
                 combat.log.push({ message: `${skill.nom} vous protège de la mort.`, type: 'info', timestamp: Date.now() });
                 effectApplied = true;
             } else if (anyEffect.type === 'buff') {
-                const newBuff: Buff = { id: anyEffect.id, name: anyEffect.name, duration: anyEffect.duration, stacks: 1 };
+                const newBuff: Buff = { id: anyEffect.id, name: anyEffect.name, duration: anyEffect.duration * 1000, stacks: 1 };
                 if (anyEffect.buffType === 'hot' && anyEffect.totalHealing) {
                     let totalHealing = 0;
                     if (anyEffect.totalHealing.source === 'base_value') {
@@ -212,7 +218,7 @@ export const processSkill = (
                     }
                     newBuff.tickInterval = 1000; // Assume 1s tick for now
                     newBuff.nextTickIn = 1000;
-                    newBuff.healingPerTick = Math.round(totalHealing / (anyEffect.duration / 1000));
+                    newBuff.healingPerTick = Math.round(totalHealing / anyEffect.duration);
                 }
                 player.activeBuffs.push(newBuff);
                 if (anyEffect.id === 'stealth') {

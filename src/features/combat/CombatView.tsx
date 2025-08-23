@@ -94,37 +94,44 @@ export function CombatView() {
         </div>
       </header>
 
-      <main className="flex-grow flex flex-col md:grid md:grid-cols-2 gap-4 p-4 overflow-hidden">
-        {/* --- VUE MOBILE --- */}
-        <div className="md:hidden flex flex-col gap-4 min-h-0">
-          {/* Ennemis */}
-          <div className="grid grid-cols-3 gap-2">
-            {enemies.slice(0, 3).map((enemy, index) => (
-              <EntityDisplay key={enemy.id} entity={enemy} isTarget={index === targetIndex} isCompact />
-            ))}
-          </div>
-
-          {/* Log de combat */}
+      <main className="flex-grow flex flex-col md:grid md:grid-cols-3 gap-4 p-4 overflow-hidden">
+        {/* --- VUE GLOBALE (JOUEUR ET LOG) --- */}
+        <div className="md:col-span-1 hidden md:flex flex-col gap-4 min-h-0">
+          <EntityDisplay entity={player} isPlayer attackProgress={playerAttackProgress} />
           <div className="flex-grow min-h-0">
             <CombatLog log={combatLog} />
           </div>
         </div>
 
-        {/* --- VUE DESKTOP --- */}
-        <div className="hidden md:flex flex-col gap-4 min-h-0">
-          <EntityDisplay entity={player} isPlayer />
-          <div className="flex-grow min-h-0">
-            <CombatLog log={combatLog} />
-          </div>
-        </div>
-        <div className="hidden md:block min-h-0">
+        {/* --- VUE ENNEMIS (DESKTOP) --- */}
+        <div className="hidden md:block md:col-span-2 min-h-0">
           <ScrollArea className="h-full">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 pr-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 pr-4">
               {enemies.map((enemy, index) => (
                 <EntityDisplay key={enemy.id} entity={enemy} isTarget={index === targetIndex} />
               ))}
             </div>
           </ScrollArea>
+        </div>
+
+        {/* --- VUE MOBILE --- */}
+        <div className="md:hidden flex flex-col gap-4 min-h-0">
+            {/* Ennemis en scroll horizontal */}
+            <ScrollArea className="w-full whitespace-nowrap">
+                <div className="flex space-x-4 pb-4">
+                    {enemies.map((enemy, index) => (
+                        <div key={enemy.id} className="w-40 flex-shrink-0">
+                            <EntityDisplay entity={enemy} isTarget={index === targetIndex} isCompact />
+                        </div>
+                    ))}
+                </div>
+                <ScrollBar orientation="horizontal" />
+            </ScrollArea>
+
+            {/* Log de combat prenant le reste de la place */}
+            <div className="flex-grow min-h-0">
+                <CombatLog log={combatLog} />
+            </div>
         </div>
       </main>
 
