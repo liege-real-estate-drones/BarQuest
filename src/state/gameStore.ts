@@ -1708,7 +1708,8 @@ export const useGameStore = create<GameState>()(
                     if (enemy.stunDuration > 0) {
                         enemy.stunDuration -= delta;
                     } else {
-                        const attackInterval = enemy.stats.Vitesse * 1000;
+                        const modifiedStats = getModifiedStats(enemy.stats, enemy.activeDebuffs || []);
+                        const attackInterval = modifiedStats.Vitesse * 1000;
                         if (enemy.attackProgress < 1) {
                             enemy.attackProgress += delta / attackInterval;
                         } else {
@@ -2096,9 +2097,10 @@ export const useGameStore = create<GameState>()(
                         const actualManaDrained = Math.min(manaDrain, state.player.resources.current);
 
                         state.player.resources.current -= actualManaDrained;
-                        shieldAbsorption -= (manaDrain - actualManaDrained);
 
-                        state.combat.log.push({ message: `Votre bouclier convertit ${actualManaDrained} dégâts en perte de mana.`, type: 'shield', timestamp: Date.now() });
+                        if (manaDrain > 0) {
+                            state.combat.log.push({ message: `Votre bouclier convertit ${actualManaDrained} dégâts en perte de mana.`, type: 'shield', timestamp: Date.now() });
+                        }
                     }
 
                     state.player.shield -= shieldAbsorption;

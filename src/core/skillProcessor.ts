@@ -157,8 +157,29 @@ export const processSkill = (
                         const numTicks = anyEffect.num_ticks || anyEffect.duration;
                         target.activeDebuffs.push({ id: anyEffect.id, name: anyEffect.name, duration: anyEffect.duration * 1000, damagePerTick: Math.round(totalDamage / numTicks), tickInterval: (anyEffect.duration * 1000) / numTicks, nextTickIn: (anyEffect.duration * 1000) / numTicks, isDebuff: true, damageType: anyEffect.damageType });
                         combat.log.push({ message: `Votre ${skill.nom} afflige ${target.nom}.`, type: 'player_attack', timestamp: Date.now() });
+                    } else if (anyEffect.debuffType === 'stat_modifier') {
+                        const newDebuff: Debuff = {
+                            id: anyEffect.id,
+                            name: anyEffect.name,
+                            duration: anyEffect.duration * 1000,
+                            isDebuff: true,
+                            statMods: anyEffect.statMods,
+                        };
+                        target.activeDebuffs = target.activeDebuffs || [];
+                        target.activeDebuffs.push(newDebuff);
+                        combat.log.push({ message: `${target.nom} est affecté par ${skill.nom}.`, type: 'info', timestamp: Date.now() });
                     }
                 });
+                effectApplied = true;
+            } else if (anyEffect.type === 'shield') {
+                let shieldAmount = 0;
+                if (anyEffect.amount.source === 'spell_power') {
+                    shieldAmount = formulas.calculateSpellDamage(getRankValue(anyEffect.amount.multiplier, rank), formulas.calculateSpellPower(buffedPlayerStats));
+                } else { // base_value
+                    shieldAmount = getRankValue(anyEffect.amount.multiplier, rank);
+                }
+                player.shield += shieldAmount;
+                combat.log.push({ message: `Vous gagnez un bouclier de ${shieldAmount} points.`, type: 'shield', timestamp: Date.now() });
                 effectApplied = true;
             } else if (anyEffect.type === 'buff') {
                 const newBuff: Buff = { id: anyEffect.id, name: anyEffect.name, duration: anyEffect.duration, stacks: 1 };
@@ -241,7 +262,8 @@ export const processSkill = (
                 effectApplied = true;
             } else if (anyEffect.type === 'multi_strike') {
                 targets.forEach(target => {
-                    for (let i = 0; i < anyEffect.strikes; i++) {
+                    const strikes = getRankValue(anyEffect.strikes, rank);
+                    for (let i = 0; i < strikes; i++) {
                         if (target.stats.PV <= 0) break;
                         const { mitigatedDamage, isCrit } = handleDamage(target, anyEffect.damage);
                         combat.log.push({ message: isCrit ? `CRITIQUE ! Votre ${skill.nom} (Frappe ${i + 1}) inflige ${mitigatedDamage} points de dégâts à ${target.nom}.` : `Votre ${skill.nom} (Frappe ${i + 1}) inflige ${mitigatedDamage} points de dégâts à ${target.nom}.`, type: isCrit ? 'crit' : 'player_attack', timestamp: Date.now() });
