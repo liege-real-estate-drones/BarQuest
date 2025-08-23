@@ -105,7 +105,7 @@
                     "type": "damage",
                     "damageType": "physical",
                     "source": "weapon",
-                    "multiplier": 0.8,
+                    "multiplier": [0.8, 0.9, 1.0, 1.1, 1.2],
                     "target": "all_enemies"
                 },
                 {
@@ -132,6 +132,7 @@
                     "damageType": "physical",
                     "source": "weapon",
                     "multiplier": 3.0,
+                    "baseValue": 0,
                     "conditions": {
                         "targetHpLessThan": 20
                     }
@@ -163,7 +164,7 @@
                     "buffType": "stat_modifier",
                     "statMods": [
                         { "stat": "DamageMultiplier", "modifier": "multiplicative", "value": 1.30 },
-                        { "stat": "DamageReductionMultiplier", "modifier": "multiplicative", "value": 1.15 }
+                        { "stat": "DamageTakenMultiplier", "modifier": "multiplicative", "value": 1.15 }
                     ]
                 },
                 { "type": "resource_cost", "amount": 0 }
@@ -189,7 +190,8 @@
                         "type": "damage",
                         "damageType": "physical",
                         "source": "weapon",
-                        "multiplier": 0.5
+                        "multiplier": 0.5,
+                        "baseValue": 0
                     }
                 },
                 {
@@ -218,7 +220,8 @@
                     "type": "damage",
                     "damageType": "physical",
                     "source": "weapon",
-                    "multiplier": 2.0
+                    "multiplier": 2.0,
+                    "baseValue": 0
                 },
                 {
                     "type": "debuff",
@@ -257,7 +260,8 @@
                         "type": "damage",
                         "damageType": "physical",
                         "source": "weapon",
-                        "multiplier": 0.6
+                        "multiplier": 0.6,
+                        "baseValue": 0
                     }
                 },
                 {
@@ -286,7 +290,7 @@
                     "duration": 12,
                     "buffType": "stat_modifier",
                     "statMods": [
-                        { "stat": "DamageReductionMultiplier", "modifier": "multiplicative", "value": 0.60 }
+                        { "stat": "DamageTakenMultiplier", "modifier": "multiplicative", "value": 0.60 }
                     ]
                 },
                 { "type": "resource_cost", "amount": 10 }
@@ -334,7 +338,8 @@
                     "type": "damage",
                     "damageType": "fire",
                     "source": "spell",
-                    "baseValue": [15, 20, 25, 30, 35]
+                    "baseValue": [15, 20, 25, 30, 35],
+                    "multiplier": 0
                 },
                 {
                     "type": "resource_cost",
@@ -359,7 +364,8 @@
                     "type": "damage",
                     "damageType": "ice",
                     "source": "spell",
-                    "baseValue": 12
+                    "baseValue": [12, 18, 24, 30, 36],
+                    "multiplier": 0
                 },
                 {
                     "type": "debuff",
@@ -393,7 +399,8 @@
                         "type": "damage",
                         "damageType": "arcane",
                         "source": "spell",
-                        "baseValue": 5
+                        "baseValue": 5,
+                        "multiplier": 0
                     }
                 },
                 {
@@ -446,7 +453,8 @@
                     "type": "damage",
                     "damageType": "fire",
                     "source": "spell",
-                    "baseValue": 10
+                    "baseValue": 10,
+                    "multiplier": 0
                 },
                 {
                     "type": "debuff",
@@ -481,7 +489,7 @@
                 "Coûte 50 Mana."
             ],
             "effects": [
-                { "type": "buff", "id": "combustion_buff", "name": "Combustion", "duration": 10000, "buffType": "stat_modifier", "statMods": [
+                { "type": "buff", "id": "combustion_buff", "name": "Combustion", "duration": 10, "buffType": "stat_modifier", "statMods": [
                     { "stat": "CritPct", "modifier": "additive", "value": 100 },
                     { "stat": "Vitesse", "modifier": "multiplicative", "value": 0.5 }
                 ]},
@@ -501,7 +509,7 @@
                 "Coûte 40 Mana."
             ],
             "effects": [
-                { "type": "damage", "damageType": "fire", "source": "spell", "baseValue": 100 },
+                { "type": "damage", "damageType": "fire", "source": "spell", "baseValue": 100, "multiplier": 0 },
                 { "type": "resource_cost", "amount": 40 }
             ]
         },
@@ -606,6 +614,20 @@
                 "Augmente les dégâts des sorts de 30% et leur coût en mana de 30% pendant 15s.",
                 "Coûte 20 Mana."
             ],
+            "effects": [
+                {
+                    "type": "buff",
+                    "id": "arcane_power_buff",
+                    "name": "Pouvoir des arcanes",
+                    "duration": 15,
+                    "buffType": "stat_modifier",
+                    "statMods": [
+                        { "stat": "SpellPowerMultiplier", "modifier": "multiplicative", "value": 1.30 },
+                        { "stat": "ManaCostMultiplier", "modifier": "multiplicative", "value": 1.30 }
+                    ]
+                },
+                { "type": "resource_cost", "amount": 20 }
+            ],
             "cooldown": 180
         },
         {
@@ -626,6 +648,7 @@
                     "damageType": "fire",
                     "source": "spell",
                     "baseValue": 40,
+                    "multiplier": 0,
                     "target": "all_enemies"
                 },
                 { "type": "resource_cost", "amount": 60 }
@@ -642,6 +665,17 @@
             "effets": [
                 "Provoque une explosion d'énergie qui inflige 30 dégâts des Arcanes à tous les ennemis proches.",
                 "Coûte 45 Mana."
+            ],
+            "effects": [
+                {
+                    "type": "damage",
+                    "damageType": "arcane",
+                    "source": "spell",
+                    "baseValue": 30,
+                    "multiplier": 0,
+                    "target": "all_enemies"
+                },
+                { "type": "resource_cost", "amount": 45 }
             ]
         },
         {
@@ -738,6 +772,7 @@
                     "damageType": "physical",
                     "source": "weapon",
                     "multiplier": 0.9,
+                    "baseValue": 0,
                     "target": "all_enemies"
                 },
                 {
@@ -780,6 +815,20 @@
             "effets": [
                 "Attaque la cible pour 150% des dégâts de l'arme. Si utilisé en étant camouflé, les dégâts sont augmentés de 100%.",
                 "Coûte 40 Énergie."
+            ],
+            "effects": [
+                {
+                    "type": "damage",
+                    "damageType": "physical",
+                    "source": "weapon",
+                    "multiplier": 1.5,
+                    "baseValue": 0,
+                    "bonus_if_buffed": {
+                        "buff_id": "stealth",
+                        "bonus_multiplier": 2.0
+                    }
+                },
+                { "type": "resource_cost", "amount": 40 }
             ]
         },
         {
@@ -793,6 +842,20 @@
                 "Passe dans l'ombre et apparaît derrière la cible. La prochaine attaque inflige 50% de dégâts supplémentaires.",
                 "Coûte 15 Énergie."
             ],
+            "effects": [
+                {
+                    "type": "buff",
+                    "id": "shadowstep_buff",
+                    "name": "Pas de l'ombre",
+                    "duration": 10,
+                    "max_stacks": 1,
+                    "buffType": "stat_modifier",
+                    "statMods": [
+                        { "stat": "DamageMultiplier", "modifier": "multiplicative", "value": 1.5 }
+                    ]
+                },
+                { "type": "resource_cost", "amount": 15 }
+            ],
             "cooldown": 20
         },
         {
@@ -805,6 +868,11 @@
             "effets": [
                 "Disparaît de la vue, mettant fin au combat. Ne peut pas être utilisé si des ennemis sont très proches.",
                 "Coûte 0 Énergie."
+            ],
+            "effects": [
+                {
+                    "type": "flee"
+                }
             ],
             "cooldown": 120
         },
