@@ -127,10 +127,20 @@ export function DungeonsView() {
                                 isUnlocked = (completedDungeons[dungeon.id] || 0) > 0;
                             }
 
+                            const activeQuestsForDungeon = activeQuests.filter(q => q.quete.requirements.dungeonId === dungeonToDisplay.id).length;
+
+
                             return (
                                 <Card key={dungeon.id} className={`transition-all ${!isUnlocked ? 'bg-background/40 filter grayscale' : ''}`}>
                                     <CardHeader>
-                                        <CardTitle>{dungeonToDisplay.name}</CardTitle>
+                                        <CardTitle className="flex justify-between items-center">
+                                            {dungeonToDisplay.name}
+                                            {activeQuestsForDungeon > 0 && (
+                                                <span className="text-xs bg-primary text-primary-foreground rounded-full px-2 py-0.5">
+                                                    {activeQuestsForDungeon} quête(s)
+                                                </span>
+                                            )}
+                                        </CardTitle>
                                         <CardDescription>
                                             Palier: {dungeonToDisplay.palier}
                                             {isCompleted && <span className="text-primary font-bold ml-2"> (Terminé {completionCount}x)</span>}

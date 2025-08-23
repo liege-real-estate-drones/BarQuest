@@ -1,4 +1,3 @@
-// liege-real-estate-drones/barquest/BarQuest-ba29103e759395544a0519632ae86dfb86dc7427/src/features/vendors/VendorsView.tsx
 'use client';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -86,7 +85,7 @@ function BuyRecipesTab() {
     };
 
     if (vendorRecipes.length === 0) {
-        return <p className="text-center text-muted-foreground p-8">L'enchanteur n'a aucune recette à vous apprendre pour le moment.</p>
+        return <p className="text-center text-muted-foreground p-8">L&apos;enchanteur n&apos;a aucune recette à vous apprendre pour le moment.</p>
     }
 
     return (
