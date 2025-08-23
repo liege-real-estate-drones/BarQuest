@@ -114,7 +114,10 @@ export const scaleAffixValue = (baseValue: number, level: number): number => {
     return Math.round(baseValue + (baseValue * level * 0.1) + (level * 0.5));
 };
 
-export const getRankValue = (values: number[] | number, rank: number): number => {
+export const getRankValue = (values: number[] | number | undefined | null, rank: number): number => {
+    if (values === undefined || values === null) {
+        return 0;
+    }
     if (typeof values === 'number') {
         return values;
     }
