@@ -11,22 +11,21 @@ import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@/comp
 import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
-
-const getResourceCost = (skill: Skill) => {
-    const effects = skill.effets || [];
-    const resourceCostMatch = effects.join(' ').match(/Coûte (\d+) (Mana|Rage|Énergie)/);
-    return resourceCostMatch ? { amount: parseInt(resourceCostMatch[1], 10), type: resourceCostMatch[2] } : null;
-}
+import { getSkillResourceCost } from "@/core/formulas";
 
 function SkillTooltipContent({ skill }: { skill: Skill }) {
+    const { player, gameData } = useGameStore(state => ({
+        player: state.player,
+        gameData: state.gameData,
+    }));
     const effects = skill.effets || [];
-    const resourceCost = getResourceCost(skill);
+    const resourceCost = getSkillResourceCost(skill, player, gameData);
     
     return (
         <div className="max-w-xs p-2">
             <p className="font-bold text-base text-primary mb-1">{skill.nom}</p>
             {skill.cooldown > 0 && <p className="text-xs text-muted-foreground">Temps de recharge: {skill.cooldown}s</p>}
-            {resourceCost && <p className="text-xs text-blue-400">Coût: {resourceCost.amount} {resourceCost.type}</p>}
+            {resourceCost > 0 && <p className="text-xs text-blue-400">Coût: {resourceCost} {player.resources.type}</p>}
             <Separator className="my-2" />
             <p className="text-sm mb-2">Effets :</p>
             <ul className="list-disc list-inside space-y-1">
@@ -50,11 +49,12 @@ const resourceColorMap = {
 }
 
 export function ActionStrip({ onRetreat, onCycleTarget, skills, skillCooldowns }: ActionStripProps) {
-    const { usePotion, inventory, useSkill, playerResources } = useGameStore(state => ({
-        usePotion: state.usePotion,
+    const { consumePotion, inventory, activateSkill, player, gameData } = useGameStore(state => ({
+        consumePotion: state.consumePotion,
         inventory: state.inventory,
-        useSkill: state.useSkill,
-        playerResources: state.player.resources,
+        activateSkill: state.activateSkill,
+        player: state.player,
+        gameData: state.gameData,
     }));
     
     useEffect(() => {
@@ -64,7 +64,7 @@ export function ActionStrip({ onRetreat, onCycleTarget, skills, skillCooldowns }
             if (event.key >= '1' && event.key <= '4') {
                 const skillIndex = parseInt(event.key, 10) - 1;
                 if (skills[skillIndex]) {
-                    useSkill(skills[skillIndex].id);
+                    activateSkill(skills[skillIndex].id);
                 }
             }
 
@@ -76,10 +76,10 @@ export function ActionStrip({ onRetreat, onCycleTarget, skills, skillCooldowns }
                     onCycleTarget();
                     break;
                 case 'Q':
-                    usePotion('health');
+                    consumePotion('health');
                     break;
                 case 'W':
-                    usePotion('resource');
+                    consumePotion('resource');
                     break;
             }
         };
@@ -87,7 +87,7 @@ export function ActionStrip({ onRetreat, onCycleTarget, skills, skillCooldowns }
         return () => {
             window.removeEventListener('keydown', handleKeyPress);
         };
-    }, [usePotion, onRetreat, onCycleTarget, skills, useSkill]);
+    }, [consumePotion, onRetreat, onCycleTarget, skills, activateSkill]);
 
     return (
         <TooltipProvider>
@@ -99,10 +99,10 @@ export function ActionStrip({ onRetreat, onCycleTarget, skills, skillCooldowns }
                         const isCoolingDown = cooldown > 0;
                         const cooldownProgress = (cooldown / (skill.cooldown * 1000)) * 100;
 
-                        const resourceCost = getResourceCost(skill);
-                        const hasEnoughResource = resourceCost ? playerResources.current >= resourceCost.amount : true;
+                        const resourceCost = getSkillResourceCost(skill, player, gameData);
+                        const hasEnoughResource = player.resources.current >= resourceCost;
 
-                        const colorClass = resourceCost ? resourceColorMap[resourceCost.type as keyof typeof resourceColorMap] : 'text-muted-foreground';
+                        const colorClass = resourceColorMap[player.resources.type as keyof typeof resourceColorMap] || 'text-muted-foreground';
                         const isDisabled = isCoolingDown || !hasEnoughResource;
 
                         return (
@@ -114,7 +114,7 @@ export function ActionStrip({ onRetreat, onCycleTarget, skills, skillCooldowns }
                                             "h-16 md:w-24 md:h-20 flex-col gap-1 text-xs relative overflow-hidden transition-all",
                                             isDisabled && "grayscale"
                                         )}
-                                        onClick={() => useSkill(skill.id)} 
+                                        onClick={() => activateSkill(skill.id)}
                                         disabled={isDisabled}
                                     >
                                         <Zap size={20} className="md:w-6 md:h-6" />
@@ -158,7 +158,7 @@ export function ActionStrip({ onRetreat, onCycleTarget, skills, skillCooldowns }
                     </Tooltip>
                     <Tooltip>
                         <TooltipTrigger asChild>
-                             <Button variant="outline" onClick={() => usePotion('health')} className="flex-col gap-1 text-xs relative h-14 md:h-12 md:w-20" disabled={inventory.potions.health <= 0}>
+                             <Button variant="outline" onClick={() => consumePotion('health')} className="flex-col gap-1 text-xs relative h-14 md:h-12 md:w-20" disabled={inventory.potions.health <= 0}>
                                 <Heart size={20} />
                                 <span className="text-muted-foreground/70 text-[10px]">[Q]</span>
                                 {inventory.potions.health > 0 && (
@@ -172,7 +172,7 @@ export function ActionStrip({ onRetreat, onCycleTarget, skills, skillCooldowns }
                     </Tooltip>
                     <Tooltip>
                         <TooltipTrigger asChild>
-                             <Button variant="outline" onClick={() => usePotion('resource')} className="flex-col gap-1 text-xs relative h-14 md:h-12 md:w-20" disabled={inventory.potions.resource <= 0}>
+                             <Button variant="outline" onClick={() => consumePotion('resource')} className="flex-col gap-1 text-xs relative h-14 md:h-12 md:w-20" disabled={inventory.potions.resource <= 0}>
                                 <Droplets size={20} />
                                 <span className="text-muted-foreground/70 text-[10px]">[W]</span>
                                 {inventory.potions.resource > 0 && (
@@ -182,7 +182,7 @@ export function ActionStrip({ onRetreat, onCycleTarget, skills, skillCooldowns }
                                 )}
                             </Button>
                         </TooltipTrigger>
-                        <TooltipContent side="top"><p>Utiliser une Potion de {playerResources.type}</p></TooltipContent>
+                        <TooltipContent side="top"><p>Utiliser une Potion de {player.resources.type}</p></TooltipContent>
                     </Tooltip>
                     <Tooltip>
                          <TooltipTrigger asChild>

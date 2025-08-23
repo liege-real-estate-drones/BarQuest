@@ -1,4 +1,35 @@
-import type { Stats, Rareté } from '@/lib/types';
+import type { Stats, Rareté, Buff, Debuff } from '@/lib/types';
+
+export const getModifiedStats = (baseStats: Stats, buffs: (Buff | Debuff)[], form?: string | null): Stats => {
+    const modifiedStats: Stats = JSON.parse(JSON.stringify(baseStats));
+
+    buffs.forEach(buff => {
+        if (buff.statMods) {
+            buff.statMods.forEach(mod => {
+                const statKey = mod.stat as keyof Stats;
+                const statValue = modifiedStats[statKey];
+
+                if (typeof statValue === 'number' && typeof mod.value === 'number') {
+                    if (mod.modifier === 'additive') {
+                        (modifiedStats[statKey] as number) += mod.value;
+                    } else if (mod.modifier === 'multiplicative') {
+                        (modifiedStats[statKey] as number) *= mod.value;
+                    } else if (mod.modifier === 'multiplicative_add') {
+                        (modifiedStats[statKey] as number) *= (1 + mod.value);
+                    }
+                }
+            });
+        }
+    });
+
+    if (form === 'shadow') {
+        modifiedStats.ShadowDamageMultiplier = (modifiedStats.ShadowDamageMultiplier || 1) * 1.15;
+        modifiedStats.DamageReductionMultiplier = (modifiedStats.DamageReductionMultiplier || 1) * 0.85;
+    }
+
+    return modifiedStats;
+};
+
 
 export const rarityMultiplier: Record<Rareté, number> = {
     "Commun": 1,
@@ -57,19 +88,68 @@ export const calculateResistanceDR = (resistance: number, enemyLevel: number): n
     return Math.min(dr, 0.75); // Cap DR at 75%
 };
 
-export const calculateCritChance = (critPct: number, precision: number, targetDodge: number): number => {
-  const hitChance = Math.min(100, precision - targetDodge) / 100;
+export const calculateCritChance = (critPct: number, precision: number, targetStats: Stats): number => {
+  const hitChance = Math.min(100, precision - targetStats.Esquive) / 100;
   if(Math.random() > hitChance) return 0; // The attack missed, so it can't crit
-  return critPct;
+
+  const finalCritChance = critPct + (targetStats.CritChanceTakenModifier || 0);
+  return finalCritChance;
 };
 
-export const isCriticalHit = (critChance: number, precision: number, targetDodge: number): boolean => {
-    const finalCritChance = calculateCritChance(critChance, precision, targetDodge);
+export const isCriticalHit = (critChance: number, precision: number, targetStats: Stats, player: any, gameData: any): boolean => {
+    let finalCritChance = calculateCritChance(critChance, precision, targetStats);
+
+    const executionerRank = player.learnedTalents['rogue_assassinat_execution_sommaire'];
+    if (executionerRank && executionerRank > 0) {
+        const targetHpPercent = (targetStats.PV / (targetStats.MaxHP || targetStats.PV)) * 100;
+        if (targetHpPercent < 35) {
+            finalCritChance += 25;
+        }
+    }
+
     return Math.random() * 100 < finalCritChance;
 }
 
 export const scaleAffixValue = (baseValue: number, level: number): number => {
     return Math.round(baseValue + (baseValue * level * 0.1) + (level * 0.5));
 };
+
+export const getRankValue = (values: number[] | number, rank: number): number => {
+    if (typeof values === 'number') {
+        return values;
+    }
+    return values[Math.min(rank - 1, values.length - 1)] || 0;
+};
+
+export const getSkillResourceCost = (skill: any, player: any, gameData: any): number => {
+    if (!skill || !skill.effects) return 0;
+
+    const rank = player.learnedSkills[skill.id] || 1;
+    let baseCost = 0;
+
+    const costEffect = skill.effects.find((e: any) => e.type === 'resource_cost');
+    if (costEffect) {
+        baseCost = getRankValue(costEffect.amount, rank);
+    }
+
+    const stackingCostEffect = skill.effects.find((e: any) => e.type === 'stacking_damage_and_cost');
+    if (stackingCostEffect) {
+        const existingBuff = player.activeBuffs.find((b: any) => b.id === stackingCostEffect.stacking_buff.id);
+        const currentStacks = existingBuff ? (existingBuff.stacks || 0) : 0;
+        baseCost = stackingCostEffect.cost.base_amount * (1 + (currentStacks * stackingCostEffect.cost.stack_multiplier));
+    }
+
+    // Apply cost reduction talents
+    const manaEfficientRank = player.learnedTalents['mage_arcane_mana_efficace'];
+    if (manaEfficientRank > 0) {
+        const talent = gameData.talents.find((t: any) => t.id === 'mage_arcane_mana_efficace');
+        if (talent) {
+            const reductionPercent = getRankValue(talent.effects[0].statMods[0].value, manaEfficientRank);
+            baseCost *= (1 - reductionPercent);
+        }
+    }
+
+    return Math.round(baseCost);
+}
 
 export const CRIT_MULTIPLIER = 1.5;

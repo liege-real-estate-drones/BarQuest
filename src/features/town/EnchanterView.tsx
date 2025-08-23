@@ -102,7 +102,7 @@ const EnchantTab: React.FC = () => {
             {/* Colonne centrale "Workbench" */}
             <div className="md:col-span-2">
                 <Card>
-                    <CardHeader><CardTitle>Atelier d'Enchantement</CardTitle></CardHeader>
+                    <CardHeader><CardTitle>Atelier d&apos;Enchantement</CardTitle></CardHeader>
                     <CardContent className="space-y-4">
                         <div>
                             <h3 className="text-lg font-semibold mb-2">Objet à Enchanter</h3>

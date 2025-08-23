@@ -25,11 +25,17 @@ export const StatsSchema = z.object({
   Vitesse: z.number(),
   Precision: z.number(),
   Esquive: z.number(),
+  HealingMultiplier: z.number().optional(),
   HealingReceivedMultiplier: z.number().optional(),
   DamageMultiplier: z.number().optional(),
   DamageReductionMultiplier: z.number().optional(),
   HPRegenPercent: z.number().optional(),
     ShadowDamageMultiplier: z.number().optional(),
+    IceDamageMultiplier: z.number().optional(),
+    CritChanceTakenModifier: z.number().optional(),
+    isImmuneToCC: z.boolean().optional(),
+    nextAttackIsGuaranteedCrit: z.boolean().optional(),
+    MaxHP: z.number().optional(),
 });
 
 export const AffixSchema = z.object({
@@ -103,8 +109,14 @@ const DamageEffectSchema = z.object({
     source: z.enum(['weapon', 'spell']),
     target: z.enum(['primary', 'all_enemies']).optional(),
     multiplier: z.number().optional(),
-    baseValue: z.number().optional(),
+    baseValue: z.union([z.number(), z.array(z.number())]).optional(),
+    bonus_flat_damage: z.union([z.number(), z.array(z.number())]).optional(),
     conditions: ConditionSchema.optional(),
+    conditional_damage_multiplier: z.object({
+        condition: z.string(), // e.g., 'target_hp_less_than'
+        threshold: z.number(),
+        multiplier: z.number(),
+    }).optional(),
 });
 
 const StatModSchema = z.object({
@@ -174,9 +186,43 @@ const TransformationEffectSchema = z.object({
     form: z.string(),
 });
 
-const SkillEffectSchema = z.union([
+const CheatDeathEffectSchema = z.object({
+    type: z.literal('cheat_death'),
+    heal_percent: z.number(),
+    buff: BuffEffectSchema.optional(),
+});
+
+const OnDeathResurrectEffectSchema = z.object({
+    type: z.literal('on_death_resurrect'),
+    heal_percent: z.number(),
+    aoe_damage: DamageEffectSchema,
+});
+
+const StatOverrideEffectSchema = z.object({
+    type: z.literal('stat_override'),
+    stat: z.string(),
+    value: z.number(),
+});
+
+const RiposteEffectSchema = z.object({
+    type: z.literal('riposte'),
+    damage_multiplier: z.number(),
+});
+
+const ConditionalStatModifierSchema = z.object({
+    type: z.literal('conditional_stat_modifier'),
+    condition: ConditionSchema,
+    statMods: z.array(StatModSchema),
+});
+
+export const SkillEffectSchema = z.union([
+    ConditionalStatModifierSchema,
     DamageEffectSchema,
     BuffEffectSchema,
+    CheatDeathEffectSchema,
+    OnDeathResurrectEffectSchema,
+    StatOverrideEffectSchema,
+    RiposteEffectSchema,
     DebuffEffectSchema,
     ResourceCostSchema,
     ShieldEffectSchema,
@@ -210,11 +256,27 @@ const TalentEffectSchema = z.object({
     chance: z.number().optional().default(1),
     effects: z.array(SkillEffectSchema), // A talent can apply any of the existing skill effects
     cooldown: z.number().optional(),
+    conditions: z.object({
+        skill_damage_type: z.string().optional(),
+    }).optional(),
+});
+
+const SkillModModificationSchema = z.object({
+    effect_index: z.number(),
+    property_path: z.string(),
+    modifier: z.enum(['additive', 'multiplicative']),
+    value: z.union([z.number(), z.array(z.number())]),
+});
+
+const SkillModSchema = z.object({
+    skill_id: z.string(),
+    modifications: z.array(SkillModModificationSchema),
 });
 
 export const TalentSchema = BaseSkillTalentSchema.extend({
   type: z.literal("passif"),
   triggeredEffects: z.array(TalentEffectSchema).optional(),
+  skill_mods: z.array(SkillModSchema).optional(),
 });
 
 
@@ -255,6 +317,7 @@ export const DungeonSchema = z.object({
   killTarget: z.number().int().default(25),
   bossId: z.string(),
   factionId: z.string().optional(),
+  heroicVersionId: z.string().optional(),
 });
 
 export const QueteSchema = z.object({

@@ -79,7 +79,7 @@ function BuyRecipesTab() {
         } else {
             toast({
                 title: "Échec de l'achat",
-                description: "Vous n'avez pas assez d'or, de réputation, ou connaissez déjà cette recette.",
+                description: "Vous n&apos;avez pas assez d&apos;or, de réputation, ou connaissez déjà cette recette.",
                 variant: 'destructive'
             });
         }

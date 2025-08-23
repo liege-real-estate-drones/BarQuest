@@ -35,10 +35,12 @@ export function DungeonsView() {
 
     const completedDungeons = player.completedDungeons || {};
 
-    const handleEnterDungeon = (dungeonId: string) => {
-        const questDungeonId = isHeroicMode ? `${dungeonId}_heroic` : dungeonId;
+    const handleEnterDungeon = (dungeon: Dungeon) => {
+        const dungeonIdToEnter = isHeroicMode ? dungeon.heroicVersionId : dungeon.id;
+        if (!dungeonIdToEnter) return;
+
         const availableQuestsForDungeon = gameData.quests.filter(q =>
-            q.requirements.dungeonId === questDungeonId &&
+            q.requirements.dungeonId === dungeonIdToEnter &&
             !player.completedQuests.includes(q.id) &&
             !activeQuests.some((aq: ActiveQuete) => aq.quete.id === q.id) &&
             (!q.requirements.classId || q.requirements.classId === player.classeId)
@@ -64,7 +66,7 @@ export function DungeonsView() {
         if (allAvailableQuests.length > 0) {
             setProposedQuests(allAvailableQuests);
         } else {
-            enterDungeon(dungeonId);
+            enterDungeon(dungeonIdToEnter);
         }
     }
 
@@ -72,9 +74,9 @@ export function DungeonsView() {
         if (proposedQuests && proposedQuests.length > 0) {
             const questIds = proposedQuests.map(q => q.id);
             acceptMultipleQuests(questIds);
-            const dungeonId = proposedQuests[0].requirements.dungeonId?.replace('_heroic', '');
-            if (dungeonId) {
-                enterDungeon(dungeonId);
+            const dungeonIdToEnter = proposedQuests[0].requirements.dungeonId;
+            if (dungeonIdToEnter) {
+                enterDungeon(dungeonIdToEnter);
             }
             setProposedQuests(null);
         }
@@ -82,18 +84,16 @@ export function DungeonsView() {
 
     const handleDeclineQuestAndEnter = () => {
         if (proposedQuests && proposedQuests.length > 0) {
-            const dungeonId = proposedQuests[0].requirements.dungeonId?.replace('_heroic', '');
-            if (dungeonId) {
-                enterDungeon(dungeonId);
+            const dungeonIdToEnter = proposedQuests[0].requirements.dungeonId;
+            if (dungeonIdToEnter) {
+                enterDungeon(dungeonIdToEnter);
             }
             setProposedQuests(null);
         }
     };
 
-    const displayedDungeons = dungeons.filter(dungeon => {
-        const isHeroicDungeon = dungeon.id.endsWith('_heroic');
-        return isHeroicMode ? isHeroicDungeon : !isHeroicDungeon;
-    });
+    // Display only normal dungeons
+    const displayedDungeons = dungeons.filter(dungeon => !dungeons.some(d => d.heroicVersionId === dungeon.id));
 
     if (!Array.isArray(dungeons)) {
         return (
@@ -116,32 +116,32 @@ export function DungeonsView() {
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         {displayedDungeons.map((dungeon: Dungeon, index: number) => {
-                            const baseDungeonId = dungeon.id.replace('_heroic', '');
-                            const normalDungeonForUnlockCheck = gameData.dungeons.find(d => d.id === baseDungeonId);
-                            const normalIndex = gameData.dungeons.indexOf(normalDungeonForUnlockCheck!);
+                            const heroicDungeon = dungeon.heroicVersionId ? dungeons.find(d => d.id === dungeon.heroicVersionId) : null;
+                            const dungeonToDisplay = isHeroicMode && heroicDungeon ? heroicDungeon : dungeon;
 
-                            const completionCount = completedDungeons[dungeon.id] || 0;
+                            const completionCount = completedDungeons[dungeonToDisplay.id] || 0;
                             const isCompleted = completionCount > 0;
 
-                            const isUnlocked = isHeroicMode
-                                ? (completedDungeons[baseDungeonId] || 0) > 0 // Must have completed normal version
-                                : normalIndex === 0 || (completedDungeons[gameData.dungeons[normalIndex - 1]?.id.replace('_heroic', '')] || 0) > 0;
+                            let isUnlocked = index === 0 || (completedDungeons[displayedDungeons[index - 1]?.id] || 0) > 0;
+                            if (isHeroicMode) {
+                                isUnlocked = (completedDungeons[dungeon.id] || 0) > 0;
+                            }
 
                             return (
                                 <Card key={dungeon.id} className={`transition-all ${!isUnlocked ? 'bg-background/40 filter grayscale' : ''}`}>
                                     <CardHeader>
-                                        <CardTitle>{dungeon.name}</CardTitle>
+                                        <CardTitle>{dungeonToDisplay.name}</CardTitle>
                                         <CardDescription>
-                                            Palier: {dungeon.palier}
+                                            Palier: {dungeonToDisplay.palier}
                                             {isCompleted && <span className="text-primary font-bold ml-2"> (Terminé {completionCount}x)</span>}
                                         </CardDescription>
                                     </CardHeader>
                                     <CardContent>
-                                        <p>Biome: <span className="capitalize text-primary">{dungeon.biome}</span></p>
-                                        <p>Objectif: Tuer {dungeon.killTarget} monstres.</p>
+                                        <p>Biome: <span className="capitalize text-primary">{dungeonToDisplay.biome}</span></p>
+                                        <p>Objectif: Tuer {dungeonToDisplay.killTarget} monstres.</p>
                                     </CardContent>
                                     <CardFooter>
-                                        <Button onClick={() => handleEnterDungeon(baseDungeonId)} disabled={!isUnlocked}>
+                                        <Button onClick={() => handleEnterDungeon(dungeon)} disabled={!isUnlocked}>
                                             {isCompleted ? "Rejouer" : "Entrer"}
                                         </Button>
                                     </CardFooter>
@@ -158,7 +158,7 @@ export function DungeonsView() {
                         <AlertDialogTitle>Quêtes Disponibles!</AlertDialogTitle>
                         <AlertDialogDescription asChild>
                             <div>
-                                <p className="mb-4">Les quêtes suivantes sont disponibles pour ce donjon. Voulez-vous toutes les accepter avant d'entrer ?</p>
+                                <p className="mb-4">Les quêtes suivantes sont disponibles pour ce donjon. Voulez-vous toutes les accepter avant d&apos;entrer ?</p>
                                 <ul className="list-disc pl-5 space-y-1">
                                     {proposedQuests?.map(q => <li key={q.id}>{q.name}</li>)}
                                 </ul>
