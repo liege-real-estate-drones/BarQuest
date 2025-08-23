@@ -1932,17 +1932,20 @@ export const useGameStore = create<GameState>()(
       },
 
       activateSkill: (skillId: string) => {
+        let deadEnemyIds: string[] = [];
         set((state: GameState) => {
-            const { deadEnemyIds } = processSkill(state, skillId, get, get().applySpecialEffect);
-            if (deadEnemyIds.length > 0) {
-                deadEnemyIds.forEach(enemyId => {
-                    const enemy = get().combat.enemies.find(e => e.id === enemyId);
-                    if (enemy) {
-                        get().handleEnemyDeath(enemy, skillId);
-                    }
-                });
-            }
+            const result = processSkill(state, skillId, get, get().applySpecialEffect);
+            deadEnemyIds = result.deadEnemyIds;
         });
+
+        if (deadEnemyIds.length > 0) {
+            deadEnemyIds.forEach(enemyId => {
+                const enemy = get().combat.enemies.find(e => e.id === enemyId);
+                if (enemy) {
+                    get().handleEnemyDeath(enemy, skillId);
+                }
+            });
+        }
       },
 
       enemyAttacks: () => {

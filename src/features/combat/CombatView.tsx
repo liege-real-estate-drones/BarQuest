@@ -3,7 +3,7 @@ import { useGameStore } from '@/state/gameStore';
 import { Button } from '@/components/ui/button';
 import { CombatLog } from './components/CombatLog';
 import EntityDisplay from './components/EntityDisplay';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react'; // AMÉLIORATION: 'useEffect' supprimé car il n'est plus utilisé ici
 import { ArrowLeft } from 'lucide-react';
 import { ActionStrip } from './components/ActionStrip';
 import type { Skill } from '@/lib/types';
@@ -63,18 +63,13 @@ export function CombatView() {
       .filter((t): t is Skill => t !== null);
   }, [player?.equippedSkills, gameData.skills]);
 
-  useEffect(() => {
-    if (enemies && enemies.length === 0 && currentDungeon) {
-      if (killCount < currentDungeon.killTarget) {
-        startCombat();
-      }
-    }
-  }, [enemies, startCombat, killCount, currentDungeon]);
-  
+  // SUPPRIMÉ: Le bloc useEffect a été retiré pour corriger la boucle infinie.
+  // La logique de démarrage de combat est maintenant entièrement gérée dans handleEnemyDeath.
+
   const handleCycleTarget = () => {
     cycleTarget();
   };
-  
+
   if (!currentDungeon) {
     return <div className="flex items-center justify-center h-screen">Chargement du donjon...</div>;
   }
