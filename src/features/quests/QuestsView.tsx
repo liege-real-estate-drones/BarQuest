@@ -144,7 +144,7 @@ export function QuestsView() {
         const prevQuestId = `${questPrefix}_q${questNum - 1}`;
         return player.completedQuests.includes(prevQuestId);
     });
-  }, [gameData.quests, gameData.dungeons, player.completedQuests, player.completedDungeons, activeQuests]);
+  }, [gameData.quests, gameData.dungeons, player.completedQuests, player.completedDungeons, activeQuests, player.classeId]);
 
 
   return (

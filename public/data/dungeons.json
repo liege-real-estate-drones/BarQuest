@@ -2,6 +2,7 @@
     "dungeons": [
         {
             "id": "dungeon_1",
+            "heroicVersionId": "dungeon_1_heroic",
             "palier": 1,
             "name": "Goblin Mines",
             "biome": "shadow",
@@ -15,6 +16,7 @@
         },
         {
             "id": "dungeon_2",
+            "heroicVersionId": "dungeon_2_heroic",
             "palier": 1,
             "name": "Bat Cave",
             "biome": "shadow",
@@ -28,6 +30,7 @@
         },
         {
             "id": "dungeon_3",
+            "heroicVersionId": "dungeon_3_heroic",
             "palier": 2,
             "name": "Icy Crevasse",
             "biome": "ice",
@@ -42,6 +45,7 @@
         },
         {
             "id": "dungeon_4",
+            "heroicVersionId": "dungeon_4_heroic",
             "palier": 2,
             "name": "Yeti Den",
             "biome": "ice",
@@ -56,6 +60,7 @@
         },
         {
             "id": "dungeon_5",
+            "heroicVersionId": "dungeon_5_heroic",
             "palier": 3,
             "name": "Scorched Caverns",
             "biome": "fire",
@@ -70,6 +75,7 @@
         },
         {
             "id": "dungeon_6",
+            "heroicVersionId": "dungeon_6_heroic",
             "palier": 3,
             "name": "Cinder Chambers",
             "biome": "fire",
@@ -84,6 +90,7 @@
         },
         {
             "id": "dungeon_7",
+            "heroicVersionId": "dungeon_7_heroic",
             "palier": 4,
             "name": "Whispering Woods",
             "biome": "nature",
@@ -98,6 +105,7 @@
         },
         {
             "id": "dungeon_8",
+            "heroicVersionId": "dungeon_8_heroic",
             "palier": 4,
             "name": "Dryad Grove",
             "biome": "nature",
@@ -112,6 +120,7 @@
         },
         {
             "id": "dungeon_9",
+            "heroicVersionId": "dungeon_9_heroic",
             "palier": 5,
             "name": "Forgotten Crypt",
             "biome": "shadow",
@@ -127,6 +136,7 @@
         },
         {
             "id": "dungeon_10",
+            "heroicVersionId": "dungeon_10_heroic",
             "palier": 5,
             "name": "Void Worshippers' Lair",
             "biome": "shadow",
@@ -142,6 +152,7 @@
         },
         {
             "id": "dungeon_11",
+            "heroicVersionId": "dungeon_11_heroic",
             "palier": 6,
             "name": "Glacial Depths",
             "biome": "ice",
@@ -157,6 +168,7 @@
         },
         {
             "id": "dungeon_12",
+            "heroicVersionId": "dungeon_12_heroic",
             "palier": 6,
             "name": "Frozen Berserkers' Hall",
             "biome": "ice",
@@ -172,6 +184,7 @@
         },
         {
             "id": "dungeon_13",
+            "heroicVersionId": "dungeon_13_heroic",
             "palier": 7,
             "name": "Volcanic Core",
             "biome": "fire",
@@ -187,6 +200,7 @@
         },
         {
             "id": "dungeon_14",
+            "heroicVersionId": "dungeon_14_heroic",
             "palier": 7,
             "name": "Fire Giants' Outpost",
             "biome": "fire",
@@ -202,6 +216,7 @@
         },
         {
             "id": "dungeon_15",
+            "heroicVersionId": "dungeon_15_heroic",
             "palier": 8,
             "name": "Verdant Labyrinth",
             "biome": "nature",
@@ -217,6 +232,7 @@
         },
         {
             "id": "dungeon_16",
+            "heroicVersionId": "dungeon_16_heroic",
             "palier": 8,
             "name": "Sylvan Guardians' Domain",
             "biome": "nature",
@@ -232,6 +248,7 @@
         },
         {
             "id": "dungeon_17",
+            "heroicVersionId": "dungeon_17_heroic",
             "palier": 9,
             "name": "Shadowy Necropolis",
             "biome": "shadow",
@@ -248,6 +265,7 @@
         },
         {
             "id": "dungeon_18",
+            "heroicVersionId": "dungeon_18_heroic",
             "palier": 9,
             "name": "Specters' Sanctuary",
             "biome": "shadow",
@@ -264,6 +282,7 @@
         },
         {
             "id": "dungeon_19",
+            "heroicVersionId": "dungeon_19_heroic",
             "palier": 10,
             "name": "Frozen Wastes",
             "biome": "ice",
@@ -280,6 +299,7 @@
         },
         {
             "id": "dungeon_20",
+            "heroicVersionId": "dungeon_20_heroic",
             "palier": 10,
             "name": "Boreal Knights' Fortress",
             "biome": "ice",
@@ -296,6 +316,7 @@
         },
         {
             "id": "dungeon_21",
+            "heroicVersionId": "dungeon_21_heroic",
             "palier": 11,
             "name": "Infernal Forge",
             "biome": "fire",
@@ -312,6 +333,7 @@
         },
         {
             "id": "dungeon_22",
+            "heroicVersionId": "dungeon_22_heroic",
             "palier": 11,
             "name": "Ash Harpies' Nest",
             "biome": "fire",
@@ -328,6 +350,7 @@
         },
         {
             "id": "dungeon_23",
+            "heroicVersionId": "dungeon_23_heroic",
             "palier": 12,
             "name": "Emerald Nightmare",
             "biome": "nature",
@@ -344,6 +367,7 @@
         },
         {
             "id": "dungeon_24",
+            "heroicVersionId": "dungeon_24_heroic",
             "palier": 12,
             "name": "Emerald Golems' Garden",
             "biome": "nature",
@@ -360,6 +384,7 @@
         },
         {
             "id": "dungeon_25",
+            "heroicVersionId": "dungeon_25_heroic",
             "palier": 13,
             "name": "Cathedral of Eternal Night",
             "biome": "shadow",
@@ -377,6 +402,7 @@
         },
         {
             "id": "dungeon_26",
+            "heroicVersionId": "dungeon_26_heroic",
             "palier": 13,
             "name": "Tomb Guardians' Crypt",
             "biome": "shadow",
@@ -394,6 +420,7 @@
         },
         {
             "id": "dungeon_27",
+            "heroicVersionId": "dungeon_27_heroic",
             "palier": 14,
             "name": "Glacier's Peak",
             "biome": "ice",
@@ -411,6 +438,7 @@
         },
         {
             "id": "dungeon_28",
+            "heroicVersionId": "dungeon_28_heroic",
             "palier": 14,
             "name": "Frost Wyrm's Lair",
             "biome": "ice",
@@ -428,6 +456,7 @@
         },
         {
             "id": "dungeon_29",
+            "heroicVersionId": "dungeon_29_heroic",
             "palier": 15,
             "name": "Heart of the Volcano",
             "biome": "fire",
@@ -445,6 +474,7 @@
         },
         {
             "id": "dungeon_30",
+            "heroicVersionId": "dungeon_30_heroic",
             "palier": 15,
             "name": "Magma Dragon's Roost",
             "biome": "fire",
@@ -462,6 +492,7 @@
         },
         {
             "id": "dungeon_31",
+            "heroicVersionId": "dungeon_31_heroic",
             "palier": 16,
             "name": "Throne of the Wilds",
             "biome": "nature",
@@ -479,6 +510,7 @@
         },
         {
             "id": "dungeon_32",
+            "heroicVersionId": "dungeon_32_heroic",
             "palier": 16,
             "name": "World Ash Treant's Grove",
             "biome": "nature",
@@ -496,6 +528,7 @@
         },
         {
             "id": "dungeon_33",
+            "heroicVersionId": "dungeon_33_heroic",
             "palier": 17,
             "name": "The Void-Corrupted Sanctum",
             "biome": "shadow",
@@ -514,6 +547,7 @@
         },
         {
             "id": "dungeon_34",
+            "heroicVersionId": "dungeon_34_heroic",
             "palier": 17,
             "name": "Cthulhu's Herald's Antechamber",
             "biome": "shadow",
@@ -532,6 +566,7 @@
         },
         {
             "id": "dungeon_35",
+            "heroicVersionId": "dungeon_35_heroic",
             "palier": 18,
             "name": "Permafrost Citadel",
             "biome": "ice",
@@ -547,6 +582,7 @@
         },
         {
             "id": "dungeon_36",
+            "heroicVersionId": "dungeon_36_heroic",
             "palier": 18,
             "name": "Molten Pinnacle",
             "biome": "fire",
@@ -562,6 +598,7 @@
         },
         {
             "id": "dungeon_37",
+            "heroicVersionId": "dungeon_37_heroic",
             "palier": 19,
             "name": "Heart of the Forest",
             "biome": "nature",
@@ -577,6 +614,7 @@
         },
         {
             "id": "dungeon_38",
+            "heroicVersionId": "dungeon_38_heroic",
             "palier": 19,
             "name": "R'lyeh's Threshold",
             "biome": "shadow",
@@ -592,6 +630,7 @@
         },
         {
             "id": "dungeon_39",
+            "heroicVersionId": "dungeon_39_heroic",
             "palier": 20,
             "name": "Frozen Throne",
             "biome": "ice",
@@ -608,6 +647,7 @@
         },
         {
             "id": "dungeon_40",
+            "heroicVersionId": "dungeon_40_heroic",
             "palier": 20,
             "name": "Inferno's Core",
             "biome": "fire",
@@ -624,6 +664,7 @@
         },
         {
             "id": "dungeon_41",
+            "heroicVersionId": "dungeon_41_heroic",
             "palier": 21,
             "name": "Verdant Sanctuary",
             "biome": "nature",
@@ -640,6 +681,7 @@
         },
         {
             "id": "dungeon_42",
+            "heroicVersionId": "dungeon_42_heroic",
             "palier": 21,
             "name": "The Sunken City",
             "biome": "shadow",
@@ -656,6 +698,7 @@
         },
         {
             "id": "dungeon_43",
+            "heroicVersionId": "dungeon_43_heroic",
             "palier": 22,
             "name": "Icecrown Citadel",
             "biome": "ice",
@@ -673,6 +716,7 @@
         },
         {
             "id": "dungeon_44",
+            "heroicVersionId": "dungeon_44_heroic",
             "palier": 22,
             "name": "Blackrock Mountain",
             "biome": "fire",
@@ -690,6 +734,7 @@
         },
         {
             "id": "dungeon_45",
+            "heroicVersionId": "dungeon_45_heroic",
             "palier": 23,
             "name": "The Emerald Dream",
             "biome": "nature",
@@ -707,6 +752,7 @@
         },
         {
             "id": "dungeon_46",
+            "heroicVersionId": "dungeon_46_heroic",
             "palier": 23,
             "name": "Ny'alotha, the Waking City",
             "biome": "shadow",
@@ -724,6 +770,7 @@
         },
         {
             "id": "dungeon_47",
+            "heroicVersionId": "dungeon_47_heroic",
             "palier": 24,
             "name": "The Frozen Halls",
             "biome": "ice",
@@ -742,6 +789,7 @@
         },
         {
             "id": "dungeon_48",
+            "heroicVersionId": "dungeon_48_heroic",
             "palier": 25,
             "name": "The Molten Core",
             "biome": "fire",

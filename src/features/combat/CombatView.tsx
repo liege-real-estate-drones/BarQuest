@@ -80,7 +80,7 @@ export function CombatView() {
   }
 
   if (enemies.length === 0 && killCount < currentDungeon.killTarget) {
-    return <div className="flex items-center justify-center h-screen">Recherche d'une cible...</div>;
+    return <div className="flex items-center justify-center h-screen">Recherche d&apos;une cible...</div>;
   }
 
   return (

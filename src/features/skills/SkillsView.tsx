@@ -148,7 +148,7 @@ export function SkillsView() {
                 </div>
 
                 <div className="flex-shrink-0">
-                    <h3 className="font-semibold mb-2 text-center">Barre d'Action</h3>
+                    <h3 className="font-semibold mb-2 text-center">Barre d&apos;Action</h3>
                      <Separator className="mb-4"/>
                     <div className="grid grid-cols-4 gap-2">
                         {equippedSkillsDetails.map((skill, index) => (

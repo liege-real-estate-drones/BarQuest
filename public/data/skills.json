@@ -181,6 +181,22 @@
                 "Frappe la cible 3 fois pour 50% des dégâts de l'arme à chaque fois.",
                 "Coûte 20 Rage."
             ],
+            "effects": [
+                {
+                    "type": "multi_strike",
+                    "strikes": 3,
+                    "damage": {
+                        "type": "damage",
+                        "damageType": "physical",
+                        "source": "weapon",
+                        "multiplier": 0.5
+                    }
+                },
+                {
+                    "type": "resource_cost",
+                    "amount": 20
+                }
+            ],
             "cooldown": 8
         },
         {
@@ -233,6 +249,22 @@
                 "Déchaîne une fureur d'attaques, frappant la cible principale 5 fois pour 60% des dégâts de l'arme.",
                 "Coûte 40 Rage."
             ],
+            "effects": [
+                {
+                    "type": "multi_strike",
+                    "strikes": 5,
+                    "damage": {
+                        "type": "damage",
+                        "damageType": "physical",
+                        "source": "weapon",
+                        "multiplier": 0.6
+                    }
+                },
+                {
+                    "type": "resource_cost",
+                    "amount": 40
+                }
+            ],
             "cooldown": 15
         },
         {
@@ -271,9 +303,18 @@
             "exigences": [
                 "berserker_titan_shield_wall:1"
             ],
-            "effets": [
-                "Augmente temporairement vos PV maximum de 30% pendant 20 secondes.",
-                "Ne coûte rien."
+            "effets": [],
+            "effects": [
+                {
+                    "type": "buff",
+                    "id": "last_stand_buff",
+                    "name": "Dernier Rempart",
+                    "duration": 20,
+                    "buffType": "stat_modifier",
+                    "statMods": [
+                        { "stat": "PV", "modifier": "multiplicative_add", "value": 0.30 }
+                    ]
+                }
             ],
             "cooldown": 180
         },
@@ -343,6 +384,22 @@
             "effets": [
                 "Tire 3/3/4/4/5 vagues de missiles infligeant 5 dégâts des Arcanes chacune.",
                 "Coûte 12 Mana."
+            ],
+            "effects": [
+                {
+                    "type": "multi_strike",
+                    "strikes": [3, 3, 4, 4, 5],
+                    "damage": {
+                        "type": "damage",
+                        "damageType": "arcane",
+                        "source": "spell",
+                        "baseValue": 5
+                    }
+                },
+                {
+                    "type": "resource_cost",
+                    "amount": 12
+                }
             ]
         },
         {
@@ -383,6 +440,30 @@
             "effets": [
                 "Inflige 10 dégâts de Feu et augmente les chances de coup critique contre la cible de 5% pendant 30s. Cumulable 5 fois.",
                 "Coûte 5 Mana."
+            ],
+            "effects": [
+                {
+                    "type": "damage",
+                    "damageType": "fire",
+                    "source": "spell",
+                    "baseValue": 10
+                },
+                {
+                    "type": "debuff",
+                    "debuffType": "stat_modifier",
+                    "id": "scorch_crit_debuff",
+                    "name": "Brûlure (Crit)",
+                    "duration": 30,
+                    "is_stacking": true,
+                    "max_stacks": 5,
+                    "statMods": [
+                        { "stat": "CritChanceTakenModifier", "modifier": "additive", "value": 5 }
+                    ]
+                },
+                {
+                    "type": "resource_cost",
+                    "amount": 5
+                }
             ]
         },
         {
@@ -399,6 +480,13 @@
                 "Augmente votre hâte et vos chances de coup critique de 100% pendant 10s.",
                 "Coûte 50 Mana."
             ],
+            "effects": [
+                { "type": "buff", "id": "combustion_buff", "name": "Combustion", "duration": 10000, "buffType": "stat_modifier", "statMods": [
+                    { "stat": "CritPct", "modifier": "additive", "value": 100 },
+                    { "stat": "Vitesse", "modifier": "multiplicative", "value": 0.5 }
+                ]},
+                { "type": "resource_cost", "amount": 50 }
+            ],
             "cooldown": 120
         },
         {
@@ -411,6 +499,10 @@
             "effets": [
                 "Inflige 100 dégâts de Feu. Temps d'incantation de 3.5s.",
                 "Coûte 40 Mana."
+            ],
+            "effects": [
+                { "type": "damage", "damageType": "fire", "source": "spell", "baseValue": 100 },
+                { "type": "resource_cost", "amount": 40 }
             ]
         },
         {
@@ -480,6 +572,27 @@
             "effets": [
                 "Inflige 20 dégâts des Arcanes. Chaque utilisation augmente son coût en mana de 100% et ses dégâts de 50%. Cumulable 4 fois.",
                 "Coûte 10 Mana."
+            ],
+            "effects": [
+                {
+                    "type": "stacking_damage_and_cost",
+                    "damage": {
+                        "damageType": "arcane",
+                        "source": "spell",
+                        "baseValue": 20,
+                        "stack_multiplier": 0.5
+                    },
+                    "cost": {
+                        "base_amount": 10,
+                        "stack_multiplier": 1.0
+                    },
+                    "stacking_buff": {
+                        "id": "arcane_charge",
+                        "name": "Charge arcanique",
+                        "max_stacks": 4,
+                        "duration": 10000
+                    }
+                }
             ]
         },
         {
@@ -541,6 +654,19 @@
             "effets": [
                 "Une attaque rapide qui inflige 100% des dégâts de l'arme + 5/10/15/20/25.",
                 "Coûte 30 Énergie."
+            ],
+            "effects": [
+                {
+                    "type": "damage",
+                    "damageType": "physical",
+                    "source": "weapon",
+                    "multiplier": 1.0,
+                    "bonus_flat_damage": [5, 10, 15, 20, 25]
+                },
+                {
+                    "type": "resource_cost",
+                    "amount": 30
+                }
             ]
         },
         {
@@ -697,6 +823,18 @@
             "effets": [
                 "Consomme les charges de Poison mortel sur la cible pour infliger 20 dégâts de Nature par charge.",
                 "Coûte 35 Énergie."
+            ],
+            "effects": [
+                {
+                    "type": "consume_debuff_for_damage",
+                    "debuff_id_to_consume": "deadly_poison_debuff",
+                    "damage_per_stack": 20,
+                    "damageType": "nature"
+                },
+                {
+                    "type": "resource_cost",
+                    "amount": 35
+                }
             ]
         },
         {
@@ -771,6 +909,17 @@
             "effets": [
                 "Un sort rapide qui vous rend 20/28/36/45/55 PV.",
                 "Coûte 15 Mana."
+            ],
+            "effects": [
+                {
+                    "type": "heal",
+                    "source": "spell",
+                    "baseValue": [20, 28, 36, 45, 55]
+                },
+                {
+                    "type": "resource_cost",
+                    "amount": 15
+                }
             ]
         },
         {
@@ -784,6 +933,18 @@
             "effets": [
                 "Inflige 18/25/32/40/48 dégâts du Sacré à un ennemi.",
                 "Coûte 12 Mana."
+            ],
+            "effects": [
+                {
+                    "type": "damage",
+                    "damageType": "holy",
+                    "source": "spell",
+                    "baseValue": [18, 25, 32, 40, 48]
+                },
+                {
+                    "type": "resource_cost",
+                    "amount": 12
+                }
             ]
         },
         {
@@ -848,6 +1009,23 @@
                 "Vous entoure d'une lumière sacrée, vous soignant pour 120 PV en 12 secondes.",
                 "Coûte 40 Mana."
             ],
+            "effects": [
+                {
+                    "type": "buff",
+                    "id": "prayer_of_healing_hot",
+                    "name": "Prière de guérison",
+                    "duration": 12000,
+                    "buffType": "hot",
+                    "totalHealing": {
+                        "source": "base_value",
+                        "multiplier": 120
+                    }
+                },
+                {
+                    "type": "resource_cost",
+                    "amount": 40
+                }
+            ],
             "cooldown": 10
         },
         {
@@ -883,6 +1061,25 @@
             "effets": [
                 "Lance une volée de lumière sacrée sur la cible, infligeant 15 dégâts 3 fois en 2s.",
                 "Coûte 25 Mana."
+            ],
+            "effects": [
+                {
+                    "type": "debuff",
+                    "debuffType": "dot",
+                    "id": "penance_dot",
+                    "name": "Pénitence",
+                    "duration": 2,
+                    "damageType": "holy",
+                    "num_ticks": 3,
+                    "totalDamage": {
+                        "source": "spell",
+                        "baseValue": 45
+                    }
+                },
+                {
+                    "type": "resource_cost",
+                    "amount": 25
+                }
             ],
             "cooldown": 9
         },
@@ -927,6 +1124,26 @@
             "cooldown": 15
         },
         {
+            "id": "mage_arcane_archon_skill",
+            "nom": "Archonte",
+            "classeId": "mage",
+            "type": "actif",
+            "rangMax": 1,
+            "niveauRequis": 150,
+            "effets": ["Vous transforme en Archonte pendant 20s, doublant les dégâts de vos sorts et annulant leur coût en mana."],
+            "cooldown": 180,
+            "effects": [
+                {
+                    "type": "buff",
+                    "id": "archon_buff",
+                    "name": "Forme d'Archonte",
+                    "duration": 20000,
+                    "buffType": "special"
+                },
+                { "type": "resource_cost", "amount": 0 }
+            ]
+        },
+        {
             "id": "cleric_shadow_shadowform",
             "nom": "Forme d'ombre",
             "classeId": "cleric",
@@ -947,6 +1164,30 @@
                 },
                 { "type": "resource_cost", "amount": 10 }
             ]
+        },
+        {
+            "id": "cleric_discipline_dome_de_lumiere",
+            "nom": "Dôme de Lumière",
+            "classeId": "cleric",
+            "type": "actif",
+            "school": "holy",
+            "rangMax": 1,
+            "niveauRequis": 100,
+            "cooldown": 300,
+            "effets": [],
+            "effects": [
+                {
+                    "type": "buff",
+                    "id": "dome_of_light",
+                    "name": "Dôme de Lumière",
+                    "duration": 10,
+                    "buffType": "stat_modifier",
+                    "statMods": [
+                        { "stat": "DamageReductionMultiplier", "modifier": "multiplicative", "value": 0.50 }
+                    ]
+                }
+            ],
+            "exigences": ["cleric_discipline_suppression_de_la_douleur:1"]
         }
     ]
 }

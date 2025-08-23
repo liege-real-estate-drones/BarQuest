@@ -75,6 +75,9 @@ export interface Buff {
     name: string;
     duration: number;
     value?: any;
+    stacks?: number;
+    is_stacking?: boolean;
+    max_stacks?: number;
     healingPerTick?: number;
     tickInterval?: number;
     nextTickIn?: number;
@@ -87,10 +90,14 @@ export interface Debuff {
     id:string;
     name: string;
     duration: number;
+    isDebuff?: boolean;
+    stacks?: number;
     damagePerTick?: number;
     tickInterval?: number;
     nextTickIn?: number;
+    num_ticks?: number;
     statMods?: StatMod[];
+    damageType?: Theme;
 }
 
 export interface PlayerState {
@@ -125,6 +132,8 @@ export interface PlayerState {
   invulnerabilityDuration: number;
   stunDuration: number;
   form: string | null;
+  isImmuneToCC: boolean;
+  nextAttackIsGuaranteedCrit: boolean;
 }
 
 export interface InventoryState {
@@ -156,17 +165,19 @@ export type CombatEnemy = Monstre & {
     attackProgress: number;
     templateId: string;
     activeDebuffs: Debuff[];
+    activeBuffs: Buff[];
     stunDuration: number;
     elementalDamage?: {
         type: Theme;
         min: number;
         max: number;
     };
+    abilities?: any[];
 };
 
 export interface CombatLogEntry {
     message: string;
-    type: 'player_attack' | 'enemy_attack' | 'crit' | 'loot' | 'info' | 'flee' | 'levelup' | 'heal' | 'quest' | 'shield' | 'poison_proc';
+    type: 'player_attack' | 'enemy_attack' | 'crit' | 'loot' | 'info' | 'flee' | 'levelup' | 'heal' | 'quest' | 'shield' | 'poison_proc' | 'talent_proc';
     timestamp: number;
     item?: Item;
 }
@@ -176,6 +187,7 @@ export interface CombatState {
   playerAttackInterval: number; // in ms
   playerAttackProgress: number; // 0 to 1
   skillCooldowns: { [skillId: string]: number }; // { skillId: remainingTimeInMs }
+  monsterSkillCooldowns: { [monsterSkillId: string]: number };
   killCount: number;
   log: CombatLogEntry[];
   autoAttack: boolean;
@@ -185,6 +197,7 @@ export interface CombatState {
   pendingActions: any[];
   goldGained: number;
   xpGained: number;
+  ultimateTalentUsed: boolean;
 }
 
 export interface ItemGenerationContext {

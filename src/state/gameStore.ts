@@ -4,6 +4,7 @@ import { immer } from 'zustand/middleware/immer';
 import type { Dungeon, Monstre, Item, Talent, Skill, Stats, PlayerState, InventoryState, CombatLogEntry, CombatState, GameData, Quete, PlayerClassId, ResourceType, Rareté, CombatEnemy, ItemSet, PotionType, Recipe, Theme, Affixe, Enchantment, Buff, Debuff } from '@/lib/types';
 import { DungeonCompletionSummary } from '@/data/schemas';
 import * as formulas from '@/core/formulas';
+import { getModifiedStats, getRankValue } from '@/core/formulas';
 import { generateProceduralItem } from '@/core/itemGenerator';
 import { v4 as uuidv4 } from 'uuid';
 import { AFFIX_TO_THEME } from '@/lib/constants';
@@ -43,6 +44,8 @@ const getInitialPlayerState = (): PlayerState => {
     invulnerabilityDuration: 0,
     stunDuration: 0,
     form: null,
+    isImmuneToCC: false,
+    nextAttackIsGuaranteedCrit: false,
   };
 };
 
@@ -59,6 +62,7 @@ const initialCombatState: CombatState = {
     playerAttackInterval: 2000,
     playerAttackProgress: 0,
     skillCooldowns: {},
+    monsterSkillCooldowns: {},
     killCount: 0,
     log: [],
     autoAttack: true,
@@ -68,9 +72,10 @@ const initialCombatState: CombatState = {
     isStealthed: false,
     goldGained: 0,
     xpGained: 0,
+    ultimateTalentUsed: false,
 };
 
-interface GameState {
+export interface GameState {
   isInitialized: boolean;
   rehydrateComplete: boolean;
   lastPlayed: number | null;
@@ -118,7 +123,7 @@ interface GameState {
   // Inn actions
   buyPotion: (potionType: PotionType) => boolean;
   rest: () => boolean;
-  usePotion: (potionType: PotionType) => void;
+  consumePotion: (potionType: PotionType) => void;
 
   // Quest actions
   acceptQuest: (questId: string) => void;
@@ -130,15 +135,15 @@ interface GameState {
   startCombat: () => void;
   gameTick: (delta: number) => void;
   playerAttack: (targetId: string, isCleave?: boolean, skillId?: string) => void;
-  useSkill: (skillId: string) => void;
+  activateSkill: (skillId: string) => void;
   enemyAttacks: () => void;
   handleEnemyDeath: (enemy: CombatEnemy, skillId?: string) => void;
   cycleTarget: () => void;
   flee: () => void;
   toggleAutoAttack: () => void;
   getXpToNextLevel: () => number;
-  applyTalentTrigger: (trigger: 'on_dodge') => void;
-      applySpecialEffect: (trigger: string, context: { targetId: string, isCrit: boolean }) => void;
+  applyTalentTrigger: (trigger: 'on_dodge' | 'on_critical_hit' | 'on_hit', context?: { targetId?: string, skill?: Skill, attackerId?: string }) => void;
+      applySpecialEffect: (trigger: string, context: { targetId: string, isCrit: boolean, skill?: Skill }) => void;
   dismantleItem: (itemId: string) => { id: string, amount: number }[] | undefined;
   dismantleAllUnusedItems: (maxRarity: Rareté) => { dismantledCount: number; materialsGained: Record<string, number> };
   enchantItem: (itemId: string, enchantmentId: string) => void;
@@ -994,10 +999,22 @@ export const useGameStore = create<GameState>()(
                                     value = mod.value;
                                 }
 
-                                if (mod.modifier === 'additive') {
-                                    (player.stats[statKey] as number) = statValue + value;
-                                } else if (mod.modifier === 'multiplicative') {
-                                    (player.stats[statKey] as number) = statValue * value;
+                                let conditionMet = true;
+                                if ((mod as any).condition) {
+                                    if ((mod as any).condition.requires_weapon_type) {
+                                        const weapon = inventory.equipment.weapon;
+                                        if (!weapon || weapon.type !== (mod as any).condition.requires_weapon_type) {
+                                            conditionMet = false;
+                                        }
+                                    }
+                                }
+
+                                if (conditionMet) {
+                                    if (mod.modifier === 'additive') {
+                                        (player.stats[statKey] as number) = statValue + value;
+                                    } else if (mod.modifier === 'multiplicative') {
+                                        (player.stats[statKey] as number) = statValue * value;
+                                    }
                                 }
                             }
                         });
@@ -1016,6 +1033,19 @@ export const useGameStore = create<GameState>()(
           });
 
           // --- Final calculations and state updates ---
+          // --- Stat Overrides from Talents ---
+            Object.entries(player.learnedTalents).forEach(([talentId, rank]) => {
+                const talentData = gameData.talents.find(t => t.id === talentId);
+                if (talentData?.effects) {
+                    talentData.effects.forEach((effect: any) => {
+                        if (effect.type === 'stat_override') {
+                            const statKey = effect.stat as keyof Stats;
+                            (player.stats[statKey] as any) = effect.value;
+                        }
+                    });
+                }
+            });
+
           const maxHp = formulas.calculateMaxHP(player.level, player.stats);
           if (classe.ressource !== 'Rage') {
             const maxMana = formulas.calculateMaxMana(player.level, player.stats);
@@ -1268,7 +1298,7 @@ export const useGameStore = create<GameState>()(
           return true;
       },
 
-      usePotion: (potionType: PotionType) => {
+      consumePotion: (potionType: PotionType) => {
           set((state: GameState) => {
               if (potionType === 'health') {
                  if (state.inventory.potions.health > 0) {
@@ -1276,6 +1306,7 @@ export const useGameStore = create<GameState>()(
                     let healAmount = Math.round(maxHp * 0.15);
 
                     const buffedStats = getModifiedStats(state.player.stats, state.player.activeBuffs, state.player.form);
+                    healAmount *= (buffedStats.HealingMultiplier || 1);
                     healAmount *= (buffedStats.HealingReceivedMultiplier || 1);
                     healAmount = Math.round(healAmount);
 
@@ -1520,6 +1551,7 @@ export const useGameStore = create<GameState>()(
               initialHp: randomMonsterTemplate.stats.PV,
               attackProgress: Math.random(),
               activeDebuffs: [],
+              activeBuffs: [],
               stunDuration: 0,
             };
 
@@ -1622,11 +1654,22 @@ export const useGameStore = create<GameState>()(
                   }
               }
 
+              for (const monsterSkillId in state.combat.monsterSkillCooldowns) {
+                  state.combat.monsterSkillCooldowns[monsterSkillId] -= delta;
+                  if (state.combat.monsterSkillCooldowns[monsterSkillId] <= 0) {
+                      delete state.combat.monsterSkillCooldowns[monsterSkillId];
+                  }
+              }
+
               const stealthExpired = state.player.activeBuffs.some(b => b.id === 'stealth' && b.duration <= delta);
+              let shouldRecalculate = false;
 
               state.player.activeBuffs = state.player.activeBuffs.filter(buff => {
                   buff.duration -= delta;
-                  if (buff.duration <= 0) return false;
+                  if (buff.duration <= 0) {
+                      shouldRecalculate = true;
+                      return false;
+                  }
 
                   if (buff.healingPerTick && buff.nextTickIn !== undefined && buff.tickInterval !== undefined) {
                       buff.nextTickIn -= delta;
@@ -1649,6 +1692,10 @@ export const useGameStore = create<GameState>()(
               if (stealthExpired && state.combat.isStealthed) {
                 state.combat.isStealthed = false;
                 state.combat.log.push({ message: "Votre camouflage s'est estompé.", type: 'info', timestamp: Date.now() });
+              }
+
+              if (shouldRecalculate) {
+                get().recalculateStats();
               }
 
               state.combat.enemies.forEach(enemy => {
@@ -1708,7 +1755,7 @@ export const useGameStore = create<GameState>()(
                         if (target && target.stats.PV > 0) {
                             const skill = state.gameData.skills.find(s => s.id === action.skillId);
                             const damage = formulas.calculateSpellDamage(action.damagePerWave, formulas.calculateSpellPower(state.player.stats));
-                            const isCrit = formulas.isCriticalHit(state.player.stats.CritPct, state.player.stats.Precision, target.stats.Esquive);
+                            const isCrit = formulas.isCriticalHit(state.player.stats.CritPct, state.player.stats.Precision, target.stats, state.player, state.gameData);
                             const finalDamage = isCrit ? damage * (state.player.stats.CritDmg / 100) : damage;
                             const dr = formulas.calculateArmorDR(target.stats.Armure, state.player.level);
                             const mitigatedDamage = Math.round(finalDamage * (1 - dr));
@@ -1751,16 +1798,21 @@ export const useGameStore = create<GameState>()(
             let debuffedTargetStats = getModifiedStats(target.stats, target.activeDebuffs);
 
             const damage = formulas.calculateMeleeDamage(buffedPlayerStats.AttMin, buffedPlayerStats.AttMax, formulas.calculateAttackPower(buffedPlayerStats));
-            const isCrit = formulas.isCriticalHit(buffedPlayerStats.CritPct, buffedPlayerStats.Precision, debuffedTargetStats.Esquive);
+            let isCrit = formulas.isCriticalHit(buffedPlayerStats.CritPct, buffedPlayerStats.Precision, debuffedTargetStats, player, gameData);
+            if (player.nextAttackIsGuaranteedCrit) {
+                isCrit = true;
+                player.nextAttackIsGuaranteedCrit = false;
+            }
             let finalDamage = isCrit ? damage * (buffedPlayerStats.CritDmg / 100) : damage;
 
             finalDamage *= (buffedPlayerStats.DamageMultiplier || 1);
 
             if (isCrit) {
-                get().applySpecialEffect('ON_CRITICAL_HIT', { targetId, isCrit });
+                get().applySpecialEffect('ON_CRITICAL_HIT', { targetId, isCrit, skill: gameData.skills.find(s => s.id === skillId) });
                 get().applyTalentTrigger('on_critical_hit', { targetId });
             }
-            get().applySpecialEffect('ON_HIT', { targetId, isCrit });
+            get().applySpecialEffect('ON_HIT', { targetId, isCrit, skill: gameData.skills.find(s => s.id === skillId) });
+            get().applyTalentTrigger('on_hit', { targetId });
 
             if (player.activeEffects && player.activeEffects.includes('dernier_cri')) {
                 const maxHp = formulas.calculateMaxHP(player.level, player.stats);
@@ -1802,9 +1854,22 @@ export const useGameStore = create<GameState>()(
 
             // Deadly Poison proc
             if (player.activeBuffs.some(b => b.id === 'deadly_poison_buff') && Math.random() < 0.3) {
-                const poisonDamage = 5; // As per skill description
-                target.stats.PV -= poisonDamage;
-                combat.log.push({ message: `Your Deadly Poison deals an additional ${poisonDamage} damage to ${target.nom}.`, type: 'poison_proc', timestamp: Date.now() });
+                const poisonDebuffId = 'deadly_poison_debuff';
+                let existingDebuff = target.activeDebuffs.find(d => d.id === poisonDebuffId);
+                if (existingDebuff) {
+                    existingDebuff.stacks = Math.min(5, (existingDebuff.stacks || 1) + 1);
+                    existingDebuff.duration = 12000; // Refresh duration
+                } else {
+                    target.activeDebuffs.push({
+                        id: poisonDebuffId,
+                        name: 'Poison mortel',
+                        duration: 12000,
+                        stacks: 1,
+                        isDebuff: true
+                    });
+                }
+                const stackCount = existingDebuff ? (existingDebuff.stacks || 1) : 1;
+                combat.log.push({ message: `${target.nom} est affligé par le Poison mortel (x${stackCount}).`, type: 'poison_proc', timestamp: Date.now() });
             }
 
             const attackMsg = `You hit ${target.nom} for ${mitigatedDamage} damage.`;
@@ -1827,7 +1892,28 @@ export const useGameStore = create<GameState>()(
               }
               state.player.resources.current = Math.min(state.player.resources.max, state.player.resources.current + rageGained);
             }
+
+            // --- Talent: Tempête Implacable ---
+            const tempeteRank = player.learnedTalents['berserker_fureur_ultime'];
+            if (tempeteRank && tempeteRank > 0) {
+                if (Math.random() < 0.1) { // 10% chance
+                    const buffId = 'tempete_implacable_buff';
+                    // Remove any existing buff to refresh duration
+                    const existingBuffIndex = player.activeBuffs.findIndex(b => b.id === buffId);
+                    if (existingBuffIndex > -1) {
+                        player.activeBuffs.splice(existingBuffIndex, 1);
+                    }
+                    player.activeBuffs.push({
+                        id: buffId,
+                        name: 'Tempête Implacable',
+                        duration: 10000, // 10s
+                        statMods: [{ stat: 'Vitesse', modifier: 'multiplicative', value: 0.01 }] // Effectively 100% attack speed
+                    });
+                    combat.log.push({ message: `Le talent Tempête Implacable s'active ! Votre vitesse d'attaque est décuplée !`, type: 'talent_proc', timestamp: Date.now() });
+                }
+            }
         });
+        get().recalculateStats();
 
         const target = get().combat.enemies.find(e => e.id === targetId);
         if (target && target.stats.PV <= 0) {
@@ -1845,7 +1931,7 @@ export const useGameStore = create<GameState>()(
         }
       },
 
-      useSkill: (skillId: string) => {
+      activateSkill: (skillId: string) => {
         set((state: GameState) => {
             const { deadEnemyIds } = processSkill(state, skillId, get, get().applySpecialEffect);
             if (deadEnemyIds.length > 0) {
@@ -1878,8 +1964,78 @@ export const useGameStore = create<GameState>()(
             const { player } = get();
             if (player.stats.PV <= 0) return;
 
+            // --- Monster Ability Logic ---
+            let abilityUsed = false;
+            if (enemy.abilities && enemy.abilities.length > 0) {
+                const availableAbilities = enemy.abilities.filter(ability => {
+                    const cooldown = get().combat.monsterSkillCooldowns[`${enemy.id}-${ability.id}`] || 0;
+                    return cooldown <= 0;
+                });
+
+                if (availableAbilities.length > 0) {
+                    const abilityToUse = availableAbilities[Math.floor(Math.random() * availableAbilities.length)];
+                    if (Math.random() < (abilityToUse.chance || 1.0)) {
+                        set((state: GameState) => {
+                            const enemyInState = state.combat.enemies.find(e => e.id === enemy.id);
+                            if (!enemyInState) return;
+
+                            abilityToUse.effects.forEach((effect: any) => {
+                                if (effect.type === 'debuff') {
+                                    if (effect.debuffType === 'cc' && state.player.isImmuneToCC) {
+                                        state.combat.log.push({ message: `Vous résistez à l'effet d'étourdissement de ${abilityToUse.name} !`, type: 'info', timestamp: Date.now() });
+                                        return;
+                                    }
+                                    const newDebuff: Debuff = { id: effect.id || effect.debuffType, name: effect.name, duration: effect.duration * 1000, isDebuff: true };
+                                    if (effect.debuffType === 'stat_modifier' && effect.statMods) {
+                                        newDebuff.statMods = effect.statMods;
+                                    } else if (effect.debuffType === 'dot' && effect.totalDamage) {
+                                        const totalDamage = effect.totalDamage.multiplier;
+                                        newDebuff.damagePerTick = Math.round(totalDamage / effect.duration);
+                                        newDebuff.tickInterval = 1000;
+                                        newDebuff.nextTickIn = 1000;
+                                        newDebuff.damageType = effect.damageType;
+                                    }
+                                    state.player.activeBuffs.push(newDebuff);
+                                } else if (effect.type === 'damage' && effect.multiplier) {
+                                    let damage = formulas.calculateMeleeDamage(enemyInState.stats.AttMin, enemyInState.stats.AttMax, formulas.calculateAttackPower(enemyInState.stats));
+                                    damage *= effect.multiplier;
+
+                                    let mitigatedDamage = 0;
+                                    if (effect.damageType === 'physical') {
+                                        const playerDr = formulas.calculateArmorDR(state.player.stats.Armure, enemyInState.level);
+                                        mitigatedDamage = Math.round(damage * (1 - playerDr));
+                                    } else {
+                                        const playerRes = state.player.stats.ResElems?.[effect.damageType] ?? 0;
+                                        const elementalDR = formulas.calculateResistanceDR(playerRes, enemyInState.level);
+                                        mitigatedDamage = Math.round(damage * (1 - elementalDR));
+                                    }
+
+                                    state.player.stats.PV -= mitigatedDamage;
+                                    state.combat.log.push({ message: `${enemyInState.nom} vous frappe avec ${abilityToUse.name} pour ${mitigatedDamage} dégâts !`, type: 'enemy_attack', timestamp: Date.now() });
+                                } else if (effect.type === 'buff' && effect.buffType === 'stat_modifier') {
+                                    enemyInState.activeBuffs.push({
+                                        id: effect.id,
+                                        name: effect.name,
+                                        duration: effect.duration * 1000,
+                                        statMods: effect.statMods,
+                                    });
+                                }
+                            });
+                            state.combat.log.push({ message: `${enemy.nom} utilise ${abilityToUse.name} !`, type: 'enemy_attack', timestamp: Date.now() });
+                            state.combat.monsterSkillCooldowns[`${enemy.id}-${abilityToUse.id}`] = abilityToUse.cooldown * 1000;
+                            enemyInState.attackProgress = 0;
+                        });
+                        abilityUsed = true;
+                    }
+                }
+            }
+
+            if (abilityUsed) {
+                return; // Skip auto-attack if ability was used
+            }
+            // --- End Monster Ability Logic ---
+
             const buffedPlayerStats = getModifiedStats(player.stats, player.activeBuffs, player.form);
-            // NOTE: Dodge mechanic is implemented here.
             const didDodge = Math.random() * 100 < buffedPlayerStats.Esquive;
 
             if (didDodge) {
@@ -1888,8 +2044,8 @@ export const useGameStore = create<GameState>()(
                     const enemyInState = state.combat.enemies.find(e => e.id === enemy.id);
                     if (enemyInState) enemyInState.attackProgress = 0;
                 });
-                get().applyTalentTrigger('on_dodge');
-                return; // Skip the rest of the attack logic for this enemy
+                get().applyTalentTrigger('on_dodge', { attackerId: enemy.id });
+                return;
             }
 
             set((state: GameState) => {
@@ -1909,7 +2065,6 @@ export const useGameStore = create<GameState>()(
                 let mitigatedElementalDamage = 0;
                 let elementalDamageType: string | undefined = undefined;
 
-                // Check for monster's inherent elemental damage
                 if (enemyInState.elementalDamage) {
                     const elementalRoll = Math.random() * (enemyInState.elementalDamage.max - enemyInState.elementalDamage.min) + enemyInState.elementalDamage.min;
                     const playerRes = state.player.stats.ResElems?.[enemyInState.elementalDamage.type] ?? 0;
@@ -1944,18 +2099,66 @@ export const useGameStore = create<GameState>()(
                 }
 
                 if (totalDamage > 0) {
-                    if (state.player.stats.PV - totalDamage <= 0) { // Check for lethal damage
-                        const deathWardBuff = state.player.activeBuffs.find(b => b.isDeathWard);
-                        if (deathWardBuff && deathWardBuff.deathWardHealPercent) {
+                    if (state.player.stats.PV - totalDamage <= 0) {
+                        const cheatDeathTalent = Object.values(state.player.learnedTalents).map(rank => state.gameData.talents.find(t => t.id === Object.keys(state.player.learnedTalents).find(k => state.player.learnedTalents[k] === rank))).find(t => t?.effects?.some((e: any) => e.type === 'cheat_death'));
+                        const resurrectTalent = Object.values(state.player.learnedTalents).map(rank => state.gameData.talents.find(t => t.id === Object.keys(state.player.learnedTalents).find(k => state.player.learnedTalents[k] === rank))).find(t => t?.effects?.some((e: any) => e.type === 'on_death_resurrect'));
+                        const dernierRempartTalent = state.player.learnedTalents['berserker_titan_dernier_rempart'];
+
+                        if (dernierRempartTalent && !state.combat.ultimateTalentUsed) {
+                            state.combat.ultimateTalentUsed = true;
+                            state.player.stats.PV = 1;
+                            state.combat.log.push({ message: `Le talent Dernier Rempart vous sauve de la mort !`, type: 'talent_proc', timestamp: Date.now() });
+                            totalDamage = 0;
+                        } else if (cheatDeathTalent && cheatDeathTalent.effects) {
+                            const effect = cheatDeathTalent.effects.find((e: any) => e.type === 'cheat_death') as any;
                             const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
-                            const healAmount = maxHp * (deathWardBuff.deathWardHealPercent / 100);
-                            state.player.stats.PV = healAmount; // Set HP to the heal amount
-                            state.combat.log.push({ message: `Votre Esprit gardien vous a sauvé de la mort et vous a soigné pour ${Math.round(healAmount)} PV!`, type: 'heal', timestamp: Date.now() });
+                            state.player.stats.PV = maxHp * effect.heal_percent;
 
-                            // Remove the buff
-                            state.player.activeBuffs = state.player.activeBuffs.filter(b => b.id !== deathWardBuff.id);
+                            if (effect.buff) {
+                                const buffId = effect.buff.id;
+                                let existingBuff = state.player.activeBuffs.find(b => b.id === buffId);
+                                if (existingBuff) {
+                                    existingBuff.stacks = Math.min(effect.buff.max_stacks || 5, (existingBuff.stacks || 1) + 1);
+                                } else {
+                                    state.player.activeBuffs.push({ ...effect.buff, stacks: 1 });
+                                }
+                                state.recalculateStats();
+                            }
 
-                            totalDamage = 0; // Negate the damage
+                            state.combat.log.push({ message: `Le talent ${cheatDeathTalent.nom} vous sauve de la mort !`, type: 'heal', timestamp: Date.now() });
+                            totalDamage = 0;
+                        } else if (resurrectTalent && !state.combat.ultimateTalentUsed && resurrectTalent.effects) {
+                            state.combat.ultimateTalentUsed = true;
+                            const effect = resurrectTalent.effects.find((e: any) => e.type === 'on_death_resurrect') as any;
+
+                            // AoE Damage
+                            const aoeDamage = formulas.calculateSpellDamage(effect.aoe_damage.baseValue, formulas.calculateSpellPower(state.player.stats));
+                            state.combat.enemies.forEach(enemy => {
+                                if (enemy.stats.PV > 0) {
+                                    const res = enemy.stats.ResElems?.[effect.aoe_damage.damageType] || 0;
+                                    const elemDR = formulas.calculateResistanceDR(res, state.player.level);
+                                    const mitigatedDamage = Math.round(aoeDamage * (1 - elemDR));
+                                    enemy.stats.PV -= mitigatedDamage;
+                                    state.combat.log.push({ message: `L'explosion de ${resurrectTalent.nom} inflige ${mitigatedDamage} dégâts à ${enemy.nom}.`, type: 'player_attack', timestamp: Date.now() });
+                                }
+                            });
+
+                            // Heal
+                            const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
+                            state.player.stats.PV = maxHp * effect.heal_percent;
+                            state.combat.log.push({ message: `Le talent ${resurrectTalent.nom} vous ramène à la vie !`, type: 'heal', timestamp: Date.now() });
+                            totalDamage = 0;
+
+                        } else {
+                            const deathWardBuff = state.player.activeBuffs.find(b => b.isDeathWard);
+                            if (deathWardBuff && deathWardBuff.deathWardHealPercent) {
+                                const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
+                                const healAmount = maxHp * (deathWardBuff.deathWardHealPercent / 100);
+                                state.player.stats.PV = healAmount;
+                                state.combat.log.push({ message: `Votre Esprit gardien vous a sauvé de la mort et vous a soigné pour ${Math.round(healAmount)} PV!`, type: 'heal', timestamp: Date.now() });
+                                state.player.activeBuffs = state.player.activeBuffs.filter(b => b.id !== deathWardBuff.id);
+                                totalDamage = 0;
+                            }
                         }
                     }
 
@@ -2226,41 +2429,74 @@ export const useGameStore = create<GameState>()(
 
                 talent.triggeredEffects.forEach(triggeredEffect => {
                     if (triggeredEffect.trigger === trigger) {
-                        const procChance = getRankValue(triggeredEffect.chance, rank)
-                        if (Math.random() < procChance) {
+                        // Check for conditions
+                        let conditionsMet = true;
+                        if (triggeredEffect.conditions) {
+                            if (triggeredEffect.conditions.skill_damage_type && context?.skill?.effects) {
+                                const skillDamageType = (context.skill.effects[0] as any).damageType;
+                                if (skillDamageType !== triggeredEffect.conditions.skill_damage_type) {
+                                    conditionsMet = false;
+                                }
+                            }
+                        }
+
+                        if (conditionsMet && Math.random() < getRankValue(triggeredEffect.chance, rank)) {
                             triggeredEffect.effects.forEach(effect => {
                                 const anyEffect = effect as any;
                                 if (anyEffect.type === 'buff' && anyEffect.buffType === 'stat_modifier') {
                                     const value = getRankValue(anyEffect.statMods[0].value, rank);
                                     const newStatMod = { ...anyEffect.statMods[0], value: value };
-
-                                    player.activeBuffs.push({
-                                        id: anyEffect.id,
-                                        name: anyEffect.name,
-                                        duration: anyEffect.duration * 1000,
-                                        statMods: [newStatMod],
-                                    });
+                                    player.activeBuffs.push({ id: anyEffect.id, name: anyEffect.name, duration: anyEffect.duration * 1000, statMods: [newStatMod] });
                                     combat.log.push({ message: `Le talent ${talent.nom} s'active !`, type: 'talent_proc', timestamp: Date.now() });
+                                } else if (anyEffect.type === 'apply_buff') {
+                                    const buffData = anyEffect.buff;
+                                    const existingBuff = player.activeBuffs.find(b => b.id === buffData.id);
+                                    if (existingBuff && buffData.is_stacking) {
+                                        const max_stacks = getRankValue(buffData.max_stacks, rank);
+                                        existingBuff.stacks = Math.min(max_stacks, (existingBuff.stacks || 1) + 1);
+                                        existingBuff.duration = buffData.duration; // Refresh duration
+                                        combat.log.push({ message: `${buffData.name} (x${existingBuff.stacks})`, type: 'talent_proc', timestamp: Date.now() });
+                                    } else if (!existingBuff) {
+                                        player.activeBuffs.push({ ...buffData, stacks: 1, duration: buffData.duration });
+                                        combat.log.push({ message: `Vous gagnez ${buffData.name}.`, type: 'talent_proc', timestamp: Date.now() });
+                                    }
                                 } else if (anyEffect.type === 'apply_debuff' && context?.targetId) {
                                     const target = combat.enemies.find(e => e.id === context.targetId);
                                     if (target) {
                                         const debuffData = anyEffect.debuff;
                                         if (debuffData.debuffType === 'dot') {
                                             const buffedPlayerStats = getModifiedStats(player.stats, player.activeBuffs, player.form);
-                                            const baseDmg = formulas.calculateMeleeDamage(buffedPlayerStats.AttMin, buffedPlayerStats.AttMax, formulas.calculateAttackPower(buffedPlayerStats));
-                                            const totalDamage = baseDmg * getRankValue(debuffData.totalDamage.multiplier, rank);
+                                            let totalDamage = 0;
+                                            if (debuffData.totalDamage.source === 'weapon') {
+                                                const baseDmg = formulas.calculateMeleeDamage(buffedPlayerStats.AttMin, buffedPlayerStats.AttMax, formulas.calculateAttackPower(buffedPlayerStats));
+                                                totalDamage = baseDmg * getRankValue(debuffData.totalDamage.multiplier, rank);
+                                            } else if (debuffData.totalDamage.source === 'attack_power') {
+                                                totalDamage = formulas.calculateAttackPower(buffedPlayerStats) * getRankValue(debuffData.totalDamage.multiplier, rank);
+                                            }
                                             const damagePerTick = Math.round(totalDamage / debuffData.duration);
-
-                                            target.activeDebuffs.push({
-                                                id: debuffData.id,
-                                                name: debuffData.name,
-                                                duration: debuffData.duration * 1000,
-                                                damagePerTick: damagePerTick,
-                                                tickInterval: 1000,
-                                                nextTickIn: 1000,
-                                            });
+                                            target.activeDebuffs.push({ id: debuffData.id, name: debuffData.name, duration: debuffData.duration * 1000, damagePerTick: damagePerTick, tickInterval: 1000, nextTickIn: 1000, isDebuff: true, damageType: debuffData.damageType });
+                                            combat.log.push({ message: `Le talent ${talent.nom} s'active sur ${target.nom} !`, type: 'talent_proc', timestamp: Date.now() });
+                                        } else if (debuffData.debuffType === 'stat_modifier') {
+                                            const newDebuff: Debuff = { id: debuffData.id, name: debuffData.name, duration: debuffData.duration * 1000, statMods: debuffData.statMods, isDebuff: true };
+                                            target.activeDebuffs.push(newDebuff);
                                             combat.log.push({ message: `Le talent ${talent.nom} s'active sur ${target.nom} !`, type: 'talent_proc', timestamp: Date.now() });
                                         }
+                                    }
+                                } else if (anyEffect.type === 'riposte' && context?.attackerId) {
+                                    combat.log.push({ message: `Le talent ${talent.nom} s'active ! Vous ripostez !`, type: 'talent_proc', timestamp: Date.now() });
+                                    get().playerAttack(context.attackerId, false);
+                                } else if (anyEffect.type === 'reduce_cooldowns') {
+                                    if (anyEffect.reset) {
+                                        for (const skillId in combat.skillCooldowns) {
+                                            delete combat.skillCooldowns[skillId];
+                                        }
+                                        combat.log.push({ message: `Le talent ${talent.nom} s'active et réinitialise vos temps de recharge !`, type: 'talent_proc', timestamp: Date.now() });
+                                    } else {
+                                        const reduction = getRankValue(anyEffect.value, rank);
+                                        for (const skillId in combat.skillCooldowns) {
+                                            combat.skillCooldowns[skillId] = Math.max(0, combat.skillCooldowns[skillId] - reduction);
+                                        }
+                                        combat.log.push({ message: `Le talent ${talent.nom} s'active et réduit vos temps de recharge !`, type: 'talent_proc', timestamp: Date.now() });
                                     }
                                 }
                             });
@@ -2273,6 +2509,15 @@ export const useGameStore = create<GameState>()(
 
       applySpecialEffect: (trigger, context) => {
         set((state: GameState) => {
+            if (trigger === 'ON_CRITICAL_HIT') {
+                const danseDeLombreRank = state.player.learnedTalents['rogue_assassinat_ultime'];
+                if (danseDeLombreRank && danseDeLombreRank > 0) {
+                    state.combat.isStealthed = true;
+                    state.player.nextAttackIsGuaranteedCrit = true;
+                    state.combat.log.push({ message: `Danse de l'Ombre vous camoufle et garantit un coup critique.`, type: 'talent_proc', timestamp: Date.now() });
+                }
+            }
+
             Object.values(state.inventory.equipment).forEach(item => {
                 if (item?.specialEffect?.trigger === trigger) {
                     const effect = item.specialEffect;

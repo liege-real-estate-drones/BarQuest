@@ -28,7 +28,11 @@
             "level": 3,
             "isBoss": true,
             "palier": 1,
-            "stats": { "PV": 150, "AttMin": 12, "AttMax": 18, "CritPct": 10, "CritDmg": 150, "Armure": 50, "Vitesse": 2.5, "Precision": 65, "Esquive": 5 }
+            "stats": { "PV": 150, "AttMin": 12, "AttMax": 18, "CritPct": 10, "CritDmg": 150, "Armure": 50, "Vitesse": 2.5, "Precision": 65, "Esquive": 5 },
+            "abilities": [{
+                "id": "get_back_to_work", "name": "Au travail !", "cooldown": 15, "chance": 0.3,
+                "effects": [{ "type": "debuff", "debuffType": "cc", "id": "supervisor_stun", "name": "Intimidation", "duration": 1.5, "ccType": "stun" }]
+            }]
         },
         {
             "id": "kobold_miner_assistant",
@@ -206,7 +210,27 @@
             "famille": "Undead",
             "isBoss": false,
             "palier": 6,
-            "stats": { "PV": 400, "AttMin": 70, "AttMax": 85, "CritPct": 12, "CritDmg": 160, "Armure": 150, "Vitesse": 2.2, "Precision": 90, "Esquive": 22 }
+            "stats": { "PV": 400, "AttMin": 70, "AttMax": 85, "CritPct": 12, "CritDmg": 160, "Armure": 150, "Vitesse": 2.2, "Precision": 90, "Esquive": 22 },
+            "abilities": [
+                {
+                    "id": "monster_frost_attack",
+                    "name": "Attaque de givre",
+                    "cooldown": 10,
+                    "chance": 0.5,
+                    "effects": [
+                        {
+                            "type": "debuff",
+                            "debuffType": "stat_modifier",
+                            "id": "monster_frost_slow",
+                            "name": "Ralentissement glacial",
+                            "duration": 6,
+                            "statMods": [
+                                { "stat": "Vitesse", "modifier": "multiplicative", "value": 1.30 }
+                            ]
+                        }
+                    ]
+                }
+            ]
         },
         {
             "id": "frozen_berserker",
@@ -233,7 +257,29 @@
             "famille": "Beast",
             "isBoss": false,
             "palier": 7,
-            "stats": { "PV": 550, "AttMin": 76, "AttMax": 90, "CritPct": 15, "CritDmg": 170, "Armure": 280, "Vitesse": 2.3, "Precision": 90, "Esquive": 18 }
+            "stats": { "PV": 550, "AttMin": 76, "AttMax": 90, "CritPct": 15, "CritDmg": 170, "Armure": 280, "Vitesse": 2.3, "Precision": 90, "Esquive": 18 },
+            "abilities": [
+                {
+                    "id": "monster_fire_breath",
+                    "name": "Souffle de feu",
+                    "cooldown": 12,
+                    "chance": 0.4,
+                    "effects": [
+                        {
+                            "type": "debuff",
+                            "debuffType": "dot",
+                            "id": "monster_fire_dot",
+                            "name": "Brûlure infernale",
+                            "duration": 9,
+                            "damageType": "fire",
+                            "totalDamage": {
+                                "source": "base_value",
+                                "multiplier": 45
+                            }
+                        }
+                    ]
+                }
+            ]
         },
         {
             "id": "obsidian_gargoyle",
@@ -536,7 +582,8 @@
             "famille": "Dragonkin",
             "isBoss": true,
             "palier": 14,
-            "stats": { "PV": 12000, "AttMin": 360, "AttMax": 405, "CritPct": 15, "CritDmg": 180, "Armure": 2500, "Vitesse": 3, "Precision": 120, "Esquive": 15 }
+            "stats": { "PV": 12000, "AttMin": 360, "AttMax": 405, "CritPct": 15, "CritDmg": 180, "Armure": 2500, "Vitesse": 3, "Precision": 120, "Esquive": 15 },
+            "abilities": [{"id": "deep_freeze", "name": "Gelure profonde", "cooldown": 20, "chance": 0.3, "effects": [{ "type": "debuff", "debuffType": "cc", "id": "deep_freeze_stun", "name": "Gelé", "duration": 4, "ccType": "stun" }] }]
         },
         {
             "id": "ice_titan",
@@ -590,7 +637,8 @@
             "famille": "Dragonkin",
             "isBoss": true,
             "palier": 15,
-            "stats": { "PV": 14400, "AttMin": 405, "AttMax": 450, "CritPct": 15, "CritDmg": 180, "Armure": 2800, "Vitesse": 3, "Precision": 125, "Esquive": 15 }
+            "stats": { "PV": 14400, "AttMin": 405, "AttMax": 450, "CritPct": 15, "CritDmg": 180, "Armure": 2800, "Vitesse": 3, "Precision": 125, "Esquive": 15 },
+            "abilities": [{"id": "magma_breath", "name": "Souffle de Magma", "cooldown": 20, "chance": 0.5, "effects": [{ "type": "damage", "damageType": "fire", "multiplier": 1.5 }, { "type": "debuff", "debuffType": "vulnerability", "id": "magma_vuln", "name": "Armure fondue", "duration": 10, "damageType": "all", "multiplier": 1.15 }] }]
         },
         {
             "id": "balrog",
@@ -644,7 +692,8 @@
             "famille": "Plant",
             "isBoss": true,
             "palier": 16,
-            "stats": { "PV": 20000, "AttMin": 495, "AttMax": 540, "CritPct": 10, "CritDmg": 160, "Armure": 4000, "Vitesse": 4.5, "Precision": 130, "Esquive": 10 }
+            "stats": { "PV": 20000, "AttMin": 495, "AttMax": 540, "CritPct": 10, "CritDmg": 160, "Armure": 4000, "Vitesse": 4.5, "Precision": 130, "Esquive": 10 },
+            "abilities": [{"id": "ashes_of_the_world", "name": "Cendres du Monde", "cooldown": 25, "chance": 0.4, "effects": [{ "type": "buff", "buffType": "stat_modifier", "id": "world_ash_dmg_buff", "name": "Puissance des cendres", "duration": 15, "statMods": [{ "stat": "AttMin", "modifier": "multiplicative", "value": 1.25 }, { "stat": "AttMax", "modifier": "multiplicative", "value": 1.25 }] }, { "type": "debuff", "debuffType": "dot", "id": "world_ash_aura", "name": "Aura de cendres", "duration": 15, "damageType": "fire", "totalDamage": { "source": "base_value", "multiplier": 350 } }] }]
         },
         {
             "id": "gaia_avatar",
@@ -698,7 +747,8 @@
             "famille": "Aberration",
             "isBoss": true,
             "palier": 17,
-            "stats": { "PV": 32000, "AttMin": 720, "AttMax": 810, "CritPct": 20, "CritDmg": 200, "Armure": 4500, "Vitesse": 2.8, "Precision": 160, "Esquive": 25 }
+            "stats": { "PV": 32000, "AttMin": 720, "AttMax": 810, "CritPct": 20, "CritDmg": 200, "Armure": 4500, "Vitesse": 2.8, "Precision": 160, "Esquive": 25 },
+            "abilities": [{"id": "touch_of_the_void", "name": "Toucher du Vide", "cooldown": 18, "chance": 0.5, "effects": [{ "type": "damage", "damageType": "shadow", "multiplier": 1.4 }, { "type": "debuff", "debuffType": "stat_modifier", "id": "insanity_debuff", "name": "Folie", "duration": 12, "statMods": [{ "stat": "Precision", "modifier": "multiplicative", "value": 0.75 }, { "stat": "Esquive", "modifier": "multiplicative", "value": 0.75 }] }] }]
         },
         {
             "id": "archlich_of_nar'thalas",
@@ -761,7 +811,11 @@
             "famille": "Beast",
             "isBoss": true,
             "palier": 1,
-            "stats": { "PV": 200, "AttMin": 15, "AttMax": 22, "CritPct": 12, "CritDmg": 150, "Armure": 40, "Vitesse": 2.0, "Precision": 70, "Esquive": 20 }
+            "stats": { "PV": 200, "AttMin": 15, "AttMax": 22, "CritPct": 12, "CritDmg": 150, "Armure": 40, "Vitesse": 2.0, "Precision": 70, "Esquive": 20 },
+            "abilities": [{
+                "id": "piercing_screech", "name": "Cri perçant", "cooldown": 12, "chance": 0.4,
+                "effects": [{ "type": "debuff", "debuffType": "stat_modifier", "id": "screech_armor_down", "name": "Armure brisée", "duration": 8, "statMods": [{ "stat": "Armure", "modifier": "multiplicative", "value": 0.85 }] }]
+            }]
         },
         {
             "id": "yeti_chieftain",
@@ -771,6 +825,13 @@
             "isBoss": true,
             "palier": 2,
             "stats": { "PV": 600, "AttMin": 25, "AttMax": 35, "CritPct": 8, "CritDmg": 150, "Armure": 150, "Vitesse": 3.2, "Precision": 75, "Esquive": 10 },
+            "abilities": [{
+                "id": "ground_slam", "name": "Frappe assommante", "cooldown": 10, "chance": 0.5,
+                "effects": [
+                    { "type": "damage", "damageType": "physical", "multiplier": 1.5 },
+                    { "type": "debuff", "debuffType": "cc", "id": "slam_stun", "name": "Assommé", "duration": 2, "ccType": "stun" }
+                ]
+            }],
             "specificLootTable": ["axe_of_the_deathbringer", "set_silver_guard_helm", "set_silver_guard_chest"],
             "componentLoot": [
                 { "id": "frozen_heart", "chance": 0.25, "quantity": 1 }
@@ -784,6 +845,10 @@
             "isBoss": true,
             "palier": 3,
             "stats": { "PV": 800, "AttMin": 45, "AttMax": 55, "CritPct": 10, "CritDmg": 150, "Armure": 180, "Vitesse": 2.7, "Precision": 80, "Esquive": 12, "ResElems": { "fire": 40, "ice": -20 } },
+            "abilities": [{
+                "id": "immolation", "name": "Immolation", "cooldown": 12, "chance": 0.5,
+                "effects": [{ "type": "debuff", "debuffType": "dot", "id": "immolation_dot", "name": "Immolation", "duration": 6, "damageType": "fire", "totalDamage": { "source": "base_value", "multiplier": 90 } }]
+            }],
             "specificLootTable": ["set_arcanist_cowl", "set_arcanist_robe"],
             "recipeLoot": [
                 { "id": "enchant_superior_fire_resistance", "chance": 0.1, "quantity": 1 }
@@ -797,6 +862,10 @@
             "isBoss": true,
             "palier": 4,
             "stats": { "PV": 1200, "AttMin": 60, "AttMax": 75, "CritPct": 15, "CritDmg": 160, "Armure": 250, "Vitesse": 2.4, "Precision": 85, "Esquive": 18 },
+            "abilities": [{
+                "id": "barkskin", "name": "Écorcefer", "cooldown": 20, "chance": 0.3,
+                "effects": [{ "type": "buff", "buffType": "stat_modifier", "id": "barkskin_buff", "name": "Écorcefer", "duration": 10, "statMods": [{ "stat": "Armure", "modifier": "multiplicative", "value": 2.0 }] }]
+            }],
             "specificLootTable": ["set_shadow_shroud_mask", "set_shadow_shroud_tunic"]
         },
         {
@@ -806,7 +875,11 @@
             "famille": "Humanoid",
             "isBoss": true,
             "palier": 5,
-            "stats": { "PV": 1800, "AttMin": 70, "AttMax": 85, "CritPct": 12, "CritDmg": 150, "Armure": 350, "Vitesse": 2.8, "Precision": 90, "Esquive": 14 }
+            "stats": { "PV": 1800, "AttMin": 70, "AttMax": 85, "CritPct": 12, "CritDmg": 150, "Armure": 350, "Vitesse": 2.8, "Precision": 90, "Esquive": 14 },
+            "abilities": [{
+                "id": "void_bolt", "name": "Trait du Vide", "cooldown": 8, "chance": 0.6,
+                "effects": [{ "type": "damage", "damageType": "shadow", "multiplier": 1.2 }]
+            }]
         },
         {
             "id": "void_priest",
@@ -815,7 +888,11 @@
             "famille": "Humanoid",
             "isBoss": true,
             "palier": 5,
-            "stats": { "PV": 1900, "AttMin": 75, "AttMax": 90, "CritPct": 14, "CritDmg": 160, "Armure": 380, "Vitesse": 2.6, "Precision": 92, "Esquive": 16 }
+            "stats": { "PV": 1900, "AttMin": 75, "AttMax": 90, "CritPct": 14, "CritDmg": 160, "Armure": 380, "Vitesse": 2.6, "Precision": 92, "Esquive": 16 },
+            "abilities": [{
+                "id": "mind_flay", "name": "Fouet mental", "cooldown": 10, "chance": 0.5,
+                "effects": [{ "type": "debuff", "debuffType": "dot", "id": "mind_flay_dot", "name": "Fouet mental", "duration": 9, "damageType": "shadow", "totalDamage": { "source": "base_value", "multiplier": 120 } }]
+            }]
         },
         {
             "id": "icebound_warlord",
@@ -825,6 +902,7 @@
             "isBoss": true,
             "palier": 6,
             "stats": { "PV": 2125, "AttMin": 90, "AttMax": 109, "CritPct": 15, "CritDmg": 150, "Armure": 500, "Vitesse": 3.2, "Precision": 95, "Esquive": 10 },
+            "abilities": [{"id": "shattering_strike", "name": "Frappe fracassante", "cooldown": 12, "chance": 0.4, "effects": [{ "type": "damage", "damageType": "physical", "multiplier": 1.4 }, { "type": "debuff", "debuffType": "stat_modifier", "id": "shattering_armor_down", "name": "Armure fracassée", "duration": 10, "statMods": [{ "stat": "Armure", "modifier": "multiplicative", "value": 0.80 }] }] }],
             "specificLootTable": ["rep_silver_vanguard_helm", "rep_silver_vanguard_greataxe"]
         },
         {
@@ -835,6 +913,7 @@
             "isBoss": true,
             "palier": 7,
             "stats": { "PV": 2975, "AttMin": 114, "AttMax": 133, "CritPct": 10, "CritDmg": 150, "Armure": 700, "Vitesse": 3.4, "Precision": 100, "Esquive": 9 },
+            "abilities": [{"id": "scorching_smash", "name": "Fracas incandescent", "cooldown": 10, "chance": 0.5, "effects": [{ "type": "damage", "damageType": "fire", "multiplier": 1.6 }] }],
             "specificLootTable": ["rep_magma_callers_cowl", "rep_magma_callers_staff"]
         },
         {
@@ -845,6 +924,7 @@
             "isBoss": true,
             "palier": 8,
             "stats": { "PV": 3825, "AttMin": 142, "AttMax": 171, "CritPct": 18, "CritDmg": 160, "Armure": 800, "Vitesse": 2.6, "Precision": 105, "Esquive": 20 },
+            "abilities": [{"id": "natures_grasp", "name": "Poigne de la nature", "cooldown": 15, "chance": 0.4, "effects": [{ "type": "debuff", "debuffType": "stat_modifier", "id": "grasp_slow", "name": "Ralenti", "duration": 8, "statMods": [{ "stat": "Vitesse", "modifier": "multiplicative", "value": 1.40 }] }] }],
             "specificLootTable": ["rep_silent_path_mask", "rep_silent_path_daggers"]
         },
         {
@@ -855,6 +935,7 @@
             "isBoss": true,
             "palier": 9,
             "stats": { "PV": 4675, "AttMin": 180, "AttMax": 209, "CritPct": 22, "CritDmg": 180, "Armure": 900, "Vitesse": 2.0, "Precision": 110, "Esquive": 32 },
+            "abilities": [{"id": "soul_drain", "name": "Drain d'âme", "cooldown": 12, "chance": 0.5, "effects": [{ "type": "debuff", "debuffType": "dot", "id": "soul_drain_dot", "name": "Drain d'âme", "duration": 6, "damageType": "shadow", "totalDamage": { "source": "base_value", "multiplier": 150 } }] }],
             "specificLootTable": ["rep_faithsworn_diadem", "rep_faithsworn_mace"]
         },
         {
@@ -864,7 +945,8 @@
             "famille": "Humanoid",
             "isBoss": true,
             "palier": 10,
-            "stats": { "PV": 5740, "AttMin": 211, "AttMax": 248, "CritPct": 15, "CritDmg": 150, "Armure": 1500, "Vitesse": 3.2, "Precision": 115, "Esquive": 14 }
+            "stats": { "PV": 5740, "AttMin": 211, "AttMax": 248, "CritPct": 15, "CritDmg": 150, "Armure": 1500, "Vitesse": 3.2, "Precision": 115, "Esquive": 14 },
+            "abilities": [{"id": "crusader_strike", "name": "Frappe du croisé", "cooldown": 8, "chance": 0.6, "effects": [{ "type": "damage", "damageType": "holy", "multiplier": 1.3 }] }]
         },
         {
             "id": "ashwing_matriarch",
@@ -873,7 +955,8 @@
             "famille": "Beast",
             "isBoss": true,
             "palier": 11,
-            "stats": { "PV": 6560, "AttMin": 257, "AttMax": 294, "CritPct": 25, "CritDmg": 180, "Armure": 1600, "Vitesse": 2.2, "Precision": 120, "Esquive": 30 }
+            "stats": { "PV": 6560, "AttMin": 257, "AttMax": 294, "CritPct": 25, "CritDmg": 180, "Armure": 1600, "Vitesse": 2.2, "Precision": 120, "Esquive": 30 },
+            "abilities": [{"id": "wing_buffet", "name": "Coup d'aile", "cooldown": 18, "chance": 0.3, "effects": [{ "type": "debuff", "debuffType": "cc", "id": "wing_buffet_stun", "name": "Repoussé", "duration": 2.5, "ccType": "stun" }] }]
         },
         {
             "id": "colossus_of_the_grove",
@@ -882,7 +965,8 @@
             "famille": "Construct",
             "isBoss": true,
             "palier": 12,
-            "stats": { "PV": 9840, "AttMin": 322, "AttMax": 368, "CritPct": 10, "CritDmg": 150, "Armure": 2500, "Vitesse": 4.2, "Precision": 125, "Esquive": 7 }
+            "stats": { "PV": 9840, "AttMin": 322, "AttMax": 368, "CritPct": 10, "CritDmg": 150, "Armure": 2500, "Vitesse": 4.2, "Precision": 125, "Esquive": 7 },
+            "abilities": [{"id": "overgrowth", "name": "Surcroissance", "cooldown": 15, "chance": 0.4, "effects": [{ "type": "debuff", "debuffType": "stat_modifier", "id": "overgrowth_slow", "name": "Enraciné", "duration": 6, "statMods": [{ "stat": "Vitesse", "modifier": "multiplicative", "value": 1.5 }] }, { "type": "debuff", "debuffType": "dot", "id": "overgrowth_dot", "name": "Ronces", "duration": 6, "damageType": "nature", "totalDamage": { "source": "base_value", "multiplier": 180 } }] }]
         },
         {
             "id": "ancient_tomb_protector",
@@ -891,7 +975,8 @@
             "famille": "Construct",
             "isBoss": true,
             "palier": 13,
-            "stats": { "PV": 12000, "AttMin": 378, "AttMax": 432, "CritPct": 8, "CritDmg": 150, "Armure": 3500, "Vitesse": 4.5, "Precision": 130, "Esquive": 6 }
+            "stats": { "PV": 12000, "AttMin": 378, "AttMax": 432, "CritPct": 8, "CritDmg": 150, "Armure": 3500, "Vitesse": 4.5, "Precision": 130, "Esquive": 6 },
+            "abilities": [{"id": "stone_form", "name": "Forme de pierre", "cooldown": 25, "chance": 0.25, "effects": [{ "type": "buff", "buffType": "stat_modifier", "id": "stone_form_buff", "name": "Forme de pierre", "duration": 8, "statMods": [{ "stat": "Armure", "modifier": "multiplicative", "value": 3.0 }] }] }]
         },
         {
             "id": "garak_frostfang",
@@ -901,6 +986,7 @@
             "isBoss": true,
             "palier": 7,
             "stats": { "PV": 3500, "AttMin": 120, "AttMax": 150, "CritPct": 15, "CritDmg": 160, "Armure": 800, "Vitesse": 3.0, "Precision": 100, "Esquive": 12, "ResElems": { "ice": 50, "fire": -25 } },
+            "abilities": [{"id": "frost_breath", "name": "Souffle de Givre", "cooldown": 12, "chance": 0.5, "effects": [{ "type": "damage", "damageType": "ice", "multiplier": 1.5 }, { "type": "debuff", "debuffType": "stat_modifier", "id": "frost_breath_slow", "name": "Souffle glacial", "duration": 8, "statMods": [{ "stat": "Vitesse", "modifier": "multiplicative", "value": 1.35 }] }] }],
             "specificLootTable": ["garaks_icy_maw", "frostfang_bite"]
         },
         {
@@ -928,7 +1014,11 @@
             "level": 53,
             "isBoss": true,
             "palier": 11,
-            "stats": { "PV": 1500, "AttMin": 60, "AttMax": 90, "CritPct": 15, "CritDmg": 175, "Armure": 250, "Vitesse": 2.5, "Precision": 115, "Esquive": 15 }
+            "stats": { "PV": 1500, "AttMin": 60, "AttMax": 90, "CritPct": 15, "CritDmg": 175, "Armure": 250, "Vitesse": 2.5, "Precision": 115, "Esquive": 15 },
+            "abilities": [{
+                "id": "get_back_to_work", "name": "Au travail !", "cooldown": 15, "chance": 0.4,
+                "effects": [{ "type": "debuff", "debuffType": "cc", "id": "supervisor_stun", "name": "Intimidation", "duration": 2, "ccType": "stun" }]
+            }]
         },
         {
             "id": "kobold_miner_assistant_heroic",
@@ -956,7 +1046,14 @@
             "famille": "Beast",
             "isBoss": true,
             "palier": 11,
-            "stats": { "PV": 2000, "AttMin": 75, "AttMax": 110, "CritPct": 17, "CritDmg": 175, "Armure": 200, "Vitesse": 2.0, "Precision": 120, "Esquive": 30 }
+            "stats": { "PV": 2000, "AttMin": 75, "AttMax": 110, "CritPct": 17, "CritDmg": 175, "Armure": 200, "Vitesse": 2.0, "Precision": 120, "Esquive": 30 },
+            "abilities": [{
+                "id": "sonic_screech_heroic", "name": "Cri Sonique", "cooldown": 12, "chance": 0.5,
+                "effects": [
+                    { "type": "debuff", "debuffType": "stat_modifier", "id": "screech_armor_down_heroic", "name": "Armure brisée (H)", "duration": 10, "statMods": [{ "stat": "Armure", "modifier": "multiplicative", "value": 0.75 }] },
+                    { "type": "debuff", "debuffType": "stat_modifier", "id": "screech_precision_down_heroic", "name": "Désorienté (H)", "duration": 10, "statMods": [{ "stat": "Precision", "modifier": "multiplicative", "value": 0.80 }] }
+                ]
+            }]
         },
         {
             "id": "yeti_chieftain_heroic",
@@ -965,7 +1062,14 @@
             "famille": "Giant",
             "isBoss": true,
             "palier": 12,
-            "stats": { "PV": 6000, "AttMin": 125, "AttMax": 175, "CritPct": 13, "CritDmg": 175, "Armure": 750, "Vitesse": 3.2, "Precision": 125, "Esquive": 20 }
+            "stats": { "PV": 6000, "AttMin": 125, "AttMax": 175, "CritPct": 13, "CritDmg": 175, "Armure": 750, "Vitesse": 3.2, "Precision": 125, "Esquive": 20 },
+            "abilities": [{
+                "id": "seismic_slam_heroic", "name": "Frappe Sismique", "cooldown": 15, "chance": 0.4,
+                "effects": [
+                    { "type": "damage", "damageType": "physical", "multiplier": 1.8 },
+                    { "type": "debuff", "debuffType": "cc", "id": "slam_stun_heroic", "name": "Assommé (H)", "duration": 3, "ccType": "stun" }
+                ]
+            }]
         },
         {
             "id": "inferno_elemental_lord_heroic",
@@ -974,7 +1078,14 @@
             "famille": "Elemental",
             "isBoss": true,
             "palier": 13,
-            "stats": { "PV": 8000, "AttMin": 225, "AttMax": 275, "CritPct": 15, "CritDmg": 175, "Armure": 900, "Vitesse": 2.7, "Precision": 130, "Esquive": 22 }
+            "stats": { "PV": 8000, "AttMin": 225, "AttMax": 275, "CritPct": 15, "CritDmg": 175, "Armure": 900, "Vitesse": 2.7, "Precision": 130, "Esquive": 22 },
+            "abilities": [{
+                "id": "firestorm_heroic", "name": "Tempête de Feu", "cooldown": 15, "chance": 0.5,
+                "effects": [
+                    { "type": "damage", "damageType": "fire", "multiplier": 1.2 },
+                    { "type": "debuff", "debuffType": "dot", "id": "immolation_dot_heroic", "name": "Immolation (H)", "duration": 9, "damageType": "fire", "totalDamage": { "source": "base_value", "multiplier": 200 } }
+                ]
+            }]
         },
         {
             "id": "ancient_dryad_matriarch_heroic",
@@ -983,7 +1094,14 @@
             "famille": "Fey",
             "isBoss": true,
             "palier": 14,
-            "stats": { "PV": 12000, "AttMin": 300, "AttMax": 375, "CritPct": 20, "CritDmg": 185, "Armure": 1250, "Vitesse": 2.4, "Precision": 135, "Esquive": 28 }
+            "stats": { "PV": 12000, "AttMin": 300, "AttMax": 375, "CritPct": 20, "CritDmg": 185, "Armure": 1250, "Vitesse": 2.4, "Precision": 135, "Esquive": 28 },
+            "abilities": [{
+                "id": "thornbark_heroic", "name": "Écorce d'Épines", "cooldown": 20, "chance": 0.4,
+                "effects": [
+                    { "type": "buff", "buffType": "stat_modifier", "id": "barkskin_buff_heroic", "name": "Écorcefer (H)", "duration": 12, "statMods": [{ "stat": "Armure", "modifier": "multiplicative", "value": 2.50 }] },
+                    { "type": "buff", "buffType": "damage_reflection", "id": "thorns_buff_heroic", "name": "Épines (H)", "duration": 12, "reflectionValue": 0.30 }
+                ]
+            }]
         },
         {
             "id": "void_cultist_leader_heroic",
@@ -992,7 +1110,14 @@
             "famille": "Humanoid",
             "isBoss": true,
             "palier": 15,
-            "stats": { "PV": 18000, "AttMin": 350, "AttMax": 425, "CritPct": 17, "CritDmg": 175, "Armure": 1750, "Vitesse": 2.8, "Precision": 140, "Esquive": 24 }
+            "stats": { "PV": 18000, "AttMin": 350, "AttMax": 425, "CritPct": 17, "CritDmg": 175, "Armure": 1750, "Vitesse": 2.8, "Precision": 140, "Esquive": 24 },
+            "abilities": [{
+                "id": "voids_embrace_heroic", "name": "Étreinte du Vide", "cooldown": 12, "chance": 0.6,
+                "effects": [
+                    { "type": "debuff", "debuffType": "vulnerability", "id": "shadow_vuln_heroic", "name": "Vulnérabilité à l'Ombre (H)", "duration": 8, "damageType": "shadow", "multiplier": 1.25 },
+                    { "type": "damage", "damageType": "shadow", "multiplier": 1.3 }
+                ]
+            }]
         },
         {
             "id": "void_priest_heroic",
@@ -1001,7 +1126,17 @@
             "famille": "Humanoid",
             "isBoss": true,
             "palier": 15,
-            "stats": { "PV": 19000, "AttMin": 375, "AttMax": 450, "CritPct": 19, "CritDmg": 185, "Armure": 1900, "Vitesse": 2.6, "Precision": 142, "Esquive": 26 }
+            "stats": { "PV": 19000, "AttMin": 375, "AttMax": 450, "CritPct": 19, "CritDmg": 185, "Armure": 1900, "Vitesse": 2.6, "Precision": 142, "Esquive": 26 },
+            "abilities": [{
+                "id": "eternal_torment_heroic", "name": "Tourment Éternel", "cooldown": 15, "chance": 0.5,
+                "effects": [
+                    { "type": "debuff", "debuffType": "dot", "id": "mind_flay_dot_heroic", "name": "Fouet mental (H)", "duration": 9, "damageType": "shadow", "totalDamage": { "source": "base_value", "multiplier": 250 } },
+                    { "type": "debuff", "debuffType": "stat_modifier", "id": "power_drain_heroic", "name": "Puissance drainée (H)", "duration": 9, "statMods": [
+                        { "stat": "AttMin", "modifier": "multiplicative", "value": 0.85 },
+                        { "stat": "AttMax", "modifier": "multiplicative", "value": 0.85 }
+                    ]}
+                ]
+            }]
         },
         {
             "id": "icebound_warlord_heroic",
@@ -1010,7 +1145,15 @@
             "famille": "Humanoid",
             "isBoss": true,
             "palier": 16,
-            "stats": { "PV": 25000, "AttMin": 475, "AttMax": 575, "CritPct": 20, "CritDmg": 175, "Armure": 2500, "Vitesse": 3.2, "Precision": 145, "Esquive": 20 }
+            "stats": { "PV": 25000, "AttMin": 475, "AttMax": 575, "CritPct": 20, "CritDmg": 175, "Armure": 2500, "Vitesse": 3.2, "Precision": 145, "Esquive": 20 },
+            "abilities": [{
+                "id": "glacial_annihilation_heroic", "name": "Anéantissement Glacial", "cooldown": 12, "chance": 0.5,
+                "effects": [
+                    { "type": "damage", "damageType": "physical", "multiplier": 0.75 },
+                    { "type": "damage", "damageType": "ice", "multiplier": 0.75 },
+                    { "type": "debuff", "debuffType": "stat_modifier", "id": "shattering_armor_down_heroic", "name": "Armure fracassée (H)", "duration": 12, "statMods": [{ "stat": "Armure", "modifier": "multiplicative", "value": 0.65 }] }
+                ]
+            }]
         },
         {
             "id": "fire_giant_champion_heroic",
@@ -1019,7 +1162,14 @@
             "famille": "Giant",
             "isBoss": true,
             "palier": 17,
-            "stats": { "PV": 35000, "AttMin": 600, "AttMax": 700, "CritPct": 15, "CritDmg": 175, "Armure": 3500, "Vitesse": 3.4, "Precision": 150, "Esquive": 19 }
+            "stats": { "PV": 35000, "AttMin": 600, "AttMax": 700, "CritPct": 15, "CritDmg": 175, "Armure": 3500, "Vitesse": 3.4, "Precision": 150, "Esquive": 19 },
+            "abilities": [{
+                "id": "ashen_mark_heroic", "name": "Marque Cendrée", "cooldown": 16, "chance": 0.4,
+                "effects": [
+                    { "type": "damage", "damageType": "fire", "multiplier": 1.8 },
+                    { "type": "debuff", "debuffType": "healing_received_modifier", "id": "mortal_wound_heroic", "name": "Marque Cendrée (H)", "duration": 10, "multiplier": 0.50 }
+                ]
+            }]
         },
         {
             "id": "guardian_of_the_grove_heroic",
@@ -1028,7 +1178,8 @@
             "famille": "Fey",
             "isBoss": true,
             "palier": 18,
-            "stats": { "PV": 45000, "AttMin": 750, "AttMax": 900, "CritPct": 23, "CritDmg": 185, "Armure": 4000, "Vitesse": 2.6, "Precision": 155, "Esquive": 30 }
+            "stats": { "PV": 45000, "AttMin": 750, "AttMax": 900, "CritPct": 23, "CritDmg": 185, "Armure": 4000, "Vitesse": 2.6, "Precision": 155, "Esquive": 30 },
+            "abilities": [{"id": "primordial_grasp_heroic", "name": "Emprise Primordiale", "cooldown": 18, "chance": 0.4, "effects": [{ "type": "debuff", "debuffType": "cc", "id": "grasp_root_heroic", "name": "Enraciné (H)", "duration": 4, "ccType": "stun" }, { "type": "debuff", "debuffType": "dot", "id": "grasp_dot_heroic", "name": "Ronces (H)", "duration": 4, "damageType": "nature", "totalDamage": { "source": "base_value", "multiplier": 300 } }] }]
         },
         {
             "id": "spectral_overlord_heroic",
@@ -1037,7 +1188,8 @@
             "famille": "Undead",
             "isBoss": true,
             "palier": 19,
-            "stats": { "PV": 55000, "AttMin": 950, "AttMax": 1100, "CritPct": 27, "CritDmg": 205, "Armure": 4500, "Vitesse": 2.0, "Precision": 160, "Esquive": 42 }
+            "stats": { "PV": 55000, "AttMin": 950, "AttMax": 1100, "CritPct": 27, "CritDmg": 205, "Armure": 4500, "Vitesse": 2.0, "Precision": 160, "Esquive": 42 },
+            "abilities": [{"id": "feast_of_souls_heroic", "name": "Festin d'Âmes", "cooldown": 20, "chance": 0.5, "effects": [{ "type": "debuff", "debuffType": "dot", "id": "soul_drain_dot_heroic", "name": "Drain d'âme (H)", "duration": 8, "damageType": "shadow", "totalDamage": { "source": "base_value", "multiplier": 400 } }, { "type": "buff", "buffType": "hot", "id": "soul_feast_hot_heroic", "name": "Festin (H)", "duration": 8, "totalHeal": { "source": "max_health_percentage", "percentage": 0.05 } }] }]
         },
         {
             "id": "boreal_crusader_heroic",
@@ -1046,7 +1198,8 @@
             "famille": "Humanoid",
             "isBoss": true,
             "palier": 20,
-            "stats": { "PV": 70000, "AttMin": 1150, "AttMax": 1350, "CritPct": 20, "CritDmg": 175, "Armure": 7500, "Vitesse": 3.2, "Precision": 165, "Esquive": 24 }
+            "stats": { "PV": 70000, "AttMin": 1150, "AttMax": 1350, "CritPct": 20, "CritDmg": 175, "Armure": 7500, "Vitesse": 3.2, "Precision": 165, "Esquive": 24 },
+            "abilities": [{"id": "holy_judgment_heroic", "name": "Jugement Sacré", "cooldown": 15, "chance": 0.5, "effects": [{ "type": "damage", "damageType": "holy", "multiplier": 1.6 }, { "type": "buff", "buffType": "stat_modifier", "id": "judgment_buff_heroic", "name": "Jugement (H)", "duration": 10, "statMods": [{ "stat": "Vitesse", "modifier": "multiplicative_add", "value": -0.20 }, { "stat": "Precision", "modifier": "multiplicative", "value": 1.20 }] }] }]
         },
         {
             "id": "ashwing_matriarch_heroic",
@@ -1055,7 +1208,8 @@
             "famille": "Beast",
             "isBoss": true,
             "palier": 21,
-            "stats": { "PV": 80000, "AttMin": 1400, "AttMax": 1600, "CritPct": 30, "CritDmg": 205, "Armure": 8000, "Vitesse": 2.2, "Precision": 170, "Esquive": 40 }
+            "stats": { "PV": 80000, "AttMin": 1400, "AttMax": 1600, "CritPct": 30, "CritDmg": 205, "Armure": 8000, "Vitesse": 2.2, "Precision": 170, "Esquive": 40 },
+            "abilities": [{"id": "ashen_tempest_heroic", "name": "Tempête de Cendres", "cooldown": 18, "chance": 0.4, "effects": [{ "type": "damage", "damageType": "physical", "multiplier": 1.5 }, { "type": "debuff", "debuffType": "stat_modifier", "id": "tempest_debuff_heroic", "name": "Aveuglé (H)", "duration": 8, "statMods": [{ "stat": "Precision", "modifier": "multiplicative", "value": 0.70 }, { "stat": "CritPct", "modifier": "multiplicative", "value": 0.70 }] }] }]
         },
         {
             "id": "colossus_of_the_grove_heroic",
@@ -1064,7 +1218,8 @@
             "famille": "Construct",
             "isBoss": true,
             "palier": 22,
-            "stats": { "PV": 120000, "AttMin": 1750, "AttMax": 2000, "CritPct": 15, "CritDmg": 175, "Armure": 12500, "Vitesse": 4.2, "Precision": 175, "Esquive": 17 }
+            "stats": { "PV": 120000, "AttMin": 1750, "AttMax": 2000, "CritPct": 15, "CritDmg": 175, "Armure": 12500, "Vitesse": 4.2, "Precision": 175, "Esquive": 17 },
+            "abilities": [{"id": "colossal_slam_heroic", "name": "Frappe Colossale", "cooldown": 20, "chance": 0.4, "effects": [{ "type": "damage", "damageType": "physical", "multiplier": 2.0 }, { "type": "debuff", "debuffType": "stat_modifier", "id": "colossal_slow_heroic", "name": "Écrasé (H)", "duration": 10, "statMods": [{ "stat": "Vitesse", "modifier": "multiplicative", "value": 1.50 }] }] }]
         },
         {
             "id": "ancient_tomb_protector_heroic",
@@ -1073,7 +1228,8 @@
             "famille": "Construct",
             "isBoss": true,
             "palier": 23,
-            "stats": { "PV": 150000, "AttMin": 2100, "AttMax": 2400, "CritPct": 13, "CritDmg": 175, "Armure": 17500, "Vitesse": 4.5, "Precision": 180, "Esquive": 16 }
+            "stats": { "PV": 150000, "AttMin": 2100, "AttMax": 2400, "CritPct": 13, "CritDmg": 175, "Armure": 17500, "Vitesse": 4.5, "Precision": 180, "Esquive": 16 },
+            "abilities": [{"id": "immutable_form_heroic", "name": "Forme Immuable", "cooldown": 30, "chance": 0.3, "effects": [{ "type": "buff", "buffType": "stat_modifier", "id": "stone_form_buff_heroic", "name": "Forme de pierre (H)", "duration": 10, "statMods": [{ "stat": "Armure", "modifier": "multiplicative", "value": 4.0 }] }, { "type": "buff", "buffType": "hot", "id": "stone_regen_heroic", "name": "Régénération (H)", "duration": 10, "totalHeal": { "source": "max_health_percentage", "percentage": 0.15 } }] }]
         }
     ]
 }

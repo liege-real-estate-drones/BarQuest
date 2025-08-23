@@ -8,7 +8,16 @@
       "type": "passif",
       "niveauRequis": 1,
       "rangMax": 5,
-      "effets": ["Augmente les dégâts de base de 2/4/6/8/10%."],
+      "effets": [
+        {
+          "type": "buff",
+          "buffType": "stat_modifier",
+          "statMods": [
+            { "stat": "AttMin", "modifier": "multiplicative", "value": [1.02, 1.04, 1.06, 1.08, 1.10] },
+            { "stat": "AttMax", "modifier": "multiplicative", "value": [1.02, 1.04, 1.06, 1.08, 1.10] }
+          ]
+        }
+      ],
       "exigences": []
     },
     {
@@ -18,7 +27,15 @@
       "type": "passif",
       "niveauRequis": 1,
       "rangMax": 5,
-      "effets": ["Augmente les chances de coup critique de 1/2/3/4/5%."],
+      "effets": [
+        {
+          "type": "buff",
+          "buffType": "stat_modifier",
+          "statMods": [
+            { "stat": "CritPct", "modifier": "additive", "value": [1, 2, 3, 4, 5] }
+          ]
+        }
+      ],
       "exigences": []
     },
     {
@@ -28,7 +45,15 @@
       "type": "passif",
       "niveauRequis": 10,
       "rangMax": 3,
-      "effets": ["Augmente les dégâts des coups critiques de 10/20/30%."],
+      "effets": [
+        {
+          "type": "buff",
+          "buffType": "stat_modifier",
+          "statMods": [
+            { "stat": "CritDmg", "modifier": "additive", "value": [10, 20, 30] }
+          ]
+        }
+      ],
       "exigences": ["berserker_armes_precision_mortelle:1"]
     },
     {
@@ -39,6 +64,26 @@
       "niveauRequis": 20,
       "rangMax": 5,
       "effets": ["Vos coups critiques ont 5/10/15/20/25% de chance de réduire l'armure de la cible de 10% pendant 5s."],
+      "triggeredEffects": [
+        {
+          "trigger": "on_critical_hit",
+          "chance": [0.05, 0.1, 0.15, 0.2, 0.25],
+          "effects": [
+            {
+              "type": "apply_debuff",
+              "debuff": {
+                "id": "dechainement_critique_armor_reduction",
+                "name": "Armure Réduite",
+                "duration": 5,
+                "debuffType": "stat_modifier",
+                "statMods": [
+                  { "stat": "Armure", "modifier": "multiplicative", "value": 0.9 }
+                ]
+              }
+            }
+          ]
+        }
+      ],
       "exigences": ["berserker_armes_frappes_devastatrices:1"]
     },
     {
@@ -80,7 +125,7 @@
       "type": "passif",
       "niveauRequis": 20,
       "rangMax": 5,
-      "effets": ["Vos attaques ont une chance de 20% d'ignorer 10/20/30/40/50% de l'armure de la cible."],
+      "description": ["Vos attaques ont une chance de 20% d'ignorer 10/20/30/40/50% de l'armure de la cible."],
        "effects": [
         {
             "type": "on_hit_effect",
@@ -98,7 +143,13 @@
       "type": "passif",
       "niveauRequis": 50,
       "rangMax": 1,
-      "effets": ["Augmente les dégâts des armes à deux mains de 15% mais réduit la vitesse d'attaque de 10%."],
+      "effets": [{
+        "type": "buff", "buffType": "stat_modifier",
+        "statMods": [
+            { "stat": "DamageMultiplier", "modifier": "additive", "value": 0.15, "condition": { "requires_weapon_type": "two_handed" } },
+            { "stat": "Vitesse", "modifier": "multiplicative", "value": 1.10, "condition": { "requires_weapon_type": "two_handed" } }
+        ]
+      }],
       "exigences": ["berserker_armes_fracas_armure:3", "berserker_armes_dechainement_critique:3"]
     },
      {
@@ -108,7 +159,10 @@
       "type": "passif",
       "niveauRequis": 100,
       "rangMax": 1,
-      "effets": ["Les attaques contre les cibles ayant moins de 20% de PV infligent 50% de dégâts supplémentaires."],
+      "effets": [{
+          "type": "buff", "buffType": "stat_modifier",
+          "statMods": [{ "stat": "DamageMultiplier", "modifier": "additive", "value": 0.5, "condition": { "target_hp_less_than": 20 } }]
+      }],
       "exigences": ["berserker_armes_maitrise_deux_mains:1"]
     },
     {
@@ -118,7 +172,15 @@
       "type": "passif",
       "niveauRequis": 1,
       "rangMax": 5,
-      "effets": ["Augmente la vitesse d'attaque de 1/2/3/4/5%."],
+      "effets": [
+        {
+          "type": "buff",
+          "buffType": "stat_modifier",
+          "statMods": [
+            { "stat": "Vitesse", "modifier": "multiplicative", "value": [0.99, 0.98, 0.97, 0.96, 0.95] }
+          ]
+        }
+      ],
       "exigences": []
     },
     {
@@ -128,7 +190,29 @@
       "type": "passif",
       "niveauRequis": 10,
       "rangMax": 3,
-      "effets": ["Chaque attaque portée augmente votre vitesse d'attaque de 1% pendant 5s. Cumulable 5/10/15 fois."],
+      "effets": [],
+      "triggeredEffects": [
+        {
+          "trigger": "on_hit",
+          "chance": 1.0,
+          "effects": [
+            {
+              "type": "apply_buff",
+              "buff": {
+                "id": "enrage_speed_buff",
+                "name": "Enragé",
+                "duration": 5000,
+                "is_stacking": true,
+                "max_stacks": [5, 10, 15],
+                "buffType": "stat_modifier",
+                "statMods": [
+                  { "stat": "Vitesse", "modifier": "multiplicative", "value": 0.99 }
+                ]
+              }
+            }
+          ]
+        }
+      ],
       "exigences": ["berserker_fureur_celerite:1"]
     },
     {
@@ -138,7 +222,15 @@
       "type": "passif",
       "niveauRequis": 20,
       "rangMax": 5,
-      "effets": ["Augmente les chances de coup critique de 1/2/3/4/5%."],
+      "effets": [
+        {
+          "type": "buff",
+          "buffType": "stat_modifier",
+          "statMods": [
+            { "stat": "CritPct", "modifier": "additive", "value": [1, 2, 3, 4, 5] }
+          ]
+        }
+      ],
       "exigences": ["berserker_fureur_enrage:1"]
     },
     {
@@ -168,7 +260,15 @@
       "type": "passif",
       "niveauRequis": 1,
       "rangMax": 5,
-      "effets": ["Augmente l'armure de 5/10/15/20/25%."],
+      "effets": [
+        {
+          "type": "buff",
+          "buffType": "stat_modifier",
+          "statMods": [
+            { "stat": "Armure", "modifier": "multiplicative", "value": [1.05, 1.10, 1.15, 1.20, 1.25] }
+          ]
+        }
+      ],
       "exigences": []
     },
     {
@@ -178,7 +278,7 @@
       "type": "passif",
       "niveauRequis": 10,
       "rangMax": 3,
-      "effets": ["Vous régénérez 0.5/1/1.5% de votre vie maximale chaque seconde en combat."],
+      "description": ["Vous régénérez 0.5/1/1.5% de votre vie maximale chaque seconde en combat."],
       "effects": [
           {
               "type": "buff",
@@ -200,7 +300,15 @@
       "type": "passif",
       "niveauRequis": 20,
       "rangMax": 5,
-      "effets": ["Réduit les dégâts subis de 2/4/6/8/10%."],
+      "effets": [
+        {
+          "type": "buff",
+          "buffType": "stat_modifier",
+          "statMods": [
+            { "stat": "DamageReductionMultiplier", "modifier": "additive", "value": [-0.02, -0.04, -0.06, -0.08, -0.10] }
+          ]
+        }
+      ],
       "exigences": ["berserker_titan_second_souffle:1"]
     },
     {
@@ -220,7 +328,14 @@
       "type": "passif",
       "niveauRequis": 100,
       "rangMax": 1,
-      "effets": ["Les dégâts qui devraient vous tuer vous laissent à 1 PV à la place. Ne peut se produire qu'une fois par combat."],
+      "effets": [],
+      "effects": [
+        {
+          "type": "cheat_death",
+          "heal_percent": 0,
+          "set_hp_to_1": true
+        }
+      ],
       "exigences": ["berserker_titan_mur_de_fer:1"]
     },
     {
@@ -231,6 +346,19 @@
       "niveauRequis": 1,
       "rangMax": 5,
       "effets": ["Augmente les dégâts de Boule de Feu de 5/10/15/20/25%."],
+      "skill_mods": [
+        {
+          "skill_id": "mage_fire_fireball",
+          "modifications": [
+            {
+              "effect_index": 0,
+              "property_path": "baseValue",
+              "modifier": "multiplicative",
+              "value": [1.05, 1.1, 1.15, 1.2, 1.25]
+            }
+          ]
+        }
+      ],
       "exigences": []
     },
     {
@@ -241,6 +369,26 @@
       "niveauRequis": 10,
       "rangMax": 3,
       "effets": ["Vos sorts de feu ont 10/20/30% de chance d'appliquer un effet de brûlure infligeant des dégâts sur la durée."],
+      "triggeredEffects": [
+        {
+          "trigger": "on_hit",
+          "chance": [0.1, 0.2, 0.3],
+          "conditions": { "skill_damage_type": "fire" },
+          "effects": [
+            {
+              "type": "apply_debuff",
+              "debuff": {
+                "id": "embrasement_burn",
+                "name": "Brûlure",
+                "duration": 6,
+                "debuffType": "dot",
+                "damageType": "fire",
+                "totalDamage": { "source": "spell", "baseValue": 30 }
+              }
+            }
+          ]
+        }
+      ],
       "exigences": ["mage_feu_boule_de_feu_amelioree:1"]
     },
     {
@@ -261,6 +409,19 @@
       "niveauRequis": 50,
       "rangMax": 1,
       "effets": ["Vos coups critiques de feu réduisent le temps de recharge de vos autres sorts de 1 seconde."],
+      "triggeredEffects": [
+        {
+          "trigger": "on_critical_hit",
+          "chance": 1.0,
+          "conditions": { "skill_damage_type": "fire" },
+          "effects": [
+            {
+              "type": "reduce_cooldowns",
+              "value": 1000
+            }
+          ]
+        }
+      ],
       "exigences": ["mage_feu_critique_flamboyant:3"]
     },
     {
@@ -300,7 +461,15 @@
       "type": "passif",
       "niveauRequis": 10,
       "rangMax": 3,
-      "effets": ["Augmente votre maximum de points de vie de 3/6/9%."],
+      "effets": [
+        {
+          "type": "buff",
+          "buffType": "stat_modifier",
+          "statMods": [
+            { "stat": "PV", "modifier": "multiplicative", "value": [1.03, 1.06, 1.09] }
+          ]
+        }
+      ],
       "exigences": ["mage_givre_armure_de_givre:1"]
     },
     {
@@ -320,7 +489,15 @@
       "type": "passif",
       "niveauRequis": 10,
       "rangMax": 3,
-      "effets": ["Augmente les dégâts des sorts de givre de 5/10/15%."],
+      "effets": [
+        {
+          "type": "buff",
+          "buffType": "stat_modifier",
+          "statMods": [
+            { "stat": "IceDamageMultiplier", "modifier": "additive", "value": [0.05, 0.10, 0.15] }
+          ]
+        }
+      ],
       "exigences": ["mage_givre_eclair_de_givre_ameliore:1"]
     },
     {
@@ -410,7 +587,15 @@
       "type": "passif",
       "niveauRequis": 1,
       "rangMax": 5,
-      "effets": ["Augmente les chances de coup critique de 1/2/3/4/5%."],
+      "effets": [
+        {
+          "type": "buff",
+          "buffType": "stat_modifier",
+          "statMods": [
+            { "stat": "CritPct", "modifier": "additive", "value": [1, 2, 3, 4, 5] }
+          ]
+        }
+      ],
       "exigences": []
     },
     {
@@ -420,7 +605,15 @@
       "type": "passif",
       "niveauRequis": 10,
       "rangMax": 3,
-      "effets": ["Augmente les dégâts des coups critiques de 10/20/30%."],
+      "effets": [
+        {
+          "type": "buff",
+          "buffType": "stat_modifier",
+          "statMods": [
+            { "stat": "CritDmg", "modifier": "additive", "value": [10, 20, 30] }
+          ]
+        }
+      ],
       "exigences": ["rogue_assassinat_frappe_precise:1"]
     },
     {
@@ -430,7 +623,15 @@
       "type": "passif",
       "niveauRequis": 20,
       "rangMax": 5,
-      "effets": ["Augmente la vitesse d'attaque de 2/4/6/8/10%."],
+      "effets": [
+        {
+          "type": "buff",
+          "buffType": "stat_modifier",
+          "statMods": [
+            { "stat": "Vitesse", "modifier": "multiplicative", "value": [0.98, 0.96, 0.94, 0.92, 0.90] }
+          ]
+        }
+      ],
       "exigences": ["rogue_assassinat_point_faible:1"]
     },
     {
@@ -440,7 +641,18 @@
       "type": "passif",
       "niveauRequis": 50,
       "rangMax": 1,
-      "effets": ["Les attaques contre les cibles ayant moins de 35% de PV ont 25% de chances de coup critique supplémentaires."],
+      "effets": [],
+      "effects": [
+        {
+          "type": "conditional_stat_modifier",
+          "condition": {
+            "target_hp_less_than": 35
+          },
+          "statMods": [
+            { "stat": "CritPct", "modifier": "additive", "value": 25 }
+          ]
+        }
+      ],
       "exigences": ["rogue_assassinat_lames_rapides:3"]
     },
     {
@@ -451,6 +663,18 @@
       "niveauRequis": 100,
       "rangMax": 1,
       "effets": ["Vos coups critiques ont une chance de réinitialiser le temps de recharge de vos autres compétences."],
+      "triggeredEffects": [
+        {
+          "trigger": "on_critical_hit",
+          "chance": 0.2,
+          "effects": [
+            {
+              "type": "reduce_cooldowns",
+              "reset": true
+            }
+          ]
+        }
+      ],
       "exigences": ["rogue_assassinat_execution_sommaire:1"]
     },
     {
@@ -460,7 +684,15 @@
       "type": "passif",
       "niveauRequis": 1,
       "rangMax": 5,
-      "effets": ["Augmente l'esquive de 1/2/3/4/5%."],
+      "effets": [
+        {
+          "type": "buff",
+          "buffType": "stat_modifier",
+          "statMods": [
+            { "stat": "Esquive", "modifier": "additive", "value": [1, 2, 3, 4, 5] }
+          ]
+        }
+      ],
       "exigences": []
     },
     {
@@ -480,7 +712,7 @@
       "type": "passif",
       "niveauRequis": 10,
       "rangMax": 3,
-      "effets": ["Après avoir esquivé une attaque, votre prochaine attaque est 20/35/50% plus rapide."],
+      "description": ["Après avoir esquivé une attaque, votre prochaine attaque est 20/35/50% plus rapide."],
       "triggeredEffects": [
         {
             "trigger": "on_dodge",
@@ -517,7 +749,27 @@
       "type": "passif",
       "niveauRequis": 10,
       "rangMax": 3,
-      "effets": ["Esquiver une attaque augmente votre vitesse d'attaque de 5/10/15% pendant 5 secondes."],
+      "effets": [],
+      "triggeredEffects": [
+        {
+          "trigger": "on_dodge",
+          "chance": 1.0,
+          "effects": [
+            {
+              "type": "apply_buff",
+              "buff": {
+                "id": "roublardise_speed_buff",
+                "name": "Roublardise",
+                "duration": 5000,
+                "buffType": "stat_modifier",
+                "statMods": [
+                  { "stat": "Vitesse", "modifier": "multiplicative", "value": [0.95, 0.90, 0.85] }
+                ]
+              }
+            }
+          ]
+        }
+      ],
       "exigences": ["rogue_subtilite_insaisissable:1"]
     },
     {
@@ -557,7 +809,29 @@
       "type": "passif",
       "niveauRequis": 1,
       "rangMax": 5,
-      "effets": ["Vos attaques ont 10/15/20/25/30% de chance d'appliquer un poison qui inflige des dégâts sur la durée."],
+      "effets": [],
+      "triggeredEffects": [
+        {
+          "trigger": "on_hit",
+          "chance": [0.1, 0.15, 0.2, 0.25, 0.3],
+          "effects": [
+            {
+              "type": "apply_debuff",
+              "debuff": {
+                "id": "lames_empoisonnees_dot",
+                "name": "Poison (Lames)",
+                "duration": 8,
+                "debuffType": "dot",
+                "damageType": "nature",
+                "totalDamage": {
+                  "source": "attack_power",
+                  "multiplier": 0.8
+                }
+              }
+            }
+          ]
+        }
+      ],
       "exigences": []
     },
     {
@@ -607,7 +881,15 @@
       "type": "passif",
       "niveauRequis": 1,
       "rangMax": 5,
-      "effets": ["Augmente l'efficacité de vos soins de 5/10/15/20/25%."],
+      "effets": [
+        {
+          "type": "buff",
+          "buffType": "stat_modifier",
+          "statMods": [
+            { "stat": "HealingMultiplier", "modifier": "additive", "value": [0.05, 0.10, 0.15, 0.20, 0.25] }
+          ]
+        }
+      ],
       "exigences": []
     },
     {
@@ -657,7 +939,15 @@
       "type": "passif",
       "niveauRequis": 1,
       "rangMax": 5,
-      "effets": ["Augmente votre armure de 5/10/15/20/25%."],
+      "effets": [
+        {
+          "type": "buff",
+          "buffType": "stat_modifier",
+          "statMods": [
+            { "stat": "Armure", "modifier": "multiplicative", "value": [1.05, 1.10, 1.15, 1.20, 1.25] }
+          ]
+        }
+      ],
       "exigences": []
     },
     {
@@ -719,16 +1009,6 @@
       "rangMax": 1,
       "effets": ["Réduit tous les dégâts subis de 20% pendant 5 secondes après avoir utilisé un sort de soin sur vous-même."],
       "exigences": ["cleric_discipline_penitence:3", "cleric_discipline_egide_scintillante:3"]
-    },
-    {
-      "id": "cleric_discipline_dome_de_lumiere",
-      "nom": "Dôme de Lumière",
-      "classeId": "cleric",
-      "type": "passif",
-      "niveauRequis": 100,
-      "rangMax": 1,
-      "effets": ["Crée un dôme de lumière qui réduit les dégâts subis par vous de 50% pendant 10 secondes. Temps de recharge long."],
-      "exigences": ["cleric_discipline_suppression_de_la_douleur:1"]
     },
     {
       "id": "cleric_chatiment_jugement",
@@ -807,7 +1087,23 @@
       "type": "passif",
       "niveauRequis": 150,
       "rangMax": 1,
-      "effets": ["Vous ne pouvez pas mourir. Au lieu de cela, chaque coup mortel vous rend 25% de votre vie et augmente votre armure de 10% (cumulable)."],
+      "effets": [
+        {
+          "type": "cheat_death",
+          "heal_percent": 0.25,
+          "buff": {
+            "id": "immortal_colossus_armor_stack",
+            "name": "Colosse de Fer",
+            "duration": -1,
+            "is_stacking": true,
+            "max_stacks": 10,
+            "buffType": "stat_modifier",
+            "statMods": [
+              { "stat": "Armure", "modifier": "multiplicative", "value": 1.10 }
+            ]
+          }
+        }
+      ],
       "exigences": ["berserker_titan_dernier_rempart:1"]
     },
     {
@@ -817,7 +1113,18 @@
       "type": "passif",
       "niveauRequis": 150,
       "rangMax": 1,
-      "effets": ["En mourant, vous explosez en une nova de feu qui inflige d'énormes dégâts et vous ressuscitez avec la moitié de votre vie."],
+      "effets": [
+        {
+          "type": "on_death_resurrect",
+          "heal_percent": 0.5,
+          "aoe_damage": {
+            "type": "damage",
+            "damageType": "fire",
+            "source": "spell",
+            "baseValue": 500
+          }
+        }
+      ],
       "exigences": ["mage_feu_pyroclasme:1"]
     },
     {
@@ -827,7 +1134,23 @@
       "type": "passif",
       "niveauRequis": 150,
       "rangMax": 1,
-      "effets": ["Vous devenez un être de glace pure, immunisé aux effets de contrôle et vos sorts de givre gèlent instantanément les cibles."],
+      "effets": [],
+      "effects": [
+        {
+          "type": "buff",
+          "id": "coeur_de_l_hiver_buff",
+          "name": "Coeur de l'Hiver",
+          "duration": -1,
+          "buffType": "special"
+        },
+        {
+            "type": "buff",
+            "buffType": "stat_modifier",
+            "statMods": [
+                { "stat": "isImmuneToCC", "modifier": "additive", "value": 1 }
+            ]
+        }
+      ],
       "exigences": ["mage_givre_blizzard:1"]
     },
     {
@@ -857,7 +1180,21 @@
       "type": "passif",
       "niveauRequis": 150,
       "rangMax": 1,
-      "effets": ["Votre esquive atteint 90% et chaque esquive réussie riposte pour 100% des dégâts de votre arme."],
+      "effets": [
+        { "type": "stat_override", "stat": "Esquive", "value": 90 }
+      ],
+      "triggeredEffects": [
+        {
+          "trigger": "on_dodge",
+          "chance": 1.0,
+          "effects": [
+            {
+              "type": "riposte",
+              "damage_multiplier": 1.0
+            }
+          ]
+        }
+      ],
       "exigences": ["rogue_subtilite_disparition:1"]
     },
     {
