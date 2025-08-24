@@ -107,16 +107,18 @@ export const generateProceduralItem = (
     itemLevel: number,
     rarity: Rareté,
     availableAffixes: Affixe[],
+    baseId: string,
     dungeon?: Dungeon, // Passez l'objet donjon entier pour plus de contexte
 ): Item => {
     // Si l'objet n'est pas un équipement standard, retournez-le tel quel.
     if (baseItem.type === 'quest' || !baseItem.slot) {
-        return { ...baseItem, id: uuidv4(), niveauMin: itemLevel, rarity: rarity };
+        return { ...baseItem, id: uuidv4(), baseId: baseId, niveauMin: itemLevel, rarity: rarity };
     }
 
     const newItem: Item = {
         ...baseItem,
         id: uuidv4(),
+        baseId: baseId,
         niveauMin: itemLevel,
         rarity: rarity,
         affixes: [],

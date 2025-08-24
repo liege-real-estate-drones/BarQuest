@@ -59,6 +59,7 @@ export type MaterialType = z.infer<typeof MaterialTypeSchema>;
 
 export const ItemSchema = z.object({
   id: z.string(),
+  baseId: z.string().optional(),
   name: z.string(),
   gender: z.enum(["m", "f"]).optional(),
   material_type: MaterialTypeSchema.optional(),
@@ -80,6 +81,7 @@ export const ItemSchema = z.object({
   enchantment: AffixSchema.optional(),
   isCrafted: z.boolean().optional(),
   isPlural: z.boolean().optional(),
+  tier: z.number().optional(),
   specialEffect: z.object({
     trigger: z.string(),
     effect: z.string(),
@@ -381,6 +383,7 @@ export const EnchantmentSchema = z.object({
         factionId: z.string(),
         threshold: z.number(),
     }).optional(),
+    tagsClasse: z.array(z.string()).optional(),
 });
 
 export interface DungeonCompletionSummary {

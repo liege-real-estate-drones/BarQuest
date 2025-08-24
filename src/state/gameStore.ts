@@ -264,7 +264,7 @@ const generateEquipmentLoot = (monster: Monstre, gameData: GameData, playerClass
     const specificItem = gameData.items.find(item => item.id === specificLootId);
     if (specificItem) {
       // Return a copy of the unique item
-      return { ...specificItem, id: uuidv4() };
+      return { ...specificItem, id: uuidv4(), baseId: specificItem.id };
     }
   }
 
@@ -292,6 +292,8 @@ const generateEquipmentLoot = (monster: Monstre, gameData: GameData, playerClass
 
     if (possibleItems.length > 0) {
         const droppedItem = { ...possibleItems[Math.floor(Math.random() * possibleItems.length)] };
+        // @ts-ignore
+        droppedItem.baseId = droppedItem.id;
         droppedItem.id = uuidv4();
         return droppedItem;
     }
@@ -310,7 +312,7 @@ const generateEquipmentLoot = (monster: Monstre, gameData: GameData, playerClass
   const baseItemTemplate = possibleItemTemplates[Math.floor(Math.random() * possibleItemTemplates.length)];
   const { id, niveauMin, rarity, affixes, ...baseItemProps } = baseItemTemplate;
   const itemLevel = monster.level + (worldTier - 1) * 5;
-  const newItem = generateProceduralItem(baseItemProps, itemLevel, chosenRarity, gameData.affixes, dungeon);
+  const newItem = generateProceduralItem(baseItemProps, itemLevel, chosenRarity, gameData.affixes, baseItemTemplate.id, dungeon);
 
   return newItem;
 };
@@ -526,47 +528,72 @@ export const useGameStore = create<GameState>()(
       craftItem: (recipeId: string) => {
         set((state: GameState) => {
           const recipe = state.gameData.recipes.find(r => r.id === recipeId);
-          if (!recipe) {
-            console.error(`Recipe ${recipeId} not found.`);
-            return;
-          }
+          if (!recipe) { console.error(`Recipe ${recipeId} not found.`); return; }
+          if (state.inventory.gold < recipe.cost) { console.log("Not enough gold."); return; }
 
-          // 1. Check cost
-          if (state.inventory.gold < recipe.cost) {
-            console.log("Not enough gold.");
-            // TODO: Add user feedback
-            return;
-          }
+          const requiredItems: Record<string, number> = {};
+          const requiredComponents: Record<string, number> = {};
 
-          // 2. Check materials
-          for (const materialId in recipe.materials) {
-            const requiredAmount = recipe.materials[materialId];
-            const playerAmount = state.inventory.craftingMaterials[materialId] || 0;
-            if (playerAmount < requiredAmount) {
-              console.log(`Not enough ${materialId}.`);
-              // TODO: Add user feedback
-              return;
+          Object.entries(recipe.materials).forEach(([key, value]) => {
+            if (key.startsWith('item:')) {
+              requiredItems[key.substring(5)] = value;
+            } else {
+              requiredComponents[key] = value;
+            }
+          });
+
+          // Pre-check components
+          for (const [id, amount] of Object.entries(requiredComponents)) {
+            if ((state.inventory.craftingMaterials[id] || 0) < amount) {
+              console.log(`Not enough component: ${id}`);
+              return; // Abort
             }
           }
 
-          // 3. Subtract cost and materials
+          // Pre-check items and prepare for consumption
+          const inventoryItemsCopy = [...state.inventory.items];
+          const consumedItemIndices: number[] = [];
+
+          for (const [baseId, amount] of Object.entries(requiredItems)) {
+            let foundCount = 0;
+            for (let i = 0; i < inventoryItemsCopy.length; i++) {
+              if (inventoryItemsCopy[i].baseId === baseId) {
+                if (!consumedItemIndices.includes(i)) {
+                  consumedItemIndices.push(i);
+                  foundCount++;
+                  if (foundCount === amount) break;
+                }
+              }
+            }
+            if (foundCount < amount) {
+              console.log(`Not enough item with baseId: ${baseId}`);
+              return; // Abort
+            }
+          }
+
+          // --- All checks passed, proceed with transaction ---
+
+          // 1. Consume Gold
           state.inventory.gold -= recipe.cost;
-          for (const materialId in recipe.materials) {
-            state.inventory.craftingMaterials[materialId] -= recipe.materials[materialId];
+
+          // 2. Consume Components
+          for (const [id, amount] of Object.entries(requiredComponents)) {
+            state.inventory.craftingMaterials[id] -= amount;
           }
 
-          // 4. Create and add item
+          // 3. Consume Items
+          consumedItemIndices.sort((a, b) => b - a); // Sort descending to splice safely
+          for (const index of consumedItemIndices) {
+            state.inventory.items.splice(index, 1);
+          }
+
+          // 4. Create and add result item
           const baseItem = state.gameData.items.find(i => i.id === recipe.result);
-          if (!baseItem) {
-            console.error(`Result item ${recipe.result} not found in game data.`);
-            // TODO: Potentially refund materials/gold here
-            return;
-          }
+          if (!baseItem) { console.error(`Result item ${recipe.result} not found.`); return; }
 
-          const newItem = { ...baseItem, id: uuidv4() };
+          const newItem: Item = { ...baseItem, id: uuidv4(), baseId: baseItem.id };
           state.inventory.items.push(newItem);
           console.log(`Successfully crafted ${newItem.name}.`);
-          // TODO: Add user feedback
         });
       },
 
@@ -575,30 +602,25 @@ export const useGameStore = create<GameState>()(
           const cost = 100 * state.worldTier;
           if (state.inventory.gold < cost) {
               console.log("Not enough gold to gamble");
-              // TODO: Add user feedback
               return null;
           }
 
           const possibleTemplates = state.gameData.items.filter(item => item.slot === itemSlot && item.rarity !== "Légendaire" && item.rarity !== "Unique" && !item.set);
           if (possibleTemplates.length === 0) {
               console.log("No items found for that slot");
-              // TODO: Add user feedback
               return null;
           }
 
-
-          // Determine rarity - low chance for high rarity
           const roll = Math.random();
           let rarity: Rareté = "Commun";
-          if (roll < 0.02) rarity = "Légendaire"; // 2% chance for Legendary
-          else if (roll < 0.10) rarity = "Épique";   // 8% chance for Epic
-          else if (roll < 0.35) rarity = "Rare";     // 25% chance for Rare
-                                                      // 65% chance for Common
+          if (roll < 0.02) rarity = "Légendaire";
+          else if (roll < 0.10) rarity = "Épique";
+          else if (roll < 0.35) rarity = "Rare";
 
           const baseItemTemplate = possibleTemplates[Math.floor(Math.random() * possibleTemplates.length)];
           const itemLevel = state.player.level;
           const { id, niveauMin, affixes, ...baseItemProps } = baseItemTemplate;
-          const newItem = generateProceduralItem(baseItemProps, itemLevel, rarity, state.gameData.affixes, undefined);
+          const newItem = generateProceduralItem(baseItemProps, itemLevel, rarity, state.gameData.affixes, baseItemTemplate.id, undefined);
 
           set((currentState: GameState) => {
               currentState.inventory.gold -= cost;
@@ -953,9 +975,9 @@ export const useGameStore = create<GameState>()(
             player.stats.ResElems = { ...player.baseStats.ResElems };
           }
 
-          const equippedSetCounts: Record<string, number> = {};
+          const equippedSetTiers: Record<string, Record<number, number>> = {};
 
-          // 2. Apply stats from equipped items
+          // 2. Apply stats from equipped items and count set pieces by tier
           Object.values(inventory.equipment).forEach(item => {
             if (item) {
               if (item.affixes) {
@@ -971,19 +993,31 @@ export const useGameStore = create<GameState>()(
               if (item.effect) {
                 player.activeEffects.push(item.effect);
               }
-              if (item.set) {
-                equippedSetCounts[item.set.id] = (equippedSetCounts[item.set.id] || 0) + 1;
+              if (item.set && item.tier) {
+                if (!equippedSetTiers[item.set.id]) {
+                    equippedSetTiers[item.set.id] = {};
+                }
+                equippedSetTiers[item.set.id][item.tier] = (equippedSetTiers[item.set.id][item.tier] || 0) + 1;
               }
             }
           });
 
-          // 3. Apply set bonuses
-          Object.entries(equippedSetCounts).forEach(([setId, count]) => {
+          // 3. Apply tiered set bonuses
+          Object.entries(equippedSetTiers).forEach(([setId, tiers]) => {
               const setInfo = gameData.sets.find(s => s.id === setId);
               if (setInfo) {
-                  Object.entries(setInfo.bonuses).forEach(([bonusCount, effect]) => {
-                      if (count >= parseInt(bonusCount, 10)) {
-                          player.activeSetBonuses.push(effect);
+                  const tierCounts = Object.keys(tiers).map(Number).sort((a,b) => a - b);
+
+                  tierCounts.forEach(tier => {
+                      const piecesOfThisTier = tiers[tier];
+                      const setBonusesForTier = setInfo.bonuses[tier];
+                      if (setBonusesForTier) {
+                          Object.entries(setBonusesForTier).forEach(([requiredCountStr, effect]) => {
+                              const requiredCount = parseInt(requiredCountStr, 10);
+                              if (piecesOfThisTier >= requiredCount) {
+                                  player.activeSetBonuses.push(effect);
+                              }
+                          });
                       }
                   });
               }
@@ -1146,14 +1180,12 @@ export const useGameStore = create<GameState>()(
               return false;
           }
 
-          const price = getItemBuyPrice(itemToBuy); // Le prix est calculé ici
+          const price = getItemBuyPrice(itemToBuy);
           if (price <= 0 || inventory.gold < price) {
               return false;
           }
 
-          const newItem: Item = JSON.parse(JSON.stringify(itemToBuy));
-          newItem.id = uuidv4();
-          // Pas besoin de supprimer vendorPrice car il ne fait pas partie de l'objet de base
+          const newItem: Item = { ...itemToBuy, id: uuidv4(), baseId: itemToBuy.id };
 
           set((state: GameState) => {
               state.inventory.gold -= price;

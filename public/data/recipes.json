@@ -3,98 +3,152 @@
     "id": "recipe_silver_guard_helm",
     "name": "Heaume de la Garde d'Argent",
     "result": "set_silver_guard_helm",
-    "materials": {
-      "iron_ingot": 10,
-      "silver_nugget": 5
-    },
-    "cost": 1000
+    "materials": { "iron_ingot": 10, "silver_nugget": 5 }, "cost": 1000
   },
   {
     "id": "recipe_silver_guard_chest",
     "name": "Cuirasse de la Garde d'Argent",
     "result": "set_silver_guard_chest",
-    "materials": {
-      "iron_ingot": 15,
-      "silver_nugget": 8,
-      "yeti_fur": 2
-    },
-    "cost": 1500
+    "materials": { "iron_ingot": 15, "silver_nugget": 8, "yeti_fur": 2 }, "cost": 1500
   },
   {
     "id": "recipe_arcanist_cowl",
     "name": "Capuche de l'Arcaniste",
     "result": "set_arcanist_cowl",
-    "materials": {
-      "silk_bolt": 12,
-      "elemental_fire": 5
-    },
-    "cost": 1200
+    "materials": { "silk_bolt": 12, "elemental_fire": 5 }, "cost": 1200
   },
   {
     "id": "recipe_arcanist_robe",
     "name": "Robe de l'Arcaniste",
     "result": "set_arcanist_robe",
-    "materials": {
-      "silk_bolt": 20,
-      "elemental_fire": 10,
-      "arcane_crystal": 1
-    },
-    "cost": 1800
+    "materials": { "silk_bolt": 20, "elemental_fire": 10, "arcane_crystal": 1 }, "cost": 1800
   },
   {
     "id": "recipe_vanguard_greataxe",
     "name": "Grande Hache de l'Avant-garde",
     "result": "rep_silver_vanguard_greataxe",
-    "materials": {
-      "steel_ingot": 25,
-      "demonic_essence": 5,
-      "primal_might": 1
-    },
-    "cost": 10000
+    "materials": { "steel_ingot": 25, "demonic_essence": 5, "primal_might": 1 }, "cost": 10000
   },
   {
     "id": "recipe_magma_caller_staff",
     "name": "Bâton de l'Invocateur de Magma",
     "result": "rep_magma_callers_staff",
-    "materials": {
-      "enchanted_wood": 15,
-      "heart_of_magma": 3,
-      "primal_fire": 10
-    },
-    "cost": 10000
+    "materials": { "enchanted_wood": 15, "heart_of_magma": 3, "primal_fire": 10 }, "cost": 10000
   },
   {
     "id": "recipe_copper_sword",
     "name": "Épée en cuivre fabriquée",
     "result": "crafted_copper_sword",
-    "materials": {
-      "copper_ingot": 8,
-      "strange_dust": 2
-    },
-    "cost": 50
+    "materials": { "copper_ingot": 8, "strange_dust": 2 }, "cost": 50
   },
   {
     "id": "recipe_leather_helmet",
     "name": "Casque en cuir fabriqué",
     "result": "crafted_leather_helmet",
-    "materials": {
-      "light_leather": 5,
-      "strange_dust": 1
-    },
-    "cost": 30
+    "materials": { "light_leather": 5, "strange_dust": 1 }, "cost": 30
   },
   { "id": "recipe_iron_sword", "name": "Épée en fer", "result": "craft_iron_sword", "materials": { "iron_ingot": 8, "strange_dust": 5 }, "cost": 100 },
   { "id": "recipe_iron_axe", "name": "Hache en fer", "result": "craft_iron_axe", "materials": { "iron_ingot": 10, "light_leather": 2 }, "cost": 100 },
   { "id": "recipe_iron_helm", "name": "Heaume en fer", "result": "craft_iron_helm", "materials": { "iron_ingot": 12 }, "cost": 120 },
   { "id": "recipe_iron_chest", "name": "Cuirasse en fer", "result": "craft_iron_chest", "materials": { "iron_ingot": 20 }, "cost": 200 },
-
   { "id": "recipe_steel_sword", "name": "Épée en acier", "result": "craft_steel_sword", "materials": { "steel_ingot": 8, "soul_dust": 5 }, "cost": 300 },
   { "id": "recipe_steel_axe", "name": "Hache en acier", "result": "craft_steel_axe", "materials": { "steel_ingot": 10, "yeti_fur": 2 }, "cost": 300 },
   { "id": "recipe_steel_helm", "name": "Heaume en acier", "result": "craft_steel_helm", "materials": { "steel_ingot": 12 }, "cost": 360 },
   { "id": "recipe_steel_chest", "name": "Cuirasse en acier", "result": "craft_steel_chest", "materials": { "steel_ingot": 20 }, "cost": 600 },
-
   { "id": "recipe_mithril_sword", "name": "Épée en mithril", "result": "craft_mithril_sword", "materials": { "mithril_ingot": 8, "vision_dust": 5 }, "cost": 900 },
   { "id": "recipe_mithril_axe", "name": "Hache en mithril", "result": "craft_mithril_axe", "materials": { "mithril_ingot": 10, "enchanted_wood": 2 }, "cost": 900 },
   { "id": "recipe_mithril_helm", "name": "Heaume en mithril", "result": "craft_mithril_helm", "materials": { "mithril_ingot": 12 }, "cost": 1080 },
-  { "id": "recipe_mithril_chest", "name": "Cuirasse en mithril", "result": "craft_mithril_chest", "materials": { "mithril_ingot": 20 }, "cost": 1800 }
+  { "id": "recipe_mithril_chest", "name": "Cuirasse en mithril", "result": "craft_mithril_chest", "materials": { "mithril_ingot": 20 }, "cost": 1800 },
+  { "id": "recipe_test_helm_t1", "name": "Forger Heaume de Test T1", "result": "test_helm_t1", "materials": { "scrap_metal": 1 }, "cost": 1 },
+  { "id": "recipe_test_helm_t2_upgrade", "name": "Reforger Heaume de Test T2", "result": "test_helm_t2", "materials": { "item:test_helm_t1": 1, "strange_dust": 1 }, "cost": 2 },
+  { "id": "recipe_berserker_t1_helm", "name": "Forger Heaume de Fureur (T1)", "result": "set_berserker_t1_helm", "materials": { "iron_ingot": 10, "strange_dust": 5 }, "cost": 100 },
+  { "id": "recipe_berserker_t2_helm", "name": "Reforger Heaume de Fureur (T2)", "result": "set_berserker_t2_helm", "materials": { "item:set_berserker_t1_helm": 1, "steel_ingot": 15, "soul_dust": 10 }, "cost": 500 },
+  { "id": "recipe_berserker_t3_helm", "name": "Reforger Heaume de Fureur (T3)", "result": "set_berserker_t3_helm", "materials": { "item:set_berserker_t2_helm": 1, "mithril_ingot": 20, "vision_dust": 15 }, "cost": 2000 },
+  {
+    "id": "recipe_mage_t1_cowl",
+    "name": "Forger Capuche Tisse-Sorts (T1)",
+    "result": "set_mage_t1_cowl",
+    "materials": { "light_leather": 10, "strange_dust": 5 },
+    "cost": 100
+  },
+  {
+    "id": "recipe_mage_t2_cowl",
+    "name": "Reforger Capuche Tisse-Sorts (T2)",
+    "result": "set_mage_t2_cowl",
+    "materials": { "item:set_mage_t1_cowl": 1, "silk_bolt": 15, "soul_dust": 10 },
+    "cost": 500
+  },
+  {
+    "id": "recipe_mage_t3_cowl",
+    "name": "Reforger Capuche Tisse-Sorts (T3)",
+    "result": "set_mage_t3_cowl",
+    "materials": { "item:set_mage_t2_cowl": 1, "enchanted_wood": 20, "vision_dust": 15 },
+    "cost": 2000
+  },
+  { "id": "recipe_mage_t1_shoulders", "name": "Forger Spallières Tisse-Sorts (T1)", "result": "set_mage_t1_shoulders", "materials": { "light_leather": 8, "strange_dust": 4 }, "cost": 80 },
+  { "id": "recipe_mage_t1_chest", "name": "Forger Robe Tisse-Sorts (T1)", "result": "set_mage_t1_chest", "materials": { "light_leather": 15, "strange_dust": 8 }, "cost": 120 },
+  { "id": "recipe_mage_t1_gloves", "name": "Forger Gants Tisse-Sorts (T1)", "result": "set_mage_t1_gloves", "materials": { "light_leather": 7, "strange_dust": 3 }, "cost": 70 },
+  { "id": "recipe_mage_t1_belt", "name": "Forger Ceinture Tisse-Sorts (T1)", "result": "set_mage_t1_belt", "materials": { "light_leather": 6, "strange_dust": 2 }, "cost": 60 },
+  { "id": "recipe_mage_t1_legs", "name": "Forger Jambières Tisse-Sorts (T1)", "result": "set_mage_t1_legs", "materials": { "light_leather": 12, "strange_dust": 7 }, "cost": 110 },
+  { "id": "recipe_mage_t1_boots", "name": "Forger Bottes Tisse-Sorts (T1)", "result": "set_mage_t1_boots", "materials": { "light_leather": 8, "strange_dust": 4 }, "cost": 80 },
+  { "id": "recipe_mage_t1_staff", "name": "Forger Bâton Tisse-Sorts (T1)", "result": "set_mage_t1_staff", "materials": { "enchanted_wood": 10, "strange_dust": 10 }, "cost": 150 },
+  { "id": "recipe_mage_t2_shoulders", "name": "Reforger Spallières Tisse-Sorts (T2)", "result": "set_mage_t2_shoulders", "materials": { "item:set_mage_t1_shoulders": 1, "silk_bolt": 12, "soul_dust": 8 }, "cost": 480 },
+  { "id": "recipe_mage_t2_chest", "name": "Reforger Robe Tisse-Sorts (T2)", "result": "set_mage_t2_chest", "materials": { "item:set_mage_t1_chest": 1, "silk_bolt": 20, "soul_dust": 12 }, "cost": 720 },
+  { "id": "recipe_mage_t2_gloves", "name": "Reforger Gants Tisse-Sorts (T2)", "result": "set_mage_t2_gloves", "materials": { "item:set_mage_t1_gloves": 1, "silk_bolt": 10, "soul_dust": 7 }, "cost": 420 },
+  { "id": "recipe_mage_t2_belt", "name": "Reforger Ceinture Tisse-Sorts (T2)", "result": "set_mage_t2_belt", "materials": { "item:set_mage_t1_belt": 1, "silk_bolt": 8, "soul_dust": 6 }, "cost": 360 },
+  { "id": "recipe_mage_t2_legs", "name": "Reforger Jambières Tisse-Sorts (T2)", "result": "set_mage_t2_legs", "materials": { "item:set_mage_t1_legs": 1, "silk_bolt": 18, "soul_dust": 11 }, "cost": 660 },
+  { "id": "recipe_mage_t2_boots", "name": "Reforger Bottes Tisse-Sorts (T2)", "result": "set_mage_t2_boots", "materials": { "item:set_mage_t1_boots": 1, "silk_bolt": 12, "soul_dust": 8 }, "cost": 480 },
+  { "id": "recipe_mage_t2_staff", "name": "Reforger Bâton Tisse-Sorts (T2)", "result": "set_mage_t2_staff", "materials": { "item:set_mage_t1_staff": 1, "enchanted_wood": 15, "soul_dust": 15 }, "cost": 900 },
+  { "id": "recipe_mage_t3_shoulders", "name": "Reforger Spallières Tisse-Sorts (T3)", "result": "set_mage_t3_shoulders", "materials": { "item:set_mage_t2_shoulders": 1, "enchanted_wood": 18, "vision_dust": 12 }, "cost": 1800 },
+  { "id": "recipe_mage_t3_chest", "name": "Reforger Robe Tisse-Sorts (T3)", "result": "set_mage_t3_chest", "materials": { "item:set_mage_t2_chest": 1, "enchanted_wood": 25, "vision_dust": 18 }, "cost": 2700 },
+  { "id": "recipe_mage_t3_gloves", "name": "Reforger Gants Tisse-Sorts (T3)", "result": "set_mage_t3_gloves", "materials": { "item:set_mage_t2_gloves": 1, "enchanted_wood": 15, "vision_dust": 10 }, "cost": 1500 },
+  { "id": "recipe_mage_t3_belt", "name": "Reforger Ceinture Tisse-Sorts (T3)", "result": "set_mage_t3_belt", "materials": { "item:set_mage_t2_belt": 1, "enchanted_wood": 12, "vision_dust": 8 }, "cost": 1200 },
+  { "id": "recipe_mage_t3_legs", "name": "Reforger Jambières Tisse-Sorts (T3)", "result": "set_mage_t3_legs", "materials": { "item:set_mage_t2_legs": 1, "enchanted_wood": 22, "vision_dust": 16 }, "cost": 2400 },
+  { "id": "recipe_mage_t3_boots", "name": "Reforger Bottes Tisse-Sorts (T3)", "result": "set_mage_t3_boots", "materials": { "item:set_mage_t2_boots": 1, "enchanted_wood": 18, "vision_dust": 12 }, "cost": 1800 },
+  { "id": "recipe_mage_t3_staff", "name": "Reforger Bâton Tisse-Sorts (T3)", "result": "set_mage_t3_staff", "materials": { "item:set_mage_t2_staff": 1, "prismatic_shard": 5, "vision_dust": 20 }, "cost": 3000 },
+  { "id": "recipe_rogue_t1_mask", "name": "Forger Masque de la Lame Silencieuse (T1)", "result": "set_rogue_t1_mask", "materials": { "light_leather": 10, "strange_dust": 5 }, "cost": 100 },
+  { "id": "recipe_rogue_t1_tunic", "name": "Forger Tunique de la Lame Silencieuse (T1)", "result": "set_rogue_t1_tunic", "materials": { "light_leather": 15, "strange_dust": 8 }, "cost": 120 },
+  { "id": "recipe_rogue_t1_gloves", "name": "Forger Gants de la Lame Silencieuse (T1)", "result": "set_rogue_t1_gloves", "materials": { "light_leather": 7, "strange_dust": 3 }, "cost": 70 },
+  { "id": "recipe_rogue_t1_belt", "name": "Forger Ceinture de la Lame Silencieuse (T1)", "result": "set_rogue_t1_belt", "materials": { "light_leather": 6, "strange_dust": 2 }, "cost": 60 },
+  { "id": "recipe_rogue_t1_leggings", "name": "Forger Jambières de la Lame Silencieuse (T1)", "result": "set_rogue_t1_leggings", "materials": { "light_leather": 12, "strange_dust": 7 }, "cost": 110 },
+  { "id": "recipe_rogue_t1_boots", "name": "Forger Bottes de la Lame Silencieuse (T1)", "result": "set_rogue_t1_boots", "materials": { "light_leather": 8, "strange_dust": 4 }, "cost": 80 },
+  { "id": "recipe_rogue_t1_daggers", "name": "Forger Dagues de la Lame Silencieuse (T1)", "result": "set_rogue_t1_daggers", "materials": { "iron_ingot": 10, "strange_dust": 10 }, "cost": 150 },
+  { "id": "recipe_rogue_t2_mask", "name": "Reforger Masque de la Lame Silencieuse (T2)", "result": "set_rogue_t2_mask", "materials": { "item:set_rogue_t1_mask": 1, "yeti_fur": 15, "soul_dust": 10 }, "cost": 500 },
+  { "id": "recipe_rogue_t2_tunic", "name": "Reforger Tunique de la Lame Silencieuse (T2)", "result": "set_rogue_t2_tunic", "materials": { "item:set_rogue_t1_tunic": 1, "yeti_fur": 20, "soul_dust": 12 }, "cost": 720 },
+  { "id": "recipe_rogue_t2_gloves", "name": "Reforger Gants de la Lame Silencieuse (T2)", "result": "set_rogue_t2_gloves", "materials": { "item:set_rogue_t1_gloves": 1, "yeti_fur": 10, "soul_dust": 7 }, "cost": 420 },
+  { "id": "recipe_rogue_t2_belt", "name": "Reforger Ceinture de la Lame Silencieuse (T2)", "result": "set_rogue_t2_belt", "materials": { "item:set_rogue_t1_belt": 1, "yeti_fur": 8, "soul_dust": 6 }, "cost": 360 },
+  { "id": "recipe_rogue_t2_leggings", "name": "Reforger Jambières de la Lame Silencieuse (T2)", "result": "set_rogue_t2_leggings", "materials": { "item:set_rogue_t1_leggings": 1, "yeti_fur": 18, "soul_dust": 11 }, "cost": 660 },
+  { "id": "recipe_rogue_t2_boots", "name": "Reforger Bottes de la Lame Silencieuse (T2)", "result": "set_rogue_t2_boots", "materials": { "item:set_rogue_t1_boots": 1, "yeti_fur": 12, "soul_dust": 8 }, "cost": 480 },
+  { "id": "recipe_rogue_t2_daggers", "name": "Reforger Dagues de la Lame Silencieuse (T2)", "result": "set_rogue_t2_daggers", "materials": { "item:set_rogue_t1_daggers": 1, "steel_ingot": 15, "soul_dust": 15 }, "cost": 900 },
+  { "id": "recipe_rogue_t3_mask", "name": "Reforger Masque de la Lame Silencieuse (T3)", "result": "set_rogue_t3_mask", "materials": { "item:set_rogue_t2_mask": 1, "demonic_essence": 2, "vision_dust": 15 }, "cost": 2000 },
+  { "id": "recipe_rogue_t3_tunic", "name": "Reforger Tunique de la Lame Silencieuse (T3)", "result": "set_rogue_t3_tunic", "materials": { "item:set_rogue_t2_tunic": 1, "demonic_essence": 3, "vision_dust": 18 }, "cost": 2700 },
+  { "id": "recipe_rogue_t3_gloves", "name": "Reforger Gants de la Lame Silencieuse (T3)", "result": "set_rogue_t3_gloves", "materials": { "item:set_rogue_t2_gloves": 1, "demonic_essence": 1, "vision_dust": 10 }, "cost": 1500 },
+  { "id": "recipe_rogue_t3_belt", "name": "Reforger Ceinture de la Lame Silencieuse (T3)", "result": "set_rogue_t3_belt", "materials": { "item:set_rogue_t2_belt": 1, "demonic_essence": 1, "vision_dust": 8 }, "cost": 1200 },
+  { "id": "recipe_rogue_t3_leggings", "name": "Reforger Jambières de la Lame Silencieuse (T3)", "result": "set_rogue_t3_leggings", "materials": { "item:set_rogue_t2_leggings": 1, "demonic_essence": 2, "vision_dust": 16 }, "cost": 2400 },
+  { "id": "recipe_rogue_t3_boots", "name": "Reforger Bottes de la Lame Silencieuse (T3)", "result": "set_rogue_t3_boots", "materials": { "item:set_rogue_t2_boots": 1, "demonic_essence": 1, "vision_dust": 12 }, "cost": 1800 },
+  { "id": "recipe_rogue_t3_daggers", "name": "Reforger Dagues de la Lame Silencieuse (T3)", "result": "set_rogue_t3_daggers", "materials": { "item:set_rogue_t2_daggers": 1, "prismatic_shard": 5, "vision_dust": 20 }, "cost": 3000 },
+  { "id": "recipe_cleric_t1_helm", "name": "Forger Heaume du Dévoué (T1)", "result": "set_cleric_t1_helm", "materials": { "iron_ingot": 10, "strange_dust": 5 }, "cost": 100 },
+  { "id": "recipe_cleric_t1_shoulders", "name": "Forger Spallières du Dévoué (T1)", "result": "set_cleric_t1_shoulders", "materials": { "iron_ingot": 8, "strange_dust": 4 }, "cost": 80 },
+  { "id": "recipe_cleric_t1_chest", "name": "Forger Cotte du Dévoué (T1)", "result": "set_cleric_t1_chest", "materials": { "iron_ingot": 15, "strange_dust": 8 }, "cost": 120 },
+  { "id": "recipe_cleric_t1_gloves", "name": "Forger Gantelets du Dévoué (T1)", "result": "set_cleric_t1_gloves", "materials": { "iron_ingot": 7, "strange_dust": 3 }, "cost": 70 },
+  { "id": "recipe_cleric_t1_belt", "name": "Forger Ceinture du Dévoué (T1)", "result": "set_cleric_t1_belt", "materials": { "iron_ingot": 6, "strange_dust": 2 }, "cost": 60 },
+  { "id": "recipe_cleric_t1_legs", "name": "Forger Jambières du Dévoué (T1)", "result": "set_cleric_t1_legs", "materials": { "iron_ingot": 12, "strange_dust": 7 }, "cost": 110 },
+  { "id": "recipe_cleric_t1_boots", "name": "Forger Bottes du Dévoué (T1)", "result": "set_cleric_t1_boots", "materials": { "iron_ingot": 8, "strange_dust": 4 }, "cost": 80 },
+  { "id": "recipe_cleric_t1_mace", "name": "Forger Masse du Dévoué (T1)", "result": "set_cleric_t1_mace", "materials": { "iron_ingot": 12, "strange_dust": 10 }, "cost": 150 },
+  { "id": "recipe_cleric_t2_helm", "name": "Reforger Heaume du Dévoué (T2)", "result": "set_cleric_t2_helm", "materials": { "item:set_cleric_t1_helm": 1, "steel_ingot": 15, "soul_dust": 10 }, "cost": 500 },
+  { "id": "recipe_cleric_t2_shoulders", "name": "Reforger Spallières du Dévoué (T2)", "result": "set_cleric_t2_shoulders", "materials": { "item:set_cleric_t1_shoulders": 1, "steel_ingot": 12, "soul_dust": 8 }, "cost": 480 },
+  { "id": "recipe_cleric_t2_chest", "name": "Reforger Cotte du Dévoué (T2)", "result": "set_cleric_t2_chest", "materials": { "item:set_cleric_t1_chest": 1, "steel_ingot": 20, "soul_dust": 12 }, "cost": 720 },
+  { "id": "recipe_cleric_t2_gloves", "name": "Reforger Gantelets du Dévoué (T2)", "result": "set_cleric_t2_gloves", "materials": { "item:set_cleric_t1_gloves": 1, "steel_ingot": 10, "soul_dust": 7 }, "cost": 420 },
+  { "id": "recipe_cleric_t2_belt", "name": "Reforger Ceinture du Dévoué (T2)", "result": "set_cleric_t2_belt", "materials": { "item:set_cleric_t1_belt": 1, "steel_ingot": 8, "soul_dust": 6 }, "cost": 360 },
+  { "id": "recipe_cleric_t2_legs", "name": "Reforger Jambières du Dévoué (T2)", "result": "set_cleric_t2_legs", "materials": { "item:set_cleric_t1_legs": 1, "steel_ingot": 18, "soul_dust": 11 }, "cost": 660 },
+  { "id": "recipe_cleric_t2_boots", "name": "Reforger Bottes du Dévoué (T2)", "result": "set_cleric_t2_boots", "materials": { "item:set_cleric_t1_boots": 1, "steel_ingot": 12, "soul_dust": 8 }, "cost": 480 },
+  { "id": "recipe_cleric_t2_mace", "name": "Reforger Masse du Dévoué (T2)", "result": "set_cleric_t2_mace", "materials": { "item:set_cleric_t1_mace": 1, "steel_ingot": 18, "soul_dust": 15 }, "cost": 900 },
+  { "id": "recipe_cleric_t3_helm", "name": "Reforger Heaume du Dévoué (T3)", "result": "set_cleric_t3_helm", "materials": { "item:set_cleric_t2_helm": 1, "mithril_ingot": 20, "vision_dust": 15 }, "cost": 2000 },
+  { "id": "recipe_cleric_t3_shoulders", "name": "Reforger Spallières du Dévoué (T3)", "result": "set_cleric_t3_shoulders", "materials": { "item:set_cleric_t2_shoulders": 1, "mithril_ingot": 18, "vision_dust": 12 }, "cost": 1800 },
+  { "id": "recipe_cleric_t3_chest", "name": "Reforger Cotte du Dévoué (T3)", "result": "set_cleric_t3_chest", "materials": { "item:set_cleric_t2_chest": 1, "mithril_ingot": 25, "vision_dust": 18 }, "cost": 2700 },
+  { "id": "recipe_cleric_t3_gloves", "name": "Reforger Gantelets du Dévoué (T3)", "result": "set_cleric_t3_gloves", "materials": { "item:set_cleric_t2_gloves": 1, "mithril_ingot": 15, "vision_dust": 10 }, "cost": 1500 },
+  { "id": "recipe_cleric_t3_belt", "name": "Reforger Ceinture du Dévoué (T3)", "result": "set_cleric_t3_belt", "materials": { "item:set_cleric_t2_belt": 1, "mithril_ingot": 12, "vision_dust": 8 }, "cost": 1200 },
+  { "id": "recipe_cleric_t3_legs", "name": "Reforger Jambières du Dévoué (T3)", "result": "set_cleric_t3_legs", "materials": { "item:set_cleric_t2_legs": 1, "mithril_ingot": 22, "vision_dust": 16 }, "cost": 2400 },
+  { "id": "recipe_cleric_t3_boots", "name": "Reforger Bottes du Dévoué (T3)", "result": "set_cleric_t3_boots", "materials": { "item:set_cleric_t2_boots": 1, "mithril_ingot": 18, "vision_dust": 12 }, "cost": 1800 },
+  { "id": "recipe_cleric_t3_mace", "name": "Reforger Masse du Dévoué (T3)", "result": "set_cleric_t3_mace", "materials": { "item:set_cleric_t2_mace": 1, "prismatic_shard": 5, "vision_dust": 20 }, "cost": 3000 }
 ]
