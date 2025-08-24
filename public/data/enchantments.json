@@ -3,22 +3,19 @@
     "id": "enchant_minor_strength",
     "name": "Ench. Mineur (Force)",
     "tier": 1, "level": 5, "description": "+2 Force.", "affixRef": "Force_2",
-    "cost": [ { "id": "strange_dust", "amount": 1 } ], "source": ["vendor"],
-    "reputationRequirement": { "factionId": "silver_guardians", "rankName": "Amical", "threshold": 1000 }
+    "cost": [ { "id": "strange_dust", "amount": 1 } ], "source": ["vendor"]
   },
   {
     "id": "enchant_minor_intellect",
     "name": "Ench. Mineur (Intelligence)",
     "tier": 1, "level": 5, "description": "+2 Intelligence.", "affixRef": "Intelligence_2",
-    "cost": [ { "id": "strange_dust", "amount": 1 } ], "source": ["vendor"],
-    "reputationRequirement": { "factionId": "silver_guardians", "rankName": "Amical", "threshold": 1000 }
+    "cost": [ { "id": "strange_dust", "amount": 1 } ], "source": ["vendor"]
   },
   {
     "id": "enchant_minor_stamina",
     "name": "Ench. Mineur (Endurance)",
     "tier": 1, "level": 5, "description": "+5 PV.", "affixRef": "PV_5",
-    "cost": [ { "id": "strange_dust", "amount": 1 } ], "source": ["vendor"],
-    "reputationRequirement": { "factionId": "silver_guardians", "rankName": "Amical", "threshold": 1000 }
+    "cost": [ { "id": "strange_dust", "amount": 1 } ], "source": ["vendor"]
   },
   {
     "id": "enchant_minor_armor",
