@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage, StateStorage } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import type { Dungeon, Monstre, Item, Talent, Skill, Stats, PlayerState, InventoryState, CombatLogEntry, CombatState, GameData, Quete, PlayerClassId, ResourceType, Rareté, CombatEnemy, ItemSet, PotionType, Recipe, Theme, Affixe, Enchantment, Buff, Debuff } from '@/lib/types';
+import type { Dungeon, Monstre, Item, Talent, Skill, Stats, PlayerState, InventoryState, CombatLogEntry, CombatState, GameData, Quete, PlayerClassId, ResourceType, Rareté, CombatEnemy, ItemSet, PotionType, Recipe, Theme, Affixe, Enchantment, Buff, Debuff, FloatingText, FloatingTextType } from '@/lib/types';
 import { DungeonCompletionSummary } from '@/data/schemas';
 import * as formulas from '@/core/formulas';
 import { getModifiedStats, getRankValue } from '@/core/formulas';
@@ -18,6 +18,7 @@ export interface ActiveQuete {
 
 const getInitialPlayerState = (): PlayerState => {
   return {
+    id: 'player',
     name: "Hero",
     classeId: null,
     level: 1,
@@ -74,6 +75,7 @@ const initialCombatState: CombatState = {
     goldGained: 0,
     xpGained: 0,
     ultimateTalentUsed: false,
+    floatingTexts: [],
 };
 
 export interface GameState {
@@ -129,6 +131,10 @@ export interface GameState {
   // Quest actions
   acceptQuest: (questId: string) => void;
   acceptMultipleQuests: (questIds: string[]) => void;
+
+  // Floating Text actions
+  addFloatingText: (entityId: string, text: string, type: FloatingTextType) => void;
+  removeFloatingText: (id: string) => void;
 
   endDungeon: () => void;
   closeDungeonSummary: () => void;
@@ -1361,14 +1367,14 @@ export const useGameStore = create<GameState>()(
 
                     state.player.stats.PV = Math.min(maxHp, state.player.stats.PV + healAmount);
                     state.inventory.potions.health--;
-                    state.combat.log.push({ message: `You use a potion and heal for ${healAmount} HP.`, type: 'heal', timestamp: Date.now() });
+                    get().addFloatingText(get().player.id, `+${healAmount}`, 'heal');
                 }
               } else if (potionType === 'resource') {
                   if (state.inventory.potions.resource > 0) {
                       const resourceAmount = Math.round(state.player.resources.max * 0.25);
                       state.player.resources.current = Math.min(state.player.resources.max, state.player.resources.current + resourceAmount);
                       state.inventory.potions.resource--;
-                      state.combat.log.push({ message: `You use a potion and restore ${resourceAmount} ${state.player.resources.type}.`, type: 'heal', timestamp: Date.now() });
+                      get().addFloatingText(get().player.id, `+${resourceAmount} ${state.player.resources.type}`, 'heal');
                   }
               }
           });
@@ -1409,6 +1415,23 @@ export const useGameStore = create<GameState>()(
             .filter((q): q is ActiveQuete => q !== null);
 
           state.activeQuests.push(...newQuestsToAdd);
+        });
+      },
+
+      addFloatingText: (entityId, text, type) => {
+        set((state: GameState) => {
+          state.combat.floatingTexts.push({
+            id: uuidv4(),
+            entityId,
+            text,
+            type,
+          });
+        });
+      },
+
+      removeFloatingText: (id) => {
+        set((state: GameState) => {
+          state.combat.floatingTexts = state.combat.floatingTexts.filter(t => t.id !== id);
         });
       },
 
@@ -1947,13 +1970,11 @@ export const useGameStore = create<GameState>()(
                 combat.log.push({ message: `${target.nom} est affligé par le Poison mortel (x${stackCount}).`, type: 'poison_proc', timestamp: Date.now() });
             }
 
-            const attackMsg = `You hit ${target.nom} for ${mitigatedDamage} damage.`;
-            const critMsg = `CRITICAL! You hit ${target.nom} for ${mitigatedDamage} damage.`;
-            if(!isCleave) {
-                state.combat.log.push({ message: isCrit ? critMsg : attackMsg, type: isCrit ? 'crit' : 'player_attack', timestamp: Date.now() });
+            if (!isCleave) {
+                get().addFloatingText(target.id, `-${mitigatedDamage}`, isCrit ? 'crit' : 'damage');
                 state.combat.playerAttackProgress = 0;
             } else {
-                  state.combat.log.push({ message: `Your cleave hits ${target.nom} for ${mitigatedDamage} damage.`, type: 'player_attack', timestamp: Date.now() });
+                get().addFloatingText(target.id, `-${mitigatedDamage}`, 'damage');
             }
 
             if(state.player.resources.type === 'Rage' && !isCleave) {
@@ -2009,7 +2030,7 @@ export const useGameStore = create<GameState>()(
       activateSkill: (skillId: string) => {
         let deadEnemyIds: string[] = [];
         set((state: GameState) => {
-            const result = processSkill(state, skillId, get, get().applySpecialEffect);
+            const result = processSkill(state, skillId, get, get().applySpecialEffect, get().addFloatingText);
             deadEnemyIds = result.deadEnemyIds;
         });
 
@@ -2117,8 +2138,8 @@ export const useGameStore = create<GameState>()(
             const didDodge = Math.random() * 100 < buffedPlayerStats.Esquive;
 
             if (didDodge) {
+                get().addFloatingText(get().player.id, 'Esquive', 'dodge');
                 set((state: GameState) => {
-                    state.combat.log.push({ message: `Vous esquivez l'attaque de ${enemy.nom}.`, type: 'info', timestamp: Date.now() });
                     const enemyInState = state.combat.enemies.find(e => e.id === enemy.id);
                     if (enemyInState) enemyInState.attackProgress = 0;
                 });
@@ -2131,7 +2152,7 @@ export const useGameStore = create<GameState>()(
                 if (!enemyInState || enemyInState.stats.PV <= 0) return;
 
                 if (state.player.invulnerabilityDuration > 0) {
-                    state.combat.log.push({ message: `L'attaque de ${enemy.nom} est bloquée par votre invulnérabilité.`, type: 'shield', timestamp: Date.now() });
+                    get().addFloatingText(get().player.id, 'Invulnérable', 'buff');
                     enemyInState.attackProgress = 0;
                     return;
                 }
@@ -2174,7 +2195,7 @@ export const useGameStore = create<GameState>()(
 
                     state.player.shield -= shieldAbsorption;
                     totalDamage -= shieldAbsorption;
-                    state.combat.log.push({ message: `L'attaque de ${enemy.nom} est absorbée par votre bouclier pour ${shieldAbsorption} points.`, type: 'shield', timestamp: Date.now() });
+                    get().addFloatingText(get().player.id, `Absorbé (${shieldAbsorption})`, 'buff');
                 }
 
                 if (totalDamage > 0) {
@@ -2186,12 +2207,13 @@ export const useGameStore = create<GameState>()(
                         if (dernierRempartTalent && !state.combat.ultimateTalentUsed) {
                             state.combat.ultimateTalentUsed = true;
                             state.player.stats.PV = 1;
-                            state.combat.log.push({ message: `Le talent Dernier Rempart vous sauve de la mort !`, type: 'talent_proc', timestamp: Date.now() });
+                            get().addFloatingText(get().player.id, 'Dernier Rempart !', 'buff');
                             totalDamage = 0;
                         } else if (cheatDeathTalent && cheatDeathTalent.effects) {
                             const effect = cheatDeathTalent.effects.find((e: any) => e.type === 'cheat_death') as any;
                             const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
                             state.player.stats.PV = maxHp * effect.heal_percent;
+                            get().addFloatingText(get().player.id, `${cheatDeathTalent.nom} !`, 'heal');
 
                             if (effect.buff) {
                                 const buffId = effect.buff.id;
@@ -2203,8 +2225,6 @@ export const useGameStore = create<GameState>()(
                                 }
                                 state.recalculateStats();
                             }
-
-                            state.combat.log.push({ message: `Le talent ${cheatDeathTalent.nom} vous sauve de la mort !`, type: 'heal', timestamp: Date.now() });
                             totalDamage = 0;
                         } else if (resurrectTalent && !state.combat.ultimateTalentUsed && resurrectTalent.effects) {
                             state.combat.ultimateTalentUsed = true;
@@ -2218,14 +2238,14 @@ export const useGameStore = create<GameState>()(
                                     const elemDR = formulas.calculateResistanceDR(res, state.player.level);
                                     const mitigatedDamage = Math.round(aoeDamage * (1 - elemDR));
                                     enemy.stats.PV -= mitigatedDamage;
-                                    state.combat.log.push({ message: `L'explosion de ${resurrectTalent.nom} inflige ${mitigatedDamage} dégâts à ${enemy.nom}.`, type: 'player_attack', timestamp: Date.now() });
+                                    get().addFloatingText(enemy.id, `-${mitigatedDamage}`, 'damage');
                                 }
                             });
 
                             // Heal
                             const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
                             state.player.stats.PV = maxHp * effect.heal_percent;
-                            state.combat.log.push({ message: `Le talent ${resurrectTalent.nom} vous ramène à la vie !`, type: 'heal', timestamp: Date.now() });
+                            get().addFloatingText(get().player.id, 'Résurrection !', 'heal');
                             totalDamage = 0;
 
                         } else {
@@ -2234,7 +2254,7 @@ export const useGameStore = create<GameState>()(
                                 const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
                                 const healAmount = maxHp * (deathWardBuff.deathWardHealPercent / 100);
                                 state.player.stats.PV = healAmount;
-                                state.combat.log.push({ message: `Votre Esprit gardien vous a sauvé de la mort et vous a soigné pour ${Math.round(healAmount)} PV!`, type: 'heal', timestamp: Date.now() });
+                                get().addFloatingText(get().player.id, 'Esprit Gardien !', 'heal');
                                 state.player.activeBuffs = state.player.activeBuffs.filter(b => b.id !== deathWardBuff.id);
                                 totalDamage = 0;
                             }
@@ -2243,20 +2263,7 @@ export const useGameStore = create<GameState>()(
 
                     if (totalDamage > 0) {
                         state.player.stats.PV -= totalDamage;
-                        const elementalTypeToFrench: Record<string, string> = {
-                            fire: 'feu',
-                            ice: 'glace',
-                            nature: 'nature',
-                            shadow: 'ombre',
-                        };
-                        const translatedType = elementalDamageType ? elementalTypeToFrench[elementalDamageType] || elementalDamageType : '';
-
-                        let damageMessage = `${enemy.nom} vous inflige ${totalDamage} points de dégâts`;
-                        if (mitigatedElementalDamage > 0 && translatedType) {
-                            damageMessage += ` (${mitigatedPhysicalDamage} physiques, ${mitigatedElementalDamage} de ${translatedType})`;
-                        }
-                        damageMessage += '.';
-                        state.combat.log.push({ message: damageMessage, type: 'enemy_attack', timestamp: Date.now() });
+                        get().addFloatingText(get().player.id, `-${totalDamage}`, 'damage');
                     }
                 }
 
