@@ -73,20 +73,6 @@
     }
   },
   {
-    "id": "test_set",
-    "name": "Ensemble de Test Évolutif",
-    "bonuses": {
-      "1": {
-        "1": "Bonus T1 (1p): +1 Armure",
-        "2": "Bonus T1 (2p): +5 Armure"
-      },
-      "2": {
-        "1": "Bonus T2 (1p): +10 Armure",
-        "2": "Bonus T2 (2p): +25 Armure"
-      }
-    }
-  },
-  {
     "id": "berserker_fury_set",
     "name": "Fureur du Berserker",
     "bonuses": {
