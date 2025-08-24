@@ -146,5 +146,30 @@
     "name": "Ench. Majeur (Toutes rés.)",
     "tier": 5, "level": 60, "description": "+15 à toutes les résistances.", "affixRef": "all_resist_15",
     "cost": [ { "id": "prismatic_shard", "amount": 2 }, { "id": "primal_might", "amount": 1 } ], "source": ["legendary_drop"]
+  },
+  {
+    "id": "enchant_boots_speed",
+    "name": "Ench. Bottes (Vitesse mineure)",
+    "tier": 2, "level": 20, "description": "Augmente légèrement la vitesse de déplacement.", "affixRef": "Vitesse_0.05",
+    "cost": [ { "id": "soul_dust", "amount": 4 } ], "source": ["trainer"]
+  },
+  {
+    "id": "enchant_gloves_haste",
+    "name": "Ench. Gants (Hâte mineure)",
+    "tier": 2, "level": 24, "description": "+1% Hâte.", "affixRef": "Vitesse_1",
+    "cost": [ { "id": "soul_dust", "amount": 6 } ], "source": ["drop"]
+  },
+  {
+    "id": "enchant_chest_regen",
+    "name": "Ench. Torse (Régénération)",
+    "tier": 3, "level": 30, "description": "Régénère 0.5% de la vie maximale par seconde.", "affixRef": "HPRegenPercent_0.5",
+    "cost": [ { "id": "vision_dust", "amount": 8 }, { "id": "greater_astral_essence", "amount": 1 } ], "source": ["rare_drop"]
+  },
+  {
+    "id": "enchant_weapon_fiery",
+    "name": "Ench. Arme (Feu)",
+    "tier": 3, "level": 35, "description": "Chance d'infliger 10-15 dégâts de Feu supplémentaires.", "affixRef": "BonusDmg.fire_10-15",
+    "cost": [ { "id": "vision_dust", "amount": 10 }, { "id": "elemental_fire", "amount": 3 } ], "source": ["vendor"],
+    "reputationRequirement": { "factionId": "magma_watchers", "rankName": "Honoré", "threshold": 3000 }
   }
 ]

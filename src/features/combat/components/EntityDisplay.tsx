@@ -69,7 +69,7 @@ export default function EntityDisplay({ entity, isPlayer = false, isTarget = fal
   }
 
   const buffs = (entity as PlayerState).activeBuffs || (entity as CombatEnemy).activeBuffs || [];
-  const debuffs = (entity as CombatEnemy).activeDebuffs || [];
+  const debuffs = (entity as PlayerState).activeDebuffs || (entity as CombatEnemy).activeDebuffs || [];
 
 
   return (
