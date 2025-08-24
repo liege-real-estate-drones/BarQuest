@@ -61,7 +61,16 @@ const EnchantTab: React.FC = () => {
     };
 
     const learnedEnchantments = useMemo(() => {
-        return gameData.enchantments.filter(e => useGameStore.getState().player.learnedRecipes.includes(e.id));
+        const { learnedRecipes, classeId } = useGameStore.getState().player;
+        return gameData.enchantments.filter(enchantment => {
+            const isLearned = learnedRecipes.includes(enchantment.id);
+            if (!isLearned) return false;
+
+            if (!enchantment.tagsClasse || enchantment.tagsClasse.length === 0) return true;
+            if (!classeId) return true; // Should not happen if player exists, but good practice
+
+            return enchantment.tagsClasse.includes('common') || enchantment.tagsClasse.includes(classeId);
+        });
     }, [gameData.enchantments]);
 
     const enchantableItems = useMemo(() => {
@@ -166,15 +175,20 @@ const EnchantTab: React.FC = () => {
 
 // Component for the "Grimoire" tab
 const GrimoireTab: React.FC = () => {
-    const { allEnchantments, learnedRecipes, materials } = useGameStore(state => ({
+    const { allEnchantments, learnedRecipes, materials, components } = useGameStore(state => ({
         allEnchantments: state.gameData.enchantments,
         learnedRecipes: state.player.learnedRecipes,
         materials: state.inventory.craftingMaterials,
+        components: state.gameData.components,
     }));
 
     const sortedEnchantments = useMemo(() => {
         return [...allEnchantments].sort((a, b) => (a.tier || 0) - (b.tier || 0) || (a.level || 0) - (b.level || 0));
     }, [allEnchantments]);
+
+    const getComponentName = (componentId: string) => {
+        return components.find(c => c.id === componentId)?.name || componentId;
+    }
 
     return (
         <Card className="mt-4">
@@ -204,7 +218,7 @@ const GrimoireTab: React.FC = () => {
                                             <ul className="list-disc list-inside text-xs text-gray-400">
                                                 {enchant.cost.map(c => (
                                                     <li key={c.id}>
-                                                        {c.amount} x {useGameStore.getState().gameData.components?.find(m => m.id === c.id)?.name || c.id}
+                                                        {c.amount} x {getComponentName(c.id)}
                                                         <span className="text-gray-500"> (Vous avez {materials[c.id] || 0})</span>
                                                     </li>
                                                 ))}

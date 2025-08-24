@@ -23,14 +23,32 @@ type StatKey = keyof Omit<Stats, 'PV' | 'RessourceMax'>;
 
 export const ArtisanatForgeView: React.FC = () => {
     const { recipes, items: allItems, components } = useGameStore(state => state.gameData);
-    const { gold, craftingMaterials, player } = useGameStore(state => ({
+    const { gold, craftingMaterials, player, inventoryItems } = useGameStore(state => ({
         gold: state.inventory.gold,
         craftingMaterials: state.inventory.craftingMaterials,
         player: state.player,
+        inventoryItems: state.inventory.items,
     }));
     const craftItem = useGameStore(state => state.craftItem);
 
     const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
+
+    const canCraft = (recipe: Recipe): boolean => {
+        if (gold < recipe.cost) return false;
+
+        for (const matId in recipe.materials) {
+            const requiredAmount = recipe.materials[matId];
+            if (matId.startsWith('item:')) {
+                const baseId = matId.substring(5);
+                const ownedCount = inventoryItems.filter(i => i.baseId === baseId).length;
+                if (ownedCount < requiredAmount) return false;
+            } else {
+                const ownedAmount = craftingMaterials[matId] || 0;
+                if (ownedAmount < requiredAmount) return false;
+            }
+        }
+        return true;
+    };
 
     const filteredRecipes = React.useMemo(() => {
         if (!player.classeId) return recipes;
@@ -43,6 +61,11 @@ export const ArtisanatForgeView: React.FC = () => {
     }, [recipes, allItems, player.classeId]);
 
     const getMaterialName = (materialId: string) => {
+        if (materialId.startsWith('item:')) {
+            const baseId = materialId.substring(5);
+            const item = allItems.find(i => i.id === baseId);
+            return item ? item.name : baseId;
+        }
         const component = components.find(c => c.id === materialId);
         return component ? component.name : materialId;
     };
@@ -50,18 +73,6 @@ export const ArtisanatForgeView: React.FC = () => {
     const getResultingItem = (recipe: Recipe | null): Item | null => {
         if (!recipe) return null;
         return allItems.find(item => item.id === recipe.result) || null;
-    };
-
-    const canCraft = (recipe: Recipe): boolean => {
-        if (gold < recipe.cost) {
-            return false;
-        }
-        for (const matId in recipe.materials) {
-            if ((craftingMaterials[matId] || 0) < recipe.materials[matId]) {
-                return false;
-            }
-        }
-        return true;
     };
 
     const resultingItem = getResultingItem(selectedRecipe);
@@ -93,7 +104,11 @@ export const ArtisanatForgeView: React.FC = () => {
                                 {filteredRecipes.map(recipe => (
                                     <div
                                         key={recipe.id}
-                                        className={`p-2 border rounded cursor-pointer ${selectedRecipe?.id === recipe.id ? 'bg-blue-200' : ''}`}
+                                        className={cn(
+                                            "p-2 border rounded cursor-pointer transition-colors",
+                                            selectedRecipe?.id === recipe.id && "bg-slate-200 dark:bg-slate-700 border-slate-400",
+                                            !canCraft(recipe) && "text-muted-foreground"
+                                        )}
                                         onClick={() => setSelectedRecipe(recipe)}
                                     >
                                         {recipe.name}
@@ -141,10 +156,13 @@ export const ArtisanatForgeView: React.FC = () => {
                                         <h3 className="font-semibold">Matériaux Requis</h3>
                                         <ul className="list-disc list-inside text-sm">
                                             {Object.entries(selectedRecipe.materials).map(([matId, required]) => {
-                                                const owned = craftingMaterials[matId] || 0;
+                                                const isItem = matId.startsWith('item:');
+                                                const owned = isItem
+                                                    ? inventoryItems.filter(i => i.baseId === matId.substring(5)).length
+                                                    : craftingMaterials[matId] || 0;
                                                 const hasEnough = owned >= required;
                                                 return (
-                                                    <li key={matId} className={hasEnough ? 'text-green-600' : 'text-red-600'}>
+                                                    <li key={matId} className={hasEnough ? 'text-green-400' : 'text-red-400'}>
                                                         {getMaterialName(matId)}: {required} ({owned} possédés)
                                                     </li>
                                                 );
@@ -153,7 +171,7 @@ export const ArtisanatForgeView: React.FC = () => {
                                     </div>
                                     <div>
                                         <h3 className="font-semibold">Coût</h3>
-                                        <p className={gold >= selectedRecipe.cost ? 'text-green-600' : 'text-red-600'}>
+                                        <p className={gold >= selectedRecipe.cost ? 'text-green-400' : 'text-red-400'}>
                                             {selectedRecipe.cost} Or ({gold} possédés)
                                         </p>
                                     </div>

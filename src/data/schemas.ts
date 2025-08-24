@@ -51,7 +51,7 @@ export const AffixSchema = z.object({
 export const ItemSetSchema = z.object({
   id: z.string(),
   name: z.string(),
-  bonuses: z.record(z.number(), z.string())
+  bonuses: z.record(z.string(), z.record(z.string(), z.string()))
 });
 
 export const MaterialTypeSchema = z.enum(["metal", "leather", "cloth", "wood", "gem", "magic", "misc"]);
