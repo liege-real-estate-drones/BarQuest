@@ -138,20 +138,33 @@ function BuyRecipesTab() {
                             }
                         }
 
-                        const rowContent = (
+                        const cellContent = (
+                            <>
+                                <p className="font-medium">{recipe.name}</p>
+                                <p className="text-xs">{recipe.description}</p>
+                                {repReq && (
+                                    <div className="text-xs mt-1 space-y-0.5">
+                                        <p className={`${recipe.hasRep ? 'text-green-400' : 'text-red-400'}`}>
+                                            Nécessite: {factionName} - {repInfo.rankName} ({repReq.threshold})
+                                        </p>
+                                        <p className="text-gray-400">
+                                            Votre réputation: {repInfo.currentRankName} ({repInfo.currentRepValue} / {repInfo.nextRankThreshold})
+                                        </p>
+                                    </div>
+                                )}
+                            </>
+                        );
+
+                        return (
                              <TableRow key={recipe.id} className={!recipe.canLearn ? 'text-muted-foreground' : ''}>
                                 <TableCell>
-                                    <p className="font-medium">{recipe.name}</p>
-                                    <p className="text-xs">{recipe.description}</p>
-                                    {repReq && (
-                                        <div className="text-xs mt-1 space-y-0.5">
-                                            <p className={`${recipe.hasRep ? 'text-green-400' : 'text-red-400'}`}>
-                                                Nécessite: {factionName} - {repInfo.rankName} ({repReq.threshold})
-                                            </p>
-                                            <p className="text-gray-400">
-                                                Votre réputation: {repInfo.currentRankName} ({repInfo.currentRepValue} / {repInfo.nextRankThreshold})
-                                            </p>
-                                        </div>
+                                    {recipe.requirementText ? (
+                                        <Tooltip delayDuration={100}>
+                                            <TooltipTrigger className="text-left">{cellContent}</TooltipTrigger>
+                                            <TooltipContent><p>{recipe.requirementText}</p></TooltipContent>
+                                        </Tooltip>
+                                    ) : (
+                                        cellContent
                                     )}
                                 </TableCell>
                                 <TableCell className="text-right font-mono text-primary">{Math.round(recipe.price)}</TableCell>
@@ -162,17 +175,6 @@ function BuyRecipesTab() {
                                 </TableCell>
                             </TableRow>
                         );
-
-                        if (recipe.requirementText) {
-                            return (
-                                <Tooltip key={recipe.id} delayDuration={100}>
-                                    <TooltipTrigger asChild>{rowContent}</TooltipTrigger>
-                                    <TooltipContent><p>{recipe.requirementText}</p></TooltipContent>
-                                </Tooltip>
-                            )
-                        }
-
-                        return rowContent;
                     })}
                 </TableBody>
             </Table>
