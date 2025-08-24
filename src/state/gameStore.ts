@@ -1528,6 +1528,25 @@ export const useGameStore = create<GameState>()(
                             completedQuestsThisDungeon.push(quete.id);
                             combat.log.push({ message: `Défi réussi: ${quete.name}`, type: 'quest', timestamp: Date.now() });
                         }
+                    } else if (quete.type === 'collecte' && quete.requirements.dungeonId === dungeonId) {
+                        const requiredCount = quete.requirements.itemCount || 0;
+                        const ownedCount = inventory.items.filter(i => i.baseId === quete.requirements.itemId).length;
+                        if (ownedCount >= requiredCount) {
+                             player.xp += quete.rewards.xp;
+                            inventory.gold += quete.rewards.gold;
+                            player.completedQuests.push(quete.id);
+                            completedQuestsThisDungeon.push(quete.id);
+                            combat.log.push({ message: `Quête terminée: ${quete.name}`, type: 'quest', timestamp: Date.now() });
+
+                            let itemsToRemove = requiredCount;
+                            inventory.items = inventory.items.filter(item => {
+                                if (item.baseId === quete.requirements.itemId && itemsToRemove > 0) {
+                                    itemsToRemove--;
+                                    return false;
+                                }
+                                return true;
+                            });
+                        }
                     }
                 });
 
@@ -2379,6 +2398,19 @@ export const useGameStore = create<GameState>()(
                   state.combat.log.push({ message: `Vous avez reçu ${quete.rewards.gold} or et ${quete.rewards.xp} XP.`, type: 'loot', timestamp: Date.now() });
       
                   state.player.completedQuests.push(quete.id);
+
+                  // Remove quest items if it's a 'collecte' quest
+                  if (quete.type === 'collecte' && req.itemId && req.itemCount) {
+                      let itemsToRemove = req.itemCount;
+                      state.inventory.items = state.inventory.items.filter(item => {
+                          if (item.baseId === req.itemId && itemsToRemove > 0) {
+                              itemsToRemove--;
+                              return false; // Remove this item
+                          }
+                          return true; // Keep this item
+                      });
+                  }
+
                   const activeQuestIndex = state.activeQuests.findIndex(aq => aq.quete.id === quete.id);
                   if (activeQuestIndex !== -1) {
                       state.activeQuests.splice(activeQuestIndex, 1);

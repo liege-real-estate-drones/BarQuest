@@ -71,9 +71,9 @@ export function PlayerStatsView() {
                     <span className="text-muted-foreground">Dextérité:</span><span className="text-right">{stats.Dexterite ?? 0}</span>
                     <span className="text-muted-foreground">Esprit:</span><span className="text-right">{stats.Esprit ?? 0}</span>
                     <hr className="col-span-2 my-1 border-border" />
-                    <span className="text-muted-foreground">Attaque:</span><span className="text-right">{stats.AttMin ?? 0} - {stats.AttMax ?? 0}</span>
-                    <span className="text-muted-foreground">Crit %:</span><span className="text-right">{stats.CritPct ?? 0}%</span>
-                    <span className="text-muted-foreground">Crit Dmg:</span><span className="text-right">{stats.CritDmg ?? 0}%</span>
+                    <span className="text-muted-foreground">Attaque:</span><span className="text-right">{(stats.AttMin ?? 0).toFixed(1)} - {(stats.AttMax ?? 0).toFixed(1)}</span>
+                    <span className="text-muted-foreground">Crit %:</span><span className="text-right">{(stats.CritPct ?? 0).toFixed(1)}%</span>
+                    <span className="text-muted-foreground">Crit Dmg:</span><span className="text-right">{(stats.CritDmg ?? 0).toFixed(1)}%</span>
                     <span className="text-muted-foreground">Armure:</span><span className="text-right">{stats.Armure ?? 0}</span>
                     <span className="text-muted-foreground">Vitesse:</span><span className="text-right">{stats.Vitesse ?? 0}s</span>
                 </div>
