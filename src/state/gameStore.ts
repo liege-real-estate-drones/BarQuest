@@ -107,7 +107,7 @@ export interface GameState {
   setProposedQuests: (quests: Quete[] | null) => void;
   checkAndApplyLevelUp: () => void;
   initializeGameData: (data: Partial<GameData>) => void;
-  setPlayerClass: (classId: PlayerClassId) => void;
+  setPlayerClass: (classId: PlayerClassId, name: string) => void;
   recalculateStats: (options?: { forceRestore?: boolean }) => void;
   equipItem: (itemId: string) => void;
   unequipItem: (slot: keyof InventoryState['equipment']) => void;
@@ -915,7 +915,7 @@ export const useGameStore = create<GameState>()(
         return success;
       },
 
-      setPlayerClass: (classId: PlayerClassId) => {
+      setPlayerClass: (classId: PlayerClassId, name: string) => {
         set((state: GameState) => {
             const chosenClass = state.gameData.classes.find(c => c.id === classId);
             if (!chosenClass) return;
@@ -925,6 +925,7 @@ export const useGameStore = create<GameState>()(
             state.combat = initialCombatState;
             state.activeQuests = [];
 
+            state.player.name = name;
             state.player.classeId = chosenClass.id as PlayerClassId;
             state.player.baseStats = { ...chosenClass.statsBase };
             state.player.talentPoints = 1;
@@ -1560,6 +1561,11 @@ export const useGameStore = create<GameState>()(
             state.combat.xpGained = 0;
             state.dungeonStartTime = null;
             state.view = 'DUNGEON_COMPLETED';
+
+            // Clear buffs and debuffs at the end of the dungeon
+            player.activeBuffs = [];
+            player.activeDebuffs = [];
+
             if (gameLoop) clearInterval(gameLoop);
         });
         get().checkAndApplyLevelUp();
