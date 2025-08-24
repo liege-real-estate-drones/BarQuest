@@ -120,8 +120,9 @@ export function CombatView() {
                     key={ft.id}
                     style={{
                         position: 'absolute',
-                        left: rect.left + rect.width / 2 - 20,
-                        top: rect.top,
+                        left: rect.left + rect.width / 2,
+                        top: rect.bottom,
+                        transform: 'translateX(-50%)',
                     }}
                 >
                     <FloatingCombatText

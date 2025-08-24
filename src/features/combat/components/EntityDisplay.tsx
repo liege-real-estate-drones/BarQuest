@@ -65,6 +65,8 @@ export default function EntityDisplay({ entity, isPlayer = false, isTarget = fal
   const buffs = (entity as PlayerState).activeBuffs || (entity as CombatEnemy).activeBuffs || [];
   const debuffs = (entity as PlayerState).activeDebuffs || (entity as CombatEnemy).activeDebuffs || [];
 
+  const avgDmg = !isPlayer ? Math.round(((stats.AttMin ?? 0) + (stats.AttMax ?? 0)) / 2) : 0;
+
   return (
     <Card 
         className={cn("flex flex-col bg-card/50 transition-all border-2 border-transparent",
@@ -83,7 +85,7 @@ export default function EntityDisplay({ entity, isPlayer = false, isTarget = fal
                 <Progress value={((isPlayer ? attackProgressProp : (entity as CombatEnemy).attackProgress) || 0) * 100} className="h-1 bg-background/50 mt-1 w-20" indicatorClassName="bg-yellow-500" />
             </div>
             {isPlayer && dungeonInfo && <div className="flex-shrink-0">{dungeonInfo}</div>}
-            {!isPlayer && <span className="text-muted-foreground flex-shrink-0 text-sm">Lvl {level}</span>}
+            {!isPlayer && <span className="text-muted-foreground flex-shrink-0 text-xs">Lvl {level} | Dmg: ~{avgDmg}</span>}
         </CardTitle>
         <CardDescription className="capitalize text-xs">
           {isPlayer ? (entity as PlayerState).classeId : (entity as Monstre).famille}
@@ -118,7 +120,7 @@ export default function EntityDisplay({ entity, isPlayer = false, isTarget = fal
         
         <BuffsDisplay buffs={buffs} debuffs={debuffs} />
 
-        {(isPlayer || !isPlayer) && (
+        {isPlayer && (
             <>
                 <Separator className="my-1" />
                 <StatGrid stats={stats} />
