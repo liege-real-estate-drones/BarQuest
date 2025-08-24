@@ -37,9 +37,8 @@ const resourceConfig: Record<ResourceType, { color: string; indicator: string }>
     'Énergie': { color: 'text-yellow-400', indicator: 'bg-gradient-to-r from-yellow-500 to-yellow-700' },
 };
 
-export default function EntityDisplay({ entity, isPlayer = false, isTarget = false, isCompact = false, attackProgress: attackProgressProp, dungeonInfo }: EntityDisplayProps) {
+export default function EntityDisplay({ entity, isPlayer = false, isTarget = false, attackProgress: attackProgressProp, dungeonInfo }: EntityDisplayProps) {
   const getXpToNextLevel = useGameStore(s => s.getXpToNextLevel);
-  const [showStats, setShowStats] = React.useState(isPlayer); // Stats affichées par défaut pour le joueur
 
   const { level } = entity;
   const name = isPlayer ? (entity as PlayerState).name : (entity as Monstre).nom;
@@ -63,74 +62,65 @@ export default function EntityDisplay({ entity, isPlayer = false, isTarget = fal
   const playerResources = isPlayer ? (entity as PlayerState).resources : undefined;
   const currentResourceConfig = (playerResources?.type && resourceConfig[playerResources.type]) || { color: 'text-gray-400', indicator: 'bg-gray-500' };
 
-  const handleCardClick = () => {
-    if (!isCompact || isPlayer) {
-        setShowStats(!showStats);
-    }
-  }
-
   const buffs = (entity as PlayerState).activeBuffs || (entity as CombatEnemy).activeBuffs || [];
   const debuffs = (entity as PlayerState).activeDebuffs || (entity as CombatEnemy).activeDebuffs || [];
-
 
   return (
     <Card 
         className={cn("flex flex-col bg-card/50 transition-all border-2 border-transparent",
             isPlayer && "border-green-500/30",
             isTarget && "border-primary shadow-lg shadow-primary/20",
-            (!isCompact || isPlayer) && "cursor-pointer",
             (entity as CombatEnemy).isBoss && "border-destructive shadow-lg shadow-destructive/40"
         )}
-        onClick={handleCardClick}
     >
-      <CardHeader className={cn("flex-shrink-0 space-y-1", isCompact ? "p-2" : "p-3")}>
-        <CardTitle className={cn("font-headline flex justify-between items-center", isCompact ? "text-sm" : "text-base")}>
+      <CardHeader className="flex-shrink-0 space-y-0.5 p-2">
+        <CardTitle className="font-headline flex justify-between items-center text-base">
             <div className="flex-grow min-w-0 mr-2">
                 <div className="flex items-center gap-2">
                     <span className="truncate font-bold">{name}</span>
                     {isTarget && <span className="text-xs text-primary font-normal">(Cible)</span>}
                 </div>
-                <Progress value={((isPlayer ? attackProgressProp : (entity as CombatEnemy).attackProgress) || 0) * 100} className={cn("h-1 bg-background/50 mt-1", isCompact ? "w-12" : "w-20")} indicatorClassName="bg-yellow-500" />
+                <Progress value={((isPlayer ? attackProgressProp : (entity as CombatEnemy).attackProgress) || 0) * 100} className="h-1 bg-background/50 mt-1 w-20" indicatorClassName="bg-yellow-500" />
             </div>
             {isPlayer && dungeonInfo && <div className="flex-shrink-0">{dungeonInfo}</div>}
-            {!isPlayer && <span className={cn("text-muted-foreground flex-shrink-0", isCompact ? "text-xs" : "text-sm")}>Lvl {level}</span>}
+            {!isPlayer && <span className="text-muted-foreground flex-shrink-0 text-sm">Lvl {level}</span>}
         </CardTitle>
         <CardDescription className="capitalize text-xs">
           {isPlayer ? (entity as PlayerState).classeId : (entity as Monstre).famille}
         </CardDescription>
       </CardHeader>
-      <CardContent className={cn("space-y-1.5 flex-grow pt-0", isCompact ? "p-2" : "p-3")}>
+      <CardContent className="space-y-1 flex-grow pt-0 p-2">
         <div>
-          <div className="flex justify-between text-xs mb-1 font-mono text-red-400">
+          <div className="flex justify-between text-xs mb-0.5 font-mono text-red-400">
             <span>PV</span>
             <span>{Math.round(currentHp)}/{Math.round(maxHp)}</span>
           </div>
-          <Progress value={hpPercentage} className="h-2.5" indicatorClassName="bg-gradient-to-r from-red-500 to-red-700" />
+          <Progress value={hpPercentage} className="h-2" indicatorClassName="bg-gradient-to-r from-red-500 to-red-700" />
         </div>
         {isPlayer && playerResources && playerResources.type && playerResources.max > 0 && (
           <div>
-            <div className={`flex justify-between text-xs mb-1 font-mono ${currentResourceConfig.color}`}>
+            <div className={`flex justify-between text-xs mb-0.5 font-mono ${currentResourceConfig.color}`}>
               <span>{playerResources.type.toUpperCase()}</span>
               <span>{Math.round(playerResources.current)}/{Math.round(playerResources.max)}</span>
             </div>
-            <Progress value={(playerResources.current / playerResources.max) * 100} className="h-2.5" indicatorClassName={currentResourceConfig.indicator} />
+            <Progress value={(playerResources.current / playerResources.max) * 100} className="h-2" indicatorClassName={currentResourceConfig.indicator} />
           </div>
         )}
         {isPlayer && xpToNextLevel !== undefined && (
           <div>
-            <div className="flex justify-between text-xs mb-1 font-mono text-yellow-400">
+            <div className="flex justify-between text-xs mb-0.5 font-mono text-yellow-400">
                 <span>XP</span>
                 <span>{Math.round((entity as PlayerState).xp)}/{Math.round(xpToNextLevel)}</span>
             </div>
-            <Progress value={xpPercentage} className="h-1.5" indicatorClassName="bg-gradient-to-r from-yellow-400 to-yellow-600" />
+            <Progress value={xpPercentage} className="h-1" indicatorClassName="bg-gradient-to-r from-yellow-400 to-yellow-600" />
           </div>
         )}
         
         <BuffsDisplay buffs={buffs} debuffs={debuffs} />
 
-        {showStats && (
+        {(isPlayer || !isPlayer) && (
             <>
-                <Separator className="my-2" />
+                <Separator className="my-1" />
                 <StatGrid stats={stats} />
             </>
         )}

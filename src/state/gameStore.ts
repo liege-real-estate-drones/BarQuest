@@ -140,6 +140,7 @@ export interface GameState {
   enemyAttacks: () => void;
   handleEnemyDeath: (enemy: CombatEnemy, skillId?: string) => void;
   cycleTarget: () => void;
+  setTargetIndex: (index: number) => void;
   flee: () => void;
   toggleAutoAttack: () => void;
   getXpToNextLevel: () => number;
@@ -2490,6 +2491,18 @@ export const useGameStore = create<GameState>()(
                 state.combat.targetIndex = newTargetIndexInAll;
                 state.combat.log.push({ message: `You are now targeting ${state.combat.enemies[newTargetIndexInAll].nom}.`, type: 'info', timestamp: Date.now() });
             }
+        });
+      },
+
+      setTargetIndex: (index: number) => {
+        set((state: GameState) => {
+          if (index >= 0 && index < state.combat.enemies.length) {
+            const target = state.combat.enemies[index];
+            if (target && target.stats.PV > 0) {
+              state.combat.targetIndex = index;
+              state.combat.log.push({ message: `You are now targeting ${target.nom}.`, type: 'info', timestamp: Date.now() });
+            }
+          }
         });
       },
 
