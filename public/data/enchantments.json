@@ -3,25 +3,29 @@
     "id": "enchant_minor_strength",
     "name": "Ench. Mineur (Force)",
     "tier": 1, "level": 5, "description": "+2 Force.", "affixRef": "Force_2",
-    "cost": [ { "id": "strange_dust", "amount": 1 } ], "source": ["trainer"]
+    "cost": [ { "id": "strange_dust", "amount": 1 } ], "source": ["vendor"],
+    "reputationRequirement": { "factionId": "silver_guardians", "rankName": "Amical", "threshold": 1000 }
   },
   {
     "id": "enchant_minor_intellect",
     "name": "Ench. Mineur (Intelligence)",
     "tier": 1, "level": 5, "description": "+2 Intelligence.", "affixRef": "Intelligence_2",
-    "cost": [ { "id": "strange_dust", "amount": 1 } ], "source": ["trainer"]
+    "cost": [ { "id": "strange_dust", "amount": 1 } ], "source": ["vendor"],
+    "reputationRequirement": { "factionId": "silver_guardians", "rankName": "Amical", "threshold": 1000 }
   },
   {
     "id": "enchant_minor_stamina",
     "name": "Ench. Mineur (Endurance)",
     "tier": 1, "level": 5, "description": "+5 PV.", "affixRef": "PV_5",
-    "cost": [ { "id": "strange_dust", "amount": 1 } ], "source": ["trainer"]
+    "cost": [ { "id": "strange_dust", "amount": 1 } ], "source": ["vendor"],
+    "reputationRequirement": { "factionId": "silver_guardians", "rankName": "Amical", "threshold": 1000 }
   },
   {
     "id": "enchant_minor_armor",
     "name": "Ench. Mineur (Armure)",
     "tier": 1, "level": 8, "description": "+10 Armure.", "affixRef": "Armure_10",
-    "cost": [ { "id": "strange_dust", "amount": 2 }, { "id": "lesser_magic_essence", "amount": 1 } ], "source": ["trainer"]
+    "cost": [ { "id": "strange_dust", "amount": 2 }, { "id": "lesser_magic_essence", "amount": 1 } ], "source": ["vendor"],
+    "reputationRequirement": { "factionId": "silver_guardians", "rankName": "Honoré", "threshold": 3000 }
   },
 
   {
@@ -151,7 +155,8 @@
     "id": "enchant_boots_speed",
     "name": "Ench. Bottes (Vitesse mineure)",
     "tier": 2, "level": 20, "description": "Augmente légèrement la vitesse de déplacement.", "affixRef": "Vitesse_0.05",
-    "cost": [ { "id": "soul_dust", "amount": 4 } ], "source": ["trainer"]
+    "cost": [ { "id": "soul_dust", "amount": 4 } ], "source": ["vendor"],
+    "reputationRequirement": { "factionId": "silver_guardians", "rankName": "Honoré", "threshold": 3000 }
   },
   {
     "id": "enchant_gloves_haste",
