@@ -16,6 +16,7 @@ interface EntityDisplayProps {
   isTarget?: boolean;
   isCompact?: boolean;
   attackProgress?: number;
+  dungeonInfo?: React.ReactNode;
 }
 
 function StatGrid({ stats }: { stats: Stats }) {
@@ -36,7 +37,7 @@ const resourceConfig: Record<ResourceType, { color: string; indicator: string }>
     'Énergie': { color: 'text-yellow-400', indicator: 'bg-gradient-to-r from-yellow-500 to-yellow-700' },
 };
 
-export default function EntityDisplay({ entity, isPlayer = false, isTarget = false, isCompact = false, attackProgress: attackProgressProp }: EntityDisplayProps) {
+export default function EntityDisplay({ entity, isPlayer = false, isTarget = false, isCompact = false, attackProgress: attackProgressProp, dungeonInfo }: EntityDisplayProps) {
   const getXpToNextLevel = useGameStore(s => s.getXpToNextLevel);
   const [showStats, setShowStats] = React.useState(isPlayer); // Stats affichées par défaut pour le joueur
 
@@ -91,7 +92,8 @@ export default function EntityDisplay({ entity, isPlayer = false, isTarget = fal
                 </div>
                 <Progress value={((isPlayer ? attackProgressProp : (entity as CombatEnemy).attackProgress) || 0) * 100} className={cn("h-1 bg-background/50 mt-1", isCompact ? "w-12" : "w-20")} indicatorClassName="bg-yellow-500" />
             </div>
-            <span className={cn("text-muted-foreground flex-shrink-0", isCompact ? "text-xs" : "text-sm")}>Lvl {level}</span>
+            {isPlayer && dungeonInfo && <div className="flex-shrink-0">{dungeonInfo}</div>}
+            {!isPlayer && <span className={cn("text-muted-foreground flex-shrink-0", isCompact ? "text-xs" : "text-sm")}>Lvl {level}</span>}
         </CardTitle>
         <CardDescription className="capitalize text-xs">
           {isPlayer ? (entity as PlayerState).classeId : (entity as Monstre).famille}

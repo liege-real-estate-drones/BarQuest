@@ -1,15 +1,13 @@
 'use client';
 import { useGameStore } from '@/state/gameStore';
 import { Button } from '@/components/ui/button';
-import { CombatLog } from './components/CombatLog';
 import EntityDisplay from './components/EntityDisplay';
-import { useMemo } from 'react'; // AMÉLIORATION: 'useEffect' supprimé car il n'est plus utilisé ici
+import { useMemo } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { ActionStrip } from './components/ActionStrip';
 import type { Skill } from '@/lib/types';
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { DungeonInfo } from './components/DungeonInfo';
-// AMÉLIORATION: Import des composants pour la boîte de dialogue
 import {
   AlertDialog,
   AlertDialogContent,
@@ -25,30 +23,26 @@ export function CombatView() {
     player,
     enemies,
     flee,
-    startCombat,
-    combatLog,
     currentDungeon,
     killCount,
     gameData,
     cycleTarget,
     targetIndex,
-    bossEncounter, // NOUVEAU: Récupération de l'état du boss
-    setBossEncounter, // NOUVEAU: Récupération de l'action pour le boss
+    bossEncounter,
+    setBossEncounter,
     playerAttackProgress,
     skillCooldowns,
   } = useGameStore((state) => ({
     player: state.player,
     enemies: state.combat.enemies,
     flee: state.flee,
-    startCombat: state.startCombat,
-    combatLog: state.combat.log,
     currentDungeon: state.currentDungeon,
     killCount: state.combat.killCount,
     gameData: state.gameData,
     cycleTarget: state.cycleTarget,
     targetIndex: state.combat.targetIndex,
-    bossEncounter: state.bossEncounter, // NOUVEAU
-    setBossEncounter: state.setBossEncounter, // NOUVEAU
+    bossEncounter: state.bossEncounter,
+    setBossEncounter: state.setBossEncounter,
     playerAttackProgress: state.combat.playerAttackProgress,
     skillCooldowns: state.combat.skillCooldowns,
   }));
@@ -62,9 +56,6 @@ export function CombatView() {
       })
       .filter((t): t is Skill => t !== null);
   }, [player?.equippedSkills, gameData.skills]);
-
-  // SUPPRIMÉ: Le bloc useEffect a été retiré pour corriger la boucle infinie.
-  // La logique de démarrage de combat est maintenant entièrement gérée dans handleEnemyDeath.
 
   const handleCycleTarget = () => {
     cycleTarget();
@@ -80,58 +71,30 @@ export function CombatView() {
 
   return (
     <div className="flex flex-col h-screen w-full font-code bg-background text-foreground">
-      <header className="flex-shrink-0 flex flex-col md:flex-row items-center border-b p-2 md:p-4 gap-4">
-        <div className="flex items-center justify-between w-full md:w-auto">
-            <Button variant="ghost" size="icon" onClick={flee} className="flex-shrink-0">
-                <ArrowLeft />
-            </Button>
-            <div className="flex-grow md:hidden">
-                <EntityDisplay entity={player} isPlayer isCompact attackProgress={playerAttackProgress} />
-            </div>
-        </div>
-        <div className="flex-grow w-full">
-          <DungeonInfo dungeon={currentDungeon} />
+      <header className="flex-shrink-0 flex items-center border-b p-2 md:p-4 gap-4">
+        <Button variant="ghost" size="icon" onClick={flee} className="flex-shrink-0">
+            <ArrowLeft />
+        </Button>
+        <div className="flex-grow">
+             <EntityDisplay entity={player} isPlayer attackProgress={playerAttackProgress} dungeonInfo={<DungeonInfo dungeon={currentDungeon} />} />
         </div>
       </header>
 
       <main className="flex-grow flex flex-col md:grid md:grid-cols-3 gap-4 p-4 overflow-hidden">
         {/* --- VUE GLOBALE (JOUEUR ET LOG) --- */}
         <div className="md:col-span-1 hidden md:flex flex-col gap-4 min-h-0">
-          <EntityDisplay entity={player} isPlayer attackProgress={playerAttackProgress} />
-          <div className="flex-grow min-h-0">
-            <CombatLog log={combatLog} />
-          </div>
+          <EntityDisplay entity={player} isPlayer attackProgress={playerAttackProgress} dungeonInfo={<DungeonInfo dungeon={currentDungeon} />} />
         </div>
 
-        {/* --- VUE ENNEMIS (DESKTOP) --- */}
-        <div className="hidden md:block md:col-span-2 min-h-0">
+        {/* --- VUE ENNEMIS (DESKTOP & MOBILE) --- */}
+        <div className="md:col-span-2 min-h-0">
           <ScrollArea className="h-full">
-            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 pr-4">
+            <div className="grid grid-cols-1 gap-4 pr-4">
               {enemies.map((enemy, index) => (
                 <EntityDisplay key={enemy.id} entity={enemy} isTarget={index === targetIndex} />
               ))}
             </div>
           </ScrollArea>
-        </div>
-
-        {/* --- VUE MOBILE --- */}
-        <div className="md:hidden flex flex-col gap-4 min-h-0">
-            {/* Ennemis en scroll horizontal */}
-            <ScrollArea className="w-full whitespace-nowrap">
-                <div className="flex space-x-4 pb-4">
-                    {enemies.map((enemy, index) => (
-                        <div key={enemy.id} className="w-40 flex-shrink-0">
-                            <EntityDisplay entity={enemy} isTarget={index === targetIndex} isCompact />
-                        </div>
-                    ))}
-                </div>
-                <ScrollBar orientation="horizontal" />
-            </ScrollArea>
-
-            {/* Log de combat prenant le reste de la place */}
-            <div className="flex-grow min-h-0">
-                <CombatLog log={combatLog} />
-            </div>
         </div>
       </main>
 
