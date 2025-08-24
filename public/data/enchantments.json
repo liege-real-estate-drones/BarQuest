@@ -3,51 +3,51 @@
     "id": "enchant_minor_strength",
     "name": "Ench. Mineur (Force)",
     "tier": 1, "level": 1, "description": "+2 Force.", "affixRef": "Force_2",
-    "cost": [ { "id": "strange_dust", "amount": 1 } ], "source": ["vendor"]
+    "cost": [ { "id": "strange_dust", "amount": 1 } ], "source": ["vendor"], "tagsClasse": ["berserker"]
   },
   {
     "id": "enchant_minor_intellect",
     "name": "Ench. Mineur (Intelligence)",
     "tier": 1, "level": 1, "description": "+2 Intelligence.", "affixRef": "Intelligence_2",
-    "cost": [ { "id": "strange_dust", "amount": 1 } ], "source": ["vendor"]
+    "cost": [ { "id": "strange_dust", "amount": 1 } ], "source": ["vendor"], "tagsClasse": ["mage", "cleric"]
   },
   {
     "id": "enchant_minor_stamina",
     "name": "Ench. Mineur (Endurance)",
     "tier": 1, "level": 1, "description": "+5 PV.", "affixRef": "PV_5",
-    "cost": [ { "id": "strange_dust", "amount": 1 } ], "source": ["vendor"]
+    "cost": [ { "id": "strange_dust", "amount": 1 } ], "source": ["vendor"], "tagsClasse": ["common"]
   },
   {
     "id": "enchant_minor_armor",
     "name": "Ench. Mineur (Armure)",
     "tier": 1, "level": 8, "description": "+10 Armure.", "affixRef": "Armure_10",
     "cost": [ { "id": "strange_dust", "amount": 2 }, { "id": "lesser_magic_essence", "amount": 1 } ], "source": ["vendor"],
-    "reputationRequirement": { "factionId": "silver_guardians", "rankName": "Honoré", "threshold": 3000 }
+    "reputationRequirement": { "factionId": "silver_guardians", "rankName": "Honoré", "threshold": 3000 }, "tagsClasse": ["common"]
   },
 
   {
     "id": "enchant_lesser_strength",
     "name": "Ench. Inférieur (Force)",
     "tier": 2, "level": 15, "description": "+4 Force.", "affixRef": "Force_4",
-    "cost": [ { "id": "soul_dust", "amount": 2 } ], "source": ["vendor", "drop"]
+    "cost": [ { "id": "soul_dust", "amount": 2 } ], "source": ["vendor", "drop"], "tagsClasse": ["berserker"]
   },
   {
     "id": "enchant_lesser_intellect",
     "name": "Ench. Inférieur (Intelligence)",
     "tier": 2, "level": 15, "description": "+4 Intelligence.", "affixRef": "Intelligence_4",
-    "cost": [ { "id": "soul_dust", "amount": 2 } ], "source": ["vendor", "drop"]
+    "cost": [ { "id": "soul_dust", "amount": 2 } ], "source": ["vendor", "drop"], "tagsClasse": ["mage", "cleric"]
   },
   {
     "id": "enchant_lesser_stamina",
     "name": "Ench. Inférieur (Endurance)",
     "tier": 2, "level": 18, "description": "+15 PV.", "affixRef": "PV_15",
-    "cost": [ { "id": "soul_dust", "amount": 3 }, { "id": "greater_magic_essence", "amount": 1 } ], "source": ["vendor", "drop"]
+    "cost": [ { "id": "soul_dust", "amount": 3 }, { "id": "greater_magic_essence", "amount": 1 } ], "source": ["vendor", "drop"], "tagsClasse": ["common"]
   },
   {
     "id": "enchant_lesser_crit",
     "name": "Ench. Inférieur (Critique)",
     "tier": 2, "level": 20, "description": "+1% Critique.", "affixRef": "CritPct_1",
-    "cost": [ { "id": "soul_dust", "amount": 5 } ], "source": ["drop"]
+    "cost": [ { "id": "soul_dust", "amount": 5 } ], "source": ["drop"], "tagsClasse": ["rogue", "berserker", "mage"]
   },
   {
     "id": "enchant_lesser_fire_resistance",
@@ -55,32 +55,32 @@
     "tier": 2, "level": 22, "description": "+8 Résistance au Feu.", "affixRef": "ResElems.fire_8",
     "cost": [ { "id": "soul_dust", "amount": 3 }, { "id": "elemental_fire", "amount": 1 } ],
     "source": ["vendor", "drop"],
-    "reputationRequirement": { "factionId": "magma_watchers", "rankName": "Amical", "threshold": 1000 }
+    "reputationRequirement": { "factionId": "magma_watchers", "rankName": "Amical", "threshold": 1000 }, "tagsClasse": ["common"]
   },
 
   {
     "id": "enchant_medium_strength",
     "name": "Ench. Moyen (Force)",
     "tier": 3, "level": 25, "description": "+7 Force.", "affixRef": "Force_7",
-    "cost": [ { "id": "vision_dust", "amount": 3 } ], "source": ["vendor", "drop"]
+    "cost": [ { "id": "vision_dust", "amount": 3 } ], "source": ["vendor", "drop"], "tagsClasse": ["berserker"]
   },
   {
     "id": "enchant_medium_intellect",
     "name": "Ench. Moyen (Intelligence)",
     "tier": 3, "level": 25, "description": "+7 Intelligence.", "affixRef": "Intelligence_7",
-    "cost": [ { "id": "vision_dust", "amount": 3 } ], "source": ["vendor", "drop"]
+    "cost": [ { "id": "vision_dust", "amount": 3 } ], "source": ["vendor", "drop"], "tagsClasse": ["mage", "cleric"]
   },
   {
     "id": "enchant_medium_stamina",
     "name": "Ench. Moyen (Endurance)",
     "tier": 3, "level": 28, "description": "+25 PV.", "affixRef": "PV_25",
-    "cost": [ { "id": "vision_dust", "amount": 4 }, { "id": "lesser_astral_essence", "amount": 1 } ], "source": ["drop"]
+    "cost": [ { "id": "vision_dust", "amount": 4 }, { "id": "lesser_astral_essence", "amount": 1 } ], "source": ["drop"], "tagsClasse": ["common"]
   },
   {
     "id": "enchant_medium_haste",
     "name": "Ench. Moyen (Hâte)",
     "tier": 3, "level": 30, "description": "+2% Hâte.", "affixRef": "Vitesse_2",
-    "cost": [ { "id": "vision_dust", "amount": 6 } ], "source": ["rare_drop"]
+    "cost": [ { "id": "vision_dust", "amount": 6 } ], "source": ["rare_drop"], "tagsClasse": ["rogue", "mage"]
   },
   {
     "id": "enchant_medium_ice_resistance",
@@ -88,32 +88,32 @@
     "tier": 3, "level": 32, "description": "+15 Résistance à la Glace.", "affixRef": "ResElems.ice_15",
     "cost": [ { "id": "vision_dust", "amount": 4 }, { "id": "crystalline_water", "amount": 2 } ],
     "source": ["vendor", "drop"],
-    "reputationRequirement": { "factionId": "silver_guardians", "rankName": "Honoré", "threshold": 3000 }
+    "reputationRequirement": { "factionId": "silver_guardians", "rankName": "Honoré", "threshold": 3000 }, "tagsClasse": ["common"]
   },
 
   {
     "id": "enchant_greater_strength",
     "name": "Ench. Supérieur (Force)",
     "tier": 4, "level": 35, "description": "+12 Force.", "affixRef": "Force_12",
-    "cost": [ { "id": "eternity_dust", "amount": 4 } ], "source": ["rare_drop"]
+    "cost": [ { "id": "eternity_dust", "amount": 4 } ], "source": ["rare_drop"], "tagsClasse": ["berserker"]
   },
   {
     "id": "enchant_greater_intellect",
     "name": "Ench. Supérieur (Intelligence)",
     "tier": 4, "level": 35, "description": "+12 Intelligence.", "affixRef": "Intelligence_12",
-    "cost": [ { "id": "eternity_dust", "amount": 4 } ], "source": ["rare_drop"]
+    "cost": [ { "id": "eternity_dust", "amount": 4 } ], "source": ["rare_drop"], "tagsClasse": ["mage", "cleric"]
   },
   {
     "id": "enchant_greater_stamina",
     "name": "Ench. Supérieur (Endurance)",
     "tier": 4, "level": 38, "description": "+40 PV.", "affixRef": "PV_40",
-    "cost": [ { "id": "eternity_dust", "amount": 5 }, { "id": "greater_astral_essence", "amount": 1 } ], "source": ["rare_drop"]
+    "cost": [ { "id": "eternity_dust", "amount": 5 }, { "id": "greater_astral_essence", "amount": 1 } ], "source": ["rare_drop"], "tagsClasse": ["common"]
   },
   {
     "id": "enchant_greater_crit",
     "name": "Ench. Supérieur (Critique)",
     "tier": 4, "level": 40, "description": "+3% Critique.", "affixRef": "CritPct_3",
-    "cost": [ { "id": "eternity_dust", "amount": 8 } ], "source": ["rare_drop"]
+    "cost": [ { "id": "eternity_dust", "amount": 8 } ], "source": ["rare_drop"], "tagsClasse": ["rogue", "berserker", "mage"]
   },
   {
     "id": "enchant_greater_shadow_resistance",
@@ -121,57 +121,69 @@
     "tier": 4, "level": 42, "description": "+25 Résistance à l'Ombre.", "affixRef": "ResElems.shadow_25",
     "cost": [ { "id": "eternity_dust", "amount": 6 }, { "id": "frozen_shadow", "amount": 2 } ],
     "source": ["vendor", "drop"],
-    "reputationRequirement": { "factionId": "void_scholars", "rankName": "Révéré", "threshold": 6000 }
+    "reputationRequirement": { "factionId": "void_scholars", "rankName": "Révéré", "threshold": 6000 }, "tagsClasse": ["common"]
   },
 
   {
     "id": "enchant_major_all_stats",
     "name": "Ench. Majeur (Toutes stats)",
     "tier": 5, "level": 50, "description": "+8 à toutes les statistiques de base.", "affixRef": "all_stats_8",
-    "cost": [ { "id": "prismatic_shard", "amount": 1 }, { "id": "nexus_crystal", "amount": 1 } ], "source": ["epic_drop"]
+    "cost": [ { "id": "prismatic_shard", "amount": 1 }, { "id": "nexus_crystal", "amount": 1 } ], "source": ["epic_drop"], "tagsClasse": ["common"]
   },
   {
     "id": "enchant_major_power",
     "name": "Ench. Majeur (Puissance)",
     "tier": 5, "level": 50, "description": "+15 Force et Intelligence.", "affixRef": "Force_15,Intelligence_15",
-    "cost": [ { "id": "prismatic_shard", "amount": 2 } ], "source": ["epic_drop"]
+    "cost": [ { "id": "prismatic_shard", "amount": 2 } ], "source": ["epic_drop"], "tagsClasse": ["berserker", "mage", "cleric"]
   },
   {
     "id": "enchant_major_crit_damage",
     "name": "Ench. Majeur (Dégâts critiques)",
     "tier": 5, "level": 55, "description": "+15% Dégâts critiques.", "affixRef": "CritDmg_15",
-    "cost": [ { "id": "prismatic_shard", "amount": 1 }, { "id": "demonic_essence", "amount": 2 } ], "source": ["epic_drop"]
+    "cost": [ { "id": "prismatic_shard", "amount": 1 }, { "id": "demonic_essence", "amount": 2 } ], "source": ["epic_drop"], "tagsClasse": ["rogue", "berserker"]
   },
   {
     "id": "enchant_major_all_resistance",
     "name": "Ench. Majeur (Toutes rés.)",
     "tier": 5, "level": 60, "description": "+15 à toutes les résistances.", "affixRef": "all_resist_15",
-    "cost": [ { "id": "prismatic_shard", "amount": 2 }, { "id": "primal_might", "amount": 1 } ], "source": ["legendary_drop"]
+    "cost": [ { "id": "prismatic_shard", "amount": 2 }, { "id": "primal_might", "amount": 1 } ], "source": ["legendary_drop"], "tagsClasse": ["common"]
   },
   {
     "id": "enchant_boots_speed",
     "name": "Ench. Bottes (Vitesse mineure)",
     "tier": 2, "level": 20, "description": "Augmente légèrement la vitesse de déplacement.", "affixRef": "Vitesse_0.05",
     "cost": [ { "id": "soul_dust", "amount": 4 } ], "source": ["vendor"],
-    "reputationRequirement": { "factionId": "silver_guardians", "rankName": "Honoré", "threshold": 3000 }
+    "reputationRequirement": { "factionId": "silver_guardians", "rankName": "Honoré", "threshold": 3000 }, "tagsClasse": ["common"]
   },
   {
     "id": "enchant_gloves_haste",
     "name": "Ench. Gants (Hâte mineure)",
     "tier": 2, "level": 24, "description": "+1% Hâte.", "affixRef": "Vitesse_1",
-    "cost": [ { "id": "soul_dust", "amount": 6 } ], "source": ["drop"]
+    "cost": [ { "id": "soul_dust", "amount": 6 } ], "source": ["drop"], "tagsClasse": ["rogue", "mage"]
   },
   {
     "id": "enchant_chest_regen",
     "name": "Ench. Torse (Régénération)",
     "tier": 3, "level": 30, "description": "Régénère 0.5% de la vie maximale par seconde.", "affixRef": "HPRegenPercent_0.5",
-    "cost": [ { "id": "vision_dust", "amount": 8 }, { "id": "greater_astral_essence", "amount": 1 } ], "source": ["rare_drop"]
+    "cost": [ { "id": "vision_dust", "amount": 8 }, { "id": "greater_astral_essence", "amount": 1 } ], "source": ["rare_drop"], "tagsClasse": ["common"]
   },
   {
     "id": "enchant_weapon_fiery",
     "name": "Ench. Arme (Feu)",
     "tier": 3, "level": 35, "description": "Chance d'infliger 10-15 dégâts de Feu supplémentaires.", "affixRef": "BonusDmg.fire_10-15",
     "cost": [ { "id": "vision_dust", "amount": 10 }, { "id": "elemental_fire", "amount": 3 } ], "source": ["vendor"],
-    "reputationRequirement": { "factionId": "magma_watchers", "rankName": "Honoré", "threshold": 3000 }
+    "reputationRequirement": { "factionId": "magma_watchers", "rankName": "Honoré", "threshold": 3000 }, "tagsClasse": ["common"]
+  },
+  {
+    "id": "enchant_lesser_dexterity",
+    "name": "Ench. Inférieur (Dextérité)",
+    "tier": 2, "level": 15, "description": "+4 Dextérité.", "affixRef": "Dexterite_4",
+    "cost": [ { "id": "soul_dust", "amount": 2 } ], "source": ["vendor", "drop"], "tagsClasse": ["rogue"]
+  },
+  {
+    "id": "enchant_lesser_spirit",
+    "name": "Ench. Inférieur (Esprit)",
+    "tier": 2, "level": 15, "description": "+4 Esprit.", "affixRef": "Esprit_4",
+    "cost": [ { "id": "soul_dust", "amount": 2 } ], "source": ["vendor", "drop"], "tagsClasse": ["cleric"]
   }
 ]

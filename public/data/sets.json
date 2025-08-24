@@ -71,5 +71,109 @@
       "3": "Mot de pouvoir : Bouclier absorbe 25% de dégâts en plus.",
       "4": "Lancer un sort de soin sur un allié vous soigne également pour 20% du montant."
     }
+  },
+  {
+    "id": "test_set",
+    "name": "Ensemble de Test Évolutif",
+    "bonuses": {
+      "1": {
+        "1": "Bonus T1 (1p): +1 Armure",
+        "2": "Bonus T1 (2p): +5 Armure"
+      },
+      "2": {
+        "1": "Bonus T2 (1p): +10 Armure",
+        "2": "Bonus T2 (2p): +25 Armure"
+      }
+    }
+  },
+  {
+    "id": "berserker_fury_set",
+    "name": "Fureur du Berserker",
+    "bonuses": {
+      "1": {
+        "2": "+15 Force",
+        "4": "Vos attaques ont 5% de chance de générer 10 Rage supplémentaire."
+      },
+      "2": {
+        "2": "+30 Force",
+        "4": "Vos attaques ont 10% de chance de générer 20 Rage supplémentaire.",
+        "6": "Tourbillon inflige 25% de dégâts supplémentaires.",
+        "8": "Lorsque vous subissez des dégâts, vous avez une chance de déchaîner une onde de choc."
+      },
+      "3": {
+        "2": "+60 Force",
+        "4": "Vos attaques ont 15% de chance de générer 30 Rage supplémentaire.",
+        "6": "Tourbillon inflige 50% de dégâts supplémentaires et vous rend insensible aux contrôles.",
+        "8": "Lorsque vous subissez des dégâts, vous déchaînez une onde de choc dévastatrice."
+      }
+    }
+  }
+,
+  {
+    "id": "mage_spellweaver_set",
+    "name": "Regalia Tisse-Sorts de l'Archimage",
+    "bonuses": {
+      "1": {
+        "2": "+15 Intelligence",
+        "4": "Vos sorts ont 5% de chance de ne coûter aucun mana."
+      },
+      "2": {
+        "2": "+30 Intelligence",
+        "4": "Vos sorts ont 10% de chance de ne coûter aucun mana.",
+        "6": "Augmente les dégâts de vos sorts de Givre et de Feu de 15%.",
+        "8": "Lorsque vous lancez un sort, vous avez une chance d'obtenir une charge d'Éclair des arcanes, augmentant les dégâts de votre prochain sort."
+      },
+      "3": {
+        "2": "+60 Intelligence",
+        "4": "Vos sorts ont 15% de chance de ne coûter aucun mana.",
+        "6": "Augmente les dégâts de vos sorts de Givre et de Feu de 30%.",
+        "8": "Lorsque vous lancez un sort, vous obtenez systématiquement une charge d'Éclair des arcanes."
+      }
+    }
+  },
+  {
+    "id": "rogue_silent_blade_set",
+    "name": "Tenue de la Lame Silencieuse",
+    "bonuses": {
+      "1": {
+        "2": "+15 Dextérité",
+        "4": "Vos attaques ont 10% de chance de ne coûter aucune Énergie."
+      },
+      "2": {
+        "2": "+30 Dextérité",
+        "4": "Vos attaques ont 20% de chance de ne coûter aucune Énergie.",
+        "6": "Augmente les dégâts des poisons de 25%.",
+        "8": "Utiliser Disparition réinitialise le temps de recharge de vos autres compétences."
+      },
+      "3": {
+        "2": "+60 Dextérité",
+        "4": "Vos attaques ont 30% de chance de ne coûter aucune Énergie.",
+        "6": "Augmente les dégâts des poisons de 50%.",
+        "8": "Utiliser Disparition vous confère 100% de chances de coup critique pendant 5 secondes."
+      }
+    }
+  }
+,
+  {
+    "id": "cleric_devotion_set",
+    "name": "Habits du Dévoué",
+    "bonuses": {
+      "1": {
+        "2": "+15 Esprit",
+        "4": "Vos soins ont 10% de chance de soigner pour 50% de plus."
+      },
+      "2": {
+        "2": "+30 Esprit",
+        "4": "Vos soins ont 20% de chance de soigner pour 50% de plus.",
+        "6": "Mot de Pouvoir : Bouclier reflète 15% des dégâts absorbés.",
+        "8": "Lorsque votre vie passe sous les 50%, un ange gardien vous protège pendant 10 secondes, réduisant les dégâts subis de 25%."
+      },
+      "3": {
+        "2": "+60 Esprit",
+        "4": "Vos soins ont 30% de chance de soigner pour 50% de plus.",
+        "6": "Mot de Pouvoir : Bouclier reflète 30% des dégâts absorbés.",
+        "8": "Lorsque votre vie passe sous les 50%, un ange gardien vous rend invulnérable pendant 5 secondes."
+      }
+    }
   }
 ]

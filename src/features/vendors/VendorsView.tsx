@@ -38,13 +38,12 @@ const ComparisonIndicator = ({ comparison }: { comparison: 'better' | 'worse' | 
 
 
 function BuyRecipesTab() {
-    const { gold, enchantments, learnedRecipes, buyRecipe, playerLevel, playerReputation, factions } = useGameStore(state => ({
+    const { gold, enchantments, learnedRecipes, buyRecipe, player, factions } = useGameStore(state => ({
         gold: state.inventory.gold,
         enchantments: state.gameData.enchantments,
         learnedRecipes: state.player.learnedRecipes,
         buyRecipe: state.buyRecipe,
-        playerLevel: state.player.level,
-        playerReputation: state.player.reputation,
+        player: state.player,
         factions: state.gameData.factions,
     }));
     const { toast } = useToast();
@@ -52,13 +51,14 @@ function BuyRecipesTab() {
     const vendorRecipes = React.useMemo(() =>
         enchantments
         .filter(e => ((e.source || []).includes('trainer') || (e.source || []).includes('vendor')))
+        .filter(e => !e.tagsClasse || e.tagsClasse.includes('common') || (player.classeId && e.tagsClasse.includes(player.classeId)))
         .map(e => {
             const repReq = e.reputationRequirement;
             const price = getRecipePrice(e);
             const isLearned = learnedRecipes.includes(e.id);
 
-            const hasRep = !repReq || (playerReputation[repReq.factionId]?.value || 0) >= repReq.threshold;
-            const hasLevel = (e.level || 0) <= playerLevel;
+            const hasRep = !repReq || (player.reputation[repReq.factionId]?.value || 0) >= repReq.threshold;
+            const hasLevel = (e.level || 0) <= player.level;
 
             const canLearn = !isLearned && hasRep && hasLevel;
 
@@ -86,7 +86,7 @@ function BuyRecipesTab() {
             }
         })
         .sort((a,b) => (a.level || 0) - (b.level || 0)),
-    [enchantments, playerLevel, learnedRecipes, playerReputation, gold, factions]);
+    [enchantments, player, learnedRecipes, gold, factions]);
 
     const handleBuyRecipe = (recipe: Enchantment & { price: number }) => {
         const success = buyRecipe(recipe.id);

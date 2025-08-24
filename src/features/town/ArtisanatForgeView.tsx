@@ -23,10 +23,24 @@ type StatKey = keyof Omit<Stats, 'PV' | 'RessourceMax'>;
 
 export const ArtisanatForgeView: React.FC = () => {
     const { recipes, items: allItems, components } = useGameStore(state => state.gameData);
-    const { gold, craftingMaterials } = useGameStore(state => state.inventory);
+    const { gold, craftingMaterials, player } = useGameStore(state => ({
+        gold: state.inventory.gold,
+        craftingMaterials: state.inventory.craftingMaterials,
+        player: state.player,
+    }));
     const craftItem = useGameStore(state => state.craftItem);
 
     const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
+
+    const filteredRecipes = React.useMemo(() => {
+        if (!player.classeId) return recipes;
+        return recipes.filter(recipe => {
+            const resultItem = allItems.find(item => item.id === recipe.result);
+            if (!resultItem || !resultItem.tagsClasse) return true; // Show if no tags
+
+            return resultItem.tagsClasse.includes('common') || resultItem.tagsClasse.includes(player.classeId);
+        });
+    }, [recipes, allItems, player.classeId]);
 
     const getMaterialName = (materialId: string) => {
         const component = components.find(c => c.id === materialId);
@@ -76,7 +90,7 @@ export const ArtisanatForgeView: React.FC = () => {
                     <CardContent>
                         <ScrollArea className="h-[400px]">
                             <div className="space-y-2">
-                                {recipes.map(recipe => (
+                                {filteredRecipes.map(recipe => (
                                     <div
                                         key={recipe.id}
                                         className={`p-2 border rounded cursor-pointer ${selectedRecipe?.id === recipe.id ? 'bg-blue-200' : ''}`}
