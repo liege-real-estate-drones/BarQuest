@@ -2,7 +2,7 @@ import type { WritableDraft } from 'immer';
 import type { GameState } from '@/state/gameStore';
 import * as formulas from '@/core/formulas';
 import { getRankValue, getModifiedStats } from '@/core/formulas';
-import type { Buff, Debuff, Stats } from '@/lib/types';
+import type { Buff, Debuff, Stats, FloatingTextType } from '@/lib/types';
 import { SkillEffectSchema } from '@/data/schemas';
 
 
@@ -10,7 +10,8 @@ export const processSkill = (
     state: WritableDraft<GameState>,
     skillId: string,
     get: () => GameState,
-    applySpecialEffect: (trigger: string, context: { targetId: string, isCrit: boolean, skill?: any }) => void
+    applySpecialEffect: (trigger: string, context: { targetId: string, isCrit: boolean, skill?: any }) => void,
+    addFloatingText: (entityId: string, text: string, type: FloatingTextType) => void
 ): { deadEnemyIds: string[] } => {
     const deadEnemyIds: string[] = [];
     const { player, combat, gameData } = state;
@@ -140,7 +141,7 @@ export const processSkill = (
             if (anyEffect.type === 'damage') {
                 targets.forEach(target => {
                     const { mitigatedDamage, isCrit } = handleDamage(target, anyEffect);
-                    combat.log.push({ message: isCrit ? `CRITIQUE ! Votre ${skill.nom} inflige ${mitigatedDamage} points de dégâts à ${target.nom}.` : `Vous utilisez ${skill.nom} sur ${target.nom} pour ${mitigatedDamage} points de dégâts.`, type: isCrit ? 'crit' : 'player_attack', timestamp: Date.now() });
+                    addFloatingText(target.id, `-${mitigatedDamage}`, isCrit ? 'crit' : 'damage');
                     if (target.stats.PV <= 0) deadEnemyIds.push(target.id);
                 });
                 effectApplied = true;
@@ -156,7 +157,7 @@ export const processSkill = (
                         if (hasArchonBuff) totalDamage *= 2;
                         const numTicks = anyEffect.num_ticks || anyEffect.duration;
                         target.activeDebuffs.push({ id: anyEffect.id, name: anyEffect.name, duration: anyEffect.duration * 1000, damagePerTick: Math.round(totalDamage / numTicks), tickInterval: (anyEffect.duration * 1000) / numTicks, nextTickIn: (anyEffect.duration * 1000) / numTicks, isDebuff: true, damageType: anyEffect.damageType });
-                        combat.log.push({ message: `Votre ${skill.nom} afflige ${target.nom}.`, type: 'player_attack', timestamp: Date.now() });
+                        addFloatingText(target.id, anyEffect.name, 'debuff');
                     } else if (anyEffect.debuffType === 'stat_modifier') {
                         const newDebuff: Debuff = {
                             id: anyEffect.id,
@@ -167,7 +168,7 @@ export const processSkill = (
                         };
                         target.activeDebuffs = target.activeDebuffs || [];
                         target.activeDebuffs.push(newDebuff);
-                        combat.log.push({ message: `${target.nom} est affecté par ${skill.nom}.`, type: 'info', timestamp: Date.now() });
+                        addFloatingText(target.id, anyEffect.name, 'debuff');
                     } else if (anyEffect.debuffType === 'cc') {
                         if (anyEffect.ccType === 'stun') {
                             target.stunDuration = (target.stunDuration || 0) + (anyEffect.duration * 1000);
@@ -177,7 +178,7 @@ export const processSkill = (
                                 duration: anyEffect.duration * 1000,
                                 isDebuff: true,
                             });
-                            combat.log.push({ message: `${target.nom} est étourdi par ${skill.nom}.`, type: 'info', timestamp: Date.now() });
+                            addFloatingText(target.id, anyEffect.name || 'Étourdi', 'debuff');
                         }
                     }
                 });
@@ -190,11 +191,11 @@ export const processSkill = (
                     shieldAmount = getRankValue(anyEffect.amount.multiplier, rank);
                 }
                 player.shield += shieldAmount;
-                combat.log.push({ message: `Vous gagnez un bouclier de ${shieldAmount} points.`, type: 'shield', timestamp: Date.now() });
+                addFloatingText(player.id, `+${shieldAmount} Bouclier`, 'buff');
                 effectApplied = true;
             } else if (anyEffect.type === 'invulnerability') {
                 player.invulnerabilityDuration = (player.invulnerabilityDuration || 0) + (anyEffect.duration * 1000);
-                combat.log.push({ message: `Vous devenez invulnérable pendant ${anyEffect.duration} secondes.`, type: 'info', timestamp: Date.now() });
+                addFloatingText(player.id, 'Invulnérable', 'buff');
                 effectApplied = true;
             } else if (anyEffect.type === 'death_ward') {
                 const newBuff: Buff = {
@@ -205,7 +206,7 @@ export const processSkill = (
                     deathWardHealPercent: anyEffect.heal_percent,
                 };
                 player.activeBuffs.push(newBuff);
-                combat.log.push({ message: `${skill.nom} vous protège de la mort.`, type: 'info', timestamp: Date.now() });
+                addFloatingText(player.id, skill.nom, 'buff');
                 effectApplied = true;
             } else if (anyEffect.type === 'buff') {
                 const newBuff: Buff = { id: anyEffect.id, name: anyEffect.name, duration: anyEffect.duration * 1000, stacks: 1 };
@@ -231,7 +232,7 @@ export const processSkill = (
                     const newMaxHp = maxHp * (1 + hpIncreasePercent);
                     player.stats.PV = (currentHp / maxHp) * newMaxHp;
                 }
-                combat.log.push({ message: `Vous utilisez ${skill.nom}.`, type: 'info', timestamp: Date.now() });
+                addFloatingText(player.id, anyEffect.name, 'buff');
                 effectApplied = true;
             } else if (anyEffect.type === 'heal') {
                 let totalHeal = 0;
@@ -241,7 +242,8 @@ export const processSkill = (
                 const maxHp = formulas.calculateMaxHP(player.level, player.stats);
                 const oldHp = player.stats.PV;
                 player.stats.PV = Math.min(maxHp, player.stats.PV + totalHeal);
-                combat.log.push({ message: `Votre ${skill.nom} vous soigne de ${Math.round(player.stats.PV - oldHp)} PV.`, type: 'heal', timestamp: Date.now() });
+                const healedAmount = Math.round(player.stats.PV - oldHp);
+                addFloatingText(player.id, `+${healedAmount}`, 'heal');
                 effectApplied = true;
             } else if (anyEffect.type === 'consume_debuff_for_damage') {
                 targets.forEach(target => {
@@ -259,11 +261,11 @@ export const processSkill = (
                         const elemDR = formulas.calculateResistanceDR(res, player.level);
                         const mitigatedDamage = Math.round(finalDamage * (1 - elemDR));
                         target.stats.PV -= mitigatedDamage;
-                        combat.log.push({ message: `Vous consommez ${stacks} charges de poison pour infliger ${mitigatedDamage} dégâts de nature à ${target.nom}.`, type: 'player_attack', timestamp: Date.now() });
+                        addFloatingText(target.id, `-${mitigatedDamage}`, 'damage');
                         if (target.stats.PV <= 0) deadEnemyIds.push(target.id);
                         effectApplied = true;
                     } else {
-                        combat.log.push({ message: `La cible n'est pas empoisonnée.`, type: 'info', timestamp: Date.now() });
+                        addFloatingText(target.id, 'Cible non empoisonnée', 'miss');
                         skillFailed = true;
                     }
                 });
@@ -280,14 +282,14 @@ export const processSkill = (
                     } else {
                         player.activeBuffs.push({ id: anyEffect.stacking_buff.id, name: anyEffect.stacking_buff.name, duration: anyEffect.stacking_buff.duration, stacks: 1 });
                     }
-                    combat.log.push({ message: isCrit ? `CRITIQUE ! Votre ${skill.nom} inflige ${mitigatedDamage} points de dégâts à ${target.nom}.` : `Votre ${skill.nom} inflige ${mitigatedDamage} points de dégâts à ${target.nom}.`, type: isCrit ? 'crit' : 'player_attack', timestamp: Date.now() });
-                    combat.log.push({ message: `Vous gagnez une charge de ${anyEffect.stacking_buff.name} (${newStacks}).`, type: 'info', timestamp: Date.now() });
+                    addFloatingText(target.id, `-${mitigatedDamage}`, isCrit ? 'crit' : 'damage');
+                    addFloatingText(player.id, `${anyEffect.stacking_buff.name} (${newStacks})`, 'buff');
                     if (target.stats.PV <= 0) deadEnemyIds.push(target.id);
                 });
                 effectApplied = true;
             } else if (anyEffect.type === 'transformation') {
                 player.form = anyEffect.form;
-                combat.log.push({ message: `Vous prenez une nouvelle forme: ${anyEffect.form}.`, type: 'info', timestamp: Date.now() });
+                addFloatingText(player.id, `Forme: ${anyEffect.form}`, 'buff');
                 effectApplied = true;
             } else if (anyEffect.type === 'multi_strike') {
                 targets.forEach(target => {
@@ -295,7 +297,7 @@ export const processSkill = (
                     for (let i = 0; i < strikes; i++) {
                         if (target.stats.PV <= 0) break;
                         const { mitigatedDamage, isCrit } = handleDamage(target, anyEffect.damage);
-                        combat.log.push({ message: isCrit ? `CRITIQUE ! Votre ${skill.nom} (Frappe ${i + 1}) inflige ${mitigatedDamage} points de dégâts à ${target.nom}.` : `Votre ${skill.nom} (Frappe ${i + 1}) inflige ${mitigatedDamage} points de dégâts à ${target.nom}.`, type: isCrit ? 'crit' : 'player_attack', timestamp: Date.now() });
+                        addFloatingText(target.id, `-${mitigatedDamage}`, isCrit ? 'crit' : 'damage');
                         if (target.stats.PV <= 0) deadEnemyIds.push(target.id);
                     }
                 });

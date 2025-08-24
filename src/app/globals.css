@@ -67,3 +67,16 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  @keyframes float-up {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(-50px);
+    }
+  }
+}

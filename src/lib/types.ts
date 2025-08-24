@@ -101,6 +101,7 @@ export interface Debuff {
 }
 
 export interface PlayerState {
+  id: string;
   name: string;
   classeId: PlayerClassId | null;
   level: number;
@@ -183,6 +184,15 @@ export interface CombatLogEntry {
     item?: Item;
 }
 
+export type FloatingTextType = 'damage' | 'crit' | 'heal' | 'dodge' | 'miss' | 'buff' | 'debuff';
+
+export interface FloatingText {
+  id: string;
+  text: string;
+  type: FloatingTextType;
+  entityId: string;
+}
+
 export interface CombatState {
   enemies: CombatEnemy[];
   playerAttackInterval: number; // in ms
@@ -199,6 +209,7 @@ export interface CombatState {
   goldGained: number;
   xpGained: number;
   ultimateTalentUsed: boolean;
+  floatingTexts: FloatingText[];
 }
 
 export interface ItemGenerationContext {

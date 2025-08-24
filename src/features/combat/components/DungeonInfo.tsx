@@ -1,7 +1,6 @@
 
 'use client';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+import { Progress } from "@/components/ui/progress";
 import type { Dungeon } from "@/lib/types";
 import { Waves, Flame, Sprout, Skull } from 'lucide-react';
 
@@ -12,27 +11,29 @@ const biomeIcons: Record<Dungeon['biome'], React.ReactNode> = {
     shadow: <Skull className="h-4 w-4 text-purple-500" />,
 };
 
-export function DungeonInfo({ dungeon }: { dungeon: Dungeon }) {
+interface DungeonInfoProps {
+  dungeon: Dungeon;
+  killCount: number;
+}
+
+export function DungeonInfo({ dungeon, killCount }: DungeonInfoProps) {
+    const progress = (killCount / dungeon.killTarget) * 100;
+
     return (
-        <div className="flex items-center justify-between w-full">
-            <div>
+        <div className="flex items-center justify-between w-full gap-4">
+            <div className="flex-shrink-0">
                 <h3 className="font-bold text-base md:text-lg flex items-center gap-2">
                     {biomeIcons[dungeon.biome]}
                     {dungeon.name}
                 </h3>
-                <p className="text-xs text-muted-foreground ml-6 md:ml-0">Palier {dungeon.palier}</p>
+                <p className="text-xs text-muted-foreground ml-6">Palier {dungeon.palier}</p>
             </div>
-            <div className="hidden md:block text-right">
-                 <h4 className="font-semibold text-xs mb-1">Modificateurs</h4>
-                 {dungeon.modifiers && dungeon.modifiers.length > 0 ? (
-                    <div className="flex gap-2 justify-end">
-                        {dungeon.modifiers.map((mod, index) => (
-                            <span key={index} className="text-xs text-primary bg-primary/10 px-2 py-1 rounded-md">{mod}</span>
-                        ))}
-                    </div>
-                ) : (
-                    <p className="text-xs text-muted-foreground">Aucun.</p>
-                )}
+            <div className="flex-grow">
+                <div className="flex justify-between items-baseline mb-1">
+                    <p className="text-sm font-semibold">Progression</p>
+                    <p className="text-xs font-mono text-muted-foreground">{killCount} / {dungeon.killTarget}</p>
+                </div>
+                <Progress value={progress} className="h-2" />
             </div>
         </div>
     );
