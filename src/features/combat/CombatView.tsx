@@ -27,6 +27,7 @@ export function CombatView() {
     killCount,
     gameData,
     cycleTarget,
+    setTargetIndex,
     targetIndex,
     bossEncounter,
     setBossEncounter,
@@ -40,6 +41,7 @@ export function CombatView() {
     killCount: state.combat.killCount,
     gameData: state.gameData,
     cycleTarget: state.cycleTarget,
+    setTargetIndex: state.setTargetIndex,
     targetIndex: state.combat.targetIndex,
     bossEncounter: state.bossEncounter,
     setBossEncounter: state.setBossEncounter,
@@ -80,22 +82,16 @@ export function CombatView() {
         </div>
       </header>
 
-      <main className="flex-grow flex flex-col md:grid md:grid-cols-3 gap-4 p-4 overflow-hidden">
-        {/* --- VUE GLOBALE (JOUEUR ET LOG) --- */}
-        <div className="md:col-span-1 hidden md:flex flex-col gap-4 min-h-0">
-          <EntityDisplay entity={player} isPlayer attackProgress={playerAttackProgress} dungeonInfo={<DungeonInfo dungeon={currentDungeon} />} />
-        </div>
-
-        {/* --- VUE ENNEMIS (DESKTOP & MOBILE) --- */}
-        <div className="md:col-span-2 min-h-0">
-          <ScrollArea className="h-full">
-            <div className="grid grid-cols-1 gap-4 pr-4">
-              {enemies.map((enemy, index) => (
-                <EntityDisplay key={enemy.id} entity={enemy} isTarget={index === targetIndex} />
-              ))}
-            </div>
-          </ScrollArea>
-        </div>
+      <main className="flex-grow p-4 overflow-hidden">
+        <ScrollArea className="h-full">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pr-4">
+            {enemies.map((enemy, index) => (
+              <div key={enemy.id} onClick={() => setTargetIndex(index)} className="cursor-pointer">
+                <EntityDisplay entity={enemy} isTarget={index === targetIndex} />
+              </div>
+            ))}
+          </div>
+        </ScrollArea>
       </main>
 
       <footer className="flex-shrink-0 border-t bg-background/80 backdrop-blur-sm p-4">
