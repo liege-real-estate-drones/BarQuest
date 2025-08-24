@@ -27,7 +27,9 @@ export function InventoryView() {
     }));
 
     const getComparison = (item: Item): 'better' | 'worse' | 'equal' => {
-        if (!player.classeId) return 'equal';
+        if (item.type === 'quest' || !player.classeId) {
+            return 'equal';
+        }
 
         let equippedItem: Item | null = null;
         if (item.slot === 'ring') {
@@ -96,7 +98,7 @@ export function InventoryView() {
                                                 </div>
                                             </ItemTooltip>
                                         </div>
-                                       <Button size="sm" variant="outline" onClick={() => equipItem(item.id)}>
+                                       <Button size="sm" variant="outline" onClick={() => equipItem(item.id)} disabled={item.type === 'quest'}>
                                          <Swords className="mr-2 h-4 w-4"/>
                                          Équiper
                                        </Button>

@@ -10,6 +10,46 @@ import { Separator } from '@/components/ui/separator';
 import type { Talent, PlayerState, GameData } from '@/lib/types';
 import { cn } from '@/lib/utils';
 
+import { getRankValue } from '@/core/formulas';
+import { STAT_DISPLAY_NAMES } from '@/lib/constants';
+
+const getTalentDescription = (talent: Talent, rank: number): string => {
+    if (!talent.effects) {
+        // Fallback for old string-based effects
+        if (talent.effets && talent.effets.length > 0) {
+            return talent.effets.join(' ');
+        }
+        return "Voir les détails du rang pour l'effet exact.";
+    }
+
+    const descriptionParts = talent.effects.map(effect => {
+        const anyEffect = effect as any;
+        switch (anyEffect.type) {
+            case 'buff':
+                if (anyEffect.buffType === 'stat_modifier' && anyEffect.statMods) {
+                    const mod = anyEffect.statMods[0];
+                    const value = getRankValue(mod.value, rank);
+                    const statName = STAT_DISPLAY_NAMES[mod.stat as keyof typeof STAT_DISPLAY_NAMES] || mod.stat;
+                    if (mod.modifier === 'additive') {
+                        return `Augmente ${statName} de ${value}.`;
+                    }
+                    if (mod.modifier === 'multiplicative') {
+                        return `Augmente ${statName} de ${value * 100}%.`;
+                    }
+                }
+                break;
+            case 'stat_override':
+                return `Votre ${anyEffect.stat} est maintenant ${anyEffect.value}.`;
+            // Add more cases here for other effect types as they are created
+        }
+        return null;
+    });
+
+    const filteredParts = descriptionParts.filter(Boolean);
+    return filteredParts.length > 0 ? filteredParts.join(' ') : "Effet passif complexe.";
+};
+
+
 const TalentPopoverContent = ({ talent, player, gameData }: { talent: Talent; player: PlayerState; gameData: GameData }) => {
     const currentRank = player.learnedTalents[talent.id] || 0;
     
@@ -18,9 +58,9 @@ const TalentPopoverContent = ({ talent, player, gameData }: { talent: Talent; pl
             <p className="font-bold text-base text-primary mb-1">{talent.nom}</p>
             <p className="text-sm text-muted-foreground capitalize">Talent Passif (Rang {currentRank}/{talent.rangMax})</p>
             <Separator className="my-2" />
-            <p className="text-sm mb-2">Effet :</p>
+            <p className="text-sm mb-2">Effet (Rang {currentRank}):</p>
             <p className="text-xs text-green-400">
-                {(talent.effets && talent.effets[0]) || "Voir les détails du rang pour l'effet exact."}
+                {getTalentDescription(talent, currentRank)}
             </p>
             
             {(talent.exigences?.length > 0 || talent.niveauRequis) && (
