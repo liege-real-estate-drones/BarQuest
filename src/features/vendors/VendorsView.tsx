@@ -130,7 +130,7 @@ function BuyRecipesTab() {
                                 const sortedRanks = [...faction.ranks].sort((a, b) => a.threshold - b.threshold);
                                 const requiredRank = sortedRanks.find(r => repReq.threshold === r.threshold);
                                 if (requiredRank) repInfo.rankName = requiredRank.name;
-                                repInfo.currentRepValue = playerReputation[repReq.factionId]?.value || 0;
+                                repInfo.currentRepValue = player.reputation[repReq.factionId]?.value || 0;
                                 const currentRank = sortedRanks.slice().reverse().find(r => repInfo.currentRepValue >= r.threshold);
                                 repInfo.currentRankName = currentRank ? currentRank.name : 'Inconnu';
                                 const nextRank = sortedRanks.find(r => repInfo.currentRepValue < r.threshold);
