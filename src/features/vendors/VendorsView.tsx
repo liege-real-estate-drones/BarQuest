@@ -11,6 +11,7 @@ import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { ItemTooltip } from '@/components/ItemTooltip';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { GamblerView } from './GamblerView';
 import {
   AlertDialog,
@@ -50,23 +51,42 @@ function BuyRecipesTab() {
 
     const vendorRecipes = React.useMemo(() =>
         enchantments
-        .filter(e => ((e.source || []).includes('trainer') || (e.source || []).includes('vendor')) && (e.level || 0) <= playerLevel)
+        .filter(e => ((e.source || []).includes('trainer') || (e.source || []).includes('vendor')))
         .map(e => {
             const repReq = e.reputationRequirement;
-            let hasRep = true;
-            if (repReq) {
-                const currentRep = playerReputation[repReq.factionId]?.value || 0;
-                hasRep = currentRep >= repReq.threshold;
+            const price = getRecipePrice(e);
+            const isLearned = learnedRecipes.includes(e.id);
+
+            const hasRep = !repReq || (playerReputation[repReq.factionId]?.value || 0) >= repReq.threshold;
+            const hasLevel = (e.level || 0) <= playerLevel;
+
+            const canLearn = !isLearned && hasRep && hasLevel;
+
+            let requirementText = '';
+            if (isLearned) {
+                // Already learned, no text needed, button will be disabled.
+            } else {
+                const requirements = [];
+                if (!hasLevel) requirements.push(`Niveau ${e.level} requis`);
+                if (!hasRep && repReq) {
+                     const factionName = factions.find(f => f.id === repReq.factionId)?.name || repReq.factionId;
+                     requirements.push(`Réputation "${repReq.rankName}" avec ${factionName} requise`);
+                }
+                requirementText = requirements.join('. ');
             }
+
             return {
                 ...e,
-                price: getRecipePrice(e),
-                isLearned: learnedRecipes.includes(e.id),
-                hasRep: hasRep,
+                price,
+                isLearned,
+                hasRep,
+                hasLevel,
+                canLearn,
+                requirementText,
             }
         })
         .sort((a,b) => (a.level || 0) - (b.level || 0)),
-    [enchantments, playerLevel, learnedRecipes, playerReputation]);
+    [enchantments, playerLevel, learnedRecipes, playerReputation, gold, factions]);
 
     const handleBuyRecipe = (recipe: Enchantment & { price: number }) => {
         const success = buyRecipe(recipe.id);
@@ -89,65 +109,74 @@ function BuyRecipesTab() {
     }
 
     return (
-        <Table>
-            <TableHeader>
-                <TableRow>
-                    <TableHead>Recette</TableHead>
-                    <TableHead className="text-right">Prix</TableHead>
-                    <TableHead className="w-[120px]"></TableHead>
-                </TableRow>
-            </TableHeader>
-            <TableBody>
-                {vendorRecipes.map(recipe => {
-                    const repReq = recipe.reputationRequirement;
-                    const factionName = repReq ? factions.find(f => f.id === repReq.factionId)?.name : '';
-                    const isBuyable = gold >= recipe.price && !recipe.isLearned && recipe.hasRep;
+        <TooltipProvider>
+            <Table>
+                <TableHeader>
+                    <TableRow>
+                        <TableHead>Recette</TableHead>
+                        <TableHead className="text-right">Prix</TableHead>
+                        <TableHead className="w-[120px]"></TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {vendorRecipes.map(recipe => {
+                        const repReq = recipe.reputationRequirement;
+                        const factionName = repReq ? factions.find(f => f.id === repReq.factionId)?.name : '';
 
-                    const repInfo = { rankName: '', currentRankName: '', currentRepValue: 0, nextRankThreshold: 'Max' };
-                    if (repReq && factionName) {
-                        const faction = factions.find(f => f.id === repReq.factionId);
-                        if (faction) {
-                            const sortedRanks = [...faction.ranks].sort((a, b) => a.threshold - b.threshold);
-
-                            const requiredRank = sortedRanks.find(r => repReq.threshold === r.threshold);
-                            if (requiredRank) repInfo.rankName = requiredRank.name;
-
-                            repInfo.currentRepValue = playerReputation[repReq.factionId]?.value || 0;
-                            const currentRank = sortedRanks.slice().reverse().find(r => repInfo.currentRepValue >= r.threshold);
-                            repInfo.currentRankName = currentRank ? currentRank.name : 'Inconnu';
-
-                            const nextRank = sortedRanks.find(r => repInfo.currentRepValue < r.threshold);
-                            repInfo.nextRankThreshold = nextRank ? String(nextRank.threshold) : 'Max';
+                        const repInfo = { rankName: '', currentRankName: '', currentRepValue: 0, nextRankThreshold: 'Max' };
+                        if (repReq && factionName) {
+                            const faction = factions.find(f => f.id === repReq.factionId);
+                            if (faction) {
+                                const sortedRanks = [...faction.ranks].sort((a, b) => a.threshold - b.threshold);
+                                const requiredRank = sortedRanks.find(r => repReq.threshold === r.threshold);
+                                if (requiredRank) repInfo.rankName = requiredRank.name;
+                                repInfo.currentRepValue = playerReputation[repReq.factionId]?.value || 0;
+                                const currentRank = sortedRanks.slice().reverse().find(r => repInfo.currentRepValue >= r.threshold);
+                                repInfo.currentRankName = currentRank ? currentRank.name : 'Inconnu';
+                                const nextRank = sortedRanks.find(r => repInfo.currentRepValue < r.threshold);
+                                repInfo.nextRankThreshold = nextRank ? String(nextRank.threshold) : 'Max';
+                            }
                         }
-                    }
 
-                    return (
-                        <TableRow key={recipe.id} className={recipe.isLearned || !recipe.hasRep ? 'text-muted-foreground' : ''}>
-                            <TableCell>
-                                <p className="font-medium">{recipe.name}</p>
-                                <p className="text-xs">{recipe.description}</p>
-                                {repReq && (
-                                    <div className="text-xs mt-1 space-y-0.5">
-                                        <p className={`${recipe.hasRep ? 'text-green-400' : 'text-red-400'}`}>
-                                            Nécessite: {factionName} - {repInfo.rankName} ({repReq.threshold})
-                                        </p>
-                                        <p className="text-gray-400">
-                                            Votre réputation: {repInfo.currentRankName} ({repInfo.currentRepValue} / {repInfo.nextRankThreshold})
-                                        </p>
-                                    </div>
-                                )}
-                            </TableCell>
-                            <TableCell className="text-right font-mono text-primary">{recipe.price}</TableCell>
-                            <TableCell className="text-right">
-                                <Button size="sm" variant="outline" onClick={() => handleBuyRecipe(recipe)} disabled={!isBuyable}>
-                                    <BookUp className="mr-2 h-4 w-4" /> Apprendre
-                                </Button>
-                            </TableCell>
-                        </TableRow>
-                    )
-                })}
-            </TableBody>
-        </Table>
+                        const rowContent = (
+                             <TableRow key={recipe.id} className={!recipe.canLearn ? 'text-muted-foreground' : ''}>
+                                <TableCell>
+                                    <p className="font-medium">{recipe.name}</p>
+                                    <p className="text-xs">{recipe.description}</p>
+                                    {repReq && (
+                                        <div className="text-xs mt-1 space-y-0.5">
+                                            <p className={`${recipe.hasRep ? 'text-green-400' : 'text-red-400'}`}>
+                                                Nécessite: {factionName} - {repInfo.rankName} ({repReq.threshold})
+                                            </p>
+                                            <p className="text-gray-400">
+                                                Votre réputation: {repInfo.currentRankName} ({repInfo.currentRepValue} / {repInfo.nextRankThreshold})
+                                            </p>
+                                        </div>
+                                    )}
+                                </TableCell>
+                                <TableCell className="text-right font-mono text-primary">{recipe.price}</TableCell>
+                                <TableCell className="text-right">
+                                    <Button size="sm" variant="outline" onClick={() => handleBuyRecipe(recipe)} disabled={!recipe.canLearn}>
+                                        <BookUp className="mr-2 h-4 w-4" /> Apprendre
+                                    </Button>
+                                </TableCell>
+                            </TableRow>
+                        );
+
+                        if (recipe.requirementText) {
+                            return (
+                                <Tooltip key={recipe.id} delayDuration={100}>
+                                    <TooltipTrigger asChild>{rowContent}</TooltipTrigger>
+                                    <TooltipContent><p>{recipe.requirementText}</p></TooltipContent>
+                                </Tooltip>
+                            )
+                        }
+
+                        return rowContent;
+                    })}
+                </TableBody>
+            </Table>
+        </TooltipProvider>
     );
 }
 
