@@ -37,6 +37,7 @@ const getInitialPlayerState = (): PlayerState => {
     reputation: {},
     activeEffects: [],
     activeBuffs: [],
+    activeDebuffs: [],
     activeSetBonuses: [],
     completedDungeons: {},
     completedQuests: [],
@@ -1319,7 +1320,7 @@ export const useGameStore = create<GameState>()(
                     const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
                     let healAmount = Math.round(maxHp * 0.15);
 
-                    const buffedStats = getModifiedStats(state.player.stats, state.player.activeBuffs, state.player.form);
+                    const buffedStats = getModifiedStats(state.player.stats, [...state.player.activeBuffs, ...state.player.activeDebuffs], state.player.form);
                     healAmount *= (buffedStats.HealingMultiplier || 1);
                     healAmount *= (buffedStats.HealingReceivedMultiplier || 1);
                     healAmount = Math.round(healAmount);
@@ -1688,7 +1689,7 @@ export const useGameStore = create<GameState>()(
                   if (buff.healingPerTick && buff.nextTickIn !== undefined && buff.tickInterval !== undefined) {
                       buff.nextTickIn -= delta;
                       if (buff.nextTickIn <= 0) {
-                        const buffedStats = getModifiedStats(state.player.stats, state.player.activeBuffs, state.player.form);
+                        const buffedStats = getModifiedStats(state.player.stats, [...state.player.activeBuffs, ...state.player.activeDebuffs], state.player.form);
                         const healAmount = buff.healingPerTick * (buffedStats.HealingReceivedMultiplier || 1);
                         const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
                         const oldHp = state.player.stats.PV;
@@ -1810,7 +1811,7 @@ export const useGameStore = create<GameState>()(
             const target = combat.enemies.find(e => e.id === targetId);
             if (!target || target.stats.PV <= 0) return;
 
-            const buffedPlayerStats = getModifiedStats(player.stats, player.activeBuffs, player.form);
+            const buffedPlayerStats = getModifiedStats(player.stats, [...player.activeBuffs, ...player.activeDebuffs], player.form);
             let debuffedTargetStats = getModifiedStats(target.stats, target.activeDebuffs);
 
             const damage = formulas.calculateMeleeDamage(buffedPlayerStats.AttMin, buffedPlayerStats.AttMax, formulas.calculateAttackPower(buffedPlayerStats));
@@ -2014,7 +2015,7 @@ export const useGameStore = create<GameState>()(
                                         newDebuff.nextTickIn = 1000;
                                         newDebuff.damageType = effect.damageType;
                                     }
-                                    state.player.activeBuffs.push(newDebuff);
+                                    state.player.activeDebuffs.push(newDebuff);
                                 } else if (effect.type === 'damage' && effect.multiplier) {
                                     let damage = formulas.calculateMeleeDamage(enemyInState.stats.AttMin, enemyInState.stats.AttMax, formulas.calculateAttackPower(enemyInState.stats));
                                     damage *= effect.multiplier;
@@ -2054,7 +2055,7 @@ export const useGameStore = create<GameState>()(
             }
             // --- End Monster Ability Logic ---
 
-            const buffedPlayerStats = getModifiedStats(player.stats, player.activeBuffs, player.form);
+            const buffedPlayerStats = getModifiedStats(player.stats, [...player.activeBuffs, ...player.activeDebuffs], player.form);
             const didDodge = Math.random() * 100 < buffedPlayerStats.Esquive;
 
             if (didDodge) {

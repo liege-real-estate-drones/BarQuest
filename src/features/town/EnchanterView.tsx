@@ -198,16 +198,24 @@ const GrimoireTab: React.FC = () => {
                                             <p className="text-xs text-gray-500">Palier {enchant.tier}</p>
                                         </div>
                                     </div>
-                                    <div className="mt-2 pt-2 border-t border-gray-700">
-                                        <p className="text-xs font-semibold">Composants requis:</p>
-                                        <ul className="list-disc list-inside text-xs text-gray-400">
-                                            {enchant.cost.map(c => (
-                                                <li key={c.id}>
-                                                    {c.amount} x {useGameStore.getState().gameData.components?.find(m => m.id === c.id)?.name || c.id}
-                                                    <span className="text-gray-500"> (Vous avez {materials[c.id] || 0})</span>
-                                                </li>
-                                            ))}
-                                        </ul>
+                                    <div className="mt-2 pt-2 border-t border-gray-700 space-y-2">
+                                        <div>
+                                            <p className="text-xs font-semibold">Composants requis:</p>
+                                            <ul className="list-disc list-inside text-xs text-gray-400">
+                                                {enchant.cost.map(c => (
+                                                    <li key={c.id}>
+                                                        {c.amount} x {useGameStore.getState().gameData.components?.find(m => m.id === c.id)?.name || c.id}
+                                                        <span className="text-gray-500"> (Vous avez {materials[c.id] || 0})</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                        {!isLearned && (
+                                            <div>
+                                                <p className="text-xs font-semibold">Source:</p>
+                                                <p className="text-xs text-gray-400 capitalize">{(enchant.source || []).join(', ').replace(/_/g, ' ')}</p>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             );

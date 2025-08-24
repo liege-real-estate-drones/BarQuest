@@ -125,6 +125,7 @@ export interface PlayerState {
   };
   activeEffects: string[];
   activeBuffs: Buff[];
+  activeDebuffs: Debuff[];
   activeSetBonuses: string[];
   completedDungeons: Record<string, number>; // { [dungeonId]: count }
   completedQuests: string[];
