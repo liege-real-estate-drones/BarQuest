@@ -59,14 +59,9 @@ export default function Home() {
         dataPaths.forEach((path, index) => {
             const data = jsonData[index];
             if (data && data[path] && Array.isArray(data[path])) {
-                // Handles nested objects like { "quests": [...] }
                 gameDataPayload[path as keyof GameData] = data[path];
-            } else if (Array.isArray(data)) {
-                // Handles direct arrays like [...]
-                gameDataPayload[path as keyof GameData] = data;
             } else {
-                // Fallback for any other unexpected format
-                gameDataPayload[path as keyof GameData] = [];
+                gameDataPayload[path as keyof GameData] = data;
             }
         });
         
