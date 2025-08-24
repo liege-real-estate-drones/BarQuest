@@ -154,7 +154,7 @@ function BuyRecipesTab() {
                                         </div>
                                     )}
                                 </TableCell>
-                                <TableCell className="text-right font-mono text-primary">{recipe.price}</TableCell>
+                                <TableCell className="text-right font-mono text-primary">{Math.round(recipe.price)}</TableCell>
                                 <TableCell className="text-right">
                                     <Button size="sm" variant="outline" onClick={() => handleBuyRecipe(recipe)} disabled={!recipe.canLearn}>
                                         <BookUp className="mr-2 h-4 w-4" /> Apprendre
