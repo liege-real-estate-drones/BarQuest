@@ -10,15 +10,15 @@ export const processSkill = (
     state: WritableDraft<GameState>,
     skillId: string,
     get: () => GameState,
-    applySpecialEffect: (trigger: string, context: { targetId: string, isCrit: boolean, skill?: any }) => void,
-    addFloatingText: (entityId: string, text: string, type: FloatingTextType) => void
-): { deadEnemyIds: string[] } => {
+    applySpecialEffect: (trigger: string, context: { targetId: string, isCrit: boolean, skill?: any }) => void
+): { deadEnemyIds: string[], floatingTexts: { entityId: string, text: string, type: FloatingTextType }[] } => {
     const deadEnemyIds: string[] = [];
+    const floatingTexts: { entityId: string, text: string, type: FloatingTextType }[] = [];
     const { player, combat, gameData } = state;
     const rank = player.learnedSkills[skillId];
     const originalSkill = gameData.skills.find(t => t.id === skillId);
 
-    if (!originalSkill || !rank) return { deadEnemyIds };
+    if (!originalSkill || !rank) return { deadEnemyIds, floatingTexts };
 
     let skill = JSON.parse(JSON.stringify(originalSkill));
     Object.entries(player.learnedTalents).forEach(([talentId, talentRank]) => {
@@ -44,13 +44,13 @@ export const processSkill = (
 
     if (player.form === 'shadow' && skill.school === 'holy') {
         combat.log.push({ message: "Vous ne pouvez pas utiliser de sorts Sacrés en Forme d'ombre.", type: 'info', timestamp: Date.now() });
-        return { deadEnemyIds };
+        return { deadEnemyIds, floatingTexts };
     }
     if (player.stunDuration > 0) {
         combat.log.push({ message: "Vous êtes étourdi et ne pouvez pas agir.", type: 'info', timestamp: Date.now() });
-        return { deadEnemyIds };
+        return { deadEnemyIds, floatingTexts };
     }
-    if ((combat.skillCooldowns[skillId] || 0) > 0) return { deadEnemyIds };
+    if ((combat.skillCooldowns[skillId] || 0) > 0) return { deadEnemyIds, floatingTexts };
 
     if (skillId !== 'mage_arcane_blast') {
         const arcaneChargeIndex = state.player.activeBuffs.findIndex(b => b.id === 'arcane_charge');
@@ -66,7 +66,7 @@ export const processSkill = (
 
         if (!hasArchonBuff && player.resources.current < dynamicResourceCost) {
             combat.log.push({ message: "Pas assez de ressource!", type: 'info', timestamp: Date.now() });
-            return { deadEnemyIds };
+            return { deadEnemyIds, floatingTexts };
         }
 
         for (const effect of skill.effects) {
@@ -141,7 +141,7 @@ export const processSkill = (
             if (anyEffect.type === 'damage') {
                 targets.forEach(target => {
                     const { mitigatedDamage, isCrit } = handleDamage(target, anyEffect);
-                    addFloatingText(target.id, `-${mitigatedDamage}`, isCrit ? 'crit' : 'damage');
+                    floatingTexts.push({ entityId: target.id, text: `-${mitigatedDamage}`, type: isCrit ? 'crit' : 'damage' });
                     combat.log.push({ message: isCrit ? `CRITIQUE ! Votre ${skill.nom} inflige ${mitigatedDamage} points de dégâts à ${target.nom}.` : `Vous utilisez ${skill.nom} sur ${target.nom} pour ${mitigatedDamage} points de dégâts.`, type: isCrit ? 'crit' : 'player_attack', timestamp: Date.now() });
                     if (target.stats.PV <= 0) deadEnemyIds.push(target.id);
                 });
@@ -158,7 +158,7 @@ export const processSkill = (
                         if (hasArchonBuff) totalDamage *= 2;
                         const numTicks = anyEffect.num_ticks || anyEffect.duration;
                         target.activeDebuffs.push({ id: anyEffect.id, name: anyEffect.name, duration: anyEffect.duration * 1000, damagePerTick: Math.round(totalDamage / numTicks), tickInterval: (anyEffect.duration * 1000) / numTicks, nextTickIn: (anyEffect.duration * 1000) / numTicks, isDebuff: true, damageType: anyEffect.damageType });
-                        addFloatingText(target.id, anyEffect.name, 'debuff');
+                        floatingTexts.push({ entityId: target.id, text: anyEffect.name, type: 'debuff' });
                         combat.log.push({ message: `Votre ${skill.nom} afflige ${target.nom}.`, type: 'player_attack', timestamp: Date.now() });
                     } else if (anyEffect.debuffType === 'stat_modifier') {
                         const newDebuff: Debuff = {
@@ -170,7 +170,7 @@ export const processSkill = (
                         };
                         target.activeDebuffs = target.activeDebuffs || [];
                         target.activeDebuffs.push(newDebuff);
-                        addFloatingText(target.id, anyEffect.name, 'debuff');
+                        floatingTexts.push({ entityId: target.id, text: anyEffect.name, type: 'debuff' });
                         combat.log.push({ message: `${target.nom} est affecté par ${skill.nom}.`, type: 'info', timestamp: Date.now() });
                     } else if (anyEffect.debuffType === 'cc') {
                         if (anyEffect.ccType === 'stun') {
@@ -181,7 +181,7 @@ export const processSkill = (
                                 duration: anyEffect.duration * 1000,
                                 isDebuff: true,
                             });
-                            addFloatingText(target.id, anyEffect.name || 'Étourdi', 'debuff');
+                            floatingTexts.push({ entityId: target.id, text: anyEffect.name || 'Étourdi', type: 'debuff' });
                             combat.log.push({ message: `${target.nom} est étourdi par ${skill.nom}.`, type: 'info', timestamp: Date.now() });
                         }
                     }
@@ -195,12 +195,12 @@ export const processSkill = (
                     shieldAmount = getRankValue(anyEffect.amount.multiplier, rank);
                 }
                 player.shield += shieldAmount;
-                addFloatingText(player.id, `+${shieldAmount} Bouclier`, 'buff');
+                floatingTexts.push({ entityId: player.id, text: `+${shieldAmount} Bouclier`, type: 'buff' });
                 combat.log.push({ message: `Vous gagnez un bouclier de ${shieldAmount} points.`, type: 'shield', timestamp: Date.now() });
                 effectApplied = true;
             } else if (anyEffect.type === 'invulnerability') {
                 player.invulnerabilityDuration = (player.invulnerabilityDuration || 0) + (anyEffect.duration * 1000);
-                addFloatingText(player.id, 'Invulnérable', 'buff');
+                floatingTexts.push({ entityId: player.id, text: 'Invulnérable', type: 'buff' });
                 combat.log.push({ message: `Vous devenez invulnérable pendant ${anyEffect.duration} secondes.`, type: 'info', timestamp: Date.now() });
                 effectApplied = true;
             } else if (anyEffect.type === 'death_ward') {
@@ -212,7 +212,7 @@ export const processSkill = (
                     deathWardHealPercent: anyEffect.heal_percent,
                 };
                 player.activeBuffs.push(newBuff);
-                addFloatingText(player.id, skill.nom, 'buff');
+                floatingTexts.push({ entityId: player.id, text: skill.nom, type: 'buff' });
                 combat.log.push({ message: `${skill.nom} vous protège de la mort.`, type: 'info', timestamp: Date.now() });
                 effectApplied = true;
             } else if (anyEffect.type === 'buff') {
@@ -239,7 +239,7 @@ export const processSkill = (
                     const newMaxHp = maxHp * (1 + hpIncreasePercent);
                     player.stats.PV = (currentHp / maxHp) * newMaxHp;
                 }
-                addFloatingText(player.id, anyEffect.name, 'buff');
+                floatingTexts.push({ entityId: player.id, text: anyEffect.name, type: 'buff' });
                 combat.log.push({ message: `Vous utilisez ${skill.nom}.`, type: 'info', timestamp: Date.now() });
                 effectApplied = true;
             } else if (anyEffect.type === 'heal') {
@@ -251,7 +251,7 @@ export const processSkill = (
                 const oldHp = player.stats.PV;
                 player.stats.PV = Math.min(maxHp, player.stats.PV + totalHeal);
                 const healedAmount = Math.round(player.stats.PV - oldHp);
-                addFloatingText(player.id, `+${healedAmount}`, 'heal');
+                floatingTexts.push({ entityId: player.id, text: `+${healedAmount}`, type: 'heal' });
                 combat.log.push({ message: `Votre ${skill.nom} vous soigne de ${healedAmount} PV.`, type: 'heal', timestamp: Date.now() });
                 effectApplied = true;
             } else if (anyEffect.type === 'consume_debuff_for_damage') {
@@ -270,12 +270,12 @@ export const processSkill = (
                         const elemDR = formulas.calculateResistanceDR(res, player.level);
                         const mitigatedDamage = Math.round(finalDamage * (1 - elemDR));
                         target.stats.PV -= mitigatedDamage;
-                        addFloatingText(target.id, `-${mitigatedDamage}`, 'damage');
+                        floatingTexts.push({ entityId: target.id, text: `-${mitigatedDamage}`, type: 'damage' });
                         combat.log.push({ message: `Vous consommez ${stacks} charges de poison pour infliger ${mitigatedDamage} dégâts de nature à ${target.nom}.`, type: 'player_attack', timestamp: Date.now() });
                         if (target.stats.PV <= 0) deadEnemyIds.push(target.id);
                         effectApplied = true;
                     } else {
-                        addFloatingText(target.id, 'Cible non empoisonnée', 'miss');
+                        floatingTexts.push({ entityId: target.id, text: 'Cible non empoisonnée', type: 'miss' });
                         combat.log.push({ message: `La cible n'est pas empoisonnée.`, type: 'info', timestamp: Date.now() });
                         skillFailed = true;
                     }
@@ -293,16 +293,16 @@ export const processSkill = (
                     } else {
                         player.activeBuffs.push({ id: anyEffect.stacking_buff.id, name: anyEffect.stacking_buff.name, duration: anyEffect.stacking_buff.duration, stacks: 1 });
                     }
-                    addFloatingText(target.id, `-${mitigatedDamage}`, isCrit ? 'crit' : 'damage');
+                    floatingTexts.push({ entityId: target.id, text: `-${mitigatedDamage}`, type: isCrit ? 'crit' : 'damage' });
                     combat.log.push({ message: isCrit ? `CRITIQUE ! Votre ${skill.nom} inflige ${mitigatedDamage} points de dégâts à ${target.nom}.` : `Votre ${skill.nom} inflige ${mitigatedDamage} points de dégâts à ${target.nom}.`, type: isCrit ? 'crit' : 'player_attack', timestamp: Date.now() });
-                    addFloatingText(player.id, `${anyEffect.stacking_buff.name} (${newStacks})`, 'buff');
+                    floatingTexts.push({ entityId: player.id, text: `${anyEffect.stacking_buff.name} (${newStacks})`, type: 'buff' });
                     combat.log.push({ message: `Vous gagnez une charge de ${anyEffect.stacking_buff.name} (${newStacks}).`, type: 'info', timestamp: Date.now() });
                     if (target.stats.PV <= 0) deadEnemyIds.push(target.id);
                 });
                 effectApplied = true;
             } else if (anyEffect.type === 'transformation') {
                 player.form = anyEffect.form;
-                addFloatingText(player.id, `Forme: ${anyEffect.form}`, 'buff');
+                floatingTexts.push({ entityId: player.id, text: `Forme: ${anyEffect.form}`, type: 'buff' });
                 combat.log.push({ message: `Vous prenez une nouvelle forme: ${anyEffect.form}.`, type: 'info', timestamp: Date.now() });
                 effectApplied = true;
             } else if (anyEffect.type === 'multi_strike') {
@@ -311,7 +311,7 @@ export const processSkill = (
                     for (let i = 0; i < strikes; i++) {
                         if (target.stats.PV <= 0) break;
                         const { mitigatedDamage, isCrit } = handleDamage(target, anyEffect.damage);
-                        addFloatingText(target.id, `-${mitigatedDamage}`, isCrit ? 'crit' : 'damage');
+                        floatingTexts.push({ entityId: target.id, text: `-${mitigatedDamage}`, type: isCrit ? 'crit' : 'damage' });
                         combat.log.push({ message: isCrit ? `CRITIQUE ! Votre ${skill.nom} (Frappe ${i + 1}) inflige ${mitigatedDamage} points de dégâts à ${target.nom}.` : `Votre ${skill.nom} (Frappe ${i + 1}) inflige ${mitigatedDamage} points de dégâts à ${target.nom}.`, type: isCrit ? 'crit' : 'player_attack', timestamp: Date.now() });
                         if (target.stats.PV <= 0) deadEnemyIds.push(target.id);
                     }
@@ -329,8 +329,8 @@ export const processSkill = (
             }
             state.combat.playerAttackProgress = 0;
         }
-        return { deadEnemyIds };
+        return { deadEnemyIds, floatingTexts };
     }
 
-    return { deadEnemyIds };
+    return { deadEnemyIds, floatingTexts };
 };
