@@ -56,7 +56,7 @@ export const ArtisanatForgeView: React.FC = () => {
             const resultItem = allItems.find(item => item.id === recipe.result);
             if (!resultItem || !resultItem.tagsClasse) return true; // Show if no tags
 
-            return resultItem.tagsClasse.includes('common') || resultItem.tagsClasse.includes(player.classeId);
+            return resultItem.tagsClasse.includes('common') || (player.classeId && resultItem.tagsClasse.includes(player.classeId));
         });
     }, [recipes, allItems, player.classeId]);
 
