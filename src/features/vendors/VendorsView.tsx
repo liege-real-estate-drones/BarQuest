@@ -69,8 +69,10 @@ function BuyRecipesTab() {
                 const requirements = [];
                 if (!hasLevel) requirements.push(`Niveau ${e.level} requis`);
                 if (!hasRep && repReq) {
-                     const factionName = factions.find(f => f.id === repReq.factionId)?.name || repReq.factionId;
-                     requirements.push(`Réputation "${repReq.rankName}" avec ${factionName} requise`);
+                    const factionName = factions.find(f => f.id === repReq.factionId)?.name || repReq.factionId;
+                    const faction = factions.find(f => f.id === repReq.factionId);
+                    const rankName = faction?.ranks.find(r => r.threshold === repReq.threshold)?.name || 'Unknown Rank';
+                    requirements.push(`Réputation "${rankName}" avec ${factionName} requise`);
                 }
                 requirementText = requirements.join('. ');
             }

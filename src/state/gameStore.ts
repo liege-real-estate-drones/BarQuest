@@ -18,6 +18,7 @@ export interface ActiveQuete {
 
 const getInitialPlayerState = (): PlayerState => {
   return {
+    id: uuidv4(),
     name: "Hero",
     classeId: null,
     level: 1,
@@ -106,6 +107,7 @@ export interface GameState {
   setWorldTier: (tier: number) => void;
   setBossEncounter: (monster: Monstre | null) => void; // NOUVEAU: Action pour gérer l'alerte
   setProposedQuests: (quests: Quete[] | null) => void;
+  setTargetIndex: (index: number) => void;
   checkAndApplyLevelUp: () => void;
   initializeGameData: (data: Partial<GameData>) => void;
   setPlayerClass: (classId: PlayerClassId, name: string) => void;
@@ -245,7 +247,8 @@ const resolveLoot = (monster: Monstre, gameData: GameData, playerClassId: Player
     baseItemProps,
     itemLevel,
     chosenRarity,
-    gameData.affixes
+    gameData.affixes,
+    baseItemTemplate.id
   );
 
   return newItem;
@@ -468,6 +471,12 @@ export const useGameStore = create<GameState>()(
 
       setProposedQuests: (quests) => {
         set({ proposedQuests: quests });
+      },
+
+      setTargetIndex: (index: number) => {
+        set((state: GameState) => {
+          state.combat.targetIndex = index;
+        });
       },
 
       checkAndApplyLevelUp: () => {
@@ -1469,7 +1478,7 @@ export const useGameStore = create<GameState>()(
                         else bonusRarity = "Commun";
                     }
 
-                    const chestItem = generateProceduralItem(baseItemProps, itemLevel, bonusRarity, gameData.affixes, state.currentDungeon || undefined);
+                    const chestItem = generateProceduralItem(baseItemProps, itemLevel, bonusRarity, gameData.affixes, baseItemTemplate.id, state.currentDungeon || undefined);
                     if (chestItem) {
                         chestItems.push(chestItem);
                     }
