@@ -55,7 +55,8 @@ export function CombatView() {
   }));
 
   const playerRef = useRef<HTMLDivElement>(null);
-  const enemyRefs = useRef(enemies.map(() => createRef<HTMLDivElement>()));
+  const enemyRefs = useRef<React.RefObject<HTMLDivElement>[]>([]);
+  enemyRefs.current = enemies.map((_, i) => enemyRefs.current[i] ?? createRef());
 
   const equippedSkills = useMemo(() => {
     if (!player?.equippedSkills) return [];
