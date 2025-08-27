@@ -19,6 +19,7 @@ const typeColors: Record<FloatingTextType, string> = {
   buff: 'text-blue-400',
   debuff: 'text-orange-400',
   info: 'text-white',
+  shield: 'text-cyan-400',
 };
 
 export function FloatingCombatText({ text, type, onAnimationEnd }: FloatingCombatTextProps) {
