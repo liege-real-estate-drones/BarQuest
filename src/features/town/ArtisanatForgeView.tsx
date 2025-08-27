@@ -1,14 +1,25 @@
 // src/features/town/ForgeView.tsx
 import React, { useState } from 'react';
-import { useGameStore } from '@/state/gameStore';
+import { useGameStore, calculateItemScore } from '@/state/gameStore';
 import type { Recipe, Item, Rareté, Stats } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { ItemStat, STAT_ORDER } from '@/components/ItemTooltip';
+import { ItemStat, STAT_ORDER, ItemTooltip } from '@/components/ItemTooltip';
 import { Separator } from '@/components/ui/separator';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 import { cn } from '@/lib/utils';
 import { STAT_DISPLAY_NAMES } from '@/lib/constants';
+import { useToast } from '@/hooks/use-toast';
 
 const rarityColorMap: Record<Rareté, string> = {
     Commun: 'text-gray-400',
@@ -23,15 +34,61 @@ type StatKey = keyof Omit<Stats, 'PV' | 'RessourceMax'>;
 
 export const ArtisanatForgeView: React.FC = () => {
     const { recipes, items: allItems, components } = useGameStore(state => state.gameData);
-    const { gold, craftingMaterials, player, inventoryItems } = useGameStore(state => ({
+    const { gold, craftingMaterials, player, inventoryItems, equipment } = useGameStore(state => ({
         gold: state.inventory.gold,
         craftingMaterials: state.inventory.craftingMaterials,
         player: state.player,
         inventoryItems: state.inventory.items,
+        equipment: state.inventory.equipment,
     }));
-    const craftItem = useGameStore(state => state.craftItem);
+    const { craftItem, equipItem } = useGameStore(state => ({
+        craftItem: state.craftItem,
+        equipItem: state.equipItem,
+    }));
+    const { toast } = useToast();
 
     const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
+    const [showEquipPrompt, setShowEquipPrompt] = useState<Item | null>(null);
+
+    const getComparisonIndicator = (recipe: Recipe) => {
+        if (!player.classeId) return null;
+
+        const resultingItem = allItems.find(item => item.id === recipe.result);
+        if (!resultingItem || !resultingItem.slot || resultingItem.slot === 'potion') return null;
+
+        const equippedItem = equipment[resultingItem.slot as keyof typeof equipment];
+        if (!equippedItem) {
+            return <span className="text-green-400 font-bold mr-2">+</span>;
+        }
+
+        const newItemScore = calculateItemScore(resultingItem, player.classeId);
+        const equippedItemScore = calculateItemScore(equippedItem, player.classeId);
+
+        if (newItemScore > equippedItemScore) {
+            return <span className="text-green-400 font-bold mr-2">+</span>;
+        } else if (newItemScore < equippedItemScore) {
+            return <span className="text-red-400 font-bold mr-2">-</span>;
+        } else {
+            return <span className="text-gray-500 font-bold mr-2">=</span>;
+        }
+    };
+
+    const handleCraft = (recipeId: string) => {
+        const result = craftItem(recipeId);
+        if (result && 'error' in result) {
+            toast({
+                title: 'Échec de la fabrication',
+                description: result.error,
+                variant: 'destructive',
+            });
+        } else if (result) {
+            toast({
+                title: 'Objet fabriqué !',
+                description: `Vous avez fabriqué: ${result.name}`,
+            });
+            setShowEquipPrompt(result);
+        }
+    };
 
     const canCraft = (recipe: Recipe): boolean => {
         if (gold < recipe.cost) return false;
@@ -76,6 +133,7 @@ export const ArtisanatForgeView: React.FC = () => {
     };
 
     const resultingItem = getResultingItem(selectedRecipe);
+    const equippedItem = resultingItem && resultingItem.slot ? equipment[resultingItem.slot as keyof typeof equipment] : null;
 
     const itemAffixes = resultingItem ? [...(resultingItem.affixes || [])] : [];
     if (resultingItem?.stats) {
@@ -91,7 +149,10 @@ export const ArtisanatForgeView: React.FC = () => {
         .sort((a, b) => STAT_ORDER.indexOf(a.ref as StatKey) - STAT_ORDER.indexOf(b.ref as StatKey));
 
 
+    const equippedItemForPrompt = showEquipPrompt ? equipment[showEquipPrompt.slot as keyof typeof equipment] : null;
+
     return (
+        <>
         <div className="p-4 grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="md:col-span-1">
                 <Card>
@@ -111,7 +172,18 @@ export const ArtisanatForgeView: React.FC = () => {
                                         )}
                                         onClick={() => setSelectedRecipe(recipe)}
                                     >
-                                        {recipe.name}
+                                        <div className="flex justify-between items-center w-full">
+                                             <div className="flex items-center">
+                                                {getComparisonIndicator(recipe)}
+                                                <span>{recipe.name}</span>
+                                             </div>
+                                            <div className="flex items-center space-x-2 text-xs text-muted-foreground">
+                                                {Object.entries(recipe.materials).map(([matId, required]) => (
+                                                    <span key={matId}>{required}x {getMaterialName(matId).split(' ').pop()}</span>
+                                                ))}
+                                                <span>{recipe.cost} Or</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 ))}
                             </div>
@@ -128,27 +200,36 @@ export const ArtisanatForgeView: React.FC = () => {
                     <CardContent>
                         {selectedRecipe && resultingItem ? (
                             <div className="space-y-4">
-                                <div>
-                                    <h4 className={cn("font-bold", rarityColorMap[resultingItem.rarity])}>{resultingItem.name}</h4>
-                                    <div className="flex justify-between text-muted-foreground text-xs">
-                                        <span className="capitalize">{resultingItem.slot}</span>
-                                        <span>Niveau {resultingItem.niveauMin}</span>
+                                <div className={cn("grid gap-4", equippedItem ? "grid-cols-2" : "grid-cols-1")}>
+                                    <div>
+                                        <h4 className="font-bold text-lg">Objet à fabriquer</h4>
+                                        <h4 className={cn("font-bold", rarityColorMap[resultingItem.rarity])}>{resultingItem.name}</h4>
+                                        <div className="flex justify-between text-muted-foreground text-xs">
+                                            <span className="capitalize">{resultingItem.slot}</span>
+                                            <span>Niveau {resultingItem.niveauMin}</span>
+                                        </div>
+                                        <Separator className="my-2" />
+                                        <div className="space-y-1 text-xs">
+                                            {allSortedAffixes.map((affix) => (
+                                                <ItemStat
+                                                    key={affix.ref}
+                                                    label={STAT_DISPLAY_NAMES[affix.ref] || affix.ref}
+                                                    value={`${affix.val > 0 ? '+' : ''}${affix.val}`}
+                                                />
+                                            ))}
+                                        </div>
+                                        {resultingItem.set && (
+                                            <>
+                                                <Separator className="my-2" />
+                                                <p className="text-yellow-300 text-xs">{resultingItem.set.name}</p>
+                                            </>
+                                        )}
                                     </div>
-                                    <Separator className="my-2" />
-                                    <div className="space-y-1 text-xs">
-                                        {allSortedAffixes.map((affix) => (
-                                            <ItemStat
-                                                key={affix.ref}
-                                                label={STAT_DISPLAY_NAMES[affix.ref] || affix.ref}
-                                                value={`${affix.val > 0 ? '+' : ''}${affix.val}`}
-                                            />
-                                        ))}
-                                    </div>
-                                    {resultingItem.set && (
-                                        <>
-                                            <Separator className="my-2" />
-                                            <p className="text-yellow-300 text-xs">{resultingItem.set.name}</p>
-                                        </>
+                                    {equippedItem && (
+                                         <div>
+                                            <h4 className="font-bold text-lg">Objet équipé</h4>
+                                            <ItemTooltip item={equippedItem} />
+                                         </div>
                                     )}
                                 </div>
                                 <div className="space-y-2">
@@ -176,7 +257,7 @@ export const ArtisanatForgeView: React.FC = () => {
                                         </p>
                                     </div>
                                     <Button
-                                        onClick={() => craftItem(selectedRecipe.id)}
+                                        onClick={() => handleCraft(selectedRecipe.id)}
                                         disabled={!canCraft(selectedRecipe)}
                                         className="mt-2 w-full"
                                     >
@@ -191,5 +272,36 @@ export const ArtisanatForgeView: React.FC = () => {
                 </Card>
             </div>
         </div>
+        {showEquipPrompt && (
+            <AlertDialog open={!!showEquipPrompt} onOpenChange={(isOpen) => !isOpen && setShowEquipPrompt(null)}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Équiper l&apos;objet fabriqué ?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            <div className={cn("grid gap-4 mt-4", equippedItemForPrompt ? "grid-cols-2" : "grid-cols-1")}>
+                                <div>
+                                    <h4 className="font-bold text-lg">Nouvel objet</h4>
+                                    <ItemTooltip item={showEquipPrompt} />
+                                </div>
+                                {equippedItemForPrompt && (
+                                     <div>
+                                        <h4 className="font-bold text-lg">Objet équipé</h4>
+                                        <ItemTooltip item={equippedItemForPrompt} />
+                                     </div>
+                                )}
+                            </div>
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel onClick={() => setShowEquipPrompt(null)}>Garder</AlertDialogCancel>
+                        <AlertDialogAction onClick={() => {
+                            equipItem(showEquipPrompt.id);
+                            setShowEquipPrompt(null);
+                        }}>Équiper</AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+        )}
+        </>
     );
 };
