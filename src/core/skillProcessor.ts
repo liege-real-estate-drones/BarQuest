@@ -9,9 +9,11 @@ import { SkillEffectSchema } from '@/data/schemas';
 export const applyPoisonProc = (
     state: WritableDraft<GameState>,
     target: WritableDraft<GameState>['combat']['enemies'][number],
-    floatingTexts: { entityId: string, text: string, type: FloatingTextType }[]
+    floatingTexts: { entityId: string, text: string, type: FloatingTextType }[],
+    forceApply = false
 ) => {
-    if (state.player.activeBuffs.some(b => b.id === 'deadly_poison_buff') && Math.random() < 0.3) {
+    const chance = forceApply ? 1 : 0.3;
+    if (state.player.activeBuffs.some(b => b.id === 'deadly_poison_buff') && Math.random() < chance) {
         const poisonDebuffId = 'deadly_poison_debuff';
         let existingPoison = target.activeDebuffs.find(d => d.id === poisonDebuffId);
 
@@ -113,7 +115,7 @@ export const processSkill = (
         if (isCrit) applySpecialEffect('ON_CRITICAL_HIT', { targetId: target.id, isCrit, skill: skill });
         applySpecialEffect('ON_HIT', { targetId: target.id, isCrit, skill: skill });
         if (!preventPoisonProc) {
-            applyPoisonProc(state, target, floatingTexts);
+            applyPoisonProc(state, target, floatingTexts, true);
         }
 
         let finalDamage = isCrit ? damage * (buffedPlayerStats.CritDmg / 100) : damage;
