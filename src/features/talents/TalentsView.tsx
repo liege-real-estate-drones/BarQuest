@@ -50,6 +50,9 @@ const describeStatMod = (mod: any, rank: number, fullDescription: boolean = fals
 
 const getTalentDescription = (talent: Talent, gameData: GameData, rank: number, fullDescription: boolean = false): string => {
     if (talent.description && fullDescription) {
+        if (Array.isArray(talent.description)) {
+            return talent.description.join(' ');
+        }
         return talent.description;
     }
 
@@ -99,13 +102,36 @@ const getTalentDescription = (talent: Talent, gameData: GameData, rank: number, 
 
     if (talent.triggeredEffects) {
         for (const triggered of talent.triggeredEffects) {
-            const chance = getRankValue(triggered.chance, rank) * 100;
-            const chanceText = fullDescription && Array.isArray(triggered.chance)
-                ? triggered.chance.map(c => `${c*100}%`).join('/')
-                : `${chance}%`;
+            const chanceValue = triggered.chance ?? 1;
+            const chanceForRank = getRankValue(chanceValue, rank) * 100;
 
-            // This part is complex, for now a simple description
-            descriptionParts.push(`Effet déclenché avec ${chanceText} de chance.`);
+            let chanceText = '';
+            if (fullDescription && Array.isArray(chanceValue)) {
+                chanceText = ` (${chanceValue.map(c => `${c*100}%`).join('/')} de chance)`;
+            } else if (chanceForRank < 100) {
+                chanceText = ` (${chanceForRank.toFixed(0)}% de chance)`;
+            }
+
+            const triggerDict: Record<string, string> = {
+                on_dodge: "Après avoir esquivé",
+                on_critical_hit: "Après un coup critique",
+                on_hit: "En touchant un ennemi"
+            };
+            const triggerText = triggerDict[triggered.trigger as keyof typeof triggerDict] || "Au déclenchement";
+
+            const effectDescriptions = triggered.effects.map(effect => {
+                const anyEffect = effect as any;
+                if (anyEffect.type === 'buff' && anyEffect.buffType === 'stat_modifier' && anyEffect.statMods) {
+                    return anyEffect.statMods.map((mod: any) => describeStatMod(mod, rank, fullDescription)).filter(Boolean).join(', ');
+                }
+                return null;
+            }).filter(Boolean).join(' ');
+
+            if (effectDescriptions) {
+                descriptionParts.push(`${triggerText}${chanceText}: ${effectDescriptions}`);
+            } else {
+                descriptionParts.push(`${triggerText}${chanceText}, un effet spécial se produit.`);
+            }
         }
     }
 
