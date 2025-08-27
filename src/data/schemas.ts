@@ -240,7 +240,7 @@ const BaseSkillTalentSchema = z.object({
   type: z.enum(["actif", "passif"]),
   niveauRequis: z.number().int().optional(),
   rangMax: z.number().int(),
-  effets: z.array(z.string()),
+  effets: z.array(z.string()).optional(),
   effects: z.array(SkillEffectSchema).optional(),
   exigences: z.array(z.string()).default([]),
 });

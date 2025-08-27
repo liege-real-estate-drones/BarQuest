@@ -1080,19 +1080,21 @@ export const useGameStore = create<GameState>()(
                     }
                 });
               } else { // Fallback to old effect strings
-                talentData.effets.forEach(effectString => {
-                    if (typeof effectString !== 'string') {
-                        // This talent is using the new object format but under the old 'effets' key.
-                        // The safeguard in getTalentEffectValue will log an error. Skip processing here.
-                        return;
-                    }
-                    const value = getTalentEffectValue(effectString, rank);
-                    if (effectString.includes('Armure') && typeof player.stats.Armure === 'number') {
-                        player.stats.Armure += (player.stats.Armure * value) / 100;
-                    } else if (effectString.includes('PV') && typeof player.stats.PV === 'number') {
-                        player.stats.PV += (player.baseStats.PV * value) / 100;
-                    } // ... and so on for other stats, always with type checks
-                });
+                if (talentData.effets) {
+                  talentData.effets.forEach(effectString => {
+                      if (typeof effectString !== 'string') {
+                          // This talent is using the new object format but under the old 'effets' key.
+                          // The safeguard in getTalentEffectValue will log an error. Skip processing here.
+                          return;
+                      }
+                      const value = getTalentEffectValue(effectString, rank);
+                      if (effectString.includes('Armure') && typeof player.stats.Armure === 'number') {
+                          player.stats.Armure += (player.stats.Armure * value) / 100;
+                      } else if (effectString.includes('PV') && typeof player.stats.PV === 'number') {
+                          player.stats.PV += (player.baseStats.PV * value) / 100;
+                      } // ... and so on for other stats, always with type checks
+                  });
+                }
               }
           });
 
@@ -1856,7 +1858,7 @@ export const useGameStore = create<GameState>()(
                             const mitigatedDamage = Math.round(finalDamage * (1 - dr));
 
                             target.stats.PV -= mitigatedDamage;
-                            const waveNum = getTalentEffectValue(skill!.effets[0], state.player.learnedSkills[skill!.id]) - action.wavesLeft + 1;
+                            const waveNum = skill?.effets ? getTalentEffectValue(skill.effets[0], state.player.learnedSkills[skill.id]) - action.wavesLeft + 1 : 0;
                             const msg = `Votre ${skill!.nom} (Vague ${waveNum}) inflige ${mitigatedDamage} points de dégâts à ${target.nom}.`;
                             const critMsg = `CRITIQUE ! Votre ${skill!.nom} (Vague ${waveNum}) inflige ${mitigatedDamage} points de dégâts à ${target.nom}.`;
                             state.combat.log.push({ message: isCrit ? critMsg : msg, type: isCrit ? 'crit' : 'player_attack', timestamp: Date.now() });
@@ -1981,7 +1983,7 @@ export const useGameStore = create<GameState>()(
               const criDeGuerreRank = state.player.learnedTalents['berserker_battle_cry'] || 0;
               if (criDeGuerreRank > 0) {
                   const talent = state.gameData.talents.find(t => t.id === 'berserker_battle_cry');
-                  if(talent) rageGained += getTalentEffectValue(talent.effets[0], criDeGuerreRank);
+                  if(talent && talent.effets) rageGained += getTalentEffectValue(talent.effets[0], criDeGuerreRank);
               }
               state.player.resources.current = Math.min(state.player.resources.max, state.player.resources.current + rageGained);
             }

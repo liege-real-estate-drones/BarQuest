@@ -184,7 +184,7 @@ export interface CombatLogEntry {
     item?: Item;
 }
 
-export type FloatingTextType = 'damage' | 'crit' | 'heal' | 'dodge' | 'miss' | 'buff' | 'debuff' | 'info';
+export type FloatingTextType = 'damage' | 'crit' | 'heal' | 'dodge' | 'miss' | 'buff' | 'debuff' | 'info' | 'shield';
 
 export interface FloatingText {
   id: string;
