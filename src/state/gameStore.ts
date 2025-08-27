@@ -101,7 +101,7 @@ export interface GameState {
   bossEncounter: Monstre | null; // NOUVEAU: Pour l'alerte d'apparition du boss
   isHeroicMode: boolean;
 
-  craftItem: (recipeId: string) => void;
+  craftItem: (recipeId: string) => Item | { error: string } | null;
   setHeroicMode: (isHeroic: boolean) => void;
   setTownView: (view: 'TOWN' | 'CRAFTING') => void;
   setWorldTier: (tier: number) => void;
@@ -540,10 +540,11 @@ export const useGameStore = create<GameState>()(
       },
 
       craftItem: (recipeId: string) => {
+        let result: Item | { error: string } | null = null;
         set((state: GameState) => {
           const recipe = state.gameData.recipes.find(r => r.id === recipeId);
-          if (!recipe) { console.error(`Recipe ${recipeId} not found.`); return; }
-          if (state.inventory.gold < recipe.cost) { console.log("Not enough gold."); return; }
+          if (!recipe) { console.error(`Recipe ${recipeId} not found.`); result = null; return; }
+          if (state.inventory.gold < recipe.cost) { result = { error: "Pas assez d'or." }; return; }
 
           const requiredItems: Record<string, number> = {};
           const requiredComponents: Record<string, number> = {};
@@ -559,8 +560,9 @@ export const useGameStore = create<GameState>()(
           // Pre-check components
           for (const [id, amount] of Object.entries(requiredComponents)) {
             if ((state.inventory.craftingMaterials[id] || 0) < amount) {
-              console.log(`Not enough component: ${id}`);
-              return; // Abort
+              const comp = state.gameData.components.find(c => c.id === id);
+              result = { error: `Manque de ${comp?.name || id}` };
+              return;
             }
           }
 
@@ -580,35 +582,32 @@ export const useGameStore = create<GameState>()(
               }
             }
             if (foundCount < amount) {
-              console.log(`Not enough item with baseId: ${baseId}`);
-              return; // Abort
+              const item = state.gameData.items.find(i => i.id === baseId);
+              result = { error: `Manque de ${item?.name || baseId}` };
+              return;
             }
           }
 
           // --- All checks passed, proceed with transaction ---
-
-          // 1. Consume Gold
           state.inventory.gold -= recipe.cost;
 
-          // 2. Consume Components
           for (const [id, amount] of Object.entries(requiredComponents)) {
             state.inventory.craftingMaterials[id] -= amount;
           }
 
-          // 3. Consume Items
-          consumedItemIndices.sort((a, b) => b - a); // Sort descending to splice safely
+          consumedItemIndices.sort((a, b) => b - a);
           for (const index of consumedItemIndices) {
             state.inventory.items.splice(index, 1);
           }
 
-          // 4. Create and add result item
           const baseItem = state.gameData.items.find(i => i.id === recipe.result);
-          if (!baseItem) { console.error(`Result item ${recipe.result} not found.`); return; }
+          if (!baseItem) { console.error(`Result item ${recipe.result} not found.`); result = null; return; }
 
           const newItem: Item = { ...baseItem, id: uuidv4(), baseId: baseItem.id };
           state.inventory.items.push(newItem);
-          console.log(`Successfully crafted ${newItem.name}.`);
+          result = newItem;
         });
+        return result;
       },
 
       gambleForItem: (itemSlot: string) => {

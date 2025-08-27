@@ -23,10 +23,15 @@ export const SalvageView: React.FC = () => {
 
     const handleDismantle = (itemId: string) => {
         const materialsGained = dismantleItem(itemId);
-        if (materialsGained) {
+        if (materialsGained && materialsGained.length > 0) {
             toast({
                 title: 'Objet démantelé',
                 description: `Vous avez obtenu: ${materialsGained.map(m => `${m.amount}x ${getMaterialName(m.id)}`).join(', ')}`,
+            });
+        } else if (materialsGained) {
+             toast({
+                title: 'Récupération',
+                description: "Cet objet n'a fourni aucun matériau utile.",
             });
         }
     };
