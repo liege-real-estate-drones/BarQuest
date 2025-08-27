@@ -13,56 +13,152 @@ import { cn } from '@/lib/utils';
 import { getRankValue } from '@/core/formulas';
 import { STAT_DISPLAY_NAMES } from '@/lib/constants';
 
-const getTalentDescription = (talent: Talent, rank: number): string => {
-    if (!talent.effects) {
-        // Fallback for old string-based effects
-        if (talent.effets && talent.effets.length > 0) {
-            return talent.effets.join(' ');
+const describeStatMod = (mod: any, rank: number, fullDescription: boolean = false): string | null => {
+    const statName = STAT_DISPLAY_NAMES[mod.stat as keyof typeof STAT_DISPLAY_NAMES] || mod.stat;
+    const isSpeed = mod.stat === 'Vitesse';
+
+    if (Array.isArray(mod.value)) {
+        let values: string[];
+        if (mod.modifier === 'multiplicative') {
+            values = mod.value.map((v: number) => {
+                const percentage = isSpeed ? (1 - v) * 100 : (v - 1) * 100;
+                return `${percentage.toFixed(0)}%`;
+            });
+        } else { // additive
+            values = mod.value.map((v: number) => `${v}`);
         }
-        return "Voir les détails du rang pour l'effet exact.";
+
+        if (fullDescription) {
+            return `Augmente ${statName} de ${values.join('/')}.`;
+        }
+
+        const index = rank > 0 ? rank - 1 : 0;
+        const displayValue = values[index] || values[values.length - 1];
+        return `Augmente ${statName} de ${displayValue}.`;
+
+    } else { // single value
+        let valueText: string;
+        if (mod.modifier === 'multiplicative') {
+            const percentage = isSpeed ? (1 - mod.value) * 100 : (mod.value - 1) * 100;
+            valueText = `${percentage.toFixed(0)}%`;
+        } else {
+            valueText = `${mod.value}`;
+        }
+        return `Augmente ${statName} de ${valueText}.`;
     }
-
-    const descriptionParts = talent.effects.map(effect => {
-        const anyEffect = effect as any;
-        switch (anyEffect.type) {
-            case 'buff':
-                if (anyEffect.buffType === 'stat_modifier' && anyEffect.statMods) {
-                    const mod = anyEffect.statMods[0];
-                    const value = getRankValue(mod.value, rank);
-                    const statName = STAT_DISPLAY_NAMES[mod.stat as keyof typeof STAT_DISPLAY_NAMES] || mod.stat;
-                    if (mod.modifier === 'additive') {
-                        return `Augmente ${statName} de ${value}.`;
-                    }
-                    if (mod.modifier === 'multiplicative') {
-                        return `Augmente ${statName} de ${value * 100}%.`;
-                    }
-                }
-                break;
-            case 'stat_override':
-                return `Votre ${anyEffect.stat} est maintenant ${anyEffect.value}.`;
-            // Add more cases here for other effect types as they are created
-        }
-        return null;
-    });
-
-    const filteredParts = descriptionParts.filter(Boolean);
-    return filteredParts.length > 0 ? filteredParts.join(' ') : "Effet passif complexe.";
 };
 
+const getTalentDescription = (talent: Talent, gameData: GameData, rank: number, fullDescription: boolean = false): string => {
+    if (talent.description && fullDescription) {
+        return talent.description;
+    }
+
+    const descriptionParts: string[] = [];
+
+    if (talent.effects) {
+        for (const effect of talent.effects) {
+            const anyEffect = effect as any;
+            switch (anyEffect.type) {
+                case 'buff':
+                    if (anyEffect.buffType === 'stat_modifier' && anyEffect.statMods) {
+                        for (const mod of anyEffect.statMods) {
+                            const desc = describeStatMod(mod, rank, fullDescription);
+                            if (desc) descriptionParts.push(desc);
+                        }
+                    }
+                    break;
+                case 'on_hit_effect':
+                     if (anyEffect.effect === 'ignore_armor' && anyEffect.value) {
+                        const chance = anyEffect.chance * 100;
+                        const value = getRankValue(anyEffect.value, rank);
+                        const valueText = fullDescription && Array.isArray(anyEffect.value)
+                            ? anyEffect.value.map((v: number) => `${v*100}%`).join('/')
+                            : `${value * 100}%`;
+                        descriptionParts.push(`Vos attaques ont ${chance}% de chance d'ignorer ${valueText} de l'armure de la cible.`);
+                    }
+                    break;
+                // Add more cases here
+            }
+        }
+    }
+
+    if (talent.skill_mods) {
+        for (const skillMod of talent.skill_mods) {
+            const skill = gameData.skills.find(s => s.id === skillMod.skill_id);
+            if (skill) {
+                for (const mod of skillMod.modifications) {
+                    const value = getRankValue(mod.value, rank);
+                    const valueText = fullDescription && Array.isArray(mod.value)
+                        ? mod.value.map(v => `${(v-1)*100}%`).join('/')
+                        : `${(value-1)*100}%`;
+                    descriptionParts.push(`Augmente les dégâts de ${skill.nom} de ${valueText}.`);
+                }
+            }
+        }
+    }
+
+    if (talent.triggeredEffects) {
+        for (const triggered of talent.triggeredEffects) {
+            const chance = getRankValue(triggered.chance, rank) * 100;
+            const chanceText = fullDescription && Array.isArray(triggered.chance)
+                ? triggered.chance.map(c => `${c*100}%`).join('/')
+                : `${chance}%`;
+
+            // This part is complex, for now a simple description
+            descriptionParts.push(`Effet déclenché avec ${chanceText} de chance.`);
+        }
+    }
+
+    if (descriptionParts.length > 0) {
+        return descriptionParts.join(' ');
+    }
+
+    if (talent.effets && talent.effets.length > 0) {
+        return talent.effets.join(' ');
+    }
+
+    return rank > 0 ? "Effet passif complexe." : "Apprenez ce talent pour voir son effet.";
+};
 
 const TalentPopoverContent = ({ talent, player, gameData }: { talent: Talent; player: PlayerState; gameData: GameData }) => {
     const currentRank = player.learnedTalents[talent.id] || 0;
-    
+    const isMaxRank = currentRank === talent.rangMax;
+
+    const currentEffect = getTalentDescription(talent, gameData, currentRank, false);
+    const nextEffect = !isMaxRank ? getTalentDescription(talent, gameData, currentRank + 1, false) : null;
+    const fullDesc = getTalentDescription(talent, gameData, currentRank, true);
+
     return (
         <div className="max-w-xs p-2">
             <p className="font-bold text-base text-primary mb-1">{talent.nom}</p>
             <p className="text-sm text-muted-foreground capitalize">Talent Passif (Rang {currentRank}/{talent.rangMax})</p>
             <Separator className="my-2" />
-            <p className="text-sm mb-2">Effet (Rang {currentRank}):</p>
-            <p className="text-xs text-green-400">
-                {getTalentDescription(talent, currentRank)}
-            </p>
             
+            <div className="space-y-1 mb-2">
+                <p className="text-sm">Effet (Rang {currentRank}):</p>
+                <p className="text-xs text-green-400">
+                    {currentRank > 0 ? currentEffect : "Non appris"}
+                </p>
+            </div>
+
+            {nextEffect && (
+                <div className="space-y-1 mb-2">
+                    <p className="text-sm">Prochain rang:</p>
+                    <p className="text-xs text-green-300/80">
+                        {nextEffect}
+                    </p>
+                </div>
+            )}
+
+            {fullDesc && fullDesc !== currentEffect && (
+                 <div className="space-y-1 mb-2">
+                    <p className="text-sm">Description complète:</p>
+                    <p className="text-xs text-muted-foreground">
+                        {fullDesc}
+                    </p>
+                </div>
+            )}
+
             {(talent.exigences?.length > 0 || talent.niveauRequis) && (
                 <>
                     <Separator className="my-2" />
