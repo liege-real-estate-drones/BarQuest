@@ -90,21 +90,27 @@ export const ArtisanatForgeView: React.FC = () => {
         }
     };
 
-    const canCraft = (recipe: Recipe): boolean => {
-        if (gold < recipe.cost) return false;
+    const getCraftingStatus = (recipe: Recipe) => {
+        const resultingItem = allItems.find(item => item.id === recipe.result);
+        const meetsLevelRequirement = resultingItem ? player.level >= resultingItem.niveauMin : true;
+        const hasEnoughGold = gold >= recipe.cost;
+        const missingMaterials: string[] = [];
 
-        for (const matId in recipe.materials) {
-            const requiredAmount = recipe.materials[matId];
+        Object.entries(recipe.materials).forEach(([matId, requiredAmount]) => {
             if (matId.startsWith('item:')) {
                 const baseId = matId.substring(5);
                 const ownedCount = inventoryItems.filter(i => i.baseId === baseId).length;
-                if (ownedCount < requiredAmount) return false;
+                if (ownedCount < requiredAmount) missingMaterials.push(matId);
             } else {
                 const ownedAmount = craftingMaterials[matId] || 0;
-                if (ownedAmount < requiredAmount) return false;
+                if (ownedAmount < requiredAmount) missingMaterials.push(matId);
             }
-        }
-        return true;
+        });
+
+        const hasAllMaterials = missingMaterials.length === 0;
+        const craftable = meetsLevelRequirement && hasEnoughGold && hasAllMaterials;
+
+        return { craftable, meetsLevelRequirement, hasEnoughGold, missingMaterials };
     };
 
     const filteredRecipes = React.useMemo(() => {
@@ -162,30 +168,36 @@ export const ArtisanatForgeView: React.FC = () => {
                     <CardContent>
                         <ScrollArea className="h-[400px]">
                             <div className="space-y-2">
-                                {filteredRecipes.map(recipe => (
+                                {filteredRecipes.map(recipe => {
+                                    const status = getCraftingStatus(recipe);
+                                    const item = getResultingItem(recipe);
+                                    return (
                                     <div
                                         key={recipe.id}
                                         className={cn(
                                             "p-2 border rounded cursor-pointer transition-colors",
                                             selectedRecipe?.id === recipe.id && "bg-slate-200 dark:bg-slate-700 border-slate-400",
-                                            !canCraft(recipe) && "text-muted-foreground"
+                                            !status.craftable && "text-muted-foreground"
                                         )}
                                         onClick={() => setSelectedRecipe(recipe)}
                                     >
                                         <div className="flex justify-between items-center w-full">
                                              <div className="flex items-center">
                                                 {getComparisonIndicator(recipe)}
-                                                <span>{recipe.name}</span>
+                                                <span className={cn(!status.craftable && "line-through")}>{recipe.name}</span>
                                              </div>
-                                            <div className="flex items-center space-x-2 text-xs text-muted-foreground">
+                                            <div className="flex items-center space-x-2 text-xs">
+                                                {item && <span className={cn(status.meetsLevelRequirement ? 'text-green-400' : 'text-red-400')}>Lvl {item.niveauMin}</span>}
                                                 {Object.entries(recipe.materials).map(([matId, required]) => (
-                                                    <span key={matId}>{required}x {getMaterialName(matId).split(' ').pop()}</span>
+                                                    <span key={matId} className={cn(status.missingMaterials.includes(matId) ? 'text-red-400' : 'text-green-400')}>
+                                                        {required}x {getMaterialName(matId).split(' ').pop()}
+                                                    </span>
                                                 ))}
-                                                <span>{recipe.cost} Or</span>
+                                                <span className={cn(status.hasEnoughGold ? 'text-green-400' : 'text-red-400')}>{recipe.cost} Or</span>
                                             </div>
                                         </div>
                                     </div>
-                                ))}
+                                )})}
                             </div>
                         </ScrollArea>
                     </CardContent>
@@ -258,7 +270,7 @@ export const ArtisanatForgeView: React.FC = () => {
                                     </div>
                                     <Button
                                         onClick={() => handleCraft(selectedRecipe.id)}
-                                        disabled={!canCraft(selectedRecipe)}
+                                        disabled={!getCraftingStatus(selectedRecipe).craftable}
                                         className="mt-2 w-full"
                                     >
                                         Fabriquer l&apos;objet
