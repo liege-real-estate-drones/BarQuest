@@ -13,20 +13,45 @@ export const applyPoisonProc = (
 ) => {
     if (state.player.activeBuffs.some(b => b.id === 'deadly_poison_buff') && Math.random() < 0.3) {
         const poisonDebuffId = 'deadly_poison_debuff';
-        let existingDebuff = target.activeDebuffs.find(d => d.id === poisonDebuffId);
+        let existingPoison = target.activeDebuffs.find(d => d.id === poisonDebuffId);
 
-        if (existingDebuff) {
-            existingDebuff.stacks = Math.min(5, (existingDebuff.stacks || 1) + 1);
-            existingDebuff.duration = 12000;
+        if (existingPoison) {
+            existingPoison.stacks = Math.min(5, (existingPoison.stacks || 1) + 1);
+            existingPoison.duration = 12000;
         } else {
             target.activeDebuffs.push({ id: poisonDebuffId, name: 'Poison mortel', duration: 12000, stacks: 1, isDebuff: true });
         }
 
-        const currentDebuff = target.activeDebuffs.find(d => d.id === poisonDebuffId);
-        const stackCount = currentDebuff ? (currentDebuff.stacks || 1) : 1;
+        const currentPoison = target.activeDebuffs.find(d => d.id === poisonDebuffId);
+        const poisonStacks = currentPoison ? (currentPoison.stacks || 1) : 1;
 
-        floatingTexts.push({ entityId: target.id, text: `Poison (x${stackCount})`, type: 'debuff' });
-        state.combat.log.push({ message: `${target.nom} est affligé par le Poison mortel (x${stackCount}).`, type: 'poison_proc', timestamp: Date.now() });
+        floatingTexts.push({ entityId: target.id, text: `Poison (x${poisonStacks})`, type: 'debuff' });
+        state.combat.log.push({ message: `${target.nom} est affligé par le Poison mortel (x${poisonStacks}).`, type: 'poison_proc', timestamp: Date.now() });
+
+        // Apply stacking slow
+        const slowDebuffId = 'poison_slow';
+        let existingSlow = target.activeDebuffs.find(d => d.id === slowDebuffId);
+        const slowDebuff: Debuff = {
+            id: slowDebuffId,
+            name: 'Poison ralentissant',
+            duration: 10000,
+            isDebuff: true,
+            is_stacking: true,
+            max_stacks: 4,
+            statMods: [{ stat: 'Vitesse', modifier: 'multiplicative', value: 0.90 }],
+            stacks: 1
+        };
+
+        if (existingSlow) {
+            existingSlow.stacks = Math.min(slowDebuff.max_stacks || 4, (existingSlow.stacks || 1) + 1);
+            existingSlow.duration = slowDebuff.duration;
+        } else {
+            target.activeDebuffs.push(slowDebuff);
+        }
+        const currentSlow = target.activeDebuffs.find(d => d.id === slowDebuffId);
+        const slowStacks = currentSlow?.stacks || 1;
+        floatingTexts.push({ entityId: target.id, text: `Ralenti (x${slowStacks})`, type: 'debuff' });
+        state.combat.log.push({ message: `${target.nom} est ralenti par le poison (x${slowStacks}).`, type: 'info', timestamp: Date.now() });
     }
 };
 
@@ -103,71 +128,6 @@ export const processSkill = (
         return { mitigatedDamage, isCrit };
     };
 
-    if (skillId === 'rogue_poison_deadly' && player.activeBuffs.some(b => b.id === 'deadly_poison_buff')) {
-        const poisonedEnemies = combat.enemies.filter(e => e.stats.PV > 0 && e.activeDebuffs.some(d => d.id === 'deadly_poison_debuff'));
-
-        if (poisonedEnemies.length === 0) {
-            combat.log.push({ message: "Aucun ennemi empoisonné.", type: 'info', timestamp: Date.now() });
-        } else {
-            poisonedEnemies.forEach(enemy => {
-                const damageEffect = {
-                    type: 'damage',
-                    damageType: 'nature',
-                    source: 'weapon',
-                    multiplier: 0.225
-                };
-                const { mitigatedDamage, isCrit } = handleDamage(enemy, damageEffect, floatingTexts, 1, true);
-                floatingTexts.push({ entityId: enemy.id, text: `-${mitigatedDamage}`, type: isCrit ? 'crit' : 'damage' });
-                combat.log.push({ message: `Le poison de ${skill.nom} inflige ${mitigatedDamage} points de dégâts à ${enemy.nom}.`, type: 'player_attack', timestamp: Date.now() });
-
-                const slowDebuffEffect: { id: string; name: string; duration: number; is_stacking: boolean; max_stacks: number; statMods: StatMod[] } = {
-                    id: 'poison_slow',
-                    name: 'Poison ralentissant',
-                    duration: 10,
-                    is_stacking: true,
-                    max_stacks: 4,
-                    statMods: [{ stat: 'Vitesse', modifier: 'multiplicative', value: 0.90 }]
-                };
-
-                const existingDebuff = enemy.activeDebuffs.find(d => d.id === slowDebuffEffect.id);
-                if (existingDebuff) {
-                    existingDebuff.stacks = Math.min(slowDebuffEffect.max_stacks, (existingDebuff.stacks || 1) + 1);
-                    existingDebuff.duration = slowDebuffEffect.duration * 1000;
-                } else {
-                    const newDebuff: Debuff = {
-                        id: slowDebuffEffect.id,
-                        name: slowDebuffEffect.name,
-                        duration: slowDebuffEffect.duration * 1000,
-                        isDebuff: true,
-                        statMods: slowDebuffEffect.statMods,
-                        stacks: 1,
-                    };
-                    enemy.activeDebuffs.push(newDebuff);
-                }
-
-                const currentDebuff = enemy.activeDebuffs.find(d => d.id === slowDebuffEffect.id);
-                const stackCount = currentDebuff?.stacks || 1;
-                const debuffName = `${slowDebuffEffect.name} (x${stackCount})`;
-
-                floatingTexts.push({ entityId: enemy.id, text: debuffName, type: 'debuff' });
-                combat.log.push({ message: `${enemy.nom} est affecté par ${debuffName}.`, type: 'info', timestamp: Date.now() });
-
-                if (enemy.stats.PV <= 0) {
-                    deadEnemyIds.push(enemy.id);
-                }
-            });
-        }
-
-        const resourceCostEffect = originalSkill.effects?.find(e => (e as any).type === 'resource_cost');
-        if (resourceCostEffect) {
-            player.resources.current -= (resourceCostEffect as any).amount;
-        }
-        if (originalSkill.cooldown) {
-            combat.skillCooldowns[skillId] = originalSkill.cooldown * 1000;
-        }
-
-        return { deadEnemyIds, floatingTexts };
-    }
 
     Object.entries(player.learnedTalents).forEach(([talentId, talentRank]) => {
         const talentData = gameData.talents.find(t => t.id === talentId);
