@@ -8,7 +8,7 @@ import { getModifiedStats, getRankValue } from '@/core/formulas';
 import { generateProceduralItem } from '@/core/itemGenerator';
 import { v4 as uuidv4 } from 'uuid';
 import { AFFIX_TO_THEME } from '@/lib/constants';
-import { processSkill } from '@/core/skillProcessor';
+import { processSkill, applyPoisonProc } from '@/core/skillProcessor';
 
 export interface ActiveQuete {
   quete: Quete;
@@ -1954,19 +1954,7 @@ export const useGameStore = create<GameState>()(
                 });
             }
 
-            if (player.activeBuffs.some(b => b.id === 'deadly_poison_buff') && Math.random() < 0.3) {
-                const poisonDebuffId = 'deadly_poison_debuff';
-                let existingDebuff = target.activeDebuffs.find(d => d.id === poisonDebuffId);
-                if (existingDebuff) {
-                    existingDebuff.stacks = Math.min(5, (existingDebuff.stacks || 1) + 1);
-                    existingDebuff.duration = 12000;
-                } else {
-                    target.activeDebuffs.push({ id: poisonDebuffId, name: 'Poison mortel', duration: 12000, stacks: 1, isDebuff: true });
-                }
-                const stackCount = existingDebuff ? (existingDebuff.stacks || 1) : 1;
-                events.push({ entityId: target.id, text: `Poison (x${stackCount})`, type: 'debuff' });
-                combat.log.push({ message: `${target.nom} est affligé par le Poison mortel (x${stackCount}).`, type: 'poison_proc', timestamp: Date.now() });
-            }
+            applyPoisonProc(state, target, events);
 
             const attackMsg = `You hit ${target.nom} for ${mitigatedDamage} damage.`;
             const critMsg = `CRITICAL! You hit ${target.nom} for ${mitigatedDamage} damage.`;

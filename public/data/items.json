@@ -1107,6 +1107,38 @@
       { "id": "set_cleric_t3_belt", "baseId": "set_cleric_t3_belt", "name": "Ceinture du Dévoué Exalté", "slot": "belt", "niveauMin": 39, "rarity": "Légendaire", "affixes": [{"ref": "Armure", "val": 60}, {"ref": "Esprit", "val": 18}, {"ref": "RessourceMax", "val": 80}], "tagsClasse": ["cleric"], "tier": 3, "set": { "id": "cleric_devotion_set", "name": "Habits du Dévoué" } },
       { "id": "set_cleric_t3_legs", "baseId": "set_cleric_t3_legs", "name": "Jambières du Dévoué Exalté", "slot": "legs", "niveauMin": 41, "rarity": "Légendaire", "affixes": [{"ref": "Armure", "val": 150}, {"ref": "Esprit", "val": 32}, {"ref": "PV", "val": 50}], "tagsClasse": ["cleric"], "tier": 3, "set": { "id": "cleric_devotion_set", "name": "Habits du Dévoué" } },
       { "id": "set_cleric_t3_boots", "baseId": "set_cleric_t3_boots", "name": "Bottes du Dévoué Exalté", "slot": "feet", "niveauMin": 39, "rarity": "Légendaire", "affixes": [{"ref": "Armure", "val": 80}, {"ref": "Esprit", "val": 20}, {"ref": "PV", "val": 40}], "tagsClasse": ["cleric"], "tier": 3, "set": { "id": "cleric_devotion_set", "name": "Habits du Dévoué" } },
-      { "id": "set_cleric_t3_mace", "baseId": "set_cleric_t3_mace", "name": "Masse du Dévoué Exalté", "slot": "weapon", "niveauMin": 42, "rarity": "Légendaire", "affixes": [{"ref": "AttMin", "val": 45}, {"ref": "AttMax", "val": 60}, {"ref": "Esprit", "val": 45}, {"ref": "Intelligence", "val": 20}], "tagsClasse": ["cleric"], "tier": 3, "set": { "id": "cleric_devotion_set", "name": "Habits du Dévoué" } }
+      { "id": "set_cleric_t3_mace", "baseId": "set_cleric_t3_mace", "name": "Masse du Dévoué Exalté", "slot": "weapon", "niveauMin": 42, "rarity": "Légendaire", "affixes": [{"ref": "AttMin", "val": 45}, {"ref": "AttMax", "val": 60}, {"ref": "Esprit", "val": 45}, {"ref": "Intelligence", "val": 20}], "tagsClasse": ["cleric"], "tier": 3, "set": { "id": "cleric_devotion_set", "name": "Habits du Dévoué" } },
+      {
+        "id": "parrying_dagger",
+        "name": "Dague de parade",
+        "gender": "f",
+        "slot": "offhand",
+        "material_type": "metal",
+        "tags": ["weapon", "dagger", "metal", "offhand"],
+        "niveauMin": 5,
+        "rarity": "Commun",
+        "affixes": [
+            { "ref": "Esquive", "val": 1 }
+        ],
+        "tagsClasse": ["rogue"],
+        "vendorPrice": 25
+      },
+      {
+        "id": "main_gauche",
+        "name": "Main-gauche",
+        "gender": "f",
+        "slot": "offhand",
+        "material_type": "metal",
+        "tags": ["weapon", "sword", "metal", "offhand"],
+        "niveauMin": 15,
+        "rarity": "Magique",
+        "affixes": [
+            { "ref": "AttMin", "val": 5 },
+            { "ref": "AttMax", "val": 8 },
+            { "ref": "Dexterite", "val": 2 }
+        ],
+        "tagsClasse": ["rogue"],
+        "vendorPrice": 75
+      }
   ]
 }

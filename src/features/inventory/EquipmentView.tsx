@@ -21,7 +21,7 @@ function EquipmentSlot({ slotName, item }: { slotName: string; item: Item | null
             </div>
              <div className="w-1/4 text-right">
                 {item && (
-                     <Button size="sm" variant="ghost" onClick={() => unequipItem(item.slot as any)}>
+                     <Button size="sm" variant="ghost" onClick={() => unequipItem(slotName as any)}>
                         <BaggageClaim className="h-4 w-4" />
                      </Button>
                 )}
