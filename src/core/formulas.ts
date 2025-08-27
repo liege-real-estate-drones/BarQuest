@@ -5,17 +5,20 @@ export const getModifiedStats = (baseStats: Stats, buffs: (Buff | Debuff)[], for
 
     buffs.forEach(buff => {
         if (buff.statMods) {
+            const stacks = buff.stacks || 1;
             buff.statMods.forEach(mod => {
                 const statKey = mod.stat as keyof Stats;
                 const statValue = modifiedStats[statKey];
 
                 if (typeof statValue === 'number' && typeof mod.value === 'number') {
                     if (mod.modifier === 'additive') {
-                        (modifiedStats[statKey] as number) += mod.value;
+                        (modifiedStats[statKey] as number) += mod.value * stacks;
                     } else if (mod.modifier === 'multiplicative') {
-                        (modifiedStats[statKey] as number) *= mod.value;
+                        if (mod.value !== 1) {
+                            (modifiedStats[statKey] as number) *= (1 + ((mod.value - 1) * stacks));
+                        }
                     } else if (mod.modifier === 'multiplicative_add') {
-                        (modifiedStats[statKey] as number) *= (1 + mod.value);
+                        (modifiedStats[statKey] as number) *= (1 + (mod.value * stacks));
                     }
                 }
             });
