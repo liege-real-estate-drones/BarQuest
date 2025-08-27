@@ -490,7 +490,7 @@ export const useGameStore = create<GameState>()(
             while (state.player.xp >= xpToNext) {
                 didLevelUp = true;
                 state.player.level++;
-                state.player.talentPoints += 2;
+                state.player.talentPoints += 1;
                 state.player.xp -= xpToNext;
                 state.combat.log.push({
                     message: `Félicitations ! Vous avez atteint le niveau ${state.player.level} !`,
