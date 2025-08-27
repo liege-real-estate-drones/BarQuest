@@ -47,6 +47,7 @@ export const processSkill = (
     let skill = JSON.parse(JSON.stringify(originalSkill));
 
     const buffedPlayerStats = getModifiedStats(player.stats, player.activeBuffs, player.form);
+    const hasArchonBuff = player.activeBuffs.some(b => b.id === 'archon_buff');
 
     const handleDamage = (target: any, damageEffect: any, floatingTexts: { entityId: string, text: string, type: FloatingTextType }[], damageMultiplier: number = 1, preventPoisonProc: boolean = false) => {
         let damage = 0;
@@ -203,8 +204,6 @@ export const processSkill = (
         const arcaneChargeIndex = state.player.activeBuffs.findIndex(b => b.id === 'arcane_charge');
         if (arcaneChargeIndex > -1) state.player.activeBuffs.splice(arcaneChargeIndex, 1);
     }
-
-    const hasArchonBuff = player.activeBuffs.some(b => b.id === 'archon_buff');
 
     if (skill.effects) {
         let effectApplied = false;
