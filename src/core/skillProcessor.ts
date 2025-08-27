@@ -29,31 +29,6 @@ export const applyPoisonProc = (
 
         floatingTexts.push({ entityId: target.id, text: `Poison (x${poisonStacks})`, type: 'debuff' });
         state.combat.log.push({ message: `${target.nom} est affligé par le Poison mortel (x${poisonStacks}).`, type: 'poison_proc', timestamp: Date.now() });
-
-        // Apply stacking slow
-        const slowDebuffId = 'poison_slow';
-        let existingSlow = target.activeDebuffs.find(d => d.id === slowDebuffId);
-        const slowDebuff: Debuff = {
-            id: slowDebuffId,
-            name: 'Poison ralentissant',
-            duration: 10000,
-            isDebuff: true,
-            is_stacking: true,
-            max_stacks: 4,
-            statMods: [{ stat: 'Vitesse', modifier: 'multiplicative', value: 0.90 }],
-            stacks: 1
-        };
-
-        if (existingSlow) {
-            existingSlow.stacks = Math.min(slowDebuff.max_stacks || 4, (existingSlow.stacks || 1) + 1);
-            existingSlow.duration = slowDebuff.duration;
-        } else {
-            target.activeDebuffs.push(slowDebuff);
-        }
-        const currentSlow = target.activeDebuffs.find(d => d.id === slowDebuffId);
-        const slowStacks = currentSlow?.stacks || 1;
-        floatingTexts.push({ entityId: target.id, text: `Ralenti (x${slowStacks})`, type: 'debuff' });
-        state.combat.log.push({ message: `${target.nom} est ralenti par le poison (x${slowStacks}).`, type: 'info', timestamp: Date.now() });
     }
 };
 
@@ -130,6 +105,67 @@ export const processSkill = (
         return { mitigatedDamage, isCrit };
     };
 
+    if (skillId === 'rogue_poison_deadly' && player.activeBuffs.some(b => b.id === 'deadly_poison_buff')) {
+        const energyCost = 10;
+        if (player.resources.current < energyCost) {
+            combat.log.push({ message: "Pas assez de ressource!", type: 'info', timestamp: Date.now() });
+            return { deadEnemyIds, floatingTexts };
+        }
+
+        const poisonedEnemies = combat.enemies.filter(e => e.stats.PV > 0 && e.activeDebuffs.some(d => d.id === 'deadly_poison_debuff'));
+
+        if (poisonedEnemies.length > 0) {
+            poisonedEnemies.forEach(enemy => {
+                const damageEffect = {
+                    type: 'damage',
+                    damageType: 'nature',
+                    source: 'weapon',
+                    multiplier: 0.225, // 25% of Fan of Knives (0.9 * 0.25)
+                    bonus_flat_damage: 0
+                };
+                const { mitigatedDamage, isCrit } = handleDamage(enemy, damageEffect, floatingTexts, 1, true);
+                floatingTexts.push({ entityId: enemy.id, text: `-${mitigatedDamage}`, type: isCrit ? 'crit' : 'damage' });
+                combat.log.push({ message: `Le poison de ${skill.nom} inflige ${mitigatedDamage} points de dégâts à ${enemy.nom}.`, type: 'player_attack', timestamp: Date.now() });
+
+                const slowDebuff: Debuff = {
+                    id: 'poison_slow',
+                    name: 'Poison ralentissant',
+                    duration: 10000,
+                    isDebuff: true,
+                    is_stacking: true,
+                    max_stacks: 4,
+                    statMods: [{ stat: 'Vitesse', modifier: 'multiplicative', value: 1.10 }],
+                    stacks: 1
+                };
+
+                const existingSlow = enemy.activeDebuffs.find(d => d.id === slowDebuff.id);
+                if (existingSlow) {
+                    existingSlow.stacks = Math.min(slowDebuff.max_stacks || 4, (existingSlow.stacks || 1) + 1);
+                    existingSlow.duration = slowDebuff.duration;
+                } else {
+                    enemy.activeDebuffs.push(slowDebuff);
+                }
+                const currentSlow = enemy.activeDebuffs.find(d => d.id === slowDebuff.id);
+                const slowStacks = currentSlow?.stacks || 1;
+                floatingTexts.push({ entityId: enemy.id, text: `Ralenti (x${slowStacks})`, type: 'debuff' });
+                combat.log.push({ message: `${enemy.nom} est ralenti par le poison (x${slowStacks}).`, type: 'info', timestamp: Date.now() });
+
+                if (enemy.stats.PV <= 0) {
+                    deadEnemyIds.push(enemy.id);
+                }
+            });
+        }
+
+        if (!hasArchonBuff) {
+            player.resources.current -= energyCost;
+        }
+        if (originalSkill.cooldown) {
+            combat.skillCooldowns[skillId] = originalSkill.cooldown * 1000;
+        }
+        state.combat.playerAttackProgress = 0;
+
+        return { deadEnemyIds, floatingTexts };
+    }
 
     Object.entries(player.learnedTalents).forEach(([talentId, talentRank]) => {
         const talentData = gameData.talents.find(t => t.id === talentId);
