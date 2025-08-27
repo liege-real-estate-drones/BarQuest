@@ -290,20 +290,21 @@ export const ArtisanatForgeView: React.FC = () => {
                     <AlertDialogHeader>
                         <AlertDialogTitle>Équiper l&apos;objet fabriqué ?</AlertDialogTitle>
                         <AlertDialogDescription>
-                            <div className={cn("grid gap-4 mt-4", equippedItemForPrompt ? "grid-cols-2" : "grid-cols-1")}>
-                                <div>
-                                    <h4 className="font-bold text-lg">Nouvel objet</h4>
-                                    <ItemTooltip item={showEquipPrompt} />
-                                </div>
-                                {equippedItemForPrompt && (
-                                     <div>
-                                        <h4 className="font-bold text-lg">Objet équipé</h4>
-                                        <ItemTooltip item={equippedItemForPrompt} />
-                                     </div>
-                                )}
-                            </div>
+                            Choisissez quoi faire avec l’objet nouvellement fabriqué.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
+                    <div className={cn("grid gap-4 py-4", equippedItemForPrompt ? "grid-cols-2" : "grid-cols-1")}>
+                        <div>
+                            <h4 className="font-bold text-lg">Nouvel objet</h4>
+                            <ItemTooltip item={showEquipPrompt} />
+                        </div>
+                        {equippedItemForPrompt && (
+                                <div>
+                                <h4 className="font-bold text-lg">Objet équipé</h4>
+                                <ItemTooltip item={equippedItemForPrompt} />
+                                </div>
+                        )}
+                    </div>
                     <AlertDialogFooter>
                         <AlertDialogCancel onClick={() => setShowEquipPrompt(null)}>Garder</AlertDialogCancel>
                         <AlertDialogAction onClick={() => {

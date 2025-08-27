@@ -166,15 +166,15 @@ export function DungeonsView() {
                 <AlertDialogContent>
                     <AlertDialogHeader>
                         <AlertDialogTitle>Quêtes Disponibles!</AlertDialogTitle>
-                        <AlertDialogDescription asChild>
-                            <div>
-                                <p className="mb-4">Les quêtes suivantes sont disponibles pour ce donjon. Voulez-vous toutes les accepter avant d&apos;entrer ?</p>
-                                <ul className="list-disc pl-5 space-y-1">
-                                    {proposedQuests?.map(q => <li key={q.id}>{q.name}</li>)}
-                                </ul>
-                            </div>
+                        <AlertDialogDescription>
+                            Les quêtes suivantes sont disponibles pour ce donjon. Voulez-vous toutes les accepter avant d&apos;entrer ?
                         </AlertDialogDescription>
                     </AlertDialogHeader>
+                    <div className="py-4">
+                        <ul className="list-disc pl-5 space-y-1">
+                            {proposedQuests?.map(q => <li key={q.id}>{q.name}</li>)}
+                        </ul>
+                    </div>
                     <AlertDialogFooter>
                         <AlertDialogCancel onClick={() => setProposedQuests(null)}>Annuler</AlertDialogCancel>
                         <AlertDialogAction onClick={handleDeclineQuestAndEnter}>Entrer sans accepter</AlertDialogAction>
