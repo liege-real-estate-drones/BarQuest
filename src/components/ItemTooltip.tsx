@@ -70,7 +70,12 @@ export function ItemStat({ label, value, comparison, isImportant }: { label: str
 }
 
 export function ItemTooltipContent({ item, equippedItem }: { item: Item, equippedItem?: Item | null }) {
-    const player = useGameStore(state => state.player);
+    const { player, inventory, gameData } = useGameStore(state => ({
+        player: state.player,
+        inventory: state.inventory,
+        gameData: state.gameData,
+    }));
+
     if (!item) return null;
 
     const classWeights = player.classeId ? STAT_WEIGHTS[player.classeId] : {};
@@ -149,12 +154,41 @@ export function ItemTooltipContent({ item, equippedItem }: { item: Item, equippe
                     );
                 })}
             </div>
-             {item.set && (
-                 <>
-                    <Separator className="my-2" />
-                    <p className="text-yellow-300">{item.set.name}</p>
-                 </>
-             )}
+             {item.set && (() => {
+                const setInfo = gameData.sets.find(s => s.id === item.set!.id);
+                if (!setInfo) return null;
+
+                const equippedCountByTier: Record<number, number> = {};
+                Object.values(inventory.equipment).forEach(equipped => {
+                    if (equipped?.set?.id === setInfo.id && equipped.tier) {
+                        equippedCountByTier[equipped.tier] = (equippedCountByTier[equipped.tier] || 0) + 1;
+                    }
+                });
+
+                return (
+                    <>
+                        <Separator className="my-2" />
+                        <p className="text-yellow-300">{setInfo.name}</p>
+                        {Object.entries(setInfo.bonuses).map(([tier, bonuses]) => {
+                            if (item.tier !== Number(tier)) return null;
+                            const equippedInTier = equippedCountByTier[Number(tier)] || 0;
+                            return (
+                                <div key={tier} className="mt-2">
+                                    <p className="text-gray-400 font-semibold">Bonus de Palier {tier}</p>
+                                    {Object.entries(bonuses).map(([required, effect]) => {
+                                        const isActive = equippedInTier >= Number(required);
+                                        return (
+                                            <p key={required} className={cn("pl-2", isActive ? 'text-green-400' : 'text-gray-500')}>
+                                                ({required}) {effect}
+                                            </p>
+                                        );
+                                    })}
+                                </div>
+                            );
+                        })}
+                    </>
+                );
+             })()}
         </div>
     );
 }
