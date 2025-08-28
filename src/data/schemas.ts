@@ -97,6 +97,7 @@ export const ClasseSchema = z.object({
   nom: z.string(),
   ressource: z.enum(["Mana", "Énergie", "Rage"]),
   archétype: z.string(),
+  image: z.string(),
   statsBase: StatsSchema,
 });
 
