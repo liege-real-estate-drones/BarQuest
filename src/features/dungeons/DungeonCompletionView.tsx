@@ -1,6 +1,8 @@
 'use client';
 
+import { useEffect } from 'react';
 import { useGameStore } from '@/state/gameStore';
+import { useAudioPlayer } from '@/hooks/useAudioPlayer';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ItemTooltip } from '@/components/ItemTooltip';
@@ -75,6 +77,14 @@ export function DungeonCompletionView() {
         summary: state.dungeonCompletionSummary,
         closeSummary: state.closeDungeonSummary,
     }));
+    const { playMusic, stopMusic } = useAudioPlayer();
+
+    useEffect(() => {
+        playMusic('/sounds/music/victory.mp3');
+        return () => {
+            stopMusic();
+        };
+    }, [playMusic, stopMusic]);
 
     if (!summary) {
         return (

@@ -39,6 +39,7 @@ export function ChooseClassView() {
         {classes.map((cls) => (
           <Card key={cls.id} className="flex flex-col">
             <CardHeader>
+              <img src={cls.image} alt={cls.nom} className="w-full h-32 object-cover rounded-t-lg" />
               <CardTitle className="font-headline">{cls.nom}</CardTitle>
               <CardDescription>{cls.archétype}</CardDescription>
             </CardHeader>

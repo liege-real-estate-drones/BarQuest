@@ -72,6 +72,11 @@ export function CombatView() {
     cycleTarget();
   };
 
+  const playerClass = useMemo(() => {
+    if (!player?.classeId) return null;
+    return gameData.classes.find(c => c.id === player.classeId);
+    }, [player?.classeId, gameData.classes]);
+
   if (!currentDungeon) {
     return <div className="flex items-center justify-center h-screen">Chargement du donjon...</div>;
   }
@@ -87,7 +92,7 @@ export function CombatView() {
             <ArrowLeft />
         </Button>
         <div ref={playerRef} className="flex-grow">
-             <EntityDisplay entity={player} isPlayer attackProgress={playerAttackProgress} dungeonInfo={<DungeonInfo dungeon={currentDungeon} killCount={killCount} />} />
+             <EntityDisplay entity={player} isPlayer attackProgress={playerAttackProgress} dungeonInfo={<DungeonInfo dungeon={currentDungeon} killCount={killCount} />} classImage={playerClass?.image} />
         </div>
       </header>
 
