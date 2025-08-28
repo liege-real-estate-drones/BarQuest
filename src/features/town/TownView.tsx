@@ -22,20 +22,38 @@ import { Settings, User, Swords, Store, Home } from 'lucide-react';
 import { InnView } from './InnView';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { CharacterView } from '../player/CharacterView';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { CraftingView } from './CraftingView';
 
 type TownTab = 'town' | 'dungeons' | 'character' | 'vendors';
 
 export function TownView() {
-  const { player, resetGame, townView, setTownView } = useGameStore(state => ({
+  const { player, resetGame, townView, setTownView, setActiveSubView } = useGameStore(state => ({
     player: state.player,
     resetGame: state.resetGame,
     townView: state.townView,
     setTownView: state.setTownView,
+    setActiveSubView: state.setActiveSubView,
   }));
   const [activeTab, setActiveTab] = useState<TownTab>('town');
+
+  useEffect(() => {
+    switch(activeTab) {
+      case 'town':
+        setActiveSubView('TOWN');
+        break;
+      case 'dungeons':
+        setActiveSubView('DUNGEONS_LIST');
+        break;
+      case 'character':
+        setActiveSubView('CHARACTER');
+        break;
+      case 'vendors':
+        setActiveSubView('VENDORS');
+        break;
+    }
+  }, [activeTab, setActiveSubView]);
 
   const renderContent = () => {
     switch (activeTab) {

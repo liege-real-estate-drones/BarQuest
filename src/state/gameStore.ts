@@ -83,6 +83,7 @@ export interface GameState {
   rehydrateComplete: boolean;
   lastPlayed: number | null;
   view: 'MAIN' | 'COMBAT' | 'DUNGEON_COMPLETED';
+  activeSubView: 'TOWN' | 'CHARACTER' | 'VENDORS' | 'DUNGEONS_LIST' | 'QUESTS' | 'SKILLS' | 'TALENTS' | 'REPUTATION';
   townView: 'TOWN' | 'CRAFTING';
   worldTier: number;
   currentDungeon: Dungeon | null;
@@ -103,6 +104,7 @@ export interface GameState {
 
   craftItem: (recipeId: string) => Item | { error: string } | null;
   setHeroicMode: (isHeroic: boolean) => void;
+  setActiveSubView: (view: GameState['activeSubView']) => void;
   setTownView: (view: 'TOWN' | 'CRAFTING') => void;
   setWorldTier: (tier: number) => void;
   setBossEncounter: (monster: Monstre | null) => void; // NOUVEAU: Action pour gérer l'alerte
@@ -437,6 +439,7 @@ export const useGameStore = create<GameState>()(
       rehydrateComplete: false,
       lastPlayed: null,
       view: 'MAIN',
+      activeSubView: 'TOWN',
       townView: 'TOWN',
       worldTier: 1,
       currentDungeon: null,
@@ -454,6 +457,10 @@ export const useGameStore = create<GameState>()(
 
       setHeroicMode: (isHeroic: boolean) => {
         set({ isHeroicMode: isHeroic });
+      },
+
+      setActiveSubView: (view) => {
+        set ({ activeSubView: view });
       },
 
       setTownView: (view) => {
