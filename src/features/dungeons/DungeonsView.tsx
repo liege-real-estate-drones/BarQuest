@@ -130,33 +130,47 @@ export function DungeonsView() {
                             const activeQuestsForDungeon = activeQuests.filter(q => q.quete.requirements.dungeonId === dungeonToDisplay.id).length;
 
 
+                            const dungeonIndex = parseInt(dungeon.id.split('_')[1]);
+                            const cardStyle = {
+                                backgroundImage: `url('/images/biome${dungeonIndex}.png')`,
+                                backgroundSize: 'cover',
+                                backgroundPosition: 'center',
+                            };
+
                             return (
-                                <Card key={dungeon.id} className={`transition-all ${!isUnlocked ? 'bg-background/40 filter grayscale' : ''}`}>
-                                    <CardHeader>
-                                        <CardTitle className="flex justify-between items-center">
-                                            {dungeonToDisplay.name}
-                                            {activeQuestsForDungeon > 0 && (
-                                                <span className="text-xs bg-primary text-primary-foreground rounded-full px-2 py-0.5">
-                                                    {activeQuestsForDungeon} quête(s)
-                                                </span>
-                                            )}
-                                        </CardTitle>
-                                        <CardDescription>
-                                            Palier: {dungeonToDisplay.palier}
-                                            {isCompleted && <span className="text-primary font-bold ml-2"> (Terminé {completionCount}x)</span>}
-                                        </CardDescription>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <p>Biome: <span className="capitalize text-primary">{dungeonToDisplay.biome}</span></p>
-                                        <p>Objectif: Tuer {dungeonToDisplay.killTarget} monstres.</p>
-                                    </CardContent>
-                                    <CardFooter>
-                                        <Button onClick={() => handleEnterDungeon(dungeon)} disabled={!isUnlocked}>
-                                            {isCompleted ? "Rejouer" : "Entrer"}
-                                        </Button>
-                                    </CardFooter>
+                                <Card
+                                    key={dungeon.id}
+                                    className={`transition-all relative overflow-hidden bg-transparent text-white ${!isUnlocked ? 'filter grayscale' : ''}`}
+                                    style={cardStyle}
+                                >
+                                    <div className="absolute inset-0 bg-black/50 z-0" />
+                                    <div className="relative z-10 flex flex-col h-full">
+                                        <CardHeader>
+                                            <CardTitle className="flex justify-between items-center">
+                                                {dungeonToDisplay.name}
+                                                {activeQuestsForDungeon > 0 && (
+                                                    <span className="text-xs bg-primary text-primary-foreground rounded-full px-2 py-0.5">
+                                                        {activeQuestsForDungeon} quête(s)
+                                                    </span>
+                                                )}
+                                            </CardTitle>
+                                            <CardDescription className="text-gray-300">
+                                                Palier: {dungeonToDisplay.palier}
+                                                {isCompleted && <span className="text-primary font-bold ml-2"> (Terminé {completionCount}x)</span>}
+                                            </CardDescription>
+                                        </CardHeader>
+                                        <CardContent className="flex-grow">
+                                            <p>Biome: <span className="capitalize text-primary">{dungeonToDisplay.biome}</span></p>
+                                            <p>Objectif: Tuer {dungeonToDisplay.killTarget} monstres.</p>
+                                        </CardContent>
+                                        <CardFooter>
+                                            <Button onClick={() => handleEnterDungeon(dungeon)} disabled={!isUnlocked}>
+                                                {isCompleted ? "Rejouer" : "Entrer"}
+                                            </Button>
+                                        </CardFooter>
+                                    </div>
                                 </Card>
-                            )
+                            );
                         })}
                     </div>
                 </div>

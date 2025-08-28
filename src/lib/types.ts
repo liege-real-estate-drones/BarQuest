@@ -92,6 +92,8 @@ export interface Debuff {
     duration: number;
     isDebuff?: boolean;
     stacks?: number;
+    is_stacking?: boolean;
+    max_stacks?: number;
     damagePerTick?: number;
     tickInterval?: number;
     nextTickIn?: number;
