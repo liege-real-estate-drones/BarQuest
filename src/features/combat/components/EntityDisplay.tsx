@@ -38,7 +38,10 @@ const resourceConfig: Record<ResourceType, { color: string; indicator: string }>
 };
 
 export default function EntityDisplay({ entity, isPlayer = false, isTarget = false, attackProgress: attackProgressProp, dungeonInfo }: EntityDisplayProps) {
-  const getXpToNextLevel = useGameStore(s => s.getXpToNextLevel);
+  const { getXpToNextLevel, currentDungeon } = useGameStore(s => ({
+    getXpToNextLevel: s.getXpToNextLevel,
+    currentDungeon: s.currentDungeon,
+  }));
 
   const { level } = entity;
   const name = isPlayer ? (entity as PlayerState).name : (entity as Monstre).nom;
@@ -67,66 +70,81 @@ export default function EntityDisplay({ entity, isPlayer = false, isTarget = fal
 
   const avgDmg = !isPlayer ? Math.round(((stats.AttMin ?? 0) + (stats.AttMax ?? 0)) / 2) : 0;
 
+  const isBoss = !isPlayer && (entity as CombatEnemy).isBoss;
+  let cardStyle = {};
+  if (isBoss && currentDungeon) {
+      const dungeonIndex = parseInt(currentDungeon.id.split('_')[1]);
+      cardStyle = {
+          backgroundImage: `url('/images/boss_biome${dungeonIndex}.png')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+      };
+  }
+
   return (
     <Card 
+        style={cardStyle}
         className={cn("flex flex-col bg-card/50 transition-all border-2 border-transparent",
             isPlayer && "border-green-500/30",
             isTarget && "border-primary shadow-lg shadow-primary/20",
-            (entity as CombatEnemy).isBoss && "border-destructive shadow-lg shadow-destructive/40"
+            isBoss && "border-destructive shadow-lg shadow-destructive/40 relative overflow-hidden bg-transparent text-white"
         )}
     >
-      <CardHeader className="flex-shrink-0 space-y-0.5 p-2">
-        <CardTitle className="font-headline flex justify-between items-center text-base">
-            <div className="flex-grow min-w-0 mr-2">
-                <div className="flex items-center gap-2">
-                    <span className="truncate font-bold">{name}</span>
-                    {isTarget && <span className="text-xs text-primary font-normal">(Cible)</span>}
-                </div>
-                <Progress value={((isPlayer ? attackProgressProp : (entity as CombatEnemy).attackProgress) || 0) * 100} className="h-1 bg-background/50 mt-1 w-20" indicatorClassName="bg-yellow-500" />
-            </div>
-            {isPlayer && dungeonInfo && <div className="flex-shrink-0">{dungeonInfo}</div>}
-            {!isPlayer && <span className="text-muted-foreground flex-shrink-0 text-xs">Lvl {level} | Dmg: ~{avgDmg}</span>}
-        </CardTitle>
-        <CardDescription className="capitalize text-xs">
-          {isPlayer ? (entity as PlayerState).classeId : (entity as Monstre).famille}
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-1 flex-grow pt-0 p-2">
-        <div>
-          <div className="flex justify-between text-xs mb-0.5 font-mono text-red-400">
-            <span>PV</span>
-            <span>{Math.round(currentHp)}/{Math.round(maxHp)}</span>
-          </div>
-          <Progress value={hpPercentage} className="h-2" indicatorClassName="bg-gradient-to-r from-red-500 to-red-700" />
-        </div>
-        {isPlayer && playerResources && playerResources.type && playerResources.max > 0 && (
+      {isBoss && <div className="absolute inset-0 bg-black/60 z-0" />}
+      <div className={cn(isBoss && "relative z-10")}>
+        <CardHeader className="flex-shrink-0 space-y-0.5 p-2">
+          <CardTitle className="font-headline flex justify-between items-center text-base">
+              <div className="flex-grow min-w-0 mr-2">
+                  <div className="flex items-center gap-2">
+                      <span className="truncate font-bold">{name}</span>
+                      {isTarget && <span className="text-xs text-primary font-normal">(Cible)</span>}
+                  </div>
+                  <Progress value={((isPlayer ? attackProgressProp : (entity as CombatEnemy).attackProgress) || 0) * 100} className="h-1 bg-background/50 mt-1 w-20" indicatorClassName="bg-yellow-500" />
+              </div>
+              {isPlayer && dungeonInfo && <div className="flex-shrink-0">{dungeonInfo}</div>}
+              {!isPlayer && <span className="text-muted-foreground flex-shrink-0 text-xs">Lvl {level} | Dmg: ~{avgDmg}</span>}
+          </CardTitle>
+          <CardDescription className={cn("capitalize text-xs", isBoss && "text-gray-300")}>
+            {isPlayer ? (entity as PlayerState).classeId : (entity as Monstre).famille}
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-1 flex-grow pt-0 p-2">
           <div>
-            <div className={`flex justify-between text-xs mb-0.5 font-mono ${currentResourceConfig.color}`}>
-              <span>{playerResources.type.toUpperCase()}</span>
-              <span>{Math.round(playerResources.current)}/{Math.round(playerResources.max)}</span>
+            <div className="flex justify-between text-xs mb-0.5 font-mono text-red-400">
+              <span>PV</span>
+              <span>{Math.round(currentHp)}/{Math.round(maxHp)}</span>
             </div>
-            <Progress value={(playerResources.current / playerResources.max) * 100} className="h-2" indicatorClassName={currentResourceConfig.indicator} />
+            <Progress value={hpPercentage} className="h-2" indicatorClassName="bg-gradient-to-r from-red-500 to-red-700" />
           </div>
-        )}
-        {isPlayer && xpToNextLevel !== undefined && (
-          <div>
-            <div className="flex justify-between text-xs mb-0.5 font-mono text-yellow-400">
-                <span>XP</span>
-                <span>{Math.round((entity as PlayerState).xp)}/{Math.round(xpToNextLevel)}</span>
+          {isPlayer && playerResources && playerResources.type && playerResources.max > 0 && (
+            <div>
+              <div className={`flex justify-between text-xs mb-0.5 font-mono ${currentResourceConfig.color}`}>
+                <span>{playerResources.type.toUpperCase()}</span>
+                <span>{Math.round(playerResources.current)}/{Math.round(playerResources.max)}</span>
+              </div>
+              <Progress value={(playerResources.current / playerResources.max) * 100} className="h-2" indicatorClassName={currentResourceConfig.indicator} />
             </div>
-            <Progress value={xpPercentage} className="h-1" indicatorClassName="bg-gradient-to-r from-yellow-400 to-yellow-600" />
-          </div>
-        )}
-        
-        <BuffsDisplay buffs={buffs} debuffs={debuffs} />
+          )}
+          {isPlayer && xpToNextLevel !== undefined && (
+            <div>
+              <div className="flex justify-between text-xs mb-0.5 font-mono text-yellow-400">
+                  <span>XP</span>
+                  <span>{Math.round((entity as PlayerState).xp)}/{Math.round(xpToNextLevel)}</span>
+              </div>
+              <Progress value={xpPercentage} className="h-1" indicatorClassName="bg-gradient-to-r from-yellow-400 to-yellow-600" />
+            </div>
+          )}
 
-        {isPlayer && (
-            <>
-                <Separator className="my-1" />
-                <StatGrid stats={stats} />
-            </>
-        )}
-      </CardContent>
+          <BuffsDisplay buffs={buffs} debuffs={debuffs} />
+
+          {isPlayer && (
+              <>
+                  <Separator className="my-1" />
+                  <StatGrid stats={stats} />
+              </>
+          )}
+        </CardContent>
+      </div>
     </Card>
   );
 }

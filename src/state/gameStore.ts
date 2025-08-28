@@ -1699,10 +1699,10 @@ export const useGameStore = create<GameState>()(
       },
 
       gameTick: (delta: number) => {
-          const { view, combat } = get();
+          const { view, combat, bossEncounter } = get();
 
-          if(view !== 'COMBAT' || !combat.enemies || combat.enemies.length === 0) {
-            if(gameLoop) clearInterval(gameLoop);
+          if(view !== 'COMBAT' || !combat.enemies || combat.enemies.length === 0 || bossEncounter) {
+            if(gameLoop && view !== 'COMBAT') clearInterval(gameLoop);
             return;
           }
 
