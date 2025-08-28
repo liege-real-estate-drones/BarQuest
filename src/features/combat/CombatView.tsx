@@ -147,18 +147,28 @@ export function CombatView() {
 
       {/* AMÉLIORATION: Boîte de dialogue pour l'apparition du boss */}
       <AlertDialog open={!!bossEncounter} onOpenChange={() => setBossEncounter(null)}>
-        <AlertDialogContent>
+        <AlertDialogContent
+          className="bg-transparent text-white border-yellow-500"
+          style={{
+            backgroundImage: `url('/images/boss_biome${parseInt(currentDungeon.id.split('_')[1])}.png')`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+        >
+          <div className="absolute inset-0 bg-black/60 z-0" />
+          <div className="relative z-10">
             <AlertDialogHeader>
-                <AlertDialogTitle className="text-destructive text-2xl">
+                <AlertDialogTitle className="text-destructive text-4xl font-display text-center drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
                     {bossEncounter?.nom} apparaît !
                 </AlertDialogTitle>
-                <AlertDialogDescription>
+                <AlertDialogDescription className="text-center text-gray-300">
                     Préparez-vous au combat ! Le gardien de ce donjon est là.
                 </AlertDialogDescription>
             </AlertDialogHeader>
-            <AlertDialogFooter>
-                <AlertDialogAction onClick={() => setBossEncounter(null)}>Combattre !</AlertDialogAction>
+            <AlertDialogFooter className="mt-4">
+                <AlertDialogAction className="w-full" onClick={() => setBossEncounter(null)}>Combattre !</AlertDialogAction>
             </AlertDialogFooter>
+          </div>
         </AlertDialogContent>
       </AlertDialog>
     </div>
