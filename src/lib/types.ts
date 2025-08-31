@@ -178,6 +178,7 @@ export type CombatEnemy = Monstre & {
         max: number;
     };
     abilities?: any[];
+    image?: string;
 };
 
 export interface CombatLogEntry {

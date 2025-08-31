@@ -18,6 +18,7 @@ interface EntityDisplayProps {
   attackProgress?: number;
   dungeonInfo?: React.ReactNode;
   classImage?: string;
+  image?: string;
 }
 
 function StatGrid({ stats }: { stats: Stats }) {
@@ -38,7 +39,7 @@ const resourceConfig: Record<ResourceType, { color: string; indicator: string }>
     'Énergie': { color: 'text-yellow-400', indicator: 'bg-gradient-to-r from-yellow-500 to-yellow-700' },
 };
 
-export default function EntityDisplay({ entity, isPlayer = false, isTarget = false, attackProgress: attackProgressProp, dungeonInfo, classImage }: EntityDisplayProps) {
+export default function EntityDisplay({ entity, isPlayer = false, isTarget = false, attackProgress: attackProgressProp, dungeonInfo, classImage, image }: EntityDisplayProps) {
   const { getXpToNextLevel, currentDungeon } = useGameStore(s => ({
     getXpToNextLevel: s.getXpToNextLevel,
     currentDungeon: s.currentDungeon,
@@ -114,10 +115,10 @@ export default function EntityDisplay({ entity, isPlayer = false, isTarget = fal
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-1 flex-grow pt-0 p-2">
-          {!isPlayer && (
+          {!isPlayer && image && (
             <div className="flex justify-center items-center h-24">
               <img 
-                src={`/images/monsters/${(entity as CombatEnemy).originalId}.png`} 
+                src={image}
                 alt={name} 
                 className="max-h-full max-w-full object-contain"
                 onError={(e) => (e.currentTarget.style.display = 'none')}

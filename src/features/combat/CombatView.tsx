@@ -101,7 +101,7 @@ export function CombatView() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pr-4">
             {enemies.map((enemy, index) => (
               <div key={enemy.id} ref={enemyRefs.current[index]} onClick={() => setTargetIndex(index)} className="cursor-pointer">
-                <EntityDisplay entity={enemy} isTarget={index === targetIndex} />
+                <EntityDisplay entity={enemy} isTarget={index === targetIndex} image={enemy.image} />
               </div>
             ))}
           </div>

@@ -1646,11 +1646,16 @@ export const useGameStore = create<GameState>()(
         for(let i=0; i<monsterCount; i++) {
           const randomMonsterTemplate = possibleMonsters[Math.floor(Math.random() * possibleMonsters.length)];
           if (randomMonsterTemplate) {
+            const monsterIndexInDungeon = currentDungeon.monsters.indexOf(randomMonsterTemplate.id);
+            const biomeNumber = parseInt(currentDungeon.id.split('_')[1], 10);
+            const image = `/images/monstre${monsterIndexInDungeon + 1}_biome${biomeNumber}.png`;
+
             const monsterInstance: CombatEnemy = {
               ...JSON.parse(JSON.stringify(randomMonsterTemplate)),
               id: uuidv4(),
               templateId: randomMonsterTemplate.id,
               originalId: randomMonsterTemplate.id,
+              image: image,
               initialHp: randomMonsterTemplate.stats.PV,
               attackProgress: Math.random(),
               activeDebuffs: [],
