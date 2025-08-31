@@ -77,7 +77,7 @@ const getTalentDescription = (talent: Talent, gameData: GameData, rank: number, 
                         const valueText = fullDescription && Array.isArray(anyEffect.value)
                             ? anyEffect.value.map((v: number) => `${v*100}%`).join('/')
                             : `${value * 100}%`;
-                        descriptionParts.push(`Vos attaques ont ${chance}% de chance d'ignorer ${valueText} de l'armure de la cible.`);
+                        descriptionParts.push(`Your attacks have a ${chance}% chance to ignore ${valueText} of the target's armor.`);
                     }
                     break;
                 // Add more cases here
@@ -94,7 +94,7 @@ const getTalentDescription = (talent: Talent, gameData: GameData, rank: number, 
                     const valueText = fullDescription && Array.isArray(mod.value)
                         ? mod.value.map(v => `${(v-1)*100}%`).join('/')
                         : `${(value-1)*100}%`;
-                    descriptionParts.push(`Augmente les dégâts de ${skill.nom} de ${valueText}.`);
+                    descriptionParts.push(`Increases damage of ${skill.name} by ${valueText}.`);
                 }
             }
         }
@@ -107,17 +107,17 @@ const getTalentDescription = (talent: Talent, gameData: GameData, rank: number, 
 
             let chanceText = '';
             if (fullDescription && Array.isArray(chanceValue)) {
-                chanceText = ` (${chanceValue.map(c => `${c*100}%`).join('/')} de chance)`;
+                chanceText = ` (${chanceValue.map(c => `${c*100}%`).join('/')} chance)`;
             } else if (chanceForRank < 100) {
-                chanceText = ` (${chanceForRank.toFixed(0)}% de chance)`;
+                chanceText = ` (${chanceForRank.toFixed(0)}% chance)`;
             }
 
             const triggerDict: Record<string, string> = {
-                on_dodge: "Après avoir esquivé",
-                on_critical_hit: "Après un coup critique",
-                on_hit: "En touchant un ennemi"
+                on_dodge: "After dodging",
+                on_critical_hit: "After a critical hit",
+                on_hit: "On hit"
             };
-            const triggerText = triggerDict[triggered.trigger as keyof typeof triggerDict] || "Au déclenchement";
+            const triggerText = triggerDict[triggered.trigger as keyof typeof triggerDict] || "On trigger";
 
             const effectDescriptions = triggered.effects.map(effect => {
                 const anyEffect = effect as any;
@@ -130,7 +130,7 @@ const getTalentDescription = (talent: Talent, gameData: GameData, rank: number, 
             if (effectDescriptions) {
                 descriptionParts.push(`${triggerText}${chanceText}: ${effectDescriptions}`);
             } else {
-                descriptionParts.push(`${triggerText}${chanceText}, un effet spécial se produit.`);
+                descriptionParts.push(`${triggerText}${chanceText}, a special effect occurs.`);
             }
         }
     }
@@ -143,7 +143,7 @@ const getTalentDescription = (talent: Talent, gameData: GameData, rank: number, 
         return talent.effets.join(' ');
     }
 
-    return rank > 0 ? "Effet passif complexe." : "Apprenez ce talent pour voir son effet.";
+    return rank > 0 ? "Complex passive effect." : "Learn this talent to see its effect.";
 };
 
 const TalentPopoverContent = ({ talent, player, gameData }: { talent: Talent; player: PlayerState; gameData: GameData }) => {
@@ -156,20 +156,20 @@ const TalentPopoverContent = ({ talent, player, gameData }: { talent: Talent; pl
 
     return (
         <div className="max-w-xs p-2">
-            <p className="font-bold text-base text-primary mb-1">{talent.nom}</p>
-            <p className="text-sm text-muted-foreground capitalize">Talent Passif (Rang {currentRank}/{talent.rangMax})</p>
+            <p className="font-bold text-base text-primary mb-1">{talent.name}</p>
+            <p className="text-sm text-muted-foreground capitalize">Passive Talent (Rank {currentRank}/{talent.rangMax})</p>
             <Separator className="my-2" />
             
             <div className="space-y-1 mb-2">
-                <p className="text-sm">Effet (Rang {currentRank}):</p>
+                <p className="text-sm">Effect (Rank {currentRank}):</p>
                 <p className="text-xs text-green-400">
-                    {currentRank > 0 ? currentEffect : "Non appris"}
+                    {currentRank > 0 ? currentEffect : "Not learned"}
                 </p>
             </div>
 
             {nextEffect && (
                 <div className="space-y-1 mb-2">
-                    <p className="text-sm">Prochain rang:</p>
+                    <p className="text-sm">Next Rank:</p>
                     <p className="text-xs text-green-300/80">
                         {nextEffect}
                     </p>
@@ -178,7 +178,7 @@ const TalentPopoverContent = ({ talent, player, gameData }: { talent: Talent; pl
 
             {fullDesc && fullDesc !== currentEffect && (
                  <div className="space-y-1 mb-2">
-                    <p className="text-sm">Description complète:</p>
+                    <p className="text-sm">Full Description:</p>
                     <p className="text-xs text-muted-foreground">
                         {fullDesc}
                     </p>
@@ -189,13 +189,13 @@ const TalentPopoverContent = ({ talent, player, gameData }: { talent: Talent; pl
                 <>
                     <Separator className="my-2" />
                     <div className="space-y-1">
-                        <p className="text-sm">Prérequis:</p>
-                        {talent.niveauRequis && <p className={`text-xs ${player.level >= talent.niveauRequis ? 'text-muted-foreground' : 'text-amber-400'}`}>- Niveau {talent.niveauRequis}</p>}
+                        <p className="text-sm">Requirements:</p>
+                        {talent.niveauRequis && <p className={`text-xs ${player.level >= talent.niveauRequis ? 'text-muted-foreground' : 'text-amber-400'}`}>- Level {talent.niveauRequis}</p>}
                         {talent.exigences?.map(req => {
                             const [reqId, reqRankStr] = req.split(':');
                             const reqTalent = gameData.talents.find(t => t.id === reqId);
                              const hasReq = (player.learnedTalents[reqId] || 0) >= parseInt(reqRankStr, 10);
-                            return <p key={req} className={`text-xs ${hasReq ? 'text-muted-foreground' : 'text-amber-400'}`}>- {reqTalent?.nom} (Rang {reqRankStr})</p>
+                            return <p key={req} className={`text-xs ${hasReq ? 'text-muted-foreground' : 'text-amber-400'}`}>- {reqTalent?.name} (Rank {reqRankStr})</p>
                         })}
                     </div>
                 </>
@@ -217,8 +217,8 @@ const TalentRow = ({ talent, canLearn, onLearn, player, gameData }: { talent: Ta
                         <div className="flex items-center gap-3 cursor-help">
                             <Star className={cn("h-5 w-5", isMaxRank ? "text-yellow-400" : "text-yellow-400/30")} />
                             <div>
-                                <p className="font-semibold">{talent.nom}</p>
-                                <p className="text-xs text-muted-foreground">Rang {currentRank}/{talent.rangMax}</p>
+                                <p className="font-semibold">{talent.name}</p>
+                                <p className="text-xs text-muted-foreground">Rank {currentRank}/{talent.rangMax}</p>
                             </div>
                         </div>
                     </PopoverTrigger>
@@ -235,7 +235,7 @@ const TalentRow = ({ talent, canLearn, onLearn, player, gameData }: { talent: Ta
                     className={cn(canLearn && !isMaxRank && 'text-primary hover:text-primary')}
                 >
                     <PlusCircle className="h-4 w-4 mr-2" />
-                    {isMaxRank ? 'Max' : 'Apprendre'}
+                    {isMaxRank ? 'Max' : 'Learn'}
                 </Button>
             </div>
         </div>
@@ -265,10 +265,10 @@ const TalentTree = ({ title, talents, player, gameData, canLearnTalent, learnTal
 }
 
 const talentTreesByClass: Record<string, string[]> = {
-  berserker: ['Armes', 'Fureur', 'Titan'],
-  mage: ['Feu', 'Givre', 'Arcane'],
-  rogue: ['Assassinat', 'Subtilite', 'Poison'],
-  cleric: ['Sacre', 'Discipline', 'Chatiment'],
+  berserker: ['arms', 'fury', 'titan'],
+  mage: ['fire', 'frost', 'arcane'],
+  rogue: ['assassination', 'subtlety', 'poison'],
+  cleric: ['holy', 'discipline', 'shadow'],
 };
 
 
@@ -314,16 +314,16 @@ export function TalentsView() {
             <CardHeader>
                 <CardTitle className="flex justify-between items-center">
                     <span>Talents</span>
-                    <span className="text-sm font-medium text-primary">{talentPoints} points restants</span>
+                    <span className="text-sm font-medium text-primary">{talentPoints} points remaining</span>
                 </CardTitle>
-                <CardDescription>Dépensez vos points pour apprendre des améliorations passives.</CardDescription>
+                <CardDescription>Spend your points to learn passive upgrades.</CardDescription>
             </CardHeader>
             <CardContent className="flex-grow min-h-0">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-full">
                     {classTalentTrees.map(treeName => (
                         <TalentTree
                             key={treeName}
-                            title={treeName}
+                            title={treeName.charAt(0).toUpperCase() + treeName.slice(1)}
                             talents={getTalentsForTree(treeName)}
                             player={player}
                             gameData={gameData}
