@@ -16,9 +16,8 @@ const MusicController = () => {
   useEffect(() => {
     let track = null;
 
-    if (view === 'COMBAT' && currentDungeon) {
-      const dungeonId = currentDungeon.id.replace('dungeon_', '').replace('_heroic', '');
-      track = `/sounds/music/donjon${dungeonId}.mp3`;
+    if (view === 'COMBAT' && currentDungeon?.music) {
+      track = currentDungeon.music;
     } else if (view === 'MAIN') {
       if (townView === 'CRAFTING') {
         track = '/sounds/music/crafting_theme.mp3';

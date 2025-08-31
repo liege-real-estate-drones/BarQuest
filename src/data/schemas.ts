@@ -312,6 +312,7 @@ export const DungeonSchema = z.object({
   palier: z.number().int(),
   name: z.string(),
   biome: z.enum(["ice","fire","nature","shadow"]),
+  music: z.string().optional(),
   damagePenetration: z.object({
       type: ThemeSchema,
       value: z.number() // Par exemple, 25 pour 25% de pénétration
