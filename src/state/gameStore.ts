@@ -1602,6 +1602,7 @@ export const useGameStore = create<GameState>()(
       },
 
       enterDungeon: (dungeonId: string) => {
+        console.log("Entering dungeon with id:", dungeonId);
         const { gameData, isHeroicMode } = get();
         const finalDungeonId = isHeroicMode ? `${dungeonId}_heroic` : dungeonId;
         const dungeon = gameData.dungeons.find(d => d.id === finalDungeonId);
