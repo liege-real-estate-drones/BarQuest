@@ -168,6 +168,7 @@ export type CombatEnemy = Monstre & {
     initialHp: number;
     attackProgress: number;
     templateId: string;
+    originalId: string;
     activeDebuffs: Debuff[];
     activeBuffs: Buff[];
     stunDuration: number;

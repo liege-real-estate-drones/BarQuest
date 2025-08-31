@@ -17,6 +17,7 @@ interface EntityDisplayProps {
   isCompact?: boolean;
   attackProgress?: number;
   dungeonInfo?: React.ReactNode;
+  classImage?: string;
 }
 
 function StatGrid({ stats }: { stats: Stats }) {
@@ -37,7 +38,7 @@ const resourceConfig: Record<ResourceType, { color: string; indicator: string }>
     'Énergie': { color: 'text-yellow-400', indicator: 'bg-gradient-to-r from-yellow-500 to-yellow-700' },
 };
 
-export default function EntityDisplay({ entity, isPlayer = false, isTarget = false, attackProgress: attackProgressProp, dungeonInfo }: EntityDisplayProps) {
+export default function EntityDisplay({ entity, isPlayer = false, isTarget = false, attackProgress: attackProgressProp, dungeonInfo, classImage }: EntityDisplayProps) {
   const { getXpToNextLevel, currentDungeon } = useGameStore(s => ({
     getXpToNextLevel: s.getXpToNextLevel,
     currentDungeon: s.currentDungeon,
@@ -76,8 +77,9 @@ export default function EntityDisplay({ entity, isPlayer = false, isTarget = fal
       const dungeonIndex = parseInt(currentDungeon.id.split('_')[1]);
       cardStyle = {
           backgroundImage: `url('/images/boss_biome${dungeonIndex}.png')`,
-          backgroundSize: 'cover',
+          backgroundSize: 'contain',
           backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
       };
   }
 
@@ -96,6 +98,9 @@ export default function EntityDisplay({ entity, isPlayer = false, isTarget = fal
           <CardTitle className="font-headline flex justify-between items-center text-base">
               <div className="flex-grow min-w-0 mr-2">
                   <div className="flex items-center gap-2">
+                      {isPlayer && classImage && (
+                          <img src={classImage} alt="class" className="w-8 h-8 rounded-full" />
+                      )}
                       <span className="truncate font-bold">{name}</span>
                       {isTarget && <span className="text-xs text-primary font-normal">(Cible)</span>}
                   </div>
@@ -109,6 +114,16 @@ export default function EntityDisplay({ entity, isPlayer = false, isTarget = fal
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-1 flex-grow pt-0 p-2">
+          {!isPlayer && (
+            <div className="flex justify-center items-center h-24">
+              <img 
+                src={`/images/monsters/${(entity as CombatEnemy).originalId}.png`} 
+                alt={name} 
+                className="max-h-full max-w-full object-contain"
+                onError={(e) => (e.currentTarget.style.display = 'none')}
+              />
+            </div>
+          )}
           <div>
             <div className="flex justify-between text-xs mb-0.5 font-mono text-red-400">
               <span>PV</span>

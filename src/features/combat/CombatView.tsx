@@ -156,8 +156,9 @@ export function CombatView() {
           className="bg-transparent text-white border-yellow-500"
           style={{
             backgroundImage: `url('/images/boss_biome${parseInt(currentDungeon.id.split('_')[1])}.png')`,
-            backgroundSize: 'cover',
+            backgroundSize: 'contain',
             backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
           }}
         >
           <div className="absolute inset-0 bg-black/60 z-0" />
