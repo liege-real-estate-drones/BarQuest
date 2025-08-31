@@ -94,7 +94,7 @@ export function CombatView() {
     <div
       className="flex flex-col h-screen w-full font-code text-foreground relative bg-cover bg-center"
       style={{
-        backgroundImage: `linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('/images/biome${dungeonIndex}.png')`,
+        backgroundImage: `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('/images/biome${dungeonIndex}.png')`,
       }}
     >
       <header className="flex-shrink-0 flex items-center border-b p-2 md:p-4 gap-4">
@@ -108,9 +108,9 @@ export function CombatView() {
 
       <main className="flex-grow p-4 overflow-hidden">
         <ScrollArea className="h-full">
-          <div className={cn("pr-4", isBossFight ? "h-full flex items-center justify-center" : "flex flex-col gap-4")}>
+          <div className="flex flex-row gap-4 pr-4">
             {enemies.map((enemy, index) => (
-              <div key={enemy.id} ref={enemyRefs.current[index]} onClick={() => setTargetIndex(index)} className={cn(isBossFight ? "w-2/3" : "cursor-pointer")}>
+              <div key={enemy.id} ref={enemyRefs.current[index]} onClick={() => setTargetIndex(index)} className="cursor-pointer flex-1">
                 <EntityDisplay entity={enemy} isTarget={index === targetIndex} image={enemy.image} />
               </div>
             ))}

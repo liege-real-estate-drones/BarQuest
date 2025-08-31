@@ -87,8 +87,8 @@ export default function EntityDisplay({ entity, isPlayer = false, isTarget = fal
   return (
     <Card 
         style={cardStyle}
-        className={cn("bg-card/50 transition-all border-2 border-transparent flex",
-            isPlayer ? "flex-col border-green-500/30" : "flex-row",
+        className={cn("bg-card/50 transition-all border-2 border-transparent flex flex-col",
+            isPlayer && "border-green-500/30",
             isTarget && "border-primary shadow-lg shadow-primary/20",
             isBoss && "border-destructive shadow-lg shadow-destructive/40 relative overflow-hidden bg-transparent text-white"
         )}
@@ -96,7 +96,7 @@ export default function EntityDisplay({ entity, isPlayer = false, isTarget = fal
       {isBoss && <div className="absolute inset-0 bg-black/60 z-0" />}
       
       {!isPlayer && image && (
-        <div className={cn("h-full flex-shrink-0", isBoss ? "w-48" : "w-32")}>
+        <div className="w-full h-48 flex-shrink-0">
           <img 
             src={image}
             alt={name} 
@@ -155,12 +155,8 @@ export default function EntityDisplay({ entity, isPlayer = false, isTarget = fal
 
           <BuffsDisplay buffs={buffs} debuffs={debuffs} />
 
-          {isPlayer && (
-              <>
-                  <Separator className="my-1" />
-                  <StatGrid stats={stats} />
-              </>
-          )}
+          <Separator className="my-1" />
+          <StatGrid stats={stats} />
         </CardContent>
       </div>
     </Card>
