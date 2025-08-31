@@ -87,20 +87,32 @@ export default function EntityDisplay({ entity, isPlayer = false, isTarget = fal
   return (
     <Card 
         style={cardStyle}
-        className={cn("flex flex-col bg-card/50 transition-all border-2 border-transparent",
-            isPlayer && "border-green-500/30",
+        className={cn("bg-card/50 transition-all border-2 border-transparent flex",
+            isPlayer ? "flex-col border-green-500/30" : "flex-row",
             isTarget && "border-primary shadow-lg shadow-primary/20",
             isBoss && "border-destructive shadow-lg shadow-destructive/40 relative overflow-hidden bg-transparent text-white"
         )}
     >
       {isBoss && <div className="absolute inset-0 bg-black/60 z-0" />}
-      <div className={cn(isBoss && "relative z-10")}>
+      
+      {!isPlayer && image && (
+        <div className={cn("h-full flex-shrink-0", isBoss ? "w-48" : "w-32")}>
+          <img 
+            src={image}
+            alt={name} 
+            className="w-full h-full object-cover"
+            onError={(e) => (e.currentTarget.style.display = 'none')}
+          />
+        </div>
+      )}
+
+      <div className={cn("flex-grow", isBoss && "relative z-10")}>
         <CardHeader className="flex-shrink-0 space-y-0.5 p-2">
           <CardTitle className="font-headline flex justify-between items-center text-base">
               <div className="flex-grow min-w-0 mr-2">
                   <div className="flex items-center gap-2">
                       {isPlayer && classImage && (
-                          <img src={classImage} alt="class" className="w-8 h-8 rounded-full" />
+                          <img src={classImage} alt="class" className="w-16 h-16 rounded-full" />
                       )}
                       <span className="truncate font-bold">{name}</span>
                       {isTarget && <span className="text-xs text-primary font-normal">(Cible)</span>}
@@ -115,16 +127,6 @@ export default function EntityDisplay({ entity, isPlayer = false, isTarget = fal
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-1 flex-grow pt-0 p-2">
-          {!isPlayer && image && (
-            <div className="flex justify-center items-center h-24">
-              <img 
-                src={image}
-                alt={name} 
-                className="max-h-full max-w-full object-contain"
-                onError={(e) => (e.currentTarget.style.display = 'none')}
-              />
-            </div>
-          )}
           <div>
             <div className="flex justify-between text-xs mb-0.5 font-mono text-red-400">
               <span>PV</span>

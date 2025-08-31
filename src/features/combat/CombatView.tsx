@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import EntityDisplay from './components/EntityDisplay';
 import { useMemo, useRef, createRef } from 'react';
 import { ArrowLeft } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { ActionStrip } from './components/ActionStrip';
 import type { Skill } from '@/lib/types';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -54,6 +55,8 @@ export function CombatView() {
     removeFloatingText: state.removeFloatingText,
   }));
 
+  const isBossFight = enemies.length === 1 && enemies[0].isBoss;
+
   const playerRef = useRef<HTMLDivElement>(null);
   const enemyRefs = useRef<React.RefObject<HTMLDivElement>[]>([]);
   enemyRefs.current = enemies.map((_, i) => enemyRefs.current[i] ?? createRef());
@@ -98,9 +101,9 @@ export function CombatView() {
 
       <main className="flex-grow p-4 overflow-hidden">
         <ScrollArea className="h-full">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pr-4">
+          <div className={cn("pr-4", isBossFight ? "h-full flex items-center justify-center" : "flex flex-col gap-4")}>
             {enemies.map((enemy, index) => (
-              <div key={enemy.id} ref={enemyRefs.current[index]} onClick={() => setTargetIndex(index)} className="cursor-pointer">
+              <div key={enemy.id} ref={enemyRefs.current[index]} onClick={() => setTargetIndex(index)} className={cn(isBossFight ? "w-2/3" : "cursor-pointer")}>
                 <EntityDisplay entity={enemy} isTarget={index === targetIndex} image={enemy.image} />
               </div>
             ))}
