@@ -91,12 +91,13 @@ export function CombatView() {
   const dungeonIndex = parseInt(currentDungeon.id.split('_')[1]);
 
   return (
-    <div className="flex flex-col h-screen w-full font-code bg-background text-foreground relative">
+    <div className="flex flex-col h-screen w-full font-code text-foreground relative">
       <div
         className="absolute inset-0 bg-cover bg-center -z-10"
-        style={{ backgroundImage: `url('/images/biome${dungeonIndex}.png')`}}
+        style={{
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('/images/biome${dungeonIndex}.png')`,
+        }}
       />
-      <div className="absolute inset-0 bg-black/70 -z-10" />
       <header className="flex-shrink-0 flex items-center border-b p-2 md:p-4 gap-4">
         <Button variant="ghost" size="icon" onClick={flee} className="flex-shrink-0">
             <ArrowLeft />
