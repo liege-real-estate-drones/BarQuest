@@ -3,9 +3,10 @@
 import { useEffect } from 'react';
 import { useGameStore } from '@/state/gameStore';
 import { useAudioPlayer } from '@/hooks/useAudioPlayer';
+import AudioPlayer from './AudioPlayer'; // Import the new component
 
 const MusicController = () => {
-  const { playMusic, stopMusic } = useAudioPlayer();
+  const { currentTrack, playMusic, stopMusic } = useAudioPlayer();
   const { view, activeSubView, townView, currentDungeon } = useGameStore(state => ({
     view: state.view,
     activeSubView: state.activeSubView,
@@ -14,7 +15,7 @@ const MusicController = () => {
   }));
 
   useEffect(() => {
-    let track = null;
+    let track: string | null = null;
 
     if (view === 'COMBAT' && currentDungeon) {
       const dungeonId = currentDungeon.id.replace('dungeon_', '').replace('_heroic', '');
@@ -37,22 +38,20 @@ const MusicController = () => {
             track = '/sounds/music/menu_donjons.mp3';
             break;
           default:
-            // For other sub-views like Quests, Skills, etc., we can fall back to town music or have none.
             track = '/sounds/music/menu_ville.mp3';
             break;
         }
       }
     }
 
-    if (track) {
+    if (track && track !== currentTrack) {
       playMusic(track);
-    } else {
-      // Stop music if no track is determined (e.g., dungeon summary screen)
+    } else if (!track) {
       stopMusic();
     }
-  }, [view, activeSubView, townView, currentDungeon, playMusic, stopMusic]);
+  }, [view, activeSubView, townView, currentDungeon, playMusic, stopMusic, currentTrack]);
 
-  return null; // This is a controller component, it doesn't render anything
+  return <AudioPlayer src={currentTrack} />;
 };
 
 export default MusicController;
