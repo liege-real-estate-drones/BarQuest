@@ -5,6 +5,9 @@ import { useGameStore } from '@/state/gameStore';
 import { useAudioPlayer } from '@/hooks/useAudioPlayer';
 import AudioPlayer from './AudioPlayer'; // Import the new component
 
+const availableDungeonTracks = ['1'];
+const defaultCombatMusic = '/sounds/music/378_Descent.mp3';
+
 const MusicController = () => {
   const { currentTrack, playMusic, stopMusic } = useAudioPlayer();
   const { view, activeSubView, townView, currentDungeon } = useGameStore(state => ({
@@ -19,7 +22,11 @@ const MusicController = () => {
 
     if (view === 'COMBAT' && currentDungeon) {
       const dungeonId = currentDungeon.id.replace('dungeon_', '').replace('_heroic', '');
-      track = `/sounds/music/donjon${dungeonId}.mp3`;
+      if (availableDungeonTracks.includes(dungeonId)) {
+        track = `/sounds/music/donjon${dungeonId}.mp3`;
+      } else {
+        track = defaultCombatMusic;
+      }
     } else if (view === 'MAIN') {
       if (townView === 'CRAFTING') {
         track = '/sounds/music/crafting_theme.mp3';
