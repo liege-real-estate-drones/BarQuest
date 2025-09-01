@@ -108,9 +108,21 @@ export function CombatView() {
 
       <main className="flex-grow p-4 overflow-hidden">
         <ScrollArea className="h-full">
-          <div className="flex flex-row gap-4 pr-4">
+          <div
+            className={cn(
+              'grid gap-4 pr-4',
+              enemies.length === 1 && 'grid-cols-1 justify-items-center',
+              enemies.length === 2 && 'grid-cols-2',
+              enemies.length >= 3 && 'grid-cols-3',
+            )}
+          >
             {enemies.map((enemy, index) => (
-              <div key={enemy.id} ref={enemyRefs.current[index]} onClick={() => setTargetIndex(index)} className="cursor-pointer w-56 sm:w-64 flex-shrink-0">
+              <div
+                key={enemy.id}
+                ref={enemyRefs.current[index]}
+                onClick={() => setTargetIndex(index)}
+                className={cn('cursor-pointer', enemies.length === 1 && 'w-full max-w-xs')}
+              >
                 <EntityDisplay entity={enemy} isTarget={index === targetIndex} image={enemy.image} />
               </div>
             ))}
