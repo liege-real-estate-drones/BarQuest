@@ -233,7 +233,7 @@
         "niveauMin": 15,
         "rarity": "Rare",
         "affixes": [
-          { "ref": "BonusDmg.shadow", "val": 5 },
+          { "ref": "BonusDmg.shadow", "val": 15 },
           { "ref": "Intelligence", "val": 2 }
         ],
         "tagsClasse": ["mage", "rogue"],
@@ -371,7 +371,7 @@
         "rarity": "Rare",
         "affixes": [
           { "ref": "Intelligence", "val": 4 },
-          { "ref": "BonusDmg.shadow", "val": 3 }
+          { "ref": "BonusDmg.shadow", "val": 10 }
         ],
         "tagsClasse": ["mage"],
         "vendorPrice": 150
@@ -517,7 +517,8 @@
           { "ref": "AttMin", "val": 20 },
           { "ref": "AttMax", "val": 30 },
           { "ref": "Dexterite", "val": 12 },
-          { "ref": "Vitesse", "val": -0.2 }
+          { "ref": "Vitesse", "val": -0.2 },
+          { "ref": "BonusDmg.nature", "val": 15 }
         ],
         "tagsClasse": ["rogue"],
         "effect": "Les attaques empoisonnent la cible, infligeant des dégâts sur la durée."
@@ -671,7 +672,8 @@
         "rarity": "Rare",
         "affixes": [
             { "ref": "Armure", "val": 40 },
-            { "ref": "CritPct", "val": 2 }
+            { "ref": "CritPct", "val": 2 },
+            { "ref": "BonusDmg.nature", "val": 10 }
         ],
         "tagsClasse": ["rogue"],
         "set": { "id": "shadow_shroud", "name": "Linceul de l'Ombre" },
