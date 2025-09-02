@@ -995,6 +995,12 @@ export const useGameStore = create<GameState>()(
           if (!player.stats.ResElems) {
             player.stats.ResElems = {};
           }
+          if (!player.stats.DmgElems) {
+            player.stats.DmgElems = {};
+          }
+          if (!player.stats.BonusDmg) {
+            player.stats.BonusDmg = {};
+          }
 
           const equippedSetTiers: Record<string, Record<number, number>> = {};
 
@@ -1052,6 +1058,18 @@ export const useGameStore = create<GameState>()(
               }
             }
           });
+
+          // Merge BonusDmg into DmgElems for consistent use in combat and UI
+          if (player.stats.BonusDmg) {
+            if (!player.stats.DmgElems) {
+              player.stats.DmgElems = {};
+            }
+            Object.entries(player.stats.BonusDmg).forEach(([elem, value]) => {
+              if (player.stats.DmgElems && typeof value === 'number') {
+                player.stats.DmgElems[elem] = (player.stats.DmgElems[elem] || 0) + value;
+              }
+            });
+          }
 
           // 3. Apply tiered set bonuses
           Object.entries(equippedSetTiers).forEach(([setId, tiers]) => {
