@@ -379,11 +379,11 @@ export const getRecipePrice = (enchantment: Enchantment): number => {
 
 type StatWeightKeys = 'PV' | 'RessourceMax' | 'Force' | 'Intelligence' | 'Dexterite' | 'Esprit' | 'AttMin' | 'AttMax' | 'CritPct' | 'CritDmg' | 'Armure' | 'Vitesse' | 'Precision' | 'Esquive';
 
-export const STAT_WEIGHTS: Record<PlayerClassId, Partial<Record<StatWeightKeys, number>> & { BonusDmg?: Partial<Record<Theme, number>> }> = {
-    berserker: { Force: 2, AttMin: 1.2, AttMax: 1.2, CritPct: 1, CritDmg: 0.8, Armure: 0.6, PV: 0.8, BonusDmg: { shadow: 1, fire: 1, ice: 1, nature: 1 } },
-    mage: { Intelligence: 2, CritPct: 1.2, CritDmg: 1, Vitesse: 1, Esprit: 0.7, PV: 0.5, BonusDmg: { shadow: 1.5, fire: 1.5, ice: 1.5, nature: 1.5 } },
-    rogue: { Dexterite: 2, Vitesse: 1.5, CritPct: 1.5, CritDmg: 1.2, AttMin: 1, AttMax: 1, BonusDmg: { shadow: 1, fire: 1, ice: 1, nature: 1 } },
-    cleric: { Esprit: 2, Intelligence: 1.5, PV: 1, Armure: 0.8, CritPct: 0.7, BonusDmg: { shadow: 1.2, fire: 1.2, ice: 1.2, nature: 1.2 } },
+export const STAT_WEIGHTS: Record<PlayerClassId, Partial<Record<StatWeightKeys, number>> & { DmgElems?: Partial<Record<Theme, number>> }> = {
+    berserker: { Force: 2, AttMin: 1.2, AttMax: 1.2, CritPct: 1, CritDmg: 0.8, Armure: 0.6, PV: 0.8, DmgElems: { shadow: 1, fire: 1, ice: 1, nature: 1 } },
+    mage: { Intelligence: 2, CritPct: 1.2, CritDmg: 1, Vitesse: 1, Esprit: 0.7, PV: 0.5, DmgElems: { shadow: 1.5, fire: 1.5, ice: 1.5, nature: 1.5 } },
+    rogue: { Dexterite: 2, Vitesse: 1.5, CritPct: 1.5, CritDmg: 1.2, AttMin: 1, AttMax: 1, DmgElems: { shadow: 1, fire: 1, ice: 1, nature: 1 } },
+    cleric: { Esprit: 2, Intelligence: 1.5, PV: 1, Armure: 0.8, CritPct: 0.7, DmgElems: { shadow: 1.2, fire: 1.2, ice: 1.2, nature: 1.2 } },
 };
 
 export const calculateItemScore = (item: Item, classId: PlayerClassId): number => {
@@ -400,7 +400,7 @@ export const calculateItemScore = (item: Item, classId: PlayerClassId): number =
 
     if (item.stats) {
         Object.entries(item.stats).forEach(([key, value]) => {
-            if (key === 'BonusDmg' || key === 'ResElems') return;
+            if (key === 'DmgElems' || key === 'ResElems') return;
             const statKey = key as StatWeightKeys;
             const weight = weights[statKey] || 0.1;
             if (typeof value === 'number') {
@@ -408,9 +408,9 @@ export const calculateItemScore = (item: Item, classId: PlayerClassId): number =
             }
         });
 
-        if (item.stats.BonusDmg && weights.BonusDmg) {
-            Object.entries(item.stats.BonusDmg).forEach(([elem, dmg]) => {
-                const weight = weights.BonusDmg?.[elem as Theme] || 0;
+        if (item.stats.DmgElems && weights.DmgElems) {
+            Object.entries(item.stats.DmgElems).forEach(([elem, dmg]) => {
+                const weight = weights.DmgElems?.[elem as Theme] || 0;
                 if(typeof dmg === 'number') {
                     score += dmg * weight;
                 }
@@ -995,9 +995,6 @@ export const useGameStore = create<GameState>()(
           if (!player.stats.ResElems) {
             player.stats.ResElems = {};
           }
-          if (!player.stats.BonusDmg) {
-            player.stats.BonusDmg = {};
-          }
 
           const equippedSetTiers: Record<string, Record<number, number>> = {};
 
@@ -1007,7 +1004,7 @@ export const useGameStore = create<GameState>()(
               // A. Handle base stats from the item (e.g., for Uniques)
               if (item.stats) {
                 Object.entries(item.stats).forEach(([statKey, statValue]) => {
-                  if (statKey === 'ResElems' || statKey === 'BonusDmg') {
+                  if (statKey === 'ResElems' || statKey === 'DmgElems') {
                     if (statValue && typeof statValue === 'object') {
                       Object.entries(statValue).forEach(([subKey, subValue]) => {
                         if (typeof subValue === 'number' && player.stats[statKey]) {
@@ -1943,59 +1940,37 @@ export const useGameStore = create<GameState>()(
             const buffedPlayerStats = getModifiedStats(player.stats, [...player.activeBuffs, ...player.activeDebuffs], player.form);
             let debuffedTargetStats = getModifiedStats(target.stats, target.activeDebuffs);
 
-            const damage = formulas.calculateMeleeDamage(buffedPlayerStats.AttMin, buffedPlayerStats.AttMax, formulas.calculateAttackPower(buffedPlayerStats));
-            let isCrit = formulas.isCriticalHit(buffedPlayerStats.CritPct, buffedPlayerStats.Precision, debuffedTargetStats, player, gameData);
+            const isCrit = formulas.isCriticalHit(buffedPlayerStats.CritPct, buffedPlayerStats.Precision, debuffedTargetStats, player, gameData);
             if (player.nextAttackIsGuaranteedCrit) {
                 isCrit = true;
                 player.nextAttackIsGuaranteedCrit = false;
             }
-            let finalDamage = isCrit ? damage * (buffedPlayerStats.CritDmg / 100) : damage;
 
-            finalDamage *= (buffedPlayerStats.DamageMultiplier || 1);
-
-            if (isCrit) {
-                get().applySpecialEffect('ON_CRITICAL_HIT', { targetId, isCrit, skill: gameData.skills.find(s => s.id === skillId) });
-                get().applyTalentTrigger('on_critical_hit', { targetId });
-            }
-            get().applySpecialEffect('ON_HIT', { targetId, isCrit, skill: gameData.skills.find(s => s.id === skillId) });
-            get().applyTalentTrigger('on_hit', { targetId });
-
-            if (player.activeEffects && player.activeEffects.includes('dernier_cri')) {
-                const maxHp = formulas.calculateMaxHP(player.level, player.stats);
-                const hpPercent = (player.stats.PV / maxHp) * 100;
-                const damageMultiplier = 1 + (100 - hpPercent) / 100;
-                finalDamage *= damageMultiplier;
-            }
-
-            const fracasRank = player.learnedTalents['berserker_armes_fracas_armure'];
-            if (fracasRank && fracasRank > 0) {
-                const talentData = gameData.talents.find(t => t.id === 'berserker_armes_fracas_armure');
-                const onHitEffect = talentData?.effects?.find(e => (e as any).effect === 'ignore_armor') as any;
-                if (onHitEffect && Math.random() < onHitEffect.chance) {
-                    const armorIgnorePercent = getRankValue(onHitEffect.value, fracasRank);
-                    const modifiedArmor = debuffedTargetStats.Armure * (1 - armorIgnorePercent);
-                    debuffedTargetStats = { ...debuffedTargetStats, Armure: modifiedArmor };
-                    events.push({ entityId: target.id, text: "Armure brisée", type: 'debuff'});
-                    combat.log.push({ message: `Fracas d'Armure ignore ${Math.round(armorIgnorePercent * 100)}% de l'armure !`, type: 'talent_proc', timestamp: Date.now() });
-                }
-            }
+            // --- Physical Damage ---
+            let physicalDamage = formulas.calculatePhysicalDamage(buffedPlayerStats.AttMin, buffedPlayerStats.AttMax, formulas.calculateAttackPower(buffedPlayerStats));
+            if (isCrit) physicalDamage *= (buffedPlayerStats.CritDmg / 100);
+            physicalDamage *= (buffedPlayerStats.DamageMultiplier || 1);
 
             const dr = formulas.calculateArmorDR(debuffedTargetStats.Armure, player.level);
-            const mitigatedDamage = Math.round(finalDamage * (isCleave ? 0.5 : 1) * (1 - dr));
-
+            const mitigatedDamage = Math.round(physicalDamage * (isCleave ? 0.5 : 1) * (1 - dr));
             target.stats.PV -= mitigatedDamage;
             events.push({ entityId: target.id, text: `-${mitigatedDamage}`, type: isCrit ? 'crit' : 'damage' });
 
-            if (buffedPlayerStats.BonusDmg) {
-                Object.entries(buffedPlayerStats.BonusDmg).forEach(([elem, dmg]) => {
-                    if (dmg > 0) {
-                        const res = debuffedTargetStats.ResElems?.[elem as keyof typeof debuffedTargetStats.ResElems] || 0;
+            // --- Elemental Damage ---
+            if (buffedPlayerStats.DmgElems) {
+                Object.entries(buffedPlayerStats.DmgElems).forEach(([type, damage]) => {
+                    if (damage > 0) {
+                        let elementalDamage = damage;
+                        if (isCrit) elementalDamage *= (buffedPlayerStats.CritDmg / 100);
+
+                        const res = debuffedTargetStats.ResElems?.[type as keyof typeof debuffedTargetStats.ResElems] || 0;
                         const elemDR = formulas.calculateResistanceDR(res, player.level);
-                        const mitigatedElemDmg = Math.round(dmg * (1 - elemDR));
+                        const mitigatedElemDmg = Math.round(elementalDamage * (1 - elemDR));
+
                         if(mitigatedElemDmg > 0) {
                             target.stats.PV -= mitigatedElemDmg;
                             events.push({ entityId: target.id, text: `-${mitigatedElemDmg}`, type: 'damage' });
-                            combat.log.push({ message: `Votre attaque inflige ${mitigatedElemDmg} points de dégâts de ${elem}.`, type: 'player_attack', timestamp: Date.now() });
+                            combat.log.push({ message: `Votre attaque inflige ${mitigatedElemDmg} points de dégâts de ${type}.`, type: 'player_attack', timestamp: Date.now() });
                         }
                     }
                 });
@@ -2116,18 +2091,18 @@ export const useGameStore = create<GameState>()(
                 return;
             }
 
-            let physicalDamage = formulas.calculateMeleeDamage(enemy.stats.AttMin, enemy.stats.AttMax, formulas.calculateAttackPower(enemy.stats));
+            const damageResult = formulas.calculateAttackDamage(enemy.stats, enemy.elementalDamage);
+
             const playerDr = formulas.calculateArmorDR(buffedPlayerStats.Armure, enemy.level);
-            let mitigatedPhysicalDamage = Math.round(physicalDamage * (1 - playerDr));
+            const mitigatedPhysicalDamage = Math.round(damageResult.physical * (1 - playerDr));
 
             let mitigatedElementalDamage = 0;
             let elementalDamageType: string | undefined = undefined;
-            if (enemy.elementalDamage) {
-                const elementalRoll = Math.random() * (enemy.elementalDamage.max - enemy.elementalDamage.min) + enemy.elementalDamage.min;
-                const playerRes = buffedPlayerStats.ResElems?.[enemy.elementalDamage.type] ?? 0;
+            if (damageResult.elemental) {
+                const playerRes = buffedPlayerStats.ResElems?.[damageResult.elemental.type] ?? 0;
                 const elementalDR = formulas.calculateResistanceDR(playerRes, enemy.level);
-                mitigatedElementalDamage = Math.round(elementalRoll * (1 - elementalDR));
-                elementalDamageType = enemy.elementalDamage.type;
+                mitigatedElementalDamage = Math.round(damageResult.elemental.value * (1 - elementalDR));
+                elementalDamageType = damageResult.elemental.type;
             }
 
             let totalDamage = mitigatedPhysicalDamage + mitigatedElementalDamage;

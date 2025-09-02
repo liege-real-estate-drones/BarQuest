@@ -67,9 +67,28 @@ export const calculateAttackInterval = (weaponSpeed: number, hastePct: number): 
   return weaponSpeed / (1 + hastePct / 100);
 };
 
-export const calculateMeleeDamage = (min: number, max: number, attackPower: number): number => {
+export const calculateAttackDamage = (
+  stats: Stats,
+  elementalDamage?: { type: string; min: number; max: number }
+): { physical: number; elemental: { type: string; value: number } | null } => {
+  const physical = Math.random() * (stats.AttMax - stats.AttMin) + stats.AttMin;
+
+  if (elementalDamage) {
+    const elementalValue = Math.random() * (elementalDamage.max - elementalDamage.min) + elementalDamage.min;
+    return {
+      physical: physical,
+      elemental: {
+        type: elementalDamage.type,
+        value: elementalValue,
+      },
+    };
+  }
+
+  return { physical, elemental: null };
+};
+
+export const calculatePhysicalDamage = (min: number, max: number, attackPower: number): number => {
   const roll = min + Math.random() * (max - min);
-  // Attack power now provides a more significant boost to melee damage.
   return roll + (attackPower / 4);
 };
 
