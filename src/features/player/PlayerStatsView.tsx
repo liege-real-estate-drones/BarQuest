@@ -89,6 +89,18 @@ export function PlayerStatsView() {
                             ))}
                         </>
                     )}
+
+                    {stats.DmgElems && Object.keys(stats.DmgElems).length > 0 && (
+                        <>
+                            <hr className="col-span-2 my-1 border-border" />
+                            {Object.entries(stats.DmgElems).map(([elem, value]) => (
+                                <React.Fragment key={elem}>
+                                    <span className="text-muted-foreground capitalize">Dégâts {elem}:</span>
+                                    <span className="text-right">{value}</span>
+                                </React.Fragment>
+                            ))}
+                        </>
+                    )}
                 </div>
             </CardContent>
         </Card>

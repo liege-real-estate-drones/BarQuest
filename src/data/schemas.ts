@@ -21,6 +21,7 @@ export const StatsSchema = z.object({
   CritDmg: z.number(),
   Armure: z.number().int(),
   ResElems: z.record(z.string(), z.number()).optional(),
+  DmgElems: z.record(z.string(), z.number()).optional(),
   BonusDmg: z.record(z.string(), z.number()).optional(),
   Vitesse: z.number(),
   Precision: z.number(),

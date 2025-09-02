@@ -17,6 +17,11 @@
         "Vitesse": 2.5,
         "Precision": 50,
         "Esquive": 5
+      },
+      "elementalDamage": {
+        "type": "nature",
+        "min": 2,
+        "max": 3
       }
     },
     {
@@ -43,7 +48,12 @@
           "chance": 0.3,
           "quantity": 1
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 2,
+        "max": 3
+      }
     },
     {
       "id": "kobold_miner_supervisor",
@@ -62,7 +72,12 @@
         "Vitesse": 2.5,
         "Precision": 65,
         "Esquive": 5,
-        "ResElems": { "fire": 10, "ice": 10, "nature": 10, "shadow": 10 }
+        "ResElems": {
+          "fire": 10,
+          "ice": 10,
+          "nature": 10,
+          "shadow": 10
+        }
       },
       "elementalDamage": {
         "type": "fire",
@@ -142,7 +157,12 @@
           "chance": 0.1,
           "quantity": 1
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "fire",
+        "min": 17,
+        "max": 21
+      }
     },
     {
       "id": "cinder_lord_heroic",
@@ -188,7 +208,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "fire",
+        "min": 81,
+        "max": 98
+      }
     },
     {
       "id": "yeti_matriarch",
@@ -234,7 +259,12 @@
           "chance": 0.25,
           "quantity": 1
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 10,
+        "max": 14
+      }
     },
     {
       "id": "yeti_matriarch_heroic",
@@ -273,11 +303,16 @@
               "name": "Ice Vulnerability (H)",
               "duration": 8,
               "damageType": "ice",
-              "multiplier": 1.20
+              "multiplier": 1.2
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 46,
+        "max": 63
+      }
     },
     {
       "id": "kobold_miner_assistant",
@@ -303,7 +338,12 @@
           "chance": 0.4,
           "quantity": 1
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 2,
+        "max": 3
+      }
     },
     {
       "id": "cave_bat",
@@ -330,7 +370,12 @@
           "chance": 0.35,
           "quantity": 1
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 2,
+        "max": 3
+      }
     },
     {
       "id": "frost_wolf",
@@ -349,7 +394,10 @@
         "Vitesse": 2.2,
         "Precision": 65,
         "Esquive": 10,
-        "ResElems": { "ice": 25, "fire": -15 }
+        "ResElems": {
+          "ice": 25,
+          "fire": -15
+        }
       },
       "elementalDamage": {
         "type": "ice",
@@ -378,6 +426,11 @@
           "ice": 25,
           "fire": -10
         }
+      },
+      "elementalDamage": {
+        "type": "ice",
+        "min": 2,
+        "max": 3
       }
     },
     {
@@ -397,6 +450,11 @@
         "Vitesse": 3,
         "Precision": 60,
         "Esquive": 5
+      },
+      "elementalDamage": {
+        "type": "nature",
+        "min": 2,
+        "max": 4
       }
     },
     {
@@ -416,6 +474,11 @@
         "Vitesse": 2.1,
         "Precision": 75,
         "Esquive": 12
+      },
+      "elementalDamage": {
+        "type": "fire",
+        "min": 2,
+        "max": 4
       }
     },
     {
@@ -435,6 +498,11 @@
         "Vitesse": 2.8,
         "Precision": 70,
         "Esquive": 8
+      },
+      "elementalDamage": {
+        "type": "fire",
+        "min": 2,
+        "max": 4
       }
     },
     {
@@ -465,7 +533,12 @@
           "chance": 0.15,
           "quantity": 1
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "fire",
+        "min": 2,
+        "max": 4
+      }
     },
     {
       "id": "cursed_sapling",
@@ -484,6 +557,11 @@
         "Vitesse": 3,
         "Precision": 75,
         "Esquive": 5
+      },
+      "elementalDamage": {
+        "type": "shadow",
+        "min": 2,
+        "max": 4
       }
     },
     {
@@ -503,6 +581,11 @@
         "Vitesse": 2.6,
         "Precision": 70,
         "Esquive": 8
+      },
+      "elementalDamage": {
+        "type": "nature",
+        "min": 3,
+        "max": 5
       }
     },
     {
@@ -522,6 +605,11 @@
         "Vitesse": 2.2,
         "Precision": 80,
         "Esquive": 15
+      },
+      "elementalDamage": {
+        "type": "nature",
+        "min": 3,
+        "max": 5
       }
     },
     {
@@ -541,6 +629,11 @@
         "Vitesse": 2.8,
         "Precision": 80,
         "Esquive": 10
+      },
+      "elementalDamage": {
+        "type": "shadow",
+        "min": 3,
+        "max": 5
       }
     },
     {
@@ -570,7 +663,12 @@
           "chance": 0.1,
           "quantity": 1
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "shadow",
+        "min": 3,
+        "max": 5
+      }
     },
     {
       "id": "acolyte_of_the_void",
@@ -589,6 +687,11 @@
         "Vitesse": 2.4,
         "Precision": 85,
         "Esquive": 15
+      },
+      "elementalDamage": {
+        "type": "shadow",
+        "min": 3,
+        "max": 5
       }
     },
     {
@@ -608,6 +711,11 @@
         "Vitesse": 2.6,
         "Precision": 82,
         "Esquive": 12
+      },
+      "elementalDamage": {
+        "type": "nature",
+        "min": 3,
+        "max": 5
       }
     },
     {
@@ -627,6 +735,11 @@
         "Vitesse": 2.9,
         "Precision": 80,
         "Esquive": 10
+      },
+      "elementalDamage": {
+        "type": "nature",
+        "min": 3,
+        "max": 6
       }
     },
     {
@@ -657,7 +770,12 @@
           "chance": 0.15,
           "quantity": 1
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "ice",
+        "min": 3,
+        "max": 6
+      }
     },
     {
       "id": "ice_wraith",
@@ -694,13 +812,18 @@
                 {
                   "stat": "Vitesse",
                   "modifier": "multiplicative",
-                  "value": 1.30
+                  "value": 1.3
                 }
               ]
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "ice",
+        "min": 3,
+        "max": 6
+      }
     },
     {
       "id": "frozen_berserker",
@@ -719,6 +842,11 @@
         "Vitesse": 3,
         "Precision": 82,
         "Esquive": 8
+      },
+      "elementalDamage": {
+        "type": "ice",
+        "min": 3,
+        "max": 6
       }
     },
     {
@@ -738,6 +866,11 @@
         "Vitesse": 3.5,
         "Precision": 85,
         "Esquive": 5
+      },
+      "elementalDamage": {
+        "type": "fire",
+        "min": 3,
+        "max": 6
       }
     },
     {
@@ -779,7 +912,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 3,
+        "max": 6
+      }
     },
     {
       "id": "obsidian_gargoyle",
@@ -798,6 +936,11 @@
         "Vitesse": 2.8,
         "Precision": 88,
         "Esquive": 12
+      },
+      "elementalDamage": {
+        "type": "nature",
+        "min": 4,
+        "max": 7
       }
     },
     {
@@ -817,6 +960,11 @@
         "Vitesse": 3.2,
         "Precision": 85,
         "Esquive": 7
+      },
+      "elementalDamage": {
+        "type": "fire",
+        "min": 4,
+        "max": 7
       }
     },
     {
@@ -836,6 +984,11 @@
         "Vitesse": 2.5,
         "Precision": 90,
         "Esquive": 15
+      },
+      "elementalDamage": {
+        "type": "nature",
+        "min": 4,
+        "max": 7
       }
     },
     {
@@ -855,6 +1008,11 @@
         "Vitesse": 4,
         "Precision": 90,
         "Esquive": 5
+      },
+      "elementalDamage": {
+        "type": "nature",
+        "min": 4,
+        "max": 7
       }
     },
     {
@@ -874,6 +1032,11 @@
         "Vitesse": 3.3,
         "Precision": 88,
         "Esquive": 8
+      },
+      "elementalDamage": {
+        "type": "nature",
+        "min": 4,
+        "max": 7
       }
     },
     {
@@ -893,6 +1056,11 @@
         "Vitesse": 2.4,
         "Precision": 92,
         "Esquive": 18
+      },
+      "elementalDamage": {
+        "type": "nature",
+        "min": 4,
+        "max": 7
       }
     },
     {
@@ -919,7 +1087,12 @@
           "chance": 0.1,
           "quantity": 1
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "shadow",
+        "min": 4,
+        "max": 7
+      }
     },
     {
       "id": "mind_flayer_spawn",
@@ -938,6 +1111,11 @@
         "Vitesse": 2.6,
         "Precision": 95,
         "Esquive": 15
+      },
+      "elementalDamage": {
+        "type": "shadow",
+        "min": 4,
+        "max": 8
       }
     },
     {
@@ -957,6 +1135,11 @@
         "Vitesse": 3.1,
         "Precision": 92,
         "Esquive": 10
+      },
+      "elementalDamage": {
+        "type": "shadow",
+        "min": 4,
+        "max": 8
       }
     },
     {
@@ -976,6 +1159,11 @@
         "Vitesse": 3.8,
         "Precision": 90,
         "Esquive": 5
+      },
+      "elementalDamage": {
+        "type": "shadow",
+        "min": 4,
+        "max": 8
       }
     },
     {
@@ -995,6 +1183,11 @@
         "Vitesse": 1.8,
         "Precision": 98,
         "Esquive": 30
+      },
+      "elementalDamage": {
+        "type": "shadow",
+        "min": 4,
+        "max": 8
       }
     },
     {
@@ -1014,6 +1207,11 @@
         "Vitesse": 3.5,
         "Precision": 95,
         "Esquive": 8
+      },
+      "elementalDamage": {
+        "type": "ice",
+        "min": 4,
+        "max": 8
       }
     },
     {
@@ -1033,6 +1231,11 @@
         "Vitesse": 2.8,
         "Precision": 98,
         "Esquive": 15
+      },
+      "elementalDamage": {
+        "type": "ice",
+        "min": 4,
+        "max": 8
       }
     },
     {
@@ -1052,6 +1255,11 @@
         "Vitesse": 4,
         "Precision": 90,
         "Esquive": 5
+      },
+      "elementalDamage": {
+        "type": "nature",
+        "min": 4,
+        "max": 8
       }
     },
     {
@@ -1071,6 +1279,11 @@
         "Vitesse": 2.5,
         "Precision": 100,
         "Esquive": 20
+      },
+      "elementalDamage": {
+        "type": "shadow",
+        "min": 4,
+        "max": 8
       }
     },
     {
@@ -1090,6 +1303,11 @@
         "Vitesse": 3,
         "Precision": 95,
         "Esquive": 12
+      },
+      "elementalDamage": {
+        "type": "ice",
+        "min": 4,
+        "max": 8
       }
     },
     {
@@ -1109,6 +1327,11 @@
         "Vitesse": 3.8,
         "Precision": 98,
         "Esquive": 7
+      },
+      "elementalDamage": {
+        "type": "fire",
+        "min": 5,
+        "max": 9
       }
     },
     {
@@ -1128,6 +1351,11 @@
         "Vitesse": 2.9,
         "Precision": 100,
         "Esquive": 15
+      },
+      "elementalDamage": {
+        "type": "fire",
+        "min": 5,
+        "max": 9
       }
     },
     {
@@ -1147,6 +1375,11 @@
         "Vitesse": 2.7,
         "Precision": 100,
         "Esquive": 12
+      },
+      "elementalDamage": {
+        "type": "fire",
+        "min": 5,
+        "max": 9
       }
     },
     {
@@ -1166,6 +1399,11 @@
         "Vitesse": 2.2,
         "Precision": 105,
         "Esquive": 22
+      },
+      "elementalDamage": {
+        "type": "fire",
+        "min": 5,
+        "max": 9
       }
     },
     {
@@ -1185,6 +1423,11 @@
         "Vitesse": 2,
         "Precision": 110,
         "Esquive": 28
+      },
+      "elementalDamage": {
+        "type": "fire",
+        "min": 5,
+        "max": 9
       }
     },
     {
@@ -1204,6 +1447,11 @@
         "Vitesse": 3.6,
         "Precision": 100,
         "Esquive": 8
+      },
+      "elementalDamage": {
+        "type": "nature",
+        "min": 5,
+        "max": 9
       }
     },
     {
@@ -1223,6 +1471,11 @@
         "Vitesse": 2.9,
         "Precision": 105,
         "Esquive": 15
+      },
+      "elementalDamage": {
+        "type": "nature",
+        "min": 5,
+        "max": 9
       }
     },
     {
@@ -1242,6 +1495,11 @@
         "Vitesse": 2,
         "Precision": 120,
         "Esquive": 30
+      },
+      "elementalDamage": {
+        "type": "nature",
+        "min": 5,
+        "max": 10
       }
     },
     {
@@ -1261,6 +1519,11 @@
         "Vitesse": 1.8,
         "Precision": 115,
         "Esquive": 35
+      },
+      "elementalDamage": {
+        "type": "nature",
+        "min": 5,
+        "max": 10
       }
     },
     {
@@ -1287,7 +1550,12 @@
           "chance": 0.15,
           "quantity": 1
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 5,
+        "max": 10
+      }
     },
     {
       "id": "dread_lich",
@@ -1306,6 +1574,11 @@
         "Vitesse": 2.5,
         "Precision": 110,
         "Esquive": 20
+      },
+      "elementalDamage": {
+        "type": "shadow",
+        "min": 5,
+        "max": 10
       }
     },
     {
@@ -1325,6 +1598,11 @@
         "Vitesse": 3.3,
         "Precision": 105,
         "Esquive": 10
+      },
+      "elementalDamage": {
+        "type": "shadow",
+        "min": 5,
+        "max": 10
       }
     },
     {
@@ -1344,6 +1622,11 @@
         "Vitesse": 2.8,
         "Precision": 115,
         "Esquive": 18
+      },
+      "elementalDamage": {
+        "type": "shadow",
+        "min": 5,
+        "max": 10
       }
     },
     {
@@ -1363,6 +1646,11 @@
         "Vitesse": 3.7,
         "Precision": 100,
         "Esquive": 8
+      },
+      "elementalDamage": {
+        "type": "nature",
+        "min": 5,
+        "max": 10
       }
     },
     {
@@ -1382,6 +1670,11 @@
         "Vitesse": 2.3,
         "Precision": 120,
         "Esquive": 25
+      },
+      "elementalDamage": {
+        "type": "shadow",
+        "min": 5,
+        "max": 10
       }
     },
     {
@@ -1401,6 +1694,11 @@
         "Vitesse": 4.2,
         "Precision": 100,
         "Esquive": 5
+      },
+      "elementalDamage": {
+        "type": "nature",
+        "min": 5,
+        "max": 10
       }
     },
     {
@@ -1438,7 +1736,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "ice",
+        "min": 126,
+        "max": 142
+      }
     },
     {
       "id": "ice_titan",
@@ -1457,6 +1760,11 @@
         "Vitesse": 3.8,
         "Precision": 110,
         "Esquive": 10
+      },
+      "elementalDamage": {
+        "type": "ice",
+        "min": 6,
+        "max": 11
       }
     },
     {
@@ -1476,6 +1784,11 @@
         "Vitesse": 2.7,
         "Precision": 115,
         "Esquive": 20
+      },
+      "elementalDamage": {
+        "type": "nature",
+        "min": 6,
+        "max": 11
       }
     },
     {
@@ -1495,6 +1808,11 @@
         "Vitesse": 4,
         "Precision": 105,
         "Esquive": 8
+      },
+      "elementalDamage": {
+        "type": "nature",
+        "min": 6,
+        "max": 11
       }
     },
     {
@@ -1514,6 +1832,11 @@
         "Vitesse": 4.5,
         "Precision": 100,
         "Esquive": 5
+      },
+      "elementalDamage": {
+        "type": "ice",
+        "min": 6,
+        "max": 11
       }
     },
     {
@@ -1533,6 +1856,11 @@
         "Vitesse": 2.4,
         "Precision": 125,
         "Esquive": 28
+      },
+      "elementalDamage": {
+        "type": "ice",
+        "min": 6,
+        "max": 11
       }
     },
     {
@@ -1576,7 +1904,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "fire",
+        "min": 142,
+        "max": 158
+      }
     },
     {
       "id": "balrog",
@@ -1595,6 +1928,11 @@
         "Vitesse": 2.6,
         "Precision": 130,
         "Esquive": 20
+      },
+      "elementalDamage": {
+        "type": "fire",
+        "min": 6,
+        "max": 11
       }
     },
     {
@@ -1614,6 +1952,11 @@
         "Vitesse": 2.2,
         "Precision": 135,
         "Esquive": 30
+      },
+      "elementalDamage": {
+        "type": "fire",
+        "min": 6,
+        "max": 11
       }
     },
     {
@@ -1633,6 +1976,11 @@
         "Vitesse": 3.2,
         "Precision": 120,
         "Esquive": 12
+      },
+      "elementalDamage": {
+        "type": "fire",
+        "min": 6,
+        "max": 11
       }
     },
     {
@@ -1652,6 +2000,11 @@
         "Vitesse": 4.2,
         "Precision": 115,
         "Esquive": 8
+      },
+      "elementalDamage": {
+        "type": "nature",
+        "min": 6,
+        "max": 11
       }
     },
     {
@@ -1671,6 +2024,11 @@
         "Vitesse": 2.9,
         "Precision": 125,
         "Esquive": 18
+      },
+      "elementalDamage": {
+        "type": "shadow",
+        "min": 6,
+        "max": 11
       }
     },
     {
@@ -1731,7 +2089,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "fire",
+        "min": 174,
+        "max": 189
+      }
     },
     {
       "id": "gaia_avatar",
@@ -1750,6 +2113,11 @@
         "Vitesse": 3.2,
         "Precision": 140,
         "Esquive": 20
+      },
+      "elementalDamage": {
+        "type": "nature",
+        "min": 6,
+        "max": 12
       }
     },
     {
@@ -1769,6 +2137,11 @@
         "Vitesse": 2.5,
         "Precision": 150,
         "Esquive": 30
+      },
+      "elementalDamage": {
+        "type": "nature",
+        "min": 6,
+        "max": 12
       }
     },
     {
@@ -1788,6 +2161,11 @@
         "Vitesse": 2,
         "Precision": 160,
         "Esquive": 35
+      },
+      "elementalDamage": {
+        "type": "nature",
+        "min": 6,
+        "max": 12
       }
     },
     {
@@ -1807,6 +2185,11 @@
         "Vitesse": 1.8,
         "Precision": 170,
         "Esquive": 40
+      },
+      "elementalDamage": {
+        "type": "nature",
+        "min": 6,
+        "max": 12
       }
     },
     {
@@ -1826,6 +2209,11 @@
         "Vitesse": 5,
         "Precision": 120,
         "Esquive": 5
+      },
+      "elementalDamage": {
+        "type": "nature",
+        "min": 6,
+        "max": 12
       }
     },
     {
@@ -1879,7 +2267,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "shadow",
+        "min": 252,
+        "max": 284
+      }
     },
     {
       "id": "archlich_of_nar'thalas",
@@ -1898,6 +2291,11 @@
         "Vitesse": 2.4,
         "Precision": 170,
         "Esquive": 30
+      },
+      "elementalDamage": {
+        "type": "shadow",
+        "min": 6,
+        "max": 12
       }
     },
     {
@@ -1917,6 +2315,11 @@
         "Vitesse": 3,
         "Precision": 150,
         "Esquive": 20
+      },
+      "elementalDamage": {
+        "type": "shadow",
+        "min": 6,
+        "max": 12
       }
     },
     {
@@ -1936,6 +2339,11 @@
         "Vitesse": 4,
         "Precision": 140,
         "Esquive": 10
+      },
+      "elementalDamage": {
+        "type": "shadow",
+        "min": 6,
+        "max": 12
       }
     },
     {
@@ -1955,6 +2363,11 @@
         "Vitesse": 2.2,
         "Precision": 180,
         "Esquive": 35
+      },
+      "elementalDamage": {
+        "type": "shadow",
+        "min": 6,
+        "max": 12
       }
     },
     {
@@ -1974,6 +2387,11 @@
         "Vitesse": 4.5,
         "Precision": 150,
         "Esquive": 12
+      },
+      "elementalDamage": {
+        "type": "shadow",
+        "min": 6,
+        "max": 12
       }
     },
     {
@@ -1993,6 +2411,11 @@
         "Vitesse": 2.9,
         "Precision": 160,
         "Esquive": 22
+      },
+      "elementalDamage": {
+        "type": "shadow",
+        "min": 6,
+        "max": 12
       }
     },
     {
@@ -2036,7 +2459,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 6,
+        "max": 8
+      }
     },
     {
       "id": "yeti_chieftain",
@@ -2090,7 +2518,12 @@
           "chance": 0.25,
           "quantity": 1
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 9,
+        "max": 13
+      }
     },
     {
       "id": "inferno_elemental_lord",
@@ -2146,7 +2579,12 @@
           "chance": 0.1,
           "quantity": 1
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 16,
+        "max": 20
+      }
     },
     {
       "id": "ancient_dryad_matriarch",
@@ -2193,7 +2631,12 @@
       "specificLootTable": [
         "set_shadow_shroud_mask",
         "set_shadow_shroud_tunic"
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 21,
+        "max": 27
+      }
     },
     {
       "id": "void_cultist_leader",
@@ -2227,7 +2670,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 25,
+        "max": 30
+      }
     },
     {
       "id": "void_priest",
@@ -2268,7 +2716,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 27,
+        "max": 32
+      }
     },
     {
       "id": "icebound_warlord",
@@ -2310,7 +2763,7 @@
                 {
                   "stat": "Armure",
                   "modifier": "multiplicative",
-                  "value": 0.80
+                  "value": 0.8
                 }
               ]
             }
@@ -2320,7 +2773,12 @@
       "specificLootTable": [
         "rep_silver_vanguard_helm",
         "rep_silver_vanguard_greataxe"
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 32,
+        "max": 39
+      }
     },
     {
       "id": "fire_giant_champion",
@@ -2358,7 +2816,12 @@
       "specificLootTable": [
         "rep_magma_callers_cowl",
         "rep_magma_callers_staff"
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 40,
+        "max": 47
+      }
     },
     {
       "id": "guardian_of_the_grove",
@@ -2395,7 +2858,7 @@
                 {
                   "stat": "Vitesse",
                   "modifier": "multiplicative",
-                  "value": 1.40
+                  "value": 1.4
                 }
               ]
             }
@@ -2405,7 +2868,12 @@
       "specificLootTable": [
         "rep_silent_path_mask",
         "rep_silent_path_daggers"
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 50,
+        "max": 60
+      }
     },
     {
       "id": "spectral_overlord",
@@ -2450,7 +2918,12 @@
       "specificLootTable": [
         "rep_faithsworn_diadem",
         "rep_faithsworn_mace"
-      ]
+      ],
+      "elementalDamage": {
+        "type": "shadow",
+        "min": 63,
+        "max": 74
+      }
     },
     {
       "id": "boreal_crusader",
@@ -2484,7 +2957,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 74,
+        "max": 87
+      }
     },
     {
       "id": "ashwing_matriarch",
@@ -2521,7 +2999,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 90,
+        "max": 103
+      }
     },
     {
       "id": "colossus_of_the_grove",
@@ -2576,7 +3059,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 113,
+        "max": 129
+      }
     },
     {
       "id": "ancient_tomb_protector",
@@ -2619,7 +3107,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 133,
+        "max": 152
+      }
     },
     {
       "id": "garak_frostfang",
@@ -2675,7 +3168,12 @@
       "specificLootTable": [
         "garaks_icy_maw",
         "frostfang_bite"
-      ]
+      ],
+      "elementalDamage": {
+        "type": "ice",
+        "min": 42,
+        "max": 53
+      }
     },
     {
       "id": "goblin_scout_heroic",
@@ -2694,6 +3192,11 @@
         "Vitesse": 2.5,
         "Precision": 100,
         "Esquive": 15
+      },
+      "elementalDamage": {
+        "type": "nature",
+        "min": 7,
+        "max": 13
       }
     },
     {
@@ -2713,6 +3216,11 @@
         "Vitesse": 2.2,
         "Precision": 95,
         "Esquive": 18
+      },
+      "elementalDamage": {
+        "type": "nature",
+        "min": 7,
+        "max": 13
       }
     },
     {
@@ -2750,7 +3258,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 21,
+        "max": 32
+      }
     },
     {
       "id": "kobold_miner_assistant_heroic",
@@ -2769,6 +3282,11 @@
         "Vitesse": 2.8,
         "Precision": 105,
         "Esquive": 13
+      },
+      "elementalDamage": {
+        "type": "nature",
+        "min": 7,
+        "max": 13
       }
     },
     {
@@ -2789,7 +3307,12 @@
         "Precision": 110,
         "Esquive": 25
       },
-      "questItemId": "bat_fang_heroic"
+      "questItemId": "bat_fang_heroic",
+      "elementalDamage": {
+        "type": "nature",
+        "min": 7,
+        "max": 13
+      }
     },
     {
       "id": "bat_matriarch_heroic",
@@ -2840,13 +3363,18 @@
                 {
                   "stat": "Precision",
                   "modifier": "multiplicative",
-                  "value": 0.80
+                  "value": 0.8
                 }
               ]
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 27,
+        "max": 39
+      }
     },
     {
       "id": "yeti_chieftain_heroic",
@@ -2888,7 +3416,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 44,
+        "max": 62
+      }
     },
     {
       "id": "inferno_elemental_lord_heroic",
@@ -2934,7 +3467,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 79,
+        "max": 97
+      }
     },
     {
       "id": "ancient_dryad_matriarch_heroic",
@@ -2971,7 +3509,7 @@
                 {
                   "stat": "Armure",
                   "modifier": "multiplicative",
-                  "value": 2.50
+                  "value": 2.5
                 }
               ]
             },
@@ -2981,11 +3519,16 @@
               "id": "thorns_buff_heroic",
               "name": "Épines (H)",
               "duration": 12,
-              "reflectionValue": 0.30
+              "reflectionValue": 0.3
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 105,
+        "max": 132
+      }
     },
     {
       "id": "void_cultist_leader_heroic",
@@ -3028,7 +3571,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 123,
+        "max": 149
+      }
     },
     {
       "id": "void_priest_heroic",
@@ -3088,7 +3636,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 132,
+        "max": 158
+      }
     },
     {
       "id": "icebound_warlord_heroic",
@@ -3141,7 +3694,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 167,
+        "max": 202
+      }
     },
     {
       "id": "fire_giant_champion_heroic",
@@ -3179,11 +3737,16 @@
               "id": "mortal_wound_heroic",
               "name": "Marque Cendrée (H)",
               "duration": 10,
-              "multiplier": 0.50
+              "multiplier": 0.5
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 210,
+        "max": 245
+      }
     },
     {
       "id": "guardian_of_the_grove_heroic",
@@ -3232,7 +3795,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 263,
+        "max": 315
+      }
     },
     {
       "id": "spectral_overlord_heroic",
@@ -3284,7 +3852,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "shadow",
+        "min": 333,
+        "max": 385
+      }
     },
     {
       "id": "boreal_crusader_heroic",
@@ -3326,18 +3899,23 @@
                 {
                   "stat": "Vitesse",
                   "modifier": "multiplicative_add",
-                  "value": -0.20
+                  "value": -0.2
                 },
                 {
                   "stat": "Precision",
                   "modifier": "multiplicative",
-                  "value": 1.20
+                  "value": 1.2
                 }
               ]
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 403,
+        "max": 473
+      }
     },
     {
       "id": "ashwing_matriarch_heroic",
@@ -3379,18 +3957,23 @@
                 {
                   "stat": "Precision",
                   "modifier": "multiplicative",
-                  "value": 0.70
+                  "value": 0.7
                 },
                 {
                   "stat": "CritPct",
                   "modifier": "multiplicative",
-                  "value": 0.70
+                  "value": 0.7
                 }
               ]
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 490,
+        "max": 560
+      }
     },
     {
       "id": "colossus_of_the_grove_heroic",
@@ -3432,13 +4015,18 @@
                 {
                   "stat": "Vitesse",
                   "modifier": "multiplicative",
-                  "value": 1.50
+                  "value": 1.5
                 }
               ]
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 613,
+        "max": 700
+      }
     },
     {
       "id": "ancient_tomb_protector_heroic",
@@ -3492,7 +4080,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 735,
+        "max": 840
+      }
     },
     {
       "id": "grove_protector",
@@ -3527,7 +4120,7 @@
               "duration": 10,
               "totalHeal": {
                 "source": "max_health_percentage",
-                "percentage": 0.10
+                "percentage": 0.1
               }
             }
           ]
@@ -3536,7 +4129,12 @@
       "specificLootTable": [
         "set_shadow_shroud_mask",
         "set_shadow_shroud_tunic"
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 22,
+        "max": 28
+      }
     },
     {
       "id": "grove_protector_heroic",
@@ -3590,7 +4188,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 109,
+        "max": 135
+      }
     },
     {
       "id": "frozen_reaver",
@@ -3636,7 +4239,12 @@
       "specificLootTable": [
         "rep_silver_vanguard_helm",
         "rep_silver_vanguard_greataxe"
-      ]
+      ],
+      "elementalDamage": {
+        "type": "ice",
+        "min": 34,
+        "max": 41
+      }
     },
     {
       "id": "frozen_reaver_heroic",
@@ -3678,7 +4286,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "ice",
+        "min": 170,
+        "max": 205
+      }
     },
     {
       "id": "magma_destroyer",
@@ -3716,7 +4329,12 @@
       "specificLootTable": [
         "rep_magma_callers_cowl",
         "rep_magma_callers_staff"
-      ]
+      ],
+      "elementalDamage": {
+        "type": "fire",
+        "min": 42,
+        "max": 49
+      }
     },
     {
       "id": "magma_destroyer_heroic",
@@ -3762,7 +4380,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "fire",
+        "min": 214,
+        "max": 249
+      }
     },
     {
       "id": "sylvan_sentinel",
@@ -3801,7 +4424,7 @@
               "name": "Nature Vulnerability",
               "duration": 10,
               "damageType": "nature",
-              "multiplier": 1.10
+              "multiplier": 1.1
             }
           ]
         }
@@ -3809,7 +4432,12 @@
       "specificLootTable": [
         "rep_silent_path_mask",
         "rep_silent_path_daggers"
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 53,
+        "max": 63
+      }
     },
     {
       "id": "sylvan_sentinel_heroic",
@@ -3848,11 +4476,16 @@
               "name": "Nature Vulnerability (H)",
               "duration": 10,
               "damageType": "nature",
-              "multiplier": 1.20
+              "multiplier": 1.2
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 266,
+        "max": 319
+      }
     },
     {
       "id": "nether_lich",
@@ -3890,7 +4523,12 @@
       "specificLootTable": [
         "rep_faithsworn_diadem",
         "rep_faithsworn_mace"
-      ]
+      ],
+      "elementalDamage": {
+        "type": "shadow",
+        "min": 67,
+        "max": 77
+      }
     },
     {
       "id": "nether_lich_heroic",
@@ -3932,13 +4570,18 @@
                 {
                   "stat": "CritDmg",
                   "modifier": "multiplicative",
-                  "value": 0.80
+                  "value": 0.8
                 }
               ]
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "shadow",
+        "min": 336,
+        "max": 389
+      }
     },
     {
       "id": "tundra_king",
@@ -3972,7 +4615,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 77,
+        "max": 91
+      }
     },
     {
       "id": "tundra_king_heroic",
@@ -4020,7 +4668,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 406,
+        "max": 476
+      }
     },
     {
       "id": "emberwing_scion",
@@ -4061,7 +4714,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "fire",
+        "min": 93,
+        "max": 107
+      }
     },
     {
       "id": "emberwing_scion_heroic",
@@ -4111,7 +4769,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "fire",
+        "min": 494,
+        "max": 564
+      }
     },
     {
       "id": "emerald_titan",
@@ -4159,7 +4822,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 116,
+        "max": 133
+      }
     },
     {
       "id": "emerald_titan_heroic",
@@ -4201,13 +4869,18 @@
                 {
                   "stat": "Armure",
                   "modifier": "multiplicative",
-                  "value": 0.70
+                  "value": 0.7
                 }
               ]
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 616,
+        "max": 704
+      }
     },
     {
       "id": "crypt_lord",
@@ -4248,7 +4921,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "shadow",
+        "min": 135,
+        "max": 154
+      }
     },
     {
       "id": "crypt_lord_heroic",
@@ -4297,7 +4975,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "shadow",
+        "min": 739,
+        "max": 844
+      }
     },
     {
       "id": "glacial_behemoth",
@@ -4339,7 +5022,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "ice",
+        "min": 130,
+        "max": 146
+      }
     },
     {
       "id": "glacial_behemoth_heroic",
@@ -4381,7 +5069,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "ice",
+        "min": 704,
+        "max": 791
+      }
     },
     {
       "id": "icecrown_sentinel",
@@ -4424,7 +5117,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "ice",
+        "min": 128,
+        "max": 144
+      }
     },
     {
       "id": "icecrown_sentinel_heroic",
@@ -4473,12 +5171,17 @@
               "duration": 10,
               "totalHeal": {
                 "source": "max_health_percentage",
-                "percentage": 0.10
+                "percentage": 0.1
               }
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "ice",
+        "min": 721,
+        "max": 809
+      }
     },
     {
       "id": "frostlord",
@@ -4520,13 +5223,18 @@
                 {
                   "stat": "Vitesse",
                   "modifier": "multiplicative",
-                  "value": 1.30
+                  "value": 1.3
                 }
               ]
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "ice",
+        "min": 133,
+        "max": 151
+      }
     },
     {
       "id": "frostlord_heroic",
@@ -4568,13 +5276,18 @@
                 {
                   "stat": "Vitesse",
                   "modifier": "multiplicative",
-                  "value": 1.50
+                  "value": 1.5
                 }
               ]
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "ice",
+        "min": 739,
+        "max": 826
+      }
     },
     {
       "id": "rimefang",
@@ -4615,7 +5328,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "ice",
+        "min": 132,
+        "max": 149
+      }
     },
     {
       "id": "rimefang_heroic",
@@ -4665,7 +5383,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "ice",
+        "min": 721,
+        "max": 809
+      }
     },
     {
       "id": "frozen_terror",
@@ -4702,18 +5425,23 @@
                 {
                   "stat": "Precision",
                   "modifier": "multiplicative",
-                  "value": 0.80
+                  "value": 0.8
                 },
                 {
                   "stat": "Esquive",
                   "modifier": "multiplicative",
-                  "value": 0.80
+                  "value": 0.8
                 }
               ]
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "ice",
+        "min": 135,
+        "max": 153
+      }
     },
     {
       "id": "frozen_terror_heroic",
@@ -4766,7 +5494,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "ice",
+        "min": 756,
+        "max": 844
+      }
     },
     {
       "id": "volcanic_annihilator",
@@ -4808,7 +5541,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 146,
+        "max": 161
+      }
     },
     {
       "id": "volcanic_annihilator_heroic",
@@ -4850,7 +5588,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 844,
+        "max": 931
+      }
     },
     {
       "id": "infernal_reaver",
@@ -4896,7 +5639,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "fire",
+        "min": 149,
+        "max": 165
+      }
     },
     {
       "id": "infernal_reaver_heroic",
@@ -4942,7 +5690,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "fire",
+        "min": 861,
+        "max": 949
+      }
     },
     {
       "id": "blackrock_tyrant",
@@ -4979,18 +5732,23 @@
                 {
                   "stat": "AttMin",
                   "modifier": "multiplicative",
-                  "value": 1.30
+                  "value": 1.3
                 },
                 {
                   "stat": "AttMax",
                   "modifier": "multiplicative",
-                  "value": 1.30
+                  "value": 1.3
                 }
               ]
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 153,
+        "max": 168
+      }
     },
     {
       "id": "blackrock_tyrant_heroic",
@@ -5027,12 +5785,12 @@
                 {
                   "stat": "AttMin",
                   "modifier": "multiplicative",
-                  "value": 1.50
+                  "value": 1.5
                 },
                 {
                   "stat": "AttMax",
                   "modifier": "multiplicative",
-                  "value": 1.50
+                  "value": 1.5
                 }
               ]
             },
@@ -5043,7 +5801,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 879,
+        "max": 966
+      }
     },
     {
       "id": "molten_leviathan",
@@ -5084,7 +5847,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 142,
+        "max": 158
+      }
     },
     {
       "id": "molten_leviathan_heroic",
@@ -5125,7 +5893,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 826,
+        "max": 914
+      }
     },
     {
       "id": "blazing_juggernaut",
@@ -5164,11 +5937,16 @@
               "name": "Broken Armor",
               "duration": 8,
               "damageType": "physical",
-              "multiplier": 1.20
+              "multiplier": 1.2
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "fire",
+        "min": 144,
+        "max": 160
+      }
     },
     {
       "id": "blazing_juggernaut_heroic",
@@ -5207,11 +5985,16 @@
               "name": "Broken Armor (H)",
               "duration": 8,
               "damageType": "physical",
-              "multiplier": 1.30
+              "multiplier": 1.3
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "fire",
+        "min": 844,
+        "max": 931
+      }
     },
     {
       "id": "verdant_colossus",
@@ -5252,7 +6035,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 177,
+        "max": 193
+      }
     },
     {
       "id": "verdant_colossus_heroic",
@@ -5301,7 +6089,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 1001,
+        "max": 1089
+      }
     },
     {
       "id": "emerald_dreamer",
@@ -5338,13 +6131,18 @@
                 {
                   "stat": "Vitesse",
                   "modifier": "multiplicative",
-                  "value": 1.20
+                  "value": 1.2
                 }
               ]
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 184,
+        "max": 200
+      }
     },
     {
       "id": "emerald_dreamer_heroic",
@@ -5381,7 +6179,7 @@
                 {
                   "stat": "Vitesse",
                   "modifier": "multiplicative",
-                  "value": 1.40
+                  "value": 1.4
                 }
               ]
             },
@@ -5395,7 +6193,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 1019,
+        "max": 1106
+      }
     },
     {
       "id": "sylvan_goliath",
@@ -5443,7 +6246,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 174,
+        "max": 189
+      }
     },
     {
       "id": "sylvan_goliath_heroic",
@@ -5480,18 +6288,23 @@
                 {
                   "stat": "AttMin",
                   "modifier": "multiplicative",
-                  "value": 1.40
+                  "value": 1.4
                 },
                 {
                   "stat": "AttMax",
                   "modifier": "multiplicative",
-                  "value": 1.40
+                  "value": 1.4
                 }
               ]
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 984,
+        "max": 1071
+      }
     },
     {
       "id": "heart_of_the_forest",
@@ -5526,12 +6339,17 @@
               "duration": 15,
               "totalHeal": {
                 "source": "max_health_percentage",
-                "percentage": 0.20
+                "percentage": 0.2
               }
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 181,
+        "max": 196
+      }
     },
     {
       "id": "heart_of_the_forest_heroic",
@@ -5566,12 +6384,17 @@
               "duration": 15,
               "totalHeal": {
                 "source": "max_health_percentage",
-                "percentage": 0.30
+                "percentage": 0.3
               }
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 1001,
+        "max": 1089
+      }
     },
     {
       "id": "void_harbinger",
@@ -5619,7 +6442,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "shadow",
+        "min": 256,
+        "max": 287
+      }
     },
     {
       "id": "void_harbinger_heroic",
@@ -5661,13 +6489,18 @@
                 {
                   "stat": "CritDmg",
                   "modifier": "multiplicative",
-                  "value": 0.70
+                  "value": 0.7
                 }
               ]
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "shadow",
+        "min": 1264,
+        "max": 1421
+      }
     },
     {
       "id": "sunken_horror",
@@ -5701,7 +6534,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "shadow",
+        "min": 249,
+        "max": 280
+      }
     },
     {
       "id": "sunken_horror_heroic",
@@ -5743,7 +6581,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "shadow",
+        "min": 1246,
+        "max": 1404
+      }
     },
     {
       "id": "nyalotha_prophet",
@@ -5780,18 +6623,23 @@
                 {
                   "stat": "Precision",
                   "modifier": "multiplicative",
-                  "value": 0.70
+                  "value": 0.7
                 },
                 {
                   "stat": "CritPct",
                   "modifier": "multiplicative",
-                  "value": 0.70
+                  "value": 0.7
                 }
               ]
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 263,
+        "max": 294
+      }
     },
     {
       "id": "nyalotha_prophet_heroic",
@@ -5828,12 +6676,12 @@
                 {
                   "stat": "Precision",
                   "modifier": "multiplicative",
-                  "value": 0.50
+                  "value": 0.5
                 },
                 {
                   "stat": "CritPct",
                   "modifier": "multiplicative",
-                  "value": 0.50
+                  "value": 0.5
                 }
               ]
             },
@@ -5851,7 +6699,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "nature",
+        "min": 1281,
+        "max": 1439
+      }
     },
     {
       "id": "shadow_of_rlyeh",
@@ -5889,7 +6742,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "shadow",
+        "min": 245,
+        "max": 277
+      }
     },
     {
       "id": "shadow_of_rlyeh_heroic",
@@ -5923,7 +6781,7 @@
               "name": "Shadow Vulnerability (H)",
               "duration": 10,
               "damageType": "shadow",
-              "multiplier": 1.50
+              "multiplier": 1.5
             },
             {
               "type": "damage",
@@ -5932,7 +6790,12 @@
             }
           ]
         }
-      ]
+      ],
+      "elementalDamage": {
+        "type": "shadow",
+        "min": 1229,
+        "max": 1386
+      }
     }
   ]
 }
