@@ -77,24 +77,14 @@ export function PlayerStatsView() {
                     <span className="text-muted-foreground">Crit Dmg:</span><span className="text-right">{(stats.CritDmg ?? 0).toFixed(1)}%</span>
                     <span className="text-muted-foreground">Armure:</span><span className="text-right">{stats.Armure ?? 0}</span>
                     <span className="text-muted-foreground">Vitesse:</span><span className="text-right">{stats.Vitesse ?? 0}s</span>
-
-                    {stats.BonusDmg && Object.keys(stats.BonusDmg).length > 0 && (
-                        <>
-                            <hr className="col-span-2 my-1 border-border" />
-                            {Object.entries(stats.BonusDmg).map(([elem, value]) => (
-                                <React.Fragment key={elem}>
-                                    <span className="text-muted-foreground capitalize">Dmg {elem}:</span><span className="text-right">{value}</span>
-                                </React.Fragment>
-                            ))}
-                        </>
-                    )}
-
+                    
                     {stats.ResElems && Object.keys(stats.ResElems).length > 0 && (
                         <>
                             <hr className="col-span-2 my-1 border-border" />
                             {Object.entries(stats.ResElems).map(([elem, value]) => (
                                 <React.Fragment key={elem}>
-                                    <span className="text-muted-foreground capitalize">Res {elem}:</span><span className="text-right">{value}</span>
+                                    <span className="text-muted-foreground capitalize">Rés. {elem}:</span>
+                                    <span className="text-right">{value}</span>
                                 </React.Fragment>
                             ))}
                         </>

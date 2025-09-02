@@ -3,6 +3,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { InventoryView } from '../inventory/InventoryView';
 import { EquipmentView } from '../inventory/EquipmentView'; // Importez EquipmentView
+import { PlayerStatsView } from './PlayerStatsView';
 import { SkillsView } from '../skills/SkillsView';
 import { TalentsView } from '../talents/TalentsView';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -22,9 +23,14 @@ export function CharacterView() {
         {/* 'h-full' est crucial ici pour que le contenu prenne la hauteur restante. */}
         <TabsContent value="inventory" className="m-0 flex-grow relative">
             <ScrollArea className="absolute inset-0 pr-4">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                    <InventoryView />
-                    <EquipmentView />
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                    <PlayerStatsView />
+                    <div className="lg:col-span-2">
+                        <EquipmentView />
+                    </div>
+                    <div className="lg:col-span-3">
+                        <InventoryView />
+                    </div>
                 </div>
             </ScrollArea>
         </TabsContent>

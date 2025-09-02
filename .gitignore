@@ -19,6 +19,8 @@
 
 # production
 /build
+/public/images
+/public/sounds
 
 # misc
 .DS_Store

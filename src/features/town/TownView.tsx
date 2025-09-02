@@ -66,8 +66,6 @@ export function TownView() {
               <div className="md:col-span-2">
                 <QuestsView />
               </div>
-              {/* Les stats du joueur, un élément central */}
-              <PlayerStatsView />
               {/* L'auberge, une action clé */}
               <InnView />
               {/* La réputation, pour suivre la progression à long terme */}

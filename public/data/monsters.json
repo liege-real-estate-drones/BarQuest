@@ -61,7 +61,13 @@
         "Armure": 50,
         "Vitesse": 2.5,
         "Precision": 65,
-        "Esquive": 5
+        "Esquive": 5,
+        "ResElems": { "fire": 10, "ice": 10, "nature": 10, "shadow": 10 }
+      },
+      "elementalDamage": {
+        "type": "fire",
+        "min": 5,
+        "max": 10
       },
       "abilities": [
         {
@@ -342,7 +348,13 @@
         "Armure": 40,
         "Vitesse": 2.2,
         "Precision": 65,
-        "Esquive": 10
+        "Esquive": 10,
+        "ResElems": { "ice": 25, "fire": -15 }
+      },
+      "elementalDamage": {
+        "type": "ice",
+        "min": 3,
+        "max": 6
       }
     },
     {
