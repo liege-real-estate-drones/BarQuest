@@ -819,7 +819,7 @@
             "effects": [
                 {
                     "type": "damage",
-                    "damageType": "physical",
+                    "damageType": "shadow",
                     "source": "weapon",
                     "multiplier": 1.5,
                     "baseValue": 0,
@@ -1019,7 +1019,7 @@
             "rangMax": 5,
             "niveauRequis": 1,
             "effets": [
-                "Inflige 18/25/32/40/48 dégâts du Sacré à un ennemi.",
+                "Inflige 14/20/26/32/38 dégâts du Sacré à un ennemi.",
                 "Coûte 12 Mana."
             ],
             "effects": [
@@ -1027,7 +1027,7 @@
                     "type": "damage",
                     "damageType": "holy",
                     "source": "spell",
-                    "baseValue": [18, 25, 32, 40, 48]
+                    "baseValue": [14, 20, 26, 32, 38]
                 },
                 {
                     "type": "resource_cost",

@@ -628,7 +628,10 @@
         "Armure": 150,
         "Vitesse": 2.8,
         "Precision": 80,
-        "Esquive": 10
+        "Esquive": 10,
+        "ResElems": {
+          "holy": -25
+        }
       },
       "elementalDamage": {
         "type": "shadow",
