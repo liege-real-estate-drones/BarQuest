@@ -77,6 +77,11 @@ export const calculateSpellDamage = (baseDamage: number, spellPower: number): nu
   return baseDamage * (1 + spellPower / 100);
 };
 
+export const calculateElementalDamage = (elementalDamage: number, resistance: number): number => {
+    const resistanceValue = Math.max(0, Math.min(100, resistance));
+    return Math.round(elementalDamage * (1 - resistanceValue / 100));
+};
+
 export const calculateArmorDR = (armor: number, enemyLevel: number): number => {
     const denominator = armor + (100 + 20 * enemyLevel);
     if (denominator === 0) return 0;

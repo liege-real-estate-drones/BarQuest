@@ -8,6 +8,7 @@ import { getModifiedStats, getRankValue } from '@/core/formulas';
 import { generateProceduralItem } from '@/core/itemGenerator';
 import { v4 as uuidv4 } from 'uuid';
 import { AFFIX_TO_THEME } from '@/lib/constants';
+import { MONSTER_RESISTANCE_MULTIPLIER } from '@/lib/config';
 import { processSkill, applyPoisonProc } from '@/core/skillProcessor';
 
 export interface ActiveQuete {
@@ -991,16 +992,24 @@ export const useGameStore = create<GameState>()(
 
           // --- Direct Mutation on Immer Draft ---
           // 1. Reset stats to a clean copy of base stats
-          player.stats = { ...player.baseStats };
-          if (player.stats.ResElems) {
-            player.stats.ResElems = { ...player.baseStats.ResElems };
-          }
+          player.stats = { ...JSON.parse(JSON.stringify(player.baseStats)) };
+          player.stats.BonusDmg = player.baseStats.BonusDmg ? { ...player.baseStats.BonusDmg } : {};
+          player.stats.ResElems = player.baseStats.ResElems ? { ...player.baseStats.ResElems } : {};
 
           const equippedSetTiers: Record<string, Record<number, number>> = {};
 
           // 2. Apply stats from equipped items and count set pieces by tier
           Object.values(inventory.equipment).forEach(item => {
             if (item) {
+                // Add flat stats from the item's `stats` property
+                if (item.stats) {
+                    for (const [stat, value] of Object.entries(item.stats)) {
+                        if (stat === 'BonusDmg' || stat === 'ResElems') continue;
+                        if (typeof value === 'number') {
+                            (player.stats[stat as keyof Stats] as number) = (player.stats[stat as keyof Stats] as number || 0) + value;
+                        }
+                    }
+                }
               if (item.affixes) {
                 item.affixes.forEach(affix => {
                   const statKey = affix.ref as keyof Stats;
@@ -1008,9 +1017,28 @@ export const useGameStore = create<GameState>()(
 
                   if (typeof statValue === 'number' && typeof affix.val === 'number') {
                     (player.stats[statKey] as number) = statValue + affix.val;
+                  } else if (statKey === 'BonusDmg' || statKey === 'ResElems') {
+                    // This is a placeholder for a more complex logic if affixes can grant elemental stats
                   }
                 });
               }
+
+                // Aggregate elemental stats
+                if (item.stats?.BonusDmg) {
+                    for (const [elem, value] of Object.entries(item.stats.BonusDmg)) {
+                        if(typeof value === 'number') {
+                            player.stats.BonusDmg![elem] = (player.stats.BonusDmg![elem] || 0) + value;
+                        }
+                    }
+                }
+                if (item.stats?.ResElems) {
+                    for (const [elem, value] of Object.entries(item.stats.ResElems)) {
+                        if(typeof value === 'number') {
+                            player.stats.ResElems![elem] = (player.stats.ResElems![elem] || 0) + value;
+                        }
+                    }
+                }
+
               if (item.effect) {
                 player.activeEffects.push(item.effect);
               }
@@ -1697,6 +1725,22 @@ export const useGameStore = create<GameState>()(
                 };
             }
 
+            // Apply dungeon resistance
+            if (currentDungeon.elementalResistance) {
+                let resistanceValue = currentDungeon.elementalResistance.value;
+                if (get().isHeroicMode) {
+                    resistanceValue *= 2;
+                }
+                if (!monsterInstance.isBoss) {
+                    resistanceValue *= MONSTER_RESISTANCE_MULTIPLIER;
+                }
+                const resType = currentDungeon.elementalResistance.type;
+                if (!monsterInstance.stats.ResElems) {
+                    monsterInstance.stats.ResElems = {};
+                }
+                monsterInstance.stats.ResElems[resType] = (monsterInstance.stats.ResElems[resType] || 0) + resistanceValue;
+            }
+
             newEnemies.push(monsterInstance);
           }
         }
@@ -1957,8 +2001,7 @@ export const useGameStore = create<GameState>()(
                 Object.entries(buffedPlayerStats.BonusDmg).forEach(([elem, dmg]) => {
                     if (dmg > 0) {
                         const res = debuffedTargetStats.ResElems?.[elem as keyof typeof debuffedTargetStats.ResElems] || 0;
-                        const elemDR = formulas.calculateResistanceDR(res, player.level);
-                        const mitigatedElemDmg = Math.round(dmg * (1 - elemDR));
+                        const mitigatedElemDmg = formulas.calculateElementalDamage(dmg, res);
                         if(mitigatedElemDmg > 0) {
                             target.stats.PV -= mitigatedElemDmg;
                             events.push({ entityId: target.id, text: `-${mitigatedElemDmg}`, type: 'damage' });
@@ -2092,8 +2135,7 @@ export const useGameStore = create<GameState>()(
             if (enemy.elementalDamage) {
                 const elementalRoll = Math.random() * (enemy.elementalDamage.max - enemy.elementalDamage.min) + enemy.elementalDamage.min;
                 const playerRes = buffedPlayerStats.ResElems?.[enemy.elementalDamage.type] ?? 0;
-                const elementalDR = formulas.calculateResistanceDR(playerRes, enemy.level);
-                mitigatedElementalDamage = Math.round(elementalRoll * (1 - elementalDR));
+                mitigatedElementalDamage = formulas.calculateElementalDamage(elementalRoll, playerRes);
                 elementalDamageType = enemy.elementalDamage.type;
             }
 

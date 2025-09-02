@@ -284,6 +284,21 @@
         "vendorPrice": 120
       },
       {
+      "id": "amulet_fire_ruby",
+      "name": "Fire Ruby Amulet",
+      "slot": "amulet",
+      "type": "jewelry",
+      "niveauMin": 1,
+      "rarity": "Rare",
+      "stats": {
+        "BonusDmg": {
+          "fire": 10
+        }
+      },
+      "tags": ["jewelry", "amulet", "gem", "fire"],
+      "vendorPrice": 250
+    },
+    {
         "id": "leather_belt",
         "name": "Ceinture en cuir",
         "gender": "f",

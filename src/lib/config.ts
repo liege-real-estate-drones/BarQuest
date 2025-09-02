@@ -1,0 +1,1 @@
+export const MONSTER_RESISTANCE_MULTIPLIER = 0.6;
