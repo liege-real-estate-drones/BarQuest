@@ -6,6 +6,7 @@
       "palier": 1,
       "name": "Goblin Mines",
       "biome": "shadow",
+      "resistance": { "type": "shadow", "value": 20 },
       "damagePenetration": {
         "type": "shadow",
         "value": 10
@@ -23,6 +24,7 @@
       "palier": 1,
       "name": "Bat Cave",
       "biome": "shadow",
+      "resistance": { "type": "shadow", "value": 20 },
       "damagePenetration": {
         "type": "shadow",
         "value": 10
@@ -40,6 +42,7 @@
       "palier": 2,
       "name": "Icy Crevasse",
       "biome": "ice",
+      "resistance": { "type": "ice", "value": 20 },
       "damagePenetration": {
         "type": "ice",
         "value": 15
@@ -58,6 +61,7 @@
       "palier": 2,
       "name": "Yeti Den",
       "biome": "ice",
+      "resistance": { "type": "ice", "value": 20 },
       "damagePenetration": {
         "type": "ice",
         "value": 15
@@ -76,6 +80,7 @@
       "palier": 3,
       "name": "Scorched Caverns",
       "biome": "fire",
+      "resistance": { "type": "fire", "value": 30 },
       "damagePenetration": {
         "type": "fire",
         "value": 15
@@ -94,6 +99,7 @@
       "palier": 3,
       "name": "Cinder Chambers",
       "biome": "fire",
+      "resistance": { "type": "fire", "value": 30 },
       "damagePenetration": {
         "type": "fire",
         "value": 15
@@ -112,6 +118,7 @@
       "palier": 4,
       "name": "Whispering Woods",
       "biome": "nature",
+      "resistance": { "type": "nature", "value": 30 },
       "damagePenetration": {
         "type": "nature",
         "value": 15
@@ -130,6 +137,7 @@
       "palier": 4,
       "name": "Dryad Grove",
       "biome": "nature",
+      "resistance": { "type": "nature", "value": 30 },
       "damagePenetration": {
         "type": "nature",
         "value": 15
@@ -148,6 +156,7 @@
       "palier": 5,
       "name": "Forgotten Crypt",
       "biome": "shadow",
+      "resistance": { "type": "shadow", "value": 30 },
       "damagePenetration": {
         "type": "shadow",
         "value": 15
@@ -167,6 +176,7 @@
       "palier": 5,
       "name": "Void Worshippers' Lair",
       "biome": "shadow",
+      "resistance": { "type": "shadow", "value": 30 },
       "damagePenetration": {
         "type": "shadow",
         "value": 15
@@ -186,6 +196,7 @@
       "palier": 6,
       "name": "Glacial Depths",
       "biome": "ice",
+      "resistance": { "type": "ice", "value": 40 },
       "damagePenetration": {
         "type": "ice",
         "value": 20
@@ -205,6 +216,7 @@
       "palier": 6,
       "name": "Frozen Berserkers' Hall",
       "biome": "ice",
+      "resistance": { "type": "ice", "value": 40 },
       "damagePenetration": {
         "type": "ice",
         "value": 20
@@ -224,6 +236,7 @@
       "palier": 7,
       "name": "Volcanic Core",
       "biome": "fire",
+      "resistance": { "type": "fire", "value": 40 },
       "damagePenetration": {
         "type": "fire",
         "value": 20
@@ -243,6 +256,7 @@
       "palier": 7,
       "name": "Fire Giants' Outpost",
       "biome": "fire",
+      "resistance": { "type": "fire", "value": 40 },
       "damagePenetration": {
         "type": "fire",
         "value": 20
@@ -262,6 +276,7 @@
       "palier": 8,
       "name": "Verdant Labyrinth",
       "biome": "nature",
+      "resistance": { "type": "nature", "value": 40 },
       "damagePenetration": {
         "type": "nature",
         "value": 20
@@ -281,6 +296,7 @@
       "palier": 8,
       "name": "Sylvan Guardians' Domain",
       "biome": "nature",
+      "resistance": { "type": "nature", "value": 40 },
       "damagePenetration": {
         "type": "nature",
         "value": 20
@@ -300,6 +316,7 @@
       "palier": 9,
       "name": "Shadowy Necropolis",
       "biome": "shadow",
+      "resistance": { "type": "shadow", "value": 40 },
       "damagePenetration": {
         "type": "shadow",
         "value": 20
@@ -320,6 +337,7 @@
       "palier": 9,
       "name": "Specters' Sanctuary",
       "biome": "shadow",
+      "resistance": { "type": "shadow", "value": 40 },
       "damagePenetration": {
         "type": "shadow",
         "value": 20
@@ -340,6 +358,7 @@
       "palier": 10,
       "name": "Frozen Wastes",
       "biome": "ice",
+      "resistance": { "type": "ice", "value": 40 },
       "damagePenetration": {
         "type": "ice",
         "value": 20
@@ -360,6 +379,7 @@
       "palier": 10,
       "name": "Boreal Knights' Fortress",
       "biome": "ice",
+      "resistance": { "type": "ice", "value": 40 },
       "damagePenetration": {
         "type": "ice",
         "value": 20
@@ -380,6 +400,7 @@
       "palier": 11,
       "name": "Infernal Forge",
       "biome": "fire",
+      "resistance": { "type": "fire", "value": 50 },
       "damagePenetration": {
         "type": "fire",
         "value": 25
@@ -400,6 +421,7 @@
       "palier": 11,
       "name": "Ash Harpies' Nest",
       "biome": "fire",
+      "resistance": { "type": "fire", "value": 50 },
       "damagePenetration": {
         "type": "fire",
         "value": 25
@@ -420,6 +442,7 @@
       "palier": 12,
       "name": "Emerald Nightmare",
       "biome": "nature",
+      "resistance": { "type": "nature", "value": 50 },
       "damagePenetration": {
         "type": "nature",
         "value": 25
@@ -440,6 +463,7 @@
       "palier": 12,
       "name": "Emerald Golems' Garden",
       "biome": "nature",
+      "resistance": { "type": "nature", "value": 50 },
       "damagePenetration": {
         "type": "nature",
         "value": 25
@@ -460,6 +484,7 @@
       "palier": 13,
       "name": "Cathedral of Eternal Night",
       "biome": "shadow",
+      "resistance": { "type": "shadow", "value": 50 },
       "damagePenetration": {
         "type": "shadow",
         "value": 25
@@ -481,6 +506,7 @@
       "palier": 13,
       "name": "Tomb Guardians' Crypt",
       "biome": "shadow",
+      "resistance": { "type": "shadow", "value": 50 },
       "damagePenetration": {
         "type": "shadow",
         "value": 25
@@ -502,6 +528,7 @@
       "palier": 14,
       "name": "Glacier's Peak",
       "biome": "ice",
+      "resistance": { "type": "ice", "value": 50 },
       "damagePenetration": {
         "type": "ice",
         "value": 25
@@ -523,6 +550,7 @@
       "palier": 14,
       "name": "Frost Wyrm's Lair",
       "biome": "ice",
+      "resistance": { "type": "ice", "value": 50 },
       "damagePenetration": {
         "type": "ice",
         "value": 25
@@ -544,6 +572,7 @@
       "palier": 15,
       "name": "Heart of the Volcano",
       "biome": "fire",
+      "resistance": { "type": "fire", "value": 50 },
       "damagePenetration": {
         "type": "fire",
         "value": 25
@@ -565,6 +594,7 @@
       "palier": 15,
       "name": "Magma Dragon's Roost",
       "biome": "fire",
+      "resistance": { "type": "fire", "value": 50 },
       "damagePenetration": {
         "type": "fire",
         "value": 25
@@ -586,6 +616,7 @@
       "palier": 16,
       "name": "Throne of the Wilds",
       "biome": "nature",
+      "resistance": { "type": "nature", "value": 60 },
       "damagePenetration": {
         "type": "nature",
         "value": 25
@@ -607,6 +638,7 @@
       "palier": 16,
       "name": "World Ash Treant's Grove",
       "biome": "nature",
+      "resistance": { "type": "nature", "value": 60 },
       "damagePenetration": {
         "type": "nature",
         "value": 25
@@ -628,6 +660,7 @@
       "palier": 17,
       "name": "The Void-Corrupted Sanctum",
       "biome": "shadow",
+      "resistance": { "type": "shadow", "value": 60 },
       "damagePenetration": {
         "type": "shadow",
         "value": 25
@@ -650,6 +683,7 @@
       "palier": 17,
       "name": "Cthulhu's Herald's Antechamber",
       "biome": "shadow",
+      "resistance": { "type": "shadow", "value": 60 },
       "damagePenetration": {
         "type": "shadow",
         "value": 25
@@ -672,6 +706,7 @@
       "palier": 18,
       "name": "Permafrost Citadel",
       "biome": "ice",
+      "resistance": { "type": "ice", "value": 60 },
       "damagePenetration": {
         "type": "ice",
         "value": 25
@@ -691,6 +726,7 @@
       "palier": 18,
       "name": "Molten Pinnacle",
       "biome": "fire",
+      "resistance": { "type": "fire", "value": 60 },
       "damagePenetration": {
         "type": "fire",
         "value": 25
@@ -710,6 +746,7 @@
       "palier": 19,
       "name": "Heart of the Forest",
       "biome": "nature",
+      "resistance": { "type": "nature", "value": 60 },
       "damagePenetration": {
         "type": "nature",
         "value": 25
@@ -729,6 +766,7 @@
       "palier": 19,
       "name": "R'lyeh's Threshold",
       "biome": "shadow",
+      "resistance": { "type": "shadow", "value": 60 },
       "damagePenetration": {
         "type": "shadow",
         "value": 25
@@ -748,6 +786,7 @@
       "palier": 20,
       "name": "Frozen Throne",
       "biome": "ice",
+      "resistance": { "type": "ice", "value": 60 },
       "damagePenetration": {
         "type": "ice",
         "value": 25
@@ -768,6 +807,7 @@
       "palier": 20,
       "name": "Inferno's Core",
       "biome": "fire",
+      "resistance": { "type": "fire", "value": 60 },
       "damagePenetration": {
         "type": "fire",
         "value": 25
@@ -788,6 +828,7 @@
       "palier": 21,
       "name": "Verdant Sanctuary",
       "biome": "nature",
+      "resistance": { "type": "nature", "value": 60 },
       "damagePenetration": {
         "type": "nature",
         "value": 25
@@ -808,6 +849,7 @@
       "palier": 21,
       "name": "The Sunken City",
       "biome": "shadow",
+      "resistance": { "type": "shadow", "value": 60 },
       "damagePenetration": {
         "type": "shadow",
         "value": 25
@@ -828,6 +870,7 @@
       "palier": 22,
       "name": "Icecrown Citadel",
       "biome": "ice",
+      "resistance": { "type": "ice", "value": 60 },
       "damagePenetration": {
         "type": "ice",
         "value": 25
@@ -849,6 +892,7 @@
       "palier": 22,
       "name": "Blackrock Mountain",
       "biome": "fire",
+      "resistance": { "type": "fire", "value": 60 },
       "damagePenetration": {
         "type": "fire",
         "value": 25
@@ -870,6 +914,7 @@
       "palier": 23,
       "name": "The Emerald Dream",
       "biome": "nature",
+      "resistance": { "type": "nature", "value": 60 },
       "damagePenetration": {
         "type": "nature",
         "value": 25
@@ -891,6 +936,7 @@
       "palier": 23,
       "name": "Ny'alotha, the Waking City",
       "biome": "shadow",
+      "resistance": { "type": "shadow", "value": 60 },
       "damagePenetration": {
         "type": "shadow",
         "value": 25
@@ -912,6 +958,7 @@
       "palier": 24,
       "name": "The Frozen Halls",
       "biome": "ice",
+      "resistance": { "type": "ice", "value": 60 },
       "damagePenetration": {
         "type": "ice",
         "value": 25
@@ -934,6 +981,7 @@
       "palier": 25,
       "name": "The Molten Core",
       "biome": "fire",
+      "resistance": { "type": "fire", "value": 60 },
       "damagePenetration": {
         "type": "fire",
         "value": 25
@@ -955,6 +1003,7 @@
       "palier": 11,
       "name": "Goblin Mines Héroïque",
       "biome": "shadow",
+      "resistance": { "type": "shadow", "value": 20 },
       "damagePenetration": {
         "type": "shadow",
         "value": 25
@@ -971,6 +1020,7 @@
       "palier": 11,
       "name": "Bat Cave Héroïque",
       "biome": "shadow",
+      "resistance": { "type": "shadow", "value": 20 },
       "damagePenetration": {
         "type": "shadow",
         "value": 25
@@ -987,6 +1037,7 @@
       "palier": 12,
       "name": "Icy Crevasse Héroïque",
       "biome": "ice",
+      "resistance": { "type": "ice", "value": 20 },
       "damagePenetration": {
         "type": "ice",
         "value": 25
@@ -1004,6 +1055,7 @@
       "palier": 12,
       "name": "Yeti Den Héroïque",
       "biome": "ice",
+      "resistance": { "type": "ice", "value": 20 },
       "damagePenetration": {
         "type": "ice",
         "value": 25
@@ -1021,6 +1073,7 @@
       "palier": 13,
       "name": "Scorched Caverns Héroïque",
       "biome": "fire",
+      "resistance": { "type": "fire", "value": 30 },
       "damagePenetration": {
         "type": "fire",
         "value": 25
@@ -1038,6 +1091,7 @@
       "palier": 13,
       "name": "Cinder Chambers Héroïque",
       "biome": "fire",
+      "resistance": { "type": "fire", "value": 30 },
       "damagePenetration": {
         "type": "fire",
         "value": 25
@@ -1055,6 +1109,7 @@
       "palier": 14,
       "name": "Whispering Woods Héroïque",
       "biome": "nature",
+      "resistance": { "type": "nature", "value": 30 },
       "damagePenetration": {
         "type": "nature",
         "value": 25
@@ -1072,6 +1127,7 @@
       "palier": 14,
       "name": "Dryad Grove Héroïque",
       "biome": "nature",
+      "resistance": { "type": "nature", "value": 30 },
       "damagePenetration": {
         "type": "nature",
         "value": 25
@@ -1089,6 +1145,7 @@
       "palier": 15,
       "name": "Forgotten Crypt Héroïque",
       "biome": "shadow",
+      "resistance": { "type": "shadow", "value": 30 },
       "damagePenetration": {
         "type": "shadow",
         "value": 25
@@ -1107,6 +1164,7 @@
       "palier": 15,
       "name": "Void Worshippers' Lair Héroïque",
       "biome": "shadow",
+      "resistance": { "type": "shadow", "value": 30 },
       "damagePenetration": {
         "type": "shadow",
         "value": 25
@@ -1125,6 +1183,7 @@
       "palier": 16,
       "name": "Glacial Depths Héroïque",
       "biome": "ice",
+      "resistance": { "type": "ice", "value": 40 },
       "damagePenetration": {
         "type": "ice",
         "value": 25
@@ -1143,6 +1202,7 @@
       "palier": 16,
       "name": "Frozen Berserkers' Hall Héroïque",
       "biome": "ice",
+      "resistance": { "type": "ice", "value": 40 },
       "damagePenetration": {
         "type": "ice",
         "value": 25
@@ -1161,6 +1221,7 @@
       "palier": 17,
       "name": "Volcanic Core Héroïque",
       "biome": "fire",
+      "resistance": { "type": "fire", "value": 40 },
       "damagePenetration": {
         "type": "fire",
         "value": 25
@@ -1179,6 +1240,7 @@
       "palier": 17,
       "name": "Fire Giants' Outpost Héroïque",
       "biome": "fire",
+      "resistance": { "type": "fire", "value": 40 },
       "damagePenetration": {
         "type": "fire",
         "value": 25
@@ -1197,6 +1259,7 @@
       "palier": 18,
       "name": "Verdant Labyrinth Héroïque",
       "biome": "nature",
+      "resistance": { "type": "nature", "value": 40 },
       "damagePenetration": {
         "type": "nature",
         "value": 25
@@ -1215,6 +1278,7 @@
       "palier": 18,
       "name": "Sylvan Guardians' Domain Héroïque",
       "biome": "nature",
+      "resistance": { "type": "nature", "value": 40 },
       "damagePenetration": {
         "type": "nature",
         "value": 25
@@ -1233,6 +1297,7 @@
       "palier": 19,
       "name": "Shadowy Necropolis Héroïque",
       "biome": "shadow",
+      "resistance": { "type": "shadow", "value": 40 },
       "damagePenetration": {
         "type": "shadow",
         "value": 25
@@ -1252,6 +1317,7 @@
       "palier": 19,
       "name": "Specters' Sanctuary Héroïque",
       "biome": "shadow",
+      "resistance": { "type": "shadow", "value": 40 },
       "damagePenetration": {
         "type": "shadow",
         "value": 25
@@ -1271,6 +1337,7 @@
       "palier": 20,
       "name": "Frozen Wastes Héroïque",
       "biome": "ice",
+      "resistance": { "type": "ice", "value": 40 },
       "damagePenetration": {
         "type": "ice",
         "value": 25
@@ -1290,6 +1357,7 @@
       "palier": 20,
       "name": "Boreal Knights' Fortress Héroïque",
       "biome": "ice",
+      "resistance": { "type": "ice", "value": 40 },
       "damagePenetration": {
         "type": "ice",
         "value": 25
@@ -1309,6 +1377,7 @@
       "palier": 21,
       "name": "Infernal Forge Héroïque",
       "biome": "fire",
+      "resistance": { "type": "fire", "value": 50 },
       "damagePenetration": {
         "type": "fire",
         "value": 25
@@ -1328,6 +1397,7 @@
       "palier": 21,
       "name": "Ash Harpies' Nest Héroïque",
       "biome": "fire",
+      "resistance": { "type": "fire", "value": 50 },
       "damagePenetration": {
         "type": "fire",
         "value": 25
@@ -1347,6 +1417,7 @@
       "palier": 22,
       "name": "Emerald Nightmare Héroïque",
       "biome": "nature",
+      "resistance": { "type": "nature", "value": 50 },
       "damagePenetration": {
         "type": "nature",
         "value": 25
@@ -1366,6 +1437,7 @@
       "palier": 22,
       "name": "Emerald Golems' Garden Héroïque",
       "biome": "nature",
+      "resistance": { "type": "nature", "value": 50 },
       "damagePenetration": {
         "type": "nature",
         "value": 25
@@ -1385,6 +1457,7 @@
       "palier": 23,
       "name": "Cathedral of Eternal Night Héroïque",
       "biome": "shadow",
+      "resistance": { "type": "shadow", "value": 50 },
       "damagePenetration": {
         "type": "shadow",
         "value": 25
@@ -1405,6 +1478,7 @@
       "palier": 23,
       "name": "Tomb Guardians' Crypt Héroïque",
       "biome": "shadow",
+      "resistance": { "type": "shadow", "value": 50 },
       "damagePenetration": {
         "type": "shadow",
         "value": 25
@@ -1425,6 +1499,7 @@
       "palier": 24,
       "name": "Glacier's Peak Héroïque",
       "biome": "ice",
+      "resistance": { "type": "ice", "value": 50 },
       "damagePenetration": {
         "type": "ice",
         "value": 25
@@ -1445,6 +1520,7 @@
       "palier": 24,
       "name": "Frost Wyrm's Lair Héroïque",
       "biome": "ice",
+      "resistance": { "type": "ice", "value": 50 },
       "damagePenetration": {
         "type": "ice",
         "value": 25
@@ -1465,6 +1541,7 @@
       "palier": 25,
       "name": "Heart of the Volcano Héroïque",
       "biome": "fire",
+      "resistance": { "type": "fire", "value": 50 },
       "damagePenetration": {
         "type": "fire",
         "value": 25
@@ -1485,6 +1562,7 @@
       "palier": 25,
       "name": "Magma Dragon's Roost Héroïque",
       "biome": "fire",
+      "resistance": { "type": "fire", "value": 50 },
       "damagePenetration": {
         "type": "fire",
         "value": 25
@@ -1505,6 +1583,7 @@
       "palier": 26,
       "name": "Throne of the Wilds Héroïque",
       "biome": "nature",
+      "resistance": { "type": "nature", "value": 60 },
       "damagePenetration": {
         "type": "nature",
         "value": 25
@@ -1525,6 +1604,7 @@
       "palier": 26,
       "name": "World Ash Treant's Grove Héroïque",
       "biome": "nature",
+      "resistance": { "type": "nature", "value": 60 },
       "damagePenetration": {
         "type": "nature",
         "value": 25
@@ -1545,6 +1625,7 @@
       "palier": 27,
       "name": "The Void-Corrupted Sanctum Héroïque",
       "biome": "shadow",
+      "resistance": { "type": "shadow", "value": 60 },
       "damagePenetration": {
         "type": "shadow",
         "value": 25
@@ -1566,6 +1647,7 @@
       "palier": 27,
       "name": "Cthulhu's Herald's Antechamber Héroïque",
       "biome": "shadow",
+      "resistance": { "type": "shadow", "value": 60 },
       "damagePenetration": {
         "type": "shadow",
         "value": 25
@@ -1587,6 +1669,7 @@
       "palier": 28,
       "name": "Permafrost Citadel Héroïque",
       "biome": "ice",
+      "resistance": { "type": "ice", "value": 60 },
       "damagePenetration": {
         "type": "ice",
         "value": 25
@@ -1605,6 +1688,7 @@
       "palier": 28,
       "name": "Molten Pinnacle Héroïque",
       "biome": "fire",
+      "resistance": { "type": "fire", "value": 60 },
       "damagePenetration": {
         "type": "fire",
         "value": 25
@@ -1623,6 +1707,7 @@
       "palier": 29,
       "name": "Heart of the Forest Héroïque",
       "biome": "nature",
+      "resistance": { "type": "nature", "value": 60 },
       "damagePenetration": {
         "type": "nature",
         "value": 25
@@ -1641,6 +1726,7 @@
       "palier": 29,
       "name": "R'lyeh's Threshold Héroïque",
       "biome": "shadow",
+      "resistance": { "type": "shadow", "value": 60 },
       "damagePenetration": {
         "type": "shadow",
         "value": 25
@@ -1659,6 +1745,7 @@
       "palier": 30,
       "name": "Frozen Throne Héroïque",
       "biome": "ice",
+      "resistance": { "type": "ice", "value": 60 },
       "damagePenetration": {
         "type": "ice",
         "value": 25
@@ -1678,6 +1765,7 @@
       "palier": 30,
       "name": "Inferno's Core Héroïque",
       "biome": "fire",
+      "resistance": { "type": "fire", "value": 60 },
       "damagePenetration": {
         "type": "fire",
         "value": 25
@@ -1697,6 +1785,7 @@
       "palier": 31,
       "name": "Verdant Sanctuary Héroïque",
       "biome": "nature",
+      "resistance": { "type": "nature", "value": 60 },
       "damagePenetration": {
         "type": "nature",
         "value": 25
@@ -1716,6 +1805,7 @@
       "palier": 31,
       "name": "The Sunken City Héroïque",
       "biome": "shadow",
+      "resistance": { "type": "shadow", "value": 60 },
       "damagePenetration": {
         "type": "shadow",
         "value": 25
@@ -1735,6 +1825,7 @@
       "palier": 32,
       "name": "Icecrown Citadel Héroïque",
       "biome": "ice",
+      "resistance": { "type": "ice", "value": 60 },
       "damagePenetration": {
         "type": "ice",
         "value": 25
@@ -1755,6 +1846,7 @@
       "palier": 32,
       "name": "Blackrock Mountain Héroïque",
       "biome": "fire",
+      "resistance": { "type": "fire", "value": 60 },
       "damagePenetration": {
         "type": "fire",
         "value": 25
@@ -1775,6 +1867,7 @@
       "palier": 33,
       "name": "The Emerald Dream Héroïque",
       "biome": "nature",
+      "resistance": { "type": "nature", "value": 60 },
       "damagePenetration": {
         "type": "nature",
         "value": 25
@@ -1795,6 +1888,7 @@
       "palier": 33,
       "name": "Ny'alotha, the Waking City Héroïque",
       "biome": "shadow",
+      "resistance": { "type": "shadow", "value": 60 },
       "damagePenetration": {
         "type": "shadow",
         "value": 25
@@ -1815,6 +1909,7 @@
       "palier": 34,
       "name": "The Frozen Halls Héroïque",
       "biome": "ice",
+      "resistance": { "type": "ice", "value": 60 },
       "damagePenetration": {
         "type": "ice",
         "value": 25
@@ -1836,6 +1931,7 @@
       "palier": 35,
       "name": "The Molten Core Héroïque",
       "biome": "fire",
+      "resistance": { "type": "fire", "value": 60 },
       "damagePenetration": {
         "type": "fire",
         "value": 25

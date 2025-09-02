@@ -316,6 +316,10 @@ export const DungeonSchema = z.object({
       type: ThemeSchema,
       value: z.number() // Par exemple, 25 pour 25% de pénétration
   }).optional(),
+  resistance: z.object({
+      type: ThemeSchema,
+      value: z.number()
+  }).optional(),
   monsters: z.array(z.string()),
   modifiers: z.array(z.string()).default([]),
   killTarget: z.number().int().default(25),

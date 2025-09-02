@@ -1,4 +1,5 @@
 'use client';
+import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useGameStore } from '@/state/gameStore';
 import * as formulas from '@/core/formulas';
@@ -76,6 +77,26 @@ export function PlayerStatsView() {
                     <span className="text-muted-foreground">Crit Dmg:</span><span className="text-right">{(stats.CritDmg ?? 0).toFixed(1)}%</span>
                     <span className="text-muted-foreground">Armure:</span><span className="text-right">{stats.Armure ?? 0}</span>
                     <span className="text-muted-foreground">Vitesse:</span><span className="text-right">{stats.Vitesse ?? 0}s</span>
+
+                    <hr className="col-span-2 my-1 border-border" />
+
+                    {stats.BonusDmg && Object.entries(stats.BonusDmg).map(([elem, value]) => (
+                        value > 0 && (
+                            <React.Fragment key={`bonus-dmg-${elem}`}>
+                                <span className="text-muted-foreground capitalize">Dégâts {elem}</span>
+                                <span className="text-right text-green-400">+{value}</span>
+                            </React.Fragment>
+                        )
+                    ))}
+
+                    {stats.ResElems && Object.entries(stats.ResElems).map(([elem, value]) => (
+                        value > 0 && (
+                            <React.Fragment key={`res-elem-${elem}`}>
+                                <span className="text-muted-foreground capitalize">Résist. {elem}</span>
+                                <span className="text-right text-blue-400">{value}</span>
+                            </React.Fragment>
+                        )
+                    ))}
                 </div>
             </CardContent>
         </Card>

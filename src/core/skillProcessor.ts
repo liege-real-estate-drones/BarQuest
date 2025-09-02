@@ -391,7 +391,7 @@ export const processSkill = (
                         const isCrit = formulas.isCriticalHit(buffedPlayerStats.CritPct, buffedPlayerStats.Precision, debuffedTargetStats, player, gameData);
                         let finalDamage = isCrit ? totalDamage * (buffedPlayerStats.CritDmg / 100) : totalDamage;
                         const res = debuffedTargetStats.ResElems?.[anyEffect.damageType] || 0;
-                        const elemDR = formulas.calculateResistanceDR(res, player.level);
+                        const elemDR = formulas.calculateResistanceDR(res);
                         const mitigatedDamage = Math.round(finalDamage * (1 - elemDR));
                         target.stats.PV -= mitigatedDamage;
                         floatingTexts.push({ entityId: target.id, text: `-${mitigatedDamage}`, type: 'damage' });

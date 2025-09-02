@@ -1,5 +1,7 @@
 import type { InventoryState } from './types';
 
+export const NORMAL_MONSTER_RESISTANCE_PERCENTAGE = 0.6;
+
 export const EQUIPMENT_SLOTS: (keyof InventoryState['equipment'])[] = [
     'head', 'chest', 'legs', 'feet', 'hands', 'weapon', 'offhand', 'amulet', 'ring', 'ring2', 'belt', 'trinket'
 ];

@@ -84,11 +84,10 @@ export const calculateArmorDR = (armor: number, enemyLevel: number): number => {
     return Math.min(dr, 0.75); // Cap DR at 75%
 };
 
-export const calculateResistanceDR = (resistance: number, enemyLevel: number): number => {
-    const denominator = resistance + (100 + 20 * enemyLevel);
-    if (denominator === 0) return 0;
-    const dr = resistance / denominator;
-    return Math.min(dr, 0.75); // Cap DR at 75%
+export const calculateResistanceDR = (resistance: number): number => {
+    const reduction = resistance / 100;
+    // Cap reduction between 0% and 100%
+    return Math.min(Math.max(reduction, 0), 1.0);
 };
 
 export const calculateCritChance = (critPct: number, precision: number, targetStats: Stats): number => {
