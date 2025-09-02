@@ -85,10 +85,10 @@ export function ItemTooltipContent({ item, equippedItem }: { item: Item, equippe
         (i.affixes || []).forEach(a => { stats[a.ref] = (stats[a.ref] || 0) + a.val; });
         if (i.stats) {
             Object.entries(i.stats).forEach(([key, value]) => {
-                if (key === 'BonusDmg' && typeof value === 'object' && value) {
+                if (key === 'DmgElems' && typeof value === 'object' && value) {
                     Object.entries(value).forEach(([elem, dmg]) => {
                         if (typeof dmg === 'number') {
-                            stats[`BonusDmg.${elem}`] = (stats[`BonusDmg.${elem}`] || 0) + dmg;
+                            stats[`DmgElems.${elem}`] = (stats[`DmgElems.${elem}`] || 0) + dmg;
                         }
                     });
                 } else if (typeof value === 'number') {
@@ -139,8 +139,8 @@ export function ItemTooltipContent({ item, equippedItem }: { item: Item, equippe
                     const valueToDisplay = comparison?.type === 'lost' ? equippedValue : itemValue;
 
                     let isImportant = !!(classWeights as any)[key];
-                    if (!isImportant && key.startsWith('BonusDmg.')) {
-                        isImportant = !!classWeights.BonusDmg;
+                    if (!isImportant && key.startsWith('DmgElems.')) {
+                        isImportant = !!classWeights.DmgElems;
                     }
 
                     return (

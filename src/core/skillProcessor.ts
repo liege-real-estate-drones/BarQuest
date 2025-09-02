@@ -54,7 +54,7 @@ export const processSkill = (
     const handleDamage = (target: any, damageEffect: any, floatingTexts: { entityId: string, text: string, type: FloatingTextType }[], damageMultiplier: number = 1, preventPoisonProc: boolean = false) => {
         let damage = 0;
         if (damageEffect.source === 'weapon') {
-            const baseDmg = formulas.calculateMeleeDamage(buffedPlayerStats.AttMin, buffedPlayerStats.AttMax, formulas.calculateAttackPower(buffedPlayerStats));
+            const baseDmg = formulas.calculatePhysicalDamage(buffedPlayerStats.AttMin, buffedPlayerStats.AttMax, formulas.calculateAttackPower(buffedPlayerStats));
             damage = baseDmg * getRankValue(damageEffect.multiplier, rank);
             damage += getRankValue(damageEffect.bonus_flat_damage, rank);
         } else if (damageEffect.source === 'spell') {
@@ -242,7 +242,7 @@ export const processSkill = (
                         let totalDamage = 0;
                         if (anyEffect.totalDamage.source === 'spell') totalDamage = formulas.calculateSpellDamage(getRankValue(anyEffect.totalDamage.baseValue, rank), formulas.calculateSpellPower(buffedPlayerStats));
                         else {
-                            const baseDmg = formulas.calculateMeleeDamage(buffedPlayerStats.AttMin, buffedPlayerStats.AttMax, formulas.calculateAttackPower(buffedPlayerStats));
+                            const baseDmg = formulas.calculatePhysicalDamage(buffedPlayerStats.AttMin, buffedPlayerStats.AttMax, formulas.calculateAttackPower(buffedPlayerStats));
                             totalDamage = baseDmg * getRankValue(anyEffect.totalDamage.multiplier, rank);
                         }
                         if (hasArchonBuff) totalDamage *= 2;

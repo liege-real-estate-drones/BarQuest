@@ -1940,7 +1940,7 @@ export const useGameStore = create<GameState>()(
             const buffedPlayerStats = getModifiedStats(player.stats, [...player.activeBuffs, ...player.activeDebuffs], player.form);
             let debuffedTargetStats = getModifiedStats(target.stats, target.activeDebuffs);
 
-            const isCrit = formulas.isCriticalHit(buffedPlayerStats.CritPct, buffedPlayerStats.Precision, debuffedTargetStats, player, gameData);
+            let isCrit = formulas.isCriticalHit(buffedPlayerStats.CritPct, buffedPlayerStats.Precision, debuffedTargetStats, player, gameData);
             if (player.nextAttackIsGuaranteedCrit) {
                 isCrit = true;
                 player.nextAttackIsGuaranteedCrit = false;
@@ -2445,7 +2445,7 @@ export const useGameStore = create<GameState>()(
                                             const buffedPlayerStats = getModifiedStats(player.stats, player.activeBuffs, player.form);
                                             let totalDamage = 0;
                                             if (debuffData.totalDamage.source === 'weapon') {
-                                                const baseDmg = formulas.calculateMeleeDamage(buffedPlayerStats.AttMin, buffedPlayerStats.AttMax, formulas.calculateAttackPower(buffedPlayerStats));
+                                                const baseDmg = formulas.calculatePhysicalDamage(buffedPlayerStats.AttMin, buffedPlayerStats.AttMax, formulas.calculateAttackPower(buffedPlayerStats));
                                                 totalDamage = baseDmg * getRankValue(debuffData.totalDamage.multiplier, rank);
                                             } else if (debuffData.totalDamage.source === 'attack_power') {
                                                 totalDamage = formulas.calculateAttackPower(buffedPlayerStats) * getRankValue(debuffData.totalDamage.multiplier, rank);
