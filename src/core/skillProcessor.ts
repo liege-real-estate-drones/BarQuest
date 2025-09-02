@@ -59,7 +59,7 @@ export const processSkill = (
             damage += getRankValue(damageEffect.bonus_flat_damage, rank);
         } else if (damageEffect.source === 'spell') {
             const baseDmg = getRankValue(damageEffect.baseValue, rank);
-            damage = formulas.calculateSpellDamage(baseDmg, formulas.calculateSpellPower(buffedPlayerStats));
+            damage = formulas.calculateSpellDamage(baseDmg, formulas.calculateSpellPower(buffedPlayerStats), buffedPlayerStats, damageEffect.damageType);
         }
 
         damage *= damageMultiplier;
@@ -232,7 +232,8 @@ export const processSkill = (
                 targets.forEach(target => {
                     const { mitigatedDamage, isCrit } = handleDamage(target, anyEffect, floatingTexts);
                     floatingTexts.push({ entityId: target.id, text: `-${mitigatedDamage}`, type: isCrit ? 'crit' : 'damage' });
-                    combat.log.push({ message: isCrit ? `CRITIQUE ! Votre ${skill.nom} inflige ${mitigatedDamage} points de dégâts à ${target.nom}.` : `Vous utilisez ${skill.nom} sur ${target.nom} pour ${mitigatedDamage} points de dégâts.`, type: isCrit ? 'crit' : 'player_attack', timestamp: Date.now() });
+                    const damageTypeString = anyEffect.damageType ? ` de ${anyEffect.damageType}` : '';
+                    combat.log.push({ message: isCrit ? `CRITIQUE ! Votre ${skill.nom} inflige ${mitigatedDamage} points de dégâts${damageTypeString} à ${target.nom}.` : `Vous utilisez ${skill.nom} sur ${target.nom} pour ${mitigatedDamage} points de dégâts${damageTypeString}.`, type: isCrit ? 'crit' : 'player_attack', timestamp: Date.now() });
                     if (target.stats.PV <= 0) deadEnemyIds.push(target.id);
                 });
                 effectApplied = true;
@@ -240,7 +241,7 @@ export const processSkill = (
                 targets.forEach(target => {
                     if (anyEffect.debuffType === 'dot') {
                         let totalDamage = 0;
-                        if (anyEffect.totalDamage.source === 'spell') totalDamage = formulas.calculateSpellDamage(getRankValue(anyEffect.totalDamage.baseValue, rank), formulas.calculateSpellPower(buffedPlayerStats));
+                        if (anyEffect.totalDamage.source === 'spell') totalDamage = formulas.calculateSpellDamage(getRankValue(anyEffect.totalDamage.baseValue, rank), formulas.calculateSpellPower(buffedPlayerStats), buffedPlayerStats, anyEffect.damageType);
                         else {
                             const baseDmg = formulas.calculatePhysicalDamage(buffedPlayerStats.AttMin, buffedPlayerStats.AttMax, formulas.calculateAttackPower(buffedPlayerStats));
                             totalDamage = baseDmg * getRankValue(anyEffect.totalDamage.multiplier, rank);
@@ -296,7 +297,7 @@ export const processSkill = (
             } else if (anyEffect.type === 'shield') {
                 let shieldAmount = 0;
                 if (anyEffect.amount.source === 'spell_power') {
-                    shieldAmount = formulas.calculateSpellDamage(getRankValue(anyEffect.amount.multiplier, rank), formulas.calculateSpellPower(buffedPlayerStats));
+                    shieldAmount = formulas.calculateSpellDamage(getRankValue(anyEffect.amount.multiplier, rank), formulas.calculateSpellPower(buffedPlayerStats), buffedPlayerStats, 'physical');
                 } else { // base_value
                     shieldAmount = getRankValue(anyEffect.amount.multiplier, rank);
                 }
@@ -331,7 +332,7 @@ export const processSkill = (
                         if (anyEffect.totalHealing.source === 'base_value') {
                             totalHealing = getRankValue(anyEffect.totalHealing.multiplier, rank);
                         } else if (anyEffect.totalHealing.source === 'spell_power') {
-                            totalHealing = formulas.calculateSpellDamage(getRankValue(anyEffect.totalHealing.multiplier, rank), formulas.calculateSpellPower(buffedPlayerStats));
+                            totalHealing = formulas.calculateSpellDamage(getRankValue(anyEffect.totalHealing.multiplier, rank), formulas.calculateSpellPower(buffedPlayerStats), buffedPlayerStats, 'physical');
                         }
                         existingBuff.tickInterval = 1000;
                         existingBuff.nextTickIn = 1000;
@@ -344,7 +345,7 @@ export const processSkill = (
                         if (anyEffect.totalHealing.source === 'base_value') {
                             totalHealing = getRankValue(anyEffect.totalHealing.multiplier, rank);
                         } else if (anyEffect.totalHealing.source === 'spell_power') {
-                            totalHealing = formulas.calculateSpellDamage(getRankValue(anyEffect.totalHealing.multiplier, rank), formulas.calculateSpellPower(buffedPlayerStats));
+                            totalHealing = formulas.calculateSpellDamage(getRankValue(anyEffect.totalHealing.multiplier, rank), formulas.calculateSpellPower(buffedPlayerStats), buffedPlayerStats, 'physical');
                         }
                         newBuff.tickInterval = 1000; // Assume 1s tick for now
                         newBuff.nextTickIn = 1000;
@@ -368,7 +369,7 @@ export const processSkill = (
                 effectApplied = true;
             } else if (anyEffect.type === 'heal') {
                 let totalHeal = 0;
-                if (anyEffect.source === 'spell') totalHeal = formulas.calculateSpellDamage(getRankValue(anyEffect.baseValue, rank), formulas.calculateSpellPower(buffedPlayerStats));
+                if (anyEffect.source === 'spell') totalHeal = formulas.calculateSpellDamage(getRankValue(anyEffect.baseValue, rank), formulas.calculateSpellPower(buffedPlayerStats), buffedPlayerStats, 'holy');
                 totalHeal *= (buffedPlayerStats.HealingMultiplier || 1);
                 totalHeal *= (buffedPlayerStats.HealingReceivedMultiplier || 1);
                 const maxHp = formulas.calculateMaxHP(player.level, player.stats);
@@ -395,7 +396,8 @@ export const processSkill = (
                         const mitigatedDamage = Math.round(finalDamage * (1 - elemDR));
                         target.stats.PV -= mitigatedDamage;
                         floatingTexts.push({ entityId: target.id, text: `-${mitigatedDamage}`, type: 'damage' });
-                        combat.log.push({ message: `Vous consommez ${stacks} charges de poison pour infliger ${mitigatedDamage} dégâts de nature à ${target.nom}.`, type: 'player_attack', timestamp: Date.now() });
+                        const damageTypeString = anyEffect.damageType ? ` de ${anyEffect.damageType}` : '';
+                        combat.log.push({ message: `Vous consommez ${stacks} charges de poison pour infliger ${mitigatedDamage} dégâts${damageTypeString} à ${target.nom}.`, type: 'player_attack', timestamp: Date.now() });
                         if (target.stats.PV <= 0) deadEnemyIds.push(target.id);
                         effectApplied = true;
                     } else {
@@ -436,7 +438,8 @@ export const processSkill = (
                         if (target.stats.PV <= 0) break;
                         const { mitigatedDamage, isCrit } = handleDamage(target, anyEffect.damage, floatingTexts);
                         floatingTexts.push({ entityId: target.id, text: `-${mitigatedDamage}`, type: isCrit ? 'crit' : 'damage' });
-                        combat.log.push({ message: isCrit ? `CRITIQUE ! Votre ${skill.nom} (Frappe ${i + 1}) inflige ${mitigatedDamage} points de dégâts à ${target.nom}.` : `Votre ${skill.nom} (Frappe ${i + 1}) inflige ${mitigatedDamage} points de dégâts à ${target.nom}.`, type: isCrit ? 'crit' : 'player_attack', timestamp: Date.now() });
+                        const damageTypeString = anyEffect.damage.damageType ? ` de ${anyEffect.damage.damageType}` : '';
+                        combat.log.push({ message: isCrit ? `CRITIQUE ! Votre ${skill.nom} (Frappe ${i + 1}) inflige ${mitigatedDamage} points de dégâts${damageTypeString} à ${target.nom}.` : `Votre ${skill.nom} (Frappe ${i + 1}) inflige ${mitigatedDamage} points de dégâts${damageTypeString} à ${target.nom}.`, type: isCrit ? 'crit' : 'player_attack', timestamp: Date.now() });
                         if (target.stats.PV <= 0) deadEnemyIds.push(target.id);
                     }
                 });

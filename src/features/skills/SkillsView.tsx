@@ -6,23 +6,27 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import type { Skill } from '@/lib/types';
+import type { Skill, PlayerState } from '@/lib/types';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import * as formulas from '@/core/formulas';
 
-const SkillPopoverContent = ({ skill }: { skill: Skill }) => {
+const SkillPopoverContent = ({ skill, player }: { skill: Skill, player: PlayerState }) => {
     const effects = skill.effets || [];
     const resourceCostMatch = effects.join(' ').match(/Coûte (\d+) (Mana|Rage|Énergie)/);
     const resourceCost = resourceCostMatch ? `${resourceCostMatch[1]} ${resourceCostMatch[2]}` : null;
-    
+    const rank = player.learnedSkills[skill.id] || 1;
+    const damageString = formulas.calculateSkillDamageForDisplay(skill, player.stats, rank);
+
     return (
         <div className="max-w-xs p-2">
             <p className="font-bold text-base text-primary mb-1">{skill.nom}</p>
             <p className="text-sm text-muted-foreground capitalize">Compétence Active</p>
             {resourceCost && <p className="text-xs text-blue-400">Coût: {resourceCost}</p>}
+            {damageString && <p className="text-xs text-green-400">Dégâts: {damageString}</p>}
             <Separator className="my-2" />
-            <p className="text-sm mb-2">Effets :</p>
+            <p className="text-sm mb-2">Description :</p>
             <ul className="list-disc list-inside space-y-1">
-                {effects.map((effet, i) => <li key={i} className="text-xs text-green-400">{effet}</li>)}
+                {effects.map((effet, i) => <li key={i} className="text-xs text-muted-foreground">{effet}</li>)}
             </ul>
             {skill.niveauRequis && (
                 <>
@@ -110,7 +114,7 @@ export function SkillsView() {
                                         </Button>
                                     </div>
                                     <PopoverContent>
-                                        <SkillPopoverContent skill={skill} />
+                                        <SkillPopoverContent skill={skill} player={player} />
                                     </PopoverContent>
                                 </Popover>
                             )) : <p className="text-center text-sm text-muted-foreground pt-8">Aucune nouvelle compétence à ce niveau.</p>}
@@ -138,7 +142,7 @@ export function SkillsView() {
                                         </Button>
                                     </div>
                                     <PopoverContent>
-                                         <SkillPopoverContent skill={skill} />
+                                         <SkillPopoverContent skill={skill} player={player} />
                                     </PopoverContent>
                                 </Popover>
                             )) : <p className="text-center text-sm text-muted-foreground pt-8">Aucune autre compétence à équiper.</p>}
@@ -166,7 +170,7 @@ export function SkillsView() {
                                             </div>
                                         </PopoverTrigger>
                                         <PopoverContent>
-                                            <SkillPopoverContent skill={skill} />
+                                            <SkillPopoverContent skill={skill} player={player} />
                                         </PopoverContent>
                                     </Popover>
                                 ) : (

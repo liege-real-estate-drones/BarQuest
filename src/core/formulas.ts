@@ -87,13 +87,32 @@ export const calculateAttackDamage = (
   return { physical, elemental: null };
 };
 
+export const calculatePlayerAttackDamage = (
+  stats: Stats,
+): { physical: number; elementals: { type: string; value: number }[] } => {
+  const physical = Math.random() * (stats.AttMax - stats.AttMin) + stats.AttMin;
+  const elementals: { type: string; value: number }[] = [];
+
+  if (stats.DmgElems) {
+    for (const [type, value] of Object.entries(stats.DmgElems)) {
+      elementals.push({ type, value });
+    }
+  }
+
+  return { physical, elementals };
+};
+
 export const calculatePhysicalDamage = (min: number, max: number, attackPower: number): number => {
   const roll = min + Math.random() * (max - min);
   return roll + (attackPower / 4);
 };
 
-export const calculateSpellDamage = (baseDamage: number, spellPower: number): number => {
-  return baseDamage * (1 + spellPower / 100);
+export const calculateSpellDamage = (baseDamage: number, spellPower: number, stats: Stats, damageType: string): number => {
+  let modifiedBaseDamage = baseDamage;
+  if (stats.DmgElems && stats.DmgElems[damageType]) {
+    modifiedBaseDamage += stats.DmgElems[damageType];
+  }
+  return modifiedBaseDamage * (1 + spellPower / 100);
 };
 
 export const calculateElementalDamage = (elementalDamage: number, resistance: number): number => {
@@ -183,3 +202,27 @@ export const getSkillResourceCost = (skill: any, player: any, gameData: any): nu
 }
 
 export const CRIT_MULTIPLIER = 1.5;
+
+export const calculateSkillDamageForDisplay = (skill: any, stats: Stats, rank: number): string => {
+    if (!skill.effects) return "";
+  
+    const damageEffect = skill.effects.find((e: any) => e.type === 'damage' || e.type === 'multi_strike');
+    if (!damageEffect) return "";
+  
+    const effect = damageEffect.type === 'multi_strike' ? damageEffect.damage : damageEffect;
+  
+    if (effect.source === 'spell') {
+      const baseDmg = getRankValue(effect.baseValue, rank);
+      const spellPower = calculateSpellPower(stats);
+      const totalDmg = calculateSpellDamage(baseDmg, spellPower, stats, effect.damageType);
+      
+      if (damageEffect.type === 'multi_strike') {
+        const strikes = getRankValue(damageEffect.strikes, rank);
+        return `${strikes} x ${Math.round(totalDmg)} (${effect.damageType})`;
+      }
+      return `${Math.round(totalDmg)} (${effect.damageType})`;
+    }
+  
+    // Handle weapon damage based skills if needed in the future
+    return "";
+  };

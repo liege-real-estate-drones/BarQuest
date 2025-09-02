@@ -1894,7 +1894,9 @@ export const useGameStore = create<GameState>()(
                         const target = state.combat.enemies.find(e => e.id === action.targetId);
                         if (target && target.stats.PV > 0) {
                             const skill = state.gameData.skills.find(s => s.id === action.skillId);
-                            const damage = formulas.calculateSpellDamage(action.damagePerWave, formulas.calculateSpellPower(state.player.stats));
+                            const damageEffect = skill?.effects?.find(e => (e as any).type === 'multi_strike');
+                            const damageType = (damageEffect as any)?.damage?.damageType || 'arcane';
+                            const damage = formulas.calculateSpellDamage(action.damagePerWave, formulas.calculateSpellPower(state.player.stats), state.player.stats, damageType);
                             const isCrit = formulas.isCriticalHit(state.player.stats.CritPct, state.player.stats.Precision, target.stats, state.player, state.gameData);
                             const finalDamage = isCrit ? damage * (state.player.stats.CritDmg / 100) : damage;
                             const dr = formulas.calculateArmorDR(target.stats.Armure, state.player.level);
@@ -1946,45 +1948,54 @@ export const useGameStore = create<GameState>()(
                 player.nextAttackIsGuaranteedCrit = false;
             }
 
+            const damageResult = formulas.calculatePlayerAttackDamage(buffedPlayerStats);
+            let totalDamage = 0;
+            const damageDetails: string[] = [];
+
             // --- Physical Damage ---
-            let physicalDamage = formulas.calculatePhysicalDamage(buffedPlayerStats.AttMin, buffedPlayerStats.AttMax, formulas.calculateAttackPower(buffedPlayerStats));
+            let physicalDamage = damageResult.physical;
             if (isCrit) physicalDamage *= (buffedPlayerStats.CritDmg / 100);
             physicalDamage *= (buffedPlayerStats.DamageMultiplier || 1);
 
             const dr = formulas.calculateArmorDR(debuffedTargetStats.Armure, player.level);
-            const mitigatedDamage = Math.round(physicalDamage * (isCleave ? 0.5 : 1) * (1 - dr));
-            target.stats.PV -= mitigatedDamage;
-            events.push({ entityId: target.id, text: `-${mitigatedDamage}`, type: isCrit ? 'crit' : 'damage' });
+            const mitigatedPhysicalDamage = Math.round(physicalDamage * (isCleave ? 0.5 : 1) * (1 - dr));
+            
+            if (mitigatedPhysicalDamage > 0) {
+              target.stats.PV -= mitigatedPhysicalDamage;
+              totalDamage += mitigatedPhysicalDamage;
+              damageDetails.push(`${mitigatedPhysicalDamage} physiques`);
+              events.push({ entityId: target.id, text: `-${mitigatedPhysicalDamage}`, type: isCrit ? 'crit' : 'damage' });
+            }
 
             // --- Elemental Damage ---
-            if (buffedPlayerStats.DmgElems) {
-                Object.entries(buffedPlayerStats.DmgElems).forEach(([type, damage]) => {
-                    if (damage > 0) {
-                        let elementalDamage = damage;
-                        if (isCrit) elementalDamage *= (buffedPlayerStats.CritDmg / 100);
+            damageResult.elementals.forEach(elem => {
+                let elementalDamage = elem.value;
+                if (isCrit) elementalDamage *= (buffedPlayerStats.CritDmg / 100);
 
-                        const res = debuffedTargetStats.ResElems?.[type as keyof typeof debuffedTargetStats.ResElems] || 0;
-                        const elemDR = formulas.calculateResistanceDR(res, player.level);
-                        const mitigatedElemDmg = Math.round(elementalDamage * (1 - elemDR));
+                const res = debuffedTargetStats.ResElems?.[elem.type] || 0;
+                const elemDR = formulas.calculateResistanceDR(res, player.level);
+                const mitigatedElemDmg = Math.round(elementalDamage * (1 - elemDR));
 
-                        if(mitigatedElemDmg > 0) {
-                            target.stats.PV -= mitigatedElemDmg;
-                            events.push({ entityId: target.id, text: `-${mitigatedElemDmg}`, type: 'damage' });
-                            combat.log.push({ message: `Votre attaque inflige ${mitigatedElemDmg} points de dégâts de ${type}.`, type: 'player_attack', timestamp: Date.now() });
-                        }
-                    }
-                });
-            }
+                if (mitigatedElemDmg > 0) {
+                    target.stats.PV -= mitigatedElemDmg;
+                    totalDamage += mitigatedElemDmg;
+                    damageDetails.push(`${mitigatedElemDmg} ${elem.type}`);
+                    events.push({ entityId: target.id, text: `-${mitigatedElemDmg}`, type: 'damage' });
+                }
+            });
 
             applyPoisonProc(state, target, events);
 
-            const attackMsg = `You hit ${target.nom} for ${mitigatedDamage} damage.`;
-            const critMsg = `CRITICAL! You hit ${target.nom} for ${mitigatedDamage} damage.`;
+            const damageDetailsString = damageDetails.length > 0 ? ` (${damageDetails.join(', ')})` : '';
+            const attackMsg = `Vous frappez ${target.nom} pour ${totalDamage} points de dégâts${damageDetailsString}.`;
+            const critMsg = `CRITIQUE ! Vous frappez ${target.nom} pour ${totalDamage} points de dégâts${damageDetailsString}.`;
+            const cleaveMsg = `Votre enchaînement touche ${target.nom} pour ${totalDamage} points de dégâts${damageDetailsString}.`;
+
             if(!isCleave) {
                 state.combat.log.push({ message: isCrit ? critMsg : attackMsg, type: isCrit ? 'crit' : 'player_attack', timestamp: Date.now() });
                 state.combat.playerAttackProgress = 0;
             } else {
-                  state.combat.log.push({ message: `Your cleave hits ${target.nom} for ${mitigatedDamage} damage.`, type: 'player_attack', timestamp: Date.now() });
+                  state.combat.log.push({ message: cleaveMsg, type: 'player_attack', timestamp: Date.now() });
             }
 
             if(state.player.resources.type === 'Rage' && !isCleave) {

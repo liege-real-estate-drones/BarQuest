@@ -157,6 +157,15 @@ export default function EntityDisplay({ entity, isPlayer = false, isTarget = fal
 
           <Separator className="my-1" />
           <StatGrid stats={stats} />
+          {!isPlayer && (entity as CombatEnemy).elementalDamage && (
+            <div className="text-xs font-mono mt-1">
+              <span className="text-muted-foreground">Dégâts élem.:</span>
+              <span className="text-right float-right">
+                {(entity as CombatEnemy).elementalDamage?.min}-{(entity as CombatEnemy).elementalDamage?.max}
+                <span className="capitalize"> {(entity as CombatEnemy).elementalDamage?.type}</span>
+              </span>
+            </div>
+          )}
         </CardContent>
       </div>
     </Card>
