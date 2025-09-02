@@ -13,14 +13,12 @@
 # testing
 /coverage
 
-# next.js
+# next.js build output
 /.next/
 /out/
 
 # production
 /build
-/public/images
-/public/sounds
 
 # misc
 .DS_Store
@@ -45,3 +43,7 @@ next-env.d.ts
 # firebase
 firebase-debug.log
 firestore-debug.log
+
+# Fichiers médias lourds hébergés sur Firebase et ignorés par Git
+/public/images
+/public/sounds
