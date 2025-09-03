@@ -2704,17 +2704,36 @@ export const useGameStore = create<GameState>()(
     {
       name: 'barquest-save',
       storage: storage,
-      onRehydrateStorage: () => (state: GameState | undefined) => {
+      onRehydrateStorage: () => (state: any) => {
         if (state) {
+          // Migration for old save structure
+          if (!state.heroes && state.player && state.player.classeId) {
+            console.log("Old save data detected, migrating...");
+            const migratedHero: Hero = {
+              id: state.player.id,
+              player: state.player,
+              inventory: state.inventory,
+              combat: initialCombatState,
+              activeQuests: state.activeQuests || [],
+            };
+            state.heroes = [migratedHero];
+            state.activeHeroId = migratedHero.id;
+
+            delete state.player;
+            delete state.inventory;
+            delete state.combat;
+            delete state.activeQuests;
+          }
+
           state.rehydrateComplete = true;
           // Reset combat state for all heroes on rehydration
           if (state.heroes) {
-            state.heroes.forEach(hero => {
+            state.heroes.forEach((hero: Hero) => {
               hero.combat = initialCombatState;
             });
           }
 
-          if (state.activeHeroId && state.heroes.some(h => h.id === state.activeHeroId)) {
+          if (state.activeHeroId && state.heroes.some((h: Hero) => h.id === state.activeHeroId)) {
             state.view = 'MAIN';
           } else if (state.heroes && state.heroes.length > 0) {
             state.view = 'HERO_SELECTION';
