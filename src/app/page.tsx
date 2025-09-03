@@ -9,6 +9,7 @@ import { DungeonCompletionView } from '@/features/dungeons/DungeonCompletionView
 import { useHydrated } from '@/hooks/useHydrated';
 import { LoaderCircle } from 'lucide-react';
 import { ChooseClassView } from '@/features/player/ChooseClassView';
+import { HeroSelectionView } from '@/features/player/HeroSelectionView';
 import type { GameData } from '@/lib/types';
 
 export default function Home() {
@@ -19,14 +20,16 @@ export default function Home() {
     isInitialized, 
     player,
     recalculateStats,
-    rehydrateComplete 
+    rehydrateComplete,
+    activeHeroId
   } = useGameStore((state) => ({
     view: state.view,
     initializeGameData: state.initializeGameData,
     isInitialized: state.isInitialized,
     player: state.player,
     recalculateStats: state.recalculateStats,
-    rehydrateComplete: state.rehydrateComplete
+    rehydrateComplete: state.rehydrateComplete,
+    activeHeroId: state.activeHeroId
   }));
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -104,7 +107,11 @@ export default function Home() {
     );
   }
 
-  if (!player.classeId) {
+  if (view === 'HERO_SELECTION') {
+    return <HeroSelectionView />;
+  }
+
+  if (!activeHeroId) {
     return <ChooseClassView />;
   }
 

@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage, StateStorage } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import type { Dungeon, Monstre, Item, Talent, Skill, Stats, PlayerState, InventoryState, CombatLogEntry, CombatState, GameData, Quete, PlayerClassId, ResourceType, Rareté, CombatEnemy, ItemSet, PotionType, Recipe, Theme, Affixe, Enchantment, Buff, Debuff, FloatingText, FloatingTextType } from '@/lib/types';
+import type { Dungeon, Monstre, Item, Talent, Skill, Stats, PlayerState, InventoryState, CombatLogEntry, CombatState, GameData, Quete, PlayerClassId, ResourceType, Rareté, CombatEnemy, ItemSet, PotionType, Recipe, Theme, Affixe, Enchantment, Buff, Debuff, FloatingText, FloatingTextType, Hero, ActiveQuete } from '@/lib/types';
 import { DungeonCompletionSummary } from '@/data/schemas';
 import * as formulas from '@/core/formulas';
 import { getModifiedStats, getRankValue } from '@/core/formulas';
@@ -10,11 +10,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { AFFIX_TO_THEME } from '@/lib/constants';
 import { processSkill, applyPoisonProc } from '@/core/skillProcessor';
 
-export interface ActiveQuete {
-  quete: Quete;
-  progress: number;
-  startTime?: number; // Pour les quêtes de temps
-}
+const RENAME_COST = 1000;
 
 const getInitialPlayerState = (): PlayerState => {
   return {
@@ -82,7 +78,7 @@ export interface GameState {
   isInitialized: boolean;
   rehydrateComplete: boolean;
   lastPlayed: number | null;
-  view: 'MAIN' | 'COMBAT' | 'DUNGEON_COMPLETED';
+  view: 'MAIN' | 'COMBAT' | 'DUNGEON_COMPLETED' | 'HERO_SELECTION';
   activeSubView: 'TOWN' | 'CHARACTER' | 'VENDORS' | 'DUNGEONS_LIST' | 'QUESTS' | 'SKILLS' | 'TALENTS' | 'REPUTATION';
   townView: 'TOWN' | 'CRAFTING';
   worldTier: number;
@@ -94,17 +90,28 @@ export interface GameState {
   dungeonStartTime: number | null;
   dungeonCompletionSummary: DungeonCompletionSummary | null;
   gameData: GameData;
-  player: PlayerState;
-  inventory: InventoryState;
-  combat: CombatState;
-  activeQuests: ActiveQuete[];
+  heroes: Hero[];
+  activeHeroId: string | null;
+  get activeHero(): Hero | null;
+  player: PlayerState; // for compatibility
+  inventory: InventoryState; // for compatibility
+  combat: CombatState; // for compatibility
+  activeQuests: ActiveQuete[]; // for compatibility
   proposedQuests: Quete[] | null;
-  bossEncounter: Monstre | null; // NOUVEAU: Pour l'alerte d'apparition du boss
+  bossEncounter: Monstre | null;
   isHeroicMode: boolean;
 
   // Music state
   currentMusicTracks: string[];
   currentTrackIndex: number;
+
+  // Hero management
+  createHero: (classId: PlayerClassId, name: string) => void;
+  switchHero: (heroId: string) => void;
+  resetHero: (heroId: string) => void;
+  renameHero: (heroId: string, newName: string) => void;
+  setView: (view: GameState['view']) => void;
+  createNewHeroFlow: () => void;
 
   // Music actions
   setCurrentMusicTracks: (tracks: string[]) => void;
@@ -116,16 +123,15 @@ export interface GameState {
   setActiveSubView: (view: GameState['activeSubView']) => void;
   setTownView: (view: 'TOWN' | 'CRAFTING') => void;
   setWorldTier: (tier: number) => void;
-  setBossEncounter: (monster: Monstre | null) => void; // NOUVEAU: Action pour gérer l'alerte
+  setBossEncounter: (monster: Monstre | null) => void;
   setProposedQuests: (quests: Quete[] | null) => void;
   setTargetIndex: (index: number) => void;
   checkAndApplyLevelUp: () => void;
   initializeGameData: (data: Partial<GameData>) => void;
-  setPlayerClass: (classId: PlayerClassId, name: string) => void;
   recalculateStats: (options?: { forceRestore?: boolean }) => void;
   equipItem: (itemId: string) => void;
   unequipItem: (slot: keyof InventoryState['equipment']) => void;
-  buyItem: (itemId: string) => boolean; // Modifié pour accepter un string
+  buyItem: (itemId: string) => boolean;
   sellItem: (itemId: string) => void;
   sellAllUnusedItems: () => { soldCount: number; goldGained: number };
   learnSkill: (skillId: string) => void;
@@ -456,17 +462,96 @@ export const useGameStore = create<GameState>()(
       dungeonStartTime: null,
       dungeonCompletionSummary: null,
       gameData: { dungeons: [], monsters: [], items: [], talents: [], skills: [], affixes: [], classes: [], quests: [], factions: [], sets: [], recipes: [], enchantments: [], components: [] },
-      player: getInitialPlayerState(),
-      inventory: initialInventoryState,
-      combat: initialCombatState,
-      activeQuests: [],
+      heroes: [],
+      activeHeroId: null,
+      get activeHero() {
+        const state = get();
+        if (!state.activeHeroId) return null;
+        return state.heroes.find(h => h.id === state.activeHeroId) ?? null;
+      },
+      // For compatibility
+      get player() { return get().activeHero?.player ?? getInitialPlayerState() },
+      get inventory() { return get().activeHero?.inventory ?? initialInventoryState },
+      get combat() { return get().activeHero?.combat ?? initialCombatState },
+      get activeQuests() { return get().activeHero?.activeQuests ?? [] },
       proposedQuests: null,
-      bossEncounter: null, // NOUVEAU: Initialisation de l'état du boss
+      bossEncounter: null,
       isHeroicMode: false,
 
       // Music state
       currentMusicTracks: [],
       currentTrackIndex: 0,
+
+      createHero: (classId: PlayerClassId, name: string) => {
+        set(state => {
+          const chosenClass = state.gameData.classes.find(c => c.id === classId);
+          if (!chosenClass) return;
+
+          const newPlayerState = getInitialPlayerState();
+          newPlayerState.name = name;
+          newPlayerState.classeId = chosenClass.id as PlayerClassId;
+          newPlayerState.baseStats = { ...chosenClass.statsBase };
+          newPlayerState.talentPoints = 1;
+          newPlayerState.resources.type = chosenClass.ressource;
+
+          const startingSkills = state.gameData.skills.filter(s => s.classeId === classId && s.niveauRequis === 1);
+          startingSkills.slice(0, 4).forEach((skill, index) => {
+            if (skill) {
+              newPlayerState.learnedSkills[skill.id] = 1;
+              newPlayerState.equippedSkills[index] = skill.id;
+            }
+          });
+
+          const newHero: Hero = {
+            id: newPlayerState.id,
+            player: newPlayerState,
+            inventory: initialInventoryState,
+            combat: initialCombatState,
+            activeQuests: [],
+          };
+
+          state.heroes.push(newHero);
+          state.activeHeroId = newHero.id;
+          state.view = 'MAIN';
+        });
+        get().recalculateStats();
+      },
+
+      switchHero: (heroId: string) => {
+        set(state => {
+          if (state.heroes.some(h => h.id === heroId)) {
+            state.activeHeroId = heroId;
+            state.view = 'MAIN';
+          }
+        });
+      },
+
+      resetHero: (heroId: string) => {
+        set(state => {
+          state.heroes = state.heroes.filter(h => h.id !== heroId);
+          if (state.activeHeroId === heroId) {
+            state.activeHeroId = null;
+            state.view = 'HERO_SELECTION';
+          }
+        });
+      },
+
+      renameHero: (heroId: string, newName: string) => {
+        set(state => {
+          const hero = state.heroes.find(h => h.id === heroId);
+          if (hero && hero.inventory.gold >= RENAME_COST) {
+            hero.player.name = newName;
+            hero.inventory.gold -= RENAME_COST;
+          }
+        });
+      },
+
+      setView: (view) => set({ view }),
+
+      createNewHeroFlow: () => set(state => {
+        state.activeHeroId = null;
+        state.view = 'MAIN';
+      }),
 
       // Music actions
       setCurrentMusicTracks: (tracks) => {
@@ -501,7 +586,6 @@ export const useGameStore = create<GameState>()(
         set({ worldTier: tier });
       },
 
-      // NOUVEAU: Implémentation de l'action pour le boss
       setBossEncounter: (monster) => {
         set({ bossEncounter: monster });
       },
@@ -512,37 +596,46 @@ export const useGameStore = create<GameState>()(
 
       setTargetIndex: (index: number) => {
         set((state: GameState) => {
-          state.combat.targetIndex = index;
+          const hero = state.activeHero;
+          if (!hero) return;
+          hero.combat.targetIndex = index;
         });
       },
 
       checkAndApplyLevelUp: () => {
-        const playerLevelBefore = get().player.level;
+        const activeHero = get().activeHero;
+        if (!activeHero) return;
+
+        const playerLevelBefore = activeHero.player.level;
         let didLevelUp = false;
 
         set((state) => {
+            const hero = state.heroes.find(h => h.id === state.activeHeroId);
+            if (!hero) return;
             // Inlined getXpToNextLevel to avoid using get() inside set()
-            let xpToNext = Math.floor(100 * Math.pow(state.player.level, 1.5));
+            let xpToNext = Math.floor(100 * Math.pow(hero.player.level, 1.5));
 
-            while (state.player.xp >= xpToNext) {
+            while (hero.player.xp >= xpToNext) {
                 didLevelUp = true;
-                state.player.level++;
-                state.player.talentPoints += 1;
-                state.player.xp -= xpToNext;
-                state.combat.log.push({
-                    message: `Félicitations ! Vous avez atteint le niveau ${state.player.level} !`,
+                hero.player.level++;
+                hero.player.talentPoints += 1;
+                hero.player.xp -= xpToNext;
+                hero.combat.log.push({
+                    message: `Félicitations ! Vous avez atteint le niveau ${hero.player.level} !`,
                     type: 'levelup',
                     timestamp: Date.now(),
                 });
                 // Recalculate for the new level, still inside the atomic update
-                xpToNext = Math.floor(100 * Math.pow(state.player.level, 1.5));
+                xpToNext = Math.floor(100 * Math.pow(hero.player.level, 1.5));
             }
         });
 
         if (didLevelUp) {
           get().recalculateStats({ forceRestore: true });
           set((state) => {
-            state.combat.log.push({
+            const hero = state.heroes.find(h => h.id === state.activeHeroId);
+            if (!hero) return;
+            hero.combat.log.push({
                 message: `Vous vous sentez ragaillardi par votre montée en niveau ! PV et ressource restaurés.`,
                 type: 'heal',
                 timestamp: Date.now(),
@@ -552,8 +645,8 @@ export const useGameStore = create<GameState>()(
       },
 
       getXpToNextLevel: () => {
-        const player = get().player;
-        if (!player.level) return 100;
+        const player = get().activeHero?.player;
+        if (!player || !player.level) return 100;
         return Math.floor(100 * Math.pow(player.level, 1.5));
       },
 
@@ -579,9 +672,11 @@ export const useGameStore = create<GameState>()(
       craftItem: (recipeId: string) => {
         let result: Item | { error: string } | null = null;
         set((state: GameState) => {
+          const hero = state.heroes.find(h => h.id === state.activeHeroId);
+          if (!hero) return;
           const recipe = state.gameData.recipes.find(r => r.id === recipeId);
           if (!recipe) { console.error(`Recipe ${recipeId} not found.`); result = null; return; }
-          if (state.inventory.gold < recipe.cost) { result = { error: "Pas assez d'or." }; return; }
+          if (hero.inventory.gold < recipe.cost) { result = { error: "Pas assez d'or." }; return; }
 
           const requiredItems: Record<string, number> = {};
           const requiredComponents: Record<string, number> = {};
@@ -596,7 +691,7 @@ export const useGameStore = create<GameState>()(
 
           // Pre-check components
           for (const [id, amount] of Object.entries(requiredComponents)) {
-            if ((state.inventory.craftingMaterials[id] || 0) < amount) {
+            if ((hero.inventory.craftingMaterials[id] || 0) < amount) {
               const comp = state.gameData.components.find(c => c.id === id);
               result = { error: `Manque de ${comp?.name || id}` };
               return;
@@ -604,7 +699,7 @@ export const useGameStore = create<GameState>()(
           }
 
           // Pre-check items and prepare for consumption
-          const inventoryItemsCopy = [...state.inventory.items];
+          const inventoryItemsCopy = [...hero.inventory.items];
           const consumedItemIndices: number[] = [];
 
           for (const [baseId, amount] of Object.entries(requiredItems)) {
@@ -626,22 +721,22 @@ export const useGameStore = create<GameState>()(
           }
 
           // --- All checks passed, proceed with transaction ---
-          state.inventory.gold -= recipe.cost;
+          hero.inventory.gold -= recipe.cost;
 
           for (const [id, amount] of Object.entries(requiredComponents)) {
-            state.inventory.craftingMaterials[id] -= amount;
+            hero.inventory.craftingMaterials[id] -= amount;
           }
 
           consumedItemIndices.sort((a, b) => b - a);
           for (const index of consumedItemIndices) {
-            state.inventory.items.splice(index, 1);
+            hero.inventory.items.splice(index, 1);
           }
 
           const baseItem = state.gameData.items.find(i => i.id === recipe.result);
           if (!baseItem) { console.error(`Result item ${recipe.result} not found.`); result = null; return; }
 
           const newItem: Item = { ...baseItem, id: uuidv4(), baseId: baseItem.id };
-          state.inventory.items.push(newItem);
+          hero.inventory.items.push(newItem);
           result = newItem;
         });
         return result;
@@ -649,8 +744,10 @@ export const useGameStore = create<GameState>()(
 
       gambleForItem: (itemSlot: string) => {
           const state = get();
+          const hero = state.activeHero;
+          if (!hero) return null;
           const cost = 100 * state.worldTier;
-          if (state.inventory.gold < cost) {
+          if (hero.inventory.gold < cost) {
               console.log("Not enough gold to gamble");
               return null;
           }
@@ -668,13 +765,15 @@ export const useGameStore = create<GameState>()(
           else if (roll < 0.35) rarity = "Rare";
 
           const baseItemTemplate = possibleTemplates[Math.floor(Math.random() * possibleTemplates.length)];
-          const itemLevel = state.player.level;
+          const itemLevel = hero.player.level;
           const { id, niveauMin, affixes, ...baseItemProps } = baseItemTemplate;
           const newItem = generateProceduralItem(baseItemProps, itemLevel, rarity, state.gameData.affixes, baseItemTemplate.id, undefined);
 
           set((currentState: GameState) => {
-              currentState.inventory.gold -= cost;
-              currentState.inventory.items.push(newItem);
+              const h = currentState.heroes.find(h => h.id === currentState.activeHeroId);
+              if (!h) return;
+              h.inventory.gold -= cost;
+              h.inventory.items.push(newItem);
           });
 
           return newItem;
@@ -689,10 +788,12 @@ export const useGameStore = create<GameState>()(
         const totalMaterialsGained: Record<string, number> = {};
 
         set((state: GameState) => {
+            const hero = state.heroes.find(h => h.id === state.activeHeroId);
+            if (!hero) return;
             const itemsToKeep: Item[] = [];
             const itemsToDismantle: Item[] = [];
 
-            state.inventory.items.forEach(item => {
+            hero.inventory.items.forEach(item => {
                 const itemRarityValue = rarityOrder[item.rarity];
                 if (item.type !== 'quest' && itemRarityValue < maxRarityValue) {
                     itemsToDismantle.push(item);
@@ -772,11 +873,11 @@ export const useGameStore = create<GameState>()(
 
                 materialsGained.forEach(mat => {
                     totalMaterialsGained[mat.id] = (totalMaterialsGained[mat.id] || 0) + mat.amount;
-                    state.inventory.craftingMaterials[mat.id] = (state.inventory.craftingMaterials[mat.id] || 0) + mat.amount;
+                    hero.inventory.craftingMaterials[mat.id] = (hero.inventory.craftingMaterials[mat.id] || 0) + mat.amount;
                 });
             });
 
-            state.inventory.items = itemsToKeep;
+            hero.inventory.items = itemsToKeep;
         });
 
         return { dismantledCount, materialsGained: totalMaterialsGained };
@@ -786,19 +887,21 @@ export const useGameStore = create<GameState>()(
         let materialsGained: { id: string, amount: number }[] | undefined = undefined;
 
         set((state: GameState) => {
-            const itemIndex = state.inventory.items.findIndex(i => i.id === itemId);
+            const hero = state.heroes.find(h => h.id === state.activeHeroId);
+            if (!hero) return;
+            const itemIndex = hero.inventory.items.findIndex(i => i.id === itemId);
             if (itemIndex === -1) {
                 materialsGained = undefined;
                 return;
             }
 
-            const itemToDismantle = state.inventory.items[itemIndex];
+            const itemToDismantle = hero.inventory.items[itemIndex];
             if (itemToDismantle.type === 'quest') {
                 console.log("Cannot dismantle quest items.");
                 materialsGained = undefined;
                 return;
             }
-            state.inventory.items.splice(itemIndex, 1);
+            hero.inventory.items.splice(itemIndex, 1);
 
             const { rarity, niveauMin, slot, type } = itemToDismantle;
             const calculatedMaterials: { id: string, amount: number }[] = [];
@@ -867,7 +970,7 @@ export const useGameStore = create<GameState>()(
             });
 
             Object.entries(finalMaterials).forEach(([matId, amount]) => {
-                 state.inventory.craftingMaterials[matId] = (state.inventory.craftingMaterials[matId] || 0) + amount;
+                 hero.inventory.craftingMaterials[matId] = (hero.inventory.craftingMaterials[matId] || 0) + amount;
             });
 
             materialsGained = Object.entries(finalMaterials).map(([id, amount]) => ({ id, amount }));
@@ -877,11 +980,13 @@ export const useGameStore = create<GameState>()(
 
       enchantItem: (itemId, enchantmentId) => {
         set((state: GameState) => {
-            let item: Item | null = state.inventory.items.find(i => i.id === itemId) || null;
+            const hero = state.heroes.find(h => h.id === state.activeHeroId);
+            if (!hero) return;
+            let item: Item | null = hero.inventory.items.find(i => i.id === itemId) || null;
 
             if (!item) {
-                for (const slot in state.inventory.equipment) {
-                    const equippedItem = state.inventory.equipment[slot as keyof typeof state.inventory.equipment];
+                for (const slot in hero.inventory.equipment) {
+                    const equippedItem = hero.inventory.equipment[slot as keyof typeof hero.inventory.equipment];
                     if (equippedItem && equippedItem.id === itemId) {
                         item = equippedItem;
                         break;
@@ -897,7 +1002,7 @@ export const useGameStore = create<GameState>()(
 
             // 1. Check cost
             for (const costItem of enchantment.cost) {
-                if ((state.inventory.craftingMaterials[costItem.id] || 0) < costItem.amount) {
+                if ((hero.inventory.craftingMaterials[costItem.id] || 0) < costItem.amount) {
                     // TODO: Add user feedback
                     return;
                 }
@@ -905,7 +1010,7 @@ export const useGameStore = create<GameState>()(
 
             // 2. Subtract cost
             enchantment.cost.forEach(costItem => {
-                state.inventory.craftingMaterials[costItem.id] -= costItem.amount;
+                hero.inventory.craftingMaterials[costItem.id] -= costItem.amount;
             });
 
             // 3. Apply new enchantment
@@ -931,6 +1036,8 @@ export const useGameStore = create<GameState>()(
       buyRecipe: (enchantmentId: string) => {
         let success = false;
         set((state: GameState) => {
+            const hero = state.heroes.find(h => h.id === state.activeHeroId);
+            if (!hero) return;
             const enchantment = state.gameData.enchantments.find(e => e.id === enchantmentId);
             if (!enchantment) {
                 console.error("Enchantment not found");
@@ -940,7 +1047,7 @@ export const useGameStore = create<GameState>()(
             // Check reputation requirement
             const repReq = enchantment.reputationRequirement;
             if (repReq) {
-                const currentRep = state.player.reputation[repReq.factionId]?.value || 0;
+                const currentRep = hero.player.reputation[repReq.factionId]?.value || 0;
                 if (currentRep < repReq.threshold) {
                     console.log("Not enough reputation");
                     return;
@@ -948,54 +1055,29 @@ export const useGameStore = create<GameState>()(
             }
 
             const price = getRecipePrice(enchantment);
-            if (state.inventory.gold < price) {
+            if (hero.inventory.gold < price) {
                 console.log("Not enough gold for recipe");
                 return;
             }
 
-            if (state.player.learnedRecipes.includes(enchantmentId)) {
+            if (hero.player.learnedRecipes.includes(enchantmentId)) {
                 console.log("Recipe already learned");
                 return;
             }
 
-            state.inventory.gold -= price;
-            state.player.learnedRecipes.push(enchantmentId);
+            hero.inventory.gold -= price;
+            hero.player.learnedRecipes.push(enchantmentId);
             success = true;
         });
         return success;
       },
 
-      setPlayerClass: (classId: PlayerClassId, name: string) => {
-        set((state: GameState) => {
-            const chosenClass = state.gameData.classes.find(c => c.id === classId);
-            if (!chosenClass) return;
-
-            state.player = getInitialPlayerState();
-            state.inventory = initialInventoryState;
-            state.combat = initialCombatState;
-            state.activeQuests = [];
-
-            state.player.name = name;
-            state.player.classeId = chosenClass.id as PlayerClassId;
-            state.player.baseStats = { ...chosenClass.statsBase };
-            state.player.talentPoints = 1;
-            state.player.resources.type = chosenClass.ressource;
-
-            const startingSkills = state.gameData.skills.filter(s => s.classeId === classId && s.niveauRequis === 1);
-
-            startingSkills.slice(0, 4).forEach((skill, index) => {
-                if (skill) {
-                    state.player.learnedSkills[skill.id] = 1;
-                    state.player.equippedSkills[index] = skill.id;
-                }
-            });
-        });
-        get().recalculateStats();
-      },
-
       recalculateStats: (options?: { forceRestore?: boolean }) => {
         set((state: GameState) => {
-          const { player, inventory, gameData } = state;
+          const hero = state.heroes.find(h => h.id === state.activeHeroId);
+          if (!hero) return;
+          const { player, inventory } = hero;
+          const { gameData } = state;
           if (!player.classeId) return;
 
           // Preserve current HP percentage, as max HP is about to be recalculated.
@@ -1014,7 +1096,7 @@ export const useGameStore = create<GameState>()(
           player.completedDungeons = player.completedDungeons || {};
           player.completedQuests = player.completedQuests || [];
           inventory.potions = inventory.potions || { health: 0, resource: 0 };
-          state.activeQuests = state.activeQuests || [];
+          hero.activeQuests = hero.activeQuests || [];
 
           const classe = gameData.classes.find(c => c.id === player.classeId);
           if (!classe) return;
@@ -1210,7 +1292,7 @@ export const useGameStore = create<GameState>()(
           if (options?.forceRestore || state.view !== 'COMBAT') {
             player.stats.PV = newMaxHp;
             player.shield = 0;
-            if(state.player.resources.type !== 'Rage') {
+            if(hero.player.resources.type !== 'Rage') {
               player.resources.current = player.resources.max;
             }
           } else {
@@ -1220,7 +1302,9 @@ export const useGameStore = create<GameState>()(
       },
 
       equipItem: (itemId: string) => {
-        const { inventory, player } = get();
+        const hero = get().activeHero;
+        if (!hero) return;
+        const { inventory, player } = hero;
         const itemIndex = inventory.items.findIndex(i => i.id === itemId);
         if (itemIndex === -1) return;
 
@@ -1238,24 +1322,26 @@ export const useGameStore = create<GameState>()(
         }
 
         set((state: GameState) => {
-            state.inventory.items.splice(itemIndex, 1);
+            const h = state.heroes.find(h => h.id === state.activeHeroId);
+            if (!h) return;
+            h.inventory.items.splice(itemIndex, 1);
             let slot = itemToEquip.slot as keyof InventoryState['equipment'];
 
             if (slot === 'ring') {
-                if (state.inventory.equipment.ring === null) {
+                if (h.inventory.equipment.ring === null) {
                     slot = 'ring';
-                } else if (state.inventory.equipment.ring2 === null) {
+                } else if (h.inventory.equipment.ring2 === null) {
                     slot = 'ring2';
                 } else {
                     slot = 'ring';
                 }
             }
 
-            const currentItem = state.inventory.equipment[slot];
+            const currentItem = h.inventory.equipment[slot];
             if (currentItem) {
-                state.inventory.items.push(currentItem);
+                h.inventory.items.push(currentItem);
             }
-            state.inventory.equipment[slot] = itemToEquip;
+            h.inventory.equipment[slot] = itemToEquip;
         });
 
         get().recalculateStats();
@@ -1263,17 +1349,21 @@ export const useGameStore = create<GameState>()(
 
       unequipItem: (slot: keyof InventoryState['equipment']) => {
         set((state: GameState) => {
-            const item = state.inventory.equipment[slot];
+            const hero = state.heroes.find(h => h.id === state.activeHeroId);
+            if (!hero) return;
+            const item = hero.inventory.equipment[slot];
             if (item) {
-                state.inventory.items.push(item);
-                state.inventory.equipment[slot] = null;
+                hero.inventory.items.push(item);
+                hero.inventory.equipment[slot] = null;
             }
         });
         get().recalculateStats();
       },
 
       buyItem: (itemId: string) => {
-          const { inventory, gameData } = get();
+          const { gameData } = get();
+          const hero = get().activeHero;
+          if (!hero) return false;
           const itemToBuy = gameData.items.find(i => i.id === itemId);
 
           if (!itemToBuy) {
@@ -1282,29 +1372,33 @@ export const useGameStore = create<GameState>()(
           }
 
           const price = getItemBuyPrice(itemToBuy);
-          if (price <= 0 || inventory.gold < price) {
+          if (price <= 0 || hero.inventory.gold < price) {
               return false;
           }
 
           const newItem: Item = { ...itemToBuy, id: uuidv4(), baseId: itemToBuy.id };
 
           set((state: GameState) => {
-              state.inventory.gold -= price;
-              state.inventory.items.push(newItem);
+              const h = state.heroes.find(h => h.id === state.activeHeroId);
+              if (!h) return;
+              h.inventory.gold -= price;
+              h.inventory.items.push(newItem);
           });
           return true;
       },
 
       sellItem: (itemId: string) => {
         set((state: GameState) => {
-            const itemIndex = state.inventory.items.findIndex(i => i.id === itemId);
+            const hero = state.heroes.find(h => h.id === state.activeHeroId);
+            if (!hero) return;
+            const itemIndex = hero.inventory.items.findIndex(i => i.id === itemId);
             if (itemIndex === -1) return;
 
-            const itemToSell = state.inventory.items[itemIndex];
+            const itemToSell = hero.inventory.items[itemIndex];
             const sellPrice = getItemSellPrice(itemToSell);
 
-            state.inventory.gold += sellPrice;
-            state.inventory.items.splice(itemIndex, 1);
+            hero.inventory.gold += sellPrice;
+            hero.inventory.items.splice(itemIndex, 1);
         });
       },
 
@@ -1312,21 +1406,26 @@ export const useGameStore = create<GameState>()(
         let soldCount = 0;
         let goldGained = 0;
         set((state: GameState) => {
-            const itemsToSell = [...state.inventory.items];
-            state.inventory.items = [];
+            const hero = state.heroes.find(h => h.id === state.activeHeroId);
+            if (!hero) return;
+            const itemsToSell = [...hero.inventory.items];
+            hero.inventory.items = [];
 
             itemsToSell.forEach(item => {
                 goldGained += getItemSellPrice(item);
                 soldCount++;
             });
-            state.inventory.gold += goldGained;
+            hero.inventory.gold += goldGained;
         });
         return { soldCount, goldGained };
       },
 
       learnSkill: (skillId: string) => {
         set((state: GameState) => {
-          const { player, gameData } = state;
+          const hero = state.heroes.find(h => h.id === state.activeHeroId);
+          if (!hero) return;
+          const { player } = hero;
+          const { gameData } = state;
           const skill = gameData.skills.find(s => s.id === skillId);
           if (!skill || player.talentPoints <= 0) return;
 
@@ -1352,7 +1451,10 @@ export const useGameStore = create<GameState>()(
 
       learnTalent: (talentId: string) => {
         set((state: GameState) => {
-          const { player, gameData } = state;
+          const hero = state.heroes.find(h => h.id === state.activeHeroId);
+          if (!hero) return;
+          const { player } = hero;
+          const { gameData } = state;
           const talent = gameData.talents.find(t => t.id === talentId);
           if (!talent || player.talentPoints <= 0) return;
 
@@ -1381,29 +1483,35 @@ export const useGameStore = create<GameState>()(
 
       learnRecipe: (recipeId: string) => {
         set((state: GameState) => {
-            if (!state.player.learnedRecipes.includes(recipeId)) {
-                state.player.learnedRecipes.push(recipeId);
+            const hero = state.heroes.find(h => h.id === state.activeHeroId);
+            if (!hero) return;
+            if (!hero.player.learnedRecipes.includes(recipeId)) {
+                hero.player.learnedRecipes.push(recipeId);
             }
         });
       },
 
       equipSkill: (skillId: string, slot: number) => {
         set((state: GameState) => {
-            if (slot < 0 || slot >= state.player.equippedSkills.length) return;
+            const hero = state.heroes.find(h => h.id === state.activeHeroId);
+            if (!hero) return;
+            if (slot < 0 || slot >= hero.player.equippedSkills.length) return;
 
-            const existingSlot = state.player.equippedSkills.indexOf(skillId);
+            const existingSlot = hero.player.equippedSkills.indexOf(skillId);
             if (existingSlot !== -1) {
-                state.player.equippedSkills[existingSlot] = null;
+                hero.player.equippedSkills[existingSlot] = null;
             }
 
-            state.player.equippedSkills[slot] = skillId;
+            hero.player.equippedSkills[slot] = skillId;
         });
       },
 
       unequipSkill: (slot: number) => {
         set((state: GameState) => {
-            if (slot < 0 || slot >= state.player.equippedSkills.length) return;
-            state.player.equippedSkills[slot] = null;
+            const hero = state.heroes.find(h => h.id === state.activeHeroId);
+            if (!hero) return;
+            if (slot < 0 || slot >= hero.player.equippedSkills.length) return;
+            hero.player.equippedSkills[slot] = null;
         });
       },
 
@@ -1415,32 +1523,38 @@ export const useGameStore = create<GameState>()(
       },
 
       buyPotion: (potionType: PotionType) => {
+          const hero = get().activeHero;
+          if (!hero) return false;
           const POTION_COST = potionType === 'health' ? 50 : 75;
-          const { inventory } = get();
-          if (inventory.gold < POTION_COST) {
+          if (hero.inventory.gold < POTION_COST) {
               return false;
           }
           set((state: GameState) => {
-              state.inventory.gold -= POTION_COST;
-              state.inventory.potions[potionType]++;
+              const h = state.heroes.find(h => h.id === state.activeHeroId);
+              if (!h) return;
+              h.inventory.gold -= POTION_COST;
+              h.inventory.potions[potionType]++;
           });
           return true;
       },
 
       rest: () => {
+          const hero = get().activeHero;
+          if (!hero) return false;
           const REST_COST = 25;
-          const { inventory } = get();
-          if (inventory.gold < REST_COST) {
+          if (hero.inventory.gold < REST_COST) {
               return false;
           }
           set((state: GameState) => {
-              state.inventory.gold -= REST_COST;
-              const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
-              state.player.stats.PV = maxHp;
-              if (state.player.resources.type !== 'Rage') {
-                  state.player.resources.current = state.player.resources.max;
+              const h = state.heroes.find(h => h.id === state.activeHeroId);
+              if (!h) return;
+              h.inventory.gold -= REST_COST;
+              const maxHp = formulas.calculateMaxHP(h.player.level, h.player.stats);
+              h.player.stats.PV = maxHp;
+              if (h.player.resources.type !== 'Rage') {
+                  h.player.resources.current = h.player.resources.max;
               } else {
-                  state.player.resources.current = 0;
+                  h.player.resources.current = 0;
               }
           });
           return true;
@@ -1448,26 +1562,28 @@ export const useGameStore = create<GameState>()(
 
       consumePotion: (potionType: PotionType) => {
           set((state: GameState) => {
+              const hero = state.heroes.find(h => h.id === state.activeHeroId);
+              if (!hero) return;
               if (potionType === 'health') {
-                 if (state.inventory.potions.health > 0) {
-                    const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
+                 if (hero.inventory.potions.health > 0) {
+                    const maxHp = formulas.calculateMaxHP(hero.player.level, hero.player.stats);
                     let healAmount = Math.round(maxHp * 0.15);
 
-                    const buffedStats = getModifiedStats(state.player.stats, [...state.player.activeBuffs, ...state.player.activeDebuffs], state.player.form);
+                    const buffedStats = getModifiedStats(hero.player.stats, [...hero.player.activeBuffs, ...hero.player.activeDebuffs], hero.player.form);
                     healAmount *= (buffedStats.HealingMultiplier || 1);
                     healAmount *= (buffedStats.HealingReceivedMultiplier || 1);
                     healAmount = Math.round(healAmount);
 
-                    state.player.stats.PV = Math.min(maxHp, state.player.stats.PV + healAmount);
-                    state.inventory.potions.health--;
-                    state.combat.log.push({ message: `You use a potion and heal for ${healAmount} HP.`, type: 'heal', timestamp: Date.now() });
+                    hero.player.stats.PV = Math.min(maxHp, hero.player.stats.PV + healAmount);
+                    hero.inventory.potions.health--;
+                    hero.combat.log.push({ message: `You use a potion and heal for ${healAmount} HP.`, type: 'heal', timestamp: Date.now() });
                 }
               } else if (potionType === 'resource') {
-                  if (state.inventory.potions.resource > 0) {
-                      const resourceAmount = Math.round(state.player.resources.max * 0.25);
-                      state.player.resources.current = Math.min(state.player.resources.max, state.player.resources.current + resourceAmount);
-                      state.inventory.potions.resource--;
-                      state.combat.log.push({ message: `You use a potion and restore ${resourceAmount} ${state.player.resources.type}.`, type: 'heal', timestamp: Date.now() });
+                  if (hero.inventory.potions.resource > 0) {
+                      const resourceAmount = Math.round(hero.player.resources.max * 0.25);
+                      hero.player.resources.current = Math.min(hero.player.resources.max, hero.player.resources.current + resourceAmount);
+                      hero.inventory.potions.resource--;
+                      hero.combat.log.push({ message: `You use a potion and restore ${resourceAmount} ${hero.player.resources.type}.`, type: 'heal', timestamp: Date.now() });
                   }
               }
           });
@@ -1475,10 +1591,12 @@ export const useGameStore = create<GameState>()(
 
       acceptQuest: (questId: string) => {
         set((state: GameState) => {
+            const hero = state.heroes.find(h => h.id === state.activeHeroId);
+            if (!hero) return;
             const questToAccept = state.gameData.quests.find(q => q.id === questId);
             if (!questToAccept) return;
 
-            if (state.activeQuests.some(q => q.quete.id === questId) || state.player.completedQuests.includes(questId)) {
+            if (hero.activeQuests.some(q => q.quete.id === questId) || hero.player.completedQuests.includes(questId)) {
                 return;
             }
             
@@ -1487,16 +1605,18 @@ export const useGameStore = create<GameState>()(
                 newActiveQuest.startTime = Date.now();
             }
 
-            state.activeQuests.push(newActiveQuest);
+            hero.activeQuests.push(newActiveQuest);
         });
       },
 
       acceptMultipleQuests: (questIds: string[]) => {
         set((state: GameState) => {
+          const hero = state.heroes.find(h => h.id === state.activeHeroId);
+          if (!hero) return;
           const newQuestsToAdd = questIds
             .map(questId => {
               const questToAccept = state.gameData.quests.find(q => q.id === questId);
-              if (!questToAccept || state.activeQuests.some(q => q.quete.id === questId) || state.player.completedQuests.includes(questId)) {
+              if (!questToAccept || hero.activeQuests.some(q => q.quete.id === questId) || hero.player.completedQuests.includes(questId)) {
                 return null;
               }
               const newActiveQuest: ActiveQuete = { quete: questToAccept, progress: 0 };
@@ -1507,20 +1627,24 @@ export const useGameStore = create<GameState>()(
             })
             .filter((q): q is ActiveQuete => q !== null);
 
-          state.activeQuests.push(...newQuestsToAdd);
+          hero.activeQuests.push(...newQuestsToAdd);
         });
       },
 
       addFloatingText: (entityId, text, type) => {
         set(state => {
+            const hero = state.heroes.find(h => h.id === state.activeHeroId);
+            if (!hero) return;
             const id = uuidv4();
-            state.combat.floatingTexts.push({ id, entityId, text, type });
+            hero.combat.floatingTexts.push({ id, entityId, text, type });
         });
       },
 
       removeFloatingText: (id: string) => {
         set(state => {
-            state.combat.floatingTexts = state.combat.floatingTexts.filter(ft => ft.id !== id);
+            const hero = state.heroes.find(h => h.id === state.activeHeroId);
+            if (!hero) return;
+            hero.combat.floatingTexts = hero.combat.floatingTexts.filter(ft => ft.id !== id);
         });
       },
 
@@ -1533,7 +1657,10 @@ export const useGameStore = create<GameState>()(
 
       endDungeon: () => {
         set((state: GameState) => {
-            const { combat, player, inventory, gameData, currentDungeon, worldTier } = state;
+            const hero = state.heroes.find(h => h.id === state.activeHeroId);
+            if (!hero) return;
+            const { combat, player, inventory } = hero;
+            const { gameData, currentDungeon, worldTier } = state;
 
             // --- Amélioration des récompenses du coffre de donjon ---
             const chestGold = (currentDungeon?.palier ?? 1) * 150 * worldTier;
@@ -1624,7 +1751,7 @@ export const useGameStore = create<GameState>()(
                 const completedQuestsThisDungeon: string[] = [];
                 const dungeonTime = state.dungeonStartTime ? Date.now() - state.dungeonStartTime : Infinity;
 
-                state.activeQuests.forEach(activeQuest => {
+                hero.activeQuests.forEach(activeQuest => {
                     const { quete } = activeQuest;
                     if (quete.type === 'nettoyage' && quete.requirements.dungeonId === dungeonId && quete.requirements.clearCount) {
                         if (newClearCount >= quete.requirements.clearCount) {
@@ -1665,13 +1792,13 @@ export const useGameStore = create<GameState>()(
                 });
 
                 if (completedQuestsThisDungeon.length > 0) {
-                    state.activeQuests = state.activeQuests.filter(aq => !completedQuestsThisDungeon.includes(aq.quete.id));
+                    hero.activeQuests = hero.activeQuests.filter(aq => !completedQuestsThisDungeon.includes(aq.quete.id));
                 }
             }
 
-            state.combat.dungeonRunItems = [];
-            state.combat.goldGained = 0;
-            state.combat.xpGained = 0;
+            combat.dungeonRunItems = [];
+            combat.goldGained = 0;
+            combat.xpGained = 0;
             state.dungeonStartTime = null;
             state.view = 'DUNGEON_COMPLETED';
             if (gameLoop) clearInterval(gameLoop);
@@ -1687,6 +1814,8 @@ export const useGameStore = create<GameState>()(
 
         if (dungeon) {
           set((state: GameState) => {
+            const hero = state.heroes.find(h => h.id === state.activeHeroId);
+            if (!hero) return;
             state.view = 'COMBAT';
             state.currentDungeon = dungeon;
             state.dungeonState = {
@@ -1694,9 +1823,9 @@ export const useGameStore = create<GameState>()(
                 monstersRemainingInDungeon: dungeon.killTarget,
             };
             state.dungeonStartTime = Date.now();
-            state.combat = { ...initialCombatState, goldGained: 0, xpGained: 0, pendingActions: [], log: [{ message: `Entered ${dungeon.name}.`, type: 'info', timestamp: Date.now() }]};
-            if (state.player.resources.type === 'Rage') {
-              state.player.resources.current = 0;
+            hero.combat = { ...initialCombatState, goldGained: 0, xpGained: 0, pendingActions: [], log: [{ message: `Entered ${dungeon.name}.`, type: 'info', timestamp: Date.now() }]};
+            if (hero.player.resources.type === 'Rage') {
+              hero.player.resources.current = 0;
             }
           });
           get().startCombat();
@@ -1705,18 +1834,9 @@ export const useGameStore = create<GameState>()(
         }
       },
 
-      // ====================================================================================
-      // NOTE: Monster abilities are not yet implemented. Currently, monsters only
-      // perform basic auto-attacks. A future system could involve:
-      // - Adding an `abilities` array to monster definitions in `monsters.json`.
-      // - Creating a monster AI loop within `gameTick` that decides when a monster
-      //   should use an ability instead of a basic attack.
-      // - Expanding the `enemyAttacks` function to process these abilities, likely
-      //   re-using parts of the `skillProcessor` logic for effects.
-      // ====================================================================================
       startCombat: () => {
-        const { currentDungeon, gameData, worldTier } = get();
-        if (!currentDungeon) return;
+        const { currentDungeon, gameData, worldTier, activeHero } = get();
+        if (!currentDungeon || !activeHero) return;
 
         const possibleMonsters = gameData.monsters.filter(m => currentDungeon.monsters.includes(m.id) && !m.isBoss);
         const monsterCount = Math.floor(Math.random() * 3) + 1;
@@ -1781,17 +1901,21 @@ export const useGameStore = create<GameState>()(
 
         if (newEnemies.length > 0) {
             set((state: GameState) => {
-              state.combat.enemies = newEnemies;
-              state.combat.playerAttackProgress = 0;
-              state.combat.playerAttackInterval = state.player.stats.Vitesse * 1000;
-              state.combat.log.push({ message: `A group of ${newEnemies.map(e => e.nom).join(', ')} appears!`, type: 'info', timestamp: Date.now() });
-              state.combat.targetIndex = 0;
+              const hero = state.heroes.find(h => h.id === state.activeHeroId);
+              if (!hero) return;
+              hero.combat.enemies = newEnemies;
+              hero.combat.playerAttackProgress = 0;
+              hero.combat.playerAttackInterval = hero.player.stats.Vitesse * 1000;
+              hero.combat.log.push({ message: `A group of ${newEnemies.map(e => e.nom).join(', ')} appears!`, type: 'info', timestamp: Date.now() });
+              hero.combat.targetIndex = 0;
             });
         }
       },
 
       gameTick: (delta: number) => {
-          const { view, combat, bossEncounter } = get();
+          const { view, bossEncounter, activeHero } = get();
+          if (!activeHero) return;
+          const { combat } = activeHero;
 
           if(view !== 'COMBAT' || !combat.enemies || combat.enemies.length === 0 || bossEncounter) {
             if(gameLoop && view !== 'COMBAT') clearInterval(gameLoop);
@@ -1801,57 +1925,59 @@ export const useGameStore = create<GameState>()(
           const deadEnemyIdsFromActions: string[] = [];
 
           set((state: GameState) => {
-              const livingEnemies = state.combat.enemies.filter(e => e.stats.PV > 0);
+              const hero = state.heroes.find(h => h.id === state.activeHeroId);
+              if (!hero) return;
+              const livingEnemies = hero.combat.enemies.filter(e => e.stats.PV > 0);
               if (livingEnemies.length === 0) {
-                  state.combat.playerAttackProgress = 0;
+                  hero.combat.playerAttackProgress = 0;
                   return;
               }
 
-              if (state.player.stunDuration > 0) {
-                state.player.stunDuration -= delta;
-              } else if (state.combat.autoAttack) {
-                  state.combat.playerAttackProgress += delta / state.combat.playerAttackInterval;
-                  if (state.combat.playerAttackProgress > 1) {
-                      state.combat.playerAttackProgress = 1;
+              if (hero.player.stunDuration > 0) {
+                hero.player.stunDuration -= delta;
+              } else if (hero.combat.autoAttack) {
+                  hero.combat.playerAttackProgress += delta / hero.combat.playerAttackInterval;
+                  if (hero.combat.playerAttackProgress > 1) {
+                      hero.combat.playerAttackProgress = 1;
                   }
               }
 
-              if (state.player.invulnerabilityDuration > 0) {
-                state.player.invulnerabilityDuration -= delta;
+              if (hero.player.invulnerabilityDuration > 0) {
+                hero.player.invulnerabilityDuration -= delta;
               }
 
-              if (state.player.stats.HPRegenPercent && state.player.stats.HPRegenPercent > 0) {
-                const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
-                const regenAmount = maxHp * (state.player.stats.HPRegenPercent / 100) * (delta / 1000); // per second
-                state.player.stats.PV = Math.min(maxHp, state.player.stats.PV + regenAmount);
+              if (hero.player.stats.HPRegenPercent && hero.player.stats.HPRegenPercent > 0) {
+                const maxHp = formulas.calculateMaxHP(hero.player.level, hero.player.stats);
+                const regenAmount = maxHp * (hero.player.stats.HPRegenPercent / 100) * (delta / 1000); // per second
+                hero.player.stats.PV = Math.min(maxHp, hero.player.stats.PV + regenAmount);
               }
 
-              if (state.player.resources.type === 'Énergie') {
+              if (hero.player.resources.type === 'Énergie') {
                   const energyPerSecond = 20;
-                  state.player.resources.current = Math.min(state.player.resources.max, state.player.resources.current + (energyPerSecond * (delta / 1000)));
-              } else if (state.player.resources.type === 'Mana') {
+                  hero.player.resources.current = Math.min(hero.player.resources.max, hero.player.resources.current + (energyPerSecond * (delta / 1000)));
+              } else if (hero.player.resources.type === 'Mana') {
                   const manaPerSecond = 10;
-                  state.player.resources.current = Math.min(state.player.resources.max, state.player.resources.current + (manaPerSecond * (delta / 1000)));
+                  hero.player.resources.current = Math.min(hero.player.resources.max, hero.player.resources.current + (manaPerSecond * (delta / 1000)));
               }
 
-              for (const skillId in state.combat.skillCooldowns) {
-                  state.combat.skillCooldowns[skillId] -= delta;
-                  if (state.combat.skillCooldowns[skillId] <= 0) {
-                      delete state.combat.skillCooldowns[skillId];
+              for (const skillId in hero.combat.skillCooldowns) {
+                  hero.combat.skillCooldowns[skillId] -= delta;
+                  if (hero.combat.skillCooldowns[skillId] <= 0) {
+                      delete hero.combat.skillCooldowns[skillId];
                   }
               }
 
-              for (const monsterSkillId in state.combat.monsterSkillCooldowns) {
-                  state.combat.monsterSkillCooldowns[monsterSkillId] -= delta;
-                  if (state.combat.monsterSkillCooldowns[monsterSkillId] <= 0) {
-                      delete state.combat.monsterSkillCooldowns[monsterSkillId];
+              for (const monsterSkillId in hero.combat.monsterSkillCooldowns) {
+                  hero.combat.monsterSkillCooldowns[monsterSkillId] -= delta;
+                  if (hero.combat.monsterSkillCooldowns[monsterSkillId] <= 0) {
+                      delete hero.combat.monsterSkillCooldowns[monsterSkillId];
                   }
               }
 
-              const stealthExpired = state.player.activeBuffs.some(b => b.id === 'stealth' && b.duration <= delta);
+              const stealthExpired = hero.player.activeBuffs.some(b => b.id === 'stealth' && b.duration <= delta);
               let shouldRecalculate = false;
 
-              state.player.activeBuffs = state.player.activeBuffs.filter(buff => {
+              hero.player.activeBuffs = hero.player.activeBuffs.filter(buff => {
                   buff.duration -= delta;
                   if (buff.duration <= 0) {
                       shouldRecalculate = true;
@@ -1861,14 +1987,14 @@ export const useGameStore = create<GameState>()(
                   if (buff.healingPerTick && buff.nextTickIn !== undefined && buff.tickInterval !== undefined) {
                       buff.nextTickIn -= delta;
                       if (buff.nextTickIn <= 0) {
-                        const buffedStats = getModifiedStats(state.player.stats, [...state.player.activeBuffs, ...state.player.activeDebuffs], state.player.form);
+                        const buffedStats = getModifiedStats(hero.player.stats, [...hero.player.activeBuffs, ...hero.player.activeDebuffs], hero.player.form);
                         const healAmount = buff.healingPerTick * (buffedStats.HealingReceivedMultiplier || 1);
-                        const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
-                        const oldHp = state.player.stats.PV;
-                        state.player.stats.PV = Math.min(maxHp, state.player.stats.PV + healAmount);
-                        const actualHeal = Math.round(state.player.stats.PV - oldHp);
+                        const maxHp = formulas.calculateMaxHP(hero.player.level, hero.player.stats);
+                        const oldHp = hero.player.stats.PV;
+                        hero.player.stats.PV = Math.min(maxHp, hero.player.stats.PV + healAmount);
+                        const actualHeal = Math.round(hero.player.stats.PV - oldHp);
                         if (actualHeal > 0) {
-                            state.combat.log.push({ message: `Votre ${buff.name} vous rend ${actualHeal} PV.`, type: 'heal', timestamp: Date.now() });
+                            hero.combat.log.push({ message: `Votre ${buff.name} vous rend ${actualHeal} PV.`, type: 'heal', timestamp: Date.now() });
                         }
                         buff.nextTickIn = buff.tickInterval;
                       }
@@ -1876,16 +2002,16 @@ export const useGameStore = create<GameState>()(
                   return true;
               });
 
-              if (stealthExpired && state.combat.isStealthed) {
-                state.combat.isStealthed = false;
-                state.combat.log.push({ message: "Votre camouflage s'est estompé.", type: 'info', timestamp: Date.now() });
+              if (stealthExpired && hero.combat.isStealthed) {
+                hero.combat.isStealthed = false;
+                hero.combat.log.push({ message: "Votre camouflage s'est estompé.", type: 'info', timestamp: Date.now() });
               }
 
               if (shouldRecalculate) {
                 get().recalculateStats();
               }
 
-              state.combat.enemies.forEach(enemy => {
+              hero.combat.enemies.forEach(enemy => {
                   if(enemy.stats.PV > 0) {
                     if (enemy.stunDuration > 0) {
                         enemy.stunDuration -= delta;
@@ -1908,8 +2034,8 @@ export const useGameStore = create<GameState>()(
                             if (debuff.nextTickIn <= 0) {
                                 const damage = debuff.damagePerTick; // TODO: Consider resistances
                                 enemy.stats.PV -= damage;
-                                state.combat.log.push({ message: `${enemy.nom} subit ${damage} dégâts de ${debuff.name}.`, type: 'enemy_attack', timestamp: Date.now() });
-                                state.combat.floatingTexts.push({ id: uuidv4(), entityId: enemy.id, text: `-${damage}`, type: 'damage' });
+                                hero.combat.log.push({ message: `${enemy.nom} subit ${damage} dégâts de ${debuff.name}.`, type: 'enemy_attack', timestamp: Date.now() });
+                                hero.combat.floatingTexts.push({ id: uuidv4(), entityId: enemy.id, text: `-${damage}`, type: 'damage' });
                                 debuff.nextTickIn = debuff.tickInterval;
                                 if (enemy.stats.PV <= 0) {
                                     deadEnemyIdsFromActions.push(enemy.id);
@@ -1923,8 +2049,8 @@ export const useGameStore = create<GameState>()(
           });
 
           const updatedState = get();
-          if (updatedState.combat.autoAttack && updatedState.combat.playerAttackProgress >= 1 && updatedState.combat.enemies.some(e => e.stats.PV > 0)) {
-              const target = updatedState.combat.enemies[updatedState.combat.targetIndex];
+          if (updatedState.activeHero && updatedState.activeHero.combat.autoAttack && updatedState.activeHero.combat.playerAttackProgress >= 1 && updatedState.activeHero.combat.enemies.some(e => e.stats.PV > 0)) {
+              const target = updatedState.activeHero.combat.enemies[updatedState.activeHero.combat.targetIndex];
               if(target && target.stats.PV > 0) {
                 get().playerAttack(target.id);
               } else {
@@ -1932,31 +2058,33 @@ export const useGameStore = create<GameState>()(
               }
           }
 
-          if (updatedState.combat.enemies.some(e => e.attackProgress >= 1)) {
+          if (updatedState.activeHero && updatedState.activeHero.combat.enemies.some(e => e.attackProgress >= 1)) {
               get().enemyAttacks();
           }
 
           set((state: GameState) => {
-            state.combat.pendingActions = state.combat.pendingActions?.filter(action => {
+            const hero = state.heroes.find(h => h.id === state.activeHeroId);
+            if (!hero) return;
+            hero.combat.pendingActions = hero.combat.pendingActions?.filter(action => {
                 if (action.type === 'damage_wave') {
                     action.nextWaveIn -= delta;
                     if (action.nextWaveIn <= 0) {
-                        const target = state.combat.enemies.find(e => e.id === action.targetId);
+                        const target = hero.combat.enemies.find(e => e.id === action.targetId);
                         if (target && target.stats.PV > 0) {
                             const skill = state.gameData.skills.find(s => s.id === action.skillId);
                             const damageEffect = skill?.effects?.find(e => (e as any).type === 'multi_strike');
                             const damageType = (damageEffect as any)?.damage?.damageType || 'arcane';
-                            const damage = formulas.calculateSpellDamage(action.damagePerWave, formulas.calculateSpellPower(state.player.stats));
-                            const isCrit = formulas.isCriticalHit(state.player.stats.CritPct, state.player.stats.Precision, target.stats, state.player, state.gameData);
-                            const finalDamage = isCrit ? damage * (state.player.stats.CritDmg / 100) : damage;
-                            const dr = formulas.calculateArmorDR(target.stats.Armure, state.player.level);
+                            const damage = formulas.calculateSpellDamage(action.damagePerWave, formulas.calculateSpellPower(hero.player.stats));
+                            const isCrit = formulas.isCriticalHit(hero.player.stats.CritPct, hero.player.stats.Precision, target.stats, hero.player, state.gameData);
+                            const finalDamage = isCrit ? damage * (hero.player.stats.CritDmg / 100) : damage;
+                            const dr = formulas.calculateArmorDR(target.stats.Armure, hero.player.level);
                             const mitigatedDamage = Math.round(finalDamage * (1 - dr));
 
                             target.stats.PV -= mitigatedDamage;
-                            const waveNum = skill?.effets ? getTalentEffectValue(skill.effets[0], state.player.learnedSkills[skill.id]) - action.wavesLeft + 1 : 0;
+                            const waveNum = skill?.effets ? getTalentEffectValue(skill.effets[0], hero.player.learnedSkills[skill.id]) - action.wavesLeft + 1 : 0;
                             const msg = `Votre ${skill!.nom} (Vague ${waveNum}) inflige ${mitigatedDamage} points de dégâts à ${target.nom}.`;
                             const critMsg = `CRITIQUE ! Votre ${skill!.nom} (Vague ${waveNum}) inflige ${mitigatedDamage} points de dégâts à ${target.nom}.`;
-                            state.combat.log.push({ message: isCrit ? critMsg : msg, type: isCrit ? 'crit' : 'player_attack', timestamp: Date.now() });
+                            hero.combat.log.push({ message: isCrit ? critMsg : msg, type: isCrit ? 'crit' : 'player_attack', timestamp: Date.now() });
 
                             if (target.stats.PV <= 0) {
                                 deadEnemyIdsFromActions.push(target.id);
@@ -1971,21 +2099,25 @@ export const useGameStore = create<GameState>()(
           });
 
           deadEnemyIdsFromActions.forEach(id => {
-            const enemy = get().combat.enemies.find(e => e.id === id);
+            const enemy = get().activeHero?.combat.enemies.find(e => e.id === id);
             if(enemy) get().handleEnemyDeath(enemy);
           });
           get().checkAndApplyLevelUp();
       },
 
       playerAttack: function(targetId: string, isCleave = false) {
-        const { combat, player } = get();
+        const hero = get().activeHero;
+        if (!hero) return;
+        const { combat, player } = hero;
         const target = combat.enemies.find(e => e.id === targetId);
         if (!target || target.stats.PV <= 0) return;
 
         if (combat.isStealthed) {
             set((state: GameState) => {
-                state.combat.isStealthed = false;
-                state.combat.log.push({ message: "Vous sortez de l'ombre.", type: 'info', timestamp: Date.now() });
+                const h = state.heroes.find(h => h.id === state.activeHeroId);
+                if (!h) return;
+                h.combat.isStealthed = false;
+                h.combat.log.push({ message: "Vous sortez de l'ombre.", type: 'info', timestamp: Date.now() });
                 get().addFloatingText(player.id, "Camouflage rompu", 'info');
             });
         }
@@ -2015,22 +2147,24 @@ export const useGameStore = create<GameState>()(
         // Post-attack logic like Rage generation and Cleave should be handled
         // after the skill has been processed.
         set((state: GameState) => {
-            if (state.player.resources.type === 'Rage' && !isCleave) {
+            const h = state.heroes.find(h => h.id === state.activeHeroId);
+            if (!h) return;
+            if (h.player.resources.type === 'Rage' && !isCleave) {
                 let rageGained = 5;
-                const criDeGuerreRank = state.player.learnedTalents['berserker_battle_cry'] || 0;
+                const criDeGuerreRank = h.player.learnedTalents['berserker_battle_cry'] || 0;
                 if (criDeGuerreRank > 0) {
                     const talent = state.gameData.talents.find(t => t.id === 'berserker_battle_cry');
                     if (talent && talent.effets) rageGained += getTalentEffectValue(talent.effets[0], criDeGuerreRank);
                 }
-                state.player.resources.current = Math.min(state.player.resources.max, state.player.resources.current + rageGained);
+                h.player.resources.current = Math.min(h.player.resources.max, h.player.resources.current + rageGained);
             }
         });
 
-        const targetAfterAttack = get().combat.enemies.find(e => e.id === targetId);
+        const targetAfterAttack = get().activeHero?.combat.enemies.find(e => e.id === targetId);
         if (targetAfterAttack && targetAfterAttack.stats.PV > 0) {
-            const cleaveRank = get().player.learnedTalents['berserker_cleave'] || 0;
-            if (!isCleave && cleaveRank > 0 && get().combat.enemies.filter(e => e.stats.PV > 0).length > 1) {
-                const secondaryTarget = get().combat.enemies.find(e => e.id !== targetId && e.stats.PV > 0);
+            const cleaveRank = get().activeHero?.player.learnedTalents['berserker_cleave'] || 0;
+            if (!isCleave && cleaveRank > 0 && get().activeHero!.combat.enemies.filter(e => e.stats.PV > 0).length > 1) {
+                const secondaryTarget = get().activeHero!.combat.enemies.find(e => e.id !== targetId && e.stats.PV > 0);
                 if (secondaryTarget) {
                     get().playerAttack(secondaryTarget.id, true);
                 }
@@ -2051,7 +2185,7 @@ export const useGameStore = create<GameState>()(
 
         if (deadEnemyIds.length > 0) {
             deadEnemyIds.forEach(enemyId => {
-                const enemy = get().combat.enemies.find(e => e.id === enemyId);
+                const enemy = get().activeHero?.combat.enemies.find(e => e.id === enemyId);
                 if (enemy) {
                     get().handleEnemyDeath(enemy, skillId || undefined);
                 }
@@ -2060,12 +2194,16 @@ export const useGameStore = create<GameState>()(
       },
 
       enemyAttacks: () => {
-        const { combat, player } = get();
+        const hero = get().activeHero;
+        if (!hero) return;
+        const { combat, player } = hero;
         const events: { entityId: string; text: string; type: FloatingTextType }[] = [];
 
         if (combat.isStealthed) {
             set((state: GameState) => {
-                state.combat.enemies.forEach(enemy => {
+                const h = state.heroes.find(h => h.id === state.activeHeroId);
+                if (!h) return;
+                h.combat.enemies.forEach(enemy => {
                     if (enemy.attackProgress >= 1) {
                         enemy.attackProgress = 0;
                     }
@@ -2092,8 +2230,10 @@ export const useGameStore = create<GameState>()(
             if (didDodge) {
                 events.push({ entityId: player.id, text: 'Esquive', type: 'dodge' });
                 set((state: GameState) => {
-                    state.combat.log.push({ message: `Vous esquivez l'attaque de ${enemy.nom}.`, type: 'info', timestamp: Date.now() });
-                    const enemyInState = state.combat.enemies.find(e => e.id === enemy.id);
+                    const h = state.heroes.find(h => h.id === state.activeHeroId);
+                    if (!h) return;
+                    h.combat.log.push({ message: `Vous esquivez l'attaque de ${enemy.nom}.`, type: 'info', timestamp: Date.now() });
+                    const enemyInState = h.combat.enemies.find(e => e.id === enemy.id);
                     if (enemyInState) enemyInState.attackProgress = 0;
                 });
                 get().applyTalentTrigger('on_dodge', { attackerId: enemy.id });
@@ -2119,45 +2259,47 @@ export const useGameStore = create<GameState>()(
             totalDamage = Math.round(totalDamage);
 
             set((state: GameState) => {
-                const enemyInState = state.combat.enemies.find(e => e.id === enemy.id);
+                const h = state.heroes.find(h => h.id === state.activeHeroId);
+                if (!h) return;
+                const enemyInState = h.combat.enemies.find(e => e.id === enemy.id);
                 if (!enemyInState || enemyInState.stats.PV <= 0) return;
 
-                if (state.player.invulnerabilityDuration > 0) {
-                    events.push({ entityId: player.id, text: 'Invulnérable!', type: 'info' });
-                    state.combat.log.push({ message: `L'attaque de ${enemy.nom} est bloquée par votre invulnérabilité.`, type: 'shield', timestamp: Date.now() });
+                if (h.player.invulnerabilityDuration > 0) {
+                    events.push({ entityId: h.player.id, text: 'Invulnérable!', type: 'info' });
+                    h.combat.log.push({ message: `L'attaque de ${enemy.nom} est bloquée par votre invulnérabilité.`, type: 'shield', timestamp: Date.now() });
                     enemyInState.attackProgress = 0;
                     return;
                 }
 
                 let damageToApply = totalDamage;
 
-                if (state.player.shield > 0) {
-                    const shieldAbsorption = Math.min(state.player.shield, damageToApply);
-                    events.push({ entityId: player.id, text: `-${shieldAbsorption}`, type: 'shield' });
-                    state.player.shield -= shieldAbsorption;
+                if (h.player.shield > 0) {
+                    const shieldAbsorption = Math.min(h.player.shield, damageToApply);
+                    events.push({ entityId: h.player.id, text: `-${shieldAbsorption}`, type: 'shield' });
+                    h.player.shield -= shieldAbsorption;
                     damageToApply -= shieldAbsorption;
-                    state.combat.log.push({ message: `L'attaque de ${enemy.nom} est absorbée par votre bouclier pour ${shieldAbsorption} points.`, type: 'shield', timestamp: Date.now() });
+                    h.combat.log.push({ message: `L'attaque de ${enemy.nom} est absorbée par votre bouclier pour ${shieldAbsorption} points.`, type: 'shield', timestamp: Date.now() });
                 }
 
                 if (damageToApply > 0) {
-                     if (state.player.stats.PV - damageToApply <= 0) {
+                     if (h.player.stats.PV - damageToApply <= 0) {
                         // Death logic here, potentially preventing damage and not adding floating text
                      }
 
                     if (damageToApply > 0) {
-                        events.push({ entityId: player.id, text: `-${damageToApply}`, type: 'damage' });
-                        state.player.stats.PV -= damageToApply;
+                        events.push({ entityId: h.player.id, text: `-${damageToApply}`, type: 'damage' });
+                        h.player.stats.PV -= damageToApply;
                         let damageMessage = `${enemy.nom} vous inflige ${damageToApply} points de dégâts`;
                         if (mitigatedElementalDamage > 0 && elementalDamageType) {
                              damageMessage += ` (${mitigatedPhysicalDamage} physiques, ${mitigatedElementalDamage} de ${elementalDamageType})`;
                         }
                         damageMessage += '.';
-                        state.combat.log.push({ message: damageMessage, type: 'enemy_attack', timestamp: Date.now() });
+                        h.combat.log.push({ message: damageMessage, type: 'enemy_attack', timestamp: Date.now() });
                     }
                 }
 
-                if (state.player.resources.type === 'Rage') {
-                    state.player.resources.current = Math.min(state.player.resources.max, state.player.resources.current + 10);
+                if (h.player.resources.type === 'Rage') {
+                    h.player.resources.current = Math.min(h.player.resources.max, h.player.resources.current + 10);
                 }
                 enemyInState.attackProgress = 0;
             });
@@ -2165,17 +2307,21 @@ export const useGameStore = create<GameState>()(
 
         events.forEach(ft => get().addFloatingText(ft.entityId, ft.text, ft.type));
 
-        if (get().player.stats.PV <= 0) {
+        const activeHero = get().activeHero;
+        if (!activeHero) return;
+        if (activeHero.player.stats.PV <= 0) {
             set((state: GameState) => {
-                const goldPenalty = Math.floor(state.inventory.gold * 0.10);
-                state.inventory.gold -= goldPenalty;
-                state.combat.log.push({ message: `Vous avez été vaincu ! Vous perdez ${goldPenalty} or et tous les objets trouvés dans le donjon. Retour en ville.`, type: 'info', timestamp: Date.now() });
-                const maxHp = formulas.calculateMaxHP(state.player.level, state.player.stats);
-                state.player.stats.PV = maxHp * 0.2;
-                if (state.player.resources.type !== 'Rage') {
-                    state.player.resources.current = state.player.resources.max * 0.2;
+                const h = state.heroes.find(h => h.id === state.activeHeroId);
+                if (!h) return;
+                const goldPenalty = Math.floor(h.inventory.gold * 0.10);
+                h.inventory.gold -= goldPenalty;
+                h.combat.log.push({ message: `Vous avez été vaincu ! Vous perdez ${goldPenalty} or et tous les objets trouvés dans le donjon. Retour en ville.`, type: 'info', timestamp: Date.now() });
+                const maxHp = formulas.calculateMaxHP(h.player.level, h.player.stats);
+                h.player.stats.PV = maxHp * 0.2;
+                if (h.player.resources.type !== 'Rage') {
+                    h.player.resources.current = h.player.resources.max * 0.2;
                 } else {
-                    state.player.resources.current = 0;
+                    h.player.resources.current = 0;
                 }
                 state.view = 'MAIN';
                 if (gameLoop) clearInterval(gameLoop);
@@ -2189,15 +2335,20 @@ export const useGameStore = create<GameState>()(
             return;
         }
         set((state: GameState) => {
-            if (!state.combat.enemies.some(e => e && e.id === enemy.id)) return;
-             const enemyInState = state.combat.enemies.find(e => e.id === enemy.id);
+            const hero = state.heroes.find(h => h.id === state.activeHeroId);
+            if (!hero) return;
+            if (!hero.combat.enemies.some(e => e && e.id === enemy.id)) return;
+             const enemyInState = hero.combat.enemies.find(e => e.id === enemy.id);
              if (enemyInState) {
                 enemyInState.attackProgress = 0;
              }
         });
 
         set((state: GameState) => {
-            const { gameData, currentDungeon, activeQuests, isHeroicMode, worldTier } = state;
+            const hero = state.heroes.find(h => h.id === state.activeHeroId);
+            if (!hero) return;
+            const { gameData, currentDungeon, isHeroicMode, worldTier } = state;
+            const { activeQuests } = hero;
 
             const palierMultiplier = currentDungeon ? Math.floor(currentDungeon.palier / 2) + 1 : 1;
             let goldDrop = (5 + palierMultiplier * 2);
@@ -2206,21 +2357,21 @@ export const useGameStore = create<GameState>()(
             }
             const xpGained = Math.round((enemy.level * 10) * (1 + (currentDungeon ? currentDungeon.palier * 0.05 : 0)));
 
-            state.combat.log.push({ message: `You defeated ${enemy.nom}!`, type: 'info', timestamp: Date.now() });
-            state.combat.log.push({ message: `You find ${goldDrop} gold.`, type: 'loot', timestamp: Date.now() });
-            state.combat.goldGained += goldDrop;
+            hero.combat.log.push({ message: `You defeated ${enemy.nom}!`, type: 'info', timestamp: Date.now() });
+            hero.combat.log.push({ message: `You find ${goldDrop} gold.`, type: 'loot', timestamp: Date.now() });
+            hero.combat.goldGained += goldDrop;
 
-            state.player.xp += xpGained;
-            state.combat.xpGained += xpGained;
-            state.combat.log.push({ message: `You gain ${xpGained} experience.`, type: 'info', timestamp: Date.now() });
+            hero.player.xp += xpGained;
+            hero.combat.xpGained += xpGained;
+            hero.combat.log.push({ message: `You gain ${xpGained} experience.`, type: 'info', timestamp: Date.now() });
 
             if (state.dungeonState && state.dungeonState.equipmentDropsPending > 0 && state.dungeonState.monstersRemainingInDungeon > 0) {
                 const dropChance = state.dungeonState.equipmentDropsPending / state.dungeonState.monstersRemainingInDungeon;
                 if (Math.random() < dropChance) {
-                    const equipmentDrop = generateEquipmentLoot(enemy, gameData, state.player.classeId, worldTier, state.currentDungeon || undefined, enemy.famille);
+                    const equipmentDrop = generateEquipmentLoot(enemy, gameData, hero.player.classeId, worldTier, state.currentDungeon || undefined, enemy.famille);
                     if (equipmentDrop) {
-                        state.combat.dungeonRunItems.push(equipmentDrop);
-                        state.combat.log.push({ message: ``, type: 'loot', timestamp: Date.now(), item: equipmentDrop });
+                        hero.combat.dungeonRunItems.push(equipmentDrop);
+                        hero.combat.log.push({ message: ``, type: 'loot', timestamp: Date.now(), item: equipmentDrop });
                         if(state.dungeonState) state.dungeonState.equipmentDropsPending--;
                     }
                 }
@@ -2237,8 +2388,8 @@ export const useGameStore = create<GameState>()(
                       const questItem = gameData.items.find(item => item.id === quete.requirements.itemId);
                       if (questItem && Math.random() < 0.3) { // 30% drop chance for quest items
                           const newQuestItem = { ...questItem, id: uuidv4() };
-                          state.combat.dungeonRunItems.push(newQuestItem);
-                          state.combat.log.push({ message: ``, type: 'loot', timestamp: Date.now(), item: newQuestItem });
+                          hero.combat.dungeonRunItems.push(newQuestItem);
+                          hero.combat.log.push({ message: ``, type: 'loot', timestamp: Date.now(), item: newQuestItem });
                       }
                   }
               }
@@ -2250,23 +2401,23 @@ export const useGameStore = create<GameState>()(
                 if (Math.random() < loot.chance) {
                   const materialId = loot.id;
                   const amount = loot.quantity;
-                  state.inventory.craftingMaterials[materialId] = (state.inventory.craftingMaterials[materialId] || 0) + amount;
+                  hero.inventory.craftingMaterials[materialId] = (hero.inventory.craftingMaterials[materialId] || 0) + amount;
                   const material = state.gameData.components.find(c => c.id === materialId);
-                  state.combat.log.push({ message: `You find ${amount} x ${material ? material.name : materialId}.`, type: 'loot', timestamp: Date.now() });
+                  hero.combat.log.push({ message: `You find ${amount} x ${material ? material.name : materialId}.`, type: 'loot', timestamp: Date.now() });
                 }
               });
             }
 
             if (!enemy.isBoss) {
-              state.combat.killCount += 1;
+              hero.combat.killCount += 1;
             }
 
-            if (state.combat.targetIndex === state.combat.enemies.findIndex(e => e.id === enemy.id)) {
-                const nextTargetIndex = state.combat.enemies.findIndex(e => e.stats.PV > 0);
-                state.combat.targetIndex = nextTargetIndex !== -1 ? nextTargetIndex : 0;
+            if (hero.combat.targetIndex === hero.combat.enemies.findIndex(e => e.id === enemy.id)) {
+                const nextTargetIndex = hero.combat.enemies.findIndex(e => e.stats.PV > 0);
+                hero.combat.targetIndex = nextTargetIndex !== -1 ? nextTargetIndex : 0;
             }
 
-            state.activeQuests.forEach((activeQuest) => {
+            hero.activeQuests.forEach((activeQuest) => {
               const { quete } = activeQuest;
               const req = quete.requirements;
               let progressMade = false;
@@ -2281,7 +2432,7 @@ export const useGameStore = create<GameState>()(
                   if (Math.random() < 0.3) {
                       activeQuest.progress++;
                       progressMade = true;
-                      state.combat.log.push({ message: `Vous avez récupéré: ${req.itemId} (${activeQuest.progress}/${req.itemCount})`, type: 'quest', timestamp: Date.now() });
+                      hero.combat.log.push({ message: `Vous avez récupéré: ${req.itemId} (${activeQuest.progress}/${req.itemCount})`, type: 'quest', timestamp: Date.now() });
                   }
               } else if (quete.type === 'defi' && req.dungeonId === currentDungeon?.id && req.skillId && req.monsterType) {
                   if (skillId === req.skillId && enemy.famille === req.monsterType) {
@@ -2292,17 +2443,17 @@ export const useGameStore = create<GameState>()(
       
               const target = req.killCount || req.itemCount || (req.bossId ? 1 : 0);
               if (progressMade && target > 0 && activeQuest.progress >= target) {
-                  state.combat.log.push({ message: `Quête terminée: ${quete.name}!`, type: 'quest', timestamp: Date.now() });
-                  state.inventory.gold += quete.rewards.gold;
-                  state.player.xp += quete.rewards.xp;
-                  state.combat.log.push({ message: `Vous avez reçu ${quete.rewards.gold} or et ${quete.rewards.xp} XP.`, type: 'loot', timestamp: Date.now() });
+                  hero.combat.log.push({ message: `Quête terminée: ${quete.name}!`, type: 'quest', timestamp: Date.now() });
+                  hero.inventory.gold += quete.rewards.gold;
+                  hero.player.xp += quete.rewards.xp;
+                  hero.combat.log.push({ message: `Vous avez reçu ${quete.rewards.gold} or et ${quete.rewards.xp} XP.`, type: 'loot', timestamp: Date.now() });
       
-                  state.player.completedQuests.push(quete.id);
+                  hero.player.completedQuests.push(quete.id);
 
                   // Remove quest items if it's a 'collecte' quest
                   if (quete.type === 'collecte' && req.itemId && req.itemCount) {
                       let itemsToRemove = req.itemCount;
-                      state.inventory.items = state.inventory.items.filter(item => {
+                      hero.inventory.items = hero.inventory.items.filter(item => {
                           if (item.baseId === req.itemId && itemsToRemove > 0) {
                               itemsToRemove--;
                               return false; // Remove this item
@@ -2311,17 +2462,17 @@ export const useGameStore = create<GameState>()(
                       });
                   }
 
-                  const activeQuestIndex = state.activeQuests.findIndex(aq => aq.quete.id === quete.id);
+                  const activeQuestIndex = hero.activeQuests.findIndex(aq => aq.quete.id === quete.id);
                   if (activeQuestIndex !== -1) {
-                      state.activeQuests.splice(activeQuestIndex, 1);
+                      hero.activeQuests.splice(activeQuestIndex, 1);
                   }
       
                   if (quete.rewards.reputation) {
                       const rep = quete.rewards.reputation;
-                      const repData = state.player.reputation[rep.factionId] || { value: 0, claimedRewards: [] };
+                      const repData = hero.player.reputation[rep.factionId] || { value: 0, claimedRewards: [] };
                       repData.value += rep.amount;
-                      state.player.reputation[rep.factionId] = repData;
-                      state.combat.log.push({ message: `Votre réputation avec ${gameData.factions.find(f => f.id === rep.factionId)?.name || 'une faction'} a augmenté de ${rep.amount}.`, type: 'info', timestamp: Date.now() });
+                      hero.player.reputation[rep.factionId] = repData;
+                      hero.combat.log.push({ message: `Votre réputation avec ${gameData.factions.find(f => f.id === rep.factionId)?.name || 'une faction'} a augmenté de ${rep.amount}.`, type: 'info', timestamp: Date.now() });
                   }
               }
           });
@@ -2329,18 +2480,20 @@ export const useGameStore = create<GameState>()(
           get().checkAndApplyLevelUp();
         });
 
-        const allEnemiesDead = get().combat.enemies.every(e => e.stats.PV <= 0);
+        const activeHero = get().activeHero;
+        if (!activeHero) return;
+        const allEnemiesDead = activeHero.combat.enemies.every(e => e.stats.PV <= 0);
         const currentDungeon = get().currentDungeon;
 
         if (allEnemiesDead) {
              setTimeout(() => {
                 const { gameData } = get();
                 if (currentDungeon) {
-                    const bossHasBeenDefeated = get().combat.enemies.some(e => e.isBoss && e.stats.PV <= 0);
+                    const bossHasBeenDefeated = get().activeHero!.combat.enemies.some(e => e.isBoss && e.stats.PV <= 0);
 
                     if (bossHasBeenDefeated) {
                         get().endDungeon();
-                    } else if (get().combat.killCount >= currentDungeon.killTarget) {
+                    } else if (get().activeHero!.combat.killCount >= currentDungeon.killTarget) {
                         const bossTemplate = gameData.monsters.find(m => m.id === currentDungeon.bossId);
                         if (bossTemplate) {
                             const bossInstance: CombatEnemy = {
@@ -2355,13 +2508,14 @@ export const useGameStore = create<GameState>()(
                                 isBoss: true
                             };
                             
-                            // NOUVEAU: Déclencher l'état de rencontre avec le boss
                             get().setBossEncounter(bossTemplate);
 
                             set((state: GameState) => {
-                                state.combat.enemies = [bossInstance];
-                                state.combat.targetIndex = 0;
-                                state.combat.log.push({ message: `Le boss, ${bossTemplate.nom}, apparaît !`, type: 'info', timestamp: Date.now() });
+                                const hero = state.heroes.find(h => h.id === state.activeHeroId);
+                                if (!hero) return;
+                                hero.combat.enemies = [bossInstance];
+                                hero.combat.targetIndex = 0;
+                                hero.combat.log.push({ message: `Le boss, ${bossTemplate.nom}, apparaît !`, type: 'info', timestamp: Date.now() });
                             });
                         }
                     } else {
@@ -2374,41 +2528,49 @@ export const useGameStore = create<GameState>()(
 
       cycleTarget: () => {
         set((state: GameState) => {
-            const livingEnemies = state.combat.enemies.filter(e => e.stats.PV > 0);
+            const hero = state.heroes.find(h => h.id === state.activeHeroId);
+            if (!hero) return;
+            const livingEnemies = hero.combat.enemies.filter(e => e.stats.PV > 0);
             if (livingEnemies.length > 1) {
-                const currentTargetId = state.combat.enemies[state.combat.targetIndex].id;
+                const currentTargetId = hero.combat.enemies[hero.combat.targetIndex].id;
                 const currentTargetIndexInLiving = livingEnemies.findIndex(e => e.id === currentTargetId);
                 const nextLivingIndex = (currentTargetIndexInLiving + 1) % livingEnemies.length;
                 const newTargetId = livingEnemies[nextLivingIndex].id;
-                const newTargetIndexInAll = state.combat.enemies.findIndex(e => e.id === newTargetId);
+                const newTargetIndexInAll = hero.combat.enemies.findIndex(e => e.id === newTargetId);
 
-                state.combat.targetIndex = newTargetIndexInAll;
-                state.combat.log.push({ message: `You are now targeting ${state.combat.enemies[newTargetIndexInAll].nom}.`, type: 'info', timestamp: Date.now() });
+                hero.combat.targetIndex = newTargetIndexInAll;
+                hero.combat.log.push({ message: `You are now targeting ${hero.combat.enemies[newTargetIndexInAll].nom}.`, type: 'info', timestamp: Date.now() });
             }
         });
       },
 
       flee: () => {
         set((state: GameState) => {
+            const hero = state.heroes.find(h => h.id === state.activeHeroId);
+            if (!hero) return;
             state.view = 'MAIN';
             state.dungeonStartTime = null;
-            state.combat.enemies = [];
-            state.inventory.items.push(...state.combat.dungeonRunItems);
-            state.combat.dungeonRunItems = [];
-            state.combat.log.push({ message: 'You fled from combat. Items found have been kept.', type: 'flee', timestamp: Date.now() });
+            hero.combat.enemies = [];
+            hero.inventory.items.push(...hero.combat.dungeonRunItems);
+            hero.combat.dungeonRunItems = [];
+            hero.combat.log.push({ message: 'You fled from combat. Items found have been kept.', type: 'flee', timestamp: Date.now() });
         });
         if(gameLoop) clearInterval(gameLoop);
       },
 
       toggleAutoAttack: () => {
         set((state: GameState) => {
-          state.combat.autoAttack = !state.combat.autoAttack;
+          const hero = state.heroes.find(h => h.id === state.activeHeroId);
+          if (!hero) return;
+          hero.combat.autoAttack = !hero.combat.autoAttack;
         });
       },
 
       applyTalentTrigger: (trigger, context) => {
         set((state: GameState) => {
-            const { player, gameData, combat } = state;
+            const hero = state.heroes.find(h => h.id === state.activeHeroId);
+            if (!hero) return;
+            const { player, gameData, combat } = hero;
             Object.entries(player.learnedTalents).forEach(([talentId, rank]) => {
                 const talent = gameData.talents.find(t => t.id === talentId);
                 if (!talent || !talent.triggeredEffects) return;
@@ -2495,23 +2657,25 @@ export const useGameStore = create<GameState>()(
 
       applySpecialEffect: (trigger, context) => {
         set((state: GameState) => {
+            const hero = state.heroes.find(h => h.id === state.activeHeroId);
+            if (!hero) return;
             if (trigger === 'ON_CRITICAL_HIT') {
-                const danseDeLombreRank = state.player.learnedTalents['rogue_assassinat_ultime'];
+                const danseDeLombreRank = hero.player.learnedTalents['rogue_assassinat_ultime'];
                 if (danseDeLombreRank && danseDeLombreRank > 0) {
-                    state.combat.isStealthed = true;
-                    state.player.nextAttackIsGuaranteedCrit = true;
-                    state.combat.log.push({ message: `Danse de l'Ombre vous camoufle et garantit un coup critique.`, type: 'talent_proc', timestamp: Date.now() });
+                    hero.combat.isStealthed = true;
+                    hero.player.nextAttackIsGuaranteedCrit = true;
+                    hero.combat.log.push({ message: `Danse de l'Ombre vous camoufle et garantit un coup critique.`, type: 'talent_proc', timestamp: Date.now() });
                 }
             }
 
-            Object.values(state.inventory.equipment).forEach(item => {
+            Object.values(hero.inventory.equipment).forEach(item => {
                 if (item?.specialEffect?.trigger === trigger) {
                     const effect = item.specialEffect;
                     console.log(`Applying special effect: ${effect.effect} from item ${item.name}`);
 
                     switch (effect.effect) {
                         case 'APPLY_BLEED':
-                            const target = state.combat.enemies.find(e => e.id === context.targetId);
+                            const target = hero.combat.enemies.find(e => e.id === context.targetId);
                             if (target && effect.details) {
                                 target.activeDebuffs = target.activeDebuffs || [];
                                 target.activeDebuffs.push({
@@ -2522,13 +2686,13 @@ export const useGameStore = create<GameState>()(
                                     tickInterval: 1000,
                                     nextTickIn: 1000,
                                 });
-                                state.combat.log.push({ message: `${target.nom} is bleeding!`, type: 'enemy_attack', timestamp: Date.now() });
+                                hero.combat.log.push({ message: `${target.nom} is bleeding!`, type: 'enemy_attack', timestamp: Date.now() });
                             }
                             break;
                         case 'RESET_SKILL_COOLDOWN':
-                            if (context.isCrit && effect.skillId && state.combat.skillCooldowns[effect.skillId]) {
-                                delete state.combat.skillCooldowns[effect.skillId];
-                                state.combat.log.push({ message: `Your critical hit reset the cooldown of ${effect.skillId}!`, type: 'info', timestamp: Date.now() });
+                            if (context.isCrit && effect.skillId && hero.combat.skillCooldowns[effect.skillId]) {
+                                delete hero.combat.skillCooldowns[effect.skillId];
+                                hero.combat.log.push({ message: `Your critical hit reset the cooldown of ${effect.skillId}!`, type: 'info', timestamp: Date.now() });
                             }
                             break;
                     }
@@ -2542,22 +2706,23 @@ export const useGameStore = create<GameState>()(
       storage: storage,
       onRehydrateStorage: () => (state: GameState | undefined) => {
         if (state) {
-            state.rehydrateComplete = true;
-            state.view = 'MAIN';
-            state.combat = initialCombatState;
-            state.player.learnedTalents = state.player.learnedTalents || {};
-            state.player.activeBuffs = state.player.activeBuffs || [];
-            state.player.reputation = state.player.reputation || {};
-            state.player.completedQuests = Array.isArray(state.player.completedQuests) ? state.player.completedQuests : [];
-            state.activeQuests = Array.isArray(state.activeQuests) ? state.activeQuests : [];
-            state.player.completedDungeons = (state.player.completedDungeons && typeof state.player.completedDungeons === 'object' && !Array.isArray(state.player.completedDungeons)) ? state.player.completedDungeons : {};
+          state.rehydrateComplete = true;
+          // Reset combat state for all heroes on rehydration
+          if (state.heroes) {
+            state.heroes.forEach(hero => {
+              hero.combat = initialCombatState;
+            });
+          }
 
-            if(typeof state.inventory.potions !== 'object' || state.inventory.potions === null) {
-              state.inventory.potions = { health: 0, resource: 0};
-            }
-            if(typeof state.inventory.craftingMaterials !== 'object' || state.inventory.craftingMaterials === null) {
-                state.inventory.craftingMaterials = {};
-            }
+          if (state.activeHeroId && state.heroes.some(h => h.id === state.activeHeroId)) {
+            state.view = 'MAIN';
+          } else if (state.heroes && state.heroes.length > 0) {
+            state.view = 'HERO_SELECTION';
+            state.activeHeroId = state.heroes[0].id;
+          } else {
+            state.view = 'MAIN'; // Will trigger ChooseClassView because activeHeroId is null
+            state.activeHeroId = null;
+          }
         }
       }
     }

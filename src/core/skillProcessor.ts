@@ -2,22 +2,23 @@ import type { WritableDraft } from 'immer';
 import type { GameState } from '@/state/gameStore';
 import * as formulas from '@/core/formulas';
 import { getRankValue, getModifiedStats } from '@/core/formulas';
-import type { Buff, Debuff, Stats, FloatingTextType, StatMod } from '@/lib/types';
+import type { Buff, Debuff, Stats, FloatingTextType, StatMod, Hero } from '@/lib/types';
 import { SkillEffectSchema } from '@/data/schemas';
 
 
 export const applyPoisonProc = (
     state: WritableDraft<GameState>,
+    hero: WritableDraft<Hero>,
     target: WritableDraft<GameState>['combat']['enemies'][number],
     floatingTexts: { entityId: string, text: string, type: FloatingTextType }[],
     forceApply = false
 ) => {
     const chance = forceApply ? 1 : 0.3;
-    if (state.player.activeBuffs.some(b => b.id === 'deadly_poison_buff') && Math.random() < chance) {
+    if (hero.player.activeBuffs.some(b => b.id === 'deadly_poison_buff') && Math.random() < chance) {
         const poisonDebuffId = 'deadly_poison_debuff';
         let existingPoison = target.activeDebuffs.find(d => d.id === poisonDebuffId);
 
-        const buffedPlayerStats = getModifiedStats(state.player.stats, state.player.activeBuffs, state.player.form);
+        const buffedPlayerStats = getModifiedStats(hero.player.stats, hero.player.activeBuffs, hero.player.form);
         const attackPower = formulas.calculateAttackPower(buffedPlayerStats);
         const damagePerTickPerStack = Math.round(attackPower * 0.05); // 5% of AP per stack
 
@@ -46,7 +47,7 @@ export const applyPoisonProc = (
         const poisonStacks = currentPoison ? (currentPoison.stacks || 1) : 1;
 
         floatingTexts.push({ entityId: target.id, text: `Poison (x${poisonStacks})`, type: 'debuff' });
-        state.combat.log.push({ message: `${target.nom} est affligé par le Poison mortel (x${poisonStacks}).`, type: 'poison_proc', timestamp: Date.now() });
+        hero.combat.log.push({ message: `${target.nom} est affligé par le Poison mortel (x${poisonStacks}).`, type: 'poison_proc', timestamp: Date.now() });
     }
 };
 
@@ -61,7 +62,12 @@ export const processSkill = (
 ): { deadEnemyIds: string[], floatingTexts: { entityId: string, text: string, type: FloatingTextType }[] } => {
     const deadEnemyIds: string[] = [];
     const floatingTexts: { entityId: string, text: string, type: FloatingTextType }[] = [];
-    const { player, combat, gameData } = state;
+
+    const hero = state.heroes.find(h => h.id === state.activeHeroId);
+    if (!hero) return { deadEnemyIds, floatingTexts };
+
+    const { player, combat } = hero;
+    const { gameData } = state;
 
     let originalSkill: Skill | undefined | null = null;
     if (skillObject) {
@@ -139,7 +145,7 @@ export const processSkill = (
 
         // ... (gestion des procs ON_HIT, etc.) ...
         if (!preventPoisonProc) {
-            applyPoisonProc(state, target, floatingTexts, true);
+            applyPoisonProc(state, hero, target, floatingTexts, true);
         }
         
         return { mitigatedDamage: finalDamageRounded, isCrit };
@@ -203,7 +209,7 @@ export const processSkill = (
             if (originalSkill.cooldown) {
                 combat.skillCooldowns[skillId] = originalSkill.cooldown * 1000;
             }
-            state.combat.playerAttackProgress = 0;
+            hero.combat.playerAttackProgress = 0;
 
             return { deadEnemyIds, floatingTexts };
         }
@@ -240,8 +246,8 @@ export const processSkill = (
         if ((combat.skillCooldowns[skillId] || 0) > 0) return { deadEnemyIds, floatingTexts };
 
         if (skillId !== 'mage_arcane_blast') {
-            const arcaneChargeIndex = state.player.activeBuffs.findIndex(b => b.id === 'arcane_charge');
-            if (arcaneChargeIndex > -1) state.player.activeBuffs.splice(arcaneChargeIndex, 1);
+            const arcaneChargeIndex = hero.player.activeBuffs.findIndex(b => b.id === 'arcane_charge');
+            if (arcaneChargeIndex > -1) hero.player.activeBuffs.splice(arcaneChargeIndex, 1);
         }
     }
 
@@ -264,7 +270,7 @@ export const processSkill = (
             if (anyEffect.type === 'heal' || anyEffect.type === 'buff') {
                 // Self-target effects
             } else if (anyEffect.target === 'all_enemies') {
-                targets = state.combat.enemies.filter(e => e.stats.PV > 0);
+                targets = hero.combat.enemies.filter(e => e.stats.PV > 0);
             } else {
                 if (primaryTarget && primaryTarget.stats.PV > 0) targets.push(primaryTarget);
             }
@@ -404,7 +410,7 @@ export const processSkill = (
                 }
 
                 if (anyEffect.id === 'stealth') {
-                    state.combat.isStealthed = true;
+                    hero.combat.isStealthed = true;
                 }
                 floatingTexts.push({ entityId: player.id, text: anyEffect.name, type: 'buff' });
                 combat.log.push({ message: `Vous utilisez ${skill.nom}.`, type: 'info', timestamp: Date.now() });
@@ -496,7 +502,7 @@ export const processSkill = (
             if (skillId && originalSkill.cooldown) {
                 combat.skillCooldowns[skillId] = originalSkill.cooldown * 1000;
             }
-            state.combat.playerAttackProgress = 0;
+            hero.combat.playerAttackProgress = 0;
         }
         return { deadEnemyIds, floatingTexts };
     }
