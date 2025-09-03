@@ -17,11 +17,29 @@ export const applyPoisonProc = (
         const poisonDebuffId = 'deadly_poison_debuff';
         let existingPoison = target.activeDebuffs.find(d => d.id === poisonDebuffId);
 
+        const buffedPlayerStats = getModifiedStats(state.player.stats, state.player.activeBuffs, state.player.form);
+        const attackPower = formulas.calculateAttackPower(buffedPlayerStats);
+        const damagePerTickPerStack = Math.round(attackPower * 0.05); // 5% of AP per stack
+
         if (existingPoison) {
             existingPoison.stacks = Math.min(5, (existingPoison.stacks || 1) + 1);
             existingPoison.duration = 12000;
+            existingPoison.damagePerTick = damagePerTickPerStack * existingPoison.stacks;
+            existingPoison.tickInterval = 1000;
+            existingPoison.nextTickIn = existingPoison.nextTickIn || 1000;
         } else {
-            target.activeDebuffs.push({ id: poisonDebuffId, name: 'Poison mortel', duration: 12000, stacks: 1, isDebuff: true });
+            const newPoison: Debuff = {
+                id: poisonDebuffId,
+                name: 'Poison mortel',
+                duration: 12000,
+                stacks: 1,
+                isDebuff: true,
+                damagePerTick: damagePerTickPerStack,
+                tickInterval: 1000,
+                nextTickIn: 1000,
+                damageType: 'nature'
+            };
+            target.activeDebuffs.push(newPoison);
         }
 
         const currentPoison = target.activeDebuffs.find(d => d.id === poisonDebuffId);

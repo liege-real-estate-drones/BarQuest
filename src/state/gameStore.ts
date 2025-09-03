@@ -1876,8 +1876,10 @@ export const useGameStore = create<GameState>()(
                         if (debuff.damagePerTick && debuff.nextTickIn !== undefined && debuff.tickInterval !== undefined) {
                             debuff.nextTickIn -= delta;
                             if (debuff.nextTickIn <= 0) {
-                                enemy.stats.PV -= debuff.damagePerTick;
-                                state.combat.log.push({ message: `${enemy.nom} subit ${debuff.damagePerTick} dégâts de ${debuff.name}.`, type: 'enemy_attack', timestamp: Date.now() });
+                                const damage = debuff.damagePerTick; // TODO: Consider resistances
+                                enemy.stats.PV -= damage;
+                                state.combat.log.push({ message: `${enemy.nom} subit ${damage} dégâts de ${debuff.name}.`, type: 'enemy_attack', timestamp: Date.now() });
+                                state.combat.floatingTexts.push({ id: uuidv4(), entityId: enemy.id, text: `-${damage}`, type: 'damage' });
                                 debuff.nextTickIn = debuff.tickInterval;
                                 if (enemy.stats.PV <= 0) {
                                     deadEnemyIdsFromActions.push(enemy.id);
