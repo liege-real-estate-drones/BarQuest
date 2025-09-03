@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { useGameStore } from '@/state/gameStore';
 import { useAudioPlayer } from '@/hooks/useAudioPlayer';
-import AudioPlayer from './AudioPlayer';
+import AudioPlayer from '@/components/AudioPlayer';
 import { musicMapping } from '@/lib/musicMapping';
 import { Dungeon } from '@/lib/types';
 

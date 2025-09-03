@@ -1,8 +1,8 @@
 import type {Metadata} from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster"
-import MusicController from '@/components/MusicController';
-import MusicControls from '@/components/MusicControls';
+import MusicController from '@/features/town/components/MusicController';
+import MusicControls from '@/features/town/components/MusicControls';
 
 export const metadata: Metadata = {
   title: 'BarQuest',
