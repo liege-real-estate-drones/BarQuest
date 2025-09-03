@@ -144,8 +144,8 @@ export interface GameState {
   enterDungeon: (dungeonId: string) => void;
   startCombat: () => void;
   gameTick: (delta: number) => void;
-  playerAttack: (targetId: string, isCleave?: boolean, skillId?: string) => void;
-  activateSkill: (skillId: string) => void;
+  playerAttack: (targetId: string, isCleave?: boolean) => void;
+  activateSkill: (skillId: string | null, skillObject?: Skill) => void;
   enemyAttacks: () => void;
   handleEnemyDeath: (enemy: CombatEnemy, skillId?: string) => void;
   cycleTarget: () => void;
@@ -1914,7 +1914,7 @@ export const useGameStore = create<GameState>()(
                             const skill = state.gameData.skills.find(s => s.id === action.skillId);
                             const damageEffect = skill?.effects?.find(e => (e as any).type === 'multi_strike');
                             const damageType = (damageEffect as any)?.damage?.damageType || 'arcane';
-                            const damage = formulas.calculateSpellDamage(action.damagePerWave, formulas.calculateSpellPower(state.player.stats), state.player.stats, damageType);
+                            const damage = formulas.calculateSpellDamage(action.damagePerWave, formulas.calculateSpellPower(state.player.stats));
                             const isCrit = formulas.isCriticalHit(state.player.stats.CritPct, state.player.stats.Precision, target.stats, state.player, state.gameData);
                             const finalDamage = isCrit ? damage * (state.player.stats.CritDmg / 100) : damage;
                             const dr = formulas.calculateArmorDR(target.stats.Armure, state.player.level);
@@ -1945,112 +1945,60 @@ export const useGameStore = create<GameState>()(
           get().checkAndApplyLevelUp();
       },
 
-      playerAttack: function(targetId: string, isCleave = false, skillId?: string) {
-        const events: { entityId: string, text: string, type: FloatingTextType }[] = [];
-        set((state: GameState) => {
-            const { player, combat, gameData } = state;
-            if (combat.isStealthed) {
-                combat.isStealthed = false;
-                events.push({ entityId: player.id, text: "Camouflage rompu", type: 'info'});
-                combat.log.push({ message: "Vous sortez de l'ombre.", type: 'info', timestamp: Date.now() });
-            }
-            const target = combat.enemies.find(e => e.id === targetId);
-            if (!target || target.stats.PV <= 0) return;
+      playerAttack: function(targetId: string, isCleave = false) {
+        const { combat, player } = get();
+        const target = combat.enemies.find(e => e.id === targetId);
+        if (!target || target.stats.PV <= 0) return;
 
-            const buffedPlayerStats = getModifiedStats(player.stats, [...player.activeBuffs, ...player.activeDebuffs], player.form);
-            let debuffedTargetStats = getModifiedStats(target.stats, target.activeDebuffs);
-
-            let isCrit = formulas.isCriticalHit(buffedPlayerStats.CritPct, buffedPlayerStats.Precision, debuffedTargetStats, player, gameData);
-            if (player.nextAttackIsGuaranteedCrit) {
-                isCrit = true;
-                player.nextAttackIsGuaranteedCrit = false;
-            }
-
-            const damageResult = formulas.calculatePlayerAttackDamage(buffedPlayerStats);
-            let totalDamage = 0;
-            const damageDetails: string[] = [];
-
-            // --- Physical Damage ---
-            let physicalDamage = damageResult.physical;
-            if (isCrit) physicalDamage *= (buffedPlayerStats.CritDmg / 100);
-            physicalDamage *= (buffedPlayerStats.DamageMultiplier || 1);
-
-            const dr = formulas.calculateArmorDR(debuffedTargetStats.Armure, player.level);
-            const mitigatedPhysicalDamage = Math.round(physicalDamage * (isCleave ? 0.5 : 1) * (1 - dr));
-            
-            if (mitigatedPhysicalDamage > 0) {
-              target.stats.PV -= mitigatedPhysicalDamage;
-              totalDamage += mitigatedPhysicalDamage;
-              damageDetails.push(`${mitigatedPhysicalDamage} physiques`);
-              events.push({ entityId: target.id, text: `-${mitigatedPhysicalDamage}`, type: isCrit ? 'crit' : 'damage' });
-            }
-
-            // --- Elemental Damage ---
-            damageResult.elementals.forEach(elem => {
-                let elementalDamage = elem.value;
-                if (isCrit) elementalDamage *= (buffedPlayerStats.CritDmg / 100);
-
-                const res = debuffedTargetStats.ResElems?.[elem.type] || 0;
-                const elemDR = formulas.calculateResistanceDR(res, player.level);
-                const mitigatedElemDmg = Math.round(elementalDamage * (1 - elemDR));
-
-                if (mitigatedElemDmg > 0) {
-                    target.stats.PV -= mitigatedElemDmg;
-                    totalDamage += mitigatedElemDmg;
-                    damageDetails.push(`${mitigatedElemDmg} ${elem.type}`);
-                    events.push({ entityId: target.id, text: `-${mitigatedElemDmg}`, type: 'damage' });
-                }
+        if (combat.isStealthed) {
+            set((state: GameState) => {
+                state.combat.isStealthed = false;
+                state.combat.log.push({ message: "Vous sortez de l'ombre.", type: 'info', timestamp: Date.now() });
+                get().addFloatingText(player.id, "Camouflage rompu", 'info');
             });
+        }
 
-            applyPoisonProc(state, target, events);
+        const autoAttackSkill: Skill = {
+            id: 'auto_attack',
+            nom: 'Attaque',
+            description: 'Une attaque de base avec votre arme.',
+            type: 'actif',
+            rangMax: 1,
+            classeId: player.classeId || 'berserker',
+            exigences: [],
+            cooldown: 0,
+            effects: [{
+                type: 'damage',
+                source: 'weapon',
+                multiplier: isCleave ? 0.5 : 1,
+                bonus_flat_damage: 0,
+                damageType: 'physical'
+            }]
+        };
 
-            const damageDetailsString = damageDetails.length > 0 ? ` (${damageDetails.join(', ')})` : '';
-            const attackMsg = `Vous frappez ${target.nom} pour ${totalDamage} points de dégâts${damageDetailsString}.`;
-            const critMsg = `CRITIQUE ! Vous frappez ${target.nom} pour ${totalDamage} points de dégâts${damageDetailsString}.`;
-            const cleaveMsg = `Votre enchaînement touche ${target.nom} pour ${totalDamage} points de dégâts${damageDetailsString}.`;
+        // The target is already set by the gameTick or player action.
+        // We directly call activateSkill with the dynamic skill object.
+        get().activateSkill(null, autoAttackSkill);
 
-            if(!isCleave) {
-                state.combat.log.push({ message: isCrit ? critMsg : attackMsg, type: isCrit ? 'crit' : 'player_attack', timestamp: Date.now() });
-                state.combat.playerAttackProgress = 0;
-            } else {
-                  state.combat.log.push({ message: cleaveMsg, type: 'player_attack', timestamp: Date.now() });
-            }
-
-            if(state.player.resources.type === 'Rage' && !isCleave) {
-              let rageGained = 5;
-              const criDeGuerreRank = state.player.learnedTalents['berserker_battle_cry'] || 0;
-              if (criDeGuerreRank > 0) {
-                  const talent = state.gameData.talents.find(t => t.id === 'berserker_battle_cry');
-                  if(talent && talent.effets) rageGained += getTalentEffectValue(talent.effets[0], criDeGuerreRank);
-              }
-              state.player.resources.current = Math.min(state.player.resources.max, state.player.resources.current + rageGained);
-            }
-
-            const tempeteRank = player.learnedTalents['berserker_fureur_ultime'];
-            if (tempeteRank && tempeteRank > 0) {
-                if (Math.random() < 0.1) {
-                    const buffId = 'tempete_implacable_buff';
-                    const existingBuffIndex = player.activeBuffs.findIndex(b => b.id === buffId);
-                    if (existingBuffIndex > -1) player.activeBuffs.splice(existingBuffIndex, 1);
-                    player.activeBuffs.push({ id: buffId, name: 'Tempête Implacable', duration: 10000, statMods: [{ stat: 'Vitesse', modifier: 'multiplicative', value: 0.01 }] });
-                    events.push({ entityId: player.id, text: "Tempête Implacable", type: 'buff' });
-                    combat.log.push({ message: `Le talent Tempête Implacable s'active ! Votre vitesse d'attaque est décuplée !`, type: 'talent_proc', timestamp: Date.now() });
+        // Post-attack logic like Rage generation and Cleave should be handled
+        // after the skill has been processed.
+        set((state: GameState) => {
+            if (state.player.resources.type === 'Rage' && !isCleave) {
+                let rageGained = 5;
+                const criDeGuerreRank = state.player.learnedTalents['berserker_battle_cry'] || 0;
+                if (criDeGuerreRank > 0) {
+                    const talent = state.gameData.talents.find(t => t.id === 'berserker_battle_cry');
+                    if (talent && talent.effets) rageGained += getTalentEffectValue(talent.effets[0], criDeGuerreRank);
                 }
+                state.player.resources.current = Math.min(state.player.resources.max, state.player.resources.current + rageGained);
             }
         });
 
-        events.forEach(ft => get().addFloatingText(ft.entityId, ft.text, ft.type));
-        get().recalculateStats();
-
-        const target = get().combat.enemies.find(e => e.id === targetId);
-        if (target && target.stats.PV <= 0) {
-            get().handleEnemyDeath(target, skillId);
-        } else {
-            const { player } = get();
-            const cleaveRank = player.learnedTalents['berserker_cleave'] || 0;
-            const enemies = get().combat.enemies;
-            if (!isCleave && cleaveRank > 0 && enemies.length > 1) {
-                const secondaryTarget = enemies.find(e => e.id !== targetId && e.stats.PV > 0);
+        const targetAfterAttack = get().combat.enemies.find(e => e.id === targetId);
+        if (targetAfterAttack && targetAfterAttack.stats.PV > 0) {
+            const cleaveRank = get().player.learnedTalents['berserker_cleave'] || 0;
+            if (!isCleave && cleaveRank > 0 && get().combat.enemies.filter(e => e.stats.PV > 0).length > 1) {
+                const secondaryTarget = get().combat.enemies.find(e => e.id !== targetId && e.stats.PV > 0);
                 if (secondaryTarget) {
                     get().playerAttack(secondaryTarget.id, true);
                 }
@@ -2058,11 +2006,11 @@ export const useGameStore = create<GameState>()(
         }
       },
 
-      activateSkill: (skillId: string) => {
+      activateSkill: (skillId: string | null, skillObject?: Skill) => {
         let deadEnemyIds: string[] = [];
         let floatingTexts: { entityId: string, text: string, type: FloatingTextType }[] = [];
         set((state: GameState) => {
-            const result = processSkill(state, skillId, get, get().applySpecialEffect);
+            const result = processSkill(state, skillId, get, get().applySpecialEffect, skillObject);
             deadEnemyIds = result.deadEnemyIds;
             floatingTexts = result.floatingTexts;
         });
@@ -2073,7 +2021,7 @@ export const useGameStore = create<GameState>()(
             deadEnemyIds.forEach(enemyId => {
                 const enemy = get().combat.enemies.find(e => e.id === enemyId);
                 if (enemy) {
-                    get().handleEnemyDeath(enemy, skillId);
+                    get().handleEnemyDeath(enemy, skillId || undefined);
                 }
             });
         }

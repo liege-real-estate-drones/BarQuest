@@ -32,19 +32,35 @@ export const applyPoisonProc = (
     }
 };
 
+import type { Skill } from '@/lib/types';
+
 export const processSkill = (
     state: WritableDraft<GameState>,
-    skillId: string,
+    skillId: string | null,
     get: () => GameState,
-    applySpecialEffect: (trigger: string, context: { targetId: string, isCrit: boolean, skill?: any }) => void
+    applySpecialEffect: (trigger: string, context: { targetId: string, isCrit: boolean, skill?: any }) => void,
+    skillObject?: Skill | null
 ): { deadEnemyIds: string[], floatingTexts: { entityId: string, text: string, type: FloatingTextType }[] } => {
     const deadEnemyIds: string[] = [];
     const floatingTexts: { entityId: string, text: string, type: FloatingTextType }[] = [];
     const { player, combat, gameData } = state;
-    const rank = player.learnedSkills[skillId];
-    const originalSkill = gameData.skills.find(t => t.id === skillId);
 
-    if (!originalSkill || !rank) return { deadEnemyIds, floatingTexts };
+    let originalSkill: Skill | undefined | null = null;
+    if (skillObject) {
+        originalSkill = skillObject;
+    } else if (skillId) {
+        originalSkill = gameData.skills.find(t => t.id === skillId);
+    }
+
+    const rank = skillId ? player.learnedSkills[skillId] || 1 : 1;
+
+    if (!originalSkill) return { deadEnemyIds, floatingTexts };
+    
+    // The rank for a dynamic skill like auto-attack is always 1, otherwise get it from learned skills
+    if (!skillId && !rank) {
+        console.error("Rank is missing for a processed skill that is not a dynamic object.");
+        return { deadEnemyIds, floatingTexts };
+    }
 
     let skill = JSON.parse(JSON.stringify(originalSkill));
 
@@ -52,155 +68,163 @@ export const processSkill = (
     const hasArchonBuff = player.activeBuffs.some(b => b.id === 'archon_buff');
 
     const handleDamage = (target: any, damageEffect: any, floatingTexts: { entityId: string, text: string, type: FloatingTextType }[], damageMultiplier: number = 1, preventPoisonProc: boolean = false) => {
-        let damage = 0;
-        if (damageEffect.source === 'weapon') {
-            const baseDmg = formulas.calculatePhysicalDamage(buffedPlayerStats.AttMin, buffedPlayerStats.AttMax, formulas.calculateAttackPower(buffedPlayerStats));
-            damage = baseDmg * getRankValue(damageEffect.multiplier, rank);
-            damage += getRankValue(damageEffect.bonus_flat_damage, rank);
-        } else if (damageEffect.source === 'spell') {
-            const baseDmg = getRankValue(damageEffect.baseValue, rank);
-            damage = formulas.calculateSpellDamage(baseDmg, formulas.calculateSpellPower(buffedPlayerStats), buffedPlayerStats, damageEffect.damageType);
-        }
-
-        damage *= damageMultiplier;
-        if (hasArchonBuff) damage *= 2;
+        let baseDamageForScaling = 0;
+        let totalDamageToTarget = 0;
 
         const debuffedTargetStats = getModifiedStats(target.stats, target.activeDebuffs || []);
-
-        if (player.activeBuffs.some(b => b.id === 'coeur_de_l_hiver_buff') && damageEffect.damageType === 'ice') {
-            target.activeDebuffs.push({
-                id: 'coeur_de_l_hiver_freeze',
-                name: 'Gelé par Coeur de l\'Hiver',
-                duration: 3000, // 3s freeze
-                isDebuff: true,
-            });
-             combat.log.push({ message: `Le Coeur de l'Hiver gèle ${target.nom} !`, type: 'talent_proc', timestamp: Date.now() });
-        }
-
-        if (damageEffect.conditional_damage_multiplier) {
-            const c = damageEffect.conditional_damage_multiplier;
-            if (c.condition === 'target_hp_less_than') {
-                const hpPercent = (target.stats.PV / target.initialHp) * 100;
-                if (hpPercent < c.threshold) {
-                    damage *= c.multiplier;
-                }
-            }
-        }
         const isCrit = formulas.isCriticalHit(buffedPlayerStats.CritPct, buffedPlayerStats.Precision, debuffedTargetStats, player, gameData);
-        if (isCrit) applySpecialEffect('ON_CRITICAL_HIT', { targetId: target.id, isCrit, skill: skill });
-        applySpecialEffect('ON_HIT', { targetId: target.id, isCrit, skill: skill });
+        const critMultiplier = isCrit ? (buffedPlayerStats.CritDmg / 100) : 1;
+        
+        // --- ÉTAPE 1: CALCULER LES DÉGÂTS DE BASE DE LA COMPÉTENCE ---
+        if (damageEffect.source === 'weapon') {
+            const baseDmg = formulas.calculatePhysicalDamage(buffedPlayerStats.AttMin, buffedPlayerStats.AttMax, formulas.calculateAttackPower(buffedPlayerStats));
+            let physicalDamage = baseDmg * getRankValue(damageEffect.multiplier, rank);
+            physicalDamage += getRankValue(damageEffect.bonus_flat_damage, rank);
+
+            const armorDR = formulas.calculateArmorDR(debuffedTargetStats.Armure, player.level);
+            const mitigatedPhysicalDamage = physicalDamage * (1 - armorDR);
+            
+            totalDamageToTarget += mitigatedPhysicalDamage;
+            baseDamageForScaling = mitigatedPhysicalDamage; // Le scaling se base sur les dégâts après armure
+        } 
+        else if (damageEffect.source === 'spell') {
+            const spellPower = formulas.calculateSpellPower(buffedPlayerStats);
+            const baseDmg = getRankValue(damageEffect.baseValue, rank);
+            const spellDamage = formulas.calculateSpellDamage(baseDmg, spellPower); // Utilise la nouvelle fonction simplifiée
+
+            const resistance = debuffedTargetStats.ResElems?.[damageEffect.damageType] || 0;
+            const mitigatedSpellDamage = formulas.calculateElementalDamage(spellDamage, resistance);
+            
+            totalDamageToTarget += mitigatedSpellDamage;
+            baseDamageForScaling = mitigatedSpellDamage; // Le scaling se base sur les dégâts après résistance
+        }
+
+        // --- ÉTAPE 2: AJOUTER LES BONUS ÉLÉMENTAIRES DE L'ÉQUIPEMENT (EN POURCENTAGE) ---
+        const elementalBonuses = { ...(buffedPlayerStats.DmgElems || {}), ...(buffedPlayerStats.BonusDmg || {}) };
+        for (const [dmgType, dmgValue] of Object.entries(elementalBonuses)) {
+            const elementalDamageToAdd = baseDamageForScaling * (dmgValue / 100.0);
+            
+            const resistance = debuffedTargetStats.ResElems?.[dmgType] || 0;
+            const mitigatedElementalDamage = formulas.calculateElementalDamage(elementalDamageToAdd, resistance);
+            
+            totalDamageToTarget += mitigatedElementalDamage;
+        }
+
+        // --- ÉTAPE 3: APPLIQUER LES MULTIPLICATEURS FINALS (CRITIQUE, BUFFS, ETC.) ---
+        let finalDamage = totalDamageToTarget * critMultiplier * damageMultiplier;
+        if (hasArchonBuff) finalDamage *= 2;
+        finalDamage *= (buffedPlayerStats.DamageMultiplier || 1);
+        // ... (autres multiplicateurs globaux si nécessaire) ...
+
+        const finalDamageRounded = Math.round(finalDamage);
+        target.stats.PV -= finalDamageRounded;
+
+        // ... (gestion des procs ON_HIT, etc.) ...
         if (!preventPoisonProc) {
             applyPoisonProc(state, target, floatingTexts, true);
         }
-
-        let finalDamage = isCrit ? damage * (buffedPlayerStats.CritDmg / 100) : damage;
-        finalDamage *= (buffedPlayerStats.DamageMultiplier || 1);
-        if (damageEffect.damageType === 'shadow') finalDamage *= (buffedPlayerStats.ShadowDamageMultiplier || 1);
-        if (damageEffect.damageType === 'ice') finalDamage *= (buffedPlayerStats.IceDamageMultiplier || 1);
-
-        const dr = formulas.calculateArmorDR(debuffedTargetStats.Armure, player.level);
-        const mitigatedDamage = Math.round(finalDamage * (1 - dr));
-
-        target.stats.PV -= mitigatedDamage;
-        return { mitigatedDamage, isCrit };
+        
+        return { mitigatedDamage: finalDamageRounded, isCrit };
     };
 
-    if (skillId === 'rogue_poison_deadly' && player.activeBuffs.some(b => b.id === 'deadly_poison_buff')) {
-        const energyCost = 10;
-        if (player.resources.current < energyCost) {
-            combat.log.push({ message: "Pas assez de ressource!", type: 'info', timestamp: Date.now() });
+    if (skillId) {
+        if (skillId === 'rogue_poison_deadly' && player.activeBuffs.some(b => b.id === 'deadly_poison_buff')) {
+            const energyCost = 10;
+            if (player.resources.current < energyCost) {
+                combat.log.push({ message: "Pas assez de ressource!", type: 'info', timestamp: Date.now() });
+                return { deadEnemyIds, floatingTexts };
+            }
+
+            const poisonedEnemies = combat.enemies.filter(e => e.stats.PV > 0 && e.activeDebuffs.some(d => d.id === 'deadly_poison_debuff'));
+
+            if (poisonedEnemies.length > 0) {
+                poisonedEnemies.forEach(enemy => {
+                    const damageEffect = {
+                        type: 'damage',
+                        damageType: 'nature',
+                        source: 'weapon',
+                        multiplier: 0.225, // 25% of Fan of Knives (0.9 * 0.25)
+                        bonus_flat_damage: 0
+                    };
+                    const { mitigatedDamage, isCrit } = handleDamage(enemy, damageEffect, floatingTexts, 1, true);
+                    floatingTexts.push({ entityId: enemy.id, text: `-${mitigatedDamage}`, type: isCrit ? 'crit' : 'damage' });
+                    combat.log.push({ message: `Le poison de ${skill.nom} inflige ${mitigatedDamage} points de dégâts à ${enemy.nom}.`, type: 'player_attack', timestamp: Date.now() });
+
+                    const slowDebuff: Debuff = {
+                        id: 'poison_slow',
+                        name: 'Poison ralentissant',
+                        duration: 10000,
+                        isDebuff: true,
+                        is_stacking: true,
+                        max_stacks: 4,
+                        statMods: [{ stat: 'Vitesse', modifier: 'multiplicative', value: 1.10 }],
+                        stacks: 1
+                    };
+
+                    const existingSlow = enemy.activeDebuffs.find(d => d.id === slowDebuff.id);
+                    if (existingSlow) {
+                        existingSlow.stacks = Math.min(slowDebuff.max_stacks || 4, (existingSlow.stacks || 1) + 1);
+                        existingSlow.duration = slowDebuff.duration;
+                    } else {
+                        enemy.activeDebuffs.push(slowDebuff);
+                    }
+                    const currentSlow = enemy.activeDebuffs.find(d => d.id === slowDebuff.id);
+                    const slowStacks = currentSlow?.stacks || 1;
+                    floatingTexts.push({ entityId: enemy.id, text: `Ralenti (x${slowStacks})`, type: 'debuff' });
+                    combat.log.push({ message: `${enemy.nom} est ralenti par le poison (x${slowStacks}).`, type: 'info', timestamp: Date.now() });
+
+                    if (enemy.stats.PV <= 0) {
+                        deadEnemyIds.push(enemy.id);
+                    }
+                });
+            }
+
+            if (!hasArchonBuff) {
+                player.resources.current -= energyCost;
+            }
+            if (originalSkill.cooldown) {
+                combat.skillCooldowns[skillId] = originalSkill.cooldown * 1000;
+            }
+            state.combat.playerAttackProgress = 0;
+
             return { deadEnemyIds, floatingTexts };
         }
 
-        const poisonedEnemies = combat.enemies.filter(e => e.stats.PV > 0 && e.activeDebuffs.some(d => d.id === 'deadly_poison_debuff'));
-
-        if (poisonedEnemies.length > 0) {
-            poisonedEnemies.forEach(enemy => {
-                const damageEffect = {
-                    type: 'damage',
-                    damageType: 'nature',
-                    source: 'weapon',
-                    multiplier: 0.225, // 25% of Fan of Knives (0.9 * 0.25)
-                    bonus_flat_damage: 0
-                };
-                const { mitigatedDamage, isCrit } = handleDamage(enemy, damageEffect, floatingTexts, 1, true);
-                floatingTexts.push({ entityId: enemy.id, text: `-${mitigatedDamage}`, type: isCrit ? 'crit' : 'damage' });
-                combat.log.push({ message: `Le poison de ${skill.nom} inflige ${mitigatedDamage} points de dégâts à ${enemy.nom}.`, type: 'player_attack', timestamp: Date.now() });
-
-                const slowDebuff: Debuff = {
-                    id: 'poison_slow',
-                    name: 'Poison ralentissant',
-                    duration: 10000,
-                    isDebuff: true,
-                    is_stacking: true,
-                    max_stacks: 4,
-                    statMods: [{ stat: 'Vitesse', modifier: 'multiplicative', value: 1.10 }],
-                    stacks: 1
-                };
-
-                const existingSlow = enemy.activeDebuffs.find(d => d.id === slowDebuff.id);
-                if (existingSlow) {
-                    existingSlow.stacks = Math.min(slowDebuff.max_stacks || 4, (existingSlow.stacks || 1) + 1);
-                    existingSlow.duration = slowDebuff.duration;
-                } else {
-                    enemy.activeDebuffs.push(slowDebuff);
-                }
-                const currentSlow = enemy.activeDebuffs.find(d => d.id === slowDebuff.id);
-                const slowStacks = currentSlow?.stacks || 1;
-                floatingTexts.push({ entityId: enemy.id, text: `Ralenti (x${slowStacks})`, type: 'debuff' });
-                combat.log.push({ message: `${enemy.nom} est ralenti par le poison (x${slowStacks}).`, type: 'info', timestamp: Date.now() });
-
-                if (enemy.stats.PV <= 0) {
-                    deadEnemyIds.push(enemy.id);
-                }
-            });
-        }
-
-        if (!hasArchonBuff) {
-            player.resources.current -= energyCost;
-        }
-        if (originalSkill.cooldown) {
-            combat.skillCooldowns[skillId] = originalSkill.cooldown * 1000;
-        }
-        state.combat.playerAttackProgress = 0;
-
-        return { deadEnemyIds, floatingTexts };
-    }
-
-    Object.entries(player.learnedTalents).forEach(([talentId, talentRank]) => {
-        const talentData = gameData.talents.find(t => t.id === talentId);
-        if (talentData?.skill_mods) {
-            talentData.skill_mods.forEach(mod => {
-                if (mod.skill_id === skillId && skill.effects) {
-                    mod.modifications.forEach(m => {
-                        if (skill.effects[m.effect_index]) {
-                            const effectToModify = skill.effects[m.effect_index] as Record<string, any>;
-                            if (effectToModify[m.property_path]) {
-                                const baseValue = getRankValue((originalSkill.effects![m.effect_index] as any)[m.property_path], rank);
-                                const talentModValue = getRankValue(m.value, talentRank);
-                                if (m.modifier === 'multiplicative') effectToModify[m.property_path] = baseValue * talentModValue;
-                                else if (m.modifier === 'additive') effectToModify[m.property_path] = baseValue + talentModValue;
+        Object.entries(player.learnedTalents).forEach(([talentId, talentRank]) => {
+            const talentData = gameData.talents.find(t => t.id === talentId);
+            if (talentData?.skill_mods) {
+                talentData.skill_mods.forEach(mod => {
+                    if (mod.skill_id === skillId && skill.effects) {
+                        mod.modifications.forEach(m => {
+                            if (skill.effects[m.effect_index]) {
+                                const effectToModify = skill.effects[m.effect_index] as Record<string, any>;
+                                if (effectToModify[m.property_path]) {
+                                    const baseValue = getRankValue((originalSkill.effects![m.effect_index] as any)[m.property_path], rank);
+                                    const talentModValue = getRankValue(m.value, talentRank);
+                                    if (m.modifier === 'multiplicative') effectToModify[m.property_path] = baseValue * talentModValue;
+                                    else if (m.modifier === 'additive') effectToModify[m.property_path] = baseValue + talentModValue;
+                                }
                             }
-                        }
-                    });
-                }
-            });
+                        });
+                    }
+                });
+            }
+        });
+
+        if (player.form === 'shadow' && skill.school === 'holy') {
+            combat.log.push({ message: "Vous ne pouvez pas utiliser de sorts Sacrés en Forme d'ombre.", type: 'info', timestamp: Date.now() });
+            return { deadEnemyIds, floatingTexts };
         }
-    });
+        if (player.stunDuration > 0) {
+            combat.log.push({ message: "Vous êtes étourdi et ne pouvez pas agir.", type: 'info', timestamp: Date.now() });
+            return { deadEnemyIds, floatingTexts };
+        }
+        if ((combat.skillCooldowns[skillId] || 0) > 0) return { deadEnemyIds, floatingTexts };
 
-    if (player.form === 'shadow' && skill.school === 'holy') {
-        combat.log.push({ message: "Vous ne pouvez pas utiliser de sorts Sacrés en Forme d'ombre.", type: 'info', timestamp: Date.now() });
-        return { deadEnemyIds, floatingTexts };
-    }
-    if (player.stunDuration > 0) {
-        combat.log.push({ message: "Vous êtes étourdi et ne pouvez pas agir.", type: 'info', timestamp: Date.now() });
-        return { deadEnemyIds, floatingTexts };
-    }
-    if ((combat.skillCooldowns[skillId] || 0) > 0) return { deadEnemyIds, floatingTexts };
-
-    if (skillId !== 'mage_arcane_blast') {
-        const arcaneChargeIndex = state.player.activeBuffs.findIndex(b => b.id === 'arcane_charge');
-        if (arcaneChargeIndex > -1) state.player.activeBuffs.splice(arcaneChargeIndex, 1);
+        if (skillId !== 'mage_arcane_blast') {
+            const arcaneChargeIndex = state.player.activeBuffs.findIndex(b => b.id === 'arcane_charge');
+            if (arcaneChargeIndex > -1) state.player.activeBuffs.splice(arcaneChargeIndex, 1);
+        }
     }
 
     if (skill.effects) {
@@ -241,7 +265,7 @@ export const processSkill = (
                 targets.forEach(target => {
                     if (anyEffect.debuffType === 'dot') {
                         let totalDamage = 0;
-                        if (anyEffect.totalDamage.source === 'spell') totalDamage = formulas.calculateSpellDamage(getRankValue(anyEffect.totalDamage.baseValue, rank), formulas.calculateSpellPower(buffedPlayerStats), buffedPlayerStats, anyEffect.damageType);
+                        if (anyEffect.totalDamage.source === 'spell') totalDamage = formulas.calculateSpellDamage(getRankValue(anyEffect.totalDamage.baseValue, rank), formulas.calculateSpellPower(buffedPlayerStats));
                         else {
                             const baseDmg = formulas.calculatePhysicalDamage(buffedPlayerStats.AttMin, buffedPlayerStats.AttMax, formulas.calculateAttackPower(buffedPlayerStats));
                             totalDamage = baseDmg * getRankValue(anyEffect.totalDamage.multiplier, rank);
@@ -297,7 +321,7 @@ export const processSkill = (
             } else if (anyEffect.type === 'shield') {
                 let shieldAmount = 0;
                 if (anyEffect.amount.source === 'spell_power') {
-                    shieldAmount = formulas.calculateSpellDamage(getRankValue(anyEffect.amount.multiplier, rank), formulas.calculateSpellPower(buffedPlayerStats), buffedPlayerStats, 'physical');
+                    shieldAmount = formulas.calculateSpellDamage(getRankValue(anyEffect.amount.multiplier, rank), formulas.calculateSpellPower(buffedPlayerStats));
                 } else { // base_value
                     shieldAmount = getRankValue(anyEffect.amount.multiplier, rank);
                 }
@@ -312,7 +336,7 @@ export const processSkill = (
                 effectApplied = true;
             } else if (anyEffect.type === 'death_ward') {
                 const newBuff: Buff = {
-                    id: skill.id,
+                    id: skill.id || 'unknown_skill',
                     name: skill.nom,
                     duration: anyEffect.duration * 1000,
                     isDeathWard: true,
@@ -332,7 +356,7 @@ export const processSkill = (
                         if (anyEffect.totalHealing.source === 'base_value') {
                             totalHealing = getRankValue(anyEffect.totalHealing.multiplier, rank);
                         } else if (anyEffect.totalHealing.source === 'spell_power') {
-                            totalHealing = formulas.calculateSpellDamage(getRankValue(anyEffect.totalHealing.multiplier, rank), formulas.calculateSpellPower(buffedPlayerStats), buffedPlayerStats, 'physical');
+                            totalHealing = formulas.calculateSpellDamage(getRankValue(anyEffect.totalHealing.multiplier, rank), formulas.calculateSpellPower(buffedPlayerStats));
                         }
                         existingBuff.tickInterval = 1000;
                         existingBuff.nextTickIn = 1000;
@@ -345,7 +369,7 @@ export const processSkill = (
                         if (anyEffect.totalHealing.source === 'base_value') {
                             totalHealing = getRankValue(anyEffect.totalHealing.multiplier, rank);
                         } else if (anyEffect.totalHealing.source === 'spell_power') {
-                            totalHealing = formulas.calculateSpellDamage(getRankValue(anyEffect.totalHealing.multiplier, rank), formulas.calculateSpellPower(buffedPlayerStats), buffedPlayerStats, 'physical');
+                            totalHealing = formulas.calculateSpellDamage(getRankValue(anyEffect.totalHealing.multiplier, rank), formulas.calculateSpellPower(buffedPlayerStats));
                         }
                         newBuff.tickInterval = 1000; // Assume 1s tick for now
                         newBuff.nextTickIn = 1000;
@@ -369,7 +393,7 @@ export const processSkill = (
                 effectApplied = true;
             } else if (anyEffect.type === 'heal') {
                 let totalHeal = 0;
-                if (anyEffect.source === 'spell') totalHeal = formulas.calculateSpellDamage(getRankValue(anyEffect.baseValue, rank), formulas.calculateSpellPower(buffedPlayerStats), buffedPlayerStats, 'holy');
+                if (anyEffect.source === 'spell') totalHeal = formulas.calculateSpellDamage(getRankValue(anyEffect.baseValue, rank), formulas.calculateSpellPower(buffedPlayerStats));
                 totalHeal *= (buffedPlayerStats.HealingMultiplier || 1);
                 totalHeal *= (buffedPlayerStats.HealingReceivedMultiplier || 1);
                 const maxHp = formulas.calculateMaxHP(player.level, player.stats);
@@ -451,8 +475,8 @@ export const processSkill = (
             if (!hasArchonBuff) {
                 player.resources.current -= dynamicResourceCost;
             }
-            if (skill.cooldown) {
-                combat.skillCooldowns[skillId] = skill.cooldown * 1000;
+            if (skillId && originalSkill.cooldown) {
+                combat.skillCooldowns[skillId] = originalSkill.cooldown * 1000;
             }
             state.combat.playerAttackProgress = 0;
         }

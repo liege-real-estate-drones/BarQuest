@@ -107,12 +107,8 @@ export const calculatePhysicalDamage = (min: number, max: number, attackPower: n
   return roll + (attackPower / 4);
 };
 
-export const calculateSpellDamage = (baseDamage: number, spellPower: number, stats: Stats, damageType: string): number => {
-  let modifiedBaseDamage = baseDamage;
-  if (stats.DmgElems && stats.DmgElems[damageType]) {
-    modifiedBaseDamage += stats.DmgElems[damageType];
-  }
-  return modifiedBaseDamage * (1 + spellPower / 100);
+export const calculateSpellDamage = (baseDamage: number, spellPower: number): number => {
+  return baseDamage * (1 + spellPower / 100);
 };
 
 export const calculateElementalDamage = (elementalDamage: number, resistance: number): number => {
@@ -214,7 +210,7 @@ export const calculateSkillDamageForDisplay = (skill: any, stats: Stats, rank: n
     if (effect.source === 'spell') {
       const baseDmg = getRankValue(effect.baseValue, rank);
       const spellPower = calculateSpellPower(stats);
-      const totalDmg = calculateSpellDamage(baseDmg, spellPower, stats, effect.damageType);
+      const totalDmg = calculateSpellDamage(baseDmg, spellPower);
       
       if (damageEffect.type === 'multi_strike') {
         const strikes = getRankValue(damageEffect.strikes, rank);
