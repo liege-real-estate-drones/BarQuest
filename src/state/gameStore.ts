@@ -102,6 +102,15 @@ export interface GameState {
   bossEncounter: Monstre | null; // NOUVEAU: Pour l'alerte d'apparition du boss
   isHeroicMode: boolean;
 
+  // Music state
+  currentMusicTracks: string[];
+  currentTrackIndex: number;
+
+  // Music actions
+  setCurrentMusicTracks: (tracks: string[]) => void;
+  nextTrack: () => void;
+  previousTrack: () => void;
+
   craftItem: (recipeId: string) => Item | { error: string } | null;
   setHeroicMode: (isHeroic: boolean) => void;
   setActiveSubView: (view: GameState['activeSubView']) => void;
@@ -454,6 +463,27 @@ export const useGameStore = create<GameState>()(
       proposedQuests: null,
       bossEncounter: null, // NOUVEAU: Initialisation de l'état du boss
       isHeroicMode: false,
+
+      // Music state
+      currentMusicTracks: [],
+      currentTrackIndex: 0,
+
+      // Music actions
+      setCurrentMusicTracks: (tracks) => {
+        set({ currentMusicTracks: tracks, currentTrackIndex: 0 });
+      },
+      nextTrack: () => {
+        set((state) => {
+          const nextIndex = (state.currentTrackIndex + 1) % state.currentMusicTracks.length;
+          return { currentTrackIndex: nextIndex };
+        });
+      },
+      previousTrack: () => {
+        set((state) => {
+          const prevIndex = (state.currentTrackIndex - 1 + state.currentMusicTracks.length) % state.currentMusicTracks.length;
+          return { currentTrackIndex: prevIndex };
+        });
+      },
 
       setHeroicMode: (isHeroic: boolean) => {
         set({ isHeroicMode: isHeroic });

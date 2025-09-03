@@ -2,6 +2,7 @@ import type {Metadata} from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster"
 import MusicController from '@/components/MusicController';
+import MusicControls from '@/components/MusicControls';
 
 export const metadata: Metadata = {
   title: 'BarQuest',
@@ -24,6 +25,7 @@ export default function RootLayout({
         {children}
         <Toaster />
         <MusicController />
+        <MusicControls />
       </body>
     </html>
   );
