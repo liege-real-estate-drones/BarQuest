@@ -22,6 +22,7 @@ import { Settings, User, Swords, Store, Home } from 'lucide-react';
 import { InnView } from './InnView';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { CharacterView } from '../player/CharacterView';
+import { PlayerBanner } from '../player/PlayerBanner';
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { CraftingView } from './CraftingView';
@@ -102,14 +103,10 @@ export function TownView() {
 
   return (
     <div className="flex flex-col h-screen max-h-screen">
-      <header className="flex-shrink-0 container mx-auto px-4 py-4 flex justify-between items-center border-b">
-        <div>
-          <h1 className="text-2xl font-headline text-primary">BarQuest</h1>
-          <p className="text-xs text-muted-foreground">Bienvenue, {player.name}.</p>
-        </div>
+      <PlayerBanner>
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Button variant="outline" size="icon">
+            <Button variant="outline" size="icon" className="bg-background/50 text-white">
               <Settings className="h-4 w-4" />
             </Button>
           </AlertDialogTrigger>
@@ -128,7 +125,7 @@ export function TownView() {
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
-      </header>
+      </PlayerBanner>
       
       <main className="flex-grow container mx-auto px-4 min-h-0 overflow-y-auto">
         {renderContent()}
