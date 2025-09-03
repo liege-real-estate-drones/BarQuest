@@ -220,3 +220,17 @@ export interface ItemGenerationContext {
   rarity: Rareté;
   tags: string[];
 }
+
+export interface ActiveQuete {
+  quete: Quete;
+  progress: number;
+  startTime?: number; // Pour les quêtes de temps
+}
+
+export interface Hero {
+  id: string;
+  player: PlayerState;
+  inventory: InventoryState;
+  combat: CombatState;
+  activeQuests: ActiveQuete[];
+}
