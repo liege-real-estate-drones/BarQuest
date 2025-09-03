@@ -31,78 +31,89 @@ export function PlayerStatsView() {
     const currentResourceConfig = (type && resourceConfig[type]) || { color: 'text-gray-400', indicator: 'bg-gray-500' };
 
     return (
-        <Card>
-            <CardHeader>
-                <CardTitle className="font-headline flex justify-between items-baseline">
-                    <span>{player.name}</span>
-                    <span className="text-sm text-muted-foreground">Lvl {player.level}</span>
-                </CardTitle>
-                <CardDescription className="capitalize">{player.classeId}</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-                 <div>
-                    <div className="flex justify-between text-xs mb-1 font-mono text-red-400">
-                        <span>PV</span>
-                        <span>{Math.round(stats.PV)} / {Math.round(maxHp)}</span>
+        <Card className="relative overflow-hidden">
+            <div
+                className="absolute inset-0 z-0"
+                style={{
+                    backgroundImage: `url('/images/classes/${player.classeId}.png')`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    opacity: 0.60,
+                }}
+            />
+            <div className="relative z-10 bg-black/20">
+                <CardHeader>
+                    <CardTitle className="font-headline flex justify-between items-baseline">
+                        <span>{player.name}</span>
+                        <span className="text-sm text-muted-foreground">Lvl {player.level}</span>
+                    </CardTitle>
+                    <CardDescription className="capitalize">{player.classeId}</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                    <div>
+                        <div className="flex justify-between text-xs mb-1 font-mono text-red-400">
+                            <span>PV</span>
+                            <span>{Math.round(stats.PV)} / {Math.round(maxHp)}</span>
+                        </div>
+                        <Progress value={hpPercentage} className="h-4" indicatorClassName="bg-gradient-to-r from-red-500 to-red-700" />
                     </div>
-                    <Progress value={hpPercentage} className="h-4" indicatorClassName="bg-gradient-to-r from-red-500 to-red-700" />
-                </div>
-                {type && max > 0 && (
-                 <div>
-                    <div className={`flex justify-between text-xs mb-1 font-mono ${currentResourceConfig.color}`}>
-                        <span>{type.toUpperCase()}</span>
-                        <span>{Math.round(current)} / {Math.round(max)}</span>
-                    </div>
-                    <Progress value={resourcePercentage} className="h-4" indicatorClassName={currentResourceConfig.indicator} />
-                </div>
-                )}
-                <div>
-                    <div className="flex justify-between text-xs mb-1 font-mono text-yellow-400">
-                        <span>XP</span>
-                        <span>{Math.round(player.xp)} / {Math.round(xpToNextLevel)}</span>
-                    </div>
-                    <Progress value={xpPercentage} className="h-2" indicatorClassName="bg-gradient-to-r from-yellow-400 to-yellow-600" />
-                </div>
-
-                <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm font-mono pt-4">
-                    <span className="text-muted-foreground">Points de talent:</span><span className="text-right font-bold text-primary">{player.talentPoints}</span>
-                    <hr className="col-span-2 my-1 border-border" />
-                    <span className="text-muted-foreground">Force:</span><span className="text-right">{stats.Force ?? 0}</span>
-                    <span className="text-muted-foreground">Intelligence:</span><span className="text-right">{stats.Intelligence ?? 0}</span>
-                    <span className="text-muted-foreground">Dextérité:</span><span className="text-right">{stats.Dexterite ?? 0}</span>
-                    <span className="text-muted-foreground">Esprit:</span><span className="text-right">{stats.Esprit ?? 0}</span>
-                    <hr className="col-span-2 my-1 border-border" />
-                    <span className="text-muted-foreground">Attaque:</span><span className="text-right">{(stats.AttMin ?? 0).toFixed(1)} - {(stats.AttMax ?? 0).toFixed(1)}</span>
-                    <span className="text-muted-foreground">Crit %:</span><span className="text-right">{(stats.CritPct ?? 0).toFixed(1)}%</span>
-                    <span className="text-muted-foreground">Crit Dmg:</span><span className="text-right">{(stats.CritDmg ?? 0).toFixed(1)}%</span>
-                    <span className="text-muted-foreground">Armure:</span><span className="text-right">{stats.Armure ?? 0}</span>
-                    <span className="text-muted-foreground">Vitesse:</span><span className="text-right">{stats.Vitesse ?? 0}s</span>
-                    
-                    {stats.ResElems && Object.keys(stats.ResElems).length > 0 && (
-                        <>
-                            <hr className="col-span-2 my-1 border-border" />
-                            {Object.entries(stats.ResElems).map(([elem, value]) => (
-                                <React.Fragment key={elem}>
-                                    <span className="text-muted-foreground capitalize">Rés. {elem}:</span>
-                                    <span className="text-right">{value}</span>
-                                </React.Fragment>
-                            ))}
-                        </>
+                    {type && max > 0 && (
+                        <div>
+                            <div className={`flex justify-between text-xs mb-1 font-mono ${currentResourceConfig.color}`}>
+                                <span>{type.toUpperCase()}</span>
+                                <span>{Math.round(current)} / {Math.round(max)}</span>
+                            </div>
+                            <Progress value={resourcePercentage} className="h-4" indicatorClassName={currentResourceConfig.indicator} />
+                        </div>
                     )}
+                    <div>
+                        <div className="flex justify-between text-xs mb-1 font-mono text-yellow-400">
+                            <span>XP</span>
+                            <span>{Math.round(player.xp)} / {Math.round(xpToNextLevel)}</span>
+                        </div>
+                        <Progress value={xpPercentage} className="h-2" indicatorClassName="bg-gradient-to-r from-yellow-400 to-yellow-600" />
+                    </div>
 
-                    {stats.DmgElems && Object.keys(stats.DmgElems).length > 0 && (
-                        <>
-                            <hr className="col-span-2 my-1 border-border" />
-                            {Object.entries(stats.DmgElems).map(([elem, value]) => (
-                                <React.Fragment key={elem}>
-                                    <span className="text-muted-foreground capitalize">Dégâts {elem}:</span>
-                                    <span className="text-right">{value}</span>
-                                </React.Fragment>
-                            ))}
-                        </>
-                    )}
-                </div>
-            </CardContent>
+                    <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm font-mono pt-4">
+                        <span className="text-muted-foreground">Points de talent:</span><span className="text-right font-bold text-primary">{player.talentPoints}</span>
+                        <hr className="col-span-2 my-1 border-border" />
+                        <span className="text-muted-foreground">Force:</span><span className="text-right">{stats.Force ?? 0}</span>
+                        <span className="text-muted-foreground">Intelligence:</span><span className="text-right">{stats.Intelligence ?? 0}</span>
+                        <span className="text-muted-foreground">Dextérité:</span><span className="text-right">{stats.Dexterite ?? 0}</span>
+                        <span className="text-muted-foreground">Esprit:</span><span className="text-right">{stats.Esprit ?? 0}</span>
+                        <hr className="col-span-2 my-1 border-border" />
+                        <span className="text-muted-foreground">Attaque:</span><span className="text-right">{(stats.AttMin ?? 0).toFixed(1)} - {(stats.AttMax ?? 0).toFixed(1)}</span>
+                        <span className="text-muted-foreground">Crit %:</span><span className="text-right">{(stats.CritPct ?? 0).toFixed(1)}%</span>
+                        <span className="text-muted-foreground">Crit Dmg:</span><span className="text-right">{(stats.CritDmg ?? 0).toFixed(1)}%</span>
+                        <span className="text-muted-foreground">Armure:</span><span className="text-right">{stats.Armure ?? 0}</span>
+                        <span className="text-muted-foreground">Vitesse:</span><span className="text-right">{stats.Vitesse ?? 0}s</span>
+                        
+                        {stats.ResElems && Object.keys(stats.ResElems).length > 0 && (
+                            <>
+                                <hr className="col-span-2 my-1 border-border" />
+                                {Object.entries(stats.ResElems).map(([elem, value]) => (
+                                    <React.Fragment key={elem}>
+                                        <span className="text-muted-foreground capitalize">Rés. {elem}:</span>
+                                        <span className="text-right">{value}</span>
+                                    </React.Fragment>
+                                ))}
+                            </>
+                        )}
+
+                        {stats.DmgElems && Object.keys(stats.DmgElems).length > 0 && (
+                            <>
+                                <hr className="col-span-2 my-1 border-border" />
+                                {Object.entries(stats.DmgElems).map(([elem, value]) => (
+                                    <React.Fragment key={elem}>
+                                        <span className="text-muted-foreground capitalize">Dégâts {elem}:</span>
+                                        <span className="text-right">{value}</span>
+                                    </React.Fragment>
+                                ))}
+                            </>
+                        )}
+                    </div>
+                </CardContent>
+            </div>
         </Card>
     )
 }
