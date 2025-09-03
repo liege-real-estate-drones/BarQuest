@@ -73,8 +73,17 @@ export default function EntityDisplay({ entity, isPlayer = false, isTarget = fal
   const avgDmg = !isPlayer ? Math.round(((stats.AttMin ?? 0) + (stats.AttMax ?? 0)) / 2) : 0;
 
   const isBoss = !isPlayer && (entity as CombatEnemy).isBoss;
-  let cardStyle = {};
-  if (isBoss && currentDungeon) {
+  const isMonster = !isPlayer;
+
+  let cardStyle: React.CSSProperties = {};
+  if (isMonster && image) {
+      cardStyle = {
+          backgroundImage: `url(${image})`,
+          backgroundSize: 'contain',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+      };
+  } else if (isBoss && currentDungeon) { // Fallback for bosses without image
       const dungeonIndex = parseInt(currentDungeon.id.split('_')[1]);
       cardStyle = {
           backgroundImage: `url('/images/boss_biome${dungeonIndex}.png')`,
@@ -90,23 +99,13 @@ export default function EntityDisplay({ entity, isPlayer = false, isTarget = fal
         className={cn("bg-card/50 transition-all border-2 border-transparent flex flex-col",
             isPlayer && "border-green-500/30",
             isTarget && "border-primary shadow-lg shadow-primary/20",
-            isBoss && "border-destructive shadow-lg shadow-destructive/40 relative overflow-hidden bg-transparent text-white"
+            isMonster && "relative overflow-hidden bg-transparent text-white",
+            isBoss && "border-destructive shadow-lg shadow-destructive/40"
         )}
     >
-      {isBoss && <div className="absolute inset-0 bg-black/60 z-0" />}
+      {isMonster && <div className="absolute inset-0 bg-black/60 z-0" />}
       
-      {!isPlayer && image && (
-        <div className="w-full h-48 flex-shrink-0">
-          <img 
-            src={image}
-            alt={name} 
-            className="w-full h-full object-cover"
-            onError={(e) => (e.currentTarget.style.display = 'none')}
-          />
-        </div>
-      )}
-
-      <div className={cn("flex-grow", isBoss && "relative z-10")}>
+      <div className={cn("flex-grow flex flex-col", isMonster && "relative z-10")}>
         <CardHeader className="flex-shrink-0 space-y-0.5 p-2">
           <CardTitle className="font-headline flex justify-between items-center text-base">
               <div className="flex-grow min-w-0 mr-2">
@@ -122,11 +121,11 @@ export default function EntityDisplay({ entity, isPlayer = false, isTarget = fal
               {isPlayer && dungeonInfo && <div className="flex-shrink-0">{dungeonInfo}</div>}
               {!isPlayer && <span className="text-muted-foreground flex-shrink-0 text-xs">Lvl {level} | Dmg: ~{avgDmg}</span>}
           </CardTitle>
-          <CardDescription className={cn("capitalize text-xs", isBoss && "text-gray-300")}>
+          <CardDescription className={cn("capitalize text-xs", isMonster && "text-gray-300")}>
             {isPlayer ? (entity as PlayerState).classeId : (entity as Monstre).famille}
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-1 flex-grow pt-0 p-2">
+        <CardContent className="space-y-1 flex-grow pt-0 p-2 flex flex-col justify-end">
           <div>
             <div className="flex justify-between text-xs mb-0.5 font-mono text-red-400">
               <span>PV</span>

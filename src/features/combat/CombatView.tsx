@@ -121,7 +121,7 @@ export function CombatView() {
                 key={enemy.id}
                 ref={enemyRefs.current[index]}
                 onClick={() => setTargetIndex(index)}
-                className={cn('cursor-pointer', enemies.length === 1 && 'w-full max-w-xs')}
+                className={cn('cursor-pointer min-h-80', enemies.length === 1 && 'w-full')}
               >
                 <EntityDisplay entity={enemy} isTarget={index === targetIndex} image={enemy.image} />
               </div>
