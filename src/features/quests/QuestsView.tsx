@@ -89,13 +89,27 @@ function QuestCard({ quest, progress, onAccept, isAvailable, gameData }: { quest
 }
 
 export function QuestsView() {
-  const { activeQuests, player, gameData, acceptQuest, acceptMultipleQuests } = useGameStore((state) => ({
-    activeQuests: state.activeQuests,
-    player: state.player,
+  const { getActiveHero, gameData, acceptQuest, acceptMultipleQuests } = useGameStore((state) => ({
+    getActiveHero: state.getActiveHero,
     gameData: state.gameData,
     acceptQuest: state.acceptQuest,
     acceptMultipleQuests: state.acceptMultipleQuests,
   }));
+
+  const activeHero = getActiveHero();
+
+  if (!activeHero) {
+    return (
+        <Card className="h-full flex flex-col items-center justify-center">
+            <CardHeader>
+                <CardTitle>Journal de Quêtes</CardTitle>
+                <CardDescription>Aucun héros actif.</CardDescription>
+            </CardHeader>
+        </Card>
+    );
+  }
+
+  const { player, activeQuests } = activeHero;
   
   const completedQuests = gameData.quests.filter(q => player.completedQuests.includes(q.id));
 
@@ -114,7 +128,6 @@ export function QuestsView() {
             return false;
         }
 
-        // Filtrer par classe si la quête a une exigence de classe
         if (q.requirements.classId && q.requirements.classId !== player.classeId) {
             return false;
         }
@@ -127,7 +140,6 @@ export function QuestsView() {
         if (questIdParts.length < 2 || isNaN(parseInt(questIdParts[1], 10))) {
             if (q.id.includes('_q_boss')) {
                 const questPrefix = q.id.substring(0, q.id.indexOf('_q_boss'));
-                // Vérifiez si la dernière quête numérotée est terminée
                 const lastNumberedQuestId = `${questPrefix}_q5`; 
                 return player.completedQuests.includes(lastNumberedQuestId);
             }
@@ -136,10 +148,9 @@ export function QuestsView() {
 
         const questNum = parseInt(questIdParts[1], 10);
         if (questNum === 1) {
-            return true; // First quest in a chain is always available if dungeon is unlocked
+            return true;
         }
         
-        // For quests > q1, check if the previous one is completed
         const questPrefix = questIdParts[0];
         const prevQuestId = `${questPrefix}_q${questNum - 1}`;
         return player.completedQuests.includes(prevQuestId);

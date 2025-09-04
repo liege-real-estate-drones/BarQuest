@@ -22,11 +22,15 @@ import { EnchantmentComparison } from './components/EnchantmentComparison';
 
 // Component for the main "Enchant" tab
 const EnchantTab: React.FC = () => {
-    const { inventory, gameData, enchantItem } = useGameStore(state => ({
-        inventory: state.inventory,
+    const { getActiveHero, gameData, enchantItem } = useGameStore(state => ({
+        getActiveHero: state.getActiveHero,
         gameData: state.gameData,
         enchantItem: state.enchantItem,
     }));
+
+    const activeHero = getActiveHero();
+    if (!activeHero) return <p>Aucun héros actif.</p>;
+    const { inventory } = activeHero;
 
     type SimpleAffix = { ref: string; val: number; isEnchantment?: boolean };
 
@@ -61,17 +65,18 @@ const EnchantTab: React.FC = () => {
     };
 
     const learnedEnchantments = useMemo(() => {
-        const { learnedRecipes, classeId } = useGameStore.getState().player;
+        if (!activeHero) return [];
+        const { learnedRecipes, classeId } = activeHero.player;
         return gameData.enchantments.filter(enchantment => {
             const isLearned = learnedRecipes.includes(enchantment.id);
             if (!isLearned) return false;
 
             if (!enchantment.tagsClasse || enchantment.tagsClasse.length === 0) return true;
-            if (!classeId) return true; // Should not happen if player exists, but good practice
+            if (!classeId) return true;
 
             return enchantment.tagsClasse.includes('common') || enchantment.tagsClasse.includes(classeId);
         });
-    }, [gameData.enchantments]);
+    }, [gameData.enchantments, activeHero]);
 
     const enchantableItems = useMemo(() => {
         const equippedItems = Object.values(inventory.equipment).filter((item): item is Item => item !== null);
@@ -175,12 +180,17 @@ const EnchantTab: React.FC = () => {
 
 // Component for the "Grimoire" tab
 const GrimoireTab: React.FC = () => {
-    const { allEnchantments, learnedRecipes, materials, components } = useGameStore(state => ({
-        allEnchantments: state.gameData.enchantments,
-        learnedRecipes: state.player.learnedRecipes,
-        materials: state.inventory.craftingMaterials,
-        components: state.gameData.components,
+    const { getActiveHero, gameData } = useGameStore(state => ({
+        getActiveHero: state.getActiveHero,
+        gameData: state.gameData,
     }));
+
+    const activeHero = getActiveHero();
+    if (!activeHero) return <p>Aucun héros actif.</p>;
+    const { player, inventory } = activeHero;
+    const { learnedRecipes } = player;
+    const { craftingMaterials: materials } = inventory;
+    const { enchantments: allEnchantments, components } = gameData;
 
     const sortedEnchantments = useMemo(() => {
         return [...allEnchantments].sort((a, b) => (a.tier || 0) - (b.tier || 0) || (a.level || 0) - (b.level || 0));

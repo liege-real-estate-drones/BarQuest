@@ -20,11 +20,27 @@ const ComparisonIndicator = ({ comparison }: { comparison: 'better' | 'worse' | 
 
 
 export function InventoryView() {
-    const { inventory, equipItem, player } = useGameStore(state => ({
-        inventory: state.inventory,
+    const { getActiveHero, equipItem } = useGameStore(state => ({
+        getActiveHero: state.getActiveHero,
         equipItem: state.equipItem,
-        player: state.player,
     }));
+
+    const activeHero = getActiveHero();
+
+    if (!activeHero) {
+        return (
+            <Card className="h-full flex flex-col border-0 shadow-none">
+                <CardHeader>
+                    <CardTitle>Inventaire</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <p className="text-muted-foreground text-center mt-8">Aucun héros actif.</p>
+                </CardContent>
+            </Card>
+        );
+    }
+
+    const { player, inventory } = activeHero;
 
     const getComparison = (item: Item): 'better' | 'worse' | 'equal' => {
         if (item.type === 'quest' || !player.classeId) {

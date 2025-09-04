@@ -32,19 +32,19 @@ const rarityColorMap: Record<Rareté, string> = {
 
 type StatKey = keyof Omit<Stats, 'PV' | 'RessourceMax'>;
 
-export const ArtisanatForgeView: React.FC = () => {
+export const ForgeView: React.FC = () => {
     const { recipes, items: allItems, components } = useGameStore(state => state.gameData);
-    const { gold, craftingMaterials, player, inventoryItems, equipment } = useGameStore(state => ({
-        gold: state.inventory.gold,
-        craftingMaterials: state.inventory.craftingMaterials,
-        player: state.player,
-        inventoryItems: state.inventory.items,
-        equipment: state.inventory.equipment,
-    }));
-    const { craftItem, equipItem } = useGameStore(state => ({
+    const { getActiveHero, craftItem, equipItem } = useGameStore(state => ({
+        getActiveHero: state.getActiveHero,
         craftItem: state.craftItem,
         equipItem: state.equipItem,
     }));
+
+    const activeHero = getActiveHero();
+    if (!activeHero) return <p>Aucun héros actif.</p>;
+
+    const { player, inventory } = activeHero;
+    const { gold, craftingMaterials, items: inventoryItems, equipment } = inventory;
     const { toast } = useToast();
 
     const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);

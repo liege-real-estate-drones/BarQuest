@@ -6,14 +6,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Progress } from '@/components/ui/progress';
 
 export function ReputationView() {
-  const { player, factions } = useGameStore((state) => ({
-    player: state.player,
+  const { getActiveHero, factions } = useGameStore((state) => ({
+    getActiveHero: state.getActiveHero,
     factions: state.gameData.factions,
   }));
 
-  const reputationEntries = player.reputation ? Object.entries(player.reputation) : [];
+  const activeHero = getActiveHero();
 
-  if (reputationEntries.length === 0) {
+  if (!activeHero || !activeHero.player.reputation || Object.keys(activeHero.player.reputation).length === 0) {
     return (
         <Card>
             <CardHeader>
@@ -32,7 +32,7 @@ export function ReputationView() {
         <CardTitle>Réputation</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        {reputationEntries.map(([factionId, repData]) => {
+        {Object.entries(activeHero.player.reputation).map(([factionId, repData]) => {
           const faction = factions.find(f => f.id === factionId);
           if (!faction) return null;
 

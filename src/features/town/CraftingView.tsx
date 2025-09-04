@@ -3,13 +3,18 @@ import React from 'react';
 import { useGameStore } from '@/state/gameStore';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArtisanatForgeView } from './ArtisanatForgeView';
+import { ForgeView } from './ForgeView';
 import { EnchanterView } from './EnchanterView';
 import { SalvageView } from './SalvageView';
 
 export const CraftingView: React.FC = () => {
     const { components } = useGameStore(state => state.gameData);
-    const { craftingMaterials } = useGameStore(state => state.inventory);
+    const activeHero = useGameStore(state => state.getActiveHero());
+
+    if (!activeHero) {
+        return <p>Aucun héros actif.</p>;
+    }
+    const { craftingMaterials } = activeHero.inventory;
 
     const getMaterialName = (materialId: string) => {
         const component = components.find(c => c.id === materialId);

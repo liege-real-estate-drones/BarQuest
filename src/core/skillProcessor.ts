@@ -12,12 +12,16 @@ export const applyPoisonProc = (
     floatingTexts: { entityId: string, text: string, type: FloatingTextType }[],
     forceApply = false
 ) => {
+    const activeHero = state.heroes.find(h => h.id === state.activeHeroId);
+    if (!activeHero) return;
+    const { player } = activeHero;
+
     const chance = forceApply ? 1 : 0.3;
-    if (state.player.activeBuffs.some(b => b.id === 'deadly_poison_buff') && Math.random() < chance) {
+    if (player.activeBuffs.some(b => b.id === 'deadly_poison_buff') && Math.random() < chance) {
         const poisonDebuffId = 'deadly_poison_debuff';
         let existingPoison = target.activeDebuffs.find(d => d.id === poisonDebuffId);
 
-        const buffedPlayerStats = getModifiedStats(state.player.stats, state.player.activeBuffs, state.player.form);
+        const buffedPlayerStats = getModifiedStats(player.stats, player.activeBuffs, player.form);
         const attackPower = formulas.calculateAttackPower(buffedPlayerStats);
         const damagePerTickPerStack = Math.round(attackPower * 0.05); // 5% of AP per stack
 
@@ -61,7 +65,11 @@ export const processSkill = (
 ): { deadEnemyIds: string[], floatingTexts: { entityId: string, text: string, type: FloatingTextType }[] } => {
     const deadEnemyIds: string[] = [];
     const floatingTexts: { entityId: string, text: string, type: FloatingTextType }[] = [];
-    const { player, combat, gameData } = state;
+
+    const activeHero = state.heroes.find(h => h.id === state.activeHeroId);
+    if (!activeHero) return { deadEnemyIds, floatingTexts };
+    const { player } = activeHero;
+    const { combat, gameData } = state;
 
     let originalSkill: Skill | undefined | null = null;
     if (skillObject) {
@@ -240,8 +248,8 @@ export const processSkill = (
         if ((combat.skillCooldowns[skillId] || 0) > 0) return { deadEnemyIds, floatingTexts };
 
         if (skillId !== 'mage_arcane_blast') {
-            const arcaneChargeIndex = state.player.activeBuffs.findIndex(b => b.id === 'arcane_charge');
-            if (arcaneChargeIndex > -1) state.player.activeBuffs.splice(arcaneChargeIndex, 1);
+            const arcaneChargeIndex = player.activeBuffs.findIndex(b => b.id === 'arcane_charge');
+            if (arcaneChargeIndex > -1) player.activeBuffs.splice(arcaneChargeIndex, 1);
         }
     }
 

@@ -273,12 +273,25 @@ const talentTreesByClass: Record<string, string[]> = {
 
 
 export function TalentsView() {
-    const { player, gameData, learnTalent, talentPoints } = useGameStore(state => ({
-        player: state.player,
+    const { getActiveHero, gameData, learnTalent } = useGameStore(state => ({
+        getActiveHero: state.getActiveHero,
         gameData: state.gameData,
         learnTalent: state.learnTalent,
-        talentPoints: state.player.talentPoints
     }));
+
+    const activeHero = getActiveHero();
+    if (!activeHero) {
+        return (
+            <Card className="h-full flex flex-col items-center justify-center">
+                <CardHeader>
+                    <CardTitle>Talents</CardTitle>
+                    <CardDescription>Aucun héros actif.</CardDescription>
+                </CardHeader>
+            </Card>
+        );
+    }
+    const { player } = activeHero;
+    const { talentPoints } = player;
 
     if (!player.classeId) return null;
 

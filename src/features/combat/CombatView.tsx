@@ -22,7 +22,7 @@ import {
 
 export function CombatView() {
   const {
-    player,
+    getActiveHero,
     enemies,
     flee,
     currentDungeon,
@@ -38,7 +38,7 @@ export function CombatView() {
     floatingTexts,
     removeFloatingText,
   } = useGameStore((state) => ({
-    player: state.player,
+    getActiveHero: state.getActiveHero,
     enemies: state.combat.enemies,
     flee: state.flee,
     currentDungeon: state.currentDungeon,
@@ -55,6 +55,8 @@ export function CombatView() {
     removeFloatingText: state.removeFloatingText,
   }));
 
+  const activeHero = getActiveHero();
+
   const isBossFight = enemies.length === 1 && enemies[0].isBoss;
 
   const playerRef = useRef<HTMLDivElement>(null);
@@ -62,25 +64,25 @@ export function CombatView() {
   enemyRefs.current = enemies.map((_, i) => enemyRefs.current[i] ?? createRef());
 
   const equippedSkills = useMemo(() => {
-    if (!player?.equippedSkills) return [];
-    return player.equippedSkills
+    if (!activeHero?.player?.equippedSkills) return [];
+    return activeHero.player.equippedSkills
       .map(skillId => {
         if (!skillId) return null;
         return gameData.skills.find(t => t.id === skillId) || null;
       })
       .filter((t): t is Skill => t !== null);
-  }, [player?.equippedSkills, gameData.skills]);
+  }, [activeHero?.player?.equippedSkills, gameData.skills]);
 
   const handleCycleTarget = () => {
     cycleTarget();
   };
 
   const playerClass = useMemo(() => {
-    if (!player?.classeId) return null;
-    return gameData.classes.find(c => c.id === player.classeId);
-    }, [player?.classeId, gameData.classes]);
+    if (!activeHero?.player?.classeId) return null;
+    return gameData.classes.find(c => c.id === activeHero.player.classeId);
+    }, [activeHero?.player?.classeId, gameData.classes]);
 
-  if (!currentDungeon) {
+  if (!currentDungeon || !activeHero) {
     return <div className="flex items-center justify-center h-screen">Chargement du donjon...</div>;
   }
 
@@ -102,7 +104,7 @@ export function CombatView() {
             <ArrowLeft />
         </Button>
         <div ref={playerRef} className="flex-grow">
-             <EntityDisplay entity={player} isPlayer attackProgress={playerAttackProgress} dungeonInfo={<DungeonInfo dungeon={currentDungeon} killCount={killCount} />} classImage={playerClass?.image} />
+             <EntityDisplay entity={activeHero.player} isPlayer attackProgress={playerAttackProgress} dungeonInfo={<DungeonInfo dungeon={currentDungeon} killCount={killCount} />} classImage={playerClass?.image} />
         </div>
       </header>
 
@@ -133,7 +135,7 @@ export function CombatView() {
       <div className="absolute inset-0 pointer-events-none">
         {floatingTexts.map((ft) => {
             let elementRef: React.RefObject<HTMLDivElement> | null = null;
-            if (ft.entityId === player.id) {
+            if (ft.entityId === activeHero.player.id) {
                 elementRef = playerRef;
             } else {
                 const enemyIndex = enemies.findIndex(e => e.id === ft.entityId);

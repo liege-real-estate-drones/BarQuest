@@ -13,10 +13,24 @@ const resourceConfig: Record<ResourceType, { color: string; indicator: string }>
 };
 
 export function PlayerStatsView() {
-    const { player, getXpToNextLevel } = useGameStore(state => ({
-        player: state.player,
+    const { getActiveHero, getXpToNextLevel } = useGameStore(state => ({
+        getActiveHero: state.getActiveHero,
         getXpToNextLevel: state.getXpToNextLevel,
     }));
+
+    const activeHero = getActiveHero();
+
+    if (!activeHero) {
+        return (
+            <Card className="relative overflow-hidden">
+                <CardHeader>
+                    <CardTitle>Statistiques du joueur</CardTitle>
+                    <CardDescription>Aucun héros sélectionné.</CardDescription>
+                </CardHeader>
+            </Card>
+        );
+    }
+    const { player } = activeHero;
     
     const stats = player.stats;
     const maxHp = formulas.calculateMaxHP(player.level, stats);
