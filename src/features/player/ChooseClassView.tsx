@@ -10,9 +10,10 @@ import { isValidName } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 
 export function ChooseClassView() {
-  const { classes, createNewHero } = useGameStore((state) => ({
+  const { classes, createNewHero, heroes } = useGameStore((state) => ({
     classes: state.gameData.classes,
     createNewHero: state.createNewHero,
+    heroes: state.heroes,
   }));
   const [name, setName] = useState('');
   const { toast } = useToast();
@@ -47,10 +48,12 @@ export function ChooseClassView() {
         />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {classes.map((cls) => (
-          <Card key={cls.id} className="flex flex-col">
-            <CardHeader>
-              <img src={cls.image} alt={cls.nom} className="w-full h-32 object-contain rounded-t-lg" />
+        {classes
+          .filter((cls) => !heroes.some((hero) => hero.player.classeId === cls.id))
+          .map((cls) => (
+            <Card key={cls.id} className="flex flex-col">
+              <CardHeader>
+                <img src={cls.image} alt={cls.nom} className="w-full h-32 object-contain rounded-t-lg" />
               <CardTitle className="font-headline">{cls.nom}</CardTitle>
               <CardDescription>{cls.archétype}</CardDescription>
             </CardHeader>

@@ -951,8 +951,24 @@ export const useGameStore = create<GameState>()(
             // 1. Base Materials from Item Type
             if (slot === 'weapon' || slot === 'offhand' || slot === 'chest' || slot === 'legs' || slot === 'hands' || slot === 'feet' || slot === 'head' || slot === 'belt') {
                 calculatedMaterials.push({ id: 'scrap_metal', amount: 1 });
-                if (type === 'leather' || type === 'mail') {
-                    calculatedMaterials.push({ id: 'light_leather', amount: Math.floor(Math.random() * 2) + 1 });
+
+                // Leather and Hides for armor
+                if (slot === 'head' || slot === 'chest' || slot === 'legs' || slot === 'hands' || slot === 'feet' || slot === 'belt') {
+                    calculatedMaterials.push({ id: 'raw-hide', amount: Math.floor(Math.random() * 2) + 1 });
+                    if (niveauMin > 20 && Math.random() > 0.5) {
+                        calculatedMaterials.push({ id: 'leather', amount: 1 });
+                    }
+                }
+
+                // Ores and Ingots for weapons and heavy armor
+                if (slot === 'weapon' || slot === 'offhand' || slot === 'chest' || slot === 'legs' || slot === 'head' || slot === 'feet') {
+                    calculatedMaterials.push({ id: 'iron-ore', amount: Math.floor(Math.random() * 2) + 1 });
+                    if (niveauMin > 20 && Math.random() > 0.5) {
+                        calculatedMaterials.push({ id: 'iron-ingot', amount: 1 });
+                    }
+                    if (niveauMin > 40 && Math.random() > 0.5) {
+                        calculatedMaterials.push({ id: 'steel-ingot', amount: 1 });
+                    }
                 }
             } else if (slot === 'amulet' || slot === 'ring') {
                  if (Math.random() < 0.2) {

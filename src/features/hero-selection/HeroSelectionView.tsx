@@ -108,7 +108,12 @@ export function HeroSelectionView() {
           ))}
         </CardContent>
         <CardFooter>
-          <Button onClick={startCharacterCreation} className="w-full" variant="outline">
+          <Button
+            onClick={startCharacterCreation}
+            className="w-full"
+            variant="outline"
+            disabled={heroes.length >= gameData.classes.length}
+          >
             <PlusCircle className="mr-2 h-4 w-4" />
             Créer un nouveau personnage
           </Button>

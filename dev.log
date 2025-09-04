@@ -1,3 +1,10 @@
 
 > nextn@0.1.0 dev
-> next dev --turbopack -p 9002
+> next dev -p 9002 --port 9002 --hostname 0.0.0.0
+
+   ▲ Next.js 15.5.2
+   - Local:        http://localhost:9002
+   - Network:      http://0.0.0.0:9002
+
+ ✓ Starting...
+ ✓ Ready in 3s

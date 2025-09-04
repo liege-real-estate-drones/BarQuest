@@ -3,14 +3,11 @@
 import * as React from 'react';
 import { useGameStore } from '@/state/gameStore';
 import { Progress } from '@/components/ui/progress';
-import { Button } from '@/components/ui/button';
-import { LogOut } from 'lucide-react';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { HeroMenu } from './HeroMenu';
 
 export function PlayerBanner({ children }: { children?: React.ReactNode }) {
-  const { getActiveHero, unselectActiveHero, gameData, getXpToNextLevel } = useGameStore((state) => ({
+  const { getActiveHero, gameData, getXpToNextLevel } = useGameStore((state) => ({
     getActiveHero: state.getActiveHero,
-    unselectActiveHero: state.unselectActiveHero,
     gameData: state.gameData,
     getXpToNextLevel: state.getXpToNextLevel,
   }));
@@ -42,18 +39,7 @@ export function PlayerBanner({ children }: { children?: React.ReactNode }) {
           </h1>
           <div className="flex items-center gap-4">
             <div className="text-lg font-semibold">{inventory.gold} Or</div>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button variant="ghost" size="icon" onClick={unselectActiveHero}>
-                    <LogOut className="h-5 w-5" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Changer de personnage</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+            <HeroMenu />
           </div>
         </div>
         <div>
