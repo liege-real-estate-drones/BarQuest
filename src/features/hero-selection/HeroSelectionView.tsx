@@ -15,20 +15,21 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { User, Trash2, Play, PlusCircle } from 'lucide-react';
+import { User, Trash2, Play, PlusCircle, RefreshCw } from 'lucide-react';
 
 export function HeroSelectionView() {
-  const { heroes, selectHero, deleteHero, gameData, startCharacterCreation } = useGameStore(state => ({
+  const { heroes, selectHero, deleteHero, resetHero, gameData, startCharacterCreation } = useGameStore(state => ({
     heroes: state.heroes,
     selectHero: state.selectHero,
     deleteHero: state.deleteHero,
+    resetHero: state.resetHero,
     gameData: state.gameData,
     startCharacterCreation: state.startCharacterCreation,
   }));
 
   const getClassName = (classId: string | null) => {
     if (!classId) return 'Inconnu';
-    return gameData.classes.find(c => c.id === classId)?.name || 'Inconnu';
+    return gameData.classes.find(c => c.id === classId)?.nom || 'Inconnu';
   };
 
   return (
@@ -59,6 +60,28 @@ export function HeroSelectionView() {
                 </Button>
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
+                    <Button variant="outline" size="sm" className="text-yellow-400 border-yellow-400 hover:bg-yellow-400 hover:text-gray-900">
+                      <RefreshCw className="h-4 w-4" />
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Réinitialiser ce héros ?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Cette action réinitialisera toute la progression, l&apos;équipement et l&apos;or de{' '}
+                        <span className="font-bold mx-1">{hero.player.name}</span> au niveau 1. Cette action est irréversible. Voulez-vous continuer ?
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Annuler</AlertDialogCancel>
+                      <AlertDialogAction onClick={() => resetHero(hero.id)} className="bg-yellow-400 text-gray-900 hover:bg-yellow-500">
+                        Oui, réinitialiser
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
                     <Button variant="destructive" size="sm">
                       <Trash2 className="h-4 w-4" />
                     </Button>
@@ -67,7 +90,7 @@ export function HeroSelectionView() {
                     <AlertDialogHeader>
                       <AlertDialogTitle>Êtes-vous sûr de vouloir supprimer ce héros ?</AlertDialogTitle>
                       <AlertDialogDescription>
-                        Cette action est irréversible. Toute la progression, l'équipement et l'or de
+                        Cette action est irréversible. Toute la progression, l&apos;équipement et l&apos;or de
                         <span className="font-bold mx-1">{hero.player.name}</span>
                         seront définitivement perdus.
                       </AlertDialogDescription>

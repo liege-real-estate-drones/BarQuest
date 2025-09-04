@@ -48,7 +48,10 @@ const getLogEntryColor = (type: CombatLogEntry['type']) => {
 
 const LogMessage = ({ entry }: { entry: CombatLogEntry }) => {
     const color = getLogEntryColor(entry.type);
-    const equipment = useGameStore(s => s.inventory.equipment);
+    const equipment = useGameStore(state => {
+        const activeHero = state.getActiveHero();
+        return activeHero ? activeHero.inventory.equipment : {};
+    });
 
     if (entry.type === 'loot' && entry.item) {
         return (
