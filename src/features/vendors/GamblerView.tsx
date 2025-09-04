@@ -8,13 +8,16 @@ import { ItemTooltipContent } from '@/components/ItemTooltip';
 const itemSlots = ["weapon", "head", "chest", "legs", "hands", "feet", "belt", "amulet", "ring", "trinket", "offhand"];
 
 export const GamblerView: React.FC = () => {
-    const { gambleForItem, worldTier, equipment, gold } = useGameStore(state => ({
+    const { gambleForItem, worldTier, getActiveHero } = useGameStore(state => ({
         gambleForItem: state.gambleForItem,
         worldTier: state.worldTier,
-        equipment: state.inventory.equipment,
-        gold: state.inventory.gold,
+        getActiveHero: state.getActiveHero,
     }));
     const [lastGambledItem, setLastGambledItem] = React.useState<Item | null>(null);
+
+    const activeHero = getActiveHero();
+    if (!activeHero) return <p>Aucun héros actif.</p>;
+    const { equipment, gold } = activeHero.inventory;
 
     const cost = 100 * worldTier;
 

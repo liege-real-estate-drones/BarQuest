@@ -35,7 +35,25 @@ import { ActiveSetBonusesView } from './ActiveSetBonusesView';
 import { EQUIPMENT_SLOTS } from '@/lib/constants';
 
 export function EquipmentView() {
-    const { equipment } = useGameStore(state => state.inventory);
+    const { getActiveHero } = useGameStore(state => ({
+        getActiveHero: state.getActiveHero,
+    }));
+
+    const activeHero = getActiveHero();
+
+    if (!activeHero) {
+        return (
+            <Card>
+                <CardHeader>
+                    <CardTitle>Équipement</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <p className="text-muted-foreground">Aucun héros actif.</p>
+                </CardContent>
+            </Card>
+        );
+    }
+    const { equipment } = activeHero.inventory;
 
     return (
         <div>
