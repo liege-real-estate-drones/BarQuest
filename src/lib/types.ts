@@ -18,6 +18,8 @@ import type {
   MaterialTypeSchema,
   ThemeSchema,
   EnchantmentSchema,
+  TalentEffectSchema,
+  SkillEffectSchema,
 } from '@/data/schemas';
 
 export type Rareté = z.infer<typeof RaretéEnum>;
@@ -36,6 +38,8 @@ export type Classe = z.infer<typeof ClasseSchema>;
 export type ItemSet = z.infer<typeof ItemSetSchema>;
 export type Recipe = z.infer<typeof RecipeSchema>;
 export type Enchantment = z.infer<typeof EnchantmentSchema>;
+export type TalentEffect = z.infer<typeof TalentEffectSchema>;
+export type SkillEffect = z.infer<typeof SkillEffectSchema>;
 
 export interface EnchantingComponent {
   id: string;

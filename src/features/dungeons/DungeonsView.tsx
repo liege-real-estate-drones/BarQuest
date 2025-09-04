@@ -10,11 +10,10 @@ import {
     AlertDialogTitle,
   } from "@/components/ui/alert-dialog";
   import { useGameStore } from '@/state/gameStore';
-  import { Dungeon, Quete } from '@/lib/types';
+  import { ActiveQuete, Dungeon, Quete } from '@/lib/types';
   import { Button } from '@/components/ui/button';
   import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
   import { ScrollArea } from '@/components/ui/scroll-area';
-  import { ActiveQuete } from "@/state/gameStore";
   
   import { Switch } from "@/components/ui/switch";
   import { Label } from "@/components/ui/label";
