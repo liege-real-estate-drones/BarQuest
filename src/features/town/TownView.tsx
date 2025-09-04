@@ -18,7 +18,15 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Settings, User, Swords, Store, Home } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Menu, User, Swords, Store, Home } from 'lucide-react';
 import { InnView } from './InnView';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { CharacterView } from '../player/CharacterView';
@@ -32,14 +40,37 @@ type TownTab = 'town' | 'dungeons' | 'character' | 'vendors';
 type TownSubView = 'main' | 'scribe';
 
 export function TownView() {
-  const { resetGame, townView, setTownView, setActiveSubView } = useGameStore(state => ({
+  const {
+    resetGame,
+    townView,
+    setTownView,
+    setActiveSubView,
+    heroes,
+    gameData,
+    startCharacterCreation,
+    unselectActiveHero,
+    resetHero,
+    activeHeroId,
+  } = useGameStore(state => ({
     resetGame: state.resetGame,
     townView: state.townView,
     setTownView: state.setTownView,
     setActiveSubView: state.setActiveSubView,
+    heroes: state.heroes,
+    gameData: state.gameData,
+    startCharacterCreation: state.startCharacterCreation,
+    unselectActiveHero: state.unselectActiveHero,
+    resetHero: state.resetHero,
+    activeHeroId: state.activeHeroId,
   }));
   const [activeTab, setActiveTab] = useState<TownTab>('town');
   const [townSubView, setTownSubView] = useState<TownSubView>('main');
+  const [isResetHeroDialogOpen, setIsResetHeroDialogOpen] = useState(false);
+  const [isResetGameDialogOpen, setIsResetGameDialogOpen] = useState(false);
+
+  const createdClasses = heroes.map(hero => hero.player.classeId);
+  const allGameClasses = gameData.classes;
+  const canCreateHero = createdClasses.length < allGameClasses.length;
 
   useEffect(() => {
     // Reset sub-view when changing main tabs
@@ -119,28 +150,73 @@ export function TownView() {
   return (
     <div className="flex flex-col h-screen max-h-screen">
       <PlayerBanner>
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
             <Button variant="outline" size="icon" className="bg-background/50 text-white">
-              <Settings className="h-4 w-4" />
+              <Menu className="h-4 w-4" />
             </Button>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Êtes-vous sûr de vouloir réinitialiser ?</AlertDialogTitle>
-              <AlertDialogDescription>
-                Cette action est irréversible et supprimera définitivement toute votre progression.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Annuler</AlertDialogCancel>
-              <AlertDialogAction onClick={resetGame} className="bg-destructive hover:bg-destructive/90">
-                Oui, réinitialiser
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Gestion du héros</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={startCharacterCreation} disabled={!canCreateHero}>
+              Créer un héros
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={unselectActiveHero}>
+              Changer de héros
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setIsResetHeroDialogOpen(true)}>
+              Réinitialiser le héros
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              className="text-red-500 focus:text-red-500"
+              onClick={() => setIsResetGameDialogOpen(true)}
+            >
+              Réinitialiser le jeu
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </PlayerBanner>
+
+      <AlertDialog open={isResetHeroDialogOpen} onOpenChange={setIsResetHeroDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Réinitialiser le héros ?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Cette action réinitialisera votre héros à son état initial (niveau 1, équipement de départ). Votre progression avec ce personnage sera perdue. Êtes-vous sûr ?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Annuler</AlertDialogCancel>
+            <AlertDialogAction onClick={() => {
+              if (activeHeroId) {
+                resetHero(activeHeroId);
+              }
+              setIsResetHeroDialogOpen(false);
+            }}>
+              Oui, réinitialiser le héros
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={isResetGameDialogOpen} onOpenChange={setIsResetGameDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Réinitialiser le jeu ?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Cette action est irréversible et supprimera définitivement toute votre progression, y compris tous vos personnages et objets. Êtes-vous absolument sûr ?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Annuler</AlertDialogCancel>
+            <AlertDialogAction onClick={resetGame} className="bg-destructive hover:bg-destructive/90">
+              Oui, tout supprimer
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
       
       <main className="flex-grow container mx-auto px-4 min-h-0 overflow-y-auto">
         {renderContent()}
