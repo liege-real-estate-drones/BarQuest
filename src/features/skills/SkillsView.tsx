@@ -39,13 +39,27 @@ const SkillPopoverContent = ({ skill, player }: { skill: Skill, player: PlayerSt
 }
 
 export function SkillsView() {
-    const { player, gameData, equipSkill, unequipSkill, learnSkill } = useGameStore(state => ({
-        player: state.player,
+    const { getActiveHero, gameData, equipSkill, unequipSkill, learnSkill } = useGameStore(state => ({
+        getActiveHero: state.getActiveHero,
         gameData: state.gameData,
         equipSkill: state.equipSkill,
         unequipSkill: state.unequipSkill,
         learnSkill: state.learnSkill
     }));
+
+    const activeHero = getActiveHero();
+
+    if (!activeHero) {
+        return (
+            <Card className="h-full flex flex-col items-center justify-center">
+                <CardHeader>
+                    <CardTitle>Compétences</CardTitle>
+                    <CardDescription>Aucun héros actif.</CardDescription>
+                </CardHeader>
+            </Card>
+        );
+    }
+    const { player } = activeHero;
 
     if (!player.classeId) return null;
 

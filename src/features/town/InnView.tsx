@@ -21,15 +21,17 @@ const resourcePotionInfo: Record<ResourceType, { name: string, icon: React.React
 };
 
 export function InnView() {
-  const { gold, buyPotion, rest, player } = useGameStore((state) => ({
-    gold: state.inventory.gold,
+  const { getActiveHero, buyPotion, rest } = useGameStore((state) => ({
+    getActiveHero: state.getActiveHero,
     buyPotion: state.buyPotion,
     rest: state.rest,
-    player: state.player,
   }));
   const { toast } = useToast();
-  
-  if (!player.classeId) return null;
+
+  const activeHero = getActiveHero();
+  if (!activeHero) return null; // Or a placeholder
+  const { player, inventory } = activeHero;
+  const { gold } = inventory;
 
   const handleBuyPotion = (type: PotionType) => {
     const success = buyPotion(type);

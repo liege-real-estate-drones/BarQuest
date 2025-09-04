@@ -9,12 +9,17 @@ import type { Item } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
 
 export const SalvageView: React.FC = () => {
-    const { inventory, dismantleItem } = useGameStore(state => ({
-        inventory: state.inventory,
+    const { getActiveHero, dismantleItem, gameData } = useGameStore(state => ({
+        getActiveHero: state.getActiveHero,
         dismantleItem: state.dismantleItem,
+        gameData: state.gameData,
     }));
     const { toast } = useToast();
-    const { components } = useGameStore(state => state.gameData);
+
+    const activeHero = getActiveHero();
+    if (!activeHero) return <p>Aucun héros actif.</p>;
+    const { inventory } = activeHero;
+    const { components } = gameData;
 
     const getMaterialName = (materialId: string) => {
         const component = components.find(c => c.id === materialId);

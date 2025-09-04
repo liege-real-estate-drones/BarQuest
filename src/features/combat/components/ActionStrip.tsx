@@ -13,11 +13,7 @@ import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { getSkillResourceCost } from "@/core/formulas";
 
-function SkillTooltipContent({ skill }: { skill: Skill }) {
-    const { player, gameData } = useGameStore(state => ({
-        player: state.player,
-        gameData: state.gameData,
-    }));
+function SkillTooltipContent({ skill, player, gameData }: { skill: Skill; player: any; gameData: any; }) {
     const effects = skill.effets || [];
     const resourceCost = getSkillResourceCost(skill, player, gameData);
     
@@ -49,13 +45,16 @@ const resourceColorMap = {
 }
 
 export function ActionStrip({ onRetreat, onCycleTarget, skills, skillCooldowns }: ActionStripProps) {
-    const { consumePotion, inventory, activateSkill, player, gameData } = useGameStore(state => ({
+    const { consumePotion, activateSkill, getActiveHero, gameData } = useGameStore(state => ({
         consumePotion: state.consumePotion,
-        inventory: state.inventory,
         activateSkill: state.activateSkill,
-        player: state.player,
+        getActiveHero: state.getActiveHero,
         gameData: state.gameData,
     }));
+
+    const activeHero = getActiveHero();
+    if (!activeHero) return null;
+    const { player, inventory } = activeHero;
     
     useEffect(() => {
         const handleKeyPress = (event: KeyboardEvent) => {
@@ -130,7 +129,7 @@ export function ActionStrip({ onRetreat, onCycleTarget, skills, skillCooldowns }
                                     </Button>
                                 </TooltipTrigger>
                                 <TooltipContent side="top">
-                                    <SkillTooltipContent skill={skill} />
+                                    <SkillTooltipContent skill={skill} player={player} gameData={gameData} />
                                 </TooltipContent>
                             </Tooltip>
                         )

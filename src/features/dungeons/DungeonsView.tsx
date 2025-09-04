@@ -20,18 +20,21 @@ import {
   import { Label } from "@/components/ui/label";
   
   export function DungeonsView() {
-      const { dungeons, enterDungeon, player, gameData, proposedQuests, setProposedQuests, acceptMultipleQuests, activeQuests, isHeroicMode, setHeroicMode } = useGameStore(state => ({
+      const { dungeons, enterDungeon, gameData, proposedQuests, setProposedQuests, acceptMultipleQuests, isHeroicMode, setHeroicMode, getActiveHero } = useGameStore(state => ({
           dungeons: state.gameData.dungeons,
           enterDungeon: state.enterDungeon,
-          player: state.player,
           gameData: state.gameData,
           proposedQuests: state.proposedQuests,
           setProposedQuests: state.setProposedQuests,
           acceptMultipleQuests: state.acceptMultipleQuests,
-          activeQuests: state.activeQuests,
           isHeroicMode: state.isHeroicMode,
           setHeroicMode: state.setHeroicMode,
+          getActiveHero: state.getActiveHero,
       }));
+
+      const activeHero = getActiveHero();
+      if (!activeHero) return <p>Aucun héros actif.</p>;
+      const { player, activeQuests } = activeHero;
   
       const completedDungeons = player.completedDungeons || {};
   

@@ -3,11 +3,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useGameStore } from '@/state/gameStore';
 
 export function ActiveSetBonusesView() {
-    const activeBonuses = useGameStore(state => state.player.activeSetBonuses);
+    const activeHero = useGameStore(state => state.getActiveHero());
 
-    if (!activeBonuses || activeBonuses.length === 0) {
-        return null; // Don't render anything if there are no active set bonuses
+    if (!activeHero || !activeHero.player.activeSetBonuses || activeHero.player.activeSetBonuses.length === 0) {
+        return null;
     }
+
+    const activeBonuses = activeHero.player.activeSetBonuses;
 
     // To prevent duplicates from different sets providing the same bonus text,
     // though the current logic in gameStore should already handle this by just pushing strings.

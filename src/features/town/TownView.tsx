@@ -30,8 +30,7 @@ import { CraftingView } from './CraftingView';
 type TownTab = 'town' | 'dungeons' | 'character' | 'vendors';
 
 export function TownView() {
-  const { player, resetGame, townView, setTownView, setActiveSubView } = useGameStore(state => ({
-    player: state.player,
+  const { resetGame, townView, setTownView, setActiveSubView } = useGameStore(state => ({
     resetGame: state.resetGame,
     townView: state.townView,
     setTownView: state.setTownView,

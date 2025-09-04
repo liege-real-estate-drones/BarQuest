@@ -70,14 +70,15 @@ export function ItemStat({ label, value, comparison, isImportant }: { label: str
 }
 
 export function ItemTooltipContent({ item, equippedItem }: { item: Item, equippedItem?: Item | null }) {
-    const { player, inventory, gameData } = useGameStore(state => ({
-        player: state.player,
-        inventory: state.inventory,
+    const { getActiveHero, gameData } = useGameStore(state => ({
+        getActiveHero: state.getActiveHero,
         gameData: state.gameData,
     }));
 
-    if (!item) return null;
+    const activeHero = getActiveHero();
+    if (!item || !activeHero) return null;
 
+    const { player, inventory } = activeHero;
     const classWeights = player.classeId ? STAT_WEIGHTS[player.classeId] : {};
 
     const getFlatStats = (i: Item) => {
