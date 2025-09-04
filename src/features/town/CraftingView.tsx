@@ -30,7 +30,7 @@ export const CraftingView: React.FC = () => {
                     <TabsTrigger value="salvage">Récupération</TabsTrigger>
                 </TabsList>
                 <TabsContent value="forge">
-                    <ArtisanatForgeView />
+                    <ForgeView />
                 </TabsContent>
                 <TabsContent value="enchant">
                     <EnchanterView />
