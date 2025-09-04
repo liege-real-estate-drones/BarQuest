@@ -9,24 +9,29 @@ import { DungeonCompletionView } from '@/features/dungeons/DungeonCompletionView
 import { useHydrated } from '@/hooks/useHydrated';
 import { LoaderCircle } from 'lucide-react';
 import { ChooseClassView } from '@/features/player/ChooseClassView';
+import { HeroSelectionView } from '@/features/hero-selection/HeroSelectionView';
 import type { GameData } from '@/lib/types';
 
 export default function Home() {
   const hydrated = useHydrated();
-  const { 
-    view, 
-    initializeGameData, 
-    isInitialized, 
-    player,
+  const {
+    view,
+    initializeGameData,
+    isInitialized,
     recalculateStats,
-    rehydrateComplete 
+    rehydrateComplete,
+    activeHeroId,
+    isCreatingCharacter,
+    getActiveHero,
   } = useGameStore((state) => ({
     view: state.view,
     initializeGameData: state.initializeGameData,
     isInitialized: state.isInitialized,
-    player: state.player,
     recalculateStats: state.recalculateStats,
-    rehydrateComplete: state.rehydrateComplete
+    rehydrateComplete: state.rehydrateComplete,
+    activeHeroId: state.activeHeroId,
+    isCreatingCharacter: state.isCreatingCharacter,
+    getActiveHero: state.getActiveHero,
   }));
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -81,10 +86,11 @@ export default function Home() {
   }, [hydrated, rehydrateComplete, loadGameData]);
 
   useEffect(() => {
-    if (isInitialized && player.classeId) {
+    const activeHero = getActiveHero();
+    if (isInitialized && activeHero?.player.classeId) {
         recalculateStats();
     }
-  }, [isInitialized, player.classeId, recalculateStats]);
+  }, [isInitialized, activeHeroId, recalculateStats, getActiveHero]);
   
   if (error) {
     return (
@@ -104,8 +110,12 @@ export default function Home() {
     );
   }
 
-  if (!player.classeId) {
+  if (isCreatingCharacter) {
     return <ChooseClassView />;
+  }
+
+  if (!activeHeroId) {
+    return <HeroSelectionView />;
   }
 
   return (

@@ -1,5 +1,7 @@
 import type { InventoryState } from './types';
 
+export const RENAME_COST = 10000;
+
 export const EQUIPMENT_SLOTS: (keyof InventoryState['equipment'])[] = [
     'head', 'chest', 'legs', 'feet', 'hands', 'weapon', 'offhand', 'amulet', 'ring', 'ring2', 'belt', 'trinket'
 ];
