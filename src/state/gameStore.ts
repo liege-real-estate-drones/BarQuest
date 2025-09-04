@@ -464,14 +464,30 @@ export const useGameStore = create<GameState>()(
       activeHeroId: null,
       get activeHero() {
         const state = get();
-        if (!state.activeHeroId) return null;
+        if (!state || !state.isInitialized || !state.activeHeroId) return null;
         return state.heroes.find(h => h.id === state.activeHeroId) ?? null;
       },
       // For compatibility
-      get player() { return get().activeHero?.player ?? getInitialPlayerState() },
-      get inventory() { return get().activeHero?.inventory ?? initialInventoryState },
-      get combat() { return get().activeHero?.combat ?? initialCombatState },
-      get activeQuests() { return get().activeHero?.activeQuests ?? [] },
+      get player() {
+        const state = get();
+        if (!state || !state.isInitialized) return getInitialPlayerState();
+        return state.activeHero?.player ?? getInitialPlayerState();
+      },
+      get inventory() {
+        const state = get();
+        if (!state || !state.isInitialized) return initialInventoryState;
+        return state.activeHero?.inventory ?? initialInventoryState;
+      },
+      get combat() {
+        const state = get();
+        if (!state || !state.isInitialized) return initialCombatState;
+        return state.activeHero?.combat ?? initialCombatState;
+      },
+      get activeQuests() {
+        const state = get();
+        if (!state || !state.isInitialized) return [];
+        return state.activeHero?.activeQuests ?? [];
+      },
       proposedQuests: null,
       bossEncounter: null,
       isHeroicMode: false,
@@ -2705,45 +2721,54 @@ export const useGameStore = create<GameState>()(
       storage: storage,
       version: 1,
       migrate: (persistedState: any, version: number) => {
-        if (version < 1) {
-          // Migration for old save structure from version 0
-          if (!persistedState.heroes && persistedState.player && persistedState.player.classeId) {
-            console.log("Old save data detected, migrating to hero structure...");
-            const migratedHero: Hero = {
-              id: persistedState.player.id,
-              player: persistedState.player,
-              inventory: persistedState.inventory,
-              combat: initialCombatState,
-              activeQuests: persistedState.activeQuests || [],
-            };
-            persistedState.heroes = [migratedHero];
-            persistedState.activeHeroId = migratedHero.id;
+        try {
+          if (version < 1) {
+            // Migration for old save structure from version 0
+            if (!persistedState.heroes && persistedState.player && persistedState.player.classeId) {
+              console.log("Old save data detected, migrating to hero structure...");
+              const migratedHero: Hero = {
+                id: persistedState.player.id,
+                player: persistedState.player,
+                inventory: persistedState.inventory,
+                combat: initialCombatState,
+                activeQuests: persistedState.activeQuests || [],
+              };
+              persistedState.heroes = [migratedHero];
+              persistedState.activeHeroId = migratedHero.id;
 
-            delete persistedState.player;
-            delete persistedState.inventory;
-            delete persistedState.combat;
-            delete persistedState.activeQuests;
-          }
+              delete persistedState.player;
+              delete persistedState.inventory;
+              delete persistedState.combat;
+              delete persistedState.activeQuests;
+            }
 
-          // Reset combat state for all heroes on rehydration
-          if (persistedState.heroes) {
-            persistedState.heroes.forEach((hero: Hero) => {
-              hero.combat = initialCombatState;
-            });
-          }
+            // Reset combat state for all heroes on rehydration
+            if (Array.isArray(persistedState.heroes)) {
+              persistedState.heroes.forEach((hero: Hero) => {
+                hero.combat = initialCombatState;
+              });
+            }
 
-          // Set initial view based on hero data
-          if (persistedState.activeHeroId && persistedState.heroes.some((h: Hero) => h.id === persistedState.activeHeroId)) {
-            persistedState.view = 'MAIN';
-          } else if (persistedState.heroes && persistedState.heroes.length > 0) {
-            persistedState.view = 'HERO_SELECTION';
-            persistedState.activeHeroId = persistedState.heroes[0].id;
-          } else {
-            persistedState.view = 'MAIN'; // Will trigger ChooseClassView because activeHeroId is null
-            persistedState.activeHeroId = null;
+            // Set initial view based on hero data
+            if (persistedState.activeHeroId && Array.isArray(persistedState.heroes) && persistedState.heroes.some((h: Hero) => h.id === persistedState.activeHeroId)) {
+              persistedState.view = 'MAIN';
+            } else if (Array.isArray(persistedState.heroes) && persistedState.heroes.length > 0) {
+              persistedState.view = 'HERO_SELECTION';
+              persistedState.activeHeroId = persistedState.heroes[0].id;
+            } else {
+              persistedState.view = 'MAIN'; // Will trigger ChooseClassView because activeHeroId is null
+              persistedState.activeHeroId = null;
+            }
           }
+          return persistedState;
+        } catch (error) {
+          console.error("Failed to migrate state, clearing storage.", error);
+          if (typeof window !== 'undefined') {
+            localStorage.removeItem('barquest-save');
+            window.location.reload();
+          }
+          return {}; // Return an empty state
         }
-        return persistedState;
       },
     }
   )

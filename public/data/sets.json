@@ -93,8 +93,7 @@
         "8": "Lorsque vous subissez des dégâts, vous déchaînez une onde de choc dévastatrice."
       }
     }
-  }
-,
+  },
   {
     "id": "mage_spellweaver_set",
     "name": "Regalia Tisse-Sorts de l'Archimage",
@@ -138,8 +137,7 @@
         "8": "Utiliser Disparition vous confère 100% de chances de coup critique pendant 5 secondes."
       }
     }
-  }
-,
+  },
   {
     "id": "cleric_devotion_set",
     "name": "Habits du Dévoué",

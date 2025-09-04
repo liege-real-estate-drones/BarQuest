@@ -6,7 +6,7 @@
             "nom": "Berserker",
             "ressource": "Rage",
             "archétype": "Guerrier féroce spécialisé dans le combat au corps à corps brutal et les frappes puissantes.",
-            "image": "/images/classes/berserker.png",
+            "image": "/images/classes/Berserker.png",
             "statsBase": {
                 "PV": 120,
                 "Force": 12,
@@ -28,7 +28,7 @@
             "nom": "Mage",
             "ressource": "Mana",
             "archétype": "Maître des arcanes, capable de déchaîner des sorts dévastateurs à distance.",
-            "image": "/images/classes/mage.png",
+            "image": "/images/classes/Mage.png",
             "statsBase": {
                 "PV": 80,
                 "Force": 4,
@@ -50,7 +50,7 @@
             "nom": "Rogue",
             "ressource": "Énergie",
             "archétype": "Assassin agile et rapide, utilisant poisons et attaques surprises pour éliminer ses cibles.",
-            "image": "/images/classes/rogue.png",
+            "image": "/images/classes/Rogue.png",
             "statsBase": {
                 "PV": 90,
                 "Force": 7,
@@ -72,7 +72,7 @@
             "nom": "Clerc",
             "ressource": "Mana",
             "archétype": "Guerrier saint qui combine des compétences martiales avec des sorts de soin et de protection.",
-            "image": "/images/classes/cleric.png",
+            "image": "/images/classes/Cleric.png",
             "statsBase": {
                 "PV": 100,
                 "Force": 9,
