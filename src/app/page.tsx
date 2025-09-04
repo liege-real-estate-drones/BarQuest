@@ -20,7 +20,6 @@ export default function Home() {
     isInitialized, 
     player,
     recalculateStats,
-    rehydrateComplete,
     activeHeroId
   } = useGameStore((state) => ({
     view: state.view,
@@ -28,7 +27,6 @@ export default function Home() {
     isInitialized: state.isInitialized,
     player: state.player,
     recalculateStats: state.recalculateStats,
-    rehydrateComplete: state.rehydrateComplete,
     activeHeroId: state.activeHeroId
   }));
   const [isLoading, setIsLoading] = useState(true);
@@ -77,11 +75,13 @@ export default function Home() {
     }
   }, [isInitialized, initializeGameData]);
 
+  const isStoreHydrated = useGameStore.persist.hasHydrated();
+
   useEffect(() => {
-    if (hydrated && rehydrateComplete) {
+    if (hydrated && isStoreHydrated) {
         loadGameData();
     }
-  }, [hydrated, rehydrateComplete, loadGameData]);
+  }, [hydrated, isStoreHydrated, loadGameData]);
 
   useEffect(() => {
     if (isInitialized && player.classeId) {
@@ -98,7 +98,7 @@ export default function Home() {
     );
   }
 
-  if (!hydrated || isLoading || !rehydrateComplete) {
+  if (!hydrated || isLoading || !isStoreHydrated) {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center p-24 bg-background">
         <LoaderCircle className="h-16 w-16 animate-spin text-primary" />
