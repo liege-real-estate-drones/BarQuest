@@ -26,8 +26,10 @@ import { PlayerBanner } from '../player/PlayerBanner';
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { CraftingView } from './CraftingView';
+import { ScribeView } from './ScribeView';
 
 type TownTab = 'town' | 'dungeons' | 'character' | 'vendors';
+type TownSubView = 'main' | 'scribe';
 
 export function TownView() {
   const { resetGame, townView, setTownView, setActiveSubView } = useGameStore(state => ({
@@ -37,8 +39,12 @@ export function TownView() {
     setActiveSubView: state.setActiveSubView,
   }));
   const [activeTab, setActiveTab] = useState<TownTab>('town');
+  const [townSubView, setTownSubView] = useState<TownSubView>('main');
 
   useEffect(() => {
+    // Reset sub-view when changing main tabs
+    setTownSubView('main');
+
     switch(activeTab) {
       case 'town':
         setActiveSubView('TOWN');
@@ -58,17 +64,27 @@ export function TownView() {
   const renderContent = () => {
     switch (activeTab) {
       case 'town':
+        if (townSubView === 'scribe') {
+          return <div className="p-4"><ScribeView onBack={() => setTownSubView('main')} /></div>;
+        }
         return (
           <ScrollArea className="h-full">
-            {/* Utilisation d'une grille pour une mise en page plus riche */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4">
-              {/* Le journal de quêtes prend toute la largeur sur les grands écrans */}
               <div className="md:col-span-2">
                 <QuestsView />
               </div>
-              {/* L'auberge, une action clé */}
               <InnView />
-              {/* La réputation, pour suivre la progression à long terme */}
+              <div className="p-6 bg-gray-800/50 rounded-lg flex flex-col justify-between">
+                <div>
+                  <h3 className="text-xl font-bold text-white mb-2">Le Scribe</h3>
+                  <p className="text-gray-400 mb-4">
+                    Changez de nom pour la postérité. Un service rapide, mais pas gratuit.
+                  </p>
+                </div>
+                <Button onClick={() => setTownSubView('scribe')} className="mt-auto">
+                  Parler au Scribe
+                </Button>
+              </div>
               <div className="md:col-span-2">
                 <ReputationView />
               </div>

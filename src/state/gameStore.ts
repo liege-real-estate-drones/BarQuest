@@ -125,6 +125,7 @@ export interface GameState {
   selectHero: (heroId: string) => void;
   createNewHero: (classId: PlayerClassId, name: string) => void;
   deleteHero: (heroId: string) => void;
+  resetHero: (heroId: string) => void;
   renameActiveHero: (newName: string) => boolean;
   unselectActiveHero: () => void;
   startCharacterCreation: () => void;
@@ -447,6 +448,25 @@ export const calculateItemScore = (item: Item, classId: PlayerClassId): number =
     return score;
 }
 
+const initializePlayerForClass = (player: PlayerState, classId: PlayerClassId, gameData: GameData): PlayerState => {
+  const chosenClass = gameData.classes.find(c => c.id === classId);
+  if (chosenClass) {
+      player.classeId = chosenClass.id as PlayerClassId;
+      player.baseStats = { ...chosenClass.statsBase };
+      player.talentPoints = 1;
+      player.resources.type = chosenClass.ressource;
+
+      const startingSkills = gameData.skills.filter(s => s.classeId === classId && s.niveauRequis === 1);
+      startingSkills.slice(0, 4).forEach((skill, index) => {
+          if (skill) {
+              player.learnedSkills[skill.id] = 1;
+              player.equippedSkills[index] = skill.id;
+          }
+      });
+  }
+  return player;
+};
+
 const dummyStorage: StateStorage = {
   getItem: () => null,
   setItem: () => {},
@@ -524,25 +544,12 @@ export const useGameStore = create<GameState>()(
           return;
         }
         const { gameData } = get();
-        const chosenClass = gameData.classes.find(c => c.id === classId);
-        if (!chosenClass) return;
 
-        const newPlayer = getInitialPlayerState();
-        const newInventory = JSON.parse(JSON.stringify(initialInventoryState));
-
+        let newPlayer = getInitialPlayerState();
         newPlayer.name = name;
-        newPlayer.classeId = chosenClass.id as PlayerClassId;
-        newPlayer.baseStats = { ...chosenClass.statsBase };
-        newPlayer.talentPoints = 1;
-        newPlayer.resources.type = chosenClass.ressource;
+        newPlayer = initializePlayerForClass(newPlayer, classId, gameData);
 
-        const startingSkills = gameData.skills.filter(s => s.classeId === classId && s.niveauRequis === 1);
-        startingSkills.slice(0, 4).forEach((skill, index) => {
-          if (skill) {
-            newPlayer.learnedSkills[skill.id] = 1;
-            newPlayer.equippedSkills[index] = skill.id;
-          }
-        });
+        const newInventory = JSON.parse(JSON.stringify(initialInventoryState));
 
         const newHeroId = uuidv4();
         const newProfile: PlayerProfile = {
@@ -567,6 +574,22 @@ export const useGameStore = create<GameState>()(
             state.activeHeroId = null;
           }
         });
+      },
+      resetHero: (heroId: string) => {
+        set(state => {
+            const heroToReset = state.heroes.find(h => h.id === heroId);
+            if (heroToReset && heroToReset.player.classeId) {
+                const { name, classeId } = heroToReset.player;
+
+                let newPlayerState = getInitialPlayerState();
+                newPlayerState.name = name;
+                newPlayerState = initializePlayerForClass(newPlayerState, classeId, state.gameData);
+
+                heroToReset.player = newPlayerState;
+                heroToReset.inventory = JSON.parse(JSON.stringify(initialInventoryState));
+            }
+        });
+        get().recalculateStats({ forceRestore: true });
       },
       renameActiveHero: (newName) => {
         if (!isValidName(newName)) {
