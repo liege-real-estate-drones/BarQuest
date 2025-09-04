@@ -3,21 +3,30 @@
 import * as React from 'react';
 import { useGameStore } from '@/state/gameStore';
 import { Progress } from '@/components/ui/progress';
-import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { LogOut } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 export function PlayerBanner({ children }: { children?: React.ReactNode }) {
-  const { player, inventory, gameData, getXpToNextLevel } = useGameStore((state) => ({
-    player: state.player,
-    inventory: state.inventory,
+  const { getActiveHero, unselectActiveHero, gameData, getXpToNextLevel } = useGameStore((state) => ({
+    getActiveHero: state.getActiveHero,
+    unselectActiveHero: state.unselectActiveHero,
     gameData: state.gameData,
     getXpToNextLevel: state.getXpToNextLevel,
   }));
+
+  const activeHero = getActiveHero();
+
+  if (!activeHero) {
+    return null; // Don't render banner if no hero is active
+  }
+
+  const { player, inventory } = activeHero;
 
   const playerClass = gameData.classes.find((c) => c.id === player.classeId);
   const xpToNextLevel = getXpToNextLevel();
   const xpPercentage = xpToNextLevel > 0 ? (player.xp / xpToNextLevel) * 100 : 0;
 
-  // The user will create these banners. Using a placeholder style for now.
   const bannerImageUrl = playerClass ? `/images/banners/${playerClass.id}.png` : '';
 
   return (
@@ -31,7 +40,21 @@ export function PlayerBanner({ children }: { children?: React.ReactNode }) {
           <h1 className="text-2xl font-bold">
             {player.name} - Nv. {player.level}
           </h1>
-          <div className="text-lg font-semibold">{inventory.gold} Or</div>
+          <div className="flex items-center gap-4">
+            <div className="text-lg font-semibold">{inventory.gold} Or</div>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="ghost" size="icon" onClick={unselectActiveHero}>
+                    <LogOut className="h-5 w-5" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Changer de personnage</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
         </div>
         <div>
           <div className="mb-1 flex justify-between text-sm">

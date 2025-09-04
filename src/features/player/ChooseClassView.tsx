@@ -6,17 +6,27 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import type { PlayerClassId } from '@/lib/types';
+import { isValidName } from '@/lib/utils';
+import { useToast } from '@/hooks/use-toast';
 
 export function ChooseClassView() {
-  const { classes, setPlayerClass } = useGameStore((state) => ({
+  const { classes, createNewHero } = useGameStore((state) => ({
     classes: state.gameData.classes,
-    setPlayerClass: state.setPlayerClass,
+    createNewHero: state.createNewHero,
   }));
   const [name, setName] = useState('');
+  const { toast } = useToast();
 
   const handleClassSelection = (classId: PlayerClassId) => {
-    if (name.trim()) {
-      setPlayerClass(classId, name.trim());
+    const trimmedName = name.trim();
+    if (isValidName(trimmedName)) {
+      createNewHero(classId, trimmedName);
+    } else {
+      toast({
+        title: "Nom invalide",
+        description: "Le nom de votre héros doit contenir entre 3 et 16 caractères et ne peut comporter que des lettres et des chiffres.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -33,6 +43,7 @@ export function ChooseClassView() {
           value={name}
           onChange={(e) => setName(e.target.value)}
           className="text-center text-lg"
+          maxLength={16}
         />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
