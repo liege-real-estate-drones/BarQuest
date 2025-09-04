@@ -256,7 +256,7 @@ export const SkillSchema = BaseSkillTalentSchema.extend({
 
 const TalentEffectTriggerSchema = z.enum(['on_dodge']); // Start with on_dodge
 
-const TalentEffectSchema = z.object({
+export const TalentEffectSchema = z.object({
     trigger: TalentEffectTriggerSchema,
     chance: z.number().optional().default(1),
     effects: z.array(SkillEffectSchema), // A talent can apply any of the existing skill effects

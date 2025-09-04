@@ -8,15 +8,15 @@ import { Input } from '@/components/ui/input';
 import type { PlayerClassId } from '@/lib/types';
 
 export function ChooseClassView() {
-  const { classes, setPlayerClass } = useGameStore((state) => ({
+  const { classes, createHero } = useGameStore((state) => ({
     classes: state.gameData.classes,
-    setPlayerClass: state.setPlayerClass,
+    createHero: state.createHero,
   }));
   const [name, setName] = useState('');
 
   const handleClassSelection = (classId: PlayerClassId) => {
     if (name.trim()) {
-      setPlayerClass(classId, name.trim());
+      createHero(classId, name.trim());
     }
   };
 

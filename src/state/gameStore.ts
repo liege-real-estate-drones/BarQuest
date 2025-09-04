@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage, StateStorage } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import type { Dungeon, Monstre, Item, Talent, Skill, Stats, PlayerState, InventoryState, CombatLogEntry, CombatState, GameData, Quete, PlayerClassId, ResourceType, Rareté, CombatEnemy, ItemSet, PotionType, Recipe, Theme, Affixe, Enchantment, Buff, Debuff, FloatingText, FloatingTextType, Hero, ActiveQuete } from '@/lib/types';
+import type { Dungeon, Monstre, Item, Talent, Skill, Stats, PlayerState, InventoryState, CombatLogEntry, CombatState, GameData, Quete, PlayerClassId, ResourceType, Rareté, CombatEnemy, ItemSet, PotionType, Recipe, Theme, Affixe, Enchantment, Buff, Debuff, FloatingText, FloatingTextType, Hero, ActiveQuete, TalentEffect, SkillEffect } from '@/lib/types';
 import { DungeonCompletionSummary } from '@/data/schemas';
 import * as formulas from '@/core/formulas';
 import { getModifiedStats, getRankValue } from '@/core/formulas';
@@ -2568,12 +2568,13 @@ export const useGameStore = create<GameState>()(
         set((state: GameState) => {
             const hero = state.heroes.find(h => h.id === state.activeHeroId);
             if (!hero) return;
-            const { player, gameData, combat } = hero;
+            const { player, combat } = hero;
+            const { gameData } = state;
             Object.entries(player.learnedTalents).forEach(([talentId, rank]) => {
-                const talent = gameData.talents.find(t => t.id === talentId);
+                const talent = gameData.talents.find((t: Talent) => t.id === talentId);
                 if (!talent || !talent.triggeredEffects) return;
 
-                talent.triggeredEffects.forEach(triggeredEffect => {
+                talent.triggeredEffects.forEach((triggeredEffect: TalentEffect) => {
                     if (triggeredEffect.trigger === trigger) {
                         // Check for conditions
                         let conditionsMet = true;
@@ -2587,7 +2588,7 @@ export const useGameStore = create<GameState>()(
                         }
 
                         if (conditionsMet && Math.random() < getRankValue(triggeredEffect.chance, rank)) {
-                            triggeredEffect.effects.forEach(effect => {
+                            triggeredEffect.effects.forEach((effect: SkillEffect) => {
                                 const anyEffect = effect as any;
                                 if (anyEffect.type === 'buff' && anyEffect.buffType === 'stat_modifier') {
                                     const value = getRankValue(anyEffect.statMods[0].value, rank);
