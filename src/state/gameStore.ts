@@ -76,7 +76,6 @@ const initialCombatState: CombatState = {
 
 export interface GameState {
   isInitialized: boolean;
-  rehydrateComplete: boolean;
   lastPlayed: number | null;
   view: 'MAIN' | 'COMBAT' | 'DUNGEON_COMPLETED' | 'HERO_SELECTION';
   activeSubView: 'TOWN' | 'CHARACTER' | 'VENDORS' | 'DUNGEONS_LIST' | 'QUESTS' | 'SKILLS' | 'TALENTS' | 'REPUTATION';
@@ -451,7 +450,6 @@ export const useGameStore = create<GameState>()(
   persist(
     immer((set, get) => ({
       isInitialized: false,
-      rehydrateComplete: false,
       lastPlayed: null,
       view: 'MAIN',
       activeSubView: 'TOWN',
@@ -2704,46 +2702,48 @@ export const useGameStore = create<GameState>()(
     {
       name: 'barquest-save',
       storage: storage,
-      onRehydrateStorage: () => (state: any) => {
-        if (state) {
-          // Migration for old save structure
-          if (!state.heroes && state.player && state.player.classeId) {
-            console.log("Old save data detected, migrating...");
+      version: 1,
+      migrate: (persistedState: any, version: number) => {
+        if (version < 1) {
+          // Migration for old save structure from version 0
+          if (!persistedState.heroes && persistedState.player && persistedState.player.classeId) {
+            console.log("Old save data detected, migrating to hero structure...");
             const migratedHero: Hero = {
-              id: state.player.id,
-              player: state.player,
-              inventory: state.inventory,
+              id: persistedState.player.id,
+              player: persistedState.player,
+              inventory: persistedState.inventory,
               combat: initialCombatState,
-              activeQuests: state.activeQuests || [],
+              activeQuests: persistedState.activeQuests || [],
             };
-            state.heroes = [migratedHero];
-            state.activeHeroId = migratedHero.id;
+            persistedState.heroes = [migratedHero];
+            persistedState.activeHeroId = migratedHero.id;
 
-            delete state.player;
-            delete state.inventory;
-            delete state.combat;
-            delete state.activeQuests;
+            delete persistedState.player;
+            delete persistedState.inventory;
+            delete persistedState.combat;
+            delete persistedState.activeQuests;
           }
 
-          state.rehydrateComplete = true;
           // Reset combat state for all heroes on rehydration
-          if (state.heroes) {
-            state.heroes.forEach((hero: Hero) => {
+          if (persistedState.heroes) {
+            persistedState.heroes.forEach((hero: Hero) => {
               hero.combat = initialCombatState;
             });
           }
 
-          if (state.activeHeroId && state.heroes.some((h: Hero) => h.id === state.activeHeroId)) {
-            state.view = 'MAIN';
-          } else if (state.heroes && state.heroes.length > 0) {
-            state.view = 'HERO_SELECTION';
-            state.activeHeroId = state.heroes[0].id;
+          // Set initial view based on hero data
+          if (persistedState.activeHeroId && persistedState.heroes.some((h: Hero) => h.id === persistedState.activeHeroId)) {
+            persistedState.view = 'MAIN';
+          } else if (persistedState.heroes && persistedState.heroes.length > 0) {
+            persistedState.view = 'HERO_SELECTION';
+            persistedState.activeHeroId = persistedState.heroes[0].id;
           } else {
-            state.view = 'MAIN'; // Will trigger ChooseClassView because activeHeroId is null
-            state.activeHeroId = null;
+            persistedState.view = 'MAIN'; // Will trigger ChooseClassView because activeHeroId is null
+            persistedState.activeHeroId = null;
           }
         }
-      }
+        return persistedState;
+      },
     }
   )
 );
