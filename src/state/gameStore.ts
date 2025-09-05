@@ -2713,54 +2713,53 @@ export const useGameStore = create<GameState>()(
     {
       name: 'barquest-save',
       storage: storage,
-      onRehydrateStorage: () => (state: GameState | undefined) => {
+      version: 1,
+      migrate: (persistedState: any, version: number) => {
+        // version 0 -> 1: Introduction of heroes array for multi-character support.
+        if (version < 1) {
+          if (persistedState.player && (!persistedState.heroes || persistedState.heroes.length === 0)) {
+            const oldPlayer = persistedState.player;
+            const oldInventory = persistedState.inventory;
+            const oldActiveQuests = persistedState.activeQuests;
+
+            const newHero: PlayerProfile = {
+              id: oldPlayer.id || uuidv4(),
+              player: oldPlayer,
+              inventory: oldInventory,
+              activeQuests: oldActiveQuests || []
+            };
+            persistedState.heroes = [newHero];
+            persistedState.activeHeroId = newHero.id;
+
+            delete persistedState.player;
+            delete persistedState.inventory;
+            delete persistedState.activeQuests;
+          }
+        }
+
+        persistedState.heroes = persistedState.heroes || [];
+        persistedState.heroes.forEach((hero: PlayerProfile) => {
+            hero.player.learnedTalents = hero.player.learnedTalents || {};
+            hero.player.activeBuffs = hero.player.activeBuffs || [];
+            hero.player.reputation = hero.player.reputation || {};
+            hero.player.completedQuests = Array.isArray(hero.player.completedQuests) ? hero.player.completedQuests : [];
+            hero.activeQuests = Array.isArray(hero.activeQuests) ? hero.activeQuests : [];
+            hero.player.completedDungeons = (hero.player.completedDungeons && typeof hero.player.completedDungeons === 'object' && !Array.isArray(hero.player.completedDungeons)) ? hero.player.completedDungeons : {};
+            if(typeof hero.inventory.potions !== 'object' || hero.inventory.potions === null) {
+              hero.inventory.potions = { health: 0, resource: 0};
+            }
+            if(typeof hero.inventory.craftingMaterials !== 'object' || hero.inventory.craftingMaterials === null) {
+                hero.inventory.craftingMaterials = {};
+            }
+        });
+
+        return persistedState;
+      },
+      onRehydrateStorage: () => (state?: GameState) => {
         if (state) {
             state.rehydrateComplete = true;
             state.view = 'MAIN';
             state.combat = initialCombatState;
-            state.heroes = state.heroes || [];
-
-            // This is a migration from old state structure.
-            // @ts-ignore
-            if (state.player && !state.heroes.length) {
-              // @ts-ignore
-              const oldPlayer = state.player;
-              // @ts-ignore
-              const oldInventory = state.inventory;
-              // @ts-ignore
-              const oldActiveQuests = state.activeQuests;
-
-              const newHero: PlayerProfile = {
-                id: oldPlayer.id || uuidv4(),
-                player: oldPlayer,
-                inventory: oldInventory,
-                activeQuests: oldActiveQuests
-              };
-              state.heroes = [newHero];
-              state.activeHeroId = newHero.id;
-
-              // @ts-ignore
-              delete state.player;
-              // @ts-ignore
-              delete state.inventory;
-              // @ts-ignore
-              delete state.activeQuests;
-            }
-
-            state.heroes.forEach(hero => {
-                hero.player.learnedTalents = hero.player.learnedTalents || {};
-                hero.player.activeBuffs = hero.player.activeBuffs || [];
-                hero.player.reputation = hero.player.reputation || {};
-                hero.player.completedQuests = Array.isArray(hero.player.completedQuests) ? hero.player.completedQuests : [];
-                hero.activeQuests = Array.isArray(hero.activeQuests) ? hero.activeQuests : [];
-                hero.player.completedDungeons = (hero.player.completedDungeons && typeof hero.player.completedDungeons === 'object' && !Array.isArray(hero.player.completedDungeons)) ? hero.player.completedDungeons : {};
-                if(typeof hero.inventory.potions !== 'object' || hero.inventory.potions === null) {
-                  hero.inventory.potions = { health: 0, resource: 0};
-                }
-                if(typeof hero.inventory.craftingMaterials !== 'object' || hero.inventory.craftingMaterials === null) {
-                    hero.inventory.craftingMaterials = {};
-                }
-            });
         }
       }
     }
