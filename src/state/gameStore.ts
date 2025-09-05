@@ -945,81 +945,97 @@ export const useGameStore = create<GameState>()(
             }
             activeHero.inventory.items.splice(itemIndex, 1);
 
-            const { rarity, niveauMin, slot, type } = itemToDismantle;
             const calculatedMaterials: { id: string, amount: number }[] = [];
+            const recipe = state.gameData.recipes.find(r => r.result === itemToDismantle.baseId);
 
-            // 1. Base Materials from Item Type
-            if (slot === 'weapon' || slot === 'offhand' || slot === 'chest' || slot === 'legs' || slot === 'hands' || slot === 'feet' || slot === 'head' || slot === 'belt') {
-                calculatedMaterials.push({ id: 'scrap_metal', amount: 1 });
+            if (recipe) {
+                // Item is crafted, calculate materials based on recipe
+                for (const materialId in recipe.materials) {
+                    const requiredAmount = recipe.materials[materialId];
+                    // Return ~50% of the materials, rounded down.
+                    const amountToReturn = Math.floor(requiredAmount / 2);
+                    if (amountToReturn > 0) {
+                        calculatedMaterials.push({ id: materialId, amount: amountToReturn });
+                    }
+                }
+            } else {
+                // Item is likely a world drop, use the existing probabilistic logic
+                const { rarity, niveauMin, slot, type } = itemToDismantle;
 
-                // Leather and Hides for armor
-                if (slot === 'head' || slot === 'chest' || slot === 'legs' || slot === 'hands' || slot === 'feet' || slot === 'belt') {
-                    calculatedMaterials.push({ id: 'raw-hide', amount: Math.floor(Math.random() * 2) + 1 });
-                    if (niveauMin > 20 && Math.random() > 0.5) {
-                        calculatedMaterials.push({ id: 'leather', amount: 1 });
+                // 1. Base Materials from Item Type
+                if (slot === 'weapon' || slot === 'offhand' || slot === 'chest' || slot === 'legs' || slot === 'hands' || slot === 'feet' || slot === 'head' || slot === 'belt') {
+                    calculatedMaterials.push({ id: 'scrap_metal', amount: 1 });
+
+                    // Leather and Hides for armor
+                    if (slot === 'head' || slot === 'chest' || slot === 'legs' || slot === 'hands' || slot === 'feet' || slot === 'belt') {
+                        calculatedMaterials.push({ id: 'light_leather', amount: Math.floor(Math.random() * 2) + 1 });
+                        if (niveauMin > 20 && Math.random() > 0.5) {
+                            calculatedMaterials.push({ id: 'light_leather', amount: 1 });
+                        }
+                    }
+
+                    // Ores and Ingots for weapons and heavy armor
+                    if (slot === 'weapon' || slot === 'offhand' || slot === 'chest' || slot === 'legs' || slot === 'head' || slot === 'feet') {
+                        calculatedMaterials.push({ id: 'copper_ingot', amount: Math.floor(Math.random() * 2) + 1 });
+                        if (niveauMin > 20 && Math.random() > 0.5) {
+                            calculatedMaterials.push({ id: 'iron-ingot', amount: 1 });
+                        }
+                        if (niveauMin > 40 && Math.random() > 0.5) {
+                            calculatedMaterials.push({ id: 'steel-ingot', amount: 1 });
+                        }
+                    }
+                } else if (slot === 'amulet' || slot === 'ring') {
+                    if (Math.random() < 0.2) {
+                        calculatedMaterials.push({ id: 'silver_nugget', amount: 1 });
                     }
                 }
 
-                // Ores and Ingots for weapons and heavy armor
-                if (slot === 'weapon' || slot === 'offhand' || slot === 'chest' || slot === 'legs' || slot === 'head' || slot === 'feet') {
-                    calculatedMaterials.push({ id: 'iron-ore', amount: Math.floor(Math.random() * 2) + 1 });
-                    if (niveauMin > 20 && Math.random() > 0.5) {
-                        calculatedMaterials.push({ id: 'iron-ingot', amount: 1 });
+                // 2. Bonus Materials from Magical Properties (Rarity)
+                if (rarity !== 'Commun') {
+                    if (niveauMin >= 1 && niveauMin < 15) {
+                        calculatedMaterials.push({ id: 'strange_dust', amount: Math.floor(Math.random() * 2) + 1 });
+                        if (rarity === 'Magique' && Math.random() < 0.35) {
+                            calculatedMaterials.push({ id: 'lesser_magic_essence', amount: 1 });
+                        }
                     }
-                    if (niveauMin > 40 && Math.random() > 0.5) {
-                        calculatedMaterials.push({ id: 'steel-ingot', amount: 1 });
+                    if (niveauMin >= 15 && niveauMin < 30) {
+                        calculatedMaterials.push({ id: 'soul_dust', amount: Math.floor(Math.random() * 2) + 1 });
+                        if (rarity === 'Rare' && Math.random() < 0.35) {
+                            calculatedMaterials.push({ id: 'greater_magic_essence', amount: 1 });
+                        }
+                    }
+                    if (niveauMin >= 30 && niveauMin < 50) {
+                        calculatedMaterials.push({ id: 'vision_dust', amount: Math.floor(Math.random() * 2) + 1 });
+                        if (rarity === 'Épique' && Math.random() < 0.35) {
+                            calculatedMaterials.push({ id: 'lesser_astral_essence', amount: 1 });
+                        }
+                    }
+                    if (niveauMin >= 50) {
+                        calculatedMaterials.push({ id: 'eternity_dust', amount: Math.floor(Math.random() * 3) + 1 });
+                        if (rarity === 'Épique' && Math.random() < 0.35) {
+                            calculatedMaterials.push({ id: 'greater_astral_essence', amount: 1 });
+                        }
+                    }
+                    if (rarity === 'Légendaire') {
+                        calculatedMaterials.push({ id: 'nexus_crystal', amount: 1 });
                     }
                 }
-            } else if (slot === 'amulet' || slot === 'ring') {
-                 if (Math.random() < 0.2) {
-                    calculatedMaterials.push({ id: 'silver_nugget', amount: 1 });
-                 }
+
+                // 3. Bonus Elemental Materials from Affixes
+                itemToDismantle.affixes?.forEach(affix => {
+                    const theme = AFFIX_TO_THEME[affix.ref];
+                    if (theme) {
+                        const elementalMaterials: Record<string, string> = {
+                            fire: 'eternal_fire', ice: 'crystalline_water',
+                            nature: 'primordial_earth', shadow: 'frozen_shadow'
+                        };
+                        if (elementalMaterials[theme] && Math.random() < 0.25) {
+                            calculatedMaterials.push({ id: elementalMaterials[theme], amount: 1 });
+                        }
+                    }
+                });
             }
 
-            // 2. Bonus Materials from Magical Properties (Rarity)
-            if (rarity !== 'Commun') {
-                if (niveauMin >= 1 && niveauMin < 15) {
-                    calculatedMaterials.push({ id: 'strange_dust', amount: Math.floor(Math.random() * 2) + 1 });
-                    if (rarity === 'Magique' && Math.random() < 0.35) {
-                        calculatedMaterials.push({ id: 'lesser_magic_essence', amount: 1 });
-                    }
-                }
-                if (niveauMin >= 15 && niveauMin < 30) {
-                    calculatedMaterials.push({ id: 'soul_dust', amount: Math.floor(Math.random() * 2) + 1 });
-                    if (rarity === 'Rare' && Math.random() < 0.35) {
-                        calculatedMaterials.push({ id: 'greater_magic_essence', amount: 1 });
-                    }
-                }
-                if (niveauMin >= 30 && niveauMin < 50) {
-                    calculatedMaterials.push({ id: 'vision_dust', amount: Math.floor(Math.random() * 2) + 1 });
-                    if (rarity === 'Épique' && Math.random() < 0.35) {
-                        calculatedMaterials.push({ id: 'lesser_astral_essence', amount: 1 });
-                    }
-                }
-                if (niveauMin >= 50) {
-                    calculatedMaterials.push({ id: 'eternity_dust', amount: Math.floor(Math.random() * 3) + 1 });
-                     if (rarity === 'Épique' && Math.random() < 0.35) {
-                        calculatedMaterials.push({ id: 'greater_astral_essence', amount: 1 });
-                    }
-                }
-                if (rarity === 'Légendaire') {
-                    calculatedMaterials.push({ id: 'nexus_crystal', amount: 1 });
-                }
-            }
-
-            // 3. Bonus Elemental Materials from Affixes
-            itemToDismantle.affixes?.forEach(affix => {
-                const theme = AFFIX_TO_THEME[affix.ref];
-                if (theme) {
-                    const elementalMaterials: Record<string, string> = {
-                        fire: 'eternal_fire', ice: 'crystalline_water',
-                        nature: 'primordial_earth', shadow: 'frozen_shadow'
-                    };
-                    if (elementalMaterials[theme] && Math.random() < 0.25) {
-                         calculatedMaterials.push({ id: elementalMaterials[theme], amount: 1 });
-                    }
-                }
-            });
 
             // Add materials to inventory
             const finalMaterials: Record<string, number> = {};
