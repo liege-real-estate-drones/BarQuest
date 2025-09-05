@@ -448,6 +448,101 @@ export const calculateItemScore = (item: Item, classId: PlayerClassId): number =
     return score;
 }
 
+const calculateDismantleRewards = (itemToDismantle: Item, gameData: GameData): { id: string, amount: number }[] => {
+    const calculatedMaterials: { id: string, amount: number }[] = [];
+    const recipe = gameData.recipes.find(r => r.result === itemToDismantle.baseId);
+
+    if (recipe) {
+        // Crafted items give back a portion of their materials
+        for (const materialId in recipe.materials) {
+            if (materialId.startsWith('item:')) continue; // Don't return items, only components
+            const requiredAmount = recipe.materials[materialId];
+            const amountToReturn = Math.max(1, Math.floor(requiredAmount * 0.5)); // Return 50%
+            if (amountToReturn > 0) {
+                calculatedMaterials.push({ id: materialId, amount: amountToReturn });
+            }
+        }
+    } else {
+        // Dropped items logic
+        const { rarity, niveauMin, slot } = itemToDismantle;
+
+        // Base material (guaranteed for non-common items)
+        if (rarity !== 'Commun') {
+            calculatedMaterials.push({ id: 'scrap_metal', amount: 1 });
+        }
+
+        // Tier definitions
+        const tiers = [
+            { level: 1, dust: 'strange_dust', essence: 'lesser_magic_essence', crafting: { armor: 'light_leather', weapon: 'copper_ingot' }, special: 'iron_ingot' },
+            { level: 15, dust: 'soul_dust', essence: 'greater_magic_essence', crafting: { armor: 'yeti_fur', weapon: 'iron_ingot' }, special: 'steel_ingot' },
+            { level: 30, dust: 'vision_dust', essence: 'lesser_astral_essence', crafting: { armor: 'silk_bolt', weapon: 'steel_ingot' }, special: 'mithril_ingot' },
+            { level: 50, dust: 'eternity_dust', essence: 'greater_astral_essence', crafting: { armor: 'enchanted_wood', weapon: 'mithril_ingot' }, special: 'prismatic_shard' }
+        ];
+
+        const itemTier = tiers.slice().reverse().find(t => niveauMin >= t.level) || tiers[0];
+        
+        // Crafting materials based on slot and tier
+        const isArmor = ['head', 'chest', 'legs', 'hands', 'feet', 'belt'].includes(slot!);
+        const isWeapon = ['weapon', 'offhand'].includes(slot!);
+
+        if (isArmor) {
+            if (Math.random() < 0.4) calculatedMaterials.push({ id: itemTier.crafting.armor, amount: 1 });
+        }
+        if (isWeapon) {
+            if (Math.random() < 0.4) calculatedMaterials.push({ id: itemTier.crafting.weapon, amount: 1 });
+        }
+        // Chance for the "special" next-tier material needed for sets
+        if (Math.random() < 0.1) {
+            calculatedMaterials.push({ id: itemTier.special, amount: 1 });
+        }
+
+
+        // Magic materials based on rarity
+        const dustAmount = { 'Commun': 1, 'Magique': 2, 'Rare': 3, 'Épique': 4, 'Légendaire': 6, 'Unique': 0 };
+        const essenceChance = { 'Commun': 0.05, 'Magique': 0.25, 'Rare': 0.5, 'Épique': 1, 'Légendaire': 1, 'Unique': 0 };
+        const shardChance = { 'Commun': 0, 'Magique': 0, 'Rare': 0.02, 'Épique': 0.15, 'Légendaire': 0.3, 'Unique': 0 };
+
+        if (Math.random() < 0.8) { // High chance to get dust
+            calculatedMaterials.push({ id: itemTier.dust, amount: Math.ceil(Math.random() * (dustAmount[rarity] || 1)) });
+        }
+        if (Math.random() < (essenceChance[rarity] || 0)) {
+            calculatedMaterials.push({ id: itemTier.essence, amount: 1 });
+            if (rarity === 'Légendaire') { // Bonus essence for legendaries
+                 calculatedMaterials.push({ id: itemTier.essence, amount: 1 });
+            }
+        }
+        if (Math.random() < (shardChance[rarity] || 0)) {
+             if (niveauMin > 45) {
+                calculatedMaterials.push({ id: 'nexus_crystal', amount: 1 });
+             } else {
+                calculatedMaterials.push({ id: 'arcane_crystal', amount: 1 });
+             }
+        }
+        
+        // Elemental Materials from affixes
+        itemToDismantle.affixes?.forEach(affix => {
+            const theme = AFFIX_TO_THEME[affix.ref];
+            if (theme) {
+                const elementalMaterials: Record<string, string> = {
+                    fire: 'eternal_fire', ice: 'crystalline_water',
+                    nature: 'primordial_earth', shadow: 'frozen_shadow'
+                };
+                if (elementalMaterials[theme] && Math.random() < 0.1) { // Reduced chance
+                    calculatedMaterials.push({ id: elementalMaterials[theme], amount: 1 });
+                }
+            }
+        });
+    }
+
+    // Consolidate materials
+    const finalMap: Record<string, number> = {};
+    calculatedMaterials.forEach(mat => {
+        finalMap[mat.id] = (finalMap[mat.id] || 0) + mat.amount;
+    });
+
+    return Object.entries(finalMap).map(([id, amount]) => ({ id, amount }));
+};
+
 const initializePlayerForClass = (player: PlayerState, classId: PlayerClassId, gameData: GameData): PlayerState => {
   const chosenClass = gameData.classes.find(c => c.id === classId);
   if (chosenClass) {
@@ -820,6 +915,7 @@ export const useGameStore = create<GameState>()(
       },
 
       dismantleAllUnusedItems: (maxRarity) => {
+        const { gameData } = get();
         const rarityOrder: Record<Rareté, number> = {
             'Commun': 0, 'Magique': 1, 'Rare': 2, 'Épique': 3, 'Légendaire': 4, 'Unique': 5
         };
@@ -827,98 +923,38 @@ export const useGameStore = create<GameState>()(
         let dismantledCount = 0;
         const totalMaterialsGained: Record<string, number> = {};
 
-        set((state: GameState) => {
-            const activeHero = state.heroes.find(h => h.id === state.activeHeroId);
-            if (!activeHero) return;
+        const activeHero = get().getActiveHero();
+        if (!activeHero) return { dismantledCount: 0, materialsGained: {} };
+        
+        const itemsToDismantle = activeHero.inventory.items.filter(item => {
+            const itemRarityValue = rarityOrder[item.rarity];
+            const isEquipped = Object.values(activeHero.inventory.equipment).some(equippedItem => equippedItem?.id === item.id);
+            return item.type !== 'quest' && !isEquipped && itemRarityValue <= maxRarityValue;
+        });
 
-            const itemsToKeep: Item[] = [];
-            const itemsToDismantle: Item[] = [];
+        if (itemsToDismantle.length === 0) {
+            return { dismantledCount: 0, materialsGained: {} };
+        }
 
-            activeHero.inventory.items.forEach(item => {
-                const itemRarityValue = rarityOrder[item.rarity];
-                if (item.type !== 'quest' && itemRarityValue < maxRarityValue) {
-                    itemsToDismantle.push(item);
-                } else {
-                    itemsToKeep.push(item);
-                }
+        dismantledCount = itemsToDismantle.length;
+        const itemIdsToDismantle = new Set(itemsToDismantle.map(item => item.id));
+
+        itemsToDismantle.forEach(itemToDismantle => {
+            const materials = calculateDismantleRewards(itemToDismantle, gameData);
+            materials.forEach(mat => {
+                totalMaterialsGained[mat.id] = (totalMaterialsGained[mat.id] || 0) + mat.amount;
             });
+        });
 
-            dismantledCount = itemsToDismantle.length;
-            if (dismantledCount === 0) {
-                return;
+        set(state => {
+            const hero = state.heroes.find(h => h.id === state.activeHeroId);
+            if (!hero) return;
+            
+            hero.inventory.items = hero.inventory.items.filter(item => !itemIdsToDismantle.has(item.id));
+            
+            for (const [matId, amount] of Object.entries(totalMaterialsGained)) {
+                hero.inventory.craftingMaterials[matId] = (hero.inventory.craftingMaterials[matId] || 0) + amount;
             }
-
-            itemsToDismantle.forEach(itemToDismantle => {
-                // Re-using the single-item dismantle logic to calculate materials
-                const { rarity, niveauMin } = itemToDismantle;
-                let materialsGained: { id: string, amount: number }[] = [];
-                if (niveauMin >= 1 && niveauMin < 15) {
-                    if (rarity === 'Commun' || rarity === 'Magique') {
-                        materialsGained.push({ id: 'strange_dust', amount: Math.floor(Math.random() * 2) + 1 });
-                        if (rarity === 'Magique' && Math.random() < 0.35) {
-                            materialsGained.push({ id: 'lesser_magic_essence', amount: 1 });
-                        }
-                    }
-                }
-                if (niveauMin >= 15 && niveauMin < 30) {
-                     if (rarity === 'Commun') {
-                        materialsGained.push({ id: 'soul_dust', amount: 1 });
-                     } else if (rarity === 'Magique' || rarity === 'Rare') {
-                        materialsGained.push({ id: 'soul_dust', amount: Math.floor(Math.random() * 2) + 1 });
-                        if (rarity === 'Rare' && Math.random() < 0.35) {
-                            materialsGained.push({ id: 'greater_magic_essence', amount: 1 });
-                        }
-                    }
-                }
-                if (niveauMin >= 30 && niveauMin < 50) {
-                    if (rarity === 'Commun' || rarity === 'Magique') {
-                        materialsGained.push({ id: 'vision_dust', amount: 1 });
-                    } else if (rarity === 'Rare' || rarity === 'Épique') {
-                        materialsGained.push({ id: 'vision_dust', amount: Math.floor(Math.random() * 2) + 1 });
-                        if (rarity === 'Épique' && Math.random() < 0.35) {
-                            materialsGained.push({ id: 'lesser_astral_essence', amount: 1 });
-                        }
-                    }
-                }
-                if (niveauMin >= 50) {
-                     if (rarity === 'Commun' || rarity === 'Magique' || rarity === 'Rare') {
-                        materialsGained.push({ id: 'eternity_dust', amount: 1 });
-                    } else if (rarity === 'Épique') {
-                        materialsGained.push({ id: 'eternity_dust', amount: Math.floor(Math.random() * 3) + 1 });
-                         if (Math.random() < 0.35) {
-                            materialsGained.push({ id: 'greater_astral_essence', amount: 1 });
-                        }
-                    }
-                }
-                if (rarity === 'Légendaire') {
-                    materialsGained.push({ id: 'eternity_dust', amount: Math.floor(Math.random() * 4) + 2 });
-                    materialsGained.push({ id: 'nexus_crystal', amount: 1 });
-                    if (Math.random() < 0.5) {
-                        materialsGained.push({ id: 'prismatic_shard', amount: 1 });
-                    }
-                }
-                itemToDismantle.affixes?.forEach(affix => {
-                    const theme = AFFIX_TO_THEME[affix.ref];
-                    if (theme) {
-                        const elementalMaterials: Record<string, string> = {
-                            fire: 'eternal_fire',
-                            ice: 'crystalline_water',
-                            nature: 'primordial_earth',
-                            shadow: 'frozen_shadow'
-                        };
-                        if (elementalMaterials[theme] && Math.random() < 0.15) {
-                             materialsGained.push({ id: elementalMaterials[theme], amount: 1 });
-                        }
-                    }
-                });
-
-                materialsGained.forEach(mat => {
-                    totalMaterialsGained[mat.id] = (totalMaterialsGained[mat.id] || 0) + mat.amount;
-                    activeHero.inventory.craftingMaterials[mat.id] = (activeHero.inventory.craftingMaterials[mat.id] || 0) + mat.amount;
-                });
-            });
-
-            activeHero.inventory.items = itemsToKeep;
         });
 
         return { dismantledCount, materialsGained: totalMaterialsGained };
@@ -943,112 +979,27 @@ export const useGameStore = create<GameState>()(
                 materialsGained = undefined;
                 return;
             }
-            activeHero.inventory.items.splice(itemIndex, 1);
-
-            const calculatedMaterials: { id: string, amount: number }[] = [];
-            const recipe = state.gameData.recipes.find(r => r.result === itemToDismantle.baseId);
-
-            if (recipe) {
-                // Item is crafted, calculate materials based on recipe
-                for (const materialId in recipe.materials) {
-                    const requiredAmount = recipe.materials[materialId];
-                    // Return ~50% of the materials, rounded down.
-                    const amountToReturn = Math.floor(requiredAmount / 2);
-                    if (amountToReturn > 0) {
-                        calculatedMaterials.push({ id: materialId, amount: amountToReturn });
-                    }
-                }
-            } else {
-                // Item is likely a world drop, use the existing probabilistic logic
-                const { rarity, niveauMin, slot, type } = itemToDismantle;
-
-                // 1. Base Materials from Item Type
-                if (slot === 'weapon' || slot === 'offhand' || slot === 'chest' || slot === 'legs' || slot === 'hands' || slot === 'feet' || slot === 'head' || slot === 'belt') {
-                    calculatedMaterials.push({ id: 'scrap_metal', amount: 1 });
-
-                    // Leather and Hides for armor
-                    if (slot === 'head' || slot === 'chest' || slot === 'legs' || slot === 'hands' || slot === 'feet' || slot === 'belt') {
-                        calculatedMaterials.push({ id: 'light_leather', amount: Math.floor(Math.random() * 2) + 1 });
-                        if (niveauMin > 20 && Math.random() > 0.5) {
-                            calculatedMaterials.push({ id: 'light_leather', amount: 1 });
-                        }
-                    }
-
-                    // Ores and Ingots for weapons and heavy armor
-                    if (slot === 'weapon' || slot === 'offhand' || slot === 'chest' || slot === 'legs' || slot === 'head' || slot === 'feet') {
-                        calculatedMaterials.push({ id: 'copper_ingot', amount: Math.floor(Math.random() * 2) + 1 });
-                        if (niveauMin > 20 && Math.random() > 0.5) {
-                            calculatedMaterials.push({ id: 'iron-ingot', amount: 1 });
-                        }
-                        if (niveauMin > 40 && Math.random() > 0.5) {
-                            calculatedMaterials.push({ id: 'steel-ingot', amount: 1 });
-                        }
-                    }
-                } else if (slot === 'amulet' || slot === 'ring') {
-                    if (Math.random() < 0.2) {
-                        calculatedMaterials.push({ id: 'silver_nugget', amount: 1 });
-                    }
-                }
-
-                // 2. Bonus Materials from Magical Properties (Rarity)
-                if (rarity !== 'Commun') {
-                    if (niveauMin >= 1 && niveauMin < 15) {
-                        calculatedMaterials.push({ id: 'strange_dust', amount: Math.floor(Math.random() * 2) + 1 });
-                        if (rarity === 'Magique' && Math.random() < 0.35) {
-                            calculatedMaterials.push({ id: 'lesser_magic_essence', amount: 1 });
-                        }
-                    }
-                    if (niveauMin >= 15 && niveauMin < 30) {
-                        calculatedMaterials.push({ id: 'soul_dust', amount: Math.floor(Math.random() * 2) + 1 });
-                        if (rarity === 'Rare' && Math.random() < 0.35) {
-                            calculatedMaterials.push({ id: 'greater_magic_essence', amount: 1 });
-                        }
-                    }
-                    if (niveauMin >= 30 && niveauMin < 50) {
-                        calculatedMaterials.push({ id: 'vision_dust', amount: Math.floor(Math.random() * 2) + 1 });
-                        if (rarity === 'Épique' && Math.random() < 0.35) {
-                            calculatedMaterials.push({ id: 'lesser_astral_essence', amount: 1 });
-                        }
-                    }
-                    if (niveauMin >= 50) {
-                        calculatedMaterials.push({ id: 'eternity_dust', amount: Math.floor(Math.random() * 3) + 1 });
-                        if (rarity === 'Épique' && Math.random() < 0.35) {
-                            calculatedMaterials.push({ id: 'greater_astral_essence', amount: 1 });
-                        }
-                    }
-                    if (rarity === 'Légendaire') {
-                        calculatedMaterials.push({ id: 'nexus_crystal', amount: 1 });
-                    }
-                }
-
-                // 3. Bonus Elemental Materials from Affixes
-                itemToDismantle.affixes?.forEach(affix => {
-                    const theme = AFFIX_TO_THEME[affix.ref];
-                    if (theme) {
-                        const elementalMaterials: Record<string, string> = {
-                            fire: 'eternal_fire', ice: 'crystalline_water',
-                            nature: 'primordial_earth', shadow: 'frozen_shadow'
-                        };
-                        if (elementalMaterials[theme] && Math.random() < 0.25) {
-                            calculatedMaterials.push({ id: elementalMaterials[theme], amount: 1 });
-                        }
-                    }
+            
+            const calculatedMaterials = calculateDismantleRewards(itemToDismantle, state.gameData);
+            
+            if (calculatedMaterials.length > 0) {
+                const finalMaterials: Record<string, number> = {};
+                calculatedMaterials.forEach(mat => {
+                    finalMaterials[mat.id] = (finalMaterials[mat.id] || 0) + mat.amount;
                 });
+
+                Object.entries(finalMaterials).forEach(([matId, amount]) => {
+                    activeHero.inventory.craftingMaterials[matId] = (activeHero.inventory.craftingMaterials[matId] || 0) + amount;
+                });
+                
+                materialsGained = Object.entries(finalMaterials).map(([id, amount]) => ({ id, amount }));
+            } else {
+                materialsGained = [];
             }
-
-
-            // Add materials to inventory
-            const finalMaterials: Record<string, number> = {};
-            calculatedMaterials.forEach(mat => {
-                finalMaterials[mat.id] = (finalMaterials[mat.id] || 0) + mat.amount;
-            });
-
-            Object.entries(finalMaterials).forEach(([matId, amount]) => {
-                 activeHero.inventory.craftingMaterials[matId] = (activeHero.inventory.craftingMaterials[matId] || 0) + amount;
-            });
-
-            materialsGained = Object.entries(finalMaterials).map(([id, amount]) => ({ id, amount }));
+            
+            activeHero.inventory.items.splice(itemIndex, 1);
         });
+
         return materialsGained;
       },
 
