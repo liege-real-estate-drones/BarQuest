@@ -161,5 +161,45 @@
         "8": "Lorsque votre vie passe sous les 50%, un ange gardien vous rend invulnérable pendant 5 secondes."
       }
     }
+  },
+  {
+    "id": "berserker_rookie_set",
+    "name": "Armure de Recrue",
+    "bonuses": {
+      "2": "+5 Force",
+      "4": "+100 PV",
+      "6": "+5% de chance de coup critique",
+      "8": "Utiliser Frappe Héroïque a 10% de chance d'augmenter vos dégâts de 5% pendant 10 secondes."
+    }
+  },
+  {
+    "id": "mage_initiate_set",
+    "name": "Tenue d'Initié",
+    "bonuses": {
+      "2": "+5 Intelligence",
+      "4": "+50 Mana",
+      "6": "+5% de chance de coup critique des sorts",
+      "8": "Votre sort Boule de Feu a 10% de chance d'être instantané."
+    }
+  },
+  {
+    "id": "rogue_scoundrel_set",
+    "name": "Habits de Vaurien",
+    "bonuses": {
+      "2": "+5 Dextérité",
+      "4": "+50 Énergie",
+      "6": "Vos attaques ont 5% de chance d'appliquer un poison faible.",
+      "8": "Utiliser Attaque Sournoise augmente votre vitesse d'attaque de 5% pendant 8 secondes."
+    }
+  },
+  {
+    "id": "cleric_acolyte_set",
+    "name": "Vêtements d'Acolyte",
+    "bonuses": {
+      "2": "+5 Esprit",
+      "4": "Vos sorts de soin coûtent 5% de mana en moins.",
+      "6": "+5% de chance de critique sur les soins",
+      "8": "Lancer Châtiment sur un ennemi soigne un allié proche pour 10% des dégâts infligés."
+    }
   }
 ]
