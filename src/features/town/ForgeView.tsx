@@ -181,12 +181,12 @@ export const ForgeView: React.FC = () => {
                                         )}
                                         onClick={() => setSelectedRecipe(recipe)}
                                     >
-                                        <div className="flex justify-between items-center w-full">
-                                             <div className="flex items-center">
+                                        <div className="flex justify-between items-center w-full flex-wrap">
+                                             <div className="flex items-center min-w-0 mr-4">
                                                 {getComparisonIndicator(recipe)}
-                                                <span className={cn(!status.craftable && "line-through")}>{recipe.name}</span>
+                                                <span className={cn("truncate", !status.craftable && "line-through")}>{recipe.name}</span>
                                              </div>
-                                            <div className="flex items-center space-x-2 text-xs">
+                                            <div className="flex items-center space-x-2 text-xs flex-wrap">
                                                 {item && <span className={cn(status.meetsLevelRequirement ? 'text-green-400' : 'text-red-400')}>Lvl {item.niveauMin}</span>}
                                                 {Object.entries(recipe.materials).map(([matId, required]) => (
                                                     <span key={matId} className={cn(status.missingMaterials.includes(matId) ? 'text-red-400' : 'text-green-400')}>

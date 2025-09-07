@@ -89,13 +89,13 @@ const EnchantTab: React.FC = () => {
     };
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
             {/* Colonne d'inventaire */}
             <div className="md:col-span-1">
                 <Card>
                     <CardHeader><CardTitle>Objets Enchantables</CardTitle></CardHeader>
                     <CardContent>
-                        <ScrollArea className="h-[400px]">
+                        <ScrollArea className="h-[600px]">
                             <div className="space-y-2">
                                 {enchantableItems.map(item => (
                                     <div
@@ -115,68 +115,88 @@ const EnchantTab: React.FC = () => {
 
             {/* Colonne centrale "Workbench" */}
             <div className="md:col-span-2">
-                <Card>
+                <Card className="h-full">
                     <CardHeader><CardTitle>Atelier d&apos;Enchantement</CardTitle></CardHeader>
-                    <CardContent className="space-y-4">
+                    <CardContent className="space-y-4 flex flex-col h-full">
+                        {/* Selected Item */}
                         <div>
                             <h3 className="text-lg font-semibold mb-2">Objet à Enchanter</h3>
-                            {selectedItem ? <ItemTooltip item={selectedItem} /> : <p className="text-sm text-muted-foreground">Sélectionnez un objet (non légendaire) de votre inventaire.</p>}
+                            {selectedItem ? <ItemTooltip item={selectedItem} /> : <p className="text-sm text-muted-foreground p-4 text-center border rounded">Sélectionnez un objet de votre inventaire.</p>}
                         </div>
-                        <hr className="border-gray-700"/>
-                        <div>
-                            <h3 className="text-lg font-semibold mb-2">Enchantement Sélectionné</h3>
-                            {selectedEnchantment ? (
+
+                        {/* Enchantment Details & Comparison */}
+                        {selectedItem && (
+                            <>
+                                <Separator />
                                 <div>
-                                    <p className="font-semibold">{selectedEnchantment.name}</p>
-                                    <p className="text-sm text-gray-400">{selectedEnchantment.description}</p>
-                                </div>
-                            ) : <p className="text-sm text-muted-foreground">Sélectionnez un enchantement dans la liste de droite.</p>}
-                        </div>
-
-                        {currentEnchantmentAffix && selectedEnchantment && (
-                            <EnchantmentComparison
-                                currentAffix={currentEnchantmentAffix}
-                                newEnchantment={selectedEnchantment}
-                            />
-                        )}
-
-                        <Button onClick={handleEnchant} disabled={!selectedItem || !selectedEnchantment || !canAfford(selectedEnchantment!)} className="mt-4 w-full">
-                            Enchanter l&apos;objet
-                        </Button>
-                    </CardContent>
-                </Card>
-            </div>
-
-            {/* Colonne des enchantements */}
-            <div className="md:col-span-1">
-                 <Card>
-                    <CardHeader><CardTitle>Enchantements Connus</CardTitle></CardHeader>
-                    <CardContent>
-                        <ScrollArea className="h-[400px]">
-                            {selectedItem ? (
-                                <div className="space-y-2">
-                                    {learnedEnchantments.map(enchant => (
-                                        <div
-                                            key={enchant.id}
-                                            className={`p-2 border rounded cursor-pointer ${selectedEnchantment?.id === enchant.id ? 'bg-purple-900/50' : ''}`}
-                                            onClick={() => setSelectedEnchantment(enchant)}
-                                        >
-                                            <p className="font-semibold">{enchant.name}</p>
-                                            <p className="text-sm text-gray-400">{enchant.description}</p>
-                                            <p className={`text-xs ${canAfford(enchant) ? 'text-green-400' : 'text-red-400'}`}>
-                                                Coût: {enchant.cost.map(c => `${c.amount} ${gameData.components?.find(m => m.id === c.id)?.name || c.id}`).join(', ')}
-                                            </p>
+                                    <h3 className="text-lg font-semibold mb-2">Enchantement</h3>
+                                    {selectedEnchantment ? (
+                                        <div className="p-2 border rounded">
+                                            <p className="font-semibold">{selectedEnchantment.name}</p>
+                                            <p className="text-sm text-gray-400">{selectedEnchantment.description}</p>
                                         </div>
-                                    ))}
+                                    ) : (
+                                        <p className="text-sm text-muted-foreground p-4 text-center border rounded">Sélectionnez un enchantement ci-dessous.</p>
+                                    )}
                                 </div>
-                            ) : <p className="text-sm text-muted-foreground p-4 text-center">Sélectionnez un objet pour voir les enchantements disponibles.</p>}
-                        </ScrollArea>
+
+                                {currentEnchantmentAffix && selectedEnchantment && (
+                                    <EnchantmentComparison
+                                        currentAffix={currentEnchantmentAffix}
+                                        newEnchantment={selectedEnchantment}
+                                    />
+                                )}
+                            </>
+                        )}
+                        
+                        {/* Available Enchantments List */}
+                        {selectedItem && (
+                            <>
+                                <Separator />
+                                <div className="flex-grow">
+                                    <h3 className="text-lg font-semibold mb-2">Enchantements Disponibles</h3>
+                                    <ScrollArea className="h-[250px] p-1">
+                                        <div className="space-y-2">
+                                            {learnedEnchantments.map(enchant => {
+                                                const isAffordable = canAfford(enchant);
+                                                return (
+                                                    <div
+                                                        key={enchant.id}
+                                                        className={`p-3 border rounded cursor-pointer flex justify-between items-center ${selectedEnchantment?.id === enchant.id ? 'bg-purple-900/50 border-purple-500' : 'border-gray-700'}`}
+                                                        onClick={() => setSelectedEnchantment(enchant)}
+                                                    >
+                                                        <div>
+                                                            <p className="font-semibold">{enchant.name}</p>
+                                                            <p className="text-sm text-gray-400">{enchant.description}</p>
+                                                        </div>
+                                                        <div className="text-right text-xs">
+                                                            <p className={isAffordable ? 'text-green-400' : 'text-red-400'}>
+                                                                {enchant.cost.map(c => `${c.amount} ${gameData.components?.find(m => m.id === c.id)?.name || c.id}`).join(', ')}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    </ScrollArea>
+                                </div>
+                            </>
+                        )}
+                        
+                        {/* Action Button */}
+                        <div className="mt-auto pt-4">
+                            <Button onClick={handleEnchant} disabled={!selectedItem || !selectedEnchantment || !canAfford(selectedEnchantment!)} className="w-full">
+                                Enchanter l&apos;objet
+                            </Button>
+                        </div>
                     </CardContent>
                 </Card>
             </div>
         </div>
     );
 };
+
+import { Separator } from '@/components/ui/separator';
 
 // Component for the "Grimoire" tab
 const GrimoireTab: React.FC = () => {
@@ -204,44 +224,49 @@ const GrimoireTab: React.FC = () => {
         <Card className="mt-4">
             <CardHeader><CardTitle>Grimoire des Enchantements</CardTitle></CardHeader>
             <CardContent>
-                <ScrollArea className="h-[500px]">
+                <ScrollArea className="h-[600px] p-1">
                     <div className="space-y-3">
                         {sortedEnchantments.map(enchant => {
                             const isLearned = learnedRecipes.includes(enchant.id);
                             return (
-                                <div key={enchant.id} className={`p-3 border rounded ${isLearned ? 'border-yellow-400/50' : 'border-gray-700'}`}>
-                                    <div className="flex justify-between items-start">
-                                        <div>
-                                            <p className={`font-bold ${isLearned ? 'text-yellow-400' : ''}`}>{enchant.name}</p>
-                                            <p className="text-sm text-gray-400">{enchant.description}</p>
-                                        </div>
-                                        <div className="text-right">
-                                            <p className={`text-sm font-semibold ${isLearned ? 'text-green-400' : 'text-red-400'}`}>
-                                                {isLearned ? 'Appris' : 'Non appris'}
-                                            </p>
-                                            <p className="text-xs text-gray-500">Palier {enchant.tier}</p>
-                                        </div>
-                                    </div>
-                                    <div className="mt-2 pt-2 border-t border-gray-700 space-y-2">
-                                        <div>
-                                            <p className="text-xs font-semibold">Composants requis:</p>
-                                            <ul className="list-disc list-inside text-xs text-gray-400">
-                                                {enchant.cost.map(c => (
-                                                    <li key={c.id}>
-                                                        {c.amount} x {getComponentName(c.id)}
-                                                        <span className="text-gray-500"> (Vous avez {materials[c.id] || 0})</span>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </div>
-                                        {!isLearned && (
+                                <Card key={enchant.id} className={isLearned ? 'border-yellow-400/50' : 'border-gray-700'}>
+                                    <CardHeader className="p-3">
+                                        <div className="flex justify-between items-start">
                                             <div>
-                                                <p className="text-xs font-semibold">Source:</p>
-                                                <p className="text-xs text-gray-400 capitalize">{(enchant.source || []).join(', ').replace(/_/g, ' ')}</p>
+                                                <CardTitle className={`text-base ${isLearned ? 'text-yellow-400' : ''}`}>{enchant.name}</CardTitle>
+                                                <p className="text-sm text-gray-400">{enchant.description}</p>
                                             </div>
-                                        )}
-                                    </div>
-                                </div>
+                                            <div className="text-right flex-shrink-0 pl-4">
+                                                <p className={`text-sm font-semibold ${isLearned ? 'text-green-400' : 'text-red-400'}`}>
+                                                    {isLearned ? 'Appris' : 'Non appris'}
+                                                </p>
+                                                <p className="text-xs text-gray-500">Palier {enchant.tier}</p>
+                                            </div>
+                                        </div>
+                                    </CardHeader>
+                                    <CardContent className="p-3 pt-0">
+                                        <Separator className="mb-3"/>
+                                        <div className="space-y-2">
+                                            <div>
+                                                <p className="text-xs font-semibold mb-1">Composants requis:</p>
+                                                <ul className="list-disc list-inside text-xs text-gray-400">
+                                                    {enchant.cost.map(c => (
+                                                        <li key={c.id}>
+                                                            {c.amount} x {getComponentName(c.id)}
+                                                            <span className="text-gray-500"> (Vous avez {materials[c.id] || 0})</span>
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+                                            {!isLearned && (
+                                                <div>
+                                                    <p className="text-xs font-semibold mb-1">Source:</p>
+                                                    <p className="text-xs text-gray-400 capitalize">{(enchant.source || []).join(', ').replace(/_/g, ' ')}</p>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </CardContent>
+                                </Card>
                             );
                         })}
                     </div>
