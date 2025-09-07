@@ -247,16 +247,17 @@ export const ForgeView: React.FC = () => {
                                 <div className="space-y-2">
                                     <div>
                                         <h3 className="font-semibold">Matériaux Requis</h3>
-                                        <ul className="list-disc list-inside text-sm">
-                                            {Object.entries(selectedRecipe.materials).map(([matId, required]) => {
-                                                const isItem = matId.startsWith('item:');
-                                                const owned = isItem
-                                                    ? inventoryItems.filter(i => i.baseId === matId.substring(5)).length
-                                                    : craftingMaterials[matId] || 0;
-                                                const hasEnough = owned >= required;
+                                        <ul className="text-sm space-y-1">
+                                            {Object.entries(selectedRecipe.materials).map(([materialId, requiredAmount]) => {
+                                                const ownedAmount = (materialId.startsWith('item:')
+                                                    ? inventoryItems.filter(i => i.baseId === materialId.substring(5)).length
+                                                    : craftingMaterials[materialId] || 0);
+                                                const textColor = ownedAmount < requiredAmount ? 'text-red-400' : 'text-muted-foreground';
+
                                                 return (
-                                                    <li key={matId} className={hasEnough ? 'text-green-400' : 'text-red-400'}>
-                                                        {getMaterialName(matId)}: {required} ({owned} possédés)
+                                                    <li key={materialId} className={`flex justify-between ${textColor}`}>
+                                                        <span>{getMaterialName(materialId)}</span>
+                                                        <span>{ownedAmount} / {requiredAmount}</span>
                                                     </li>
                                                 );
                                             })}
@@ -264,9 +265,10 @@ export const ForgeView: React.FC = () => {
                                     </div>
                                     <div>
                                         <h3 className="font-semibold">Coût</h3>
-                                        <p className={gold >= selectedRecipe.cost ? 'text-green-400' : 'text-red-400'}>
-                                            {selectedRecipe.cost} Or ({gold} possédés)
-                                        </p>
+                                        <div className={`flex justify-between text-sm ${gold >= selectedRecipe.cost ? 'text-muted-foreground' : 'text-red-400'}`}>
+                                            <span>Or</span>
+                                            <span>{gold} / {selectedRecipe.cost}</span>
+                                        </div>
                                     </div>
                                     <Button
                                         onClick={() => handleCraft(selectedRecipe.id)}
