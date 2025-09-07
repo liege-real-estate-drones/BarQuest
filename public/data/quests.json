@@ -8393,34 +8393,112 @@
     },
     {
       "id": "quest_t05_set_part1",
-      "type": "chasse_boss",
-      "name": "Plans de forgeron : Équipement de base",
-      "desc": "On dit que le Superviseur mineur kobold dans les Mines des Gobelins détient des plans pour forger des pièces d'armure de base. Battez-le pour les récupérer.",
-      "requirements": { "dungeonId": "dungeon_1", "bossId": "kobold_miner_supervisor" },
+      "type": "chasse",
+      "name": "Plans de forgeron : Casques",
+      "desc": "On dit que des monstres dans les Mines des Gobelins détiennent des plans pour forger des casques de base. Tuez-en pour les récupérer.",
+      "requirements": { "dungeonId": "dungeon_1", "killCount": 10 },
       "rewards": {
-        "gold": 150,
-        "xp": 250,
+        "gold": 100,
+        "xp": 150,
         "recipes": [
-          "recipe_berserker_t05_helm", "recipe_mage_t05_helm", "recipe_rogue_t05_helm", "recipe_cleric_t05_helm",
-          "recipe_berserker_t05_shoulders", "recipe_mage_t05_shoulders", "recipe_rogue_t05_shoulders", "recipe_cleric_t05_shoulders",
-          "recipe_berserker_t05_chest", "recipe_mage_t05_chest", "recipe_rogue_t05_chest", "recipe_cleric_t05_chest",
-          "recipe_berserker_t05_gloves", "recipe_mage_t05_gloves", "recipe_rogue_t05_gloves", "recipe_cleric_t05_gloves"
+          "recipe_berserker_t05_helm", "recipe_mage_t05_helm", "recipe_rogue_t05_helm", "recipe_cleric_t05_helm"
         ]
       }
     },
     {
       "id": "quest_t05_set_part2",
       "type": "chasse_boss",
-      "name": "Plans de forgeron : Équipement avancé",
-      "desc": "La matriarche des chauves-souris dans la Grotte des Chauves-souris aurait en sa possession des plans pour des pièces d'équipement plus complexes. Éliminez-la pour obtenir ses secrets.",
+      "name": "Plans de forgeron : Épaulières",
+      "desc": "Le Superviseur mineur kobold dans les Mines des Gobelins détient des plans pour forger des épaulières. Battez-le pour les récupérer.",
+      "requirements": { "dungeonId": "dungeon_1", "bossId": "kobold_miner_supervisor" },
+      "rewards": {
+        "gold": 150,
+        "xp": 250,
+        "recipes": [
+          "recipe_berserker_t05_shoulders", "recipe_mage_t05_shoulders", "recipe_rogue_t05_shoulders", "recipe_cleric_t05_shoulders"
+        ]
+      }
+    },
+    {
+      "id": "quest_t05_set_part3",
+      "type": "chasse",
+      "name": "Plans de forgeron : Plastrons",
+      "desc": "Des monstres dans la Grotte des Chauves-souris auraient en leur possession des plans pour des plastrons. Éliminez-en pour obtenir leurs secrets.",
+      "requirements": { "dungeonId": "dungeon_2", "killCount": 10 },
+      "rewards": {
+        "gold": 100,
+        "xp": 150,
+        "recipes": [
+          "recipe_berserker_t05_chest", "recipe_mage_t05_chest", "recipe_rogue_t05_chest", "recipe_cleric_t05_chest"
+        ]
+      }
+    },
+    {
+      "id": "quest_t05_set_part4",
+      "type": "chasse_boss",
+      "name": "Plans de forgeron : Gants",
+      "desc": "La matriarche des chauves-souris dans la Grotte des Chauves-souris aurait en sa possession des plans pour des gants. Éliminez-la pour obtenir ses secrets.",
       "requirements": { "dungeonId": "dungeon_2", "bossId": "bat_matriarch" },
       "rewards": {
         "gold": 150,
         "xp": 250,
         "recipes": [
-          "recipe_berserker_t05_belt", "recipe_mage_t05_belt", "recipe_rogue_t05_belt", "recipe_cleric_t05_belt",
-          "recipe_berserker_t05_legs", "recipe_mage_t05_legs", "recipe_rogue_t05_legs", "recipe_cleric_t05_legs",
-          "recipe_berserker_t05_boots", "recipe_mage_t05_boots", "recipe_rogue_t05_boots", "recipe_cleric_t05_boots",
+          "recipe_berserker_t05_gloves", "recipe_mage_t05_gloves", "recipe_rogue_t05_gloves", "recipe_cleric_t05_gloves"
+        ]
+      }
+    },
+    {
+      "id": "quest_t05_set_part5",
+      "type": "chasse",
+      "name": "Plans de forgeron : Ceintures",
+      "desc": "Des créatures dans la Crevasse Glacée détiendraient des plans pour des ceintures. Aventurez-vous y pour les trouver.",
+      "requirements": { "dungeonId": "dungeon_3", "killCount": 15 },
+      "rewards": {
+        "gold": 150,
+        "xp": 250,
+        "recipes": [
+          "recipe_berserker_t05_belt", "recipe_mage_t05_belt", "recipe_rogue_t05_belt", "recipe_cleric_t05_belt"
+        ]
+      }
+    },
+    {
+      "id": "quest_t05_set_part6",
+      "type": "chasse_boss",
+      "name": "Plans de forgeron : Jambières",
+      "desc": "Le chef des yétis dans la Crevasse Glacée posséderait des plans de jambières. Terrassez-le pour les récupérer.",
+      "requirements": { "dungeonId": "dungeon_3", "bossId": "yeti_chieftain" },
+      "rewards": {
+        "gold": 200,
+        "xp": 350,
+        "recipes": [
+          "recipe_berserker_t05_legs", "recipe_mage_t05_legs", "recipe_rogue_t05_legs", "recipe_cleric_t05_legs"
+        ]
+      }
+    },
+    {
+      "id": "quest_t05_set_part7",
+      "type": "chasse",
+      "name": "Plans de forgeron : Bottes",
+      "desc": "Les yétis de l'Antre des Yétis auraient des plans pour des bottes. Chassez-les pour les obtenir.",
+      "requirements": { "dungeonId": "dungeon_4", "killCount": 15 },
+      "rewards": {
+        "gold": 150,
+        "xp": 250,
+        "recipes": [
+          "recipe_berserker_t05_boots", "recipe_mage_t05_boots", "recipe_rogue_t05_boots", "recipe_cleric_t05_boots"
+        ]
+      }
+    },
+    {
+      "id": "quest_t05_set_part8",
+      "type": "chasse_boss",
+      "name": "Plans de forgeron : Armes",
+      "desc": "Le chef des yétis dans l'Antre des Yétis garderait précieusement des plans d'armes. Affrontez-le pour les lui prendre.",
+      "requirements": { "dungeonId": "dungeon_4", "bossId": "yeti_matriarch" },
+      "rewards": {
+        "gold": 200,
+        "xp": 350,
+        "recipes": [
           "recipe_berserker_t05_axe", "recipe_mage_t05_staff", "recipe_rogue_t05_daggers", "recipe_cleric_t05_mace"
         ]
       }
