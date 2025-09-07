@@ -15,7 +15,7 @@
     "id": "recipe_arcanist_cowl",
     "name": "Capuche de l'Arcaniste",
     "result": "set_arcanist_cowl",
-    "materials": { "silk_bolt": 12, "elemental_fire": 5 }, "cost": 1200
+    "materials": { "silk_bolt": 12, "eternal_fire": 5 }, "cost": 1200
   },
   {
     "id": "recipe_arcanist_robe",

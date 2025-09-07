@@ -496,6 +496,12 @@ const calculateDismantleRewards = (itemToDismantle: Item, gameData: GameData): {
             calculatedMaterials.push({ id: itemTier.special, amount: 1 });
         }
 
+        // AJOUT : Chance d'obtenir des pépites d'argent (silver_nugget)
+        if (niveauMin >= 15 && niveauMin < 30 && isWeapon) {
+            if (Math.random() < 0.2) { // 20% de chance sur les armes de ce palier
+                calculatedMaterials.push({ id: 'silver_nugget', amount: 1 });
+            }
+        }
 
         // Magic materials based on rarity
         const dustAmount = { 'Commun': 1, 'Magique': 2, 'Rare': 3, 'Épique': 4, 'Légendaire': 6, 'Unique': 0 };
@@ -519,16 +525,30 @@ const calculateDismantleRewards = (itemToDismantle: Item, gameData: GameData): {
              }
         }
         
+        // AJOUT : Chance pour les composants rares de haut niveau
+        if (niveauMin >= 50 && (rarity === 'Épique' || rarity === 'Légendaire')) {
+            if (Math.random() < 0.1) { // 10% de chance
+                calculatedMaterials.push({ id: 'demonic_essence', amount: 1 });
+            }
+            if (Math.random() < 0.05) { // 5% de chance
+                calculatedMaterials.push({ id: 'primal_might', amount: 1 });
+            }
+        }
+
         // Elemental Materials from affixes
         itemToDismantle.affixes?.forEach(affix => {
             const theme = AFFIX_TO_THEME[affix.ref];
             if (theme) {
-                const elementalMaterials: Record<string, string> = {
-                    fire: 'eternal_fire', ice: 'crystalline_water',
-                    nature: 'primordial_earth', shadow: 'frozen_shadow'
+                const elementalMaterials: Record<string, string[]> = {
+                    fire: ['eternal_fire', 'primal_fire'], // On peut obtenir l'un ou l'autre
+                    ice: ['crystalline_water'],
+                    nature: ['primordial_earth'],
+                    shadow: ['frozen_shadow']
                 };
-                if (elementalMaterials[theme] && Math.random() < 0.1) { // Reduced chance
-                    calculatedMaterials.push({ id: elementalMaterials[theme], amount: 1 });
+                if (elementalMaterials[theme] && Math.random() < 0.15) {
+                    const possibleMaterials = elementalMaterials[theme];
+                    const materialId = possibleMaterials[Math.floor(Math.random() * possibleMaterials.length)];
+                    calculatedMaterials.push({ id: materialId, amount: 1 });
                 }
             }
         });
