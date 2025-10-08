@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "esnext",
+    "moduleResolution": "node",
+    "target": "es2017",
+    "lib": ["es2017", "webworker"],
+    "noEmit": false,
+    "outDir": "worker",
+    "rootDir": "src",
+    "isolatedModules": false
+  },
+  "include": [
+    "src/sw.ts"
+  ]
+}
